@@ -32,31 +32,18 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->creditmemoMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\CreditmemoInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->refundOperationMock = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo\RefundOperation',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->refundOperationMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\RefundOperation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->subject = new \Magento\Sales\Model\Order\PaymentAdapter(
             $this->refundOperationMock
         );

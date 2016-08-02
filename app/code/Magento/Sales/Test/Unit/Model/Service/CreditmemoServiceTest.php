@@ -5,12 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Class CreditmemoServiceTest
@@ -43,7 +38,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
     protected $creditmemoNotifierMock;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $priceCurrencyMock;
 
@@ -62,8 +57,6 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new ObjectManagerHelper($this);
-
         $this->creditmemoRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Sales\Api\CreditmemoRepositoryInterface::class,
             ['get'],
@@ -97,10 +90,11 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->creditmemoService = $objectManager->getObject(
+        $this->creditmemoService = $this->objectManagerHelper->getObject(
             \Magento\Sales\Model\Service\CreditmemoService::class,
             [
                 'creditmemoRepository' => $this->creditmemoRepositoryMock,
@@ -281,7 +275,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $baseGrandTotal = 10;
         $baseTotalRefunded = 9;
         $baseTotalPaid = 10;
-        $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
+        $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->setMethods(['getId', 'getOrder', 'formatBasePrice'])
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
@@ -310,7 +304,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testRefundDoNotExpectsId()
     {
-        $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
+        $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);

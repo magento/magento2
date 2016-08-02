@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Service;
 
 /**
  * Class CreditmemoService
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterface
 {
