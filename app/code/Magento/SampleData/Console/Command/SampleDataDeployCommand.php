@@ -9,13 +9,10 @@ namespace Magento\SampleData\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\SampleData\Model\Dependency;
 use Magento\Framework\App\State;
 use Symfony\Component\Console\Input\ArrayInput;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Composer\Console\Application;
-use Composer\Console\ApplicationFactory;
 use Magento\Setup\Model\PackagesAuth;
 
 /**
@@ -24,12 +21,12 @@ use Magento\Setup\Model\PackagesAuth;
 class SampleDataDeployCommand extends Command
 {
     /**
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var Dependency
+     * @var \Magento\SampleData\Model\Dependency
      */
     private $sampleDataDependency;
 
@@ -40,21 +37,21 @@ class SampleDataDeployCommand extends Command
     private $arrayInputFactory;
 
     /**
-     * @var ApplicationFactory
+     * @var \Composer\Console\ApplicationFactory
      */
     private $applicationFactory;
 
     /**
-     * @param Filesystem $filesystem
-     * @param Dependency $sampleDataDependency
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\SampleData\Model\Dependency $sampleDataDependency
      * @param \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory
-     * @param ApplicationFactory $applicationFactory
+     * @param \Composer\Console\ApplicationFactory $applicationFactory
      */
     public function __construct(
-        Filesystem $filesystem,
-        Dependency $sampleDataDependency,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\SampleData\Model\Dependency $sampleDataDependency,
         \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory
+        \Composer\Console\ApplicationFactory $applicationFactory
     ) {
         $this->filesystem = $filesystem;
         $this->sampleDataDependency = $sampleDataDependency;
