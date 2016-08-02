@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Theme\File', 'Magento\Theme\Model\ResourceModel\Theme\File');
+        $this->_init(\Magento\Theme\Model\Theme\File::class, \Magento\Theme\Model\ResourceModel\Theme\File::class);
     }
 
     /**

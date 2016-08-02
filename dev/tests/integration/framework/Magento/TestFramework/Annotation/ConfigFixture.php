@@ -47,7 +47,7 @@ class ConfigFixture
         $result = null;
         if ($scopeCode !== false) {
             /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
-            $scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+            $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $result = $scopeConfig->getValue(
                 $configPath,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -71,7 +71,7 @@ class ConfigFixture
             if (strpos($configPath, 'default/') === 0) {
                 $configPath = substr($configPath, 8);
                 $objectManager->get(
-                    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
                 )->setValue(
                     $configPath,
                     $value,
@@ -80,7 +80,7 @@ class ConfigFixture
             }
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                \Magento\Framework\App\Config\MutableScopeConfigInterface::class
             )->setValue(
                 $configPath,
                 $value,

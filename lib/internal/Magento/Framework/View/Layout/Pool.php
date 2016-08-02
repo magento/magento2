@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\LayoutInterface;
  */
 class Pool
 {
-    const DEFAULT_CLASS = 'Magento\Framework\View\Layout\Generic';
+    const DEFAULT_CLASS = \Magento\Framework\View\Layout\Generic::class;
 
     /**
      * Layouts pool

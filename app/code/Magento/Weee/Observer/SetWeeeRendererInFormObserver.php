@@ -46,7 +46,7 @@ class SetWeeeRendererInFormObserver implements ObserverInterface
         foreach ($attributes as $code) {
             $weeeTax = $form->getElement($code);
             if ($weeeTax) {
-                $weeeTax->setRenderer($this->layout->createBlock('Magento\Weee\Block\Renderer\Weee\Tax'));
+                $weeeTax->setRenderer($this->layout->createBlock(\Magento\Weee\Block\Renderer\Weee\Tax::class));
             }
         }
 

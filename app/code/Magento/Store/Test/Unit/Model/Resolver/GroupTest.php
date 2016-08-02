@@ -27,7 +27,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             [],
             '',
@@ -45,7 +45,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false, false);
+        $scopeMock = $this->getMock(\Magento\Framework\App\ScopeInterface::class, [], [], '', false, false);
         $this->storeManagerMock
             ->expects($this->once())
             ->method('getGroup')

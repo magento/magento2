@@ -73,7 +73,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Form\Type');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Form\Type::class);
     }
 
     /**

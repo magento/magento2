@@ -33,15 +33,15 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->billingAddressManagementMock = $this->getMock(
-            '\Magento\Quote\Api\BillingAddressManagementInterface'
+            \Magento\Quote\Api\BillingAddressManagementInterface::class
         );
         $this->paymentMethodManagementMock = $this->getMock(
-            '\Magento\Quote\Api\PaymentMethodManagementInterface'
+            \Magento\Quote\Api\PaymentMethodManagementInterface::class
         );
-        $this->cartManagementMock = $this->getMock('\Magento\Quote\Api\CartManagementInterface');
+        $this->cartManagementMock = $this->getMock(\Magento\Quote\Api\CartManagementInterface::class);
 
         $this->model = $objectManager->getObject(
-            'Magento\Checkout\Model\PaymentInformationManagement',
+            \Magento\Checkout\Model\PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
@@ -54,8 +54,8 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $orderId = 200;
-        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
-        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+        $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')
@@ -70,14 +70,14 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedExceptionMessage Unable to place order. Please try again later.
+     * @expectedExceptionMessage An error occurred on the server. Please try to place the order again.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
     {
         $cartId = 100;
-        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
-        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+        $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')
@@ -93,7 +93,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $orderId = 200;
-        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+        $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
         $this->billingAddressManagementMock->expects($this->never())->method('assign');
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
@@ -108,8 +108,8 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     public function testSavePaymentInformation()
     {
         $cartId = 100;
-        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
-        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+        $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')
@@ -122,7 +122,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     public function testSavePaymentInformationWithoutBillingAddress()
     {
         $cartId = 100;
-        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+        $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
         $this->billingAddressManagementMock->expects($this->never())->method('assign');
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);

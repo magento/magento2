@@ -42,12 +42,12 @@ class Hostedpro extends Direct
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Hosted\Pro\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Hosted\Pro\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Hosted\Pro\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Hosted\Pro\Info::class;
 
     /**
      * Availability option
@@ -312,7 +312,7 @@ class Hostedpro extends Direct
         $store = $this->_storeManager->getStore($storeId);
         return $this->_urlBuilder->getUrl(
             $path,
-            ["_store" => $store, "_secure" => $secure === null ? $store->isCurrentlySecure() : $secure]
+            ["_secure" => $secure === null ? $store->isCurrentlySecure() : $secure]
         );
     }
 }

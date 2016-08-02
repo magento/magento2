@@ -54,7 +54,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         parent::_construct();
 
-        $this->setErrorText($this->escapeJsQuote(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('Please select items.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {
@@ -325,7 +325,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Column'
+            \Magento\Backend\Block\Widget\Grid\Column::class
         )->setData(
             [
                 'index' => $this->getMassactionIdField(),

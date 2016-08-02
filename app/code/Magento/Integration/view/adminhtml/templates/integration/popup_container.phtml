@@ -19,9 +19,9 @@
     ], function ($, Confirm) {
 
         window.integration = new Integration(
-            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]); ?>',
+            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]); ?>',
+            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]); ?>',
             '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*'); ?>',
             '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/loginSuccessCallback'); ?>'
         );

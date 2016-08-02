@@ -36,7 +36,7 @@ class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Col
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->setModel('Magento\Reports\Model\Item');
+        $this->setModel(\Magento\Reports\Model\Item::class);
     }
 
     /**

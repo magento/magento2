@@ -25,7 +25,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 '__wakeup',
                 'getId',
@@ -52,14 +52,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->willReturnSelf();
         $this->addressMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address',
+            \Magento\Sales\Model\Order\Address::class,
             [],
             [],
             '',
             false
         );
         $this->addressCollectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Address\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Address\Collection::class,
             [],
             [],
             '',

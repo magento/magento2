@@ -30,7 +30,7 @@ class LogLastLoginAtObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Magento\Customer\Model\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock(\Magento\Customer\Model\Logger::class, [], [], '', false);
         $this->logLastLoginAtObserver = new LogLastLoginAtObserver($this->loggerMock);
     }
 
@@ -41,9 +41,9 @@ class LogLastLoginAtObserverTest extends \PHPUnit_Framework_TestCase
     {
         $id = 1;
 
-        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getCustomer'], [], '', false);
-        $customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
+        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getCustomer'], [], '', false);
+        $customerMock = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
 
         $observerMock->expects($this->once())
             ->method('getEvent')

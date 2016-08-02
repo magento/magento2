@@ -34,13 +34,13 @@ class HandlerFactory
     {
         if (!is_subclass_of(
             $instance,
-            '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class
         )
         ) {
             throw new \InvalidArgumentException(
                 $instance .
                 ' does not implement ' .
-                'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
+                \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class
             );
         }
 

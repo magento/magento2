@@ -15,7 +15,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $this->_orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Order($this->_orderMock);
     }
 

@@ -71,7 +71,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Rating');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**

@@ -167,7 +167,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Config');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Config::class);
     }
 
     /**

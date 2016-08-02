@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Menu;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,7 +58,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cacheInstanceMock = $this->getMock(
-            'Magento\Framework\App\Cache\Type\Config',
+            \Magento\Framework\App\Cache\Type\Config::class,
             [],
             [],
             '',
@@ -63,7 +66,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_directorMock = $this->getMock(
-            'Magento\Backend\Model\Menu\AbstractDirector',
+            \Magento\Backend\Model\Menu\AbstractDirector::class,
             [],
             [],
             '',
@@ -71,7 +74,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_menuFactoryMock = $this->getMock(
-            'Magento\Backend\Model\MenuFactory',
+            \Magento\Backend\Model\MenuFactory::class,
             ['create'],
             [],
             '',
@@ -79,7 +82,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_configReaderMock = $this->getMock(
-            'Magento\Backend\Model\Menu\Config\Reader',
+            \Magento\Backend\Model\Menu\Config\Reader::class,
             [],
             [],
             '',
@@ -87,7 +90,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             [],
             '',
@@ -95,23 +98,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->_menuMock = $this->getMock(
-            'Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock('Psr\Log\LoggerInterface')]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)]
         );
 
-        $this->_menuBuilderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', [], [], '', false);
+        $this->_menuBuilderMock = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
 
         $this->_menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_menuMock));
 
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_configReaderMock->expects($this->any())->method('read')->will($this->returnValue([]));
 
-        $appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
+        $appState = $this->getMock(\Magento\Framework\App\State::class, ['getAreaCode'], [], '', false);
         $appState->expects(
             $this->any()
         )->method(

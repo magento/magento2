@@ -107,7 +107,7 @@ class Builder
     {
         if (null === $this->storeFactory) {
             $this->storeFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Store\Model\StoreFactory');
+                ->get(\Magento\Store\Model\StoreFactory::class);
         }
         return $this->storeFactory;
     }

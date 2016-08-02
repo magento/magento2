@@ -28,14 +28,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+        $typeProcessor = $this->objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class);
 
         $objectManagerMock = $this->getMockBuilder(
-            'Magento\Framework\App\ObjectManager'
+            \Magento\Framework\App\ObjectManager::class
         )->disableOriginalConstructor()->getMock();
 
         $classReflection = $this->getMock(
-            'Magento\Webapi\Model\Config\ClassReflector',
+            \Magento\Webapi\Model\Config\ClassReflector::class,
             ['reflectClassMethods'],
             ['_typeProcessor' => $typeProcessor],
             ''
@@ -43,8 +43,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $classReflection->expects($this->any())->method('reflectClassMethods')->will($this->returnValue([]));
 
         $servicesConfig = [
-            'services' => [
-                'Magento\Customer\Api\AccountManagementInterface' => [
+            'services' => [\Magento\Customer\Api\AccountManagementInterface::class => [
                     'V1' => [
                         'methods' => [
                             'activate' => [
@@ -57,8 +56,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-                ],
-                'Magento\Customer\Api\CustomerRepositoryInterface' => [
+                ], \Magento\Customer\Api\CustomerRepositoryInterface::class => [
                     'V1' => [
                         'methods' => [
                             'getById' => [
@@ -78,19 +76,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /**
          * @var $registryMock \Magento\Framework\Registry
          */
-        $registryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /**
          * @var $cacheMock \Magento\Webapi\Model\Cache\Type\Webapi
          */
-        $cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type\Webapi')
+        $cacheMock = $this->getMockBuilder(\Magento\Webapi\Model\Cache\Type\Webapi::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var $readerMock \Magento\Webapi\Model\Config\Reader */
-        $readerMock = $this->getMockBuilder('Magento\Webapi\Model\Config\Reader')
+        $readerMock = $this->getMockBuilder(\Magento\Webapi\Model\Config\Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $readerMock->expects($this->any())->method('read')->will($this->returnValue($servicesConfig));
@@ -106,7 +104,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $typeProcessor);
 
         $this->_soapConfig = $this->objectManager->getObject(
-            'Magento\Webapi\Model\Soap\Config',
+            \Magento\Webapi\Model\Soap\Config::class,
             [
                 'objectManager' => $objectManagerMock,
                 'registry' => $registryMock,
@@ -129,7 +127,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                             'resources' => [['Magento_Customer::manage']],
                         ],
                     ],
-                    'class' => 'Magento\Customer\Api\AccountManagementInterface',
+                    'class' => \Magento\Customer\Api\AccountManagementInterface::class,
                     'description' => 'Interface for managing customers accounts.',
                 ],
         ];
@@ -144,7 +142,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetServiceMethodInfo()
     {
         $expectedResult = [
-            'class' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+            'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
             'method' => 'getById',
             'isSecure' => false,
             'resources' => [['Magento_Customer::customer']],
@@ -160,7 +158,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = 'customerAccountManagementV1Activate';
         $soapOperation = $this->_soapConfig
-            ->getSoapOperation('Magento\Customer\Api\AccountManagementInterface', 'activate', 'V1');
+            ->getSoapOperation(\Magento\Customer\Api\AccountManagementInterface::class, 'activate', 'V1');
         $this->assertEquals($expectedResult, $soapOperation);
     }
 }

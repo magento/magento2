@@ -31,7 +31,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'sales_order_grid',
-        $resourceModel = '\Magento\Sales\Model\ResourceModel\Order'
+        $resourceModel = \Magento\Sales\Model\ResourceModel\Order::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

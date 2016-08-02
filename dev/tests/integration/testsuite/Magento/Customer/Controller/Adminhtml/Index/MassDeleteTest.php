@@ -24,12 +24,12 @@ class MassDeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getMessages(true);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
     }
 
     /**
