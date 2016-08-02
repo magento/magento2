@@ -56,6 +56,7 @@ class EavVariationsFixture extends Fixture
     /**
      * @param int|string $index
      * @param int $optionCount
+     * @return void
      */
     private function generateAttribute($index, $optionCount)
     {

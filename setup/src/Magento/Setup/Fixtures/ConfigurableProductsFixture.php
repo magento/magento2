@@ -137,10 +137,10 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * @param $productCategory
-     * @param $productWebsite
-     * @param $variation
-     * @param $suffix
+     * @param callable $productCategory
+     * @param callable $productWebsite
+     * @param string $variation
+     * @param string $suffix
      * @return array
      */
     private function generateConfigurableProduct($productCategory, $productWebsite, $variation, $suffix)
@@ -170,7 +170,7 @@ class ConfigurableProductsFixture extends Fixture
             'has_options' => '1',
             'image' => '',
             'image_label' => '',
-            'is_returnable' => 'Use config',
+            'is_returnable' => 'no',
             'manufacturer' => '',
             'meta_description' => 'Configurable Product %s <p>Configurable product description %s</p>',
             'meta_keyword' => 'Configurable Product %s',
