@@ -194,7 +194,16 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_model->expects($this->any())->method('_getCachedQuotes')->will(
             $this->returnValue(serialize($response))
         );
-        $request = $this->getMock(\Magento\Quote\Model\Quote\Address\RateRequest::class, [], [], '', false);
+        $request = $this->getMock(
+            \Magento\Quote\Model\Quote\Address\RateRequest::class,
+            ['getDestCity'],
+            [],
+            '',
+            false
+        );
+        $request->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Wonderful City');
         foreach ($this->_model->collectRates($request)->getAllRates() as $allRates) {
             $this->assertEquals($expected, $allRates->getData('cost'));
         }
