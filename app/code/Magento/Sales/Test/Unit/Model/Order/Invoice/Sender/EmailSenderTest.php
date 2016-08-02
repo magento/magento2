@@ -7,6 +7,8 @@ namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Sender;
 
 /**
  * Unit test for email notification sender for Invoice.
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,6 +97,9 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
      */
     private $senderBuilderFactoryMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -188,10 +193,10 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->identityContainerMock = $this->getMockBuilder(
-                \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+            \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -199,10 +204,10 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
 
         $this->senderBuilderFactoryMock = $this->getMockBuilder(
                 \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class
-            )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        )
+        ->disableOriginalConstructor()
+        ->setMethods(['create'])
+        ->getMock();
 
         $this->subject = new \Magento\Sales\Model\Order\Invoice\Sender\EmailSender(
             $this->templateContainerMock,
@@ -226,6 +231,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
      * @dataProvider sendDataProvider
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSend($configValue, $forceSyncMode, $isComment, $emailSendingResult)
     {

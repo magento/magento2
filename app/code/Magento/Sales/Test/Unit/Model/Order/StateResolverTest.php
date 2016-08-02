@@ -74,6 +74,9 @@ class StateResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getState')
             ->willReturn(Order::STATE_NEW);
 
-        $this->assertEquals(Order::STATE_PROCESSING, $this->orderStateResolver->getStateForOrder($this->orderMock, $arguments));
+        $this->assertEquals(
+            Order::STATE_PROCESSING,
+            $this->orderStateResolver->getStateForOrder($this->orderMock, $arguments)
+        );
     }
 }

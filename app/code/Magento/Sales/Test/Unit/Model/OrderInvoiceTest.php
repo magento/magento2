@@ -25,6 +25,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 
 /**
  * Class OrderInvoiceTest
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
@@ -245,7 +246,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $this->invoiceMock->expects($this->once())
             ->method('setState')
-            ->with(InvoiceInterface::STATE_PAID)
+            ->with(\Magento\Sales\Model\Order\Invoice::STATE_PAID)
             ->willReturnSelf();
 
         $this->invoiceRepositoryMock->expects($this->once())

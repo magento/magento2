@@ -50,6 +50,9 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
      */
     private $paymentMethodMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->orderMock = $this->getMockForAbstractClass(
@@ -299,6 +302,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider payDataProvider
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute($canCapture, $isOnline, $isGateway, $isTransactionPending)
     {

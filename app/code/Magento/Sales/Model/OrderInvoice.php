@@ -152,8 +152,8 @@ class OrderInvoice implements OrderInvoiceInterface
         );
         $errorMessages = $this->invoiceValidator->validate($invoice, $order);
         if (!empty($errorMessages)) {
-            throw new DocumentValidationException(__(
-                "Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
+            throw new DocumentValidationException(
+                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
             );
         }
         $connection->beginTransaction();
@@ -163,7 +163,7 @@ class OrderInvoice implements OrderInvoiceInterface
                 $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
             );
             $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $invoice->setState(InvoiceInterface::STATE_PAID);
+            $invoice->setState(\Magento\Sales\Model\Order\Invoice::STATE_PAID);
             $this->invoiceRepository->save($invoice);
             $this->orderRepository->save($order);
             $connection->commit();

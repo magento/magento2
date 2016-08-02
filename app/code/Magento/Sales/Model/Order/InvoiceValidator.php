@@ -57,11 +57,7 @@ class InvoiceValidator implements InvoiceValidatorInterface
     private function checkQtyAvailability(InvoiceInterface $invoice, OrderInterface $order)
     {
         $messages = [];
-        $qtys = [];
-        /** @var InvoiceItemInterface $item */
-        foreach ($invoice->getItems() as $item) {
-            $qtys[$item->getOrderItemId()] = $item->getQty();
-        }
+        $qtys = $this->getInvoiceQty($invoice);
 
         $totalQty = 0;
         if ($qtys) {
@@ -71,7 +67,7 @@ class InvoiceValidator implements InvoiceValidatorInterface
                     if ($qtys[$orderItem->getId()] > $orderItem->getQtyToInvoice() && !$orderItem->isDummy()) {
                         $messages[] = __(
                             'The quantity to invoice must not be greater than the uninvoiced quantity'
-                                . ' for product SKU "%1".',
+                            . ' for product SKU "%1".',
                             $orderItem->getSku()
                         );
                     }
@@ -79,13 +75,26 @@ class InvoiceValidator implements InvoiceValidatorInterface
                     unset($qtys[$orderItem->getId()]);
                 }
             }
-            if ($qtys) {
-                $messages[] = __('The invoice contains one or more items that are not part of the original order.');
-            }
         }
-        if (!$qtys && $totalQty <= 0) {
+        if ($qtys) {
+            $messages[] = __('The invoice contains one or more items that are not part of the original order.');
+        } elseif ($totalQty <= 0) {
             $messages[] = __('You can\'t create an invoice without products.');
         }
         return $messages;
+    }
+
+    /**
+     * @param InvoiceInterface $invoice
+     * @return array
+     */
+    private function getInvoiceQty(InvoiceInterface $invoice)
+    {
+        $qtys = [];
+        /** @var InvoiceItemInterface $item */
+        foreach ($invoice->getItems() as $item) {
+            $qtys[$item->getOrderItemId()] = $item->getQty();
+        }
+        return $qtys;
     }
 }

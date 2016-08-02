@@ -42,6 +42,7 @@ class InvoiceDocumentFactory
      * @param bool|false $appendComment
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function create(
         OrderInterface $order,
