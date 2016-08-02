@@ -21,7 +21,7 @@ class OrderUnHoldTest extends WebapiAbstract
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
+        $order = $objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         if ($order->canHold()) {
             $order->hold()->save();
         }

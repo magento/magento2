@@ -22,7 +22,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->serviceManager = $this->getMock('\Zend\ServiceManager\ServiceManager', [], [], '', false);
+        $this->serviceManager = $this->getMock(\Zend\ServiceManager\ServiceManager::class, [], [], '', false);
         $this->commandList = new CommandList($this->serviceManager);
     }
 

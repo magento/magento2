@@ -56,10 +56,10 @@ class CleanCacheTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->subjectMock = $this->getMock('Magento\Indexer\Model\Processor', [], [], '', false);
-        $this->contextMock = $this->getMock('Magento\Framework\Indexer\CacheContext', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $this->cacheMock = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Indexer\Model\Processor::class, [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $this->cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false);
         $this->plugin = new CleanCache(
             $this->contextMock,
             $this->eventManagerMock

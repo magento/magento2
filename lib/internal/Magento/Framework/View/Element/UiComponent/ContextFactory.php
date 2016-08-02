@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ContextFactory
 {
-    const INSTANCE_NAME = 'Magento\Framework\View\Element\UiComponent\ContextInterface';
+    const INSTANCE_NAME = \Magento\Framework\View\Element\UiComponent\ContextInterface::class;
 
     /**
      * @var ObjectManagerInterface

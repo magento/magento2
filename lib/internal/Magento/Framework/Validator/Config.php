@@ -24,7 +24,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
     /**
      * @var string
      */
-    protected $_defaultBuilderClass = 'Magento\Framework\Validator\Builder';
+    protected $_defaultBuilderClass = \Magento\Framework\Validator\Builder::class;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory

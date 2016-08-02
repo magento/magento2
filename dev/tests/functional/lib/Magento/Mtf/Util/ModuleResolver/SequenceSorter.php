@@ -48,7 +48,7 @@ class SequenceSorter implements SequenceSorterInterface
      */
     protected function getModuleSequence()
     {
-        return $this->magentoObjectManager->create('\Magento\Framework\Module\ModuleList\Loader')->load();
+        return $this->magentoObjectManager->create(\Magento\Framework\Module\ModuleList\Loader::class)->load();
     }
 
     /**

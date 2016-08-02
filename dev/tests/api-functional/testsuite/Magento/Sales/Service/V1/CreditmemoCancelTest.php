@@ -27,7 +27,9 @@ class CreditmemoCancelTest extends WebapiAbstract
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditmemoCollection */
-        $creditmemoCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
+        $creditmemoCollection = $objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection::class
+        );
         $creditmemo = $creditmemoCollection->getFirstItem();
 
         $serviceInfo = [

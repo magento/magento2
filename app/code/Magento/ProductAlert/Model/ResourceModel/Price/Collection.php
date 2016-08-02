@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Price', 'Magento\ProductAlert\Model\ResourceModel\Price');
+        $this->_init(\Magento\ProductAlert\Model\Price::class, \Magento\ProductAlert\Model\ResourceModel\Price::class);
     }
 
     /**

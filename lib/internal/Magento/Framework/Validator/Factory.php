@@ -91,7 +91,7 @@ class Factory
                 return (string)new \Magento\Framework\Phrase(array_shift($argc), $argc);
             };
             /** @var \Magento\Framework\Translate\Adapter $translator */
-            $translator = $this->_objectManager->create('Magento\Framework\Translate\Adapter');
+            $translator = $this->_objectManager->create(\Magento\Framework\Translate\Adapter::class);
             $translator->setOptions(['translator' => $translatorCallback]);
             \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($translator);
             $this->isDefaultTranslatorInitialized = true;
@@ -109,7 +109,8 @@ class Factory
     {
         $this->_initializeConfigList();
         $this->_initializeDefaultTranslator();
-        return $this->_objectManager->create('Magento\Framework\Validator\Config', ['configFiles' => $this->_configFiles]);
+        return $this->_objectManager->create(
+            \Magento\Framework\Validator\Config::class, ['configFiles' => $this->_configFiles]);
     }
 
     /**

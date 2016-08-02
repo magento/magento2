@@ -19,7 +19,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Search\Model\Adminhtml\System\Config\Source\Engine'
+            \Magento\Search\Model\Adminhtml\System\Config\Source\Engine::class
         );
     }
 

@@ -46,7 +46,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Translate\Inline',
+        $instanceName = \Magento\Framework\Translate\Inline::class,
         $shared = true
     ) {
         $this->objectManager = $objectManager;

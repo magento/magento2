@@ -35,7 +35,7 @@ class Cart extends \Magento\Checkout\Test\Block\Cart
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(
-                'Magento\Weee\Test\Block\Cart\CartItem',
+                \Magento\Weee\Test\Block\Cart\CartItem::class,
                 ['element' => $cartItemBlock]
             );
         }

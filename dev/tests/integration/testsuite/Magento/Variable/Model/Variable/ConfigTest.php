@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Variable\Model\Variable\Config'
+            \Magento\Variable\Model\Variable\Config::class
         );
     }
 
