@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Model\Order;
+namespace Magento\Sales\Api;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class SalesDocumentValidationException
+ * Class DocumentValidationException
+ * @api
  */
-class SalesDocumentValidationException extends LocalizedException
+class DocumentValidationException extends LocalizedException
 {
 }

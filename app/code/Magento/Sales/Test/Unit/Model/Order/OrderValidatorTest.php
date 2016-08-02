@@ -37,12 +37,12 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
-        $this->orderItemMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderItemInterface')
+        $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
             ->getMockForAbstractClass();

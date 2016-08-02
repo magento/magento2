@@ -113,10 +113,12 @@ interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemCreati
      * Base discount tax compensation amount.
      */
     const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
+
     /**
      * Invoice
      */
     const INVOICE = 'invoice';
+
     /**
      * Gets the additional data for the invoice item.
      *

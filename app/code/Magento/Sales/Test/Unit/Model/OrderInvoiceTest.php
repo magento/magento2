@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -24,9 +23,9 @@ use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 
-
 /**
  * Class OrderInvoiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -260,9 +259,6 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->orderMock);
 
         if ($notify) {
-            if (!$appendComment) {
-                $comment = null;
-            }
             $this->notifierInterfaceMock->expects($this->once())
                 ->method('notify')
                 ->with($this->orderMock, $this->invoiceMock, $this->invoiceCommentCreationMock);
@@ -272,7 +268,8 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId')
             ->willReturn(2);
 
-        $this->assertEquals(2,
+        $this->assertEquals(
+            2,
             $this->orderInvoice->execute(
                 $orderId,
                 $capture,
@@ -284,7 +281,6 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
-
 
     /**
      * @expectedException \Magento\Sales\Model\Order\SalesDocumentValidationException
@@ -384,7 +380,6 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             $this->invoiceCommentCreationMock,
             $this->invoiceCreationArgumentsMock
         );
-
     }
 
     public function dataProvider()
@@ -394,5 +389,4 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             'TestWithNotifyFalse' => [1, true, [1 => 2], false, true]
         ];
     }
-
 }

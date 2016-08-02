@@ -8,7 +8,6 @@ namespace Magento\Sales\Api;
 
 /**
  * Class OrderInvoiceInterface
- *  Should be part of OrderManagementInterface::invoice()
  *
  * @api
  */

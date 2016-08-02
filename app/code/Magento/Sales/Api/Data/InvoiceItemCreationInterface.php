@@ -10,6 +10,8 @@ namespace Magento\Sales\Api\Data;
  * Input argument for invoice creation
  *
  * Interface InvoiceItemCreationInterface
+ *
+ * @api
  */
 interface InvoiceItemCreationInterface extends LineItemInterface
 {

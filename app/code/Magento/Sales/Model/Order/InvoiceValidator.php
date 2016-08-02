@@ -69,7 +69,8 @@ class InvoiceValidator implements InvoiceValidatorInterface
             foreach ($order->getItems() as $orderItem) {
                 if (isset($qtys[$orderItem->getId()])) {
                     if ($qtys[$orderItem->getId()] > $orderItem->getQtyToInvoice() && !$orderItem->isDummy()) {
-                        $messages[] = __('The quantity to invoice must not be greater than the uninvoiced quantity'
+                        $messages[] = __(
+                            'The quantity to invoice must not be greater than the uninvoiced quantity'
                                 . ' for product SKU "%1".',
                             $orderItem->getSku()
                         );

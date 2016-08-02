@@ -1,9 +1,9 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model;
 
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
@@ -19,12 +19,13 @@ use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order\InvoiceRepository;
-use Magento\Sales\Model\Order\SalesDocumentValidationException;
-use Magento\Sales\Model\Order\SalesOperationFailedException;
+use Magento\Sales\Api\DocumentValidationException;
+use Magento\Sales\Api\CouldNotInvoiceException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class InvoiceService
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderInvoice implements OrderInvoiceInterface
 {
@@ -90,6 +91,7 @@ class OrderInvoice implements OrderInvoiceInterface
      * @param InvoiceRepository $invoiceRepository
      * @param NotifierInterface $notifierInterface
      * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -123,9 +125,9 @@ class OrderInvoice implements OrderInvoiceInterface
      * @param bool $appendComment
      * @param \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface|null $arguments
-     * @return int|null
-     * @throws \Magento\Sales\Model\Order\SalesDocumentValidationException
-     * @throws \Magento\Sales\Model\Order\SalesOperationFailedException
+     * @return int
+     * @throws DocumentValidationException
+     * @throws CouldNotInvoiceException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \DomainException
@@ -150,7 +152,9 @@ class OrderInvoice implements OrderInvoiceInterface
         );
         $errorMessages = $this->invoiceValidator->validate($invoice, $order);
         if (!empty($errorMessages)) {
-            throw new SalesDocumentValidationException(__("Sales Document Validation Error", $errorMessages));
+            throw new DocumentValidationException(__(
+                "Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
+            );
         }
         $connection->beginTransaction();
         try {
@@ -166,7 +170,7 @@ class OrderInvoice implements OrderInvoiceInterface
         } catch (\Exception $e) {
             $this->logger->critical($e);
             $connection->rollBack();
-            throw new SalesOperationFailedException(__("Sales Operation Failed", $e->getMessage()));
+            throw new CouldNotInvoiceException(__('Could not save an invoice, see error log for details'));
         }
         if ($notify) {
             if (!$appendComment) {

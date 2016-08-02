@@ -22,6 +22,16 @@ use Magento\Sales\Model\EntityInterface;
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
+    /**#@+
+     * Invoice states
+     */
+    const STATE_OPEN = 1;
+
+    const STATE_PAID = 2;
+
+    const STATE_CANCELED = 3;
+    /**#@-*/
+
     const CAPTURE_ONLINE = 'online';
 
     const CAPTURE_OFFLINE = 'offline';

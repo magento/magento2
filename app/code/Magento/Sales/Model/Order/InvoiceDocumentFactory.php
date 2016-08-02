@@ -39,7 +39,7 @@ class InvoiceDocumentFactory
      * @param OrderInterface $order
      * @param array $items
      * @param InvoiceCommentCreationInterface|null $comment
-     * @param bool $appendComment
+     * @param bool|false $appendComment
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      */

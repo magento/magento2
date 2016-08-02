@@ -4,13 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Model\Order;
+namespace Magento\Sales\Api;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class SalesOperationFailedException
+ * Class CouldNotInvoiceException
+ * @api
  */
-class SalesOperationFailedException extends LocalizedException
+class CouldNotInvoiceException extends LocalizedException
 {
+
 }

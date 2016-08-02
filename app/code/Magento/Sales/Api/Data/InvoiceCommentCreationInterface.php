@@ -8,6 +8,8 @@ namespace Magento\Sales\Api\Data;
 
 /**
  * Interface InvoiceCommentCreationInterface
+ *
+ * @api
  */
 interface InvoiceCommentCreationInterface extends \Magento\Sales\Api\Data\CommentInterface
 {

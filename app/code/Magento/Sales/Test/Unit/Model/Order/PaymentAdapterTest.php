@@ -32,33 +32,17 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $this->invoiceMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\InvoiceInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $this->payOperationMock = $this->getMock(
-            'Magento\Sales\Model\Order\Invoice\PayOperation',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->payOperationMock =$this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\PayOperation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->subject = new \Magento\Sales\Model\Order\PaymentAdapter(
             $this->payOperationMock

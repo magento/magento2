@@ -53,7 +53,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderInterface',
+            \Magento\Sales\Api\Data\OrderInterface::class,
             [],
             '',
             false,
@@ -140,7 +140,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn(31);
 
         $this->invoiceMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\InvoiceInterface',
+            \Magento\Sales\Api\Data\InvoiceInterface::class,
             [],
             '',
             false,
@@ -216,7 +216,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn(31);
 
         $this->contextMock = $this->getMock(
-            'Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             [],
             [],
             '',
@@ -224,7 +224,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->invoiceItemMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\InvoiceItemInterface',
+            \Magento\Sales\Api\Data\InvoiceItemInterface::class,
             [],
             '',
             false,
@@ -243,7 +243,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $this->orderPaymentMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderPaymentInterface',
+            \Magento\Sales\Api\Data\OrderPaymentInterface::class,
             [],
             '',
             false,
@@ -260,7 +260,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->orderPaymentMock);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -273,7 +273,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->eventManagerMock);
 
         $this->paymentMethodMock = $this->getMockForAbstractClass(
-            'Magento\Payment\Model\MethodInterface',
+            \Magento\Payment\Model\MethodInterface::class,
             [],
             '',
             false,

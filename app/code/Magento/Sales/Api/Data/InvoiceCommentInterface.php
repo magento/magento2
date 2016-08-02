@@ -13,7 +13,7 @@ namespace Magento\Sales\Api\Data;
  * @api
  */
 interface InvoiceCommentInterface extends
-\Magento\Framework\Api\ExtensibleDataInterface, \Magento\Sales\Api\Data\InvoiceCommentCreationInterface
+    \Magento\Framework\Api\ExtensibleDataInterface, \Magento\Sales\Api\Data\InvoiceCommentCreationInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
