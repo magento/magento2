@@ -54,6 +54,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         ];
 
         $requestData = [
+            'orderId' => $existingOrder->getId(),
             'items' => [],
             'comment' => [
                 'comment' => 'Test Comment',
