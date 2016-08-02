@@ -118,6 +118,10 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
         do {
             sleep(1);
             $actualCount = file_exists($logFilePath) ? count(file($logFilePath)) : 0;
-        } while (($expectedLinesCount !== $actualCount) && ($i++ < 30));
+        } while (($expectedLinesCount !== $actualCount) && ($i++ < 90));
+
+        if (!file_exists($logFilePath)) {
+            $this->fail("No asynchronous messages were not processed.");
+        }
     }
 }
