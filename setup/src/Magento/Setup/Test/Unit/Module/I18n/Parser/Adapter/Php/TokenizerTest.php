@@ -28,7 +28,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->tokenizer = $this->objectManager->getObject(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer'
+            \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer::class
         );
     }
 

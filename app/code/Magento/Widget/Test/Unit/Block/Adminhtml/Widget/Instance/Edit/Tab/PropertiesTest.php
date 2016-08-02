@@ -24,12 +24,12 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->widget = $this->getMock('Magento\Widget\Model\Widget\Instance', [], [], '', false);
-        $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->widget = $this->getMock(\Magento\Widget\Model\Widget\Instance::class, [], [], '', false);
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->propertiesBlock = $objectManager->getObject(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties',
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties::class,
             [
                 'registry' => $this->registry
             ]

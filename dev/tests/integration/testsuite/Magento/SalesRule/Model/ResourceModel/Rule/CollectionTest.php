@@ -21,7 +21,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testSetValidationFilter($couponCode, $expectedItems)
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
         $items = array_values($collection->setValidationFilter(1, 0, $couponCode)->getItems());
 
@@ -65,17 +65,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\SalesRule\Model\Rule $rule */
-        $rule = $objectManager->get('Magento\Framework\Registry')
+        $rule = $objectManager->get(\Magento\Framework\Registry::class)
             ->registry('_fixture/Magento_SalesRule_Group_Multiple_Categories');
 
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
 
         //gather only the existing rules that obey the validation filter
         /** @var  \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
         $ruleCollection = $objectManager->create(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
 
         $appliedRulesArray = array_keys(
@@ -102,17 +102,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\SalesRule\Model\Rule $rule */
-        $rule = $objectManager->get('Magento\Framework\Registry')
+        $rule = $objectManager->get(\Magento\Framework\Registry::class)
             ->registry('_fixture/Magento_SalesRule_Group_Multiple_Categories');
 
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
 
         //gather only the existing rules that obey the validation filter
         /** @var  \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
         $ruleCollection = $objectManager->create(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
 
         $appliedRulesArray = array_keys(
@@ -140,13 +140,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
 
         //gather only the existing rules that obey the validation filter
         /** @var  \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
         $ruleCollection = $objectManager->create(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
 
         $appliedRulesArray = array_keys(
@@ -173,7 +173,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setSpecificTimezone('Europe/Kiev');
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
         $collection->addWebsiteGroupDateFilter(1, 0);
         $items = array_values($collection->getItems());
@@ -192,7 +192,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setSpecificTimezone('Australia/Sydney');
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
         );
         $collection->addWebsiteGroupDateFilter(1, 0);
         $items = array_values($collection->getItems());
@@ -215,7 +215,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Config\Model\Config\Factory')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Config\Model\Config\Factory::class)
             ->create()
             ->addData($localeData)
             ->save();

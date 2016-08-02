@@ -21,7 +21,7 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->booleanFactory = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory')
+        $this->booleanFactory = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -32,7 +32,7 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClassEmpty()
     {
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIsRequired',
@@ -56,7 +56,7 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClass()
     {
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIsRequired',
@@ -89,7 +89,7 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClassLength()
     {
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIsRequired',

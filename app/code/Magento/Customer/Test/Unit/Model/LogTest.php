@@ -35,7 +35,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->log = $objectManagerHelper->getObject(
-            'Magento\Customer\Model\Log',
+            \Magento\Customer\Model\Log::class,
             [
                 'customerId' => $this->logData['customer_id'],
                 'lastLoginAt' => $this->logData['last_login_at'],

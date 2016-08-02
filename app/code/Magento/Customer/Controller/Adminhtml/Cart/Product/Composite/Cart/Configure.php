@@ -22,7 +22,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
             $quoteItem = $this->_quoteItem;
 
             $optionCollection = $this->_objectManager->create(
-                'Magento\Quote\Model\Quote\Item\Option'
+                \Magento\Quote\Model\Quote\Item\Option::class
             )->getCollection()->addItemFilter(
                 $quoteItem
             );
@@ -38,7 +38,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
             $configureResult->setMessage($e->getMessage());
         }
 
-        return $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
+        return $this->_objectManager->get(\Magento\Catalog\Helper\Product\Composite::class)
             ->renderConfigureResult($configureResult);
     }
 }

@@ -33,7 +33,7 @@ class ProductServiceTest extends WebapiAbstract
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
+        $this->productCollection = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
     }
 
     /**

@@ -20,7 +20,7 @@ class CountryRegion extends \Magento\Backend\App\Action
         $countryId = $this->getRequest()->getParam('parent');
         if (!empty($countryId)) {
             $arrRegions = $this->_objectManager->create(
-                'Magento\Directory\Model\ResourceModel\Region\Collection'
+                \Magento\Directory\Model\ResourceModel\Region\Collection::class
             )->addCountryFilter(
                 $countryId
             )->load()->toOptionArray();
@@ -32,7 +32,7 @@ class CountryRegion extends \Magento\Backend\App\Action
             }
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($arrRes)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($arrRes)
         );
     }
 }

@@ -65,7 +65,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\ResourceModel\Page');
+        $this->_init(\Magento\Cms\Model\ResourceModel\Page::class);
     }
 
     /**

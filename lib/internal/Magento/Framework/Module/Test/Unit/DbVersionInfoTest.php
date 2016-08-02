@@ -7,7 +7,6 @@ namespace Magento\Framework\Module\Test\Unit;
 
 use \Magento\Framework\Module\DbVersionInfo;
 
-
 class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,7 +26,7 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
+        $this->moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $this->moduleList->expects($this->any())
             ->method('getOne')
             ->will($this->returnValueMap([
@@ -39,8 +38,8 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getNames')
             ->will($this->returnValue(['Module_One', 'Module_Two']));
 
-        $this->_outputConfig = $this->getMockForAbstractClass('Magento\Framework\Module\Output\ConfigInterface');
-        $this->moduleResource = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceInterface');
+        $this->_outputConfig = $this->getMockForAbstractClass(\Magento\Framework\Module\Output\ConfigInterface::class);
+        $this->moduleResource = $this->getMockForAbstractClass(\Magento\Framework\Module\ResourceInterface::class);
 
         $this->dbVersionInfo = new DbVersionInfo(
             $this->moduleList,
@@ -85,7 +84,6 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
             $this->dbVersionInfo->isDataUpToDate($moduleName)
         );
     }
-
 
     /**
      * @return array

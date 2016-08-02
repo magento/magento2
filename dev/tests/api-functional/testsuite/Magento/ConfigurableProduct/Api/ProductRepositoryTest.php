@@ -42,7 +42,7 @@ class ProductRepositoryTest extends WebapiAbstract
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->eavConfig = $this->objectManager->get('Magento\Eav\Model\Config');
+        $this->eavConfig = $this->objectManager->get(\Magento\Eav\Model\Config::class);
     }
 
     /**
@@ -58,7 +58,7 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection */
         $optionCollection = $this->objectManager->create(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
         );
         $options = $optionCollection->setAttributeFilter($this->configurableAttribute->getId())->getData();
         return $options;

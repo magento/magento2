@@ -27,7 +27,7 @@ class DocumentFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Api\Search\Document'
+        $instanceName = \Magento\Framework\Api\Search\Document::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

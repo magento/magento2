@@ -77,7 +77,7 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
                 $productAttributeOriginal = $attribute;
             }
             $product = $this->objectManager->create(
-                'Magento\Catalog\Test\TestStep\CreateProductWithAttributeSetStep',
+                \Magento\Catalog\Test\TestStep\CreateProductWithAttributeSetStep::class,
                 [
                     'attribute' => $productAttributeOriginal,
                     'attributeSet' => $attributeSet

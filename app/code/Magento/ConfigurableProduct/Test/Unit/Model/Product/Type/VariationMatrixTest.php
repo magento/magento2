@@ -21,7 +21,7 @@ class VariationMatrixTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->model = $this->objectManagerHelper->getObject(
-            '\Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix'
+            \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix::class
         );
     }
 
