@@ -100,12 +100,10 @@ class StructurePlugin
         if ($isSectionChanged && isset($result)) {
             if ($result instanceof Section) {
                 $this->restructurePayments($result);
-                $result->setData(
-                    array_merge(
-                        $result->getData(),
-                        ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
-                    ), $this->_scopeDefiner->getScope()
-                );
+                $result->setData(array_merge(
+                    $result->getData(),
+                    ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
+                ), $this->_scopeDefiner->getScope());
             }
         }
         return $result;
