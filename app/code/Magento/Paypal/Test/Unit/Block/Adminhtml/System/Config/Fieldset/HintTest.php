@@ -38,7 +38,7 @@ class HintTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Hint::render
+     * @covers \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint::render
      */
     public function testRender()
     {
@@ -58,7 +58,7 @@ class HintTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Hint::render
+     * @covers \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint::render
      */
     public function testRenderEmptyComment()
     {
