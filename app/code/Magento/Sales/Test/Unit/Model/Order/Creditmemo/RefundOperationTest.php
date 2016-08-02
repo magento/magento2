@@ -137,7 +137,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $amounts
-     * @dataProvider BaseAmountsDataProvider
+     * @dataProvider baseAmountsDataProvider
      */
     public function testExecuteOffline($amounts)
     {
@@ -192,7 +192,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $amounts
-     * @dataProvider BaseAmountsDataProvider
+     * @dataProvider baseAmountsDataProvider
      */
     public function testExecuteOnline($amounts)
     {
@@ -246,7 +246,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function BaseAmountsDataProvider()
+    public function baseAmountsDataProvider()
     {
         return [
             [[

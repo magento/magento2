@@ -9,6 +9,7 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class CreditmemoServiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
 {
