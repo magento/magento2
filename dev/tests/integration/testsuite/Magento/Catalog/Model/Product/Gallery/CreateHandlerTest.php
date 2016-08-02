@@ -21,7 +21,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->createHandler = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Gallery\CreateHandler'
+            \Magento\Catalog\Model\Product\Gallery\CreateHandler::class
         );
     }
 
@@ -34,7 +34,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileLabel = 'Magento image';
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
         $product->setData(

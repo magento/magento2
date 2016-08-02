@@ -28,16 +28,16 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
+        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder('Magento\Framework\Event\ManagerInterface')->getMock());
+            ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
 
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Theme\Model\Design\Backend\Exceptions',
+            \Magento\Theme\Model\Design\Backend\Exceptions::class,
             [
                 'context' => $this->contextMock,
                 'design' => $this->designMock,

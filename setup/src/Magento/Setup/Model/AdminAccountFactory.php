@@ -33,7 +33,7 @@ class AdminAccountFactory
     {
         return new AdminAccount(
             $setup,
-            $this->serviceLocator->get('Magento\Framework\Encryption\Encryptor'),
+            $this->serviceLocator->get(\Magento\Framework\Encryption\Encryptor::class),
             $data
         );
     }

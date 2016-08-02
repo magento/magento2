@@ -48,7 +48,7 @@ class Reader extends Filesystem
         Backend $helper,
         $fileName = 'adminhtml/rules/payment_{country}.xml',
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'primary'
     ) {
         $fileName = str_replace('{country}', strtolower($helper->getConfigurationCountryCode()), $fileName);

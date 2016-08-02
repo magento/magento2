@@ -32,6 +32,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     const STATUS_DISABLED = 0;
 
     /**#@-*/
+
     /**
      * @var string
      */
@@ -49,7 +50,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\ResourceModel\Block');
+        $this->_init(\Magento\Cms\Model\ResourceModel\Block::class);
     }
 
     /**

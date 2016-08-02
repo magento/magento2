@@ -42,7 +42,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
             $storeId = (int)$storeId;
         }
 
-        $groupId = $this->_objectManager->get('Magento\Customer\Model\Vat')
+        $groupId = $this->_objectManager->get(\Magento\Customer\Model\Vat::class)
             ->getCustomerGroupIdBasedOnVatNumber(
                 $this->getRequest()->getParam('country'),
                 $result,

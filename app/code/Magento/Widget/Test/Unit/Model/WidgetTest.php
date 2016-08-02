@@ -109,8 +109,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($widgets);
 
-        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
 
         $this->assertSame('CMS Page Link', $resultObject->getName());
         $this->assertSame('Link to a CMS Page', $resultObject->getDescription());
@@ -118,9 +118,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
 
         $resultParameters = $resultObject->getParameters();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id']);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['page_id']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['anchor_text']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['template']);
 
         $supportedContainersExpected = [
             '0' => [
@@ -141,14 +141,14 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn([]);
 
-        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
         $this->assertSame([], $resultObject->getData());
     }
 
     public function testGetWidgetDeclaration()
     {
-        $mathRandomMock = $this->getMock('\Magento\Framework\Math\Random', ['getRandomString'], [], '', false);
+        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
         $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
         $reflection = new \ReflectionClass(get_class($this->widget));
         $reflectionProperty = $reflection->getProperty('mathRandom');
@@ -157,7 +157,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
         $conditions = [
             [
-                'type' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine',
+                'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                 'aggregator' => 'all',
                 'value' => '1',
                 'new_child' => ''
@@ -185,7 +185,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
                 ['encoded-conditions-string', false, 'encoded-conditions-string'],
             ]);
 
-        $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
+        $result = $this->widget->getWidgetDeclaration(
+            \Magento\CatalogWidget\Block\Product\ProductsList::class,
+            $params
+        );
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('title="my &quot;widget&quot;"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
@@ -194,7 +197,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetDeclarationWithZeroValueParam()
     {
-        $mathRandomMock = $this->getMock('\Magento\Framework\Math\Random', ['getRandomString'], [], '', false);
+        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
         $mathRandomMock->expects($this->any())
             ->method('getRandomString')
             ->willReturn('asdf');
@@ -207,7 +210,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
         $conditions = [
             [
-                'type' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine',
+                'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                 'aggregator' => 'all',
                 'value' => '1',
                 'new_child' => ''
@@ -227,7 +230,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->with($conditions)
             ->willReturn('encoded-conditions-string');
 
-        $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
+        $result = $this->widget->getWidgetDeclaration(
+            \Magento\CatalogWidget\Block\Product\ProductsList::class,
+            $params
+        );
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('page_var_name="pasdf"}}', $result);
         $this->assertContains('products_count=""', $result);

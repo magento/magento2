@@ -11,6 +11,9 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -48,34 +51,36 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->categoriesCollection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category\Collection')
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->categoriesCollection = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class)
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
             ->will($this->returnValue($this->categoriesCollection));
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->categoriesCollection->expects($this->exactly(2))->method('addAttributeToSelect')
             ->will($this->returnSelf());
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator'
+            \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->canonicalUrlRewriteGenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator'
+            \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->categoriesUrlRewriteGenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator'
+            \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->anchorUrlRewriteGenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator'
+            \Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
-        $this->objectRegistryFactory = $this->getMockBuilder('Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory')
-            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
-        $this->storeViewService = $this->getMockBuilder('Magento\CatalogUrlRewrite\Service\V1\StoreViewService')
+        $this->objectRegistryFactory = $this->getMockBuilder(
+            \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory::class
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->productUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            'Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator',
+            \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::class,
             [
                 'canonicalUrlRewriteGenerator' => $this->canonicalUrlRewriteGenerator,
                 'categoriesUrlRewriteGenerator' => $this->categoriesUrlRewriteGenerator,
@@ -144,12 +149,12 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $this->product->expects($this->never())->method('getStoreIds');
         $storeRootCategoryId = 'root-for-store-id';
-        $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $category->expects($this->any())->method('getParentIds')
             ->will($this->returnValue(['root-id', $storeRootCategoryId]));
         $category->expects($this->any())->method('getParentId')->will($this->returnValue('parent_id'));
         $category->expects($this->any())->method('getId')->will($this->returnValue('category_id'));
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getRootCategoryId')->will($this->returnValue($storeRootCategoryId));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->categoriesCollection->expects($this->any())->method('getIterator')
@@ -177,10 +182,10 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $this->product->expects($this->never())->method('getStoreIds');
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getRootCategoryId')->will($this->returnValue('root-for-store-id'));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $rootCategory = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $rootCategory = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $rootCategory->expects($this->any())->method('getParentIds')->will($this->returnValue([1, 2]));
         $rootCategory->expects($this->any())->method('getParentId')->will($this->returnValue(Category::TREE_ROOT_ID));
         $this->categoriesCollection->expects($this->any())->method('getIterator')
@@ -208,10 +213,10 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $this->product->expects($this->never())->method('getStoreIds');
-        $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $category->expects($this->any())->method('getParentIds')
             ->will($this->returnValue(['root-id', 'root-for-store-id']));
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getRootCategoryId')->will($this->returnValue('not-root-id'));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->categoriesCollection->expects($this->any())->method('getIterator')
@@ -249,7 +254,7 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function initObjectRegistryFactory($entities)
     {
-        $objectRegistry = $this->getMockBuilder('Magento\CatalogUrlRewrite\Model\ObjectRegistry')
+        $objectRegistry = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\ObjectRegistry::class)
             ->disableOriginalConstructor()->getMock();
         $this->objectRegistryFactory->expects($this->any())->method('create')
             ->with(['entities' => $entities])

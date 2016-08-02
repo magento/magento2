@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ReaderFactory
 {
-    const INSTANCE_NAME = 'Magento\Framework\View\Element\UiComponent\Config\Reader';
+    const INSTANCE_NAME = \Magento\Framework\View\Element\UiComponent\Config\Reader::class;
 
     /**
      * @var ObjectManagerInterface

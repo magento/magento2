@@ -16,7 +16,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
+        $this->templateFilter = $objectManager->getObject(\Magento\Framework\Filter\Template::class);
     }
 
     public function testFilter()
@@ -141,7 +141,7 @@ EXPECTED_RESULT;
     public function varDirectiveDataProvider()
     {
         /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
-        $stub = $this->getMockBuilder('\Magento\Framework\DataObject')
+        $stub = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->disableProxyingToOriginalMethods()
             ->setMethods(['bar'])

@@ -24,7 +24,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->gridBlock = Bootstrap::getObjectManager()
-            ->create('Magento\Integration\Block\Adminhtml\Integration\Grid');
+            ->create(\Magento\Integration\Block\Adminhtml\Integration\Grid::class);
     }
 
     public function testGetRowClickCallback()

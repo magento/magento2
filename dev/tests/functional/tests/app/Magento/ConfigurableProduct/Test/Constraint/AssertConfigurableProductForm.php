@@ -150,7 +150,7 @@ class AssertConfigurableProductForm extends AssertProductForm
     {
         $data = array_diff_key($product->getData(), ['price' => 0, 'special_price' => 0]);
         return $this->objectManager->create(
-            'Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct',
+            \Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct::class,
             ['data' => $data]
         );
     }

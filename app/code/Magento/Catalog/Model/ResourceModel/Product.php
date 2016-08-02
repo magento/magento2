@@ -386,7 +386,7 @@ class Product extends AbstractResource
      */
     public function getDefaultAttributeSourceModel()
     {
-        return 'Magento\Eav\Model\Entity\Attribute\Source\Table';
+        return \Magento\Eav\Model\Entity\Attribute\Source\Table::class;
     }
 
     /**
@@ -619,7 +619,7 @@ class Product extends AbstractResource
     {
         if (null === $this->entityManager) {
             $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\EntityManager');
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
         }
         return $this->entityManager;
     }
@@ -641,7 +641,7 @@ class Product extends AbstractResource
     {
         if (null === $this->productCategoryLink) {
             $this->productCategoryLink = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\ResourceModel\Product\CategoryLink');
+                ->get(\Magento\Catalog\Model\ResourceModel\Product\CategoryLink::class);
         }
         return $this->productCategoryLink;
     }
