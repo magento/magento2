@@ -28,7 +28,7 @@ class Region extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\ResourceModel\Region');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Region::class);
     }
 
     /**

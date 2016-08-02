@@ -28,7 +28,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->validatorTest = $this->getMockForAbstractClass(
-            'Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface',
+            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::class,
             [],
             '',
             false
@@ -38,7 +38,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validators = [$this->validatorTest];
 
         $this->validator = $this->getMock(
-            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator',
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class,
             ['_clearMessages', '_addMessages'],
             [$this->validators]
         );

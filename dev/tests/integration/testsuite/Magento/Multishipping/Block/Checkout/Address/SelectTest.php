@@ -21,7 +21,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_selectBlock = Bootstrap::getObjectManager()->create(
-            'Magento\Multishipping\Block\Checkout\Address\Select'
+            \Magento\Multishipping\Block\Checkout\Address\Select::class
         );
         parent::setUp();
     }
@@ -34,7 +34,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\AddressRepositoryInterface'
+            \Magento\Customer\Api\AddressRepositoryInterface::class
         );
         $fixtureAddressId = 1;
         $address = $addressRepository->getById($fixtureAddressId);

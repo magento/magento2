@@ -160,7 +160,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->stockItem->expects($this->once())->method('setWebsiteId');
         $this->product->expects(($this->atLeastOnce()))->method('getStoreId')->willReturn(20);
 
-        $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+        $newProductMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->productRepository->expects($this->once())->method('get')->willReturn($newProductMock);
 
@@ -212,7 +212,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('updateStockItemBySku')
             ->with($sku, $this->stockItem);
 
-        $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+        $newProductMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->productRepository->expects($this->once())
             ->method('get')

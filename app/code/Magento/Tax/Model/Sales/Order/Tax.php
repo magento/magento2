@@ -39,7 +39,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\ResourceModel\Sales\Order\Tax');
+        $this->_init(\Magento\Tax\Model\ResourceModel\Sales\Order\Tax::class);
     }
 
     /**

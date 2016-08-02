@@ -27,7 +27,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $this->deploymentConfig->expects(
             $this->any()
         )->method(

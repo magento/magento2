@@ -85,6 +85,6 @@ class Main extends AbstractMain
      */
     protected function _getAdditionalElementTypes()
     {
-        return ['apply' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Apply'];
+        return ['apply' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Apply::class];
     }
 }

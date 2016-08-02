@@ -25,7 +25,7 @@ class CompleteBackupTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/complete-backup.phtml', $viewModel->getTemplate());
     }
@@ -33,7 +33,7 @@ class CompleteBackupTest extends \PHPUnit_Framework_TestCase
     public function testProgressAction()
     {
         $viewModel = $this->controller->progressAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/complete-backup/progress.phtml', $viewModel->getTemplate());
     }

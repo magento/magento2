@@ -86,7 +86,7 @@ class CustomerExtractor
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $store = $this->storeManager->getStore();
         if ($isGroupIdEmpty) {
