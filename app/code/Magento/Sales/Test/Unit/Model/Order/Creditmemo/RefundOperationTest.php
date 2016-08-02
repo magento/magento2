@@ -44,31 +44,31 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Api\Data\CreditmemoInterface')
+        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBaseCost'])
             ->getMockForAbstractClass();
 
-        $this->paymentMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
+        $this->paymentMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['refund'])
             ->getMockForAbstractClass();
 
-        $this->priceCurrencyMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
+        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['round'])
             ->getMockForAbstractClass();
 
-        $contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
 
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -386,7 +386,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
     private function getCreditmemoItemMock()
     {
-        return $this->getMockBuilder('Magento\Sales\Api\Data\CreditmemoItemInterface')
+        return $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoItemInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'setCreditMemo', 'getQty', 'register'])
             ->getMockForAbstractClass();
