@@ -264,50 +264,13 @@ define([
          * @returns {Object}
          */
         focusInvalid: function () {
-            var scrollTop, invalidField = this.some('isInvalid');
+            var invalidField = _.find(this.delegate('isInvalid'));
 
-            if (typeof invalidField !== 'undefined') {
-                if (typeof invalidField.focused === 'function') {
-                    invalidField.focused(true);
-                } else {
-                    scrollTop = $(this.errorClass).offset().top - window.innerHeight / 2;
-                    window.scrollTo(0, scrollTop);
-                }
+            if (typeof invalidField !== 'undefined' && typeof invalidField.focused === 'function') {
+                invalidField.focused(true);
             }
 
             return this;
-        },
-
-        /**
-         * Tries to call specified method on an object or its children.
-         * Returns first object which pass the method test.
-         *
-         * @param {String} method - name of method for test
-         * @param {Object} [obj] - target object
-         * @returns {*}
-         */
-        some: function (method, obj) {
-            var i, result, collection;
-
-            obj = obj || this;
-
-            if (_.isFunction(obj[method]) && obj[method]()) {
-                result = obj;
-            }
-
-            if (!result) {
-                collection = typeof obj.elems === 'function' ? obj.elems() : [];
-
-                for (i in collection) {
-                    if (collection.hasOwnProperty(i)) {
-                        if (result = this.some(method, collection[i])) {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
         },
 
         /**

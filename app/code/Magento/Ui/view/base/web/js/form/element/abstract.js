@@ -79,7 +79,7 @@ define([
          * @returns {Boolean}
          */
         isInvalid: function () {
-            return this.error() && this.error().length;
+            return this.error() && this.error().length ? this : false;
         },
 
         /**
