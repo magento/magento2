@@ -6,15 +6,15 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\AbstractBlock */
+/** @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info */
 
-/** @var \Magento\Wishlist\Model\Item $item */
+/** @var $item \Magento\Wishlist\Model\Item */
 $item = $block->getItem();
 $product = $item->getProduct();
 
 ?>
 <strong class="product-item-name">
-    <a href="<?php echo $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>" class="product-item-link">
+    <a href="<?php echo $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?php echo $block->escapeHtmlAttr($product->getName()) ?>" class="product-item-link">
         <?php echo $block->escapeHtml($product->getName()) ?>
     </a>
 </strong>

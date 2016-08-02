@@ -13,6 +13,6 @@
     <a href="#"
        data-post='<?php /* @noEscape */ echo $block->getMoveFromCartParams(); ?>'
        class="use-ajax action action-towishlist">
-        <span><?php /* @noEscape */ echo __('Move to Wishlist'); ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Move to Wishlist'); ?></span>
     </a>
 <?php endif ?>

@@ -21,7 +21,7 @@
             <td class="col product">
                 <p>
                     <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <?php echo $block->escapeHtml($block->getImage($_product, 'product_small_image')->toHtml()); ?>
+                        <?php /* @noEscape */ echo $block->getImage($_product, 'product_small_image')->toHtml(); ?>
                     </a>
                 </p>
 
@@ -32,13 +32,13 @@
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
                     <p>
-                        <strong><?= /* @noEscape */  __('Comment') ?>:</strong>
+                        <strong><?= /* @escapeNotVerified */  __('Comment') ?>:</strong>
                         <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
                     </p>
                 <?php endif; ?>
                 <p>
                     <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <?= /* @noEscape */  __('View Product') ?>
+                        <?= /* @escapeNotVerified */  __('View Product') ?>
                     </a>
                 </p>
             </td>

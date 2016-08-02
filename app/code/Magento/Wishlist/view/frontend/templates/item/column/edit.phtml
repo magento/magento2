@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\AbstractBlock */
+/** @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit */
 
 /** @var \Magento\Wishlist\Model\Item $item */
 $item = $block->getItem();
@@ -16,6 +16,6 @@ $product = $item->getProduct();
 
 <?php if ($product->isVisibleInSiteVisibility()): ?>
     <a class="action edit" href="<?php echo $block->escapeUrl($block->getItemConfigureUrl($item)) ?>">
-        <span><?php /* @noEscape */ echo __('Edit') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Edit') ?></span>
     </a>
 <?php endif ?>
