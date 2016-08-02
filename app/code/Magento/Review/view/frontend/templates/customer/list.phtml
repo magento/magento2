@@ -26,7 +26,7 @@
                     <td data-th="<?php echo $block->escapeHtml(__('Created')) ?>" class="col date"><?php echo $block->escapeHtml($block->dateFormat($_review->getReviewCreatedAt())); ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Product Name')) ?>" class="col item">
                         <strong class="product-name">
-                            <a href="<?php echo $block->escapeUrl($block->getProductLink()) ?>id/<?php echo $block->escapeHtmlAttr($_review->getEntityPkValue()) ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a>
+                            <a href="<?php echo $block->escapeUrl($block->getProductUrl()) ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a>
                         </strong>
                     </td>
                     <td data-th="<?php echo $block->escapeHtml(__('Rating')) ?>" class="col summary">
@@ -43,7 +43,7 @@
                         <?php echo $this->helper('Magento\Review\Helper\Data')->getDetailHtml($_review->getDetail()) ?>
                     </td>
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                        <a href="<?php echo $block->escapeUrl($block->getReviewLink()) ?>id/<?php echo $block->escapeHtmlAttr($_review->getReviewId()) ?>" class="action more">
+                        <a href="<?php echo $block->escapeUrl($block->getReviewUrl($_review)) ?>" class="action more">
                             <span><?php /* @escapeNotVerified */ echo __('See Details') ?></span>
                         </a>
                     </td>
