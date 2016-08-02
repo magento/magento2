@@ -107,6 +107,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->setMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
 

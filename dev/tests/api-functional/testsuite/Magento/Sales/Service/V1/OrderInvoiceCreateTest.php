@@ -38,7 +38,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
     public function testInvoiceCreate()
     {
         /** @var \Magento\Sales\Model\Order $existingOrder */
-        $existingOrder = $this->objectManager->create('Magento\Sales\Model\Order')
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
         $serviceInfo = [
@@ -63,7 +63,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         ];
 
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
-        foreach($existingOrder->getAllItems() as $item) {
+        foreach ($existingOrder->getAllItems() as $item) {
             $requestData['items'][] = [
                 'order_item_id' => $item->getItemId(),
                 'qty' => $item->getQtyOrdered()
@@ -81,7 +81,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         }
 
         /** @var \Magento\Sales\Model\Order $updatedOrder */
-        $updatedOrder = $this->objectManager->create('Magento\Sales\Model\Order')
+        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
         $this->assertNotEquals(
