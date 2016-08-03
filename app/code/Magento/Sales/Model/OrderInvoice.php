@@ -138,7 +138,7 @@ class OrderInvoice implements OrderInvoiceInterface
         InvoiceCommentCreationInterface $comment = null,
         InvoiceCreationArgumentsInterface $arguments = null
     ) {
-        $connection = $this->resourceConnection->getConnectionByName('sales');
+        $connection = $this->resourceConnection->getConnection('sales');
         $order = $this->orderRepository->get($orderId);
         $invoice = $this->invoiceDocumentFactory->create(
             $order,

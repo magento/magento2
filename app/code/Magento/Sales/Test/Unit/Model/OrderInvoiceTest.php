@@ -192,7 +192,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     public function testOrderInvoice($orderId, $capture, $items, $notify, $appendComment)
     {
         $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnectionByName')
+            ->method('getConnection')
             ->with('sales')
             ->willReturn($this->adapterInterface);
 
@@ -336,7 +336,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
         $notify = true;
         $appendComment = true;
         $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnectionByName')
+            ->method('getConnection')
             ->with('sales')
             ->willReturn($this->adapterInterface);
 
