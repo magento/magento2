@@ -87,7 +87,7 @@ class CheckPayflowProConfigStep implements TestStepInterface
     }
 
     /**
-     * .
+     * Run step for checking Payflow Pro configuration.
      *
      * @return void
      */
@@ -100,6 +100,8 @@ class CheckPayflowProConfigStep implements TestStepInterface
 
     /**
      * Enables Payflow Pro and makes assertions for fields.
+     *
+     * @return void
      */
     private function enablePayflowPro()
     {
@@ -134,6 +136,8 @@ class CheckPayflowProConfigStep implements TestStepInterface
 
     /**
      * Disables Payflow Pro and makes assertions for fields.
+     *
+     * @return void
      */
     private function disablePayflowPro()
     {

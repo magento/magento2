@@ -15,7 +15,7 @@ use Magento\Mtf\Client\Locator;
 class PaymentsPro extends Block
 {
     /**
-     * @var string
+     * @var array
      */
     private $fields = [
         'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_' .
@@ -29,14 +29,6 @@ class PaymentsPro extends Block
         'Password' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_paypal_payflow_api_' .
             'settings_pwd'
     ];
-
-    /**
-     * @return string
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
 
     /**
      * @var array
@@ -57,6 +49,8 @@ class PaymentsPro extends Block
 
     /**
      *  Specify credentials in PayPal Payments Pro configuration.
+     *
+     * @return void
      */
     public function specifyCredentials()
     {
@@ -70,6 +64,8 @@ class PaymentsPro extends Block
 
     /**
      *  Set fields for credentials empty in PayPal Payments Pro configuration.
+     *
+     * @return void
      */
     public function clearCredentials()
     {
@@ -81,6 +77,18 @@ class PaymentsPro extends Block
     }
 
     /**
+     * Return credentials fields selectors.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Return enabler fields selectors.
+     *
      * @return array
      */
     public function getEnablerFields()
@@ -90,6 +98,8 @@ class PaymentsPro extends Block
 
     /**
      *  Click 'Configure' button to expand PayPal Payments Pro configuration.
+     *
+     * @return void
      */
     public function clickConfigureButton()
     {
@@ -98,6 +108,8 @@ class PaymentsPro extends Block
 
     /**
      * Set 'Enable this Solution' = Yes.
+     *
+     * @return void
      */
     public function enablePaymentsPro()
     {
@@ -110,6 +122,8 @@ class PaymentsPro extends Block
 
     /**
      * Set 'Enable this Solution' = No.
+     *
+     * @return void
      */
     public function disablePaymentsPro()
     {

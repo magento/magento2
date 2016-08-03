@@ -15,7 +15,7 @@ use Magento\Mtf\Client\Locator;
 class PayflowLink extends Block
 {
     /**
-     * @var string
+     * @var array
      */
     private $fields = [
         'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_payment_gateways_payflow_link_us_' .
@@ -29,14 +29,6 @@ class PayflowLink extends Block
         'Password' => '#payment_us_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow' .
             '_link_pwd'
     ];
-
-    /**
-     * @return string
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
 
     /**
      * @var array
@@ -57,6 +49,8 @@ class PayflowLink extends Block
 
     /**
      *  Specify credentials in PayPal Payflow Link configuration.
+     *
+     * @return void
      */
     public function specifyCredentials()
     {
@@ -70,6 +64,8 @@ class PayflowLink extends Block
 
     /**
      *  Set fields for credentials empty in PayPal Payflow Link configuration.
+     *
+     * @return void
      */
     public function clearCredentials()
     {
@@ -81,6 +77,18 @@ class PayflowLink extends Block
     }
 
     /**
+     * Return credentials fields selectors.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Return enabler fields selectors.
+     *
      * @return array
      */
     public function getEnablerFields()
@@ -90,6 +98,8 @@ class PayflowLink extends Block
 
     /**
      *  Click 'Configure' button to expand PayPal Payflow Link configuration.
+     *
+     * @return void
      */
     public function clickConfigureButton()
     {
@@ -98,6 +108,8 @@ class PayflowLink extends Block
 
     /**
      * Set 'Enable this Solution' = Yes.
+     *
+     * @return void
      */
     public function enablePayflowLink()
     {
@@ -110,6 +122,8 @@ class PayflowLink extends Block
 
     /**
      * Set 'Enable this Solution' = No.
+     *
+     * @return void
      */
     public function disablePayflowLink()
     {

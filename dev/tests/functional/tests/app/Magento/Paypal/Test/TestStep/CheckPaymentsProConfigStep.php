@@ -77,7 +77,6 @@ class CheckPaymentsProConfigStep implements TestStepInterface
         $sections
     ) {
         $this->systemConfigEditSectionPayment = $systemConfigEditSectionPayment;
-        $this->assertSolutionsAvailableInSection = $assertSolutionsAvailableInSection;
         $this->assertFieldsAreDisabled = $assertFieldsAreDisabled;
         $this->assertFieldsArePresent = $assertFieldsArePresent;
         $this->assertFieldsAreActive = $assertFieldsAreActive;
@@ -88,7 +87,7 @@ class CheckPaymentsProConfigStep implements TestStepInterface
     }
 
     /**
-     * .
+     * Run step for checking Payments Pro configuration.
      *
      * @return void
      */
@@ -101,6 +100,8 @@ class CheckPaymentsProConfigStep implements TestStepInterface
 
     /**
      * Enables Payments Pro and makes assertions for fields.
+     *
+     * @return void
      */
     private function enablePaymentsPro()
     {
@@ -135,6 +136,8 @@ class CheckPaymentsProConfigStep implements TestStepInterface
 
     /**
      * Disables Payments Pro and makes assertions for fields.
+     *
+     * @return void
      */
     private function disablePaymentsPro()
     {

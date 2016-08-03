@@ -87,7 +87,7 @@ class CheckBraintreeConfigStep implements TestStepInterface
     }
 
     /**
-     * .
+     * Run step for checking Braintree configuration.
      *
      * @return void
      */
@@ -100,6 +100,8 @@ class CheckBraintreeConfigStep implements TestStepInterface
 
     /**
      * Enables Braintree and makes assertions for fields.
+     *
+     * @return void
      */
     private function enableBraintree()
     {
@@ -117,6 +119,8 @@ class CheckBraintreeConfigStep implements TestStepInterface
 
     /**
      * Disables Express Checkout and makes assertions for fields.
+     *
+     * @return void
      */
     private function disableBraintree()
     {

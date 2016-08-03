@@ -23,7 +23,6 @@ class CheckPayflowLinkConfigStep implements TestStepInterface
      */
     private $systemConfigEditSectionPayment;
 
-
     /**
      * @var AssertFieldsAreDisabled
      */
@@ -88,7 +87,7 @@ class CheckPayflowLinkConfigStep implements TestStepInterface
     }
 
     /**
-     * .
+     * Run step for checking Payflow Link configuration.
      *
      * @return void
      */
@@ -101,6 +100,8 @@ class CheckPayflowLinkConfigStep implements TestStepInterface
 
     /**
      * Enables Payflow Link and makes assertions for fields.
+     *
+     * @return void
      */
     private function enablePayflowLink()
     {
@@ -135,6 +136,8 @@ class CheckPayflowLinkConfigStep implements TestStepInterface
 
     /**
      * Disables Payflow Link and makes assertions for fields.
+     *
+     * @return void
      */
     private function disablePayflowLink()
     {

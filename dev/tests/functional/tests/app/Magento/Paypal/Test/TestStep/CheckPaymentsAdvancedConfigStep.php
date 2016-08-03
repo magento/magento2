@@ -87,7 +87,7 @@ class CheckPaymentsAdvancedConfigStep implements TestStepInterface
     }
 
     /**
-     * .
+     * Run step for checking Payments Advanced configuration.
      *
      * @return void
      */
@@ -100,6 +100,8 @@ class CheckPaymentsAdvancedConfigStep implements TestStepInterface
 
     /**
      * Enables Payments Advanced and makes assertions for fields.
+     *
+     * @return void
      */
     private function enablePaymentsAdvanced()
     {
@@ -127,6 +129,8 @@ class CheckPaymentsAdvancedConfigStep implements TestStepInterface
 
     /**
      * Disables Payments Advanced and makes assertions for fields.
+     *
+     * @return void
      */
     private function disablePaymentsAdvanced()
     {

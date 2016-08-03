@@ -87,7 +87,7 @@ class CheckExpressConfigStep implements TestStepInterface
     }
 
     /**
-     * .
+     * Run step for checking PayPal Express Checkout configuration.
      *
      * @return void
      */
@@ -102,6 +102,8 @@ class CheckExpressConfigStep implements TestStepInterface
 
     /**
      * Enables Express Checkout and makes assertions for fields.
+     *
+     * @return void
      */
     private function enableExpressCheckout()
     {
@@ -131,6 +133,8 @@ class CheckExpressConfigStep implements TestStepInterface
 
     /**
      * Disables Express Checkout and makes assertions for fields.
+     *
+     * @return void
      */
     private function disableExpressCheckout()
     {

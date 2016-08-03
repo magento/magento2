@@ -15,7 +15,7 @@ use Magento\Mtf\Client\Locator;
 class PaymentsAdvanced extends Block
 {
     /**
-     * @var string
+     * @var array
      */
     private $fields = [
         'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_group_all_in_one_payflow_advanced_' .
@@ -25,14 +25,6 @@ class PaymentsAdvanced extends Block
         'User' => '#payment_us_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_user',
         'Password' => '#payment_us_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_pwd'
     ];
-
-    /**
-     * @return string
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
 
     /**
      * @var array
@@ -51,6 +43,8 @@ class PaymentsAdvanced extends Block
 
     /**
      *  Specify credentials in PayPal Payments Advanced configuration.
+     *
+     * @return void
      */
     public function specifyCredentials()
     {
@@ -64,6 +58,8 @@ class PaymentsAdvanced extends Block
 
     /**
      *  Set fields for credentials empty in PayPal Payments Advanced configuration.
+     *
+     * @return void
      */
     public function clearCredentials()
     {
@@ -75,6 +71,18 @@ class PaymentsAdvanced extends Block
     }
 
     /**
+     * Return credentials fields selectors.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Return enabler fields selectors.
+     *
      * @return array
      */
     public function getEnablerFields()
@@ -84,6 +92,8 @@ class PaymentsAdvanced extends Block
 
     /**
      *  Click 'Configure' button to expand PayPal Payments Advanced configuration.
+     *
+     * @return void
      */
     public function clickConfigureButton()
     {
@@ -92,6 +102,8 @@ class PaymentsAdvanced extends Block
 
     /**
      * Set 'Enable this Solution' = Yes.
+     *
+     * @return void
      */
     public function enablePaymentsAdvanced()
     {
@@ -104,6 +116,8 @@ class PaymentsAdvanced extends Block
 
     /**
      * Set 'Enable this Solution' = No.
+     *
+     * @return void
      */
     public function disablePaymentsAdvanced()
     {
