@@ -23,8 +23,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_uploaderFactory;
 
     /**
-     * Filesystem facade
-     *
      * @var \Magento\Framework\Filesystem
      *
      * @deprecated
@@ -32,8 +30,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_filesystem;
 
     /**
-     * File Uploader factory
-     *
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
      * @deprecated
@@ -48,20 +44,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_logger;
 
     /**
-     * @var array
-     */
-    protected $actions = ['delete'];
-
-    /**
-     * Image uploader
-     *
      * @var \Magento\Catalog\Model\ImageUploader
      */
     private $imageUploader;
 
     /**
-     * Image constructor.
-     *
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
@@ -77,11 +64,10 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Check if there is image upload data available for current attribute
-     *
-     * @return bool
+     * @param $value
+     * @return string|bool
      */
-    protected function _hasUploadedImage($value)
+    protected function getUploadedImageName($value)
     {
         if (!is_array($value)) {
             return false;
@@ -93,36 +79,15 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $imageData = reset($value);
 
-        return isset($imageData['name']) && isset($imageData['tmp_name']);
-    }
-
-    protected function _getUploadedImageName($value)
-    {
-        if (!$this->_hasUploadedImage($value)) {
-            return '';
+        if (!isset($imageData['name'])) {
+            return false;
         }
-
-        $imageData = reset($value);
 
         return $imageData['name'];
     }
 
     /**
-     * Check if image attribute value has any action directives to perform after the save
-     *
-     * @param $object
-     * @return bool
-     */
-    protected function _hasImageActions($object)
-    {
-        $attributeName = $this->getAttribute()->getName();
-        $value = $object->getData($attributeName);
-
-        return is_array($value) && array_intersect(array_keys($value), $this->actions);
-    }
-
-    /**
-     * Before save method. Avoiding saving potential upload data to DB
+     * Avoiding saving potential upload data to DB
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -132,21 +97,17 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attributeName = $this->getAttribute()->getName();
         $value = $object->getData($attributeName);
 
-        if ($this->_hasUploadedImage($value)) {
-            $imageName = $this->_getUploadedImageName($value);
-
+        if ($value === false || (is_array($value) && isset($value['delete']) && $value['delete'] === true)) {
+            $object->setData($attributeName, '');
+        } else if ($imageName = $this->getUploadedImageName($value)) {
             $object->setData($attributeName . self::ADDITIONAL_DATA_SUFFIX, $value);
             $object->setData($attributeName, $imageName);
-        } else if ($this->_hasImageActions($object)) {
-            $object->setData($attributeName, '');
         }
 
         return parent::beforeSave($object);
     }
 
     /**
-     * Get image uploader
-     *
      * @return \Magento\Catalog\Model\ImageUploader
      *
      * @deprecated
@@ -158,6 +119,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 \Magento\Catalog\CategoryImageUpload::class
             );
         }
+
         return $this->imageUploader;
     }
 
@@ -171,11 +133,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->getAttribute()->getName() . self::ADDITIONAL_DATA_SUFFIX);
 
-        if (!$this->_hasUploadedImage($value)) {
+        if (!$imageName = $this->getUploadedImageName($value)) {
             return $this;
         }
-
-        $imageName = $this->_getUploadedImageName($value);
 
         try {
             $this->getImageUploader()->moveFileFromTmp($imageName);
