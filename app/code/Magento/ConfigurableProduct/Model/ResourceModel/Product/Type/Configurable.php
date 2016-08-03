@@ -41,17 +41,14 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
-     * @param ScopeResolverInterface $scopeResolver
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
-        ScopeResolverInterface $scopeResolver = null,
         $connectionName = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
-        $this->scopeResolver = $scopeResolver;
         parent::__construct($context, $connectionName);
     }
 
@@ -252,7 +249,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'entity_value.attribute_id = super_attribute.attribute_id',
                     'entity_value.store_id = 0',
                     "entity_value.{$this->getProductEntityLinkField()} = "
-                    . "entity.{$this->getProductEntityLinkField()}"
+                    . "entity.{$this->getProductEntityLinkField()}",
                 ]
             ),
             []
@@ -262,7 +259,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     'option_value.option_id = entity_value.value',
-                    'option_value.store_id = ' . $scope->getId()
+                    'option_value.store_id = ' . $scope->getId(),
                 ]
             ),
             []
@@ -272,7 +269,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     'default_option_value.option_id = entity_value.value',
-                    'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             ),
             []
@@ -289,6 +286,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return ScopeResolverInterface
+     * @deprecated
      */
     private function getScopeResolver()
     {
