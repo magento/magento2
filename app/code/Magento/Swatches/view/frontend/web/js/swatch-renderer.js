@@ -6,10 +6,46 @@
 define([
     'jquery',
     'underscore',
+    'mage/smart-keyboard-handler',
     'jquery/ui',
-    'jquery/jquery.parsequery'
-], function ($, _) {
+    'jquery/jquery.parsequery',
+    'mage/validation/validation'
+], function ($, _, keyboardHandler) {
     'use strict';
+
+    $.widget('mage.validation', $.mage.validation, {
+        listenFormValidateHandler: function (event, validation) {
+            this._superApply(arguments);
+
+            var swatchWrapper = $.mage.SwatchRenderer().options.classes.attributeOptionsWrapper,
+                firstActive = $(validation.errorList[0].element || []),
+                swatches = $(this).find('.' + swatchWrapper);
+
+            if(swatches.length){
+                var successList = validation.successList,
+                    errorList = validation.errorList,
+                    firstSwatch = $(firstActive).parent().find('.' + swatchWrapper);
+
+                keyboardHandler.focus(swatches);
+
+                if (successList.length) {
+                    $.each(successList, function () {
+                        $(this).parent().find('.' + swatchWrapper).attr('aria-invalid', false);
+                    })
+                }
+
+                if (errorList.length) {
+                    $.each(errorList, function (index, item) {
+                        $(item.element).parent().find('.' + swatchWrapper).attr('aria-invalid', true);
+                    })
+                }
+
+                if(firstSwatch.length){
+                    $(firstSwatch) .focus();
+                }
+            }
+        }
+    });
 
     /**
      * Render tooltips by attributes (only to up).
@@ -310,6 +346,8 @@ define([
                         label +
                         '<div aria-activedescendant="" ' +
                              'tabindex="0" ' +
+                             'aria-invalid="false" ' +
+                             'aria-required="true" ' +
                              'role="listbox" ' + listLabel +
                              'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
                             options + select +
