@@ -43,11 +43,11 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
         $html = $this->_block->toHtml();
 
-        $this->assertContains('title="First Name"', $html);
+        $this->assertContains('title="First&#x20;Name"', $html);
         $this->assertContains('value="Jane"', $html);
-        $this->assertContains('title="Last Name"', $html);
+        $this->assertContains('title="Last&#x20;Name"', $html);
         $this->assertContains('value="Doe"', $html);
-        $this->assertNotContains('title="Middle Name/Initial"', $html);
+        $this->assertNotContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
         $this->assertNotContains('title="Prefix"', $html);
         $this->assertNotContains('title="Suffix"', $html);
     }
@@ -78,11 +78,11 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
         $html = $this->_block->toHtml();
 
-        $this->assertContains('title="First Name"', $html);
+        $this->assertContains('title="First&#x20;Name"', $html);
         $this->assertContains('value="Jane"', $html);
-        $this->assertContains('title="Last Name"', $html);
+        $this->assertContains('title="Last&#x20;Name"', $html);
         $this->assertContains('value="Doe"', $html);
-        $this->assertContains('title="Middle Name/Initial"', $html);
+        $this->assertContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
         $this->assertContains('value="Roe"', $html);
         $this->assertContains('title="Prefix"', $html);
         $this->assertContains('value="Dr."', $html);
