@@ -1,3 +1,7 @@
+2.0.9
+=============
+To get detailed information about changes in Magento 2.0.9, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.0/release-notes/ReleaseNotes2.0.9CE.html "Magento Community Edition (CE) Release Notes")
+
 2.0.8
 =============
 * Fixed bugs:
