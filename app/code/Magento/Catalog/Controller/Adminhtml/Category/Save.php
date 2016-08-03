@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Store\Model\StoreManagerInterface;
+use \Magento\Catalog\Api\Data\CategoryAttributeInterface;
 
 /**
  * Class Save
@@ -49,6 +50,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     private $storeManager;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -56,19 +62,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param StoreManagerInterface $storeManager
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->storeManager = $storeManager;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -95,7 +104,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $isNewCategory = !isset($categoryPostData['entity_id']);
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
-        $categoryPostData = $this->processImageAttributeValues($categoryPostData, $category);
+        $categoryPostData = $this->imagePreprocessing($categoryPostData);
         $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
         $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
         $store = $this->storeManager->getStore($storeId);
@@ -225,25 +234,25 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @param $data
-     * @param $category
      * @return array
      */
-    public function processImageAttributeValues($data, $category)
+    public function imagePreprocessing($data)
     {
-        foreach ($category->getAttributes() as $attributeCode => $attributeModel) {
-            $backendModel = $attributeModel->getBackend();
+        $entityType = $this->eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE);
 
-            if (!$backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
-                continue;
-            }
+        foreach ($entityType->getAttributeCollection() as $attributeModel) {
+            $attributeCode = $attributeModel->getAttributeCode();
+            $backendModel = $attributeModel->getBackend();
 
             if (isset($data[$attributeCode])) {
                 continue;
             }
 
-            $data[$attributeCode] = [
-                'delete' => true
-            ];
+            if (!$backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
+                continue;
+            }
+
+            $data[$attributeCode] = false;
         }
 
         return $data;
