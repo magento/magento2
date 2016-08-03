@@ -28,7 +28,6 @@ class ResetCurrencySymbolEntityTest extends AbstractCurrencySymbolEntityTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

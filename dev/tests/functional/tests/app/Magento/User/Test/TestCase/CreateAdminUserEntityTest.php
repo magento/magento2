@@ -30,7 +30,6 @@ class CreateAdminUserEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 

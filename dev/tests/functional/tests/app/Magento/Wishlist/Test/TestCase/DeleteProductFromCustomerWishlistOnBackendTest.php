@@ -34,7 +34,6 @@ class DeleteProductFromCustomerWishlistOnBackendTest extends AbstractWishlistTes
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

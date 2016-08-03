@@ -28,7 +28,6 @@ class DeleteIntegrationEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

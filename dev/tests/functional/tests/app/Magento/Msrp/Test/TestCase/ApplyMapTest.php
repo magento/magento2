@@ -19,7 +19,6 @@ use Magento\Mtf\TestCase\Injectable;
 class ApplyMapTest extends Injectable
 {
     /* tags */
-    const DOMAIN = 'MX';
     const MVP = 'yes';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */

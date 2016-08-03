@@ -31,7 +31,6 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

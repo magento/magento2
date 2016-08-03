@@ -32,7 +32,6 @@ class ApplyVatIdTest extends AbstractApplyVatIdTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
     /* end tags */
 

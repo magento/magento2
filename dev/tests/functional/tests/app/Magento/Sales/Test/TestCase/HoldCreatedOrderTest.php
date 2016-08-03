@@ -31,7 +31,6 @@ class HoldCreatedOrderTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

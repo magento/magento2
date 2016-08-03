@@ -28,7 +28,6 @@ class ClearAllCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

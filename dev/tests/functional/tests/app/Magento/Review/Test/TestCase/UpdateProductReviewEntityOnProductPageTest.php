@@ -36,7 +36,6 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

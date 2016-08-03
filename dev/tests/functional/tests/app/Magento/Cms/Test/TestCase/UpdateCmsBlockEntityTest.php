@@ -27,7 +27,6 @@ class UpdateCmsBlockEntityTest extends AbstractCmsBlockEntityTest
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

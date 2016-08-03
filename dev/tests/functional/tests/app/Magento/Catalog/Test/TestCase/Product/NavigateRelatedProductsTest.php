@@ -27,7 +27,6 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

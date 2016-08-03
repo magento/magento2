@@ -32,7 +32,6 @@ class PrintOrderFrontendGuestTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

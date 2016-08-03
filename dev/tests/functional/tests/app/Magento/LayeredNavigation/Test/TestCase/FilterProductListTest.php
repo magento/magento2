@@ -26,7 +26,6 @@ use Magento\Mtf\TestCase\Injectable;
 class FilterProductListTest extends Injectable
 {
     /* tags */
-    const DOMAIN = 'MX';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 

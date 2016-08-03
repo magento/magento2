@@ -27,7 +27,6 @@ class EditCurrencySymbolEntityTest extends AbstractCurrencySymbolEntityTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
