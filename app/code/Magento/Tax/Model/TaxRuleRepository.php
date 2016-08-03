@@ -147,10 +147,9 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         $searchResults->setSearchCriteria($searchCriteria);
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
+
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults->setTotalCount($collection->getSize());
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
 
         $searchResults->setItems($collection->getItems());
         return $searchResults;

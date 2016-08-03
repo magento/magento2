@@ -343,15 +343,15 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $taxRate = $this->taxRate->load('*', 'code');
 
         $filter2 = $this->filterBuilder
-            ->setField('cd.customer_tax_class_id')
+            ->setField('customer_tax_class_ids')
             ->setValue($customerTaxClass->getClassId())
             ->create();
         $filter3 = $this->filterBuilder
-            ->setField('ptc.product_tax_class_id')
+            ->setField('product_tax_class_ids')
             ->setValue($productTaxClass->getClassId())
             ->create();
         $filter4 = $this->filterBuilder
-            ->setField('rate.tax_calculation_rate_id')
+            ->setField('tax_calculation_rate_id')
             ->setValue($taxRate->getId())
             ->create();
         $sortOrder = $this->sortOrderBuilder
