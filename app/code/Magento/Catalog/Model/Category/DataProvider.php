@@ -206,11 +206,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
-            if (isset($categoryData['image'])) {
-                unset($categoryData['image']);
-                $categoryData['image'][0]['name'] = $category->getData('image');
-                $categoryData['image'][0]['url'] = $category->getImageUrl();
-            }
+
+            foreach ($category->getAttributes() as $attributeCode => $attribute) {
+                $backendModel = $attribute->getBackend();
+
+                if ($backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
+                    if (isset($categoryData[$attributeCode])) {
+                        unset($categoryData[$attributeCode]);
+
+                        $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
+                        $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                    }
+                }
+             }
+
             $this->loadedData[$category->getId()] = $categoryData;
         }
         return $this->loadedData;
