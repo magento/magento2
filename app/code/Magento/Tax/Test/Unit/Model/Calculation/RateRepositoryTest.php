@@ -70,8 +70,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     private $joinProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     * | \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessor;
 

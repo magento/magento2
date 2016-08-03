@@ -62,8 +62,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     private $loadHandlerMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
-     * \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessor;
 
@@ -418,7 +417,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListSuccess()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $searchResult = $this->getMock(\Magento\Quote\Api\Data\CartSearchResultsInterface::class, [], [], '', false);
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $cartMock = $this->getMock(\Magento\Payment\Model\Cart::class, [], [], '', false);
@@ -436,8 +434,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         //back in getList()
         $this->quoteCollectionMock->expects($this->once())->method('getSize')->willReturn($pageSize);
         $searchResult->expects($this->once())->method('setTotalCount')->with($pageSize);
-        $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
-        $this->quoteCollectionMock->expects($this->once())->method('setPageSize')->with(10);
         $this->collectionProcessor->expects($this->once())
             ->method('process')
             ->with($searchCriteriaMock, $this->quoteCollectionMock);
@@ -458,7 +454,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'quoteCollection' => $this->quoteCollectionMock,
                 'searchResultsDataFactory' => $this->searchResultsDataFactory,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'collectionProcessor' => $this->collectionProcessor,
             ]
         );
         $this->model->expects($this->once())->method('getQuoteCollection')->willReturn($this->quoteCollectionMock);
