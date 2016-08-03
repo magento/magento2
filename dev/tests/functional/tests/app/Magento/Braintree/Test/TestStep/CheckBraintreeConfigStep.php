@@ -133,5 +133,7 @@ class CheckBraintreeConfigStep implements TestStepInterface
         );
         $this->braintreeConfigBlock->disableBraintree();
         $this->assertFieldsAreActive->processAssert($this->systemConfigEditSectionPayment, $enablers);
+        $this->systemConfigEditSectionPayment->getPageActions()->save();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
     }
 }

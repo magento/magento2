@@ -153,5 +153,7 @@ class CheckPaymentsProConfigStep implements TestStepInterface
             $this->systemConfigEditSectionPayment,
             [$enablers['Enable PayPal Credit']]
         );
+        $this->systemConfigEditSectionPayment->getPageActions()->save();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
     }
 }

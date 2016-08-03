@@ -153,5 +153,7 @@ class CheckPayflowLinkConfigStep implements TestStepInterface
             $this->systemConfigEditSectionPayment,
             [$enablers['Enable Express Checkout'], $enablers['Enable PayPal Credit']]
         );
+        $this->systemConfigEditSectionPayment->getPageActions()->save();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
     }
 }

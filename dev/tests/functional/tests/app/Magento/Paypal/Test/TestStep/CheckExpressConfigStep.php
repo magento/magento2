@@ -147,5 +147,7 @@ class CheckExpressConfigStep implements TestStepInterface
             $this->systemConfigEditSectionPayment,
             [$enablers['Enable In-Context Checkout Experience'], $enablers['Enable PayPal Credit']]
         );
+        $this->systemConfigEditSectionPayment->getPageActions()->save();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
     }
 }
