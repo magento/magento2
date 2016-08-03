@@ -102,7 +102,7 @@ class JoinProcessor implements CollectionProcessorInterface
             if (!($this->joins[$field] instanceof CustomJoinInterface)) {
                 throw new \InvalidArgumentException(
                     sprintf(
-                        'Filter for %s must implement %s interface.',
+                        'Custom join for %s must implement %s interface.',
                         $field,
                         CustomJoinInterface::class
                     )
