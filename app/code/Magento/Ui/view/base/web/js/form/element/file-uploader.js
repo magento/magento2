@@ -294,7 +294,7 @@ define([
         /**
          * Handler which is invoked prior to the start of a file upload.
          *
-         * @param {Event} e - Event obejct.
+         * @param {Event} e - Event object.
          * @param {Object} data - File data that will be uploaded.
          */
         onBeforeFileUpload: function (e, data) {
@@ -302,7 +302,13 @@ define([
                 allowed  = this.isFileAllowed(file);
 
             if (allowed.passed) {
-                $(e.target).fileupload('process', data).done(function () {
+                var $target = $(e.target);
+
+                $target.on('fileuploadsend', function(event, postData) {
+                    postData.data.set('param_name', this.paramName);
+                }.bind(data));
+
+                $target.fileupload('process', data).done(function () {
                     data.submit();
                 });
             } else {
