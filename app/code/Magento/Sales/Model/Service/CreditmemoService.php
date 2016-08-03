@@ -160,7 +160,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         $this->validateForRefund($creditmemo);
         $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
 
-        $connection = $this->getResource()->getConnectionByName('sales');
+        $connection = $this->getResource()->getConnection('sales');
         $connection->beginTransaction();
         try {
             $order = $this->getPaymentAdapter()->refund(

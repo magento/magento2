@@ -248,7 +248,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $resourceMock->expects($this->once())->method('getConnectionByName')->with('sales')->willReturn($adapterMock);
+        $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
         $adapterMock->expects($this->once())->method('beginTransaction');
         $paymentAdapterMock->expects($this->once())
             ->method('refund')
