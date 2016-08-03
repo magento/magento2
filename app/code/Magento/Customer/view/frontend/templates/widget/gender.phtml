@@ -11,7 +11,7 @@
 <div class="field gender<?php if ($block->isRequired()) echo ' required' ?>">
     <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getFieldId('gender')) ?>"><span><?php /* @escapeNotVerified */ echo __('Gender') ?></span></label>
     <div class="control">
-        <select id="<?php echo $block->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?php echo $block->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?php /* @escapeNotVerified */ echo __('Gender') ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php /* @escapeNotVerified */ echo $block->getFieldParams() ?>>
+        <select id="<?php echo $block->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?php echo $block->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?php /* @escapeNotVerified */ echo __('Gender') ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php /* @noEscape */ echo $block->getFieldParams() ?>>
             <?php $options = $block->getGenderOptions(); ?>
             <?php $value = $block->getGender();?>
             <?php foreach ($options as $option):?>
