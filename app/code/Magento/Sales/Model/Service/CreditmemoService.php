@@ -269,7 +269,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     {
         if ($this->invoiceRepository === null) {
             $this->invoiceRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Sales\Api\OrderRepositoryInterface::class);
+                ->get(\Magento\Sales\Api\InvoiceRepositoryInterface::class);
         }
         return $this->invoiceRepository;
     }
