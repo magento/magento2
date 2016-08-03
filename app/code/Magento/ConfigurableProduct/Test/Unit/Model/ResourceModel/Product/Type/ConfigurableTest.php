@@ -102,16 +102,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
                 'getTable',
-                'getConnection',
+                'getConnection'
             ],
             [
                 $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock(),
-                $this->relation,
-                $scopeResolver
+                $this->relation
             ],
             '',
             true
         );
+
+        $reflection = new \ReflectionClass('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable');
+        $reflectionProperty = $reflection->getProperty('scopeResolver');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($configurable, $scopeResolver);
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(

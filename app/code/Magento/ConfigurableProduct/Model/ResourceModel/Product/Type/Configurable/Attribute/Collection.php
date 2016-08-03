@@ -66,7 +66,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Attribute $resource
-     * @param ConfigurableResource $configurableResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -79,13 +78,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         Attribute $resource,
-        ConfigurableResource $configurableResource = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
-        $this->configurableResource = $configurableResource;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -332,6 +329,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get Configurable Resource
      *
      * @return ConfigurableResource
+     * @deprecated
      */
     private function getConfigurableResource()
     {
