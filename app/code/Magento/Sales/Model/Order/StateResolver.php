@@ -13,6 +13,43 @@ use Magento\Sales\Model\Order;
  */
 class StateResolver implements OrderStateResolverInterface
 {
+
+    /**
+     * Check is order in complete state
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    private function checkIsOrderComplete(OrderInterface $order)
+    {
+        /** @var  $order Order|OrderInterface */
+        if (0 == $order->getBaseGrandTotal() || $order->canCreditmemo()) {
+            if ($order->getState() !== Order::STATE_COMPLETE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check is order in cancel state
+     *
+     * @param OrderInterface $order
+     * @param array $arguments
+     * @return bool
+     */
+    private function checkIsOrderClosed(OrderInterface $order, $arguments)
+    {
+        /** @var  $order Order|OrderInterface */
+        $forceCreditmemo = in_array(self::FORCED_CREDITMEMO, $arguments);
+        if (floatval($order->getTotalRefunded()) || !$order->getTotalRefunded() && $forceCreditmemo) {
+            if ($order->getState() !== Order::STATE_CLOSED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param OrderInterface $order
      * @param array $arguments
@@ -23,16 +60,10 @@ class StateResolver implements OrderStateResolverInterface
         /** @var  $order Order|OrderInterface */
         $orderState = $order->getState() === Order::STATE_PROCESSING ? Order::STATE_PROCESSING : Order::STATE_NEW;
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && !$order->canShip()) {
-            if (0 == $order->getBaseGrandTotal() || $order->canCreditmemo()) {
-                if ($order->getState() !== Order::STATE_COMPLETE) {
-                    $orderState = Order::STATE_COMPLETE;
-                }
-            } elseif (floatval($order->getTotalRefunded())
-                || !$order->getTotalRefunded() && in_array(self::FORCED_CREDITMEMO, $arguments)
-            ) {
-                if ($order->getState() !== Order::STATE_CLOSED) {
-                    $orderState = Order::STATE_CLOSED;
-                }
+            if ($this->checkIsOrderComplete($order)) {
+                $orderState = Order::STATE_COMPLETE;
+            } elseif ($this->checkIsOrderClosed($order, $arguments)) {
+                $orderState = Order::STATE_CLOSED;
             }
         }
         if ($order->getState() == Order::STATE_NEW && in_array(self::IN_PROGRESS, $arguments)) {
