@@ -228,7 +228,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite::class
+                '\Magento\Tax\Model\Api\TaxRule\SearchCrtieria\CollectionProcessorComposite'
             );
         }
         return $this->collectionProcessor;

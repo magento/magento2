@@ -309,7 +309,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite::class
+                '\Magento\Tax\Model\Api\TaxRate\SearchCrtieria\CollectionProcessorComposite'
             );
         }
         return $this->collectionProcessor;
