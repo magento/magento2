@@ -36,8 +36,8 @@
         alt="<?php /* @escapeNotVerified */ echo __('Reload captcha') ?>"/>
     <img
         id="<?php echo $block->escapeHtmlAttr($block->getFormId()) ?>"
-        width="<?php /* @noEscape */ echo (int) $block->getImgWidth() ?>"
-        height="<?php /* @noEscape */ echo (int) $block->getImgHeight() ?>"
+        width="<?php /* @noEscape */ echo (float) $block->getImgWidth() ?>"
+        height="<?php /* @noEscape */ echo (float) $block->getImgHeight() ?>"
         src="<?php echo $block->escapeUrl($captcha->getImgSrc()) ?>" />
 </div>
 <script>
