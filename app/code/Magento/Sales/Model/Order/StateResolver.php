@@ -51,6 +51,32 @@ class StateResolver implements OrderStateResolverInterface
     }
 
     /**
+     * Check is order in cancel state
+     *
+     * @param OrderInterface $order
+     * @param array $arguments
+     * @return bool
+     */
+    private function checkIsOrderProcessing(OrderInterface $order, $arguments)
+    {
+        /** @var  $order Order|OrderInterface */
+        if ($order->getState() == Order::STATE_NEW && in_array(self::IN_PROGRESS, $arguments)) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Returns initial state for order
+     *
+     * @param OrderInterface $order
+     * @return string
+     */
+    private function getInitialOrderState(OrderInterface $order)
+    {
+        return $order->getState() === Order::STATE_PROCESSING ? Order::STATE_PROCESSING : Order::STATE_NEW;
+    }
+
+    /**
      * @param OrderInterface $order
      * @param array $arguments
      * @return string
@@ -58,7 +84,7 @@ class StateResolver implements OrderStateResolverInterface
     public function getStateForOrder(OrderInterface $order, array $arguments = [])
     {
         /** @var  $order Order|OrderInterface */
-        $orderState = $order->getState() === Order::STATE_PROCESSING ? Order::STATE_PROCESSING : Order::STATE_NEW;
+        $orderState = $this->getInitialOrderState($order);
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && !$order->canShip()) {
             if ($this->checkIsOrderComplete($order)) {
                 $orderState = Order::STATE_COMPLETE;
@@ -66,7 +92,7 @@ class StateResolver implements OrderStateResolverInterface
                 $orderState = Order::STATE_CLOSED;
             }
         }
-        if ($order->getState() == Order::STATE_NEW && in_array(self::IN_PROGRESS, $arguments)) {
+        if ($this->checkIsOrderProcessing($order, $arguments)) {
             $orderState = Order::STATE_PROCESSING;
         }
         return $orderState;
