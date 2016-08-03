@@ -80,7 +80,8 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
             $modulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
             foreach (Files::init()->getFiles([$modulePath], '*.phtml') as $file) {
                 $fileContents = file_get_contents($file);
-                $instances = preg_grep("/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/", explode("\n", $fileContents));
+                $pattern = "/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/";
+                $instances = preg_grep($pattern, explode("\n", $fileContents));
                 if (!empty($instances)) {
                     foreach (array_keys($instances) as $line) {
                         $result .= $file . ':' . ($line + 1) . "\n";
