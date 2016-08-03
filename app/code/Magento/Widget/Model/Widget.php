@@ -89,7 +89,7 @@ class Widget
     {
         if ($this->mathRandom === null) {
             $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\Math\Random');
+                ->get(\Magento\Framework\Math\Random::class);
         }
         return $this->mathRandom;
     }

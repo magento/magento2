@@ -56,7 +56,7 @@ class HoldCreatedOrderTest extends Injectable
     public function __prepare()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'checkmo, flatrate', 'rollback' => true]
         )->run();
     }

@@ -22,7 +22,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->combineFactory = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\CombineFactory')
+        $this->combineFactory = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\CombineFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -31,17 +31,17 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareObjectManager([
             [
-                'Magento\Framework\Api\ExtensionAttributesFactory',
-                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
+                \Magento\Framework\Api\ExtensionAttributesFactory::class,
+                $this->getMock(\Magento\Framework\Api\ExtensionAttributesFactory::class, [], [], '', false)
             ],
             [
-                'Magento\Framework\Api\AttributeValueFactory',
-                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
+                \Magento\Framework\Api\AttributeValueFactory::class,
+                $this->getMock(\Magento\Framework\Api\AttributeValueFactory::class, [], [], '', false)
             ],
         ]);
 
         $this->rule = $objectManagerHelper->getObject(
-            'Magento\CatalogWidget\Model\Rule',
+            \Magento\CatalogWidget\Model\Rule::class,
             [
                 'conditionsFactory' => $this->combineFactory
             ]
@@ -50,7 +50,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConditionsInstance()
     {
-        $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Combine')
+        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,12 +68,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareObjectManager($map)
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $reflectionProperty = $reflectionClass->getProperty('_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock);

@@ -14,7 +14,7 @@ class LoadOptions extends \Magento\Backend\App\Action
      * @var \Magento\Widget\Helper\Conditions
      */
     private $conditionsHelper;
-    
+
     /**
      * Ajax responder for loading plugin options form
      *
@@ -50,7 +50,7 @@ class LoadOptions extends \Magento\Backend\App\Action
             );
         }
     }
-    
+
     /**
      * @return \Magento\Widget\Helper\Conditions
      * @deprecated

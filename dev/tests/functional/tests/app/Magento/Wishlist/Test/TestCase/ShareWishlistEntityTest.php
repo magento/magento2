@@ -110,11 +110,11 @@ class ShareWishlistEntityTest extends Injectable
     ) {
         //Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->objectManager->create(
-            'Magento\Wishlist\Test\TestStep\AddProductsToWishlistStep',
+            \Magento\Wishlist\Test\TestStep\AddProductsToWishlistStep::class,
             ['products' => [$product]]
         )->run();
         $this->wishlistIndex->getMessagesBlock()->waitSuccessMessage();

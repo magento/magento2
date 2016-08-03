@@ -15,7 +15,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cmd = $this->getMock(
-            'Magento\TestFramework\Inspection\JsHint\Command',
+            \Magento\TestFramework\Inspection\JsHint\Command::class,
             [
                 '_getHostScript',
                 '_fileExists',

@@ -53,7 +53,7 @@ class FieldsProvider implements FieldsetInterface
                 $fields[$itemName] = [
                     'name' => $itemName,
                     'origin' => 'value',
-                    'handler' => 'Magento\Framework\Indexer\Handler\DefaultHandler',
+                    'handler' => \Magento\Framework\Indexer\Handler\DefaultHandler::class,
                     'type' => 'searchable',
                 ];
             }

@@ -26,9 +26,9 @@ class DefaultColumnTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->defaultColumn = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn'
+            \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn::class
         );
-        $this->itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRowTotal', 'getDiscountAmount', 'getBaseRowTotal', 'getBaseDiscountAmount', '__wakeup'])
             ->getMock();

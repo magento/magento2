@@ -50,9 +50,9 @@ class GroupRepositoryTest extends WebapiAbstract
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->groupRegistry = $objectManager->get('Magento\Customer\Model\GroupRegistry');
-        $this->groupRepository = $objectManager->get('Magento\Customer\Model\ResourceModel\GroupRepository');
-        $this->customerGroupFactory = $objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
+        $this->groupRegistry = $objectManager->get(\Magento\Customer\Model\GroupRegistry::class);
+        $this->groupRepository = $objectManager->get(\Magento\Customer\Model\ResourceModel\GroupRepository::class);
+        $this->customerGroupFactory = $objectManager->create(\Magento\Customer\Api\Data\GroupInterfaceFactory::class);
     }
 
     /**
@@ -929,10 +929,10 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public function testSearchGroups($filterField, $filterValue, $expectedResult)
     {
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder =  Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $filter = $filterBuilder
                     ->setField($filterField)
                     ->setValue($filterValue)
@@ -1030,10 +1030,10 @@ class GroupRepositoryTest extends WebapiAbstract
     public function testSearchGroupsWithGET($filterField, $filterValue, $expectedResult)
     {
         $this->_markTestAsRestOnly('SOAP is covered in ');
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder =  Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $filter = $filterBuilder
             ->setField($filterField)
             ->setValue($filterValue)

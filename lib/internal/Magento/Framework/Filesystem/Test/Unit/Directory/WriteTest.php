@@ -38,9 +38,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->driver = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->driver = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
         $this->fileFactory = $this->getMock(
-            'Magento\Framework\Filesystem\File\WriteFactory',
+            \Magento\Framework\Filesystem\File\WriteFactory::class,
             [],
             [],
             '',
@@ -68,7 +68,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function testGetDriver()
     {
         $this->assertInstanceOf(
-            'Magento\Framework\Filesystem\DriverInterface',
+            \Magento\Framework\Filesystem\DriverInterface::class,
             $this->write->getDriver(),
             'getDriver method expected to return instance of Magento\Framework\Filesystem\DriverInterface'
         );
@@ -88,10 +88,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 
-
     public function testCreateSymlinkTargetDirectoryExists()
     {
-        $targetDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $targetDir = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMock();
         $targetDir->driver = $this->driver;
         $sourcePath = 'source/path/file';

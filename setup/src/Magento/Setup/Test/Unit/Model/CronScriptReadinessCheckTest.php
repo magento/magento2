@@ -24,8 +24,8 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->read = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->read = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
         $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->read);
         $this->cronScriptReadinessCheck = new CronScriptReadinessCheck($filesystem);
     }

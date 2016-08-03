@@ -31,8 +31,8 @@ class ForUpdateRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', ['getPart'], [], '', false);
-        $this->model = $objectManager->getObject('\Magento\Framework\DB\Select\ForUpdateRenderer');
+        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['getPart'], [], '', false);
+        $this->model = $objectManager->getObject(\Magento\Framework\DB\Select\ForUpdateRenderer::class);
     }
 
     public function testRenderNoPart()

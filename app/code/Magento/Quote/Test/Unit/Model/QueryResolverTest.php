@@ -25,8 +25,8 @@ class QueryResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Framework\App\ResourceConnection\ConfigInterface');
-        $this->cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->configMock = $this->getMock(\Magento\Framework\App\ResourceConnection\ConfigInterface::class);
+        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         $this->quoteResolver = new \Magento\Quote\Model\QueryResolver(
             $this->configMock,
             $this->cacheMock,

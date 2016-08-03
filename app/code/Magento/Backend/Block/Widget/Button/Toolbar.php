@@ -48,7 +48,7 @@ class Toolbar implements ToolbarInterface
     protected function createContainer(LayoutInterface $layout, $containerName, $buttonItem)
     {
         $container = $layout->createBlock(
-            '\Magento\Backend\Block\Widget\Button\Toolbar\Container',
+            \Magento\Backend\Block\Widget\Button\Toolbar\Container::class,
             $containerName,
             ['data' => ['button_item' => $buttonItem]]
         );

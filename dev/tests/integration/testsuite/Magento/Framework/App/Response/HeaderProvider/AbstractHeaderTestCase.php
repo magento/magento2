@@ -17,11 +17,12 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
             [
                 'preferences' =>
                     [
-                        'Magento\Framework\App\Response\Http' => 'Magento\Framework\App\Response\Http\Interceptor'
+                        \Magento\Framework\App\Response\Http::class =>
+                            \Magento\Framework\App\Response\Http\Interceptor::class
                     ]
             ]
         );
-        $this->interceptedResponse = $this->_objectManager->create('\Magento\Framework\App\Response\Http');
+        $this->interceptedResponse = $this->_objectManager->create(\Magento\Framework\App\Response\Http::class);
     }
 
     /**
@@ -35,7 +36,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
         $this->interceptedResponse->sendResponse();
 
         $header = $this->interceptedResponse->getHeader($name);
-        $this->assertTrue(is_subclass_of($header, 'Zend\Http\Header\HeaderInterface', false));
+        $this->assertTrue(is_subclass_of($header, \Zend\Http\Header\HeaderInterface::class, false));
         $this->assertSame(
             $value,
             $header->getFieldValue()

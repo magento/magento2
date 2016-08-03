@@ -59,33 +59,33 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getRootPackage')
             ->willReturn($rootPackage);
-        $timeZoneProvider = $this->getMock('\Magento\Setup\Model\DateTime\TimeZoneProvider', [], [], '', false);
-        $timeZone = $this->getMock('\Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
+        $timeZoneProvider = $this->getMock(\Magento\Setup\Model\DateTime\TimeZoneProvider::class, [], [], '', false);
+        $timeZone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
         $timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
-        $packagesAuth = $this->getMock('\Magento\Setup\Model\PackagesAuth', [], [], '', false);
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $objectManagerProvider = $this->getMock('\Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface');
+        $packagesAuth = $this->getMock(\Magento\Setup\Model\PackagesAuth::class, [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $applicationFactory = $this->getMock(
-            '\Magento\Framework\Composer\MagentoComposerApplicationFactory',
+            \Magento\Framework\Composer\MagentoComposerApplicationFactory::class,
             [],
             [],
             '',
             false
         );
-        $application = $this->getMock('\Magento\Composer\MagentoComposerApplication', [], [], '', false);
+        $application = $this->getMock(\Magento\Composer\MagentoComposerApplication::class, [], [], '', false);
         $application->expects($this->any())
             ->method('runComposerCommand')
             ->willReturn('versions: 2.0.1');
         $applicationFactory->expects($this->any())->method('create')->willReturn($application);
         $objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Framework\Composer\MagentoComposerApplicationFactory')
+            ->with(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
             ->willReturn($applicationFactory);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
 
-        $directoryWrite = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-        $directoryRead = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $directoryWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $directoryRead = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')

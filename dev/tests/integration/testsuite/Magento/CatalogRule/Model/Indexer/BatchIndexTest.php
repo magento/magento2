@@ -33,9 +33,9 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
-        $this->product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
-        $this->productRepository = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductRepository');
+        $this->resourceRule = Bootstrap::getObjectManager()->get(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+        $this->product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Product::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductRepository::class);
     }
 
     /**
@@ -50,7 +50,7 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
          * @var IndexBuilder $indexerBuilder
          */
         $indexerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\CatalogRule\Model\Indexer\IndexBuilder',
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class,
             ['batchCount' => $batchCount]
         );
 

@@ -24,7 +24,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     /**
      * @var string
      */
-    protected $actionInterface = '\Magento\Framework\App\ActionInterface';
+    protected $actionInterface = \Magento\Framework\App\ActionInterface::class;
 
     /**
      * @var array

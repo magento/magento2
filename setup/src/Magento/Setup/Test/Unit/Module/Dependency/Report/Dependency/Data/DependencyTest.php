@@ -20,7 +20,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency',
+            \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class,
             ['module' => $module, 'type' => $type]
         );
     }
