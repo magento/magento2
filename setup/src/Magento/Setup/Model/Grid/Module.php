@@ -20,6 +20,12 @@ use Magento\Setup\Model\PackagesData;
 class Module
 {
     /**
+     * Const for unknown package name and version
+     */
+    const UNKNOWN_PACKAGE_NAME = 'unknown';
+    const UNKNOWN_VERSION = '—';
+
+    /**
      * @var ComposerInformation
      */
     private $composerInformation;
@@ -105,9 +111,9 @@ class Module
         });
 
         array_walk($items, function (&$module, $name) {
-            $module['moduleName'] = $this->packageInfo->getModuleName($name);
+            $module['moduleName'] = $module['moduleName'] ?: $this->packageInfo->getModuleName($name);
             $module['enable'] = $this->moduleList->has($module['moduleName']);
-            $module['vendor'] = ucfirst(current(explode('/', $name)));
+            $module['vendor'] = ucfirst(current(preg_split('%[/_]%', $name)));
             $module['type'] = $this->typeMapper->map($name, $module['type']);
             $module['requiredBy'] = $this->getModuleRequiredBy($name);
         });
@@ -128,11 +134,11 @@ class Module
         foreach ($modules as $moduleName) {
             $packageName = $this->packageInfo->getPackageName($moduleName);
             $result[] = [
-                'name' => $packageName,
+                'name' => $packageName ?: self::UNKNOWN_PACKAGE_NAME,
                 'moduleName' => $moduleName,
                 'type' => $this->typeMapper->map($packageName, ComposerInformation::MODULE_PACKAGE_TYPE),
                 'enable' => $this->moduleList->has($moduleName),
-                'version' => $this->packageInfo->getVersion($moduleName)
+                'version' => $this->packageInfo->getVersion($moduleName) ?: self::UNKNOWN_VERSION
             ];
         }
 
@@ -149,10 +155,12 @@ class Module
         $modules = [];
         $allModules = $this->fullModuleList->getNames();
         foreach ($allModules as $module) {
-            $name = $this->packageInfo->getPackageName($module);
-            $modules[$name]['name'] = $name;
+            $packageName = $this->packageInfo->getPackageName($module);
+            $name = $packageName ?: $module;
+            $modules[$name]['name'] = $packageName ?: self::UNKNOWN_PACKAGE_NAME;
+            $modules[$name]['moduleName'] = $module;
             $modules[$name]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
-            $modules[$name]['version'] = $this->packageInfo->getVersion($module);
+            $modules[$name]['version'] = $this->packageInfo->getVersion($module) ?: self::UNKNOWN_VERSION;
         }
 
         return $modules;
