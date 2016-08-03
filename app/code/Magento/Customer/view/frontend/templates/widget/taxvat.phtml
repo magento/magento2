@@ -6,6 +6,8 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var $block \Magento\Customer\Block\Widget\Taxvat */
+
 ?>
 <div class="field taxvat<?php if ($block->isRequired()) echo ' required'; ?>">
     <label class="label" for="<?php echo $block->escapeHtml($block->getFieldId('taxvat')) ?>"><span><?php /* @escapeNotVerified */ echo __('Tax/VAT number') ?></span></label>

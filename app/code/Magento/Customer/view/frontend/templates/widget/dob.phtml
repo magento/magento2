@@ -6,11 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-/**
-USAGE:
+/** @var $block \Magento\Customer\Block\Widget\Dob */
 
-Simple:
-
+/*
 <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
    ->setDate($block->getCustomer()->getDob())
    ->toHtml() ?>
@@ -23,15 +21,10 @@ For checkout/onepage/billing.phtml:
    ->setFieldNameFormat('billing[%s]')
    ->toHtml() ?>
 
-NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
-      Alternatively we could calculate widths automatically using block input parameters.
+NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css. Alternatively we could calculate widths
+automatically using block input parameters.
 */
 
-/**
- * @see \Magento\Customer\Block\Widget\Dob
- */
-?>
-<?php
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>

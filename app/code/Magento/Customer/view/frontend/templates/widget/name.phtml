@@ -6,11 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-/**
-USAGE:
+/** @var $block \Magento\Customer\Block\Widget\Name */
 
-Simple:
-
+/*
 <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')
    ->setObject($block->getAddress())
    ->toHtml() ?>
@@ -24,12 +22,11 @@ For checkout/onepage/shipping.phtml:
    ->setFieldParams('onchange="shipping.setSameAsBilling(false);"')
    ->toHtml() ?>
 */
-/* @var $block \Magento\Customer\Block\Widget\Name */
+
 $prefix = $block->showPrefix();
 $middle = $block->showMiddlename();
 $suffix = $block->showSuffix();
 ?>
-
 <?php if (($prefix || $middle || $suffix) && !$block->getNoWrap()): ?>
 <div class="field required fullname <?php echo $block->escapeHtmlAttr($block->getContainerClassName()) ?>">
     <label for="<?php echo $block->escapeHtmlAttr($block->getFieldId('firstname')) ?>" class="label">

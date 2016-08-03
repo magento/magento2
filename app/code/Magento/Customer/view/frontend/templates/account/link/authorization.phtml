@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var $block \Magento\Customer\Block\Account\AuthorizationLink */
+
 $dataPostParam = '';
 if ($block->isLoggedIn()) {
     $dataPostParam = sprintf(" data-post='%s'", $block->getPostParams());
