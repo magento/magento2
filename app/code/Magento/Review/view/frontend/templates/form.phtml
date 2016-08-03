@@ -15,7 +15,7 @@
 <form action="<?php echo $block->escapeUrl($block->getAction()) ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
     <?php echo $block->getBlockHtml('formkey'); ?>
     <?php echo $block->getChildHtml('form_fields_before')?>
-    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
+    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields'); ?>">
         <legend class="legend review-legend"><span><?php /* @escapeNotVerified */ echo __("You're reviewing:"); ?></span><strong><?php echo $block->escapeHtml($block->getProductInfo()->getName()) ?></strong></legend><br />
         <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
