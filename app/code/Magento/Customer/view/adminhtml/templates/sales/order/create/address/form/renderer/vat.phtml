@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat */
+/** @var \Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat $block */
 
 $_element = $block->getElement();
 $_note = $_element->getNote();
@@ -19,7 +19,7 @@ $_validateButton = $block->getValidateButton();
     <div class="hidden"><?php echo $_element->getElementHtml(); ?></div>
     <?php else: ?>
     <?php echo $_element->getLabelHtml(); ?>
-    <div class="admin__field-control <?php /* @noEscape */ echo $_element->hasValueClass() ? $_element->getValueClass() : 'value'; ?><?php echo $_class ? " {$_class}-value" : ''; ?>">
+    <div class="admin__field-control <?php /* @noEscape */ echo $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value'; ?><?php echo $_class ? $block->escapeHtmlAttr($_class) . '-value' : ''; ?>">
         <?php echo $_element->getElementHtml(); ?>
         <?php if ($_note): ?>
             <div class="admin__field-note<?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $block->escapeHtmlAttr($_element->getId()); ?>">

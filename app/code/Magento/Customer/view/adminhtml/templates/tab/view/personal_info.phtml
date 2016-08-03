@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo */
+/** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo $block */
 
 $lastLoginDateAdmin = $block->getLastLoginDate();
 $lastLoginDateStore = $block->getStoreLastLoginDate();
@@ -14,7 +14,6 @@ $lastLoginDateStore = $block->getStoreLastLoginDate();
 $createDateAdmin = $block->getCreateDate();
 $createDateStore = $block->getStoreCreateDate();
 ?>
-
 <div class="fieldset-wrapper customer-information">
     <div class="fieldset-wrapper-title">
         <span class="title"><?php /* @escapeNotVerified */ echo __('Personal Information') ?></span>
