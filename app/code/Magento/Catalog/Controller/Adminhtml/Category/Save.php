@@ -72,30 +72,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
-     * Filter category data
-     *
-     * @param array $rawData
-     * @return array
-     */
-    protected function _filterCategoryPostData(array $rawData)
-    {
-        $data = $rawData;
-        // @todo It is a workaround to prevent saving this data in category model and it has to be refactored in future
-        if (isset($data['image']) && is_array($data['image'])) {
-            if (!empty($data['image']['delete'])) {
-                $data['image'] = null;
-            } else {
-                if (isset($data['image'][0]['name']) && isset($data['image'][0]['tmp_name'])) {
-                    $data['image'] = $data['image'][0]['name'];
-                } else {
-                    unset($data['image']);
-                }
-            }
-        }
-        return $data;
-    }
-
-    /**
      * Category save
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -119,14 +95,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $isNewCategory = !isset($categoryPostData['entity_id']);
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
-        $categoryPostData = $this->imagePreprocessing($categoryPostData);
+        $categoryPostData = $this->processImageAttributeValues($categoryPostData, $category);
         $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
         $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());
         $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
         if ($categoryPostData) {
-            $category->addData($this->_filterCategoryPostData($categoryPostData));
+            $category->addData($categoryPostData);
             if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
@@ -248,18 +224,28 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
-     * Image data preprocessing
-     *
-     * @param array $data
-     *
+     * @param $data
+     * @param $category
      * @return array
      */
-    public function imagePreprocessing($data)
+    public function processImageAttributeValues($data, $category)
     {
-        if (empty($data['image'])) {
-            unset($data['image']);
-            $data['image']['delete'] = true;
+        foreach ($category->getAttributes() as $attributeCode => $attributeModel) {
+            $backendModel = $attributeModel->getBackend();
+
+            if (!$backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
+                continue;
+            }
+
+            if (isset($data[$attributeCode])) {
+                continue;
+            }
+
+            $data[$attributeCode] = [
+                'delete' => true
+            ];
         }
+
         return $data;
     }
 
