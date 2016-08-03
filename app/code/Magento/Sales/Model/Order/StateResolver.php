@@ -65,6 +65,7 @@ class StateResolver implements OrderStateResolverInterface
         }
         return false;
     }
+
     /**
      * Returns initial state for order
      *
