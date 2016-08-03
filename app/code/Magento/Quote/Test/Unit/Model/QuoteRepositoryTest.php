@@ -422,7 +422,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchResult = $this->getMock(\Magento\Quote\Api\Data\CartSearchResultsInterface::class, [], [], '', false);
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $cartMock = $this->getMock(\Magento\Payment\Model\Cart::class, [], [], '', false);
-        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $pageSize = 10;
 
         $this->searchResultsDataFactory
@@ -434,28 +433,9 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('setSearchCriteria');
 
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $searchCriteriaMock
-            ->expects($this->any())
-            ->method('getFilterGroups')
-            ->will($this->returnValue([$filterGroupMock]));
-
-        //addFilterGroupToCollection() checks
-        $filterGroupMock->expects($this->any())->method('getFilters')->will($this->returnValue([$filterMock]));
-        $filterMock->expects($this->once())->method('getField')->will($this->returnValue('store_id'));
-        $filterMock->expects($this->any())->method('getConditionType')->will($this->returnValue('eq'));
-        $filterMock->expects($this->once())->method('getValue')->will($this->returnValue('filter_value'));
-
         //back in getList()
         $this->quoteCollectionMock->expects($this->once())->method('getSize')->willReturn($pageSize);
         $searchResult->expects($this->once())->method('setTotalCount')->with($pageSize);
-        $sortOrderMock = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)
-            ->setMethods(['getField', 'getDirection'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->will($this->returnValue(1));
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->will($this->returnValue(10));
         $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
         $this->quoteCollectionMock->expects($this->once())->method('setPageSize')->with(10);
         $this->collectionProcessor->expects($this->once())

@@ -377,17 +377,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetListWhenFilterGroupExists()
     {
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $searchCriteriaMock
-            ->expects($this->any())
-            ->method('getFilterGroups')
-            ->will($this->returnValue([$filterGroupMock]));
-        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
-        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('like');
-        $filterMock->expects($this->once())->method('getField')->willReturn('region_name');
-        $filterMock->expects($this->once())->method('getValue')->willReturn('condition_value');
         $objectManager = new ObjectManager($this);
         $rateMock = $this->getTaxRateMock([]);
         $items = [$rateMock];
@@ -395,18 +384,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class,
             $items
         );
-        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
-        $searchCriteriaMock
-            ->expects($this->any())
-            ->method('getSortOrders')
-            ->will($this->returnValue([$sortOrderMock]));
-        $sortOrderMock->expects($this->once())->method('getField')->willReturn('field_name');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with('main_table.field_name', 'ASC');
-        $currentPage = 1;
-        $pageSize = 100;
-        $searchCriteriaMock->expects($this->any())->method('getCurrentPage')->will($this->returnValue($currentPage));
-        $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
         $rateMock = $this->getTaxRateMock([]);
         $this->collectionProcessor->expects($this->once())
             ->method('process')

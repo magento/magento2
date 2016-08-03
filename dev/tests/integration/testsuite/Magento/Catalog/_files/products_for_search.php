@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-include_once 'category.php';
+include 'category.php';
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Model\Product;
