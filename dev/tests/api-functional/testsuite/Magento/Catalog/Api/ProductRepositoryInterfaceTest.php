@@ -19,6 +19,7 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {

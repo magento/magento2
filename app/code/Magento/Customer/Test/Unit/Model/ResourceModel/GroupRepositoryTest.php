@@ -80,6 +80,57 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
+        $this->setupGroupObjects();
+        $this->dataObjectProcessor = $this->getMock(
+            \Magento\Framework\Reflection\DataObjectProcessor::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->searchResultsFactory = $this->getMock(
+            \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->searchResults = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->taxClassRepository = $this->getMockForAbstractClass(
+            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
+
+        $this->model = new \Magento\Customer\Model\ResourceModel\GroupRepository(
+            $this->groupRegistry,
+            $this->groupFactory,
+            $this->groupDataFactory,
+            $this->groupResourceModel,
+            $this->dataObjectProcessor,
+            $this->searchResultsFactory,
+            $this->taxClassRepository,
+            $this->extensionAttributesJoinProcessor,
+            $this->collectionProcessorMock
+        );
+    }
+
+    private function setupGroupObjects()
+    {
         $this->groupRegistry = $this->getMock(
             \Magento\Customer\Model\GroupRegistry::class,
             [],
@@ -133,52 +184,6 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false
-        );
-        $this->dataObjectProcessor = $this->getMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultsFactory = $this->getMock(
-            \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->searchResults = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->taxClassRepository = $this->getMockForAbstractClass(
-            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(
-            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->getMock();
-
-        $this->model = new \Magento\Customer\Model\ResourceModel\GroupRepository(
-            $this->groupRegistry,
-            $this->groupFactory,
-            $this->groupDataFactory,
-            $this->groupResourceModel,
-            $this->dataObjectProcessor,
-            $this->searchResultsFactory,
-            $this->taxClassRepository,
-            $this->extensionAttributesJoinProcessor,
-            $this->collectionProcessorMock
         );
     }
 

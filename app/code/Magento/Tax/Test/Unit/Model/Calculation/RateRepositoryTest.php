@@ -13,6 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
+ * Class RateRepositoryTest
+ * @package Magento\Tax\Test\Unit\Model\Calculation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -66,6 +68,12 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $joinProcessorMock;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     * | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
 
     protected function setUp()
     {
@@ -132,6 +140,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new RateRepository(
             $this->rateConverterMock,
             $this->rateRegistryMock,
@@ -140,7 +155,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->countryFactoryMock,
             $this->regionFactoryMock,
             $this->rateResourceMock,
-            $this->joinProcessorMock
+            $this->joinProcessorMock,
+            $this->collectionProcessor
         );
     }
 
@@ -243,12 +259,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $searchCriteriaMock->expects($this->any())->method('getFilterGroups')->will($this->returnValue([]));
-        $searchCriteriaMock->expects($this->any())->method('getSortOrders')->will($this->returnValue([]));
-        $currentPage = 1;
-        $pageSize = 100;
-        $searchCriteriaMock->expects($this->any())->method('getCurrentPage')->will($this->returnValue($currentPage));
-        $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $rateMock = $this->getTaxRateMock([]);
 
         $objectManager = new ObjectManager($this);
@@ -258,8 +269,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             $items
         );
         $collectionMock->expects($this->once())->method('joinRegionTable');
-        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
-        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
         $collectionMock->expects($this->once())->method('getSize')->will($this->returnValue(count($items)));
 
         $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));
@@ -270,6 +279,9 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
 
         $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
@@ -365,6 +377,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetListWhenFilterGroupExists()
     {
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
         $searchCriteriaMock
             ->expects($this->any())
@@ -382,10 +395,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class,
             $items
         );
-        $collectionMock
-            ->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with(['region_table.code'], [['like' => 'condition_value']]);
         $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
         $searchCriteriaMock
             ->expects($this->any())
@@ -399,10 +408,10 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->any())->method('getCurrentPage')->will($this->returnValue($currentPage));
         $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
         $rateMock = $this->getTaxRateMock([]);
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $collectionMock->expects($this->once())->method('joinRegionTable');
-        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
-        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
         $collectionMock->expects($this->once())->method('getSize')->will($this->returnValue(count($items)));
 
         $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));

@@ -61,6 +61,12 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $loadHandlerMock;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
+     * \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -103,7 +109,13 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = $objectManager->getObject(
             \Magento\Quote\Model\QuoteRepository::class,
             [
@@ -111,7 +123,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'searchResultsDataFactory' => $this->searchResultsDataFactory,
                 'quoteCollection' => $this->quoteCollectionMock,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'collectionProcessor' => $this->collectionProcessor
             ]
         );
 
@@ -402,9 +415,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $direction
      * @param string $expectedDirection
-     * @dataProvider getListSuccessDataProvider
      */
-    public function testGetListSuccess($direction, $expectedDirection)
+    public function testGetListSuccess()
     {
         $this->markTestSkipped('MAGETWO-48531');
         $searchResult = $this->getMock(\Magento\Quote\Api\Data\CartSearchResultsInterface::class, [], [], '', false);
@@ -441,21 +453,14 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getField', 'getDirection'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        //foreach cycle
-        $searchCriteriaMock
-            ->expects($this->once())
-            ->method('getSortOrders')
-            ->will($this->returnValue([$sortOrderMock]));
-        $sortOrderMock->expects($this->once())->method('getField')->will($this->returnValue('id'));
-        $sortOrderMock->expects($this->once())->method('getDirection')->will($this->returnValue($direction));
-        $this->quoteCollectionMock->expects($this->once())->method('addOrder')->with('id', $expectedDirection);
-
+        
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->will($this->returnValue(1));
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->will($this->returnValue(10));
         $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
         $this->quoteCollectionMock->expects($this->once())->method('setPageSize')->with(10);
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $this->quoteCollectionMock);
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with(
@@ -481,6 +486,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @deprecated
      * @return array
      */
     public function getListSuccessDataProvider()
