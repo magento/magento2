@@ -110,6 +110,10 @@ class StructurePlugin
     }
 
     /**
+     * Changes payment config structure.
+     * Groups which have `displayIn` element, transfer to appropriate group.
+     * Groups without `displayIn` transfer to other payment methods group.
+     *
      * @param Section $result
      * @return void
      */
@@ -139,6 +143,8 @@ class StructurePlugin
     }
 
     /**
+     * Recursive search of `displayIn` element in node children
+     *
      * @param string $section
      * @param array $data
      * @return array|null
