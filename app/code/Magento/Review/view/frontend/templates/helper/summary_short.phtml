@@ -6,9 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Review\Block\Product\ReviewRenderer $block */
+
+$url = $block->getReviewsUrl() . '#reviews';
+$urlForm = $block->getReviewsUrl() . '#review-form';
 ?>
-<?php $url = $block->getReviewsUrl() . '#reviews'; ?>
-<?php $urlForm = $block->getReviewsUrl() . '#review-form'; ?>
 <?php if ($block->getReviewsCount()): ?>
 <?php $rating = $block->getRatingSummary(); ?>
 <div class="product-reviews-summary short<?php echo !$rating ? ' no-rating' : ''?>">
