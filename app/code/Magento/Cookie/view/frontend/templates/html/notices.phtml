@@ -29,7 +29,7 @@
                     "cookieAllowButtonSelector": "#btn-cookie-allow",
                     "cookieName": "<?php echo $block->escapeJs(\Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE) ?>",
                     "cookieValue": <?php /* @noEscape */ echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>,
-                    "cookieLifetime": <?php echo $block->escapeJs($this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()) ?>,
+                    "cookieLifetime": <?php /* @noEscape */ echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
                     "noCookiesUrl": "<?php echo $block->escapeUrl($block->getUrl('cookie/index/noCookies')) ?>"
                 }
             }
