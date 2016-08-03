@@ -41,7 +41,7 @@
     </fieldset>
 </script>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getSendUrl() ?>" method="post" id="product-sendtofriend-form"
+<form action="<?php echo $block->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
       data-mage-init='{
         "rowBuilder":{
             "rowTemplate":"#add-recipient-tmpl",
@@ -49,7 +49,7 @@
             "rowParentElem":"<div></div>",
             "remEventSelector":"button",
             "btnRemoveSelector":".action.remove",
-            "maxRows":"<?php /* @escapeNotVerified */ echo $block->getMaxRecipients() ?>",
+            "maxRows":"<?php echo (int) $block->getMaxRecipients() ?>",
             "maxRowsMsg":"#max-recipient-message",
             "addRowBtn":"#add-recipient-button",
             "additionalRowClass":"additional"},

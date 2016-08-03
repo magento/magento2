@@ -12,7 +12,7 @@
        class="action towishlist"
        title="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
        aria-label="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
-       data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
+       data-post='<?php /* @noEscape */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
        data-action="add-to-wishlist"
        role="button">
         <span><?php /* @noEscape */ echo __('Add to Wish List') ?></span>

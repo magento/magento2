@@ -9,7 +9,7 @@
 /** @var $block \Magento\Wishlist\Block\Customer\Sharing */
 ?>
 <form class="form wishlist share"
-      action="<?php /* @escapeNotVerified */ echo $block->getSendUrl() ?>"
+      action="<?php echo $block->escapeUrl($block->getSendUrl()) ?>"
       id="form-validate"
       method="post"
       data-hasrequired="<?php /* @noEscape */ echo __('* Required Fields') ?>"
@@ -47,7 +47,7 @@
             </button>
         </div>
         <div class="secondary">
-            <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl(); ?>"><span><?php /* @noEscape */ echo __('Back')?></span></a>
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()); ?>"><span><?php /* @noEscape */ echo __('Back')?></span></a>
         </div>
     </div>
 </form>

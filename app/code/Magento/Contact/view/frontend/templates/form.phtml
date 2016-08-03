@@ -8,7 +8,7 @@
 
 ?>
 <form class="form contact"
-      action="<?php /* @escapeNotVerified */ echo $block->getFormAction(); ?>"
+      action="<?php echo $block->escapeUrl($block->getFormAction()); ?>"
       id="contact-form"
       method="post"
       data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>"
