@@ -19,7 +19,7 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cacheFrontendMock = $this->getMock('\Magento\Framework\Cache\FrontendInterface');
+        $this->_cacheFrontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_configCache = new \Magento\Framework\App\ObjectManager\ConfigCache($this->_cacheFrontendMock);
     }
 

@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -53,6 +54,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -88,6 +90,14 @@ class UpgradeData implements UpgradeDataInterface
             $setup->getConnection()->delete(
                 $setup->getTable('customer_form_attribute'),
                 ['form_code = ?' => 'checkout_register']
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+            $setup->getConnection()->update(
+                $setup->getTable('core_config_data'),
+                ['path' => \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE],
+                ['path = ?' => 'general/restriction/autocomplete_on_storefront']
             );
         }
 
@@ -370,45 +380,45 @@ class UpgradeData implements UpgradeDataInterface
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'entity_model',
-            'Magento\Customer\Model\ResourceModel\Customer'
+            \Magento\Customer\Model\ResourceModel\Customer::class
         );
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'increment_model',
-            'Magento\Eav\Model\Entity\Increment\NumericValue'
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
         );
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'entity_attribute_collection',
-            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
         $customerSetup->updateEntityType(
             'customer_address',
             'entity_model',
-            'Magento\Customer\Model\ResourceModel\Address'
+            \Magento\Customer\Model\ResourceModel\Address::class
         );
         $customerSetup->updateEntityType(
             'customer_address',
             'entity_attribute_collection',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class
         );
         $customerSetup->updateAttribute(
             'customer_address',
             'country_id',
             'source_model',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country::class
         );
         $customerSetup->updateAttribute(
             'customer_address',
             'region',
             'backend_model',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region::class
         );
         $customerSetup->updateAttribute(
             'customer_address',
             'region_id',
             'source_model',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region::class
         );
     }
 

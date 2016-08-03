@@ -52,7 +52,10 @@ class BackupActionItems extends AbstractActionController
         \Magento\Framework\Backup\Filesystem $fileSystem
     ) {
         $objectManager = $objectManagerProvider->get();
-        $this->backupHandler = $objectManager->create('Magento\Framework\Setup\BackupRollback', ['log' => $logger]);
+        $this->backupHandler = $objectManager->create(
+            \Magento\Framework\Setup\BackupRollback::class,
+            ['log' => $logger]
+        );
         $this->directoryList = $directoryList;
         $this->fileSystem = $fileSystem;
     }

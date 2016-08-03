@@ -192,13 +192,13 @@
     }
 
     .admin__field:not(.admin__field-option) > & {
+        &:extend(.abs-word-wrap all);
         font-family: @font-family__base;
         font-size: @field-label__font-size;
         font-weight: @font-weight__semibold;
         line-height: 3.2rem;
         padding: 0;
         white-space: nowrap;
-        word-wrap: break-word;
 
         &:before {
             .appearing__off();

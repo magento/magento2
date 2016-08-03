@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Model;
 
+/**
+ * @api
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**

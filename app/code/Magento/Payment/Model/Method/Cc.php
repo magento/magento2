@@ -19,12 +19,12 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Form\Cc';
+    protected $_formBlockType = \Magento\Payment\Block\Form\Cc::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Cc';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Cc::class;
 
     /**
      * @var bool

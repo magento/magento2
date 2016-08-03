@@ -49,7 +49,7 @@ class GetShippingItemsGrid extends \Magento\Backend\App\Action
         $this->shipmentLoader->load();
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
-                'Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid'
+                \Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid::class
             )->setIndex(
                 $this->getRequest()->getParam('index')
             )->toHtml()

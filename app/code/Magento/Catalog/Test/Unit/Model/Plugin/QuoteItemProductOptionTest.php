@@ -28,10 +28,10 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $this->orderItemMock = $this->getMock(\Magento\Sales\Model\Order\Item::class, [], [], '', false);
+        $this->quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $orderItem = $this->orderItemMock;
-        $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
         $this->closureMock = function () use ($orderItem) {
             return $orderItem;
         };
@@ -49,7 +49,7 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     public function testAroundItemToOrderItemWithOptions()
     {
         $itemOption = $this->getMock(
-            'Magento\Quote\Model\Quote\Item\Option',
+            \Magento\Quote\Model\Quote\Item\Option::class,
             ['getCode', '__wakeup'],
             [],
             '',
@@ -66,8 +66,8 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
         $itemOption->expects($this->at(0))->method('getCode')->will($this->returnValue('someText_8'));
         $itemOption->expects($this->at(1))->method('getCode')->will($this->returnValue('not_int_text'));
 
-        $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $optionMock = $this->getMock('stdClass', ['getType']);
+        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $optionMock = $this->getMock(\stdClass::class, ['getType']);
         $optionMock->expects($this->once())->method('getType');
 
         $productMock->expects($this->once())->method('getOptionById')->will($this->returnValue($optionMock));

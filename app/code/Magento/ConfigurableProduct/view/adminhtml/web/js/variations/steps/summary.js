@@ -81,6 +81,7 @@ define([
                     options: options,
                     images: images,
                     sku: sku,
+                    name: sku,
                     quantity: quantity,
                     price: price,
                     productId: productId,
@@ -91,6 +92,7 @@ define([
                 if (productId) {
                     variation.sku = product.sku;
                     variation.weight = product.weight;
+                    variation.name = product.name;
                     gridExisting.push(this.prepareRowForGrid(variation));
                 } else {
                     gridNew.push(this.prepareRowForGrid(variation));

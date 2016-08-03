@@ -21,6 +21,8 @@ use Magento\Framework\View;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @api
  */
 class Config
 {
@@ -138,7 +140,7 @@ class Config
     {
         if ($this->areaResolver === null) {
             $this->areaResolver = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\App\State');
+                ->get(\Magento\Framework\App\State::class);
         }
         return $this->areaResolver;
     }

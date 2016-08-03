@@ -55,7 +55,6 @@ define([
                 this._setOption('priceFormat', priceBox.priceBox('option').priceConfig.priceFormat);
                 priceBox.priceBox('setDefault', this.options.optionConfig.prices);
             }
-            this._applyQtyFix();
             this._applyOptionNodeFix(options);
 
             options.on('change', this._onBundleOptionChanged.bind(this));
@@ -113,6 +112,7 @@ define([
          * Helper to fix backend behavior:
          *  - if default qty large than 1 then backend multiply price in config
          *
+         * @deprecated
          * @private
          */
         _applyQtyFix: function applyQtyFix() {

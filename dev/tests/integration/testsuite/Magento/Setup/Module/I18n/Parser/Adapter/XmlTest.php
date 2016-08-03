@@ -20,7 +20,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->xmlPhraseCollector = $objectManager->create(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Xml'
+            \Magento\Setup\Module\I18n\Parser\Adapter\Xml::class
         );
     }
 

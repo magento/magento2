@@ -112,9 +112,11 @@ class Plugin
             $product->addData($productData);
             $product->setCollectExceptionMessages(true);
             $configurableAttribute = [];
-            $encodedData = $productData['configurable_attribute'];
-            if ($encodedData) {
-                $configurableAttribute = $this->jsonHelper->jsonDecode($encodedData);
+            if (!empty($productData['configurable_attribute'])) {
+                $encodedData = $productData['configurable_attribute'];
+                if ($encodedData) {
+                    $configurableAttribute = $this->jsonHelper->jsonDecode($encodedData);
+                }
             }
             $configurableAttribute = implode('-', $configurableAttribute);
 

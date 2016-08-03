@@ -55,7 +55,7 @@ abstract class Images extends \Magento\Backend\App\Action
     public function getStorage()
     {
         if (!$this->_coreRegistry->registry('storage')) {
-            $storage = $this->_objectManager->create('Magento\Cms\Model\Wysiwyg\Images\Storage');
+            $storage = $this->_objectManager->create(\Magento\Cms\Model\Wysiwyg\Images\Storage::class);
             $this->_coreRegistry->register('storage', $storage);
         }
         return $this->_coreRegistry->registry('storage');

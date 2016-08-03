@@ -169,7 +169,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Payment::class);
     }
 
     /**

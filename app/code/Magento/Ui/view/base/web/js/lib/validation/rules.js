@@ -572,6 +572,15 @@ define([
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
+        'validate-integer': [
+            function(value) {
+                return (
+                    utils.isEmptyNoTrim(value)
+                    || (!isNaN(utils.parseNumber(value)) && /^\s*-?\d*\s*$/.test(value))
+                );
+            },
+            $.mage.__('Please enter a valid integer in this field.')
+        ],
         "validate-number-range": [
             function(value, param) {
                 if (utils.isEmptyNoTrim(value)) {

@@ -430,9 +430,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _construct()
     {
         if ($this->isEnabledFlat()) {
-            $this->_init('Magento\Catalog\Model\Product', 'Magento\Catalog\Model\ResourceModel\Product\Flat');
+            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product\Flat::class);
         } else {
-            $this->_init('Magento\Catalog\Model\Product', 'Magento\Catalog\Model\ResourceModel\Product');
+            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         }
         $this->_initTables();
     }
@@ -448,7 +448,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _init($model, $entityModel)
     {
         if ($this->isEnabledFlat()) {
-            $entityModel = 'Magento\Catalog\Model\ResourceModel\Product\Flat';
+            $entityModel = \Magento\Catalog\Model\ResourceModel\Product\Flat::class;
         }
         return parent::_init($model, $entityModel);
     }
@@ -1858,6 +1858,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
+        // Preventing overriding price loaded from EAV because we want to use the one from index
+        $this->removeAttributeToSelect('price');
+
         $connection = $this->getConnection();
         $select = $this->getSelect();
         $joinCond = join(
@@ -2269,6 +2272,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private function createLimitationFilters()
     {
         return \Magento\Framework\App\ObjectManager::getInstance()
-                ->create('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation');
+                ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class);
     }
 }

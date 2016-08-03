@@ -18,7 +18,7 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
         array $data = []
     ) {
         parent::__construct($context, $ruleConditionProduct, $data);
-        $this->setType('Magento\SalesRule\Model\Rule\Condition\Product\Found');
+        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Product\Found::class);
     }
 
     /**

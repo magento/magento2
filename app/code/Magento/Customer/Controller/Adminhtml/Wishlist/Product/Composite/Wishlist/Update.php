@@ -32,7 +32,7 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Com
             $updateResult->setMessage($e->getMessage());
         }
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
+        $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCompositeProductResult($updateResult);
         return $this->resultRedirectFactory->create()->setPath('catalog/product/showUpdateResult');
     }
 }

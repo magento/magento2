@@ -29,7 +29,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'sales_shipment_grid',
-        $resourceModel = '\Magento\Sales\Model\ResourceModel\Order\Shipment'
+        $resourceModel = \Magento\Sales\Model\ResourceModel\Order\Shipment::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

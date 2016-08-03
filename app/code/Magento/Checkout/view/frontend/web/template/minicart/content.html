@@ -53,7 +53,13 @@
                         id="top-cart-btn-checkout"
                         type="button"
                         class="action primary checkout"
-                        data-bind="attr: {title: $t('Go to Checkout')}">
+                        data-action="close"
+                        data-bind="
+                            attr: {
+                                title: $t('Go to Checkout')
+                            },
+                            click: closeMinicart()
+                        ">
                     <!-- ko i18n: 'Go to Checkout' --><!-- /ko -->
                 </button>
                 <div data-bind="html: getCartParam('extra_actions')"></div>

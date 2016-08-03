@@ -140,24 +140,19 @@ class PageRepository implements PageRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Magento\Cms\Model\ResourceModel\Page\Collection
+     * @return \Magento\Cms\Api\Data\PageSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
 
+        /** @var \Magento\Cms\Model\ResourceModel\Page\Collection $collection */
         $collection = $this->pageCollectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'store_id') {
-                    $collection->addStoreFilter($filter->getValue(), false);
-                    continue;
-                }
-                $condition = $filter->getConditionType() ?: 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
+            $this->addFilterGroupToCollection($filterGroup, $collection);
         }
+
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $criteria->getSortOrders();
         if ($sortOrders) {
@@ -178,11 +173,11 @@ class PageRepository implements PageRepositoryInterface
             $this->dataObjectHelper->populateWithArray(
                 $pageData,
                 $pageModel->getData(),
-                'Magento\Cms\Api\Data\PageInterface'
+                \Magento\Cms\Api\Data\PageInterface::class
             );
             $pages[] = $this->dataObjectProcessor->buildOutputDataArray(
                 $pageData,
-                'Magento\Cms\Api\Data\PageInterface'
+                \Magento\Cms\Api\Data\PageInterface::class
             );
         }
         $searchResults->setItems($pages);
@@ -220,5 +215,34 @@ class PageRepository implements PageRepositoryInterface
     public function deleteById($pageId)
     {
         return $this->delete($this->getById($pageId));
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param \Magento\Cms\Model\ResourceModel\Page\Collection $collection
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    private function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        \Magento\Cms\Model\ResourceModel\Page\Collection $collection
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            if ($filter->getField() === 'store_id') {
+                $collection->addStoreFilter($filter->getValue(), false);
+                continue;
+            }
+            $condition = $filter->getConditionType() ?: 'eq';
+            $fields[] = $filter->getField();
+            $conditions[] = [$condition => $filter->getValue()];
+        }
+
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
     }
 }
