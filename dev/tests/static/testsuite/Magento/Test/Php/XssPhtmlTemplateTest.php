@@ -8,12 +8,30 @@ namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\Utility\XssOutputValidator;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Find not escaped output in phtml templates
  */
 class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var array
+     */
+    private $moduleList = [
+        'Magento_Customer',
+        'Magento_Contact',
+        'Magento_Cookie',
+        'Magento_Customer',
+        'Magento_Newsletter',
+        'Magento_Persistent',
+        'Magento_ProductAlert',
+        'Magento_Review',
+        'Magento_Rss',
+        'Magento_Wishlist',
+        'Magento_SendFriend'
+    ];
+
     /**
      * @return void
      */
@@ -48,6 +66,33 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
                 );
             },
             Files::init()->getPhtmlFiles()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAbsenceOfEscapeNotVerifiedAnnotationInRefinedModules()
+    {
+        $componentRegistrar = new ComponentRegistrar();
+        $result = "";
+        foreach ($this->moduleList as $moduleName) {
+            $modulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            foreach (Files::init()->getFiles([$modulePath], '*.phtml') as $file) {
+                $fileContents = file_get_contents($file);
+                $pattern = "/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/";
+                $instances = preg_grep($pattern, explode("\n", $fileContents));
+                if (!empty($instances)) {
+                    foreach (array_keys($instances) as $line) {
+                        $result .= $file . ':' . ($line + 1) . "\n";
+                    }
+                }
+            }
+        }
+        $this->assertEmpty(
+            $result,
+            "@escapeNotVerified annotation detected.\n" .
+            "Please use the correct escape strategy and remove annotation at : \n" . $result
         );
     }
 }
