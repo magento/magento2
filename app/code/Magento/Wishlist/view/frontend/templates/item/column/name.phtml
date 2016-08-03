@@ -6,12 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info */
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info $block */
 
-/** @var $item \Magento\Wishlist\Model\Item */
+/** @var \Magento\Wishlist\Model\Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
-
 ?>
 <strong class="product-item-name">
     <a href="<?php echo $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?php echo $block->escapeHtmlAttr($product->getName()) ?>" class="product-item-link">

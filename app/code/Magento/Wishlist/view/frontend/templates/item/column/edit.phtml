@@ -6,12 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit */
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit $block */
 
 /** @var \Magento\Wishlist\Model\Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
-
 ?>
 
 <?php if ($product->isVisibleInSiteVisibility()): ?>
