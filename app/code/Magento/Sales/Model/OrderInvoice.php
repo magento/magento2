@@ -17,10 +17,7 @@ use Magento\Sales\Model\Order\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
-use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order\InvoiceRepository;
-use Magento\Sales\Api\DocumentValidationException;
-use Magento\Sales\Api\CouldNotInvoiceException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -126,8 +123,8 @@ class OrderInvoice implements OrderInvoiceInterface
      * @param \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
-     * @throws DocumentValidationException
-     * @throws CouldNotInvoiceException
+     * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
+     * @throws \Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \DomainException
@@ -152,7 +149,7 @@ class OrderInvoice implements OrderInvoiceInterface
         );
         $errorMessages = $this->invoiceValidator->validate($invoice, $order);
         if (!empty($errorMessages)) {
-            throw new DocumentValidationException(
+            throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
             );
         }
@@ -170,7 +167,9 @@ class OrderInvoice implements OrderInvoiceInterface
         } catch (\Exception $e) {
             $this->logger->critical($e);
             $connection->rollBack();
-            throw new CouldNotInvoiceException(__('Could not save an invoice, see error log for details'));
+            throw new \Magento\Sales\Exception\CouldNotInvoiceException(
+                __('Could not save an invoice, see error log for details')
+            );
         }
         if ($notify) {
             if (!$appendComment) {

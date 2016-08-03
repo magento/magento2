@@ -284,7 +284,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\DocumentValidationException
+     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
      */
     public function testDocumentValidationException()
     {
@@ -326,7 +326,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\CouldNotInvoiceException
+     * @expectedException \Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface
      */
     public function testCouldNotInvoiceException()
     {
