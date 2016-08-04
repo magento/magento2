@@ -20,7 +20,7 @@
           <dt class="label"><?php echo $block->escapeHtml($option['label']) ?></dt>
           <dd class="values">
               <?php if (is_array($option['value'])): ?>
-              <?php echo nl2br($block->escapeHtml(implode("\n", $option['value']))) ?>
+              <?php /* @noEscape */ echo nl2br(implode("\n", $option['value'])) ?>
               <?php else: ?>
               <?php echo $block->escapeHtml($option['value']) ?>
               <?php endif; ?>
