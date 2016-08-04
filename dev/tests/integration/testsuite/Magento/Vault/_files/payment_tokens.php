@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 use Magento\Vault\Model\PaymentToken;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
