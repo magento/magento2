@@ -48,6 +48,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory
      * @param Bookmark $bookmarkResourceModel
      * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CollectionProcessorInterface | null $collectionProcessor
      */
     public function __construct(
         \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,

@@ -38,7 +38,7 @@ $paymentTokens = [
     ],
 ];
 /** @var array $tokenData */
-foreach($paymentTokens as $tokenData) {
+foreach ($paymentTokens as $tokenData) {
     /** @var PaymentToken $bookmark */
     $paymentToken = $objectManager->create(PaymentToken::class);
     $paymentToken

@@ -31,7 +31,7 @@ $bookmarks = [
     ],
 ];
 
-foreach($bookmarks as $bookmarkData) {
+foreach ($bookmarks as $bookmarkData) {
     /** @var Bookmark $bookmark */
     $bookmark = $objectManager->create(BookmarkInterface::class);
     $bookmark

@@ -62,6 +62,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
+     * @param CollectionProcessorInterface | null $collectionProcessor
      */
     public function __construct(
         PaymentTokenResourceModel $resourceModel,
@@ -91,7 +92,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     {
         /** @var \Magento\Vault\Model\ResourceModel\PaymentToken\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection); 
+        $this->collectionProcessor->process($searchCriteria, $collection);
         /** @var \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);

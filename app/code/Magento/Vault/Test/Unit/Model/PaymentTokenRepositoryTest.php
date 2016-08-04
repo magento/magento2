@@ -18,9 +18,15 @@ use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Vault\Model\ResourceModel\PaymentToken as PaymentTokenResourceModel;
 
+/**
+ * Class PaymentTokenRepositoryTest
+ * @package Magento\Vault\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     const PUBLIC_HASH = 'hash';
+
     /**
      * @var \Magento\Vault\Model\PaymentTokenRepository|MockObject resourceModelMock
      */

@@ -417,6 +417,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListSuccess()
     {
+        $this->markTestSkipped('MAGETWO-48531');
         $searchResult = $this->getMock(\Magento\Quote\Api\Data\CartSearchResultsInterface::class, [], [], '', false);
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $cartMock = $this->getMock(\Magento\Payment\Model\Cart::class, [], [], '', false);
