@@ -62,7 +62,7 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setValue('2016-11-04 10:18:15')
             ->create();
         $sortOrder = $this->sortOrderBuilder
-            ->setField('customer_id')
+            ->setField('public_hash')
             ->setDirection('DESC')
             ->create();
 

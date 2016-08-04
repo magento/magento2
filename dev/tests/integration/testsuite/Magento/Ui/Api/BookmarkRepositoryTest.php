@@ -72,7 +72,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteria = $this->searchCriteriaBuilder->create();
         /** @var \Magento\Ui\Api\Data\BookmarkSearchResultsInterface $result */
         $result = $this->repository->getList($searchCriteria);
-        $this->assertEquals(2, $result->getTotalCount());
+        $this->assertCount(2, $result->getItems());
         $this->assertEquals('Default View', $result->getItems()[0]->getTitle());
         $this->assertEquals('Bb', $result->getItems()[1]->getTitle());
     }

@@ -25,7 +25,7 @@ $bookmarks = [
         'title' => 'Aa'
     ],
     [
-        'user_id' => 2,
+        'user_id' => 1,
         'namespace' => 'new_namespace',
         'identifier' => 'third',
         'current' => 1,

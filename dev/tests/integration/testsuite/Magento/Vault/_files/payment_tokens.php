@@ -3,6 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+include "customer.php"; 
+
+use Magento\Customer\Model\Customer;
 use Magento\Vault\Model\PaymentToken;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -16,7 +20,7 @@ $paymentTokens = [
         'is_active' => 1
     ],
     [
-        'customer_id' => 2,
+        'customer_id' => 1,
         'public_hash' => '12345',
         'payment_method_code' => 'second',
         'type' => 'simple',
