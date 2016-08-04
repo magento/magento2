@@ -82,6 +82,7 @@ class AdvancedPricing extends AbstractModifier
      * @var array
      */
     protected $meta = [];
+
     /**
      * @var GroupSourceInterface
      */
