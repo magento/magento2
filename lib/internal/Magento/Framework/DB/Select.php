@@ -523,7 +523,7 @@ class Select extends \Zend_Db_Select
         return $this;
     }
 
-        /**
+    /**
      * add SQL_CACHE to enable querycache usage
      *
      * @param bool $flag
