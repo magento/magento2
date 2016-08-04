@@ -39,9 +39,9 @@ $product = $block->getProductData();
                     <?php $rating = ceil($_rating->getPercent()) ?>
                     <div class="rating-summary item">
                         <span class="rating-label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></span>
-                        <div class="rating-result" title="<?php /* noEscape */ echo $rating; ?>%">
-                            <span style="width:<?php /* noEscape */ echo $rating; ?>%">
-                                <span><?php /* noEscape */ echo $rating; ?>%</span>
+                        <div class="rating-result" title="<?php /* @noEscape */ echo $rating; ?>%">
+                            <span style="width:<?php /* @noEscape */ echo $rating; ?>%">
+                                <span><?php /* @noEscape */ echo $rating; ?>%</span>
                             </span>
                         </div>
                     </div>
