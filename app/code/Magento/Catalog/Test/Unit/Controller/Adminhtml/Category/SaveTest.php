@@ -84,7 +84,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->contextMock = $this->getMock(
@@ -201,6 +200,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($categoryId, $storeId, $parentId)
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
+
         $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $products = [['any_product']];
         $postData = [
@@ -576,5 +577,85 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'parentId' => null,
             ]
         ];
+    }
+
+    public function attributeValueDataProvider()
+    {
+        return [
+            [['attribute1' => null, 'attribute2' => 123]],
+            [['attribute2' => 123]]
+        ];
+    }
+
+    /**
+     * @dataProvider attributeValueDataProvider
+     *
+     * @param $data
+     */
+    public function testImagePreprocessingShouldSetAttributesWithImageBackendToFalse($data)
+    {
+        $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
+
+        $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
+            new \Magento\Framework\DataObject([
+                'attribute_code' => 'attribute1',
+                'backend' => $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class)
+            ]),
+            new \Magento\Framework\DataObject([
+                'attribute_code' => 'attribute2',
+                'backend' => new \Magento\Framework\DataObject()
+            ])
+        ]]);
+
+        $eavConfig->expects($this->once())
+            ->method('getEntityType')
+            ->with(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
+            ->will($this->returnValue($collection));
+
+        $model = $this->objectManager->getObject(\Magento\Catalog\Controller\Adminhtml\Category\Save::class, [
+            'eavConfig' => $eavConfig
+        ]);
+
+        $result = $model->imagePreprocessing($data);
+
+        $this->assertEquals([
+            'attribute1' => false,
+            'attribute2' => 123
+        ], $result);
+    }
+
+    public function testImagePreprocessingShouldNotSetValueToFalseWhenValueSet()
+    {
+        $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
+
+        $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
+            new \Magento\Framework\DataObject([
+                'attribute_code' => 'attribute1',
+                'backend' => $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class)
+            ]),
+            new \Magento\Framework\DataObject([
+                'attribute_code' => 'attribute2',
+                'backend' => new \Magento\Framework\DataObject()
+            ])
+        ]]);
+
+        $eavConfig->expects($this->once())
+            ->method('getEntityType')
+            ->with(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
+            ->will($this->returnValue($collection));
+
+        $model = $this->objectManager->getObject(\Magento\Catalog\Controller\Adminhtml\Category\Save::class, [
+            'eavConfig' => $eavConfig
+        ]);
+
+        $result = $model->imagePreprocessing([
+            'attribute1' => 'somevalue',
+            'attribute2' => null
+        ]);
+
+        $this->assertEquals([
+            'attribute1' => 'somevalue',
+            'attribute2' => null
+        ], $result);
     }
 }

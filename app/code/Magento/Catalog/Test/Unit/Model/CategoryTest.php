@@ -9,6 +9,7 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Indexer;
+use Magento\Catalog\Model\Category as Model;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -89,8 +90,15 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeValueFactory;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $this->context = $this->getMock(
             \Magento\Framework\Model\Context::class,
             ['getEventDispatcher', 'getCacheManager'],
@@ -313,7 +321,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function getCategoryModel()
     {
-        return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+        return $this->objectManager->getObject(
             \Magento\Catalog\Model\Category::class,
             [
                 'context' => $this->context,
@@ -486,5 +494,69 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             "new description",
             $this->category->getCustomAttribute($descriptionAttributeCode)->getValue()
         );
+    }
+
+    public function imageAttributeNameAndUrlProvider()
+    {
+        return [
+            ['testimage', 'http://www.test123.com/catalog/category/testimage'],
+            [false, false]
+        ];
+    }
+
+    /**
+     * @param $value
+     * @param $url
+     *
+     * @dataProvider imageAttributeNameAndUrlProvider
+     */
+    public function testGetImageUrlShouldGenerateMediaUrlForSpecifiedAttributeValue($value, $url)
+    {
+        $storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, ['getStore'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getBaseUrl'], [], '', false);
+
+        $storeManager->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+
+        $store->expects($this->any())
+            ->method('getBaseUrl')
+            ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+            ->will($this->returnValue('http://www.test123.com/'));
+
+        $model = $this->objectManager->getObject(Model::class, [
+            'storeManager' => $storeManager
+        ]);
+
+        $model->setData('attribute1', $value);
+
+        $result = $model->getImageUrl('attribute1');
+
+        $this->assertEquals($url, $result);
+    }
+
+    public function testGetImageUrlShouldGenerateMediaUrlForImageAttributeValue()
+    {
+        $storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, ['getStore'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getBaseUrl'], [], '', false);
+
+        $storeManager->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+
+        $store->expects($this->any())
+            ->method('getBaseUrl')
+            ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+            ->will($this->returnValue('http://www.test123.com/'));
+
+        $model = $this->objectManager->getObject(Model::class, [
+            'storeManager' => $storeManager
+        ]);
+
+        $model->setData('image', 'myimage');
+
+        $result = $model->getImageUrl();
+
+        $this->assertEquals('http://www.test123.com/catalog/category/myimage', $result);
     }
 }
