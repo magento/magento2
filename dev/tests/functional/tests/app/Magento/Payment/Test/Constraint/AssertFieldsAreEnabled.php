@@ -16,11 +16,11 @@ use Magento\Backend\Test\Page\Adminhtml\SystemConfigEditSectionPayment;
  */
 class AssertFieldsAreEnabled extends AbstractConstraint
 {
-
     /**
      * Assert that field is present.
      *
      * @param array $fieldIds
+     * @return void
      */
     public function processAssert(SystemConfigEditSectionPayment $configEditSectionPayment, array $fieldIds)
     {

@@ -15,21 +15,13 @@ use Magento\Mtf\Client\Locator;
 class Braintree extends Block
 {
     /**
-     * @var string
+     * @var array
      */
     private $fields = [
         'Merchant ID' => '#payment_us_braintree_section_braintree_braintree_required_merchant_id',
         'Public Key' => '#payment_us_braintree_section_braintree_braintree_required_public_key',
         'Private Key' => '#payment_us_braintree_section_braintree_braintree_required_private_key',
     ];
-
-    /**
-     * @return string
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
 
     /**
      * @var array
@@ -46,7 +38,19 @@ class Braintree extends Block
     private $configureBraintreeButton = '#payment_us_braintree_section_braintree-head';
 
     /**
-     *  Specify credentials in Braintree configuration.
+     * Return credentials fields selectors.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Specify credentials in Braintree configuration.
+     *
+     * @return void
      */
     public function specifyCredentials()
     {
@@ -56,16 +60,20 @@ class Braintree extends Block
     }
 
     /**
-     *  Clear credentials in Braintree configuration.
+     * Clear credentials in Braintree configuration.
+     *
+     * @return void
      */
     public function clearCredentials()
     {
         $this->_rootElement->find($this->fields['Merchant ID'])->setValue('');
         $this->_rootElement->find($this->fields['Public Key'])->setValue('');
-        $this->_rootElement->find($this->fields['Private Key'])->setValue(' ');
+        $this->_rootElement->find($this->fields['Private Key'])->setValue('');
     }
 
     /**
+     * Return enabler fields selectors.
+     *
      * @return array
      */
     public function getEnablerFields()
@@ -75,6 +83,8 @@ class Braintree extends Block
 
     /**
      *  Click 'Configure' button to expand Braintree configuration.
+     *
+     * @return void
      */
     public function clickConfigureButton()
     {
@@ -83,6 +93,8 @@ class Braintree extends Block
 
     /**
      * Set 'Enable this Solution' = Yes.
+     *
+     * @return void
      */
     public function enableBraintree()
     {
@@ -95,6 +107,8 @@ class Braintree extends Block
 
     /**
      * Set 'Enable this Solution' = No.
+     *
+     * @return void
      */
     public function disableBraintree()
     {

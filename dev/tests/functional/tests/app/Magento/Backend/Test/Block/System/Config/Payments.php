@@ -1,19 +1,12 @@
 <?php
 /**
- * Store configuration group.
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\System\Config;
 
-use Magento\Mtf\Factory\Factory;
-use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\ElementInterface;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Locator;
 
 class Payments extends Block
 {
@@ -36,6 +29,7 @@ class Payments extends Block
 
     /**
      * @param string $countryCode
+     * @return void
      */
     public function switchMerchantCountry($countryCode)
     {
@@ -46,12 +40,13 @@ class Payments extends Block
      * Expand payment methods sections.
      *
      * @param $sectionId
+     * @return void
      */
     private function expandSection($sectionId)
     {
         $sectionName = "a[id*={$sectionId}]";
         $section = $this->_rootElement->find($sectionName . '.open');
-        if(!$section->isVisible()) {
+        if (!$section->isVisible()) {
             $this->_rootElement->find($sectionName)->click();
         }
     }
@@ -64,7 +59,7 @@ class Payments extends Block
      */
     public function findSolution($solution)
     {
-        if($this->_rootElement->find(sprintf($this->solutionTitle, $solution))) {
+        if ($this->_rootElement->find(sprintf($this->solutionTitle, $solution))) {
             return true;
         }
         return false;
@@ -109,6 +104,7 @@ class Payments extends Block
      * Expand payment methods sections.
      *
      * @param array $sections
+     * @return void
      */
     public function expandPaymentSections(array $sections)
     {

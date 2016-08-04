@@ -15,7 +15,7 @@ use Magento\Mtf\Client\Locator;
 class ExpressCheckout extends Block
 {
     /**
-     * @var string
+     * @var array
      */
     private $fields = [
         'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_alternative_payment_methods_express_' .
@@ -31,14 +31,6 @@ class ExpressCheckout extends Block
         'Sort Order PayPal Credit' => '#payment_us_paypal_alternative_payment_methods_express_checkout_us_express_' .
             'checkout_required_express_checkout_bml_sort_order',
     ];
-
-    /**
-     * @return string
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
 
     /**
      * @var array
@@ -58,7 +50,19 @@ class ExpressCheckout extends Block
     private $configureExpressButton = '#payment_us_paypal_alternative_payment_methods_express_checkout_us-head';
 
     /**
+     * Return credentials fields selectors.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
      *  Specify credentials in PayPal Express Checkout configuration.
+     *
+     * @return void
      */
     public function specifyCredentials()
     {
@@ -71,6 +75,8 @@ class ExpressCheckout extends Block
 
     /**
      *  Set fields for credentials empty in PayPal Express Checkout configuration.
+     *
+     * @return void
      */
     public function clearCredentials()
     {
@@ -82,6 +88,8 @@ class ExpressCheckout extends Block
 
     /**
      *  Specify Merchant Account ID in PayPal Express Checkout configuration.
+     *
+     * @return void
      */
     public function specifyMerchantAccountId()
     {
@@ -89,6 +97,8 @@ class ExpressCheckout extends Block
     }
 
     /**
+     * Return enabler fields selectors.
+     *
      * @return array
      */
     public function getEnablerFields()
@@ -98,6 +108,8 @@ class ExpressCheckout extends Block
 
     /**
      *  Click 'Configure' button to expand PayPal Express Checkout configuration.
+     *
+     * @return void
      */
     public function clickConfigureButton()
     {
@@ -106,6 +118,8 @@ class ExpressCheckout extends Block
 
     /**
      * Set 'Enable this Solution' = Yes.
+     *
+     * @return void
      */
     public function enableExpressCheckout()
     {
@@ -118,6 +132,8 @@ class ExpressCheckout extends Block
 
     /**
      * Set 'Enable this Solution' = No.
+     *
+     * @return void
      */
     public function disableExpressCheckout()
     {

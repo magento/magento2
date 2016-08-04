@@ -7,6 +7,10 @@ namespace Magento\Payment\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
 
+/**
+ * Tests conflict resolution for payments configuration.
+ * Class ConflictResolutionTest
+ */
 class ConflictResolutionTest extends Scenario
 {
     /* tags */
