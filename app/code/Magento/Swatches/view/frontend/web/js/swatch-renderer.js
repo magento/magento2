@@ -13,36 +13,46 @@ define([
 ], function ($, _, keyboardHandler) {
     'use strict';
 
+    /**
+     * Extend form validation to support swatch accessibility
+     */
     $.widget('mage.validation', $.mage.validation, {
+        /**
+         * Handle form with swatches validation
+         *
+         * @param {Object} event
+         * @param {Object} validation
+         */
         listenFormValidateHandler: function (event, validation) {
+            var swatchWrapper, firstActive, swatches, swatch, successList, errorList, firstSwatch;
+
             this._superApply(arguments);
 
-            var swatchWrapper = $.mage.SwatchRenderer().options.classes.attributeOptionsWrapper,
-                firstActive = $(validation.errorList[0].element || []),
-                swatches = $(this).find('.' + swatchWrapper);
+            swatchWrapper = '.swatch-attribute-options';
+            swatches = $(event.target).find(swatchWrapper);
 
-            if(swatches.length){
-                var successList = validation.successList,
-                    errorList = validation.errorList,
-                    firstSwatch = $(firstActive).parent().find('.' + swatchWrapper);
+            if (!swatches.length) {
+                return;
+            }
 
-                keyboardHandler.focus(swatches);
+            swatch = '.swatch-attribute';
+            firstActive = $(validation.errorList[0].element || []);
+            successList = validation.successList;
+            errorList = validation.errorList;
+            firstSwatch = $(firstActive).parent(swatch).find(swatchWrapper);
 
-                if (successList.length) {
-                    $.each(successList, function () {
-                        $(this).parent().find('.' + swatchWrapper).attr('aria-invalid', false);
-                    })
-                }
+            keyboardHandler.focus(swatches);
 
-                if (errorList.length) {
-                    $.each(errorList, function (index, item) {
-                        $(item.element).parent().find('.' + swatchWrapper).attr('aria-invalid', true);
-                    })
-                }
+            $.each(successList, function (index, item) {
+                $(item).parent(swatch).find(swatchWrapper).attr('aria-invalid', false);
+            });
 
-                if(firstSwatch.length){
-                    $(firstSwatch) .focus();
-                }
+            $.each(errorList, function (index, item) {
+                $(item.element).parent(swatch).find(swatchWrapper).attr('aria-invalid', true);
+            });
+
+            if (firstSwatch.length) {
+                $(firstSwatch).focus();
             }
         }
     });
@@ -316,7 +326,7 @@ define([
                     options = $widget._RenderSwatchOptions(item, controlLabelId),
                     select = $widget._RenderSwatchSelect(item, chooseText),
                     input = $widget._RenderFormInput(item),
-                    listLabel ='',
+                    listLabel = '',
                     label = '';
 
                 // Show only swatch controls
