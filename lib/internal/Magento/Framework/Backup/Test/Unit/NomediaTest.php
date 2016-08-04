@@ -5,10 +5,17 @@
  */
 namespace Magento\Framework\Backup\Test\Unit;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 require_once __DIR__ . '/_files/io.php';
 
 class NomediaTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Framework\Filesystem
      */
@@ -24,6 +31,11 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
      */
     protected $_backupDbMock;
 
+    /**
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Fs
+     */
+    private $fsMock;
+
     public static function setUpBeforeClass()
     {
         require __DIR__ . '/_files/app_dirs.php';
@@ -36,6 +48,7 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
         $this->_backupDbMock = $this->getMock(\Magento\Framework\Backup\Db::class, [], [], '', false);
         $this->_backupDbMock->expects($this->any())->method('setBackupExtension')->will($this->returnSelf());
 
@@ -69,6 +82,8 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_backupDbMock)
         );
+
+        $this->fsMock = $this->getMock(\Magento\Framework\Backup\Filesystem\Rollback\Fs::class, [], [], '', false);
     }
 
     /**
@@ -81,7 +96,14 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
 
         $rootDir = TESTS_TEMP_DIR . '/Magento/Backup/data';
 
-        $model = new \Magento\Framework\Backup\Nomedia($this->_filesystemMock, $this->_backupFactoryMock);
+        $model = $this->objectManager->getObject(
+            \Magento\Framework\Backup\Nomedia::class,
+            [
+                'filesystem' => $this->_filesystemMock,
+                'backupFactory' => $this->_backupFactoryMock,
+                'rollBackFs' => $this->fsMock
+            ]
+        );
         $model->setRootDir($rootDir);
         $model->setBackupsDir($rootDir);
         $model->{$action}();

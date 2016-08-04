@@ -5,6 +5,9 @@
  */
 namespace Magento\Developer\Model\Css\PreProcessor\FileGenerator;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\App\View\Asset\Publisher;
@@ -37,6 +40,11 @@ class PublicationDecorator extends RelatedGenerator
     private $hasRelatedPublishing;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
@@ -66,12 +74,27 @@ class PublicationDecorator extends RelatedGenerator
     protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
     {
         $relatedAsset = parent::generateRelatedFile($relatedFileId, $asset);
-        if ($this->hasRelatedPublishing
-            || WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)
-        ) {
+        $isClientSideCompilation =
+            $this->getState()->getMode() !== State::MODE_PRODUCTION
+            && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
+
+        if ($this->hasRelatedPublishing || $isClientSideCompilation) {
             $this->assetPublisher->publish($relatedAsset);
         }
 
         return $relatedAsset;
+    }
+
+    /**
+     * @return State
+     * @deprecated
+     */
+    private function getState()
+    {
+        if (null === $this->state) {
+            $this->state = ObjectManager::getInstance()->get(State::class);
+        }
+
+        return $this->state;
     }
 }
