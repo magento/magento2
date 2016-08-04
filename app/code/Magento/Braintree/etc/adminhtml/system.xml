@@ -9,7 +9,7 @@
     <system>
         <section id="payment">
             <group id="braintree_section" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
-                <group id="braintree" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="braintree" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Braintree</label>
                     <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
                     <fieldset_css>complex braintree-section</fieldset_css>
@@ -40,7 +40,7 @@
                             <group id="braintree_required"/>
                         </requires>
                     </field>
-                    <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                    <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
                         <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>

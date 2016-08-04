@@ -12,7 +12,7 @@
         <fieldset_css>paypal-other-section</fieldset_css>
         <comment><![CDATA[Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_link/active</attribute>
-        <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
             <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>

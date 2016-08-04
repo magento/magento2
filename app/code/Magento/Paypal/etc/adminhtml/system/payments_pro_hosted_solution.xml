@@ -13,7 +13,7 @@
         <attribute type="activity_path">payment/hosted_pro/active</attribute>
         <comment><![CDATA[Accept payments with a PCI compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="paypal_ec_separate">1</attribute>
-        <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
             <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
