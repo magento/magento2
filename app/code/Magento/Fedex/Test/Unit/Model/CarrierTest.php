@@ -148,6 +148,30 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetRequestWithoutCity()
+    {
+        $requestMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDestCity'])
+            ->getMock();
+        $requestMock->expects($this->once())
+            ->method('getDestCity')
+            ->willReturn(null);
+        $this->_model->setRequest($requestMock);
+    }
+
+    public function testSetRequestWithCity()
+    {
+        $requestMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDestCity'])
+            ->getMock();
+        $requestMock->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Small Town');
+        $this->_model->setRequest($requestMock);
+    }
+
     /**
      * Callback function, emulates getValue function
      * @param $path
@@ -194,7 +218,16 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_model->expects($this->any())->method('_getCachedQuotes')->will(
             $this->returnValue(serialize($response))
         );
-        $request = $this->getMock(\Magento\Quote\Model\Quote\Address\RateRequest::class, [], [], '', false);
+        $request = $this->getMock(
+            \Magento\Quote\Model\Quote\Address\RateRequest::class,
+            ['getDestCity'],
+            [],
+            '',
+            false
+        );
+        $request->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Wonderful City');
         foreach ($this->_model->collectRates($request)->getAllRates() as $allRates) {
             $this->assertEquals($expected, $allRates->getData('cost'));
         }
