@@ -64,8 +64,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param $value
-     * @return string|bool
+     * @param array|bool|null $value Attribute value
+     * @return bool
      */
     protected function getUploadedImageName($value)
     {

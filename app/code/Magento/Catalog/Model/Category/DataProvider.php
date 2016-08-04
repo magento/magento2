@@ -210,15 +210,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             foreach ($category->getAttributes() as $attributeCode => $attribute) {
                 $backendModel = $attribute->getBackend();
 
-                if ($backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
-                    if (isset($categoryData[$attributeCode])) {
-                        unset($categoryData[$attributeCode]);
-
-                        $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
-                        $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
-                    }
+                if (!isset($categoryData[$attributeCode])) {
+                    continue;
                 }
-             }
+
+                if ($backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
+                    unset($categoryData[$attributeCode]);
+
+                    $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
+                    $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                }
+            }
 
             $this->loadedData[$category->getId()] = $categoryData;
         }

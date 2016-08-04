@@ -233,10 +233,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
-     * @param $data
-     * @return array
+     * @param array $data Category data
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function imagePreprocessing($data)
+    public function imagePreprocessing(array $data)
     {
         $entityType = $this->eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE);
 
