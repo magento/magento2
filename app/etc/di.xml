@@ -1123,6 +1123,16 @@
     <type name="Magento\Framework\DB\Select\SelectRenderer">
         <arguments>
             <argument name="renderers" xsi:type="array">
+                <item name="use_cache" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\UseCacheRenderer</item>
+                    <item name="sort" xsi:type="string">88</item>
+                    <item name="part" xsi:type="string">nocache</item>
+                </item>
+                <item name="no_cache" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\NoCacheRenderer</item>
+                    <item name="sort" xsi:type="string">89</item>
+                    <item name="part" xsi:type="string">usecache</item>
+                </item>
                 <item name="distinct" xsi:type="array">
                     <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\DistinctRenderer</item>
                     <item name="sort" xsi:type="string">100</item>
