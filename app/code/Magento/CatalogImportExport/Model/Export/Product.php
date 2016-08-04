@@ -255,6 +255,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
+     * Attributes codes which shows as date
+     *
+     * @var array
+     */
+    protected $dateAttrCodes = [
+        'special_from_date',
+        'special_to_date'
+    ];
+
+    /**
      * Attributes codes which are appropriate for export and not the part of additional_attributes.
      *
      * @var array
@@ -897,7 +907,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
-                    if ($this->_attributeTypes[$code] === 'datetime') {
+                    if (in_array($code, $this->dateAttrCodes)) {
+                        $attrValue = $this->_localeDate->formatDateTime(
+                            new \DateTime($attrValue),
+                            \IntlDateFormatter::SHORT,
+                            \IntlDateFormatter::NONE,
+                            null,
+                            date_default_timezone_get()
+                        );
+                    } else if ($this->_attributeTypes[$code] === 'datetime') {
                         $attrValue = $this->_localeDate->formatDateTime(
                             new \DateTime($attrValue),
                             \IntlDateFormatter::SHORT,
