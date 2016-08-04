@@ -22,6 +22,13 @@ class Grid extends AbstractGrid
     protected $installButton = "//button[contains(@class, 'goInstall')]";
 
     /**
+     * 'Review Updates' button that opens grid with extensions for update.
+     *
+     * @var string
+     */
+    protected $updateButton = "//button[contains(@class, 'goUpdate')]";
+
+    /**
      * Select action of extension on the grid.
      *
      * @var string
@@ -81,6 +88,16 @@ class Grid extends AbstractGrid
     }
 
     /**
+     * Click 'Review Updates' button.
+     *
+     * @return void
+     */
+    public function clickUpdateButton()
+    {
+        $this->_rootElement->find($this->updateButton, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
      * Click to uninstall button.
      *
      * @param Extension $extension
@@ -119,7 +136,7 @@ class Grid extends AbstractGrid
      * @param Extension $extension
      * @return void
      */
-    public function clickUpdateButton(Extension $extension)
+    public function clickUpdateActionButton(Extension $extension)
     {
         $this->clickSelectActionButton($extension);
         $button = $this->_rootElement->find(
