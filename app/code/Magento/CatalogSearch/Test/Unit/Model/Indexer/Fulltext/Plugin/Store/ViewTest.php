@@ -31,9 +31,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Store', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Store\Model\ResourceModel\Store::class, [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false,
@@ -42,7 +42,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getState', '__wakeup']
         );
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
@@ -60,7 +60,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSave($isObjectNew, $invalidateCounter)
     {
         $viewMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
             [],
             '',

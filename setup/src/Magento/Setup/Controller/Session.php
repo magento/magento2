@@ -54,20 +54,20 @@ class Session extends AbstractActionController
     public function prolongAction()
     {
         try {
-            if ($this->serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            if ($this->serviceManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
                 $objectManager = $this->objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
-                $adminAppState = $objectManager->get('Magento\Framework\App\State');
+                $adminAppState = $objectManager->get(\Magento\Framework\App\State::class);
                 $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
-                $sessionConfig = $objectManager->get('Magento\Backend\Model\Session\AdminConfig');
+                $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
                 /** @var \Magento\Backend\Model\Url $backendUrl */
-                $backendUrl = $objectManager->get('Magento\Backend\Model\Url');
+                $backendUrl = $objectManager->get(\Magento\Backend\Model\Url::class);
                 $urlPath = parse_url($backendUrl->getBaseUrl(), PHP_URL_PATH);
                 $cookiePath = $urlPath . 'setup';
                 $sessionConfig->setCookiePath($cookiePath);
                 /* @var \Magento\Backend\Model\Auth\Session $session */
                 $session = $objectManager->create(
-                    'Magento\Backend\Model\Auth\Session',
+                    \Magento\Backend\Model\Auth\Session::class,
                     [
                         'sessionConfig' => $sessionConfig,
                         'appState' => $adminAppState

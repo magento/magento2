@@ -64,7 +64,7 @@ class UpgradeData implements UpgradeDataInterface
                 $entityTypeId,
                 $attribute['attribute_id'],
                 'source_model',
-                'Magento\Catalog\Model\Product\Attribute\Source\Boolean'
+                \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class
             );
         }
 

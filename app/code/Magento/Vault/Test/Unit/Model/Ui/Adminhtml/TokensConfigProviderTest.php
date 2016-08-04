@@ -174,7 +174,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);
 
-        $date = $this->getMockBuilder('DateTime')
+        $date = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateTimeFactory->expects(static::once())
@@ -262,7 +262,6 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $token->expects(static::once())
             ->method('getEntityId')
             ->willReturn(self::ENTITY_ID);
-
 
         list($tokenUiComponent, $tokenUiComponentProvider) = $this->getTokenUiComponentProvider($token);
 

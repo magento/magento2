@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quote->load('test01', 'reserved_order_id');
 
 $payment = $quote->getPayment();

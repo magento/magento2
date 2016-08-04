@@ -151,7 +151,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     {
         /** @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $couponInterfaceName = 'Magento\SalesRule\Api\Data\CouponInterface';
+        $couponInterfaceName = \Magento\SalesRule\Api\Data\CouponInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $couponInterfaceName);
 
         //Add filters from root filter group to the collection

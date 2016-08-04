@@ -66,7 +66,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Problem');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Problem::class);
     }
 
     /**

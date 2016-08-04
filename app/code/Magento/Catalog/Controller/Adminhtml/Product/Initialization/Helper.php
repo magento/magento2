@@ -361,7 +361,7 @@ class Helper
     {
         if (null === $this->customOptionFactory) {
             $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+                ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
         }
         return $this->customOptionFactory;
     }
@@ -373,7 +373,7 @@ class Helper
     {
         if (null === $this->productLinkFactory) {
             $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
         }
         return $this->productLinkFactory;
     }
@@ -385,7 +385,7 @@ class Helper
     {
         if (null === $this->productRepository) {
             $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+                ->get(\Magento\Catalog\Api\ProductRepositoryInterface\Proxy::class);
         }
         return $this->productRepository;
     }

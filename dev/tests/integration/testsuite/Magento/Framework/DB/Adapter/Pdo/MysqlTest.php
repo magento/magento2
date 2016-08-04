@@ -51,7 +51,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             // Sleep for time greater than wait_timeout and try to perform query
             sleep($minWaitTimeout + 1);
             $result = $this->_executeQuery('SELECT 1');
-            $this->assertInstanceOf('Magento\Framework\DB\Statement\Pdo\Mysql', $result);
+            $this->assertInstanceOf(\Magento\Framework\DB\Statement\Pdo\Mysql::class, $result);
             // Restore wait_timeout
             $this->_setWaitTimeout($defaultWaitTimeout);
             $this->assertEquals(
@@ -127,7 +127,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         if (is_null($this->_connection)) {
             /** @var $coreResource \Magento\Framework\App\ResourceConnection */
             $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Framework\App\ResourceConnection');
+                ->get(\Magento\Framework\App\ResourceConnection::class);
             $this->_connection = $coreResource->getConnection();
         }
         return $this->_connection;
