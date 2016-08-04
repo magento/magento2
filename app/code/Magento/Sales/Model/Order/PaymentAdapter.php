@@ -5,9 +5,11 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\OrderInterface;
-
+/**
+ * Payment adapter.
+ *
+ * @api
+ */
 class PaymentAdapter implements PaymentAdapterInterface
 {
     /**
@@ -16,22 +18,41 @@ class PaymentAdapter implements PaymentAdapterInterface
     private $refundOperation;
 
     /**
+     * @var \Magento\Sales\Model\Order\Invoice\PayOperation
+     */
+    private $payOperation;
+
+    /**
      * PaymentAdapter constructor.
      * @param \Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation
+     * @param \Magento\Sales\Model\Order\Invoice\PayOperation $payOperation
      */
-    public function __construct(\Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation)
-    {
+    public function __construct(
+        \Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation,
+        \Magento\Sales\Model\Order\Invoice\PayOperation $payOperation
+    ) {
         $this->refundOperation = $refundOperation;
     }
 
     /**
-     * @param CreditmemoInterface $creditmemo
-     * @param OrderInterface $order
-     * @param bool $isOnline
-     * @return OrderInterface
+     * {@inheritdoc}
      */
-    public function refund(CreditmemoInterface $creditmemo, OrderInterface $order, $isOnline = false)
-    {
+    public function refund(
+        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
+        \Magento\Sales\Api\Data\OrderInterface $order,
+        $isOnline = false
+    ) {
         return $this->refundOperation->execute($creditmemo, $order, $isOnline);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function pay(
+        \Magento\Sales\Api\Data\OrderInterface $order,
+        \Magento\Sales\Api\Data\InvoiceInterface $invoice,
+        $capture
+    ) {
+        return $this->payOperation->execute($order, $invoice, $capture);
     }
 }

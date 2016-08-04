@@ -30,6 +30,16 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $refundOperationMock;
 
+    /**
+     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $invoiceMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Invoice\PayOperation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $payOperationMock;
+
     protected function setUp()
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
@@ -44,8 +54,17 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->payOperationMock =$this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\PayOperation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->subject = new \Magento\Sales\Model\Order\PaymentAdapter(
-            $this->refundOperationMock
+            $this->refundOperationMock,
+            $this->payOperationMock
         );
     }
 
@@ -59,6 +78,25 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $this->orderMock,
             $this->subject->refund($this->creditmemoMock, $this->orderMock, $isOnline)
+        );
+    }
+
+    public function testPay()
+    {
+        $isOnline = true;
+
+        $this->payOperationMock->expects($this->once())
+            ->method('execute')
+            ->with($this->orderMock, $this->invoiceMock, $isOnline)
+            ->willReturn($this->orderMock);
+
+        $this->assertEquals(
+            $this->orderMock,
+            $this->subject->pay(
+                $this->orderMock,
+                $this->invoiceMock,
+                $isOnline
+            )
         );
     }
 }
