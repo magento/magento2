@@ -13,6 +13,8 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
+    const ADDITIONAL_DATA_SUFFIX = '_additional_data';
+
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
@@ -21,8 +23,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_uploaderFactory;
 
     /**
-     * Filesystem facade
-     *
      * @var \Magento\Framework\Filesystem
      *
      * @deprecated
@@ -30,8 +30,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_filesystem;
 
     /**
-     * File Uploader factory
-     *
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
      * @deprecated
@@ -46,15 +44,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_logger;
 
     /**
-     * Image uploader
-     *
      * @var \Magento\Catalog\Model\ImageUploader
      */
     private $imageUploader;
 
     /**
-     * Image constructor.
-     *
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
@@ -70,8 +64,50 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Get image uploader
+     * @param $value
+     * @return string|bool
+     */
+    protected function getUploadedImageName($value)
+    {
+        if (!is_array($value)) {
+            return false;
+        }
+
+        if (!count($value)) {
+            return false;
+        }
+
+        $imageData = reset($value);
+
+        if (!isset($imageData['name'])) {
+            return false;
+        }
+
+        return $imageData['name'];
+    }
+
+    /**
+     * Avoiding saving potential upload data to DB
      *
+     * @param \Magento\Framework\DataObject $object
+     * @return $this
+     */
+    public function beforeSave($object)
+    {
+        $attributeName = $this->getAttribute()->getName();
+        $value = $object->getData($attributeName);
+
+        if ($value === false || (is_array($value) && isset($value['delete']) && $value['delete'] === true)) {
+            $object->setData($attributeName, '');
+        } else if ($imageName = $this->getUploadedImageName($value)) {
+            $object->setData($attributeName . self::ADDITIONAL_DATA_SUFFIX, $value);
+            $object->setData($attributeName, $imageName);
+        }
+
+        return parent::beforeSave($object);
+    }
+
+    /**
      * @return \Magento\Catalog\Model\ImageUploader
      *
      * @deprecated
@@ -83,6 +119,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 \Magento\Catalog\CategoryImageUpload::class
             );
         }
+
         return $this->imageUploader;
     }
 
@@ -94,15 +131,18 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        $image = $object->getData($this->getAttribute()->getName(), null);
+        $value = $object->getData($this->getAttribute()->getName() . self::ADDITIONAL_DATA_SUFFIX);
 
-        if ($image !== null) {
-            try {
-                $this->getImageUploader()->moveFileFromTmp($image);
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
-            }
+        if (!$imageName = $this->getUploadedImageName($value)) {
+            return $this;
         }
+
+        try {
+            $this->getImageUploader()->moveFileFromTmp($imageName);
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
+
         return $this;
     }
 }
