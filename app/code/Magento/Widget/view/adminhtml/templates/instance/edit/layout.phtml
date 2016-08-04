@@ -6,6 +6,8 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var $block \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout */
+
 ?>
 <fieldset class="fieldset">
     <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Layout Updates') ?></span></legend>
@@ -38,7 +40,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
     '<div class="fieldset-wrapper-content">'+
 <?php foreach ($block->getDisplayOnContainers() as $container): ?>
     '<div class="no-display <?php echo $block->escapeJs($container['code']) ?> group_container" id="<?php echo $block->escapeJs($container['name']) ?>_<%- data.id %>">'+
-        '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][<?php echo $block->escapeHtml($container['name']) ?>]" />'+
+        '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%- data.id %>][<?php echo $block->escapeJs($container['name']) ?>]" />'+
         '<input disabled="disabled" type="hidden" name="widget_instance[<%- data.id %>][<?php echo $block->escapeJs($container['name']) ?>][page_id]" value="<%- data.page_id %>" />'+
         '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[<%- data.id %>][<?php echo $block->escapeJs($container['name']) ?>][layout_handle]" value="<?php echo $block->escapeJs($container['layout_handle']) ?>" />'+
         '<table class="data-table">'+
@@ -79,7 +81,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
                 '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $block->escapeJs($container['code']) ?>\', \'<?php echo $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')"  title="<?php echo $block->escapeJs(__('Open Chooser')) ?>">' +
                     '<img src="<?php echo $block->escapeUrl($block->getViewFileUrl('images/rule_chooser_trigger.gif')) ?>" alt="<?php echo $block->escapeJs(__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
-                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $block->escapeHtmlAttr($container['name']) ?>_ids_<%- data.id %>\')" title="<?php echo $block->escapeJs(__('Apply')); ?>">' +
+                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $block->escapeJs($container['name']) ?>_ids_<%- data.id %>\')" title="<?php echo $block->escapeJs(__('Apply')); ?>">' +
                     '<img src="<?php echo $block->escapeUrl($block->getViewFileUrl('images/rule_component_apply.gif')) ?>" alt="<?php echo $block->escapeJs(__('Apply')); ?>" />' +
                 '</a>' +
             '</p>'+
@@ -133,7 +135,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</thead>'+
         '<tbody>'+
             '<tr>'+
-                '<td><?php echo $block->escapeHtml($block->getLayoutsChooser()) ?></td>'+
+                '<td><?php echo $block->escapeJs($block->getLayoutsChooser()) ?></td>'+
                 '<td>'+
                     '<div class="block_reference_container">'+
                         '<div class="block_reference"></div>'+
