@@ -273,9 +273,9 @@ class PackagesData
                     ksort($package);
                     $packageValues = array_values($package);
                     if ($this->isNewUserPackage($packageValues[0], $packageNames)) {
-                        $versions = array_reverse(array_keys($package));
+                        uksort($package, 'version_compare');
                         $installPackage = $packageValues[0];
-                        $installPackage['versions'] = $versions;
+                        $installPackage['versions'] = array_reverse(array_keys($package));
                         $installPackage['name'] = $packageName;
                         $installPackage['vendor'] = explode('/', $packageName)[0];
                         $installPackages[$packageName] = $installPackage;

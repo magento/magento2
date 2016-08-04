@@ -33,28 +33,31 @@
             <tr>
                 <th class="data-grid-multicheck-cell">
                     <div class="action-multicheck-wrap"
-                         ng-class="{'_active':isNewExtensionsMenuVisible}"
-                         click-out="hideNewExtensionsMenu()"
+                         ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                         click-out="multipleChoiceService.hideNewExtensionsMenu()"
                     >
                         <input type="checkbox"
                                style="visibility: hidden;"
                                class="admin__control-checkbox"
-                               ng-class="{'_indeterminate':someExtensionsSelected}"
-                               ng-checked="allExtensionsSelected"
+                               ng-class="{'_indeterminate':multipleChoiceService.someExtensionsSelected}"
+                               ng-checked="multipleChoiceService.allExtensionsSelected"
                         >
                         <label></label>
                         <button class="action-multicheck-toggle"
-                                ng-class="{'_active':isNewExtensionsMenuVisible}"
-                                ng-click="toggleNewExtensionsMenu()"
+                                ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                                ng-click="multipleChoiceService.toggleNewExtensionsMenu()"
                         >
                             <span>Options</span>
                         </button>
                         <ul class="action-menu">
-                            <li ng-show="!allExtensionsSelected" ng-click="selectAllExtensions()">
+                            <li ng-show="!multipleChoiceService.allExtensionsSelected"
+                                ng-click="multipleChoiceService.selectAllExtensions()"
+                            >
                                 <span class="action-menu-item">Select all</span>
                             </li>
-                            <li ng-show="allExtensionsSelected || someExtensionsSelected"
-                                ng-click="deselectAllExtensions()">
+                            <li ng-show="multipleChoiceService.allExtensionsSelected
+                                        || multipleChoiceService.someExtensionsSelected"
+                                ng-click="multipleChoiceService.deselectAllExtensions()">
                                 <span class="action-menu-item">Deselect all</span>
                             </li>
                         </ul>
@@ -89,8 +92,9 @@
                     <label class="data-grid-checkbox-cell-inner">
                         <input type="checkbox"
                                class="admin__control-checkbox"
-                               ng-checked="selectedExtensions.hasOwnProperty(extension.name)"
-                               ng-click="updateSelectedExtensions($event, extension.name, extension.version)"
+                               ng-checked="multipleChoiceService.selectedExtensions.hasOwnProperty(extension.name)"
+                               ng-click="multipleChoiceService.updateSelectedExtensions($event, extension.name,
+                                        extension.version)"
                         >
                         <label></label>
                     </label>
