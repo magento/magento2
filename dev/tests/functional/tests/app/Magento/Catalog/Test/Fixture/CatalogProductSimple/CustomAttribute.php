@@ -20,7 +20,7 @@ class CustomAttribute extends DataSource
      *
      * @var CatalogProductAttribute
      */
-    protected $attribute;
+    private $attribute;
 
     /**
      * @constructor
@@ -54,7 +54,7 @@ class CustomAttribute extends DataSource
      * @param CatalogProductAttribute $attribute
      * @return string|null
      */
-    protected function getDefaultAttributeValue(CatalogProductAttribute $attribute)
+    private function getDefaultAttributeValue(CatalogProductAttribute $attribute)
     {
         $data = $attribute->getData();
         $value = '';
@@ -91,7 +91,7 @@ class CustomAttribute extends DataSource
      * @param CatalogProductAttribute $attribute
      * @return string
      */
-    protected function createAttributeCode(CatalogProductAttribute $attribute)
+    private function createAttributeCode(CatalogProductAttribute $attribute)
     {
         $label = $attribute->getFrontendLabel();
         return strtolower(preg_replace('@[\W\s]+@', '_', $label));
