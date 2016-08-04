@@ -73,8 +73,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Attribute $resource
-     * @param ConfigurableResource $configurableResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param ConfigurableResource $configurableResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -86,8 +86,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         Attribute $resource,
-        ConfigurableResource $configurableResource = null,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ConfigurableResource $configurableResource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
@@ -345,6 +345,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Get MetadataPool instance
+     *
+     * @deprecated
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -358,6 +360,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get Configurable Resource
      *
+     * @deprecated
      * @return ConfigurableResource
      */
     private function getConfigurableResource()

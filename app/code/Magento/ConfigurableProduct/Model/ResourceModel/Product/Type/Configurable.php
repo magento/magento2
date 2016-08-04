@@ -41,14 +41,14 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
-     * @param ScopeResolverInterface $scopeResolver
      * @param string $connectionName
+     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
-        ScopeResolverInterface $scopeResolver = null,
-        $connectionName = null
+        $connectionName = null,
+        ScopeResolverInterface $scopeResolver = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
         $this->scopeResolver = $scopeResolver;
@@ -288,6 +288,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @deprecated
      * @return ScopeResolverInterface
      */
     private function getScopeResolver()
@@ -301,6 +302,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get product metadata pool
      *
+     * @deprecated
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
@@ -315,6 +317,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get product entity link field
      *
+     * @deprecated
      * @return string
      */
     private function getProductEntityLinkField()

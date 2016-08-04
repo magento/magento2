@@ -2243,7 +2243,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return GalleryReadHandler
      * @deprecated
      */
-    protected function getGalleryReadHandler()
+    private function getGalleryReadHandler()
     {
         if ($this->productGalleryReadHandler === null) {
             $this->productGalleryReadHandler = ObjectManager::getInstance()->get(GalleryReadHandler::class);
