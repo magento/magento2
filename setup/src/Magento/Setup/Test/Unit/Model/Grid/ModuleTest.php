@@ -77,11 +77,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      */
     private $moduleData = [];
 
-    /**
-     * @var array
-     */
-    private $allComponentData = [];
-
     public function setUp()
     {
         $this->moduleData = [
@@ -95,7 +90,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $fullModuleList = [
             'Sample_ModuleOne', 'Sample_ModuleTwo'
         ];
-
 
         $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()

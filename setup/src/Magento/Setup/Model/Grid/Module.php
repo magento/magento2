@@ -7,12 +7,6 @@
 namespace Magento\Setup\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleList;
-use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\Module\PackageInfoFactory;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Setup\Model\PackagesData;
 
 /**
  * Module grid
@@ -33,26 +27,26 @@ class Module
     /**
      * Module package info
      *
-     * @var PackageInfo
+     * @var \Magento\Framework\Module\PackageInfo
      */
     private $packageInfo;
 
     /**
-     * @var ObjectManagerProvider
+     * @var \Magento\Setup\Model\ObjectManagerProvider
      */
     private $objectManagerProvider;
 
     /**
      * Full Module info
      *
-     * @var FullModuleList
+     * @var \Magento\Framework\Module\FullModuleList
      */
     private $fullModuleList;
 
     /**
      * Module info
      *
-     * @var ModuleList
+     * @var \Magento\Framework\Module\ModuleList
      */
     private $moduleList;
 
@@ -62,25 +56,25 @@ class Module
     private $typeMapper;
 
     /**
-     * @var PackagesData
+     * @var \Magento\Setup\Model\PackagesData
      */
     private $packagesData;
 
     /**
      * @param ComposerInformation $composerInformation
-     * @param FullModuleList $fullModuleList
-     * @param ModuleList $moduleList
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Framework\Module\FullModuleList $fullModuleList
+     * @param \Magento\Framework\Module\ModuleList $moduleList
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param TypeMapper $typeMapper
-     * @param PackagesData $packagesData
+     * @param \Magento\Setup\Model\PackagesData $packagesData
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        FullModuleList $fullModuleList,
-        ModuleList $moduleList,
-        ObjectManagerProvider $objectManagerProvider,
+        \Magento\Framework\Module\FullModuleList $fullModuleList,
+        \Magento\Framework\Module\ModuleList $moduleList,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         TypeMapper $typeMapper,
-        PackagesData $packagesData
+        \Magento\Setup\Model\PackagesData $packagesData
     ) {
         $this->composerInformation = $composerInformation;
         $this->fullModuleList = $fullModuleList;
@@ -98,7 +92,7 @@ class Module
     public function getList()
     {
         $this->packageInfo = $this->objectManagerProvider->get()
-            ->get(PackageInfoFactory::class)
+            ->get(\Magento\Framework\Module\PackageInfoFactory::class)
             ->create();
         
         $items = array_replace_recursive(
