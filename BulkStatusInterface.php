@@ -20,6 +20,15 @@ interface BulkStatusInterface
     public function getFailedOperationsByBulkId($bulkUuid, $failureType = null);
 
     /**
+     * Get operations count by bulk uuid and status.
+     *
+     * @param string $bulkUuid
+     * @param int $status
+     * @return int
+     */
+    public function getOperationsCountByBulkIdAndStatus($bulkUuid, $status);
+
+    /**
      * Get all bulks created by user
      * 
      * @param int $userId
