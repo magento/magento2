@@ -598,10 +598,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
 
+        $imageBackendModel = $this->objectManager->getObject(
+            \Magento\Catalog\Model\Category\Attribute\Backend\Image::class
+        );
+
         $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
             new \Magento\Framework\DataObject([
                 'attribute_code' => 'attribute1',
-                'backend' => $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class)
+                'backend' => $imageBackendModel
             ]),
             new \Magento\Framework\DataObject([
                 'attribute_code' => 'attribute2',
@@ -631,7 +635,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
 
         $imageBackendModel = $this->objectManager->getObject(
-            \Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
+            \Magento\Catalog\Model\Category\Attribute\Backend\Image::class
+        );
 
         $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
             new \Magento\Framework\DataObject([
