@@ -135,6 +135,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         ];
         return $renderer;
     }
+
     /**
      * Retrieve mock of adapter with mocked quote method
      *
