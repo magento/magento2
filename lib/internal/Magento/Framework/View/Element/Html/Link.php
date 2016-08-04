@@ -59,7 +59,7 @@ class Link extends \Magento\Framework\View\Element\Template
         foreach ($this->allowedAttributes as $attribute) {
             $value = $this->getDataUsingMethod($attribute);
             if ($value !== null) {
-                $attributes[$this->escapeHtml($attribute)] = $this->escapeHtml($value);
+                $attributes[$attribute] = $this->escapeHtml($value);
             }
         }
 

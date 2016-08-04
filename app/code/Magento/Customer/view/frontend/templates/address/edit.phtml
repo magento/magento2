@@ -82,7 +82,7 @@
                                        value="<?php echo $block->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                        title="<?php /* @escapeNotVerified */ echo __('Street Address %1', $_i + 1) ?>"
                                        id="street_<?php /* @noEscape */ echo $_i + 1 ?>"
-                                       class="<?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
+                                       class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
                             </div>
                         </div>
                     <?php endfor; ?>
