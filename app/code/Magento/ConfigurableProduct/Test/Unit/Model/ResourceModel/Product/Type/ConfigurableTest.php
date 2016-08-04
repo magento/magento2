@@ -144,6 +144,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [
                 $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock(),
                 $this->relation,
+                null,
                 $scopeResolver
             ],
             '',
