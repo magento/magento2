@@ -511,7 +511,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     if ($pdoException && isset($this->exceptionMap[$pdoException->errorInfo[1]])) {
                         $customExceptionClass = $this->exceptionMap[$pdoException->errorInfo[1]];
                         /** @var \Zend_Db_Adapter_Exception $customException */
-                        $customException = new $customExceptionClass($e->getMessage(), $e->getCode(), $e);
+                        $customException = new $customExceptionClass($e->getMessage(), $pdoException->errorInfo[1], $e);
                         throw $customException;
                     }
                     throw $e;
