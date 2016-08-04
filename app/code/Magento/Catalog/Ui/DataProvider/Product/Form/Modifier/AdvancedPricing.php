@@ -7,7 +7,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceWithAllGroupsInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -84,7 +84,7 @@ class AdvancedPricing extends AbstractModifier
     protected $meta = [];
 
     /**
-     * @var GroupSourceInterface
+     * @var GroupSourceWithAllGroupsInterface
      */
     private $customerGroupSource;
 
@@ -98,7 +98,7 @@ class AdvancedPricing extends AbstractModifier
      * @param Data $directoryHelper
      * @param ArrayManager $arrayManager
      * @param string $scopeName
-     * @param GroupSourceInterface $customerGroupSource
+     * @param GroupSourceWithAllGroupsInterface $customerGroupSource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -111,7 +111,7 @@ class AdvancedPricing extends AbstractModifier
         Data $directoryHelper,
         ArrayManager $arrayManager,
         $scopeName = '',
-        GroupSourceInterface $customerGroupSource = null
+        GroupSourceWithAllGroupsInterface $customerGroupSource = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -123,7 +123,7 @@ class AdvancedPricing extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->scopeName = $scopeName;
         $this->customerGroupSource = $customerGroupSource
-            ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
+            ?: ObjectManager::getInstance()->get(GroupSourceWithAllGroupsInterface::class);
     }
 
     /**

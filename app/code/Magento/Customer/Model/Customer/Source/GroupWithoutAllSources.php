@@ -8,7 +8,10 @@ namespace Magento\Customer\Model\Customer\Source;
 
 use Magento\Framework\Option\ArrayInterface as OptionArrayInterface;
 
-class GroupWithoutAllSources extends Group implements OptionArrayInterface
+class GroupWithoutAllSources extends Group implements GroupSourceInterface
 {
+    /**
+     * @var bool
+     */
     protected $isShowAllGroupsValue = false;
 }

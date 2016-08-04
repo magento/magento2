@@ -7,7 +7,6 @@ namespace Magento\Customer\Model\Customer\Source;
 
 use Magento\Framework\Option\ArrayInterface as OptionArrayInterface;
 
-
 interface GroupSourceWithAllGroupsInterface extends OptionArrayInterface
 {
 }
