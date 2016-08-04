@@ -12,6 +12,8 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Phrase;
 
 /**
  * Class Dom
@@ -313,8 +315,10 @@ class Dom
                 $errors = self::getXmlErrors($errorFormat);
             }
         } catch (\Exception $exception) {
+            $errors = self::getXmlErrors($errorFormat);
             libxml_use_internal_errors(false);
-            throw $exception;
+            array_unshift($errors, new Phrase('Processed schema file: %1', [$schema]));
+            throw new ValidationSchemaException(new Phrase(implode("\n", $errors)));
         }
         libxml_set_external_entity_loader(null);
         libxml_use_internal_errors(false);
