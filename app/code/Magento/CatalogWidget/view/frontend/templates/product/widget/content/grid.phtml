@@ -27,7 +27,7 @@
     <div class="block widget block-products-list <?php /* @noEscape */ echo $mode; ?>">
         <?php if ($title): ?>
         <div class="block-title">
-            <strong><?php /* @noEscape */ echo $title; ?></strong>
+            <strong><?php echo $block->escapeHtml($title); ?></strong>
         </div>
         <?php endif ?>
         <div class="block-content">
