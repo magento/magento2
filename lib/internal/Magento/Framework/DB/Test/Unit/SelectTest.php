@@ -117,25 +117,29 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
         $select->sqlNoCache()->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT SQL_NO_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
+        $this->assertEquals(
+            "SELECT SQL_NO_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
             $select->assemble()
         );
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
         $select->sqlUseCache()->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT SQL_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
+        $this->assertEquals(
+            "SELECT SQL_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
             $select->assemble()
         );
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
         $select->sqlNoCache(true)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT SQL_NO_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
+        $this->assertEquals(
+            "SELECT SQL_NO_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
             $select->assemble()
         );
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
         $select->sqlUseCache(true)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT SQL_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
+        $this->assertEquals(
+            "SELECT SQL_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
             $select->assemble()
         );
 
