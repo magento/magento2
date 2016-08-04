@@ -19,7 +19,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         $quote = new \Magento\Framework\DB\Platform\Quote();
         $renderer = new \Magento\Framework\DB\Select\SelectRenderer(
-            $this->_getSelectRenderer()
+            $this->_getSelectRenderer($quote)
         );
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'5'"), $renderer);
@@ -90,9 +90,10 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     /**
      * Retrieve di for select renderer
      *
+     * @param \Magento\Framework\DB\Platform\Quote $quote
      * @return array
      */
-    protected function _getSelectRenderer()
+    protected function _getSelectRenderer(\Magento\Framework\DB\Platform\Quote $quote)
     {
         $renderer = [
             'distinct' =>
