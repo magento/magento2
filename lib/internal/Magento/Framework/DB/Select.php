@@ -50,12 +50,7 @@ class Select extends \Zend_Db_Select
     /**
      * no cache key
      */
-    const NO_CACHE = 'nocache';
-
-    /**
-     * use cache key
-     */
-    const USE_CACHE = 'usecache';
+    const QUERY_CACHE = 'querycache';
 
     /**
      * sql no cache
@@ -85,12 +80,8 @@ class Select extends \Zend_Db_Select
             self::$_partsInit = [self::STRAIGHT_JOIN => false] + self::$_partsInit;
         }
 
-        if (!isset(self::$_partsInit[self::NO_CACHE])) {
-            self::$_partsInit = [self::NO_CACHE => false] + self::$_partsInit;
-        }
-
-        if (!isset(self::$_partsInit[self::USE_CACHE])) {
-            self::$_partsInit = [self::USE_CACHE => false] + self::$_partsInit;
+        if (!isset(self::$_partsInit[self::QUERY_CACHE])) {
+            self::$_partsInit = [self::QUERY_CACHE => null] + self::$_partsInit;
         }
 
         $this->selectRenderer = $selectRenderer;
@@ -512,26 +503,14 @@ class Select extends \Zend_Db_Select
     }
 
     /**
-     * add SQL_NO_CACHE to bypass querycache usage
+     * add query cache related hints
      *
-     * @param bool $flag
+     * @param string SQL_CACHE / SQL_NO_CACHE
      * @return $this
      */
-    public function sqlNoCache($flag = true)
+    public function setQueryCache($hint = null)
     {
-        $this->_parts[self::NO_CACHE] = (bool)$flag;
-        return $this;
-    }
-
-    /**
-     * add SQL_CACHE to enable querycache usage
-     *
-     * @param bool $flag
-     * @return $this
-     */
-    public function sqlUseCache($flag = true)
-    {
-        $this->_parts[self::USE_CACHE] = (bool)$flag;
+        $this->_parts[self::QUERY_CACHE] = $hint;
         return $this;
     }
 

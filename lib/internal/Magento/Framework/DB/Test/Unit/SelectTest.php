@@ -43,48 +43,18 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlNoCache()->from('test')->where("id IN (?)", [1, 2, 4, 8]);
+        $select->setQueryCache(Select::SQL_NO_CACHE)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
         $this->assertEquals(
             "SELECT SQL_NO_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
             $select->assemble()
         );
 
         $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlUseCache()->from('test')->where("id IN (?)", [1, 2, 4, 8]);
+        $select->setQueryCache(Select::SQL_CACHE)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
         $this->assertEquals(
             "SELECT SQL_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
             $select->assemble()
         );
-
-        $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlNoCache(true)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals(
-            "SELECT SQL_NO_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
-            $select->assemble()
-        );
-
-        $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlUseCache(true)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals(
-            "SELECT SQL_CACHE  `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))",
-            $select->assemble()
-        );
-
-        $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlNoCache(false)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
-
-        $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlUseCache(false)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
-
-        $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlNoCache(true)->sqlNoCache(false)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
-
-        $select = new Select($this->_getConnectionMockWithMockedQuote(1, "'1', '2', '4', '8'"), $renderer);
-        $select->sqlUseCache(true)->sqlUseCache(false)->from('test')->where("id IN (?)", [1, 2, 4, 8]);
-        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
     }
 
     /**
@@ -156,17 +126,11 @@ class SelectTest extends \PHPUnit_Framework_TestCase
                     'sort' => 1000,
                     'part' => 'forupdate'
                 ],
-            'usecache' =>
+            'querycache' =>
                 [
-                    'renderer' => new \Magento\Framework\DB\Select\UseCacheRenderer(),
-                    'sort' => 88,
-                    'part' => 'usecache'
-                ],
-            'nocache' =>
-                [
-                    'renderer' => new \Magento\Framework\DB\Select\NoCacheRenderer(),
-                    'sort' => 89,
-                    'part' => 'nocache'
+                    'renderer' => new \Magento\Framework\DB\Select\QueryCacheRenderer(),
+                    'sort' => 90,
+                    'part' => 'querycache'
                 ],
         ];
         return $renderer;

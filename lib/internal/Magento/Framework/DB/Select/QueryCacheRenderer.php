@@ -8,12 +8,12 @@ namespace Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select;
 
 /**
- * Class UseCacheRenderer
+ * Class QueryCacheRenderer
  */
-class UseCacheRenderer implements RendererInterface
+class QueryCacheRenderer implements RendererInterface
 {
     /**
-     * Render SQL_CACHE section
+     * Render query cache related hints
      *
      * @param Select $select
      * @param string $sql
@@ -21,8 +21,10 @@ class UseCacheRenderer implements RendererInterface
      */
     public function render(Select $select, $sql = '')
     {
-        if ($select->getPart(Select::USE_CACHE)) {
+        if ($select->getPart(Select::QUERY_CACHE) === Select::SQL_CACHE) {
             $sql .= ' ' . Select::SQL_CACHE  . ' ';
+        } elseif ($select->getPart(Select::QUERY_CACHE) === Select::SQL_NO_CACHE) {
+            $sql .= ' ' . Select::SQL_NO_CACHE  . ' ';
         }
         return $sql;
     }
