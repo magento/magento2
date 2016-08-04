@@ -18,9 +18,9 @@ define([
      */
     $.widget('mage.validation', $.mage.validation, {
         /**
-         * Handle form with swatches validation
+         * Handle form with swatches validation. Focus on first invalid swatch block.
          *
-         * @param {Object} event
+         * @param {jQuery.Event} event
          * @param {Object} validation
          */
         listenFormValidateHandler: function (event, validation) {
