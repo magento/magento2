@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Framework\View\Element\Template */
-
+/** @var \Magento\Framework\View\Element\Template $block */
 ?>
 
 <?php /* @escapeNotVerified */ echo __('%1 has been added to your Wish List.', $block->escapeHtml($block->getData('product_name'))) ?> <?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getData('referer')));

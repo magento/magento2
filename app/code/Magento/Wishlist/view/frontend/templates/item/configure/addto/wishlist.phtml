@@ -6,8 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\Item\Configure */
-
+/** @var \Magento\Wishlist\Block\Item\Configure $block */
 ?>
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
     <a href="#" data-post='<?php /* @noEscape */ echo $block->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
