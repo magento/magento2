@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
+use \Magento\Catalog\Controller\Adminhtml\Category\Save as Model;
+
 /**
  * Class SaveTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -628,10 +630,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
 
+        $imageBackendModel = $this->objectManager->getObject(
+            \Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
+
         $collection = new \Magento\Framework\DataObject(['attribute_collection' => [
             new \Magento\Framework\DataObject([
                 'attribute_code' => 'attribute1',
-                'backend' => $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class)
+                'backend' => $imageBackendModel
             ]),
             new \Magento\Framework\DataObject([
                 'attribute_code' => 'attribute2',
@@ -644,7 +649,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
             ->will($this->returnValue($collection));
 
-        $model = $this->objectManager->getObject(\Magento\Catalog\Controller\Adminhtml\Category\Save::class, [
+        $model = $this->objectManager->getObject(Model::class, [
             'eavConfig' => $eavConfig
         ]);
 

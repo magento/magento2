@@ -64,26 +64,16 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param array|bool|null $value Attribute value
-     * @return bool
+     * @param array $value Attribute value
+     * @return string
      */
     protected function getUploadedImageName($value)
     {
-        if (!is_array($value)) {
-            return false;
+        if (is_array($value) && isset($value[0]['name'])) {
+            return $value[0]['name'];
         }
 
-        if (!count($value)) {
-            return false;
-        }
-
-        $imageData = reset($value);
-
-        if (!isset($imageData['name'])) {
-            return false;
-        }
-
-        return $imageData['name'];
+        return '';
     }
 
     /**
@@ -133,14 +123,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->getAttribute()->getName() . self::ADDITIONAL_DATA_SUFFIX);
 
-        if (!$imageName = $this->getUploadedImageName($value)) {
-            return $this;
-        }
-
-        try {
-            $this->getImageUploader()->moveFileFromTmp($imageName);
-        } catch (\Exception $e) {
-            $this->_logger->critical($e);
+        if ($imageName = $this->getUploadedImageName($value)) {
+            try {
+                $this->getImageUploader()->moveFileFromTmp($imageName);
+            } catch (\Exception $e) {
+                $this->_logger->critical($e);
+            }
         }
 
         return $this;
