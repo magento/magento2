@@ -14,6 +14,7 @@ use Magento\Framework\Reflection\MethodsMap;
 class ReflectionGenerator
 {
     const DEFAULT_HANDLER = 'defaultHandler';
+
     /**
      * @var MethodsMap
      */
