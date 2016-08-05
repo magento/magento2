@@ -16,23 +16,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var array
-     */
-    private $moduleList = [
-        'Magento_Customer',
-        'Magento_Contact',
-        'Magento_Cookie',
-        'Magento_Customer',
-        'Magento_Newsletter',
-        'Magento_Persistent',
-        'Magento_ProductAlert',
-        'Magento_Review',
-        'Magento_Rss',
-        'Magento_Wishlist',
-        'Magento_SendFriend'
-    ];
-
-    /**
      * @return void
      */
     public function testXssSensitiveOutput()
@@ -75,9 +58,19 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
     public function testAbsenceOfEscapeNotVerifiedAnnotationInRefinedModules()
     {
         $componentRegistrar = new ComponentRegistrar();
+        $exemptModules = [];
+        foreach (array_diff(scandir(__DIR__ . '/_files/whitelist/exempt_modules'), ['..', '.']) as $file) {
+            $exemptModules = array_merge(
+                $exemptModules,
+                include(__DIR__ . '/_files/whitelist/exempt_modules/' . $file)
+            );
+        }
+
         $result = "";
-        foreach ($this->moduleList as $moduleName) {
-            $modulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+            if (in_array($moduleName, $exemptModules)) {
+                continue;
+            }
             foreach (Files::init()->getFiles([$modulePath], '*.phtml') as $file) {
                 $fileContents = file_get_contents($file);
                 $pattern = "/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/";
@@ -92,7 +85,7 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty(
             $result,
             "@escapeNotVerified annotation detected.\n" .
-            "Please use the correct escape strategy and remove annotation at : \n" . $result
+            "Please use the correct escape strategy and remove annotation at:\n" . $result
         );
     }
 }
