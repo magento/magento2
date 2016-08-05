@@ -1123,6 +1123,11 @@
     <type name="Magento\Framework\DB\Select\SelectRenderer">
         <arguments>
             <argument name="renderers" xsi:type="array">
+                <item name="querycache" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\QueryCacheRenderer</item>
+                    <item name="sort" xsi:type="string">90</item>
+                    <item name="part" xsi:type="string">querycache</item>
+                </item>
                 <item name="distinct" xsi:type="array">
                     <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\DistinctRenderer</item>
                     <item name="sort" xsi:type="string">100</item>

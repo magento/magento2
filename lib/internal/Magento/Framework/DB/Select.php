@@ -48,6 +48,21 @@ class Select extends \Zend_Db_Select
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
     /**
+     * no cache key
+     */
+    const QUERY_CACHE = 'querycache';
+
+    /**
+     * sql no cache
+     */
+    const SQL_NO_CACHE = 'SQL_NO_CACHE';
+
+    /**
+     * sql cache
+     */
+    const SQL_CACHE = 'SQL_CACHE';
+
+    /**
      * Class constructor
      * Add straight join support
      *
@@ -63,6 +78,10 @@ class Select extends \Zend_Db_Select
         self::$_partsInit = array_merge(self::$_partsInit, $parts);
         if (!isset(self::$_partsInit[self::STRAIGHT_JOIN])) {
             self::$_partsInit = [self::STRAIGHT_JOIN => false] + self::$_partsInit;
+        }
+
+        if (!isset(self::$_partsInit[self::QUERY_CACHE])) {
+            self::$_partsInit = [self::QUERY_CACHE => null] + self::$_partsInit;
         }
 
         $this->selectRenderer = $selectRenderer;
@@ -480,6 +499,18 @@ class Select extends \Zend_Db_Select
         $exists = sprintf($exists, $select->assemble());
 
         $this->where($exists);
+        return $this;
+    }
+
+    /**
+     * add query cache related hints
+     *
+     * @param string SQL_CACHE / SQL_NO_CACHE
+     * @return $this
+     */
+    public function setQueryCache($hint = null)
+    {
+        $this->_parts[self::QUERY_CACHE] = $hint;
         return $this;
     }
 
