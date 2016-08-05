@@ -523,6 +523,45 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Check is product already exists or we trying to create one
+     *
+     * @return bool
+     */
+    private function isProductExists()
+    {
+        return (bool) $this->locator->getProduct()->getId();
+    }
+
+    /**
+     * Check is product has some value for attribute
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return bool
+     */
+    private function isProductHasValueForAttribute(ProductAttributeInterface $attribute)
+    {
+        return (bool)($this->locator->getProduct()->getCustomAttribute($attribute->getAttributeCode()) !== null)
+            && $this->locator->getProduct()->getCustomAttribute($attribute->getAttributeCode())->getValue();
+    }
+
+    /**
+     * Check should we display default values for attribute or not
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return bool
+     */
+    private function isShowDefaultValue(ProductAttributeInterface $attribute)
+    {
+        if (!$this->isProductExists()) {
+            return true;
+        } elseif ($attribute->getIsRequired() && !$this->isProductHasValueForAttribute($attribute)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
@@ -543,7 +582,7 @@ class Eav extends AbstractModifier
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote(),
-            'default' => $attribute->getDefaultValue(),
+            'default' => $this->isShowDefaultValue($attribute) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
