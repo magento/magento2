@@ -209,6 +209,10 @@ class Consumer implements ConsumerInterface
             } catch (MessageLockException $exception) {
                 $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
+                if ($lock) {
+                    $this->resource->getConnection()
+                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
+                }
             } catch (\Exception $e) {
                 $queue->reject($message, false, $e->getMessage());
                 if ($lock) {
