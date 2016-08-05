@@ -43,7 +43,7 @@ interface BulkStatusInterface
      * FINISHED_WITH_FAILURE - some operations are handled with failure
      *
      * @param string $bulkUuid
-     * @return int NOT_STARTED | IN_PROGRESS_SUCCESS | IN_PROGRESS_FAILED | FINISHED_SUCCESFULLY | FINISHED_WITH_FAILURE
+     * @return int NOT_STARTED | IN_PROGRESS | FINISHED_SUCCESFULLY | FINISHED_WITH_FAILURE
      */
     public function getBulkStatus($bulkUuid);
 }
