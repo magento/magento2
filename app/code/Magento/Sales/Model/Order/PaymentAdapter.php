@@ -32,6 +32,7 @@ class PaymentAdapter implements PaymentAdapterInterface
         \Magento\Sales\Model\Order\Invoice\PayOperation $payOperation
     ) {
         $this->refundOperation = $refundOperation;
+        $this->payOperation = $payOperation;
     }
 
     /**
