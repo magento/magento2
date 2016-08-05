@@ -94,7 +94,7 @@ class Module
         $this->packageInfo = $this->objectManagerProvider->get()
             ->get(\Magento\Framework\Module\PackageInfoFactory::class)
             ->create();
-        
+
         $items = array_replace_recursive(
             $this->composerInformation->getInstalledMagentoPackages(),
             $this->getInstalledModules()
@@ -132,7 +132,7 @@ class Module
                 'moduleName' => $moduleName,
                 'type' => $this->typeMapper->map($packageName, ComposerInformation::MODULE_PACKAGE_TYPE),
                 'enable' => $this->moduleList->has($moduleName),
-                'version' => $this->packageInfo->getVersion($moduleName) ?: self::UNKNOWN_VERSION
+                'version' => $this->packageInfo->getVersion($moduleName) ?: self::UNKNOWN_VERSION,
             ];
         }
 

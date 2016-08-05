@@ -15,5 +15,4 @@ namespace Magento\Sales\Api\Data;
  */
 interface InvoiceItemCreationInterface extends LineItemInterface
 {
-
 }
