@@ -74,7 +74,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
                 throw new \LogicException(sprintf('Service interface was expected, "%1" given', $serviceInterface));
             }
             foreach ($methodsMap as $methodName => $returnType) {
-                $topicName = $this->generateTopicName($serviceInterface, $methodName);
+                $topicName = $this->dataGenerator->generateTopicName($serviceInterface, $methodName);
                 $result[$topicName] = $this->dataGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
                     $serviceInterface,
@@ -95,13 +95,12 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @param string $typeName
      * @param string $methodName
      * @return string
+     *
+     * @deprecated
+     * @see \Magento\Framework\Communication\Config\ReflectionGenerator::generateTopicName
      */
     public function generateTopicName($typeName, $methodName)
     {
-        $parts = explode('\\', ltrim($typeName, '\\'));
-        foreach ($parts as &$part) {
-            $part = lcfirst($part);
-        }
-        return implode('.', $parts) . '.' . $methodName;
+        return $this->dataGenerator->generateTopicName($typeName, $methodName);
     }
 }

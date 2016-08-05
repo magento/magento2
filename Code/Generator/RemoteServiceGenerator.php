@@ -10,6 +10,7 @@ use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
 
 /**
  * Code generator for remote services.
@@ -33,6 +34,11 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * @var RemoteServiceReader
      */
     private $communicationRemoteServiceReader;
+
+    /**
+     * @var ReflectionGenerator
+     */
+    private $reflectionGenerator;
 
     /**
      * Initialize dependencies.
@@ -148,10 +154,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                 $methodParameters[] = $parameter;
                 $topicParameters[] = "'{$parameterName}' => \${$parameterName}";
             }
-            $topicName = $this->communicationRemoteServiceReader->generateTopicName(
-                $this->getSourceClassName(),
-                $methodName
-            );
+            $topicName = $this->getReflectionGenerator()->generateTopicName($this->getSourceClassName(), $methodName);
             $topicConfig = $this->communicationConfig->getTopic($topicName);
             $methodBody = $topicConfig[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? 'return ' : '';
             $methodBody .= "\$this->publisher->publish(\n"
@@ -215,5 +218,21 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             $result = false;
         }
         return $result;
+    }
+
+    /**
+     * Get reflection generator.
+     *
+     * @return ReflectionGenerator
+     *
+     * @deprecated
+     */
+    private function getReflectionGenerator()
+    {
+        if ($this->reflectionGenerator === null) {
+            $this->reflectionGenerator = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ReflectionGenerator::class);
+        }
+        return $this->reflectionGenerator;
     }
 }
