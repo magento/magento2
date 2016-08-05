@@ -32,4 +32,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\ConnectionTypeResolver">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="db" xsi:type="object">Magento\MysqlMq\Model\ConnectionTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
