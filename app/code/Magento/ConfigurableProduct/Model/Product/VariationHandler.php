@@ -89,6 +89,7 @@ class VariationHandler
 
             $generatedProductIds[] = $newSimpleProduct->getId();
         }
+        $this->attributes = null;
         return $generatedProductIds;
     }
 
@@ -132,6 +133,8 @@ class VariationHandler
         }
     }
 
+    protected $attributes = null;
+
     /**
      * Fill simple product data during generation
      *
@@ -156,7 +159,10 @@ class VariationHandler
             $parentProduct->getNewVariationsAttributeSetId()
         );
 
-        foreach ($product->getTypeInstance()->getSetAttributes($product) as $attribute) {
+        if ($this->attributes === null) {
+            $this->attributes = $product->getTypeInstance()->getSetAttributes($product);
+        }
+        foreach ($this->attributes as $attribute) {
             if ($attribute->getIsUnique() ||
                 $attribute->getAttributeCode() == 'url_key' ||
                 $attribute->getFrontend()->getInputType() == 'gallery' ||

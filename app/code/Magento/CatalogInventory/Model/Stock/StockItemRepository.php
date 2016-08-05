@@ -20,8 +20,8 @@ use Magento\Framework\DB\QueryBuilderFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class StockItemRepository
@@ -137,7 +137,11 @@ class StockItemRepository implements StockItemRepositoryInterface
         try {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productFactory->create();
-            $product->load($stockItem->getProductId());
+            $product =  $product->getCollection()
+                ->addIdFilter($stockItem->getProductId())
+                ->addFieldToSelect('type_id')
+                ->getFirstItem();
+
             if (!$product->getId()) {
                 return $stockItem;
             }

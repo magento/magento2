@@ -6,9 +6,9 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\EntityManager\Operation\AttributeInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\AttributeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
@@ -70,13 +70,18 @@ class CreateHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        $searchResult = $this->attributeRepository->getList(
-            $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
-        );
-        return $searchResult->getItems();
+        if (!isset($this->attributes[$entityType])) {
+            $metadata = $this->metadataPool->getMetadata($entityType);
+            $searchResult = $this->attributeRepository->getList(
+                $metadata->getEavEntityType(),
+                $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
+            );
+            $this->attributes[$entityType] = $searchResult->getItems();
+        }
+        return $this->attributes[$entityType];
     }
+
+    private $attributes = [];
 
     /**
      * @param string $entityType
@@ -92,23 +97,25 @@ class CreateHandler implements AttributeInterface
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
             $processed = [];
+            $entityLinkField = $metadata->getLinkField();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
                 }
-                if (isset($entityData[$attribute->getAttributeCode()])
-                    && !is_array($entityData[$attribute->getAttributeCode()])
-                    && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
+
+                $attributeCode = $attribute->getAttributeCode();
+                if (isset($entityData[$attributeCode])
+                    && !is_array($entityData[$attributeCode])
+                    && !$attribute->isValueEmpty($entityData[$attributeCode])
                 ) {
-                    $entityLinkField = $metadata->getLinkField();
                     $this->attributePersistor->registerInsert(
                         $entityType,
                         $entityData[$entityLinkField],
-                        $attribute->getAttributeCode(),
-                        $entityData[$attribute->getAttributeCode()]
+                        $attributeCode,
+                        $entityData[$attributeCode]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
+                    $processed[$attributeCode] = $entityData[$attributeCode];
                 }
             }
             $context = $this->scopeResolver->getEntityContext($entityType, $entityData);

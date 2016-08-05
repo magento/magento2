@@ -40,7 +40,6 @@ class SaveHandler
         Link $linkResource,
         ProductLinkRepositoryInterface $productLinkRepository
     ) {
-
         $this->metadataPool = $metadataPool;
         $this->linkResource = $linkResource;
         $this->productLinkRepository = $productLinkRepository;
@@ -54,12 +53,17 @@ class SaveHandler
      */
     public function execute($entityType, $entity)
     {
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
-        foreach ($this->productLinkRepository->getList($entity) as $link) {
-            $this->productLinkRepository->delete($link);
+        if ($entity->getId()) {
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
+            foreach ($this->productLinkRepository->getList($entity) as $link) {
+                $this->productLinkRepository->delete($link);
+            }
         }
-        foreach ($entity->getProductLinks() as $link) {
-            $this->productLinkRepository->save($link);
+        $productLinks = $entity->getProductLinks();
+        if (count($productLinks) > 0) {
+            foreach ($entity->getProductLinks() as $link) {
+                $this->productLinkRepository->save($link);
+            }
         }
         return $entity;
     }
