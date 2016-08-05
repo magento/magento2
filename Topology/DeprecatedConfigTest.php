@@ -28,7 +28,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $topology = $config->getExchange('deprecatedExchange');
+        $topology = $config->getExchange('deprecatedExchange', 'db');
         $this->assertEquals('deprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
         $this->assertEquals('db', $topology->getConnection());
@@ -62,7 +62,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $topology = $config->getExchange('overlappingDeprecatedExchange');
+        $topology = $config->getExchange('overlappingDeprecatedExchange', 'db');
         $this->assertEquals('overlappingDeprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
         $this->assertEquals('db', $topology->getConnection());
