@@ -8,7 +8,8 @@ define([
     'ko',
     'underscore',
     'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/grid/paging/paging'
+    'Magento_Ui/js/grid/paging/paging',
+    'Magento_ConfigurableProduct/js/variations/paging/sizes'
 ], function (Component, $, ko, _, alert, paging) {
     'use strict';
 
@@ -37,7 +38,11 @@ define([
                 associatedProductGrid: '${ $.configurableProductGrid }'
             },
             paging: paging({
-                name: '${ $.configurableProductGrid }.paging'
+                name: 'configurableProductVariationsGrid.paging',
+                sizesConfig: {
+                    component: 'Magento_ConfigurableProduct/js/variations/paging/sizes',
+                    name: 'configurableProductVariationsGrid_sizes'
+                }
             })
         },
 

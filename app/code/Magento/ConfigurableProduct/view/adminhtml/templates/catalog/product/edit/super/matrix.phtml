@@ -42,12 +42,15 @@ $currencySymbol = $block->getCurrencySymbol();
                         </div>
                     <!-- /ko -->
                 </div>
+                <div class="admin__data-grid-header">
+                    <div class="admin__data-grid-header-row row row-gutter">
+                        <div class="col-xs-12">
+                            <!-- ko template: { name: "ui/grid/paging/paging", data: paging } --><!-- /ko -->
+                        </div>
+                    </div>
+                </div>
                 <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
-                    <!-- ko template: {
-                        name: "ui/grid/paging/paging", data: paging
-                    } -->
-                    <!-- /ko -->
-                    <table class="data-grid" data-bind="blockLoader: isLoading">
+                    <table class="data-grid">
                         <thead>
                             <tr>
                                 <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
