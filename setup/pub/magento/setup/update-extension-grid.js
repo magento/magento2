@@ -12,11 +12,16 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
             $http.get('index.php/updateExtensionGrid/extensions').success(function(data) {
                 $scope.error = false;
                 $scope.errorMessage = '';
+                $scope.extensionsVersions = {};
                 $scope.multipleChoiceService = multipleChoiceService;
                 $scope.multipleChoiceService.reset();
                 angular.forEach(data.extensions, function(extension) {
                     extension.updateVersion = extension.latestVersion;
                     $scope.multipleChoiceService.addExtension(extension.name, extension.latestVersion);
+                    $scope.extensionsVersions[extension.name] = {
+                        'currentVersion': extension.version,
+                        'versions': extension.versions
+                    };
                 });
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
@@ -24,6 +29,7 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                 $scope.rowLimit = 20;
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $scope.isHiddenSpinner = true;
+                $localStorage.extensionsVersions = $scope.extensionsVersions;
             });
 
             paginationService.initWatchers($scope);

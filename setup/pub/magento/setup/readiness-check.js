@@ -11,6 +11,7 @@ angular.module('readiness-check', [])
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
+        $rootScope.needReCheck = false;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
         };
@@ -359,5 +360,50 @@ angular.module('readiness-check', [])
                 $actionString +='ed';
             }
             return $actionString;
-        }
+        };
+
+        $scope.getExtensionsList = function () {
+            return $scope.componentDependency.packages ? $scope.componentDependency.packages : {};
+        };
+
+        $scope.removeExtension = function (name) {
+            delete $scope.componentDependency.packages[name];
+            $localStorage.packages = $scope.componentDependency.packages;
+            $rootScope.needReCheck = true;
+        };
+
+        $scope.getCurrentVersion = function (name) {
+            if ($scope.getExtensionInfo(name).hasOwnProperty('currentVersion')) {
+                return $scope.getExtensionInfo(name)['currentVersion'];
+            }
+            
+            return '';
+        };
+
+        $scope.getVersionsList = function (name) {
+            if ($scope.getExtensionInfo(name).hasOwnProperty('versions')) {
+                return $scope.getExtensionInfo(name)['versions'];
+            }
+
+            return {};
+        };
+
+        $scope.getExtensionInfo = function (name) {
+            var extensionsVersions = $localStorage.extensionsVersions;
+            return extensionsVersions.hasOwnProperty(name) ? extensionsVersions[name] : {};
+        };
+
+        $scope.versionChanged = function () {
+            $rootScope.needReCheck = true;
+        };
+
+        $scope.getObjectSize = function (obj) {
+            var size = 0, key;
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    ++size;
+                }
+            }
+            return size;
+        };
     }]);
