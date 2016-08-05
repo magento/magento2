@@ -31,6 +31,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
      * @param AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck
      * @param AssertSuccessMessage $assertSuccessMessage
      * @param AssertMultipleUpdateSuccessMessage $assertMultipleUpdateSuccessMessage
+     * @param AssertSelectSeveralExtensions $assertSelectSeveralExtensions
      * @param $needAuthentication
      * @param array $extensions
      */
@@ -43,6 +44,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck,
         AssertSuccessMessage $assertSuccessMessage,
         AssertMultipleUpdateSuccessMessage $assertMultipleUpdateSuccessMessage,
+        AssertSelectSeveralExtensions $assertSelectSeveralExtensions,
         $needAuthentication,
         array $extensions
     ) {
@@ -76,7 +78,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         $this->setupWizard->getExtensionsGrid()->clickUpdateButton();
 
         // Select several extensions on grid and check it
-        $this->setupWizard->getExtensionsUpdateGrid()->selectSeveralExtensions($extensions);
+        $assertSelectSeveralExtensions->processAssert($this->setupWizard->getExtensionsUpdateGrid(), $extensions);
 
         // Click general "Update" button
         $this->setupWizard->getExtensionsUpdateGrid()->clickUpdateAllButton();
