@@ -7,9 +7,11 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="message" ng-show="getObjectSize(getExtensionsList()) > 1">
+<div class="message" ng-class="{'message-warning':needReCheck && !checkingInProgress()}"
+     ng-show="getObjectSize(getExtensionsList()) > 1"
+>
     <div><strong>Extensions to {{$state.current.type}}:</strong></div>
-    <div>You can change the version or remove the extension from the updating.</div>
+    <div class="row">You can change the version or remove the extension from the updating.</div>
     <div class="row" ng-repeat="extension in getExtensionsList()">
         <div class="col-m-3">{{extension.name}}</div>
         <div class="col-m-1">{{getCurrentVersion(extension.name)}}</i></div>
@@ -33,11 +35,10 @@
             </a>
         </div>
     </div>
-</div>
-
-<div class="message message-warning" ng-show="needReCheck && !checkingInProgress()">
-    After your changes You need to recheck component dependency. Please click
-    <a href="#" ng-click="$state.forceReload()">here</a>.
+    <div ng-show="needReCheck && !checkingInProgress()">
+        <strong>After your changes You need to recheck component dependency. Please click
+            <a href="#" ng-click="$state.forceReload()">here</a>.</strong>
+    </div>
 </div>
 
 <div ng-switch="isCompleted()">
