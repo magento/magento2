@@ -430,7 +430,6 @@
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation</item>
-                <item name="creditmemo_refund" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund</item>
             </argument>
         </arguments>
     </virtualType>
