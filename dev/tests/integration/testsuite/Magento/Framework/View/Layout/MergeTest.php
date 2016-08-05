@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Layout;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
 
 /**
@@ -396,17 +397,23 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test loading invalid layout
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Layout is invalid.
      */
     public function testLoadWithInvalidLayout()
     {
         $this->_model->addPageHandles(['default']);
 
-        $this->_appState->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
 
-        $this->_layoutValidator->expects($this->any())->method('getMessages')
-            ->will($this->returnValue(['testMessage1', 'testMessage2']));
+        $this->_layoutValidator->expects($this->any())
+            ->method('getMessages')
+            ->willReturn(['testMessage1', 'testMessage2']);
 
-        $this->_layoutValidator->expects($this->any())->method('isValid')->will($this->returnValue(false));
+        $this->_layoutValidator->expects($this->any())
+            ->method('isValid')
+            ->willThrowException(new \Exception('Layout is invalid.'));
 
         $suffix = md5(implode('|', $this->_model->getHandles()));
         $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->scope->getId()}_{$this->_theme->getId()}{$suffix}";
@@ -419,5 +426,16 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->_model->load();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Config\Dom\ValidationException
+     * @expectedExceptionMessageRegExp /_mergeFiles\/layout\/file_wrong\.xml\' is not valid/
+     */
+    public function testLayoutUpdateFileIsNotValid()
+    {
+        $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
+
+        $this->_model->addPageHandles(['default']);
     }
 }
