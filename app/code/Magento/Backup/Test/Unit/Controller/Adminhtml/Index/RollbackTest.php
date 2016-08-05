@@ -146,7 +146,7 @@ class RollbackTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $this->objectManagerMock,
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
             ]
         );
         $this->rollbackController = $this->objectManager->getObject(
@@ -155,7 +155,7 @@ class RollbackTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'backupFactory' => $this->backupFactoryMock,
                 'backupModelFactory' => $this->backupModelFactoryMock,
-                'fileFactory' => $this->fileFactoryMock
+                'fileFactory' => $this->fileFactoryMock,
             ]
         );
     }
@@ -204,7 +204,7 @@ class RollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['time', null, $time],
-                    ['type', null, $type]
+                    ['type', null, $type],
                 ]
             );
         $this->backupModelFactoryMock->expects($this->once())
@@ -245,7 +245,7 @@ class RollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['time', null, $time],
-                    ['type', null, $type]
+                    ['type', null, $type],
                 ]
             );
         $this->backupModelFactoryMock->expects($this->once())
