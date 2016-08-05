@@ -15,6 +15,7 @@ return [
     'Magento_CatalogSearch',
     'Magento_CatalogWidget',
     'Magento_Checkout',
+    'Magento_CheckoutAgreements',
     'Magento_Cms',
     'Magento_Config',
     'Magento_ConfigurableProduct',
