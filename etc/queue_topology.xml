@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento-topic-based-exchange1">
+    <exchange name="magento-topic-based-exchange1" connection="amqp">
         <arguments>
             <argument name="alternate-exchange" xsi:type="string">magento-log-exchange</argument>
         </arguments>
