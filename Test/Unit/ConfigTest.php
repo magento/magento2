@@ -41,6 +41,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unknown connection name amqp
+     */
     public function testGetNullConfig()
     {
         $this->deploymentConfigMock->expects($this->once())
@@ -48,14 +52,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::QUEUE_CONFIG)
             ->will($this->returnValue(null));
 
-        $this->assertNull($this->amqpConfig->getValue(Config::HOST));
-        $this->assertNull($this->amqpConfig->getValue(Config::PORT));
-        $this->assertNull($this->amqpConfig->getValue(Config::USERNAME));
-        $this->assertNull($this->amqpConfig->getValue(Config::PASSWORD));
-        $this->assertNull($this->amqpConfig->getValue(Config::VIRTUALHOST));
-        $this->assertNull($this->amqpConfig->getValue(Config::SSL));
+        $this->amqpConfig->getValue(Config::HOST);
     }
 
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unknown connection name amqp
+     */
     public function testGetEmptyConfig()
     {
         $this->deploymentConfigMock->expects($this->once())
@@ -63,12 +66,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with(Config::QUEUE_CONFIG)
             ->will($this->returnValue([]));
 
-        $this->assertNull($this->amqpConfig->getValue(Config::HOST));
-        $this->assertNull($this->amqpConfig->getValue(Config::PORT));
-        $this->assertNull($this->amqpConfig->getValue(Config::USERNAME));
-        $this->assertNull($this->amqpConfig->getValue(Config::PASSWORD));
-        $this->assertNull($this->amqpConfig->getValue(Config::VIRTUALHOST));
-        $this->assertNull($this->amqpConfig->getValue(Config::SSL));
+        $this->amqpConfig->getValue(Config::HOST);
     }
 
     public function testGetStandardConfig()

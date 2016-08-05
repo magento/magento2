@@ -34,7 +34,7 @@ class Config
     /**
      * Deployment configuration
      *
-     * @var DeploymentConfig
+     * @var array
      */
     private $deploymentConfig;
 
@@ -56,28 +56,22 @@ class Config
     private $data;
 
     /**
-     * Constructor
+     * AMQP connection name.
      *
-     * Example environment config:
-     * <code>
-     * 'queue' =>
-     *     [
-     *         'amqp' => [
-     *             'host' => 'localhost',
-     *             'port' => 5672,
-     *             'username' => 'guest',
-     *             'password' => 'guest',
-     *             'virtual_host' => '/',
-     *             'ssl' => [],
-     *         ],
-     *     ],
-     * </code>
+     * @var string
+     */
+    private $connectionName;
+
+    /**
+     * Initialize dependencies.
      *
      * @param DeploymentConfig $config
+     * @param string $connectionName
      */
-    public function __construct(DeploymentConfig $config)
+    public function __construct(DeploymentConfig $config, $connectionName = 'amqp')
     {
         $this->deploymentConfig = $config;
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -95,6 +89,7 @@ class Config
      *
      * @param string $key
      * @return string
+     * @throws \LogicException
      */
     public function getValue($key)
     {
@@ -106,6 +101,7 @@ class Config
      * Return Amqp channel
      *
      * @return AMQPChannel
+     * @throws \LogicException
      */
     public function getChannel()
     {
@@ -126,12 +122,22 @@ class Config
      * Load the configuration for Amqp
      *
      * @return void
+     * @throws \LogicException
      */
     private function load()
     {
         if (null === $this->data) {
             $queueConfig = $this->deploymentConfig->getConfigData(self::QUEUE_CONFIG);
-            $this->data = isset($queueConfig[self::AMQP_CONFIG]) ? $queueConfig[self::AMQP_CONFIG] : [];
+            if ($this->connectionName == self::AMQP_CONFIG) {
+                $this->data = isset($queueConfig[self::AMQP_CONFIG]) ? $queueConfig[self::AMQP_CONFIG] : [];
+            } else {
+                $this->data = isset($queueConfig['connection'][$this->connectionName])
+                    ? ['connection'][$this->connectionName]
+                    : [];
+            }
+            if (empty($this->data)) {
+                throw  new \LogicException('Unknown connection name ' . $this->connectionName);
+            }
         }
     }
 
