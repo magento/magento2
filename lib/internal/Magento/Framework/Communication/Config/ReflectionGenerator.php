@@ -79,4 +79,23 @@ class ReflectionGenerator
                 ?: [self::DEFAULT_HANDLER => $methodMetadata[Config::SCHEMA_METHOD_HANDLER]]
         ];
     }
+
+    /**
+     * Generate topic name based on service type and method name.
+     *
+     * Perform the following conversion:
+     * \Magento\Customer\Api\RepositoryInterface + getById => magento.customer.api.repositoryInterface.getById
+     *
+     * @param string $typeName
+     * @param string $methodName
+     * @return string
+     */
+    public function generateTopicName($typeName, $methodName)
+    {
+        $parts = explode('\\', ltrim($typeName, '\\'));
+        foreach ($parts as &$part) {
+            $part = lcfirst($part);
+        }
+        return implode('.', $parts) . '.' . $methodName;
+    }
 }
