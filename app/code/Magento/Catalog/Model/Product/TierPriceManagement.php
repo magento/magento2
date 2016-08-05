@@ -12,7 +12,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\TemporaryStateException;
+use Magento\Framework\Exception\TemporaryStateExceptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -138,7 +138,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            if ($e instanceof TemporaryStateException) {
+            if ($e instanceof TemporaryStateExceptionInterface) {
                 // temporary state exception must be already localized
                 throw $e;
             }

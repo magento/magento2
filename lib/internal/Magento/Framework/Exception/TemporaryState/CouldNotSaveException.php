@@ -5,15 +5,14 @@
  */
 namespace Magento\Framework\Exception\TemporaryState;
 
-use Magento\Framework\Exception\TemporaryStateException;
+use Magento\Framework\Exception\TemporaryStateExceptionInterface;
+use Magento\Framework\Exception\CouldNotSaveException as LocalizedCouldNotSaveException;
 use Magento\Framework\Phrase;
 
 /**
  * CouldNotSaveException caused by recoverable error
  */
-class CouldNotSaveException
-    extends \Magento\Framework\Exception\CouldNotSaveException
-    implements TemporaryStateException
+class CouldNotSaveException extends LocalizedCouldNotSaveException implements TemporaryStateExceptionInterface
 {
     /**
      * Class constructor
