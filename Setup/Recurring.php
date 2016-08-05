@@ -5,28 +5,27 @@
  */
 namespace Magento\Amqp\Setup;
 
-use Magento\Amqp\Model\Topology;
+use Magento\Framework\Amqp\TopologyInstaller;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Class Recurring
- *
  */
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var \Magento\Amqp\Model\Topology
+     * @var TopologyInstaller
      */
-    protected $topology;
+    protected $topologyInstaller;
 
     /**
-     * @param Topology $topology
+     * @param TopologyInstaller $topologyInstaller
      */
-    public function __construct(Topology $topology)
+    public function __construct(TopologyInstaller $topologyInstaller)
     {
-        $this->topology = $topology;
+        $this->topologyInstaller = $topologyInstaller;
     }
 
     /**
@@ -34,6 +33,6 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $this->topology->install();
+        $this->topologyInstaller->install();
     }
 }

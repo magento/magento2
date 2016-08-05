@@ -10,15 +10,16 @@ use Magento\Framework\Amqp\Topology\QueueInstaller;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Topology\ConfigInterface as TopologyConfig;
+use Magento\Framework\Amqp\ConfigPool;
+use Magento\Framework\Amqp\ConnectionTypeResolver;
+use Magento\Framework\Amqp\TopologyInstaller;
 
 /**
  * Class Topology creates topology for Amqp messaging
  *
- * @package Magento\Amqp\Model
- *
  * @deprecated
  */
-class Topology
+class Topology extends TopologyInstaller
 {
     /**
      * Type of exchange
@@ -40,31 +41,6 @@ class Topology
     const IS_DURABLE = true;
 
     /**
-     * @var Config
-     */
-    private $amqpConfig;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var TopologyConfig
-     */
-    private $topologyConfig;
-
-    /**
-     * @var \Magento\Framework\Amqp\Topology\ExchangeInstaller
-     */
-    private $exchangeInstaller;
-
-    /**
-     * @var \Magento\Framework\Amqp\Topology\QueueInstaller
-     */
-    private $queueInstaller;
-
-    /**
      * Initialize dependencies
      *
      * @param Config $amqpConfig
@@ -79,72 +55,13 @@ class Topology
         CommunicationConfig $communicationConfig,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->amqpConfig = $amqpConfig;
-        $this->logger = $logger;
-    }
-
-    /**
-     * Get topology config
-     *
-     * @return TopologyConfig
-     */
-    private function getTopologyConfig()
-    {
-        if (null == $this->topologyConfig) {
-            $this->topologyConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(TopologyConfig::class);
-        }
-        return $this->topologyConfig;
-    }
-
-    /**
-     * Get exchange installer.
-     *
-     * @return ExchangeInstaller
-     */
-    private function getExchangeInstaller()
-    {
-        if (null == $this->exchangeInstaller) {
-            $this->exchangeInstaller = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(ExchangeInstaller::class);
-        }
-        return $this->exchangeInstaller;
-    }
-
-    /**
-     * Get queue installer.
-     *
-     * @return QueueInstaller
-     */
-    private function getQueueInstaller()
-    {
-        if (null == $this->queueInstaller) {
-            $this->queueInstaller = \Magento\Framework\App\ObjectManager::getInstance()->get(QueueInstaller::class);
-        }
-        return $this->queueInstaller;
-    }
-
-    /**
-     * Install Amqp Exchanges, Queues and bind them
-     *
-     * @return void
-     */
-    public function install()
-    {
-        try {
-            foreach ($this->getTopologyConfig()->getQueues() as $queue) {
-                if ($queue->getConnection() != self::AMQP_CONNECTION) {
-                    continue;
-                }
-                $this->getQueueInstaller()->install($this->amqpConfig->getChannel(), $queue);
-            }
-            foreach ($this->getTopologyConfig()->getExchanges() as $exchange) {
-                if ($exchange->getConnection() != self::AMQP_CONNECTION) {
-                    continue;
-                }
-                $this->getExchangeInstaller()->install($this->amqpConfig->getChannel(), $exchange);
-            }
-        } catch (\PhpAmqpLib\Exception\AMQPExceptionInterface $e) {
-            $this->logger->error('There is a problem. Error: ' . $e->getTraceAsString());
-        }
+        parent::__construct(
+            \Magento\Framework\App\ObjectManager::getInstance()->get(TopologyConfig::class),
+            \Magento\Framework\App\ObjectManager::getInstance()->get(ExchangeInstaller::class),
+            \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigPool::class),
+            \Magento\Framework\App\ObjectManager::getInstance()->get(QueueInstaller::class),
+            \Magento\Framework\App\ObjectManager::getInstance()->get(ConnectionTypeResolver::class),
+            $logger
+        );
     }
 }
