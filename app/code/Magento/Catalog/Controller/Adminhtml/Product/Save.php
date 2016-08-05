@@ -73,6 +73,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
+                if (isset($data["configurable-matrix-serialized"])) {
+                    $configurableMatrixSerialized = $data["configurable-matrix-serialized"];
+                    if ($configurableMatrixSerialized != null && !empty($configurableMatrixSerialized)) {
+                        $data["variations-matrix"] = json_decode($configurableMatrixSerialized, true);
+                        unset($data["configurable-matrix-serialized"]);
+                    }
+                }
                 $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
                 $this->productTypeManager->processProduct($product);
 
