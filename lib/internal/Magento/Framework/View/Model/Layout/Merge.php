@@ -709,7 +709,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
                             "Theme layout update file '%1' is not valid.\n%2",
                             [
                                 $file->getFilename(),
-                                implode("\n", $xmlErrors),
+                                implode("\n", $xmlErrors)
                             ]
                         )
                     );
