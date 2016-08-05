@@ -8,33 +8,29 @@
 
 ?>
 <div class="message" ng-class="{'message-warning':needReCheck && !checkingInProgress()}"
-     ng-show="getObjectSize(getExtensionsList()) > 1"
+     ng-show="getObjectSize(getExtensionsList()) > 0"
 >
     <div><strong>Extensions to {{$state.current.type}}:</strong></div>
-    <div class="row">You can change the version or remove the extension from the updating.</div>
-    <div class="row" ng-repeat="extension in getExtensionsList()">
-        <div class="col-m-3">{{extension.name}}</div>
-        <div class="col-m-1">{{getCurrentVersion(extension.name)}}</i></div>
-        <div class="col-m-2">
-            <span ng-show="checkingInProgress()">{{extension.version}}</span>
+    <div>You can change the version or remove the extension from the updating.</div>
+
+    <ul class="list">
+        <li ng-repeat="extension in getExtensionsList()">
+            {{extension.name}} {{getCurrentVersion(extension.name)}} to
             <select ng-change="versionChanged()"
                     ng-model="extension.version"
-                    ng-hide="checkingInProgress()"
+                    ng-disabled="checkingInProgress()"
             >
                 <option ng-repeat="version in getVersionsList(extension.name)"
+                        ng-selected="version == extension.version"
                         value="{{version}}"
                 >Version {{version}}</option>
             </select>
-        </div>
-        <div class="col-m-1">
-            <a href="#"
+            <button style="padding-top: 0;" class="abs-action-delete"
                ng-click="removeExtension(extension.name)"
-               ng-show="!checkingInProgress()"
-            >
-                remove
-            </a>
-        </div>
-    </div>
+               ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1"></button>
+        </li>
+    </ul>
+
     <div ng-show="needReCheck && !checkingInProgress()">
         <strong>After your changes You need to recheck component dependency. Please click
             <a href="#" ng-click="$state.forceReload()">here</a>.</strong>
