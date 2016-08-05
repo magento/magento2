@@ -46,14 +46,14 @@ class ConfigReaderPlugin
     ) {
         $topologyConfigData = $proceed($scope);
         $topologyConfigDataFromQueueConfig = $this->getTopologyConfigDataFromQueueConfig();
-        foreach ($topologyConfigDataFromQueueConfig as $exchangeName => $exchangeConfig) {
-            if (isset($topologyConfigData[$exchangeName])) {
-                $topologyConfigData[$exchangeName]['bindings'] = array_merge(
+        foreach ($topologyConfigDataFromQueueConfig as $exchangeKey => $exchangeConfig) {
+            if (isset($topologyConfigData[$exchangeKey])) {
+                $topologyConfigData[$exchangeKey]['bindings'] = array_merge(
                     $exchangeConfig['bindings'],
-                    $topologyConfigData[$exchangeName]['bindings']
+                    $topologyConfigData[$exchangeKey]['bindings']
                 );
             } else {
-                $topologyConfigData[$exchangeName] = $exchangeConfig;
+                $topologyConfigData[$exchangeKey] = $exchangeConfig;
             }
         }
         return $topologyConfigData;
@@ -82,13 +82,14 @@ class ConfigReaderPlugin
             ];
 
             $exchangeName = $queueConfigBinding['exchange'];
+            $connection = $this->queueConfig->getConnectionByTopic($topic);
             if (isset($result[$exchangeName])) {
                 $result[$exchangeName]['bindings'][$bindingId] = $bindingData;
             } else {
-                $result[$exchangeName] = [
+                $result[$exchangeName . '-' . $connection] = [
                     'name' => $exchangeName,
                     'type' => 'topic',
-                    'connection' => $this->queueConfig->getConnectionByTopic($topic),
+                    'connection' => $connection,
                     'durable' => true,
                     'autoDelete' => false,
                     'internal' => false,

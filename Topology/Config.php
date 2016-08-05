@@ -44,11 +44,19 @@ class Config implements ConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getExchange($name)
+    public function getExchange($name, $connection)
     {
-        $topology = $this->exchangeIterator[$name];
+        $topology = $this->exchangeIterator[$name . '-' . $connection];
         if (!$topology) {
-            throw new LocalizedException(new Phrase("Exchange '%exchange' is not declared.", ['exchange' => $name]));
+            throw new LocalizedException(
+                new Phrase(
+                    "Exchange '%exchange' is not declared for connection '%connection'.",
+                    [
+                        'exchange' => $name,
+                        'connection' => $connection
+                    ]
+                )
+            );
         }
         return $topology;
     }

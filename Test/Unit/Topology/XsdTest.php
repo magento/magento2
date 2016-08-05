@@ -53,14 +53,14 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             /** Valid configurations */
             'valid' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-                        <exchange name="ex01" type="topic" />
+                        <exchange name="ex01" type="topic" connection="amqp"/>
                         <exchange name="ex02" type="topic" connection="amqp" />
                         <exchange name="ex03" autoDelete="true" durable="false" internal="true" type="topic" connection="db">
                             <arguments>
                                 <argument name="arg1" xsi:type="string">10</argument>
                             </arguments>
                         </exchange>
-                        <exchange name="ex04">
+                        <exchange name="ex04" connection="amqp">
                             <binding id="bind01" destinationType="queue" destination="queue01" topic="top01" disabled="true" />
                             <binding id="bind02" destinationType="queue" destination="queue01" topic="top01">
                                 <arguments>
@@ -73,16 +73,16 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'non-unique-exchange' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-                        <exchange name="ex01" type="topic" />
+                        <exchange name="ex01" type="topic" connection="amqp"/>
                         <exchange name="ex01" type="topic" connection="amqp" />
                 </config>',
                 [
-                    "Element 'exchange': Duplicate key-sequence ['ex01'] in unique identity-constraint 'unique-exchange-name'."
+                    "Element 'exchange': Duplicate key-sequence ['ex01', 'amqp'] in unique identity-constraint 'unique-exchange-name-connection'."
                 ],
             ],
             'non-unique-exchange-binding' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-                        <exchange name="ex01">
+                        <exchange name="ex01" connection="amqp">
                             <binding id="bind01" destinationType="queue" destination="queue01" topic="top01" disabled="true" />
                             <binding id="bind01" destinationType="queue" destination="queue01" topic="top01" />
                         </exchange>
@@ -93,7 +93,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'invalid-destination-type-binding' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-                    <exchange name="ex01" type="topic">
+                    <exchange name="ex01" type="topic" connection="amqp">
                         <binding id="bind01" destinationType="topic" destination="queue01" topic="top01" />
                     </exchange>
                 </config>',
@@ -104,7 +104,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'invalid-exchange-type-binding' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-                    <exchange name="ex01" type="exchange">
+                    <exchange name="ex01" type="exchange" connection="amqp">
                         <binding id="bind01" destinationType="queue" destination="queue01" topic="top01" />
                     </exchange>
                 </config>',
