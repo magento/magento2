@@ -118,6 +118,7 @@ main.controller('navigationController',
         mainState: {},
         states: [],
         titlesWithModuleName: ['enable', 'disable', 'update', 'uninstall'],
+        isLoadedStates: false,
         load: function () {
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
@@ -129,19 +130,22 @@ main.controller('navigationController',
                     data.titles[value] = data.titles[value] + $localStorage.moduleName;
                 });
                 $localStorage.titles = data.titles;
-                data.nav.forEach(function (item) {
-                    app.stateProvider.state(item.id, item);
-                    if (item.default) {
-                        self.mainState = item;
-                    }
+                if (self.isLoadedStates == false) {
+                    data.nav.forEach(function (item) {
+                        app.stateProvider.state(item.id, item);
+                        if (item.default) {
+                            self.mainState = item;
+                        }
 
-                    if (currentState == item.url) {
-                        $state.go(item.id);
-                        isCurrentStateFound = true;
+                        if (currentState == item.url) {
+                            $state.go(item.id);
+                            isCurrentStateFound = true;
+                        }
+                    });
+                    if (!isCurrentStateFound) {
+                        $state.go(self.mainState.id);
                     }
-                });
-                if (!isCurrentStateFound) {
-                    $state.go(self.mainState.id);
+                    self.isLoadedStates = true;
                 }
             });
         },
