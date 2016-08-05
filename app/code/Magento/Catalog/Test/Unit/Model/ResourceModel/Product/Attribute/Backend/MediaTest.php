@@ -286,8 +286,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $storeId = 1;
         $attributeId = 6;
         $getTableReturnValue = 'table';
-        $quoteInfoReturnValue =
-            'main.value_id = value.value_id AND value.store_id = ' . $storeId . ' AND value.entity_id = ' . $productId;
+        $quoteInfoReturnValue = 'main.value_id = value.value_id AND value.store_id = ' . $storeId;
         $positionCheckSql = 'testchecksql';
         $resultRow = [
             [
@@ -325,14 +324,12 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->product->expects($this->at(0))->method('getId')->willReturn($productId);
         $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
-        $this->connection->expects($this->exactly(3))->method('quoteInto')->withConsecutive(
-            ['value.store_id = ?', 1],
-            ['value.entity_id = ?', 5],
-            ['default_value.entity_id = ?', 5]
+        $this->connection->expects($this->any())->method('quoteInto')->withConsecutive(
+            ['value.store_id = ?'],
+            ['default_value.store_id = ?']
         )->willReturnOnConsecutiveCalls(
             'value.store_id = ' . $storeId,
-            'value.entity_id = ' . $productId,
-            'default_value.entity_id = ' . $productId
+            'default_value.store_id = ' . 0
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
@@ -345,8 +342,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->select->expects($this->at(3))->method('joinLeft')->with(
             ['default_value' => $getTableReturnValue],
-            'main.value_id = default_value.value_id AND default_value.store_id = 0 AND default_value.entity_id = '
-            . $productId,
+            'main.value_id = default_value.value_id AND default_value.store_id = 0',
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->willReturnSelf();
         $this->select->expects($this->at(4))->method('where')->with(
@@ -354,7 +350,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             $attributeId
         )->willReturnSelf();
         $this->select->expects($this->at(5))->method('where')->with('main.disabled = 0')->willReturnSelf();
-        $this->select->expects($this->at(6))->method('where')
+        $this->select->expects($this->at(7))->method('where')
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
         $this->select->expects($this->once())->method('order')

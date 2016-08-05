@@ -274,13 +274,8 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
             'values' => []
         ];
 
-        $resourceEntryResult = [];
-
         $this->productMock->expects($this->once())->method('getData')->with('media_gallery')->willReturn($mediaData);
-
-        $this->resourceEntryMediaGalleryMock->expects($this->once())->method('loadDataFromTableByValueId')->willReturn(
-            $resourceEntryResult
-        );
+        $this->resourceEntryMediaGalleryMock->expects($this->never())->method('loadDataFromTableByValueId');
         $this->mediaBackendModel->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
 
         $this->modelObject->afterAfterLoad($this->mediaBackendModel, $this->productMock);

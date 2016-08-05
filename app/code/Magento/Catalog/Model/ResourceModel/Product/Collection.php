@@ -12,7 +12,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
 
 /**
  * Product collection
@@ -242,7 +244,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $dateTime;
 
     /**
-     * @var GroupManagementInterface
+     * @var \Magento\Customer\Api\GroupManagementInterface
      */
     protected $_groupManagement;
 
@@ -252,6 +254,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @var bool
      */
     protected $needToAddWebsiteNamesToResult;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
+     */
+    private $mediaGalleryResource;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -2153,6 +2160,59 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->_priceDataFieldFilters[] = array_merge([$comparisonFormat], $fields);
         return $this;
+    }
+
+    /**
+     * Add media gallery data to loaded items
+     *
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function addMediaGalleryData()
+    {
+        if ($this->getFlag('media_gallery_added')) {
+            return $this;
+        }
+
+        $mediaGalleries = [];
+        if (!$this->count()) {
+            return $this;
+        }
+
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->getAttribute('media_gallery');
+        $select = $this->getMediaGalleryResource()->createBatchBaseSelect(
+            $this->getStoreId(),
+            $attribute->getAttributeId()
+        );
+        
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $mediaGalleries[$row['entity_id']][] = $row;
+        }
+
+        /* @var $backend \Magento\Catalog\Model\Product\Attribute\Backend\Media */
+        $backend = $attribute->getBackend();
+
+        foreach ($this->getItems() as $item) {
+            $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
+            $backend->addMediaDataToProduct($item, $mediaEntries);
+        }
+
+        $this->setFlag('media_gallery_added', true);
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
+     */
+    private function getMediaGalleryResource()
+    {
+        if (null === $this->mediaGalleryResource) {
+            $this->mediaGalleryResource = ObjectManager::getInstance()->get(Media::class);
+        }
+        return $this->mediaGalleryResource;
     }
 
     /**

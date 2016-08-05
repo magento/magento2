@@ -12,6 +12,8 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
+
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
     </type>
@@ -125,5 +127,10 @@
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
     </type>
 </config>

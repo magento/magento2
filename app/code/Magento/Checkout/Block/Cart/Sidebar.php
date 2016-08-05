@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 class Sidebar extends AbstractCart
 {
     /**
-     * Xml pah to checkout sidebar count value
+     * Xml pah to checkout sidebar display value
      */
     const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
@@ -63,7 +63,8 @@ class Sidebar extends AbstractCart
             'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
             'removeItemUrl' => $this->getRemoveItemUrl(),
             'imageTemplate' => $this->getImageHtmlTemplate(),
-            'baseUrl' => $this->getBaseUrl()
+            'baseUrl' => $this->getBaseUrl(),
+            'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount()
         ];
     }
 
@@ -170,5 +171,15 @@ class Sidebar extends AbstractCart
     public function getBaseUrl()
     {
         return $this->_storeManager->getStore()->getBaseUrl();
+    }
+
+    /**
+     * Return max visible item count for minicart
+     *
+     * @return int
+     */
+    private function getMiniCartMaxItemsCount()
+    {
+        return (int)$this->_scopeConfig->getValue('checkout/sidebar/count', ScopeInterface::SCOPE_STORE);
     }
 }

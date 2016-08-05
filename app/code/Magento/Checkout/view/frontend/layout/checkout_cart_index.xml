@@ -62,6 +62,9 @@
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-estimation</item>
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                 <item name="sortOrder" xsi:type="string">1</item>
+                                                <item name="deps" xsi:type="array">
+                                                    <item name="0" xsi:type="string">block-summary.block-shipping.address-fieldsets</item>
+                                                </item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="address-fieldsets" xsi:type="array">
                                                         <item name="component" xsi:type="string">uiComponent</item>

@@ -8,6 +8,8 @@
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -221,6 +223,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /**
      * Retrieve resource model mock instance and its adapter
      *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     protected function _prepareResourceModel()
@@ -312,13 +315,29 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'storeManager' => $storeManager,
             'eavEntityType' => $eavEntityType,
         ];
-        $resourceModelMock = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute',
-            ['getAdditionalAttributeTable'],
+
+
+        $configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()->getMock();
+        $attributeCacheMock = $this->getMockBuilder(
+            \Magento\Eav\Model\Entity\AttributeCache::class
+        )->disableOriginalConstructor()->getMock();
+
+        $resourceModel = (new ObjectManager($this))->getObject(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute::class,
             $arguments
         );
 
-        return [$connectionMock, $resourceModelMock];
+        $reflection = new \ReflectionClass(get_class($resourceModel));
+        $reflectionProperty = $reflection->getProperty('config');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($resourceModel, $configMock);
+
+        $reflection = new \ReflectionClass(get_class($resourceModel));
+        $reflectionProperty = $reflection->getProperty('attributeCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($resourceModel, $attributeCacheMock);
+
+        return [$connectionMock, $resourceModel];
     }
 
     /**
