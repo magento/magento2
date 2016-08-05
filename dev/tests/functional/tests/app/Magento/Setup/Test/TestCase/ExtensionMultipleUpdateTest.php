@@ -90,7 +90,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         $assertMultipleUpdateSuccessMessage->processAssert(
             $this->setupWizard,
             $extensions,
-            AssertSuccessMessage::TYPE_INSTALL
+            AssertSuccessMessage::TYPE_UPDATE
         );
 
         // Uninstall installed extensions
