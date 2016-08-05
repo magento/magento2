@@ -83,6 +83,8 @@ class Reader implements ReaderInterface
      * @return array
      *
      * @throws \LogicException
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function generateBindings()
     {

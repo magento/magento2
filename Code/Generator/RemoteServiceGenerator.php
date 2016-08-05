@@ -7,13 +7,15 @@ namespace Magento\Framework\MessageQueue\Code\Generator;
 
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
-use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
+use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
+use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 
 /**
  * Code generator for remote services.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -29,11 +31,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * @var ServiceMethodsMap
      */
     private $serviceMethodsMap;
-
-    /**
-     * @var RemoteServiceReader
-     */
-    private $communicationRemoteServiceReader;
 
     /**
      * @var ReflectionGenerator
@@ -64,7 +61,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     ) {
         $this->communicationConfig = $communicationConfig;
         $this->serviceMethodsMap = $serviceMethodsMap;
-        $this->communicationRemoteServiceReader = $communicationRemoteServiceReader;
         parent::__construct(
             $sourceClassName,
             $resultClassName,

@@ -59,6 +59,8 @@ class Reader implements ReaderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function read($scope = null)
     {
