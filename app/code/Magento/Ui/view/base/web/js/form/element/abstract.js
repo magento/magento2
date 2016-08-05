@@ -77,10 +77,10 @@ define([
         /**
          * Checks if component has error.
          *
-         * @returns {Boolean}
+         * @returns {Object}
          */
-        isInvalid: function () {
-            return this.error() && this.error().length ? this : false;
+        checkInvalid: function () {
+            return this.error() && this.error().length ? this : null;
         },
 
         /**

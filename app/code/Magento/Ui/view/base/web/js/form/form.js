@@ -264,7 +264,7 @@ define([
          * @returns {Object}
          */
         focusInvalid: function () {
-            var invalidField = _.find(this.delegate('isInvalid'));
+            var invalidField = _.find(this.delegate('checkInvalid'));
 
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
                 invalidField.focused(true);
