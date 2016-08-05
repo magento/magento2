@@ -47,7 +47,7 @@ class MessageController
      *
      * @param EnvelopeInterface $envelope
      * @param string $consumerName
-     * @return bool
+     * @return LockInterface
      * @throws MessageLockException
      */
     public function lock(EnvelopeInterface $envelope, $consumerName)

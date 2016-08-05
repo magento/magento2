@@ -183,11 +183,12 @@ class Consumer implements ConsumerInterface
     private function getTransactionCallback(QueueInterface $queue)
     {
         return function (EnvelopeInterface $message) use ($queue) {
+            /** @var LockInterface $lock */
+            $lock = null;
             try {
-                $this->resource->getConnection()->beginTransaction();
                 $topicName = $message->getProperties()['topic_name'];
                 $topicConfig = $this->getCommunicationConfig()->getTopic($topicName);
-                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
+                $lock = $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
 
                 if ($topicConfig[CommunicationConfig::TOPIC_IS_SYNCHRONOUS]) {
                     $responseBody = $this->dispatchMessage($message, true);
@@ -204,16 +205,16 @@ class Consumer implements ConsumerInterface
                         return;
                     }
                 }
-                $this->resource->getConnection()->commit();
                 $queue->acknowledge($message);
             } catch (MessageLockException $exception) {
-                $this->resource->getConnection()->rollBack();
                 $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
-                $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
-                $this->resource->getConnection()->rollBack();
                 $queue->reject($message, false, $e->getMessage());
+                if ($lock) {
+                    $this->resource->getConnection()
+                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
+                }
             }
         };
     }
