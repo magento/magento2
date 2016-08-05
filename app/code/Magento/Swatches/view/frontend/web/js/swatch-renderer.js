@@ -336,7 +336,9 @@ define([
 
                 if ($widget.options.enableControlLabel) {
                     label +=
-                        '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' + item.label + '</span>' +
+                        '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
+                            item.label +
+                        '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
 
@@ -547,7 +549,8 @@ define([
          */
         _EventListener: function () {
             var $widget = this,
-                options = this.options.classes;
+                options = this.options.classes,
+                target;
 
             $widget.element.on('click', '.' + options.optionClass, function () {
                 return $widget._OnClick($(this), $widget);
@@ -564,8 +567,8 @@ define([
             });
 
             $widget.element.on('keydown', function (e) {
-                if (e.which == 13) {
-                    var target = $(e.target);
+                if (e.which === 13) {
+                    target = $(e.target);
 
                     if (target.is('.' + options.optionClass)) {
                         return $widget._OnClick(target, $widget);
