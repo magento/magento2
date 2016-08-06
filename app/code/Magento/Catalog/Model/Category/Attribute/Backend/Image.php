@@ -49,6 +49,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private $imageUploader;
 
     /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
@@ -56,11 +61,13 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory,
+        \Magento\Framework\App\ObjectManager $objectManager
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -105,9 +112,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private function getImageUploader()
     {
         if ($this->imageUploader === null) {
-            $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Catalog\CategoryImageUpload::class
-            );
+            $this->imageUploader = $this->objectManager->get(\Magento\Catalog\CategoryImageUpload::class);
         }
 
         return $this->imageUploader;
