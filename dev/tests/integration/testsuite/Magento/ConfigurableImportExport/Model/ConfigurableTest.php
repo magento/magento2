@@ -30,8 +30,10 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getUsedProducts($expectedProduct);
-        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getUsedProducts($actualProduct);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $prooductType */
+        $prooductType = $expectedProduct->getTypeInstance();
+        $expectedAssociatedProducts = $prooductType->getUsedProductCollection($expectedProduct);
+        $actualAssociatedProducts = iterator_to_array($prooductType->getUsedProductCollection($actualProduct));
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
