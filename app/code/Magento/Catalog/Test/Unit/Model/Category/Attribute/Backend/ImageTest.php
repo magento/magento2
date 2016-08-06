@@ -95,11 +95,15 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function invalidValueProvider()
     {
+        $closure = function () {
+            return false;
+        };
+
         return [
             [1234],
             [true],
             [new \stdClass()],
-            [function() {}],
+            [$closure],
             [['a' => 1, 'b' => 2]]
         ];
     }
