@@ -13,7 +13,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
-    const ADDITIONAL_DATA_SUFFIX = '_additional_data';
+    const ADDITIONAL_DATA_PREFIX = '_additional_data_';
 
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
@@ -57,7 +57,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
-     * @param \Magento\Framework\ObjectManagerInterface
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -95,11 +95,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attributeName = $this->getAttribute()->getName();
         $value = $object->getData($attributeName);
 
-        if ($value === false || (is_array($value) && isset($value['delete']) && $value['delete'] === true)) {
-            $object->setData($attributeName, '');
-        } else if ($imageName = $this->getUploadedImageName($value)) {
-            $object->setData($attributeName . self::ADDITIONAL_DATA_SUFFIX, $value);
+        if ($imageName = $this->getUploadedImageName($value)) {
+            $object->setData(self::ADDITIONAL_DATA_PREFIX . $attributeName, $value);
             $object->setData($attributeName, $imageName);
+        } else if (!is_string($value)) {
+            $object->setData($attributeName, '');
         }
 
         return parent::beforeSave($object);
@@ -127,7 +127,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        $value = $object->getData($this->getAttribute()->getName() . self::ADDITIONAL_DATA_SUFFIX);
+        $value = $object->getData(self::ADDITIONAL_DATA_PREFIX . $this->getAttribute()->getName());
 
         if ($imageName = $this->getUploadedImageName($value)) {
             try {
