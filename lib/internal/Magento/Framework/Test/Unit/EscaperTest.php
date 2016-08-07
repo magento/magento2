@@ -67,6 +67,46 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Framework\Escaper::escapeXml
+     * @dataProvider escapeXMLDataProvider
+     */
+    public function testEscapeXml($data, $expected, $allowedTags = null)
+    {
+        $actual = $this->_escaper->escapeXml($data, $allowedTags);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeXMLDataProvider()
+    {
+        return [
+            'array data' => [
+                'data' => ['one', '<two>three</two>'],
+                'expected' => ['<![CDATA[one]]>', '<![CDATA[&lt;two&gt;three&lt;/two&gt;]]>'],
+                null,
+            ],
+            'string data conversion' => [
+                'data' => '<two>three</two>',
+                'expected' => '<![CDATA[&lt;two&gt;three&lt;/two&gt;]]>',
+                null,
+            ],
+            'string data no conversion' => ['data' => 'one', 'expected' => '<![CDATA[one]]>'],
+            'string data with allowed tags' => [
+                'data' => '<span><b>some text in tags</b></span>',
+                'expected' => '<![CDATA[<span><b>some text in tags</b></span>]]>',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'special symbol' => [
+                'data' => 'onetwo',
+                'expected' => '<![CDATA[one�two]]>',
+                null,
+            ]
+        ];
+    }
+
+    /**
      * @covers \Magento\Framework\Escaper::escapeUrl
      */
     public function testEscapeUrl()
