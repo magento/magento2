@@ -24,12 +24,12 @@ class SwitcherPluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundGetUrl($countryParam, $getUrlParams)
     {
-        $subjectRequest = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
+        $subjectRequest = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $subjectRequest->expects($this->once())
             ->method('getParam')
             ->with(\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY)
             ->will($this->returnValue($countryParam));
-        $subject = $this->getMock('Magento\Backend\Block\Store\Switcher', ['getRequest'], [], '', false);
+        $subject = $this->getMock(\Magento\Backend\Block\Store\Switcher::class, ['getRequest'], [], '', false);
         $subject->expects($this->any())->method('getRequest')->will($this->returnValue($subjectRequest));
         $getUrl = function ($route, $params) {
             return [$route, $params];

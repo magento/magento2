@@ -66,7 +66,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function _construct()
     {
-        $this->_init('Magento\Cron\Model\ResourceModel\Schedule');
+        $this->_init(\Magento\Cron\Model\ResourceModel\Schedule::class);
     }
 
     /**

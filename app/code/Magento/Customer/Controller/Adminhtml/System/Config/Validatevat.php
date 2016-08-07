@@ -19,7 +19,7 @@ abstract class Validatevat extends \Magento\Backend\App\Action
      */
     protected function _validate()
     {
-        return $this->_objectManager->get('Magento\Customer\Model\Vat')
+        return $this->_objectManager->get(\Magento\Customer\Model\Vat::class)
             ->checkVatNumber(
                 $this->getRequest()->getParam('country'),
                 $this->getRequest()->getParam('vat')

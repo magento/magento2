@@ -22,7 +22,7 @@ class VideoEntryTest extends \PHPUnit_Framework_TestCase
     {
         $this->modelObject =
             $this->getMock(
-                '\Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry',
+                \Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry::class,
                 ['getData', 'setData'],
                 [],
                 '',

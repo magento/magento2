@@ -24,9 +24,9 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->_store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
-        $this->_storeManagerInterface = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerInterface = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->_storeManagerInterface->expects(
             $this->any()
@@ -45,10 +45,10 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\Catalog\Model\ResourceModel\Product\Flat(
-            $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false),
+            $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false),
             $this->_storeManagerInterface,
-            $this->getMock('Magento\Catalog\Model\Config', [], [], '', false),
-            $this->getMock('Magento\Catalog\Model\Product\Attribute\DefaultAttributes')
+            $this->getMock(\Magento\Catalog\Model\Config::class, [], [], '', false),
+            $this->getMock(\Magento\Catalog\Model\Product\Attribute\DefaultAttributes::class)
         );
     }
 

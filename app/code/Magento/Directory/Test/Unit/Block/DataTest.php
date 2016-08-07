@@ -64,19 +64,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareContext();
 
-        $this->helperData = $this->getMockBuilder('Magento\Directory\Helper\Data')
+        $this->helperData = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->jsonEncoder = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+        $this->jsonEncoder = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->getMockForAbstractClass();
 
-        $this->cacheTypeConfig = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Config')
+        $this->cacheTypeConfig = $this->getMockBuilder(\Magento\Framework\App\Cache\Type\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->regionCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory'
+            \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,24 +95,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareContext()
     {
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->layout = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->getMockForAbstractClass();
 
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -131,12 +131,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareCountryCollection()
     {
-        $this->countryCollection = $this->getMockBuilder('Magento\Directory\Model\ResourceModel\Country\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->countryCollection = $this->getMockBuilder(
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->countryCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\ResourceModel\Country\CollectionFactory'
+            \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods([
@@ -283,7 +283,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $id = 'country';
         $title = 'Country';
 
-        $elementHtmlSelect = $this->getMockBuilder('Magento\Framework\View\Element\Html\Select')
+        $elementHtmlSelect = $this->getMockBuilder(\Magento\Framework\View\Element\Html\Select::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setName',

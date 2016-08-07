@@ -65,7 +65,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $sourceUrl = $this->getUrl('cms/block_widget/chooser', ['uniq_id' => $uniqId]);
 
         $chooser = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
         )->setElement(
             $element
         )->setConfig(

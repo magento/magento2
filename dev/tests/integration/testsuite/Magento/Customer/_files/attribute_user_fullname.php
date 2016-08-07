@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 $model->loadByCode('customer', 'prefix')->setIsVisible('1');
 $model->save();
 

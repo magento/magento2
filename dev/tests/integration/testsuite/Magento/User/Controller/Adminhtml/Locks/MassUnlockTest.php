@@ -18,7 +18,7 @@ class MassUnlockTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $userIds = [];
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $model \Magento\User\Model\User */
-        $model = $objectManager->create('Magento\User\Model\User');
+        $model = $objectManager->create(\Magento\User\Model\User::class);
         $userIds[] = $model->loadByUsername('adminUser1')->getId();
         $userIds[] = $model->loadByUsername('adminUser2')->getId();
 

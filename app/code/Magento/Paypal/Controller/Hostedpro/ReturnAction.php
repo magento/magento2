@@ -15,7 +15,7 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $session = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
         //TODO: some actions with order
         if ($session->getLastRealOrderId()) {
             $this->_redirect('checkout/onepage/success');

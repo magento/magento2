@@ -23,7 +23,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Backend\Model\Search\Customer $customerSearch */
-        $customerSearch = $objectManager->create('Magento\Backend\Model\Search\Customer');
+        $customerSearch = $objectManager->create(\Magento\Backend\Model\Search\Customer::class);
         $customerSearch->setQuery($query);
         $customerSearch->setLimit($limit);
         $customerSearch->setStart($start);

@@ -12,7 +12,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Model\Context
-     */ 
+     */
     private $context;
 
     /**
@@ -32,12 +32,12 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\AbstractResource
-     */ 
+     */
     private $resource;
 
     /**
      * @var \Magento\Framework\Data\Collection\AbstractDb
-     */ 
+     */
     private $resourceCollection;
 
     /**
@@ -53,35 +53,35 @@ class StockTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         /** @var  PHPUnit_Framework_MockObject_MockObject */
-        $this->eventDispatcher = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
         
-        $this->context = $this->getMockBuilder('\Magento\Framework\Model\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
         
-        $this->registry = $this->getMockBuilder('\Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->extensionFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+        $this->extensionFactory = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->customAttributeFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+        $this->customAttributeFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->resource = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\AbstractResource')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIdFieldName'])
             ->getMockForAbstractClass();
         
-        $this->resourceCollection = $this->getMockBuilder('\Magento\Framework\Data\Collection\AbstractDb')
+        $this->resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -92,7 +92,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             $this->customAttributeFactory,
             $this->resource,
             $this->resourceCollection
-        ); 
+        );
     }
 
     /**
@@ -104,11 +104,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
      * @dataProvider eventsDataProvider
      */
     public function testDispatchEvents($eventName, $methodName)
-    { 
+    {
         $isCalledWithRightPrefix = 0;
         $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
-            $this->callback(function($arg) use (&$isCalledWithRightPrefix, $eventName) {
-                $isCalledWithRightPrefix |= ($arg === $eventName); 
+            $this->callback(function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
+                $isCalledWithRightPrefix |= ($arg === $eventName);
                 return true;
             }),
             $this->anything()
@@ -116,8 +116,8 @@ class StockTest extends \PHPUnit_Framework_TestCase
             
         $this->stockModel->$methodName();
         $this->assertEquals(
-            1, 
-            (int) $isCalledWithRightPrefix, 
+            1,
+            (int) $isCalledWithRightPrefix,
             sprintf("Event %s doesn't dispatched", $eventName)
         );
     }
@@ -127,6 +127,6 @@ class StockTest extends \PHPUnit_Framework_TestCase
         return [
             ['cataloginventory_stock_save_before', 'beforeSave'],
             ['cataloginventory_stock_save_after', 'afterSave'],
-        ];    
+        ];
     }
 }

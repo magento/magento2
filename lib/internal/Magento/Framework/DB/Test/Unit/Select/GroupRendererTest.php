@@ -36,10 +36,16 @@ class GroupRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteMock = $this->getMock('\Magento\Framework\DB\Platform\Quote', ['quoteIdentifier'], [], '', false);
-        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', ['getPart'], [], '', false);
+        $this->quoteMock = $this->getMock(
+            \Magento\Framework\DB\Platform\Quote::class,
+            ['quoteIdentifier'],
+            [],
+            '',
+            false
+        );
+        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['getPart'], [], '', false);
         $this->model = $objectManager->getObject(
-            '\Magento\Framework\DB\Select\GroupRenderer',
+            \Magento\Framework\DB\Select\GroupRenderer::class,
             ['quote' => $this->quoteMock]
         );
     }

@@ -19,7 +19,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Status', 'Magento\Sales\Model\ResourceModel\Order\Status');
+        $this->_init(\Magento\Sales\Model\Order\Status::class, \Magento\Sales\Model\ResourceModel\Order\Status::class);
     }
 
     /**

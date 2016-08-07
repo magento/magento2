@@ -25,7 +25,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
             $invoice->cancel();
             $invoice->getOrder()->setIsInProcess(true);
             $this->_objectManager->create(
-                'Magento\Framework\DB\Transaction'
+                \Magento\Framework\DB\Transaction::class
             )->addObject(
                 $invoice
             )->addObject(

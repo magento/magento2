@@ -30,6 +30,6 @@ class ResponseFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Magento\Framework\App\ResponseInterface', $arguments);
+        return $this->_objectManager->create(\Magento\Framework\App\ResponseInterface::class, $arguments);
     }
 }

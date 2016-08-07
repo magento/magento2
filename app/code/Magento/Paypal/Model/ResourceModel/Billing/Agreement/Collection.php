@@ -67,7 +67,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\Billing\Agreement', 'Magento\Paypal\Model\ResourceModel\Billing\Agreement');
+        $this->_init(
+            \Magento\Paypal\Model\Billing\Agreement::class,
+            \Magento\Paypal\Model\ResourceModel\Billing\Agreement::class
+        );
     }
 
     /**

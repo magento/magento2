@@ -20,7 +20,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->postcodesConfigMock = $this->getMock(
-            '\Magento\Directory\Model\Country\Postcode\Config',
+            \Magento\Directory\Model\Country\Postcode\Config::class,
             [],
             [],
             '',

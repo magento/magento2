@@ -58,7 +58,7 @@ class LinksList
             $this->dataObjectHelper->populateWithArray(
                 $productLink,
                 $selection->getData(),
-                '\Magento\Bundle\Api\Data\LinkInterface'
+                \Magento\Bundle\Api\Data\LinkInterface::class
             );
             $productLink->setIsDefault($selection->getIsDefault())
                 ->setId($selection->getSelectionId())

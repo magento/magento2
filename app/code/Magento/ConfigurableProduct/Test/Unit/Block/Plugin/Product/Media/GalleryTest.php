@@ -34,20 +34,20 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->galleryHandler = $this->getMockBuilder('\Magento\Catalog\Model\Product\Gallery\ReadHandler')
+        $this->galleryHandler = $this->getMockBuilder(\Magento\Catalog\Model\Product\Gallery\ReadHandler::class)
             ->disableOriginalConstructor()
             ->setMethods(['execute'])
             ->getMock();
 
-        $this->jsonEncoder = $this->getMock('\Magento\Framework\Json\EncoderInterface');
-        $this->jsonDecoder = $this->getMock('\Magento\Framework\Json\DecoderInterface');
+        $this->jsonEncoder = $this->getMock(\Magento\Framework\Json\EncoderInterface::class);
+        $this->jsonDecoder = $this->getMock(\Magento\Framework\Json\DecoderInterface::class);
 
-        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getTypeId', 'getTypeInstance'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $variationProduct = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $variationProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['setMediaGalleryEntries', 'getSku', 'getMediaGalleryImages', 'getImage', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +62,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 
         $this->galleryHandler->expects($this->once())->method('execute')->with($variationProduct);
 
-        $configurableType = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable')
+        $configurableType = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUsedProducts', 'getConfigurableAttributesAsArray'])
             ->getMock();
@@ -75,7 +75,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 
         $this->plugin = $helper->getObject(
-            '\Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery',
+            \Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery::class,
             [
                 'productGalleryReadHandler' => $this->galleryHandler,
                 'jsonEncoder' => $this->jsonEncoder,
@@ -101,7 +101,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoder->expects($this->any())->method('encode')->with($expected)
             ->willReturn(json_encode($expected));
 
-        $blockMock = $this->getMockBuilder('\Magento\ProductVideo\Block\Product\View\Gallery')
+        $blockMock = $this->getMockBuilder(\Magento\ProductVideo\Block\Product\View\Gallery::class)
             ->disableOriginalConstructor()
             ->getMock();
 
