@@ -55,7 +55,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->clearTemporaryIndexTable();
             $this->_prepareIndex();
             $this->_prepareRelationIndex();
-            $this->_removeNotVisibleEntityFromIndex();
+            $this->_prepareVisibilityIndex();
             $this->syncData();
             $this->commit();
         } catch (\Exception $e) {
@@ -94,7 +94,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
-        $this->_removeNotVisibleEntityFromIndex();
+        $this->_prepareVisibilityIndex();
 
         $connection->beginTransaction();
         try {
@@ -130,7 +130,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
             $this->_prepareIndex(null, $attributeId);
             $this->_prepareRelationIndex();
-            $this->_removeNotVisibleEntityFromIndex();
+            $this->_prepareVisibilityIndex();
 
             $this->_synchronizeAttributeIndexData($attributeId);
         }
@@ -146,6 +146,18 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @return $this
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);
+
+    /**
+     * Prepare product visibility attribute value index
+     *
+     * @param array $entityIds      the entity ids limitation
+     */
+    protected function _prepareVisibilityIndex($entityIds = null)
+    {
+        $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'visibility');
+        $this->_prepareIndex($entityIds, $attribute->getAttributeId());
+        $this->_removeNotVisibleEntityFromIndex();
+    }
 
     /**
      * Remove Not Visible products from temporary data index
