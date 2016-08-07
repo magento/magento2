@@ -11,9 +11,22 @@ use Magento\Framework\App\ObjectManager;
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var \Magento\Framework\Registry
      */
-    private $conditionsHelper;
+    protected $coreRegistry;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $registry
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $registry
+    ) {
+        parent::__construct($context);
+
+        $this->coreRegistry = $registry;
+    }
 
     /**
      * Ajax responder for loading plugin options form
@@ -29,16 +42,25 @@ class LoadOptions extends \Magento\Backend\App\Action
                     ->jsonDecode($paramsJson);
                 if (is_array($request)) {
                     $optionsBlock = $this->_view->getLayout()->getBlock('wysiwyg_widget.options');
+                    $widgetInstance = null;
+
                     if (isset($request['widget_type'])) {
+                        $widgetInstance = $this->_objectManager->create($request['widget_type']);
                         $optionsBlock->setWidgetType($request['widget_type']);
                     }
+
                     if (isset($request['values'])) {
                         $request['values'] = array_map('htmlspecialchars_decode', $request['values']);
-                        if (isset($request['values']['conditions_encoded'])) {
-                            $request['values']['conditions'] =
-                                $this->getConditionsHelper()->decode($request['values']['conditions_encoded']);
+
+                        if ($widgetInstance) {
+                            $widgetInstance->setWidgetParameters($request['values']);
                         }
+
                         $optionsBlock->setWidgetValues($request['values']);
+                    }
+
+                    if ($widgetInstance) {
+                        $this->coreRegistry->register('current_widget_instance', $widgetInstance, true);
                     }
                 }
                 $this->_view->renderLayout();
@@ -49,18 +71,5 @@ class LoadOptions extends \Magento\Backend\App\Action
                 $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         }
-    }
-
-    /**
-     * @return \Magento\Widget\Helper\Conditions
-     * @deprecated
-     */
-    private function getConditionsHelper()
-    {
-        if (!$this->conditionsHelper) {
-            $this->conditionsHelper = ObjectManager::getInstance()->get(\Magento\Widget\Helper\Conditions::class);
-        }
-
-        return $this->conditionsHelper;
     }
 }
