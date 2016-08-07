@@ -151,12 +151,15 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * Prepare product visibility attribute value index
      *
      * @param array $entityIds      the entity ids limitation
+     * @return $this
      */
     protected function _prepareVisibilityIndex($entityIds = null)
     {
         $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'visibility');
         $this->_prepareIndex($entityIds, $attribute->getAttributeId());
         $this->_removeNotVisibleEntityFromIndex();
+
+        return $this;
     }
 
     /**
