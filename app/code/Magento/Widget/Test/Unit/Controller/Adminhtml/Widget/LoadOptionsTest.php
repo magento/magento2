@@ -95,17 +95,12 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
             LoadOptions::class,
             ['context' => $this->contextMock]
         );
-        $this->objectManagerHelper->setBackwardCompatibleProperty(
-            $this->loadOptions,
-            'conditionsHelper',
-            $this->conditionsHelperMock
-        );
     }
 
     /**
      * @return void
      */
-    public function dtestExecuteWithException()
+    public function testExecuteWithException()
     {
         $jsonResult = '{"error":true,"message":"Some error"}';
         $errorMessage = 'Some error';
@@ -140,26 +135,17 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $widgetType = 'Magento\SomeWidget';
-        $conditionsEncoded = 'a:3:{s:5:"value";i:1;s:8:"operator";s:2:"==";s:9:"attribute";s:2:"id";}';
-        $conditionsDecoded = [
-            'value' => 1,
-            'operator' => '==',
-            'attribute' => 'id',
-        ];
         $widgetJsonParams = '{"widget_type":"Magento\\Widget","values":{"title":"&quot;Test&quot;", "":}}';
         $widgetArrayParams = [
             'widget_type' => $widgetType,
             'values' => [
-                'title' => '&quot;Test&quot;',
-                'conditions_encoded' => $conditionsEncoded,
+                'title' => '&quot;Test&quot;'
             ],
         ];
         $resultWidgetArrayParams = [
             'widget_type' => $widgetType,
             'values' => [
-                'title' => '"Test"',
-                'conditions_encoded' => $conditionsEncoded,
-                'conditions' => $conditionsDecoded,
+                'title' => '"Test"'
             ],
         ];
 
@@ -203,10 +189,6 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('wysiwyg_widget.options')
             ->willReturn($blockMock);
 
-        $this->conditionsHelperMock->expects($this->once())
-            ->method('decode')
-            ->with($conditionsEncoded)
-            ->willReturn($conditionsDecoded);
         $this->viewMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
