@@ -3,9 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Reports\Test\TestCase;
-
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
@@ -17,71 +15,62 @@ use Magento\Review\Test\Fixture\Review;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-
 /**
  * Preconditions:
- * 1. Create customer
- * 2. Create simple product
- * 3. Open Product created in preconditions
- * 4. Click "Be the first to review this product "
- * 5. Fill data according to DataSet
- * 6. Click Submit review
+ * 1. Create customer.
+ * 2. Create simple product.
  *
  * Steps:
- * 1. Open Reports -> Review : By Customers
- * 2. Assert Reviews qty
- * 3. Click Show Reviews
- * 4. Perform appropriate assertions.
+ * 1. Open Product created in preconditions.
+ * 2. Click "Be the first to review this product".
+ * 3. Fill data according to DataSet.
+ * 4. Click Submit review.
+ * 5. Perform appropriate assertions.
  *
  * @group Reports_(MX)
  * @ZephyrId MAGETWO-27555
+ * @ZephyrId MAGETWO-27223
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerReviewReportEntityTest extends Injectable
+class ReviewReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
     /* end tags */
-
     /**
-     * Customer frontend logout page
+     * Customer frontend logout page.
      *
      * @var CustomerAccountLogout
      */
     protected $customerAccountLogout;
-
     /**
-     * Product reviews report page
+     * Product reviews report page.
      *
      * @var ProductReportReview
      */
     protected $productReportReview;
-
     /**
-     * Frontend product view page
+     * Frontend product view page.
      *
      * @var CatalogProductView
      */
     protected $pageCatalogProductView;
-
     /**
-     * Cms Index page
+     * Cms Index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
-
     /**
-     * Catalog Category page
+     * Catalog Category page.
      *
      * @var CatalogCategoryView
      */
     protected $catalogCategoryView;
-
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @return array
@@ -90,12 +79,10 @@ class CustomerReviewReportEntityTest extends Injectable
     {
         $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'johndoe_unique']);
         $customer->persist();
-
         return ['customer' => $customer];
     }
-
     /**
-     * Preparing pages for test
+     * Preparing pages for test.
      *
      * @param ProductReportReview $productReportReview
      * @param CatalogProductView $pageCatalogProductView
@@ -117,46 +104,57 @@ class CustomerReviewReportEntityTest extends Injectable
         $this->catalogCategoryView = $catalogCategoryView;
         $this->customerAccountLogout = $customerAccountLogout;
     }
-
     /**
-     * Test Creation for CustomerReviewReportEntity
+     * Test Creation for ReviewReportEntity.
      *
      * @param Review $review
      * @param Customer $customer
-     * @param $customerLogin
-     * @param CatalogProductSimple $product
      * @param BrowserInterface $browser
+     * @param CatalogProductSimple $product [optional]
+     * @param bool $isCustomerLoggedIn [optional]
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
     public function test(
         Review $review,
         Customer $customer,
-        CatalogProductSimple $product,
         BrowserInterface $browser,
-        $customerLogin
+        CatalogProductSimple $product = null,
+        $isCustomerLoggedIn = false
     ) {
         // Preconditions
-        $product->persist();
         $this->cmsIndex->open();
-        if ($customerLogin == 'Yes') {
-            $this->objectManager->create(
-                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
-                ['customer' => $customer]
-            )->run();
+        if ($isCustomerLoggedIn) {
+            $this->loginCustomer($customer);
         }
         // Steps
-        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $this->pageCatalogProductView->getReviewSummary()->getAddReviewLink()->click();
-        $this->pageCatalogProductView->getReviewFormBlock()->fill($review);
-        $this->pageCatalogProductView->getReviewFormBlock()->submit();
-
+        if ($review->getType() === "Administrator") {
+            $review->persist();
+            $product = $review->getDataFieldConfig('entity_id')['source']->getEntity();
+        } else {
+            $product->persist();
+            $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+            $this->pageCatalogProductView->getReviewSummary()->getAddReviewLink()->click();
+            $this->pageCatalogProductView->getReviewFormBlock()->fill($review);
+            $this->pageCatalogProductView->getReviewFormBlock()->submit();
+        }
+        
         return ['product' => $product];
     }
-
     /**
-     * Logout customer from frontend account
+     * Login customer on frontend.
+     *
+     * @param Customer $customer
+     * @return void
+     */
+    private function loginCustomer(Customer $customer)
+    {
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $customer]
+        )->run();
+    }
+    /**
+     * Logout customer from frontend account.
      *
      * return void
      */
