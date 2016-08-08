@@ -224,7 +224,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @param string $rateType
      * @param float $expected
      * @dataProvider collectRatesDataProvider
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testCollectRatesRateAmountOriginBased($amount, $rateType, $expected)
     {
@@ -357,7 +357,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testGetTrackingErrorResponse()
     {
@@ -391,7 +391,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testGetTracking()
     {
@@ -458,7 +458,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testGetTrackingWithEvents()
     {
