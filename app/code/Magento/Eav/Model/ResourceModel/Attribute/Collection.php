@@ -218,10 +218,8 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
             $this->applyScopeValues();
         }
 
-
         return $this;
     }
-
 
     /**
      * Apply scope values from website tables if implemented
