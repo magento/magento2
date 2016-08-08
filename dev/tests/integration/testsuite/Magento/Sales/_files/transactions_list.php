@@ -6,7 +6,7 @@
 
 use Magento\Sales\Model\Order;
 
-require 'transactions_list_rollback.php'; 
+require 'transactions_list_rollback.php';
 require 'transactions_detailed.php';
 
 /** @var Order $order */
