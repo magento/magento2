@@ -24,7 +24,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->tokensBlock = Bootstrap::getObjectManager()
-            ->create('Magento\Integration\Block\Adminhtml\Integration\Tokens');
+            ->create(\Magento\Integration\Block\Adminhtml\Integration\Tokens::class);
     }
 
     public function testGetFormFields()

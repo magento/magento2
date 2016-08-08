@@ -45,18 +45,18 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<col width="200" />'+
             '<thead>'+
                 '<tr>'+
-                    '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('%1', $container['label'])) ?></label></th>'+
-                    '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Container')) ?> <span class="required">*</span></label></th>'+
-                    '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Template')) ?></label></th>'+
+                    '<th><label><?php echo $block->escapeJs(__('%1', $container['label'])) ?></label></th>'+
+                    '<th><label><?php echo $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                    '<th><label><?php echo $block->escapeJs(__('Template')) ?></label></th>'+
                 '</tr>'+
             '</thead>'+
             '<tbody>'+
                 '<tr>'+
                     '<td>'+
                         '<input disabled="disabled" type="radio" class="radio for_all" id="all_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
-                        '<label for="all_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('All')) ?></label><br />'+
+                        '<label for="all_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php echo $block->escapeJs(__('All')) ?></label><br />'+
                         '<input disabled="disabled" type="radio" class="radio for_specific" id="specific_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
-                        '<label for="specific_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Specific %1', $container['label'])) ?></label>'+
+                        '<label for="specific_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php echo $block->escapeJs(__('Specific %1', $container['label'])) ?></label>'+
                     '</td>'+
                     '<td>'+
                         '<div class="block_reference_container">'+
@@ -76,11 +76,11 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<input disabled="disabled" type="hidden" class="product_type_id" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][product_type_id]" value="<?php /* @escapeNotVerified */ echo $container['product_type_id'] ?>" />'+
             '<p>' +
                 '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][entities]" value="<%- data.<?php /* @escapeNotVerified */ echo $container['name'] ?>_entities %>" readonly="readonly" />&nbsp;' +
-                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php /* @escapeNotVerified */ echo $container['code'] ?>\', \'<?php /* @escapeNotVerified */ echo $container['name'] ?>_ids_<%- data.id %>\')"  title="<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Open Chooser')) ?>">' +
-                    '<img src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Open Chooser')); ?>" />' +
+                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php /* @escapeNotVerified */ echo $container['code'] ?>\', \'<?php /* @escapeNotVerified */ echo $container['name'] ?>_ids_<%- data.id %>\')"  title="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Open Chooser')) ?>">' +
+                    '<img src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
-                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php /* @escapeNotVerified */ echo $container['name'] ?>_ids_<%- data.id %>\')" title="<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Apply')); ?>">' +
-                    '<img src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Apply')); ?>" />' +
+                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php /* @escapeNotVerified */ echo $container['name'] ?>_ids_<%- data.id %>\')" title="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Apply')); ?>">' +
+                    '<img src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Apply')); ?>" />' +
                 '</a>' +
             '</p>'+
             '<div class="chooser"></div>'+
@@ -96,8 +96,8 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<col width="200" />'+
         '<thead>'+
             '<tr>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Container')) ?> <span class="required">*</span></label></th>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Template')) ?></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Template')) ?></label></th>'+
                 '<th>&nbsp;</th>'+
             '</tr>'+
         '</thead>'+
@@ -126,9 +126,9 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<col width="200" />'+
         '<thead>'+
             '<tr>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Page')) ?> <span class="required">*</span></label></th>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Container')) ?> <span class="required">*</span></label></th>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Template')) ?></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Page')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Template')) ?></label></th>'+
             '</tr>'+
         '</thead>'+
         '<tbody>'+
@@ -157,9 +157,9 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<col width="200" />'+
         '<thead>'+
             '<tr>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Page')) ?> <span class="required">*</span></label></th>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Container')) ?> <span class="required">*</span></label></th>'+
-                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Template')) ?></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Page')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Template')) ?></label></th>'+
             '</tr>'+
         '</thead>'+
         '<tbody>'+

@@ -28,7 +28,8 @@
         ->appendFile($this->basePath() . '/pub/magento/setup/app.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/main.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/landing.js')
-        ->appendFile($this->basePath() . '/pub/magento/setup/component-grid.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/module-grid.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/extension-grid.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/readiness-check.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/add-database.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/web-configuration.js')
@@ -46,7 +47,8 @@
         ->appendFile($this->basePath() . '/pub/magento/setup/auth-dialog.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/system-config.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/marketplace-credentials.js')
-        ->appendFile($this->basePath() . '/pub/magento/setup/install-extension-grid.js');
+        ->appendFile($this->basePath() . '/pub/magento/setup/install-extension-grid.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/update-extension-grid.js');
     ?>
     <link
         rel="icon"

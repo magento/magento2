@@ -43,19 +43,19 @@ class PageTest extends \PHPUnit_Framework_TestCase
             return 'URL Rewrite Result';
         };
 
-        $this->urlPersistMock = $this->getMockBuilder('Magento\UrlRewrite\Model\UrlPersistInterface')
+        $this->urlPersistMock = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlPersistInterface::class)
             ->getMockForAbstractClass();
 
-        $this->cmsPageMock = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $this->cmsPageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cmsPageResourceMock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->cmsPageResourceMock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->pageObject = $objectManager->getObject(
-            'Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page',
+            \Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page::class,
             [
                 'urlPersist' => $this->urlPersistMock
             ]

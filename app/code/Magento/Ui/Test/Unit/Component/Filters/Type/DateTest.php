@@ -39,7 +39,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     private $filterModifierMock;
 
-
     /**
      * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -69,7 +68,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['applyFilterModifier'])
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
     }
 
@@ -121,7 +120,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
             ->willReturn($filterData);
-        
+
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
@@ -193,12 +192,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Gets Filter mock
-     * 
+     *
      * @param string $name
      * @param string $expectedType
      * @param string $expectedDate
      * @param int $i
-     * 
+     *
      * @return Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getFilterMock($name, $expectedType, $expectedDate, &$i)
@@ -215,7 +214,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with($expectedDate)
             ->willReturnSelf();
-        
+
         $filterMock = $this->getMock(Filter::class);
         $this->filterBuilderMock->expects(static::at($i++))
             ->method('create')

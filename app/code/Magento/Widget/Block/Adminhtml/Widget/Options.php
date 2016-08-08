@@ -100,7 +100,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
-        $block = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence');
+        $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         $this->setChild('form_after', $block);
 
         return $fieldset;

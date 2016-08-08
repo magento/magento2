@@ -12,17 +12,17 @@ use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Delete CatalogPriceRuleEntity
+ * Test Creation for Delete CatalogPriceRuleEntity.
  *
  * Test Flow:
  * Preconditions:
  * 1. Catalog Price Rule is created.
  * Steps:
  * 1. Log in as default admin user.
- * 2. Go to Marketing > Catalog Price Rules
- * 3. Select required catalog price rule from preconditions
- * 4. Click on the "Delete" button
- * 5. Perform all assertions
+ * 2. Go to Marketing > Catalog Price Rules.
+ * 3. Select required catalog price rule from preconditions.
+ * 4. Click on the "Delete" button.
+ * 5. Perform all assertions.
  *
  * @group Catalog_Price_Rules_(MX)
  * @ZephyrId MAGETWO-25211
@@ -35,21 +35,21 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Page CatalogRuleIndex
+     * Page CatalogRuleIndex.
      *
      * @var CatalogRuleIndex
      */
     protected $catalogRuleIndex;
 
     /**
-     * Page CatalogRuleNew
+     * Page CatalogRuleNew.
      *
      * @var CatalogRuleNew
      */
     protected $catalogRuleNew;
-
+    
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogRuleIndex $catalogRuleIndex
      * @param CatalogRuleNew $catalogRuleNew
@@ -64,12 +64,13 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
     }
 
     /**
-     * Delete Catalog Price Rule test
+     * Delete Catalog Price Rule test.
      *
      * @param CatalogRule $catalogPriceRule
-     * @return void
+     * @param string $product
+     * @return array
      */
-    public function testDeleteCatalogPriceRule(CatalogRule $catalogPriceRule)
+    public function test(CatalogRule $catalogPriceRule, $product)
     {
         // Precondition
         $catalogPriceRule->persist();
@@ -83,5 +84,13 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getFormPageActions()->delete();
         $this->catalogRuleNew->getModalBlock()->acceptAlert();
+        $products = $this->objectManager->create(
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            ['products' => $product]
+        )->run();
+
+        return [
+            'products' => $products['products']
+        ];
     }
 }

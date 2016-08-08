@@ -28,7 +28,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
     /**
      * @var string
      */
-    protected $configPreference = 'Magento\Framework\ObjectManager\Factory\Dynamic\Developer';
+    protected $configPreference = \Magento\Framework\ObjectManager\Factory\Dynamic\Developer::class;
 
     /**
      * @var FactoryInterface

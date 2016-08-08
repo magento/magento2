@@ -12,7 +12,7 @@
                 <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Default Store View</field>
-            <field name="code" xsi:type="string">base</field>
+            <field name="code" xsi:type="string">default</field>
             <field name="is_active" xsi:type="string">Enabled</field>
             <field name="store_id" xsi:type="string">1</field>
         </dataset>

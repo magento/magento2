@@ -19,7 +19,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     public function testApplyAll()
     {
         $ruleProcessorMock = $this->getMock(
-            'Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             ['markIndexerAsInvalid'],
             [],
             '',
@@ -36,7 +36,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     public function testExceptionApplyAll()
     {
         $ruleProcessorMock = $this->getMock(
-            'Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             ['markIndexerAsInvalid'],
             [],
             '',

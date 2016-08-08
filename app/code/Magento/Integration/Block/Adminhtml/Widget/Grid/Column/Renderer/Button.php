@@ -85,7 +85,11 @@ class Button extends AbstractRenderer
             ) : $this->getColumn()->{$rowMethodName}();
 
             if ($attributeValue) {
-                $attributes[] = sprintf('%s="%s"', $attributeName, $this->escapeHtml($attributeValue));
+                $attributes[] = sprintf(
+                    '%s="%s"',
+                    $attributeName,
+                    $this->escapeHtmlAttr($attributeValue, false)
+                );
             }
         }
         return $attributes;

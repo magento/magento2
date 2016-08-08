@@ -269,7 +269,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
             $vatIdElement->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat'
+                    \Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat::class
                 )->setJsVariablePrefix(
                     $this->getJsVariablePrefix()
                 )

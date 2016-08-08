@@ -37,7 +37,7 @@ class AddAttribute extends FormSections
     protected function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->addAttributeBlock, Locator::SELECTOR_XPATH)]
         );
     }

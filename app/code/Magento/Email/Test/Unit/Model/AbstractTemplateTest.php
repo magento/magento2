@@ -73,20 +73,20 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
+        $this->design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->appEmulation = $this->getMockBuilder('Magento\Store\Model\App\Emulation')
+        $this->appEmulation = $this->getMockBuilder(\Magento\Store\Model\App\Emulation::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getFrontendName', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,23 +100,23 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->store));
 
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
+        $this->emailConfig = $this->getMockBuilder(\Magento\Email\Model\Template\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
+        $this->filterFactory = $this->getMockBuilder(\Magento\Email\Model\Template\FilterFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
+        $this->templateFactory = $this->getMockBuilder(\Magento\Email\Model\TemplateFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -131,9 +131,9 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         return $this->getMockForAbstractClass(
-            'Magento\Email\Model\AbstractTemplate',
+            \Magento\Email\Model\AbstractTemplate::class,
             $helper->getConstructArguments(
-                'Magento\Email\Model\AbstractTemplate',
+                \Magento\Email\Model\AbstractTemplate::class,
                 [
                     'design' => $this->design,
                     'registry' => $this->registry,
@@ -165,7 +165,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
-        $filterTemplate = $this->getMockBuilder('Magento\Email\Model\Template\Filter')
+        $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setMethods([
                 'setUseSessionInUrl',
                 'setPlainTemplateMode',
@@ -347,18 +347,18 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $designMock = $this->getMock('Magento\Framework\View\DesignInterface');
+        $designMock = $this->getMock(\Magento\Framework\View\DesignInterface::class);
         $designMock->expects($this->any())->method('getArea')->willReturn('test_area');
 
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->any())->method('getId')->willReturn(2);
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $model = $this->getMockForAbstractClass(
-            'Magento\Email\Model\AbstractTemplate',
+            \Magento\Email\Model\AbstractTemplate::class,
             $helper->getConstructArguments(
-                'Magento\Email\Model\AbstractTemplate',
+                \Magento\Email\Model\AbstractTemplate::class,
                 [
                     'design' => $designMock,
                     'storeManager' => $storeManagerMock
