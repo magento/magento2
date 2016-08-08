@@ -213,7 +213,7 @@ define([
                 modal.closeModal();
             }
         },
-        showSpecificStep: function () {
+        showSpecificStep: function (data, event) {
             var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
                 stepName = this.wizard.move(index);
 

@@ -104,7 +104,7 @@ class EmailSender extends Sender implements SenderInterface
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
-                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
             ];
 
             $this->eventManager->dispatch(

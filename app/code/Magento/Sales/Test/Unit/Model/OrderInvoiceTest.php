@@ -7,21 +7,21 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
+use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order;
-use Psr\Log\LoggerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\OrderInvoice;
-use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
-use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class OrderInvoiceTest
@@ -358,7 +358,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->invoiceMock, $this->orderMock)
             ->willReturn([]);
-        $e = new \Exception;
+        $e = new \Exception();
 
         $this->paymentAdapterMock->expects($this->once())
             ->method('pay')
@@ -387,7 +387,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'TestWithNotifyTrue' => [1, true, [1 => 2], true, true],
-            'TestWithNotifyFalse' => [1, true, [1 => 2], false, true]
+            'TestWithNotifyFalse' => [1, true, [1 => 2], false, true],
         ];
     }
 }

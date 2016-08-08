@@ -62,7 +62,8 @@ angular.module('module-grid', ['ngStorage'])
             $scope.enableDisable = function(type, component) {
                 $localStorage.packages = [
                     {
-                        name: component.moduleName
+                        name: component.moduleName,
+                        isComposerPackage: component.name !== 'unknown',
                     }
                 ];
                 titleService.setTitle(type, component.moduleName ? component.moduleName : component.name);
