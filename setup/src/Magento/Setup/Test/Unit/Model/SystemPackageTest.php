@@ -53,49 +53,57 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             'id' => '1.2.0',
             'name' => 'Version 1.2.0 EE (latest)',
             'package' => 'magento/product-enterprise-edition',
-            'stable' => true
+            'stable' => true,
+            'current' => false,
         ],
         [
             'id' => '1.2.0',
             'name' => 'Version 1.2.0 CE (latest)',
             'package' => 'magento/product-community-edition',
-            'stable' => true
+            'stable' => true,
+            'current' => false,
         ],
         [
             'id' => '1.1.0',
             'name' => 'Version 1.1.0 EE',
             'package' => 'magento/product-enterprise-edition',
-            'stable' => true
+            'stable' => true,
+            'current' => false,
         ],
         [
             'id' => '1.1.0',
             'name' => 'Version 1.1.0 CE',
             'package' => 'magento/product-community-edition',
-            'stable' => true
+            'stable' => true,
+            'current' => false,
         ],
         [
             'id' => '1.1.0-RC1',
             'name' => 'Version 1.1.0-RC1 EE (unstable version)',
             'package' => 'magento/product-enterprise-edition',
-            'stable' => false
+            'stable' => false,
+            'current' => false,
         ],
         [
             'id' => '1.1.0-RC1',
             'name' => 'Version 1.1.0-RC1 CE (unstable version)',
             'package' => 'magento/product-community-edition',
-            'stable' => false
+            'stable' => false,
+            'current' => false,
         ],
         [
             'id' => '1.0.0',
-            'name' => 'Version 1.0.0 EE (current)',
+            'name' => 'Version 1.0.0 EE',
             'package' => 'magento/product-enterprise-edition',
-            'stable' => true
+            'stable' => true,
+            'current' => true,
         ],
         [
             'id' => '1.0.0',
-            'name' => 'Version 1.0.0 CE (current)',
+            'name' => 'Version 1.0.0 CE',
             'package' => 'magento/product-community-edition',
-            'stable' => true
+            'stable' => true,
+            'current' => true,
         ],
     ];
 
@@ -183,7 +191,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
                     'names' => 'magento/product-community-edition',
                     'current_version' => '1.0.0',
                     'available_versions' => [1 => '1.2.0', 2 => '1.1.0', 3 => '1.1.0-RC1', 4 => '1.0.0'],
-                    'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1']
+                    'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
                 ]
             );
 
@@ -202,7 +210,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
                     'names' => 'magento/product-enterprise-edition',
                     'current_version' => '1.0.0',
                     'available_versions' => [1 => '1.2.0', 2 => '1.1.0', 3 => '1.1.0-RC1', 4 => '1.0.0'],
-                    'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1']
+                    'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
                 ]
             );
         $this->assertEquals($this->expectedPackages, $this->systemPackage->getPackageVersions());
@@ -325,21 +333,24 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
                     'versions' => [
                         [
                             'id' => '1.0.2',
-                            'name' => 'Version 1.0.2 EE (latest)'
+                            'name' => 'Version 1.0.2 EE (latest)',
+                            'current' => false,
                         ],
                         [
                             'id' => '1.0.1',
-                            'name' => 'Version 1.0.1 EE'
+                            'name' => 'Version 1.0.1 EE',
+                            'current' => false,
                         ],
                         [
 
                             'id' => '1.0.0',
-                            'name' => 'Version 1.0.0 EE'
-                        ]
-                    ]
-                ]
-            ]
-            ]
+                            'name' => 'Version 1.0.0 EE',
+                            'current' => false,
+                        ],
+                    ],
+                ],
+            ],
+            ],
         ];
     }
 }
