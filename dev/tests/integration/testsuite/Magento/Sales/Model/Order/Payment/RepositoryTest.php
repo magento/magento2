@@ -1,23 +1,24 @@
 <?php
-/***
+/**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Model;
+namespace Magento\Sales\Model\Order\Payment;
 
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 
 /**
- * Class PaymentTokenRepositoryTest
- * @package Magento\Vault\Model
+ * Class RepositoryTest
+ * @package Magento\Sales\Model\Order\Payment\
  * @magentoDbIsolation enabled
  */
-class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  PaymentTokenRepository */
-    private $repository;
+    /** @var Repository */
+    protected $repository;
 
     /** @var  SortOrderBuilder */
     private $sortOrderBuilder;
@@ -28,10 +29,10 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->repository = $objectManager->create(PaymentTokenRepository::class);
+        $this->repository = $objectManager->create(Repository::class);
         $this->searchCriteriaBuilder = $objectManager->create(
             \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
@@ -44,25 +45,24 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Vault/_files/payment_tokens.php
+     * @magentoDataFixture Magento/Sales/_files/order_payment_list.php
      */
     public function testGetListWithMultipleFiltersAndSorting()
     {
         $filter1 = $this->filterBuilder
-            ->setField('type')
-            ->setValue('simple')
+            ->setField('cc_ss_start_year')
+            ->setValue('2014')
             ->create();
         $filter2 = $this->filterBuilder
-            ->setField('is_active')
-            ->setValue(1)
+            ->setField('cc_exp_month')
+            ->setValue('09')
             ->create();
         $filter3 = $this->filterBuilder
-            ->setField('expires_at')
-            ->setConditionType('lt')
-            ->setValue('2016-11-04 10:18:15')
+            ->setField('method')
+            ->setValue('checkmo')
             ->create();
         $sortOrder = $this->sortOrderBuilder
-            ->setField('public_hash')
+            ->setField('cc_exp_month')
             ->setDirection('DESC')
             ->create();
 
@@ -70,11 +70,11 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchCriteriaBuilder->addFilters([$filter3]);
         $this->searchCriteriaBuilder->addSortOrder($sortOrder);
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        /** @var \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface $result */
+        /** @var \Magento\Sales\Api\Data\OrderPaymentSearchResultInterface $result */
         $result = $this->repository->getList($searchCriteria);
         $items = $result->getItems();
         $this->assertCount(2, $items);
-        $this->assertEquals('second', array_shift($items)->getPaymentMethodCode());
-        $this->assertEquals('first', array_shift($items)->getPaymentMethodCode());
+        $this->assertEquals('456', array_shift($items)->getCcLast4());
+        $this->assertEquals('123', array_shift($items)->getCcLast4());
     }
 }

@@ -170,10 +170,11 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->searchResults);
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($this->searchCriteriaMock, $this->collectionMock);
         $list = $this->repositoryModel->getList($this->searchCriteriaMock);
         $this->assertSame($this->searchResults, $list);
-
         $this->assertSame(
             $this->paymentTokenMock,
             $list->getItems()[0]

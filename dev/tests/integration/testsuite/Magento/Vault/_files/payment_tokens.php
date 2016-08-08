@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-include "customer.php"; 
+include "customer.php";
 
 use Magento\Customer\Model\Customer;
 use Magento\Vault\Model\PaymentToken;

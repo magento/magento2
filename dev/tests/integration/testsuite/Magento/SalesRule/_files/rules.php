@@ -3,6 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+require 'rules_rollback.php';
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
 $rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
@@ -20,7 +21,10 @@ $rule->setName(
     0
 )->setWebsiteIds(
     '1'
-)->setCustomerGroupIds(
+)
+->setUsesPerCoupon(2)
+->setIsRss(1)
+->setCustomerGroupIds(
     '0'
 )->setDiscountStep(0)
     ->save();
@@ -37,7 +41,10 @@ $rule->setName(
     1
 )->setCouponType(
     Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
-)->setUseAutoGeneration(
+)
+->setIsRss(1)
+->setUsesPerCoupon(2)
+->setUseAutoGeneration(
     0
 )->setWebsiteIds(
     '1'
@@ -56,7 +63,8 @@ $rule->setName(
     0
 )->setIsAdvanced(
     1
-)->setCouponType(
+)
+->setCouponType(
     Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC
 )->setUseAutoGeneration(
     1

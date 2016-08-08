@@ -1,23 +1,24 @@
 <?php
-/***
+/**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Model;
+namespace Magento\Sales\Model\Order;
 
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 
 /**
- * Class PaymentTokenRepositoryTest
- * @package Magento\Vault\Model
+ * Class AddressRepositoryTest
+ * @package Magento\Sales\Model\Order]
  * @magentoDbIsolation enabled
  */
-class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
+class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  PaymentTokenRepository */
-    private $repository;
+    /** @var AddressRepository */
+    protected $repository;
 
     /** @var  SortOrderBuilder */
     private $sortOrderBuilder;
@@ -28,10 +29,10 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->repository = $objectManager->create(PaymentTokenRepository::class);
+        $this->repository = $objectManager->create(AddressRepository::class);
         $this->searchCriteriaBuilder = $objectManager->create(
             \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
@@ -44,37 +45,37 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Vault/_files/payment_tokens.php
+     * @magentoDataFixture Magento/Sales/_files/address_list.php
      */
     public function testGetListWithMultipleFiltersAndSorting()
     {
         $filter1 = $this->filterBuilder
-            ->setField('type')
-            ->setValue('simple')
+            ->setField('postcode')
+            ->setConditionType('neq')
+            ->setValue('ZX0789A')
             ->create();
         $filter2 = $this->filterBuilder
-            ->setField('is_active')
-            ->setValue(1)
+            ->setField('address_type')
+            ->setValue('billing')
             ->create();
         $filter3 = $this->filterBuilder
-            ->setField('expires_at')
-            ->setConditionType('lt')
-            ->setValue('2016-11-04 10:18:15')
+            ->setField('city')
+            ->setValue('Ena4ka')
             ->create();
         $sortOrder = $this->sortOrderBuilder
-            ->setField('public_hash')
+            ->setField('region_id')
             ->setDirection('DESC')
             ->create();
 
-        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilters([$filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter1]);
+        $this->searchCriteriaBuilder->addFilters([$filter2, $filter3]);
         $this->searchCriteriaBuilder->addSortOrder($sortOrder);
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        /** @var \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface $result */
+        /** @var \Magento\Sales\Api\Data\OrderAddressSearchResultInterface $result */
         $result = $this->repository->getList($searchCriteria);
         $items = $result->getItems();
         $this->assertCount(2, $items);
-        $this->assertEquals('second', array_shift($items)->getPaymentMethodCode());
-        $this->assertEquals('first', array_shift($items)->getPaymentMethodCode());
+        $this->assertEquals('ZX0789', array_shift($items)->getPostcode());
+        $this->assertEquals('47676', array_shift($items)->getPostcode());
     }
 }
