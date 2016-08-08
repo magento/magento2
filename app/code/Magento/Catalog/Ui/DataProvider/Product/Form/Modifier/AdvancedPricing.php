@@ -199,24 +199,6 @@ class AdvancedPricing extends AbstractModifier
         }
 
         return $this->customerGroupSource->toOptionArray();
-
-        $customerGroups = [
-            [
-                'label' => __('ALL GROUPS'),
-                'value' => GroupInterface::CUST_GROUP_ALL,
-            ]
-        ];
-
-        /** @var GroupInterface[] $groups */
-        $groups = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
-        foreach ($groups->getItems() as $group) {
-            $customerGroups[] = [
-                'label' => $group->getCode(),
-                'value' => $group->getId(),
-            ];
-        }
-
-        return $customerGroups;
     }
 
     /**
