@@ -94,4 +94,21 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         }
         return $data;
     }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     */
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->markTestSkipped('MAGETWO-56530s');
+        parent::testImportReplace($fixtures, $skus, $skippedAttributes);
+    }
+
 }
