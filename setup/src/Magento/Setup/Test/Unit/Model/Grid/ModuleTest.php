@@ -7,14 +7,14 @@
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Grid\Module;
 use Magento\Setup\Model\Grid\TypeMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\PackagesData;
 
 /**
@@ -49,7 +49,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @var PackageInfo|\PHPUnit_Framework_MockObject_MockObject
      */
     private $packageInfoMock;
-    
+
     /**
      * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -71,7 +71,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @var Module
      */
     private $model;
-    
+
     /**
      * @var array
      */
@@ -83,12 +83,12 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             'magento/sample-module-one' => [
                 'name' => 'magento/sample-module-one',
                 'type' => 'magento2-module',
-                'version' => '1.0.0'
-            ]
+                'version' => '1.0.0',
+            ],
         ];
 
         $fullModuleList = [
-            'Sample_ModuleOne', 'Sample_ModuleTwo'
+            'Sample_ModuleOne', 'Sample_ModuleTwo',
         ];
 
         $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
@@ -114,7 +114,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $this->fullModuleListMock->expects(static::any())
             ->method('getNames')
             ->willReturn($fullModuleList);
-        
+
         $this->packageInfoMock = $this->getMockBuilder(PackageInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -192,7 +192,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 'vendor' => 'Magento',
                 'moduleName' => 'Sample_ModuleOne',
                 'enable' => true,
-                'requiredBy' => []
+                'requiredBy' => [],
             ],
             [
                 'name' => Module::UNKNOWN_PACKAGE_NAME,
@@ -201,8 +201,8 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 'vendor' => 'Sample',
                 'moduleName' => 'Sample_ModuleTwo',
                 'enable' => true,
-                'requiredBy' => []
-            ]
+                'requiredBy' => [],
+            ],
         ];
 
         static::assertEquals($expected, $this->model->getList());
