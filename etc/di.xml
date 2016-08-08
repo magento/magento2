@@ -15,27 +15,14 @@
     <type name="Magento\Framework\MessageQueue\Topology\Config\CompositeReader">
         <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Topology\ConfigReaderPlugin" />
     </type>
-    <type name="Magento\Framework\MessageQueue\ExchangeRepository">
-        <arguments>
-            <argument name="exchanges" xsi:type="array">
-                <item name="amqp" xsi:type="string">Magento\Framework\Amqp\Exchange</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\MessageQueue\PublisherPool">
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="async" xsi:type="array">
-                    <item name="amqp" xsi:type="array">
-                        <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
-                        <item name="connectionName" xsi:type="string">amqp</item>
-                    </item>
+                    <item name="amqp" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
                 </item>
                 <item name="sync" xsi:type="array">
-                    <item name="amqp" xsi:type="array">
-                        <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
-                        <item name="connectionName" xsi:type="string">amqp</item>
-                    </item>
+                    <item name="amqp" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
                 </item>
             </argument>
         </arguments>
