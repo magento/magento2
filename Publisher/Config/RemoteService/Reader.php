@@ -77,7 +77,7 @@ class Reader implements ReaderInterface
             try {
                 $methodsMap = $this->serviceMethodsMap->getMethodsMap($serviceInterface);
             } catch (\Exception $e) {
-                throw new \LogicException(sprintf('Service interface was expected, "%1" given', $serviceInterface));
+                throw new \LogicException(sprintf('Service interface was expected, "%s" given', $serviceInterface));
             }
             foreach ($methodsMap as $methodName => $returnType) {
                 $topic = $this->reflectionGenerator->generateTopicName($serviceInterface, $methodName);
