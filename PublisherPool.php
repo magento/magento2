@@ -17,8 +17,17 @@ class PublisherPool implements PublisherInterface
 {
     const MODE_SYNC = 'sync';
     const MODE_ASYNC = 'async';
-    const CONNECTION_NAME = 'connectionName';
+
+
+    /**
+     * @deprecated
+     */
     const TYPE = 'type';
+
+    /**
+     * @deprecated
+     */
+    const CONNECTION_NAME = 'connectionName';
 
     /**
      * Publisher objects pool.
@@ -38,6 +47,11 @@ class PublisherPool implements PublisherInterface
      * @var PublisherConfig
      */
     private $publisherConfig;
+
+    /**
+     * @var ConnectionTypeResolver
+     */
+    private $connectionTypeResolver;
 
     /**
      * Initialize dependencies.
@@ -80,18 +94,18 @@ class PublisherPool implements PublisherInterface
     {
         $asyncPublishers = isset($publishers[self::MODE_ASYNC]) ? $publishers[self::MODE_ASYNC] : [];
         $syncPublishers = isset($publishers[self::MODE_SYNC]) ? $publishers[self::MODE_SYNC] : [];
-        foreach ($asyncPublishers as $publisherConfig) {
+        foreach ($asyncPublishers as $connectionType => $publisher) {
             $this->addPublisherToPool(
                 self::MODE_ASYNC,
-                $publisherConfig[self::CONNECTION_NAME],
-                $publisherConfig[self::TYPE]
+                $connectionType,
+                $publisher
             );
         }
-        foreach ($syncPublishers as $publisherConfig) {
+        foreach ($syncPublishers as $connectionType => $publisher) {
             $this->addPublisherToPool(
                 self::MODE_SYNC,
-                $publisherConfig[self::CONNECTION_NAME],
-                $publisherConfig[self::TYPE]
+                $connectionType,
+                $publisher
             );
         }
     }
@@ -100,13 +114,13 @@ class PublisherPool implements PublisherInterface
      * Add publisher.
      *
      * @param string $type
-     * @param string $connectionName
+     * @param string $connectionType
      * @param PublisherInterface $publisher
      * @return $this
      */
-    private function addPublisherToPool($type, $connectionName, PublisherInterface $publisher)
+    private function addPublisherToPool($type, $connectionType, PublisherInterface $publisher)
     {
-        $this->publishers[$type][$connectionName] = $publisher;
+        $this->publishers[$type][$connectionType] = $publisher;
         return $this;
     }
 
@@ -121,11 +135,12 @@ class PublisherPool implements PublisherInterface
      */
     private function getPublisherForConnectionNameAndType($type, $connectionName)
     {
+        $connectionType = $this->getConnectionTypeResolver()->getConnectionType($connectionName);
         if (!isset($this->publishers[$type])) {
             throw new \InvalidArgumentException('Unknown publisher type ' . $type);
         }
 
-        if (!isset($this->publishers[$type][$connectionName])) {
+        if (!isset($this->publishers[$type][$connectionType])) {
             throw new \LogicException(
                 sprintf(
                     'Could not find an implementation type for type "%s" and connection "%s".',
@@ -134,7 +149,7 @@ class PublisherPool implements PublisherInterface
                 )
             );
         }
-        return $this->publishers[$type][$connectionName];
+        return $this->publishers[$type][$connectionType];
     }
 
     /**
@@ -150,5 +165,21 @@ class PublisherPool implements PublisherInterface
             $this->publisherConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(PublisherConfig::class);
         }
         return $this->publisherConfig;
+    }
+
+    /**
+     * Get publisher config.
+     *
+     * @return ConnectionTypeResolver
+     *
+     * @deprecated
+     */
+    private function getConnectionTypeResolver()
+    {
+        if ($this->connectionTypeResolver === null) {
+            $this->connectionTypeResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ConnectionTypeResolver::class);
+        }
+        return $this->connectionTypeResolver;
     }
 }

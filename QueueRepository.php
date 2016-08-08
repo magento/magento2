@@ -28,6 +28,8 @@ class QueueRepository
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string[] $queues
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $queues = [])
     {
