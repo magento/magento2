@@ -255,6 +255,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
+     * Attributes codes which shows as date
+     *
+     * @var array
+     */
+    protected $dateAttrCodes = [
+        'special_from_date',
+        'special_to_date'
+    ];
+
+    /**
      * Attributes codes which are appropriate for export and not the part of additional_attributes.
      *
      * @var array
@@ -338,6 +348,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param array $dateAttrCodes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -356,7 +367,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
-        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
+        array $dateAttrCodes = []
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -371,6 +383,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_typeFactory = $_typeFactory;
         $this->_linkTypeProvider = $linkTypeProvider;
         $this->rowCustomizer = $rowCustomizer;
+        $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
 
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
@@ -897,7 +910,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
-                    if ($this->_attributeTypes[$code] === 'datetime') {
+                    if (in_array($code, $this->dateAttrCodes)) {
+                        $attrValue = $this->_localeDate->formatDateTime(
+                            new \DateTime($attrValue),
+                            \IntlDateFormatter::SHORT,
+                            \IntlDateFormatter::NONE,
+                            null,
+                            date_default_timezone_get()
+                        );
+                    } else if ($this->_attributeTypes[$code] === 'datetime') {
                         $attrValue = $this->_localeDate->formatDateTime(
                             new \DateTime($attrValue),
                             \IntlDateFormatter::SHORT,

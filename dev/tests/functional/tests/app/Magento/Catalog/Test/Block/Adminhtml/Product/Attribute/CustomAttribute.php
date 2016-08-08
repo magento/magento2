@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\DriverInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**

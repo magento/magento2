@@ -103,7 +103,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock,
                 'creditmemoNotifier' => $this->creditmemoNotifierMock,
-                'priceCurrency' => $this->priceCurrencyMock
+                'priceCurrency' => $this->priceCurrencyMock,
             ]
         );
     }

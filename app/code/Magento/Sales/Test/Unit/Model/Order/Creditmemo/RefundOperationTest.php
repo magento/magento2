@@ -253,97 +253,97 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
                 'setBaseTotalRefunded' => [
                     'result' => 2,
                     'order' => ['method' => 'getBaseTotalRefunded', 'amount' => 1],
-                    'creditmemo' => ['method' => 'getBaseGrandTotal', 'amount' => 1]
+                    'creditmemo' => ['method' => 'getBaseGrandTotal', 'amount' => 1],
                 ],
                 'setTotalRefunded' => [
                     'result' => 4,
                     'order' => ['method' => 'getTotalRefunded', 'amount' => 2],
-                    'creditmemo' => ['method' => 'getGrandTotal', 'amount' => 2]
+                    'creditmemo' => ['method' => 'getGrandTotal', 'amount' => 2],
                 ],
                 'setBaseSubtotalRefunded' => [
                     'result' => 6,
                     'order' => ['method' => 'getBaseSubtotalRefunded', 'amount' => 3],
-                    'creditmemo' => ['method' => 'getBaseSubtotal', 'amount' => 3]
+                    'creditmemo' => ['method' => 'getBaseSubtotal', 'amount' => 3],
                 ],
                 'setSubtotalRefunded' => [
                     'result' => 6,
                     'order' => ['method' => 'getSubtotalRefunded', 'amount' => 3],
-                    'creditmemo' => ['method' => 'getSubtotal', 'amount' => 3]
+                    'creditmemo' => ['method' => 'getSubtotal', 'amount' => 3],
                 ],
                 'setBaseTaxRefunded' => [
                     'result' => 8,
                     'order' => ['method' => 'getBaseTaxRefunded', 'amount' => 4],
-                    'creditmemo' => ['method' => 'getBaseTaxAmount', 'amount' => 4]
+                    'creditmemo' => ['method' => 'getBaseTaxAmount', 'amount' => 4],
                 ],
                 'setTaxRefunded' => [
                     'result' => 10,
                     'order' => ['method' => 'getTaxRefunded', 'amount' => 5],
-                    'creditmemo' => ['method' => 'getTaxAmount', 'amount' => 5]
+                    'creditmemo' => ['method' => 'getTaxAmount', 'amount' => 5],
                 ],
                 'setBaseDiscountTaxCompensationRefunded' => [
                     'result' => 12,
                     'order' => ['method' => 'getBaseDiscountTaxCompensationRefunded', 'amount' => 6],
-                    'creditmemo' => ['method' => 'getBaseDiscountTaxCompensationAmount', 'amount' => 6]
+                    'creditmemo' => ['method' => 'getBaseDiscountTaxCompensationAmount', 'amount' => 6],
                 ],
                 'setDiscountTaxCompensationRefunded' => [
                     'result' => 14,
                     'order' => ['method' => 'getDiscountTaxCompensationRefunded', 'amount' => 7],
-                    'creditmemo' => ['method' => 'getDiscountTaxCompensationAmount', 'amount' => 7]
+                    'creditmemo' => ['method' => 'getDiscountTaxCompensationAmount', 'amount' => 7],
                 ],
                 'setBaseShippingRefunded' => [
                     'result' => 16,
                     'order' => ['method' => 'getBaseShippingRefunded', 'amount' => 8],
-                    'creditmemo' => ['method' => 'getBaseShippingAmount', 'amount' => 8]
+                    'creditmemo' => ['method' => 'getBaseShippingAmount', 'amount' => 8],
                 ],
                 'setShippingRefunded' => [
                     'result' => 18,
                     'order' => ['method' => 'getShippingRefunded', 'amount' => 9],
-                    'creditmemo' => ['method' => 'getShippingAmount', 'amount' => 9]
+                    'creditmemo' => ['method' => 'getShippingAmount', 'amount' => 9],
                 ],
                 'setBaseShippingTaxRefunded' => [
                     'result' => 20,
                     'order' => ['method' => 'getBaseShippingTaxRefunded', 'amount' => 10],
-                    'creditmemo' => ['method' => 'getBaseShippingTaxAmount', 'amount' => 10]
+                    'creditmemo' => ['method' => 'getBaseShippingTaxAmount', 'amount' => 10],
                 ],
                 'setShippingTaxRefunded' => [
                     'result' => 22,
                     'order' => ['method' => 'getShippingTaxRefunded', 'amount' => 11],
-                    'creditmemo' => ['method' => 'getShippingTaxAmount', 'amount' => 11]
+                    'creditmemo' => ['method' => 'getShippingTaxAmount', 'amount' => 11],
                 ],
                 'setAdjustmentPositive' => [
                     'result' => 24,
                     'order' => ['method' => 'getAdjustmentPositive', 'amount' => 12],
-                    'creditmemo' => ['method' => 'getAdjustmentPositive', 'amount' => 12]
+                    'creditmemo' => ['method' => 'getAdjustmentPositive', 'amount' => 12],
                 ],
                 'setBaseAdjustmentPositive' => [
                     'result' => 26,
                     'order' => ['method' => 'getBaseAdjustmentPositive', 'amount' => 13],
-                    'creditmemo' => ['method' => 'getBaseAdjustmentPositive', 'amount' => 13]
+                    'creditmemo' => ['method' => 'getBaseAdjustmentPositive', 'amount' => 13],
                 ],
                 'setAdjustmentNegative' => [
                     'result' => 28,
                     'order' => ['method' => 'getAdjustmentNegative', 'amount' => 14],
-                    'creditmemo' => ['method' => 'getAdjustmentNegative', 'amount' => 14]
+                    'creditmemo' => ['method' => 'getAdjustmentNegative', 'amount' => 14],
                 ],
                 'setBaseAdjustmentNegative' => [
                     'result' => 30,
                     'order' => ['method' => 'getBaseAdjustmentNegative', 'amount' => 15],
-                    'creditmemo' => ['method' => 'getBaseAdjustmentNegative', 'amount' => 15]
+                    'creditmemo' => ['method' => 'getBaseAdjustmentNegative', 'amount' => 15],
                 ],
                 'setDiscountRefunded' => [
                     'result' => 32,
                     'order' => ['method' => 'getDiscountRefunded', 'amount' => 16],
-                    'creditmemo' => ['method' => 'getDiscountAmount', 'amount' => 16]
+                    'creditmemo' => ['method' => 'getDiscountAmount', 'amount' => 16],
                 ],
                 'setBaseDiscountRefunded' => [
                     'result' => 34,
                     'order' => ['method' => 'getBaseDiscountRefunded', 'amount' => 17],
-                    'creditmemo' => ['method' => 'getBaseDiscountAmount', 'amount' => 17]
+                    'creditmemo' => ['method' => 'getBaseDiscountAmount', 'amount' => 17],
                 ],
                 'setBaseTotalInvoicedCost' => [
                     'result' => 7,
                     'order' => ['method' => 'getBaseTotalInvoicedCost', 'amount' => 18],
-                    'creditmemo' => ['method' => 'getBaseCost', 'amount' => 11]
+                    'creditmemo' => ['method' => 'getBaseCost', 'amount' => 11],
                 ],
             ]],
         ];
