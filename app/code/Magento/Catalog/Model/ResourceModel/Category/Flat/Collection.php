@@ -77,7 +77,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\ResourceModel\Category\Flat');
+        $this->_init(
+            \Magento\Catalog\Model\Category::class,
+            \Magento\Catalog\Model\ResourceModel\Category\Flat::class
+        );
     }
 
     /**

@@ -17,7 +17,7 @@ class TestObserver extends AddController
     {
         $object = new DataObject();
         /** @var \Magento\ProductAlert\Model\Observer $observer */
-        $observer = $this->_objectManager->get('Magento\ProductAlert\Model\Observer');
+        $observer = $this->_objectManager->get(\Magento\ProductAlert\Model\Observer::class);
         $observer->process($object);
     }
 }

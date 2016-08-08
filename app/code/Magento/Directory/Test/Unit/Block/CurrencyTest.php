@@ -26,7 +26,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urlBuilder = $this->getMock(
-            '\Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             [],
             '',
@@ -36,7 +36,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Template\Context $context */
         $context = $this->getMock(
-            '\Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             ['getUrlBuilder'],
             [],
             '',
@@ -45,11 +45,11 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
 
         /** @var \Magento\Directory\Model\CurrencyFactory $currencyFactory */
-        $currencyFactory = $this->getMock('\Magento\Directory\Model\CurrencyFactory', [], [], '', false);
-        $this->postDataHelper = $this->getMock('Magento\Framework\Data\Helper\PostHelper', [], [], '', false);
+        $currencyFactory = $this->getMock(\Magento\Directory\Model\CurrencyFactory::class, [], [], '', false);
+        $this->postDataHelper = $this->getMock(\Magento\Framework\Data\Helper\PostHelper::class, [], [], '', false);
 
         /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
-        $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface', [], [], '', false);
+        $localeResolver = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class, [], [], '', false);
 
         $this->object = new \Magento\Directory\Block\Currency(
             $context,

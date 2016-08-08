@@ -739,7 +739,7 @@ define([
         },
 
         /**
-         * Change page to previos
+         * Change page to previous
          */
         previousPage: function () {
             this.currentPage(this.currentPage() - 1);

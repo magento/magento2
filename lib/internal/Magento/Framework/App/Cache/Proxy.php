@@ -41,7 +41,7 @@ class Proxy implements
     protected function _getCache()
     {
         if (null == $this->_cache) {
-            $this->_cache = $this->_objectManager->get('Magento\Framework\App\Cache');
+            $this->_cache = $this->_objectManager->get(\Magento\Framework\App\Cache::class);
         }
         return $this->_cache;
     }

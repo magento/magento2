@@ -72,11 +72,6 @@ class RequestValidator
         if ($route->isSecure() && !$this->request->isSecure()) {
             throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
         }
-        if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
-            && strtoupper($this->request->getMethod()) === RestRequest::HTTP_METHOD_GET
-        ) {
-            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
-        }
     }
 
     /**

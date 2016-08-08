@@ -19,6 +19,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Ui\Model\Bookmark', 'Magento\Ui\Model\ResourceModel\Bookmark');
+        $this->_init(\Magento\Ui\Model\Bookmark::class, \Magento\Ui\Model\ResourceModel\Bookmark::class);
     }
 }

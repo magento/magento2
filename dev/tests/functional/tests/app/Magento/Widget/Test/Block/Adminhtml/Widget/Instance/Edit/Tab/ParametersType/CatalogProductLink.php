@@ -26,7 +26,7 @@ class CatalogProductLink extends ParametersForm
      * @var string
      */
     // @codingStandardsIgnoreStart
-    protected $pathToGrid = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogProductLink\Grid';
+    protected $pathToGrid = \Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogProductLink\Grid::class;
     // @codingStandardsIgnoreEnd
 
     /**

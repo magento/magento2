@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="outdated_authentication_failures_cleanup" instance="Magento\Integration\Cron\CleanExpiredAuthenticationFailures" method="execute">
-            <schedule>0 1 * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
     </group>
 </config>

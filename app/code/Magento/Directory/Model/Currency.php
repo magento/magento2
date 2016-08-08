@@ -109,7 +109,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\ResourceModel\Currency');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Currency::class);
     }
 
     /**

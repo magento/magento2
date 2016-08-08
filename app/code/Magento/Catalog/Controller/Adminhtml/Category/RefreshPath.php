@@ -34,7 +34,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {
-            $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+            $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($categoryId);
 
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();

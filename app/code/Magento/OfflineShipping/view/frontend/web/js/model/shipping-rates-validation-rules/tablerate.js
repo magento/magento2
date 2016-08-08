@@ -18,6 +18,9 @@ define(
                     },
                     'region_id': {
                         'required': true
+                    },
+                    'region_id_input': {
+                        'required': true
                     }
                 };
             }

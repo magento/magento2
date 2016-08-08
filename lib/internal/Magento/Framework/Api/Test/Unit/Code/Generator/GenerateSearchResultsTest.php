@@ -22,7 +22,7 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ioObjectMock = $this->getMock(
-            '\Magento\Framework\Code\Generator\Io',
+            \Magento\Framework\Code\Generator\Io::class,
             [],
             [],
             '',
@@ -37,23 +37,22 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
     {
         require_once __DIR__ . '/Sample.php';
         $model = $this->getMock(
-            'Magento\Framework\Api\Code\Generator\SearchResults',
+            \Magento\Framework\Api\Code\Generator\SearchResults::class,
             [
                 '_validateData'
             ],
-            [
-                '\Magento\Framework\Api\Code\Generator\Sample',
+            [\Magento\Framework\Api\Code\Generator\Sample::class,
                 null,
                 $this->ioObjectMock,
                 null,
                 null,
-                $this->getMock('Magento\Framework\Filesystem\FileResolver')
+                $this->getMock(\Magento\Framework\Filesystem\FileResolver::class)
             ]
         );
         $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResults.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
-            ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResults')
+            ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleSearchResults::class)
             ->will($this->returnValue('SampleSearchResults.php'));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')

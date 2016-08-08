@@ -542,7 +542,10 @@ define([
          */
         _OnChange: function ($this, $widget) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
-                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                attributeId = $parent.attr('attribute-id'),
+                $input = $widget.productForm.find(
+                    '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
+                );
 
             if ($this.val() > 0) {
                 $parent.attr('option-selected', $this.val());

@@ -19,7 +19,7 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
-            'Magento\\Backend\\Block\\Widget\\Grid\\Column\\Renderer\\Concat'
+            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat::class
         );
     }
 
@@ -40,7 +40,7 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
     public function testRender($method, $getters)
     {
         $object = new DataObject(['test' => 'a', 'best' => 'b']);
-        $column = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
+        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->disableOriginalConstructor()
             ->setMethods([$method, 'getSeparator'])
             ->getMock();

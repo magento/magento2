@@ -174,6 +174,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $urlModifier;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
@@ -232,7 +237,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             'user' => 'setUser',
             'pass' => 'setPassword',
             'path' => 'setPath',
-            'query' => 'setQuery',
+            'query' => '_setQuery',
             'fragment' => 'setFragment',
         ];
 
@@ -862,6 +867,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private function createUrl($routePath = null, array $routeParams = null)
     {
         $escapeQuery = false;
+        $escapeParams = true;
 
         /**
          * All system params should be unset before we call getRouteUrl
@@ -880,6 +886,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_escape']);
         }
 
+        if (isset($routeParams['_escape_params'])) {
+            $escapeParams = $routeParams['_escape_params'];
+            unset($routeParams['_escape_params']);
+        }
+        $this->getRouteParamsResolver()->setData('escape_params', $escapeParams);
+
         $query = null;
         if (isset($routeParams['_query'])) {
             $this->_queryParamsResolver->setQueryParams([]);
@@ -893,6 +905,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_nosid']);
         }
         $url = $this->getRouteUrl($routePath, $routeParams);
+
         /**
          * Apply query params, need call after getRouteUrl for rewrite _current values
          */
@@ -920,11 +933,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         if (!is_null($fragment)) {
-            $url .= '#' . $fragment;
+            $url .= '#' . $this->getEscaper()->encodeUrlParam($fragment);
         }
         $this->getRouteParamsResolver()->unsetData('secure');
+        $this->getRouteParamsResolver()->unsetData('escape_params');
 
-        return $this->escape($url);
+        return $url;
     }
 
     /**
@@ -974,10 +988,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         $fragment = $this->_getFragment();
         if ($fragment) {
-            $url .= '#' . $fragment;
+            $url .= '#' . $this->getEscaper()->encodeUrlParam($fragment);
         }
 
-        return $this->escape($url);
+        return $url;
     }
 
     /**
@@ -985,6 +999,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $value
      * @return string
+     * @deprecated
      */
     public function escape($value)
     {
@@ -1149,10 +1164,25 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         if ($this->urlModifier === null) {
             $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\Url\ModifierInterface'
+                \Magento\Framework\Url\ModifierInterface::class
             );
         }
 
         return $this->urlModifier;
+    }
+
+    /**
+     * Get escaper
+     *
+     * @return Escaper
+     * @deprecated
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper == null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
+                    ->get(\Magento\Framework\Escaper::class);
+        }
+        return $this->escaper;
     }
 }

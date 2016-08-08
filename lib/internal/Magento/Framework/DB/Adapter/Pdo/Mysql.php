@@ -62,7 +62,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @var string
      */
-    protected $_defaultStmtClass = 'Magento\Framework\DB\Statement\Pdo\Mysql';
+    protected $_defaultStmtClass = \Magento\Framework\DB\Statement\Pdo\Mysql::class;
 
     /**
      * Current Transaction Level
@@ -328,6 +328,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (!isset($this->_config['host'])) {
             throw new \Zend_Db_Adapter_Exception('No host configured to connect');
         }
+
+        if (isset($this->_config['port'])) {
+            throw new \Zend_Db_Adapter_Exception('Port must be configured within host parameter (like localhost:3306');
+        }
+
+        unset($this->_config['port']);
 
         if (strpos($this->_config['host'], '/') !== false) {
             $this->_config['unix_socket'] = $this->_config['host'];

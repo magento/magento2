@@ -6,8 +6,12 @@
 namespace Magento\Paypal\Block\Adminhtml\Payflowpro;
 
 use Magento\Checkout\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
+use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 class CcForm extends \Magento\Payment\Block\Transparent\Form
@@ -18,26 +22,23 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     protected $_template = 'Magento_Paypal::transparent/form.phtml';
 
     /**
-     * @var VaultPaymentInterface
+     * @var Data
      */
-    private $vaultService;
+    private $paymentDataHelper;
 
     /**
      * @param Context $context
      * @param Config $paymentConfig
      * @param Session $checkoutSession
-     * @param VaultPaymentInterface $vaultService
      * @param array $data
      */
     public function __construct(
         Context $context,
         Config $paymentConfig,
         Session $checkoutSession,
-        VaultPaymentInterface $vaultService,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $checkoutSession, $data);
-        $this->vaultService = $vaultService;
     }
 
     /**
@@ -46,9 +47,9 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
      */
     public function isVaultEnabled()
     {
-        return $this->vaultService->isActiveForPayment(
-            \Magento\Paypal\Model\Config::METHOD_PAYFLOWPRO
-        );
+        $storeId = $this->_storeManager->getStore()->getId();
+        $vaultPayment = $this->getVaultPayment();
+        return $vaultPayment->isActive($storeId);
     }
 
     /**
@@ -67,5 +68,27 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     protected function initializeMethod()
     {
         return;
+    }
+
+    /**
+     * Get configured vault payment for PayflowPro
+     * @return VaultPaymentInterface
+     */
+    private function getVaultPayment()
+    {
+        return  $this->getPaymentDataHelper()->getMethodInstance(Transparent::CC_VAULT_CODE);
+    }
+
+    /**
+     * Get payment data helper instance
+     * @return Data
+     * @deprecated
+     */
+    private function getPaymentDataHelper()
+    {
+        if ($this->paymentDataHelper === null) {
+            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->paymentDataHelper;
     }
 }

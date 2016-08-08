@@ -17,13 +17,20 @@ class UseVaultPaymentTokenStep implements TestStepInterface
      * @var OrderCreateIndex
      */
     private $orderCreatePage;
+    
+    /**
+     * @var array
+     */
+    private $payment;
 
     /**
      * @param OrderCreateIndex $orderCreateIndex
+     * @param array $payment
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex)
+    public function __construct(OrderCreateIndex $orderCreateIndex, array $payment)
     {
         $this->orderCreatePage = $orderCreateIndex;
+        $this->payment = $payment;
     }
 
     /**
@@ -32,7 +39,8 @@ class UseVaultPaymentTokenStep implements TestStepInterface
     public function run()
     {
         $block = $this->orderCreatePage->getCreateBlock();
-        $block->selectPaymentMethod(['method' => 'vault']);
-        $block->selectVaultToken('token_switcher_');
+        $this->payment['method'] .= '_cc_vault';
+        $block->selectPaymentMethod($this->payment);
+        $block->selectVaultToken('token_switcher_' . $this->payment['method']);
     }
 }

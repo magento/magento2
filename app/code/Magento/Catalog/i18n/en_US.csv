@@ -405,6 +405,7 @@ Images,Images
 Select...,Select...
 "Advanced Pricing","Advanced Pricing"
 "Tier Price","Tier Price"
+"Customer Group Price","Customer Group Price"
 "Customer Group","Customer Group"
 "Special Price From","Special Price From"
 To,To
@@ -714,3 +715,4 @@ Disable,Disable
 none,none
 Overview,Overview
 Details,Details
+"The value of Admin must be unique.", "The value of Admin must be unique."

@@ -244,9 +244,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function __wakeup()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_registry = $objectManager->get('Magento\Framework\Registry');
+        $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
 
-        $context = $objectManager->get('Magento\Framework\Model\Context');
+        $context = $objectManager->get(\Magento\Framework\Model\Context::class);
         if ($context instanceof \Magento\Framework\Model\Context) {
             $this->_appState = $context->getAppState();
             $this->_eventManager = $context->getEventDispatcher();
@@ -520,10 +520,10 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Load object data
      *
-     * @deprecated
      * @param integer $modelId
      * @param null|string $field
      * @return $this
+     * @deprecated
      */
     public function load($modelId, $field = null)
     {
@@ -622,9 +622,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Save object data
      *
-     * @deprecated
      * @return $this
      * @throws \Exception
+     * @deprecated
      */
     public function save()
     {
@@ -807,9 +807,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Delete object from database
      *
-     * @deprecated
      * @return $this
      * @throws \Exception
+     * @deprecated
      */
     public function delete()
     {

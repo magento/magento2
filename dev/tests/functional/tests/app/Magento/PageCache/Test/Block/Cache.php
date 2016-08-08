@@ -89,7 +89,7 @@ class Cache extends Block
     protected function getMessagesBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Messages',
+            \Magento\Backend\Test\Block\Messages::class,
             ['element' => $this->_rootElement->find($this->messagesSelector, Locator::SELECTOR_XPATH)]
         );
     }

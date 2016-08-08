@@ -39,7 +39,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Request::class)
             ->setMethods(
                 [
                     'isSecure',
@@ -55,16 +55,16 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
-        $routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
+        $routerMock = $this->getMockBuilder(\Magento\Webapi\Controller\Rest\Router::class)->setMethods(['match'])
             ->disableOriginalConstructor()->getMock();
-        $this->routeMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router\Route')
+        $this->routeMock = $this->getMockBuilder(\Magento\Webapi\Controller\Rest\Router\Route::class)
             ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()->getMock();
-        $this->authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
+        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeMock = $this->getMock('\Magento\Store\Api\Data\StoreInterface');
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->requestValidator =
@@ -137,19 +137,6 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
         $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
-        $this->requestValidator->validate();
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Webapi\Exception
-     * @expectedExceptionMessage Cannot perform GET operation with store code 'all'
-     */
-    public function testGetMethodAllStoresInvalid()
-    {
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->storeMock->expects($this->once())->method('getCode')->willReturn('admin');
-        $this->requestMock->expects($this->once())->method('getMethod')->willReturn('get');
         $this->requestValidator->validate();
     }
 }

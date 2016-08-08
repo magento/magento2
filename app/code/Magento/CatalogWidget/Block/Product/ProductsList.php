@@ -8,12 +8,15 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Widget\Block\BlockInterface;
+
 /**
  * Catalog Products List widget block
  * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Widget\Block\BlockInterface
+class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
     /**
      * Default value for products count that will be shown
@@ -301,7 +304,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         if ($this->showPager() && $this->getProductCollection()->getSize() > $this->getProductsPerPage()) {
             if (!$this->pager) {
                 $this->pager = $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Product\Widget\Html\Pager',
+                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
                     'widget.products.list.pager'
                 );
 
@@ -327,7 +330,16 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function getIdentities()
     {
-        return [\Magento\Catalog\Model\Product::CACHE_TAG];
+        $identities = [];
+        if ($this->getProductCollection()) {
+            foreach ($this->getProductCollection() as $product) {
+                if ($product instanceof IdentityInterface) {
+                    $identities = array_merge($identities, $product->getIdentities());
+                }
+            }
+        }
+
+        return $identities ?: [\Magento\Catalog\Model\Product::CACHE_TAG];
     }
 
     /**

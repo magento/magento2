@@ -5,12 +5,12 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Customer;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
@@ -18,6 +18,8 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
  * Class DataProviderTest
  *
  * Test for class \Magento\Customer\Model\Customer\DataProvider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,30 +47,49 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
+     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileProcessorFactory;
+
+    /**
+     * @var \Magento\Customer\Model\FileProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileProcessor;
+
+    /**
      * Set up
      *
      * @return void
      */
     protected function setUp()
     {
-        $this->eavConfigMock = $this->getMockBuilder('Magento\Eav\Model\Config')
+        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock = $this->getMock(
-            'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory',
+            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->eavValidationRulesMock = $this
-            ->getMockBuilder('Magento\Ui\DataProvider\EavValidationRules')
+            ->getMockBuilder(\Magento\Ui\DataProvider\EavValidationRules::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionMock = $this
-            ->getMockBuilder('Magento\Framework\Session\SessionManagerInterface')
+            ->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
             ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
+
+        $this->fileProcessor = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
     }
 
     /**
@@ -83,7 +104,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -92,6 +113,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
                 'eavConfig' => $this->getEavConfigMock()
             ]
+        );
+
+        $helper->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
         );
 
         $meta = $dataProvider->getMeta();
@@ -212,7 +239,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCustomerCollectionFactoryMock()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -249,7 +276,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTypeCustomerMock()
     {
-        $typeCustomerMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -265,7 +292,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTypeAddressMock()
     {
-        $typeAddressMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -281,11 +308,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAttributeMock()
     {
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $sourceMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Source\AbstractSource')
+        $sourceMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -311,14 +338,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getSource')
             ->willReturn($sourceMock);
 
-        $attributeBooleanMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeBooleanMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeBooleanMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn('test-code-boolean');
-        $attributeBooleanMock->expects($this->once())
+        $attributeBooleanMock->expects($this->any())
             ->method('getFrontendInput')
             ->willReturn('boolean');
         $attributeBooleanMock->expects($this->any())
@@ -344,13 +371,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetData()
     {
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -375,6 +402,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([]);
+
         $address->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(2);
@@ -389,10 +420,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'lastname' => 'lastname',
                 'street' => "street\nstreet",
             ]);
+        $address->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([]);
 
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -411,6 +445,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock->expects($this->once())
             ->method('getCustomerFormData')
             ->willReturn(null);
+
+        $helper->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
 
         $this->assertEquals(
             [
@@ -462,13 +502,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -496,6 +536,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([]);
+
         $address->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(2);
@@ -510,10 +554,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'lastname' => 'lastname',
                 'street' => "street\nstreet",
             ]);
+        $address->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([]);
 
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -535,6 +582,378 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerFormData');
 
+        $helper->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
+    }
+
+    public function testGetDataWithCustomAttributeImage()
+    {
+        $customerId = 1;
+        $customerEmail = 'user1@example.com';
+
+        $filename = '/filename.ext1';
+        $viewUrl = 'viewUrl';
+
+        $expectedData = [
+            $customerId => [
+                'customer' => [
+                    'email' => $customerEmail,
+                    'img1' => [
+                        [
+                            'file' => $filename,
+                            'size' => 1,
+                            'url' => $viewUrl,
+                            'name' => 'filename.ext1',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->exactly(2))
+            ->method('getFrontendInput')
+            ->willReturn('image');
+        $attributeMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn('img1');
+
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityTypeMock->expects($this->once())
+            ->method('getEntityTypeCode')
+            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'email' => $customerEmail,
+                'img1' => $filename,
+            ]);
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customerMock->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([$attributeMock]);
+        $customerMock->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn($entityTypeMock);
+
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$customerMock]);
+
+        $this->customerCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $this->sessionMock->expects($this->once())
+            ->method('getCustomerFormData')
+            ->willReturn([]);
+
+        $this->fileProcessorFactory->expects($this->any())
+            ->method('create')
+            ->with([
+                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            ])
+            ->willReturn($this->fileProcessor);
+
+        $this->fileProcessor->expects($this->once())
+            ->method('isExist')
+            ->with($filename)
+            ->willReturn(true);
+        $this->fileProcessor->expects($this->once())
+            ->method('getStat')
+            ->with($filename)
+            ->willReturn(['size' => 1]);
+        $this->fileProcessor->expects($this->once())
+            ->method('getViewUrl')
+            ->with('/filename.ext1', 'image')
+            ->willReturn($viewUrl);
+
+        $objectManager = new ObjectManager($this);
+        $dataProvider = $objectManager->getObject(
+            \Magento\Customer\Model\Customer\DataProvider::class,
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->customerCollectionFactoryMock,
+                'eavConfig' => $this->getEavConfigMock()
+            ]
+        );
+
+        $objectManager->setBackwardCompatibleProperty(
+            $dataProvider,
+            'session',
+            $this->sessionMock
+        );
+
+        $objectManager->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
+        $this->assertEquals($expectedData, $dataProvider->getData());
+    }
+
+    public function testGetDataWithCustomAttributeImageNoData()
+    {
+        $customerId = 1;
+        $customerEmail = 'user1@example.com';
+
+        $expectedData = [
+            $customerId => [
+                'customer' => [
+                    'email' => $customerEmail,
+                    'img1' => [],
+                ],
+            ],
+        ];
+
+        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('image');
+        $attributeMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn('img1');
+
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityTypeMock->expects($this->once())
+            ->method('getEntityTypeCode')
+            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'email' => $customerEmail,
+            ]);
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([]);
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customerMock->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([$attributeMock]);
+        $customerMock->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn($entityTypeMock);
+
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$customerMock]);
+
+        $this->customerCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $this->sessionMock->expects($this->once())
+            ->method('getCustomerFormData')
+            ->willReturn([]);
+
+        $objectManager = new ObjectManager($this);
+        $dataProvider = $objectManager->getObject(
+            \Magento\Customer\Model\Customer\DataProvider::class,
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->customerCollectionFactoryMock,
+                'eavConfig' => $this->getEavConfigMock()
+            ]
+        );
+
+        $objectManager->setBackwardCompatibleProperty(
+            $dataProvider,
+            'session',
+            $this->sessionMock
+        );
+
+        $objectManager->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
+        $this->assertEquals($expectedData, $dataProvider->getData());
+    }
+
+    public function testGetAttributesMetaWithCustomAttributeImage()
+    {
+        $maxFileSize = 1000;
+        $allowedExtension = 'ext1 ext2';
+
+        $attributeCode = 'img1';
+
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->with('*');
+
+        $this->customerCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->setMethods([
+                'getAttributeCode',
+                'getFrontendInput',
+                'getDataUsingMethod',
+            ])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+        $attributeMock->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn('image');
+        $attributeMock->expects($this->any())
+            ->method('getDataUsingMethod')
+            ->willReturnCallback(
+                function ($origName) {
+                    return $origName;
+                }
+            );
+
+        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeCustomerMock->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn([$attributeMock]);
+        $typeCustomerMock->expects($this->once())
+            ->method('getEntityTypeCode')
+            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeAddressMock->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn([]);
+
+        $this->eavConfigMock->expects($this->at(0))
+            ->method('getEntityType')
+            ->with('customer')
+            ->willReturn($typeCustomerMock);
+        $this->eavConfigMock->expects($this->at(1))
+            ->method('getEntityType')
+            ->with('customer_address')
+            ->willReturn($typeAddressMock);
+
+        $this->eavValidationRulesMock->expects($this->once())
+            ->method('build')
+            ->with($attributeMock, [
+                'dataType' => 'frontend_input',
+                'formElement' => 'frontend_input',
+                'visible' => 'is_visible',
+                'required' => 'is_required',
+                'sortOrder' => 'sort_order',
+                'notice' => 'note',
+                'default' => 'default_value',
+                'size' => 'multiline_count',
+                'label' => __('frontend_label'),
+            ])
+            ->willReturn([
+                'max_file_size' => $maxFileSize,
+                'file_extensions' => 'ext1, eXt2 ', // Added spaces and upper-cases
+            ]);
+
+        $this->fileProcessorFactory->expects($this->any())
+            ->method('create')
+            ->with([
+                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            ])
+            ->willReturn($this->fileProcessor);
+
+        $objectManager = new ObjectManager($this);
+        $dataProvider = $objectManager->getObject(
+            \Magento\Customer\Model\Customer\DataProvider::class,
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->customerCollectionFactoryMock,
+                'eavConfig' => $this->eavConfigMock,
+                'fileProcessorFactory' => $this->fileProcessorFactory,
+            ]
+        );
+
+        $result = $dataProvider->getMeta();
+
+        $this->assertNotEmpty($result);
+
+        $expected = [
+            'customer' => [
+                'children' => [
+                    $attributeCode => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'formElement' => 'fileUploader',
+                                    'componentType' => 'fileUploader',
+                                    'maxFileSize' => $maxFileSize,
+                                    'allowedExtensions' => $allowedExtension,
+                                    'uploaderConfig' => [
+                                        'url' => 'customer/file/customer_upload',
+                                    ],
+                                    'sortOrder' => 'sort_order',
+                                    'required' => 'is_required',
+                                    'visible' => 'is_visible',
+                                    'validation' => [
+                                        'max_file_size' => $maxFileSize,
+                                        'file_extensions' => 'ext1, eXt2 ',
+                                    ],
+                                    'label' => __('frontend_label'),
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'address' => [
+                'children' => [],
+            ],
+        ];
+
+        $this->assertEquals($expected, $result);
     }
 }

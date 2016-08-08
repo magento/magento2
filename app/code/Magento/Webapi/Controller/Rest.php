@@ -180,7 +180,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     {
         if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
             $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\App\DeploymentConfig');
+                ->get(\Magento\Framework\App\DeploymentConfig::class);
         }
         return $this->deploymentConfig;
     }

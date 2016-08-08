@@ -18,6 +18,7 @@ class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
      */
     public function addField(Collection $collection, $field, $alias = null)
     {
-         $collection->addWebsiteNamesToResult();
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection->addWebsiteNamesToResult();
     }
 }

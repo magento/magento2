@@ -20,7 +20,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_addressConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Model\Address\Config'
+            \Magento\Customer\Model\Address\Config::class
         );
     }
 
@@ -50,7 +50,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
         ];
 
         $htmlResult = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, " .
-            "75477<br/>\nUnited States<br/>\nT: 3468676\n\n";
+            "75477<br/>\nUnited States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         return [
             [$addressAttributes, AttributeDataFactory::OUTPUT_FORMAT_HTML, $htmlResult],
             [
@@ -97,7 +97,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
         ];
 
         $address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Address'
+            \Magento\Customer\Model\Address::class
         )->setData(
             $data
         );
@@ -107,7 +107,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
                 $address,
                 AttributeDataFactory::OUTPUT_FORMAT_HTML,
                 "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>
-United States<br/>\nT: 3468676\n\n",
+United States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n",
             ],
             [
                 $address,

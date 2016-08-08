@@ -42,7 +42,7 @@ class CouponTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = 'Magento\SalesRule\Helper\Coupon';
+        $className = \Magento\SalesRule\Helper\Coupon::class;
         $arguments = $objectManager->getConstructArguments(
             $className,
             ['couponParameters' => $this->couponParameters]
@@ -50,7 +50,7 @@ class CouponTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->helper = $objectManager->getObject('Magento\SalesRule\Helper\Coupon', $arguments);
+        $this->helper = $objectManager->getObject(\Magento\SalesRule\Helper\Coupon::class, $arguments);
     }
 
     public function testGetFormatsList()

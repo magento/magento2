@@ -21,13 +21,13 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $arguments =  $objectManager->getConstructArguments(
-            'Magento\Eav\Model\Entity\AbstractEntity',
+            \Magento\Eav\Model\Entity\AbstractEntity::class,
             ['eavConfig' => $this->eavConfig]
         );
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\AbstractEntity',
+            \Magento\Eav\Model\Entity\AbstractEntity::class,
             $arguments
         );
     }
@@ -46,9 +46,9 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompareAttributes($attribute1Sort, $attribute2Sort, $expected)
     {
-        $attribute1 = $this->getMock('Magento\Eav\Model\Entity\Attribute', ['__wakeup'], [], '', false);
+        $attribute1 = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup'], [], '', false);
         $attribute1->setAttributeSetInfo([0 => $attribute1Sort]);
-        $attribute2 = $this->getMock('Magento\Eav\Model\Entity\Attribute', ['__wakeup'], [], '', false);
+        $attribute2 = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup'], [], '', false);
         $attribute2->setAttributeSetInfo([0 => $attribute2Sort]);
         $this->assertEquals($expected, $this->_model->attributesCompare($attribute1, $attribute2));
     }
@@ -85,7 +85,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $codes = ['entity_type_id', 'attribute_set_id', 'created_at', 'updated_at', 'parent_id', 'increment_id'];
         foreach ($codes as $code) {
             $mock = $this->getMock(
-                'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+                \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
                 ['getBackend', 'getBackendTable', '__wakeup'],
                 [],
                 '',
@@ -95,7 +95,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
 
             /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
             $backendModel = $this->getMock(
-                'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
+                \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
                 ['getBackend', 'getBackendTable']
             );
 
@@ -118,7 +118,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionMock()
     {
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [
                 'describeTable',
                 'getIndexList',
@@ -134,7 +134,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
             false
         );
         $statement = $this->getMock(
-            'Zend_Db_Statement',
+            \Zend_Db_Statement::class,
             ['closeCursor', 'columnCount', 'errorCode', 'errorInfo', 'fetch', 'nextRowset', 'rowCount'],
             [],
             '',
@@ -142,7 +142,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         );
 
         $select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',
@@ -203,7 +203,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     protected function _getAttributeMock($attributeCode, $attributeSetId)
     {
         $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getBackend', 'getBackendTable', 'isInSet', 'getApplyTo', 'getAttributeCode', '__wakeup'],
             [],
             '',
@@ -245,7 +245,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     public function testSave($attributeCode, $attributeSetId, $productData, $productOrigData)
     {
         $object = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getOrigData', '__wakeup', 'beforeSave', 'afterSave', 'validateBeforeSave'],
             [],
             '',
@@ -268,7 +268,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
 
         /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
         $backendModel = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
+            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
             [
                 'getBackend',
                 'getBackendTable',
@@ -294,13 +294,13 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
         $attribute->setId(222);
         $attributes[$attributeCode] = $attribute;
-        $eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
+        $eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
-        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $arguments =  $objectManager->getConstructArguments(
-            'Magento\Eav\Model\Entity\AbstractEntity',
+            \Magento\Eav\Model\Entity\AbstractEntity::class,
             [
                 'eavConfig' => $eavConfig,
                 'data' => [
@@ -311,13 +311,12 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
             ]
         );
         /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
+        $model = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
         $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
-
 
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
