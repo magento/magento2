@@ -66,7 +66,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
             $connection = $this->getConnection();
             $columns = [];
             $scopeTable = $this->_getEavWebsiteTable();
-            if($scopeTable){
+            if ($scopeTable) {
                 $describe = $connection->describeTable($scopeTable);
                 unset($describe['attribute_id']);
                 foreach (array_keys($describe) as $columnName) {
@@ -120,7 +120,6 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
         $table = $this->_getEavWebsiteTable();
 
         if ($websiteId && $table) {
-
             $describe = $this->getConnection()->describeTable($table);
             $data = [];
             if (!$object->getScopeWebsiteId() || $object->getScopeWebsiteId() != $websiteId) {
@@ -152,7 +151,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      */
     public function getScopeValues(\Magento\Eav\Model\Attribute $object)
     {
-        if(!$this->_getEavWebsiteTable()){
+        if (!$this->_getEavWebsiteTable()) {
             return [];
         }
 
