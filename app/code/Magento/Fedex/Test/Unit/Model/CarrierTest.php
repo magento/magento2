@@ -224,7 +224,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @param string $rateType
      * @param float $expected
      * @dataProvider collectRatesDataProvider
-     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testCollectRatesRateAmountOriginBased($amount, $rateType, $expected)
     {
@@ -232,6 +231,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->willReturn(true);
 
+        // @codingStandardsIgnoreStart
         $netAmount = new \stdClass();
         $netAmount->Amount = $amount;
 
@@ -249,6 +249,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $response = new \stdClass();
         $response->HighestSeverity = 'SUCCESS';
         $response->RateReplyDetails = $rate;
+        // @codingStandardsIgnoreEnd
 
         $this->model->expects(static::any())
             ->method('_getCachedQuotes')
@@ -357,17 +358,18 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testGetTrackingErrorResponse()
     {
         $tracking = '123456789012';
         $errorMessage = 'Tracking information is unavailable.';
 
+        // @codingStandardsIgnoreStart
         $response = new \stdClass();
         $response->HighestSeverity = 'ERROR';
         $response->Notifications = new \stdClass();
         $response->Notifications->Message = $errorMessage;
+        // @codingStandardsIgnoreEnd
 
         $this->model->expects(static::once())
             ->method('_getCachedQuotes')
@@ -391,12 +393,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testGetTracking()
     {
         $tracking = '123456789012';
 
+        // @codingStandardsIgnoreStart
         $response = new \stdClass();
         $response->HighestSeverity = 'SUCCESS';
         $response->CompletedTrackDetails = new \stdClass();
@@ -422,6 +424,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $trackDetails->PackageWeight->Units = 'LB';
 
         $response->CompletedTrackDetails->TrackDetails = [$trackDetails];
+        // @codingStandardsIgnoreEnd
 
         $this->model->expects(static::once())
             ->method('_getCachedQuotes')
@@ -458,12 +461,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @SuppressWarnings(PHPMD.CamelCasePropertyName)
      */
     public function testGetTrackingWithEvents()
     {
         $tracking = '123456789012';
 
+        // @codingStandardsIgnoreStart
         $response = new \stdClass();
         $response->HighestSeverity = 'SUCCESS';
         $response->CompletedTrackDetails = new \stdClass();
@@ -481,6 +484,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $trackDetails->Events = $event;
 
         $response->CompletedTrackDetails->TrackDetails = $trackDetails;
+        // @codingStandardsIgnoreEnd
 
         $this->model->expects(static::once())
             ->method('_getCachedQuotes')
