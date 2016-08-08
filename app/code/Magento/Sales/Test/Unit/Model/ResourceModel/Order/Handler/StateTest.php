@@ -42,7 +42,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
                 'getTotalRefunded',
                 'hasForcedCanCreditmemo',
                 'getIsInProcess',
-                'getConfig'
+                'getConfig',
             ],
             [],
             '',
