@@ -5,17 +5,16 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\App\ObjectManager;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 
 /**
  * Shipping method read service.

@@ -5,14 +5,13 @@
  */
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
-use Magento\Framework\App\DeploymentConfig;
+use Magento\Developer\Model\Config\Source\WorkflowType;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\PreProcessor;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Developer\Model\Config\Source\WorkflowType;
-use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * Class PreprocessorStrategy

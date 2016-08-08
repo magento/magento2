@@ -251,7 +251,7 @@ class Dom
                 $value = $node->getAttribute($attribute);
                 $constraints[] = "@{$attribute}='{$value}'";
             }
-            $path .= '[' . join(' and ', $constraints) . ']';
+            $path .= '[' . implode(' and ', $constraints) . ']';
         } elseif ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
@@ -351,7 +351,7 @@ class Dom
                 }
                 if (!empty($unsupported)) {
                     throw new \InvalidArgumentException(
-                        "Error format '{$format}' contains unsupported placeholders: " . join(', ', $unsupported)
+                        "Error format '{$format}' contains unsupported placeholders: " . implode(', ', $unsupported)
                     );
                 }
             }
