@@ -7,11 +7,11 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
-use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
+use Magento\Sales\Model\Service\InvoiceService;
 
 /**
  * Class InvoiceDocumentFactoryTest

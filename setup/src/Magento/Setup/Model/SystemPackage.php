@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Composer\MagentoComposerApplication;
 use Magento\Composer\InfoCommand;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Composer\MagentoComposerApplication;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
  * Class SystemPackage returns system package and available for update versions
@@ -76,14 +76,14 @@ class SystemPackage
 
             $result[] = [
                 'package' => $systemPackageInfo['name'],
-                'versions' => $versions
+                'versions' => $versions,
             ];
         }
 
         if (!in_array('magento/product-enterprise-edition', $systemPackages)) {
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
-        
+
         $result = $this->formatPackages($result);
 
         return $result;
@@ -110,7 +110,7 @@ class SystemPackage
         if (!empty($eeVersions)) {
             $result[] = [
                 'package' => 'magento/product-enterprise-edition',
-                'versions' => $eeVersions
+                'versions' => $eeVersions,
             ];
         }
         return $result;
@@ -126,7 +126,7 @@ class SystemPackage
         $editionType = '';
         if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
             $editionType .= 'CE';
-        } else if ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
+        } elseif ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
             $editionType .= 'EE';
         }
         foreach ($systemPackageInfo[InfoCommand::NEW_VERSIONS] as $version) {
@@ -137,7 +137,7 @@ class SystemPackage
             $versions[] = [
                 'id' => $systemPackageInfo[InfoCommand::CURRENT_VERSION],
                 'name' => 'Version ' . $systemPackageInfo[InfoCommand::CURRENT_VERSION] . ' ' . $editionType,
-                'current' => true
+                'current' => true,
             ];
         }
         return  $versions;

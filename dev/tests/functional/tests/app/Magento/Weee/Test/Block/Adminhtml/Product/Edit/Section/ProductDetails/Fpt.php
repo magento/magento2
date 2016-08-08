@@ -28,20 +28,20 @@ class Fpt extends SimpleElement
     private $fields = [
         'country' => [
             'type' => 'select',
-            'selector' => '[name$="[country]"]'
+            'selector' => '[name$="[country]"]',
         ],
         'website' => [
             'type' => 'select',
-            'selector' => '[name$="[website_id]"]'
+            'selector' => '[name$="[website_id]"]',
         ],
         'tax' => [
             'type' => 'input',
-            'selector' => '[name$="[value]"]'
+            'selector' => '[name$="[value]"]',
         ],
         'state' => [
             'type' => 'select',
-            'selector' => '[name$="[state]"]'
-        ]
+            'selector' => '[name$="[state]"]',
+        ],
     ];
 
     /**

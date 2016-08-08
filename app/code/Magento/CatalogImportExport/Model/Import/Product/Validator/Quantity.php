@@ -33,7 +33,7 @@ class Quantity extends AbstractImportValidator implements RowValidatorInterface
                         $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
                         'qty',
                         'decimal'
-                    )
+                    ),
                 ]
             );
             return false;

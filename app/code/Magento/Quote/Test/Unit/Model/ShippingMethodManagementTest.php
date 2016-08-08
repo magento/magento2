@@ -97,7 +97,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
 
         $className = \Magento\Framework\Reflection\DataObjectProcessor::class;
         $this->dataProcessor = $this->getMock($className, [], [], '', false);
-        
+
         $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
@@ -149,7 +149,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
                 'methodDataFactory' => $this->methodDataFactoryMock,
                 'converter' => $this->converter,
                 'totalsCollector' => $this->totalsCollector,
-                'addressRepository' => $this->addressRepository
+                'addressRepository' => $this->addressRepository,
             ]
         );
 
@@ -482,7 +482,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             'region' => 'California',
             'region_id' => 23,
             'country_id' => 1,
-            'postcode' => 90200
+            'postcode' => 90200,
         ];
         $currencyCode = 'UAH';
 
@@ -562,7 +562,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             'region' => 'California',
             'region_id' => 23,
             'country_id' => 1,
-            'postcode' => 90200
+            'postcode' => 90200,
         ];
         $currencyCode = 'UAH';
 

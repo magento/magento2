@@ -8,16 +8,17 @@
 
 namespace Magento\CatalogImportExport\Model\Import;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
-use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
-use Magento\Catalog\Model\Product\Visibility;
+
 /**
  * Import entity product model
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -370,7 +371,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         self::COL_MEDIA_IMAGE,
         '_media_label',
         '_media_position',
-        '_media_is_disabled'
+        '_media_is_disabled',
     ];
 
     /**
@@ -418,7 +419,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Array of supported product types as keys with appropriate model object as value.
      *
-     * @var array
+     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType[]
      */
     protected $_productTypeModels = [];
 
@@ -828,7 +829,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param string $name
-     * @return mixed
+     * @return Product\Type\AbstractType
      */
     public function retrieveProductTypeByName($name)
     {
@@ -902,7 +903,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         [
                             'adapter' => $this,
                             'bunch' => $bunch,
-                            'ids_to_delete' => $idsToDelete
+                            'ids_to_delete' => $idsToDelete,
                         ]
                     );
                     $this->transactionManager->commit();
@@ -1176,7 +1177,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 }
 
                                 $linkKey = "{$productId}-{$linkedId}-{$linkId}";
-                                if(empty($productLinkKeys[$linkKey])) {
+                                if (empty($productLinkKeys[$linkKey])) {
                                     $productLinkKeys[$linkKey] = $nextLinkId;
                                 }
                                 if (!isset($linkRows[$linkKey])) {
@@ -1489,8 +1490,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     // existing row
                     $entityRowsUp[] = [
                         'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
-                        $this->getProductEntityLinkField()
-                            => $this->_oldSku[$rowSku][$this->getProductEntityLinkField()],
+                        $this->getProductEntityLinkField() => $this->_oldSku[$rowSku][$this->getProductEntityLinkField()],
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {
@@ -1982,7 +1982,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $this;
     }
 
-
     /**
      * Save product websites.
      *
@@ -2295,7 +2294,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
-            $rowAttributesValid = $this->_productTypeModels[$newSku['type_id']]->isRowValid(
+            /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
+            $rowAttributesValid = $productTypeValidator->isRowValid(
                 $rowData,
                 $rowNum,
                 !isset($this->_oldSku[$sku])
@@ -2397,7 +2398,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function _setStockUseConfigFieldsValues($rowData)
     {
-        $useConfigFields = array();
+        $useConfigFields = [];
         foreach ($rowData as $key => $value) {
             $useConfigName = self::INVENTORY_USE_CONFIG_PREFIX . $key;
             if (isset($this->defaultStockData[$key])

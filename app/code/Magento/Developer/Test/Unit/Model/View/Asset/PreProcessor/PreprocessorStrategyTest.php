@@ -5,15 +5,14 @@
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\State;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation;
 use Magento\Developer\Model\View\Asset\PreProcessor\PreprocessorStrategy;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 
 /**
  * Class PreprocessorStrategyTest

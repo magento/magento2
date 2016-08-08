@@ -5,13 +5,13 @@
  */
 namespace Magento\Developer\Test\Unit\Model\Css\PreProcessor\FileGenerator;
 
+use Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Css\PreProcessor\File\Temporary;
-use Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\LocalInterface;
@@ -108,7 +108,7 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
             'assetPublisher' => $this->publisherMock,
             'scopeConfig' => $this->scopeConfigMock,
             'state' => $this->stateMock,
-            'hasRelatedPublishing' => true
+            'hasRelatedPublishing' => true,
         ]);
     }
 
