@@ -48,6 +48,8 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * @param Io $ioObject
      * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CommunicationConfig $communicationConfig,
