@@ -35,14 +35,31 @@ define([
             }
         },
 
+        /**
+         * Extends instance with default config, calls initialize of parent
+         * class, calls initChildren method, set observe variable.
+         * Use parent "track" method - wrapper observe array
+         *
+         * @returns {Object} Chainable.
+         */
         initialize: function () {
             var self = this;
 
             this._super();
 
-            registry.async(this.name + '.' + this.positionProvider)(function(component){
+            registry.async(this.name + '.' + this.positionProvider)(function (component) {
+
+                /**
+                 * Overwrite hasChanged method
+                 *
+                 * @returns {Boolean}
+                 */
                 component.hasChanged = function () {
+
+                    /* eslint-disable eqeqeq */
                     return this.value().toString() != this.initialValue.toString();
+
+                    /* eslint-enable eqeqeq */
                 };
 
                 if (!component.initialValue) {

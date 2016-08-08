@@ -160,6 +160,9 @@ define([
             startIndex: 0
         },
 
+        /**
+         * Sets record data to cache
+         */
         setRecordDataToCache: function (data) {
             this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
                 data : this.recordDataCache;
@@ -177,7 +180,9 @@ define([
                 'processingDeleteRecord',
                 'onChildrenUpdate',
                 'checkDefaultState',
-                'renderColumnsHeader'
+                'renderColumnsHeader',
+                'deleteHandler',
+                'setDefaultState'
             );
 
             this._super()
@@ -247,15 +252,9 @@ define([
         initElement: function (elem) {
             this._super();
             elem.on({
-                'deleteRecord': function (index, id) {
-                    this.deleteHandler(index, id);
-                }.bind(this),
-                'update': function (state) {
-                    this.onChildrenUpdate(state);
-                }.bind(this),
-                'addChild': function () {
-                    this.setDefaultState();
-                }.bind(this)
+                'deleteRecord': this.deleteHandler,
+                'update': this.onChildrenUpdate,
+                'addChild': this.setDefaultState
             });
 
             return this;
@@ -270,7 +269,8 @@ define([
         deleteHandler: function (index, id) {
             this.setDefaultState();
             this.processingDeleteRecord(index, id);
-            this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.pagesChanged[this.currentPage()] =
+                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
             this.changed(_.some(this.pagesChanged));
         },
 
@@ -307,17 +307,18 @@ define([
                 changed.forEach(function (elem) {
                     changedElemDataScope = elem.dataScope.split('.');
                     changedElemDataScope.splice(0, dataScope.length);
-                    changedElemDataScope[0] = (parseInt(changedElemDataScope[0], 10) - this.pageSize * (this.currentPage() - 1)).toString();
-                    this.setValueByPath(this.defaultPagesState[this.currentPage()], changedElemDataScope, elem.initialValue);
+                    changedElemDataScope[0] =
+                        (parseInt(changedElemDataScope[0], 10) - this.pageSize * (this.currentPage() - 1)).toString();
+                    this.setValueByPath(
+                        this.defaultPagesState[this.currentPage()],
+                        changedElemDataScope, elem.initialValue
+                    );
                 }, this);
             }
 
-            this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.pagesChanged[this.currentPage()] =
+                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
             this.changed(_.some(this.pagesChanged));
-        },
-
-        compare: function (a1,a2) {
-            return compareArrays(a1,a2)
         },
 
         /**
@@ -426,10 +427,12 @@ define([
                     return initialize;
                 }));
 
-                this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.pagesChanged[this.currentPage()] =
+                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
                 this.changed(_.some(this.pagesChanged));
             } else if (this.hasInitialPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.pagesChanged[this.currentPage()] =
+                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
                 this.changed(_.some(this.pagesChanged));
             }
         },
@@ -438,6 +441,7 @@ define([
          * Filters out deleted items from array
          *
          * @param {Array} data
+         * 
          * @returns {Array} filtered array
          */
         arrayFilter: function (data) {
