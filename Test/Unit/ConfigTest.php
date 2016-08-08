@@ -103,4 +103,42 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedSsl, $this->amqpConfig->getValue(Config::SSL));
         $this->assertEquals('randomValue', $this->amqpConfig->getValue('randomKey'));
     }
+
+    public function testGetCustomConfig()
+    {
+        $amqpConfig = new \Magento\Framework\Amqp\Config($this->deploymentConfigMock, 'connection-01');
+        $expectedHost = 'example.com';
+        $expectedPort = 5672;
+        $expectedUsername = 'guest_username';
+        $expectedPassword = 'guest_password';
+        $expectedVirtualHost = '/';
+        $expectedSsl = ['some' => 'value'];
+
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(Config::QUEUE_CONFIG)
+            ->will($this->returnValue(
+                [
+                    'connections' => [
+                        'connection-01' => [
+                            'host' => $expectedHost,
+                            'port' => $expectedPort,
+                            'user' => $expectedUsername,
+                            'password' => $expectedPassword,
+                            'virtualhost' => $expectedVirtualHost,
+                            'ssl' => $expectedSsl,
+                            'randomKey' => 'randomValue',
+                        ]
+                    ]
+                ]
+            ));
+
+        $this->assertEquals($expectedHost, $amqpConfig->getValue(Config::HOST));
+        $this->assertEquals($expectedPort, $amqpConfig->getValue(Config::PORT));
+        $this->assertEquals($expectedUsername, $amqpConfig->getValue(Config::USERNAME));
+        $this->assertEquals($expectedPassword, $amqpConfig->getValue(Config::PASSWORD));
+        $this->assertEquals($expectedVirtualHost, $amqpConfig->getValue(Config::VIRTUALHOST));
+        $this->assertEquals($expectedSsl, $amqpConfig->getValue(Config::SSL));
+        $this->assertEquals('randomValue', $amqpConfig->getValue('randomKey'));
+    }
 }
