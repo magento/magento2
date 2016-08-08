@@ -5,10 +5,12 @@
  */
 
 use Magento\Sales\Model\Order;
-
 require 'order.php';
 /** @var Order $order */
 /** @var  Order\Payment $payment */
+/** @var  Order\Item $orderItem */
+/** @var  Order\Address $billingAddress */
+/** @var  Order\Address $shippingAddress */
 $orders = [
     [
         'increment_id' => '100000002',
@@ -16,6 +18,7 @@ $orders = [
         'status' => 'processing',
         'grand_total' => 120.00,
         'subtotal' => 120.00,
+        'base_grand_total' => 120.00,
         'store_id' => 1,
         'website_id' => 1,
         'payment' => $payment
@@ -25,6 +28,7 @@ $orders = [
         'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
         'status' => 'processing',
         'grand_total' => 140.00,
+        'base_grand_total' => 140.00,
         'subtotal' => 140.00,
         'store_id' => 0,
         'website_id' => 0,
@@ -35,6 +39,7 @@ $orders = [
         'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
         'status' => 'closed',
         'grand_total' => 140.00,
+        'base_grand_total' => 140.00,
         'subtotal' => 140.00,
         'store_id' => 1,
         'website_id' => 1,
@@ -50,5 +55,8 @@ foreach ($orders as $orderData) {
     );
     $order
         ->setData($orderData)
+        ->addItem($orderItem)
+        ->setBillingAddress($billingAddress)
+        ->setBillingAddress($shippingAddress)
         ->save();
 }
