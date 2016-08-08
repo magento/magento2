@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceCommentBaseInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Interface InvoiceNotifierInterface

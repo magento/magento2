@@ -44,13 +44,13 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/invoice',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_READ_NAME . 'execute'
-            ]
+                'operation' => self::SERVICE_READ_NAME . 'execute',
+            ],
         ];
 
         $requestData = [
@@ -58,15 +58,15 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
             'items' => [],
             'comment' => [
                 'comment' => 'Test Comment',
-                'is_visible_on_front' => 1
-            ]
+                'is_visible_on_front' => 1,
+            ],
         ];
 
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
         foreach ($existingOrder->getAllItems() as $item) {
             $requestData['items'][] = [
                 'order_item_id' => $item->getItemId(),
-                'qty' => $item->getQtyOrdered()
+                'qty' => $item->getQtyOrdered(),
             ];
         }
 

@@ -35,15 +35,10 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
-        $i = 0;
-        foreach ($expectedAssociatedProducts as $associatedProduct) {
+        foreach ($expectedAssociatedProducts as $i => $associatedProduct) {
             $expectedAssociatedProductSkus[] = $associatedProduct->getSku();
             $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
-            $i++;
         }
-
-        sort($expectedAssociatedProductSkus);
-        sort($actualAssociatedProductSkus);
 
         $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
 

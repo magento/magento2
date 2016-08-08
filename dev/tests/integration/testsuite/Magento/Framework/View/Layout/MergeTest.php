@@ -120,7 +120,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $fileReader->expects($this->any())->method('readAll')->will(
             $this->returnCallback(
                 function ($filename) use ($fileDriver) {
-                    return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/'. $filename);
+                    return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/' . $filename);
                 }
             )
         );
@@ -139,7 +139,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
                 'validator' => $this->_layoutValidator,
                 'logger' => $this->_logger,
                 'readFactory' => $readFactory,
-                'pageConfig' => $this->pageConfig
+                'pageConfig' => $this->pageConfig,
             ]
         );
     }
@@ -216,7 +216,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'non-existing handle' => ['non_existing_handle', false],
-            'existing page type' => ['default', true]
+            'existing page type' => ['default', true],
         ];
     }
 
