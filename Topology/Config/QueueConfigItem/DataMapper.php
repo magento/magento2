@@ -98,7 +98,7 @@ class DataMapper
 
         foreach ($synchronousTopics as $topicName) {
             $callbackQueueName = $this->queueNameBuilder->getQueueName($topicName);
-            $output[$callbackQueueName . '-' . $connection] = [
+            $output[$callbackQueueName . '--' . $connection] = [
                 'name' => $callbackQueueName,
                 'connection' => $connection,
                 'durable' => true,
@@ -107,7 +107,7 @@ class DataMapper
             ];
         }
 
-        $output[$name . '-' . $connection] = [
+        $output[$name . '--' . $connection] = [
             'name' => $name,
             'connection' => $connection,
             'durable' => true,

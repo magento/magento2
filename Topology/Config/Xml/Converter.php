@@ -88,7 +88,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
-            $result[$name . '-' . $connection] = [
+            $result[$name . '--' . $connection] = [
                 'name' => $name,
                 'type' => $this->getAttributeValue($exchange, 'type'),
                 'connection' => $connection,

@@ -83,10 +83,10 @@ class ConfigReaderPlugin
 
             $exchangeName = $queueConfigBinding['exchange'];
             $connection = $this->queueConfig->getConnectionByTopic($topic);
-            if (isset($result[$exchangeName . '-' . $connection])) {
-                $result[$exchangeName . '-' . $connection]['bindings'][$bindingId] = $bindingData;
+            if (isset($result[$exchangeName . '--' . $connection])) {
+                $result[$exchangeName . '--' . $connection]['bindings'][$bindingId] = $bindingData;
             } else {
-                $result[$exchangeName . '-' . $connection] = [
+                $result[$exchangeName . '--' . $connection] = [
                     'name' => $exchangeName,
                     'type' => 'topic',
                     'connection' => $connection,

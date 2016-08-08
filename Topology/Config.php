@@ -46,7 +46,7 @@ class Config implements ConfigInterface
      */
     public function getExchange($name, $connection)
     {
-        $topology = $this->exchangeIterator[$name . '-' . $connection];
+        $topology = $this->exchangeIterator[$name . '--' . $connection];
         if (!$topology) {
             throw new LocalizedException(
                 new Phrase(

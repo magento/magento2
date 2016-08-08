@@ -5,7 +5,7 @@
  */
 
 return [
-    'ex01-amqp' => [
+    'ex01--amqp' => [
         'name' => 'ex01',
         'type' => 'topic',
         'connection' => 'amqp',
@@ -15,7 +15,7 @@ return [
         'bindings' => [],
         'arguments' => [],
     ],
-    'ex02-amqp' => [
+    'ex02--amqp' => [
         'name' => 'ex02',
         'type' => 'topic',
         'connection' => 'amqp',
@@ -25,7 +25,7 @@ return [
         'bindings' => [],
         'arguments' => [],
     ],
-    'ex03-amqp' => [
+    'ex03--amqp' => [
         'name' => 'ex03',
         'type' => 'topic',
         'connection' => 'amqp',
@@ -37,7 +37,7 @@ return [
             'arg1' => '10',
         ],
     ],
-    'ex04-amqp' => [
+    'ex04--amqp' => [
         'name' => 'ex04',
         'type' => 'topic',
         'connection' => 'amqp',
