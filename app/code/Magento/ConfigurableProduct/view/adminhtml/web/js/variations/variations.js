@@ -8,8 +8,7 @@ define([
     'ko',
     'underscore',
     'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/grid/paging/paging',
-    'Magento_ConfigurableProduct/js/variations/paging/sizes'
+    'Magento_Ui/js/grid/paging/paging'
 ], function (Component, $, ko, _, alert, paging) {
     'use strict';
 
@@ -28,7 +27,11 @@ define([
             opened: false,
             attributes: [],
             productMatrix: [],
-            productMatrixSerialized: '',
+            productMatrixSerialized: ko.observable(''),
+            associatedProducts: [],
+            associatedProductsSerialized: ko.observable(''),
+            configurations: [],
+            configurationsSerialized: ko.observable(''),
             variations: [],
             productAttributes: [],
             fullAttributes: [],
@@ -67,7 +70,7 @@ define([
                 pageSize: ko.getObservable(this.paging, 'pageSize')
             };
 
-            this._super().observe('actions opened attributes productMatrix productMatrixSerialized');
+            this._super().observe('actions opened attributes productMatrix');
             this.paging.totalRecords = this.variations.length;
 
             _.each(pagingObservables, function (observable) {
@@ -80,6 +83,8 @@ define([
 
             $('#save-split-button, #save-split-button .item').click(function () {
                 this.productMatrixSerialized(JSON.stringify(this.prepareVariations()));
+                this.associatedProductsSerialized(JSON.stringify(this.associatedProducts));
+                this.configurationsSerialized(JSON.stringify(this.configurations));
             }.bind(this));
 
             return this;
@@ -131,6 +136,8 @@ define([
          * @param {Array} newProducts
          */
         appendProducts: function (newProducts) {
+            var newProduct = {};
+
             this.variations.push.apply(
                 this.variations,
                 _.map(
@@ -138,7 +145,8 @@ define([
                     _.wrap(
                         this._makeProduct.bind(this),
                         function (func, product) {
-                            var newProduct = func(product);
+                            product.associatedProductId = product.productId;
+                            newProduct = func(product);
 
                             this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
 
@@ -147,6 +155,7 @@ define([
                     )
                 )
             );
+            this.associatedProducts.push(newProduct.productId);
             this.render(this.variations);
         },
 
@@ -186,6 +195,7 @@ define([
                 options: options,
                 price: parseFloat(product.price.replace(/[^\d.]+/g, '')).toFixed(4),
                 productId: productId,
+                associatedProductId: product.associatedProductId || null,
                 productUrl: this.buildProductUrl(productId),
                 quantity: product.quantity || null,
                 sku: product.sku,
@@ -283,10 +293,25 @@ define([
          * @returns {Object}
          */
         prepareVariations: function () {
-            var mappedVariations = {};
+            var mappedVariations = {},
+                configurations = {};
 
             _.each(this.variations, function (variation) {
-                var attributes = _.reduce(variation.options, function (memo, option) {
+                var attributes;
+
+                if (variation.productId) {
+                    configurations[variation.productId] = {
+                        'status': variation.status === undefined ? 1 : parseInt(variation.status, 10)
+                    };
+
+                    if (this.associatedProducts.indexOf(variation.productId) === -1) {
+                        this.associatedProducts.push(variation.productId);
+                    }
+
+                    return;
+                }
+
+                attributes = _.reduce(variation.options, function (memo, option) {
                     var attribute = {};
 
                     attribute[option['attribute_code']] = option.value;
@@ -312,6 +337,7 @@ define([
                     mappedVariations[this.getVariationKey(variation.options)][key] = imageFile;
                 }, this);
             }, this);
+            this.configurations = configurations;
 
             return mappedVariations;
         },
@@ -401,6 +427,11 @@ define([
                 this.attributes.each(function (attribute) {
                     $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
                 });
+            }
+
+            if (removedProduct[0].productId) {
+                rowIndex = this.associatedProducts.indexOf(removedProduct[0].productId);
+                this.associatedProducts.splice(rowIndex, 1);
             }
             this.render(this.variations);
             this.showPrice();

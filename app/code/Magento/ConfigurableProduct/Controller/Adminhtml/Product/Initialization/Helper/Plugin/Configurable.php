@@ -56,6 +56,12 @@ class Configurable
 
             $product->setNewVariationsAttributeSetId($setId);
             $associatedProductIds = $this->request->getPost('associated_product_ids', []);
+            if ($this->request->getParam('associated_product_ids_serialized')) {
+                $associatedProductIds = json_decode(
+                    $this->request->getParam('associated_product_ids_serialized'),
+                    true
+                );
+            }
             $variationsMatrix = $this->request->getParam('variations-matrix', []);
             if ($this->request->getParam('configurable-matrix-serialized')) {
                 $variationsMatrix = json_decode($this->request->getParam('configurable-matrix-serialized'), true);

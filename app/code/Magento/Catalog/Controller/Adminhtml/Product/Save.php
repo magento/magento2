@@ -80,6 +80,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                         unset($data["configurable-matrix-serialized"]);
                     }
                 }
+                if (isset($data["associated_product_ids_serialized"])) {
+                    $associatedProductIdsSerialized = $data["associated_product_ids_serialized"];
+                    if ($associatedProductIdsSerialized != null && !empty($associatedProductIdsSerialized)) {
+                        $data["associated_product_ids"] = json_decode($associatedProductIdsSerialized, true);
+                        unset($data["associated_product_ids_serialized"]);
+                    }
+                }
                 $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
                 $this->productTypeManager->processProduct($product);
 
