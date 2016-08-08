@@ -24,7 +24,7 @@
                 <div class="item-number">{{countOfUpdate}}</div>
                 <div class="item-title">Updates<br />Available</div>
                 <button ui-sref="root.update" href="#update-extension-grid"
-                        ng-class="{'disabled' : !countOfUpdate}"
+                        ng-class="{'disabled' : !countOfUpdate, 'goUpdate' : countOfUpdate}"
                         type="button" class="btn">
                     Review Updates
                 </button>
