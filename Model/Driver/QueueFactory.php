@@ -24,7 +24,6 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
      */
     private $instanceName = null;
 
-
     /**
      * Initialize dependencies.
      *
