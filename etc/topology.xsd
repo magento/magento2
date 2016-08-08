@@ -100,7 +100,7 @@
         </xs:choice>
         <xs:attribute type="xs:string" name="name" use="required"/>
         <xs:attribute type="exchangeType" name="type" use="optional"/>
-        <xs:attribute name="connection" type="connectionType" use="required" />
+        <xs:attribute name="connection" type="xs:string" use="required" />
         <xs:attribute type="xs:boolean" name="durable" use="optional"/>
         <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
         <xs:attribute type="xs:boolean" name="internal" use="optional"/>
@@ -109,13 +109,6 @@
     <xs:simpleType name="exchangeType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="topic" />
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="connectionType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="amqp" />
-            <xs:enumeration value="db" />
         </xs:restriction>
     </xs:simpleType>
 

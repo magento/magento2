@@ -16,26 +16,27 @@ class QueueRepository
     private $objectManager;
 
     /**
-     * @var string[]
-     */
-    private $queues;
-
-    /**
      * @var QueueInterface[]
      */
     private $queueInstances;
 
     /**
+     * @var QueueFactoryInterface
+     */
+    private $queueFactory;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string[] $queues
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $queues)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $queues = [])
     {
         $this->objectManager = $objectManager;
-        $this->queues = $queues;
     }
 
     /**
+     * Get queue instance by connection name and queue name.
+     *
      * @param string $connectionName
      * @param string $queueName
      * @return QueueInterface
@@ -43,25 +44,24 @@ class QueueRepository
      */
     public function get($connectionName, $queueName)
     {
-        if (!isset($this->queueInstances[$queueName])) {
-            if (!isset($this->queues[$connectionName])) {
-                throw new \LogicException("Not found queue for connection name '{$connectionName}' in config");
-            }
-
-            $queueClassName = $this->queues[$connectionName];
-            $queue = $this->objectManager->create($queueClassName, ['queueName' => $queueName]);
-
-            if (!$queue instanceof QueueInterface) {
-                $queueInterface = \Magento\Framework\MessageQueue\QueueInterface::class;
-                throw new \LogicException(
-                    "Queue '{$queueClassName}' for connection name '{$connectionName}' " .
-                    "does not implement interface '{$queueInterface}'"
-                );
-            }
-
-            $this->queueInstances[$queueName] = $queue;
+        if (!isset($this->queueInstances[$connectionName][$queueName])) {
+            $queue = $this->getQueueFactory()->create($queueName, $connectionName);
+            $this->queueInstances[$connectionName][$queueName] = $queue;
         }
+        return $this->queueInstances[$connectionName][$queueName];
+    }
 
-        return $this->queueInstances[$queueName];
+    /**
+     * Get connection type resolver.
+     *
+     * @return QueueFactoryInterface
+     * @deprecated
+     */
+    private function getQueueFactory()
+    {
+        if ($this->queueFactory === null) {
+            $this->queueFactory = $this->objectManager->get(QueueFactoryInterface::class);
+        }
+        return $this->queueFactory;
     }
 }

@@ -54,13 +54,13 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'valid' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
                         <exchange name="ex01" type="topic" connection="amqp"/>
-                        <exchange name="ex02" type="topic" connection="amqp" />
+                        <exchange name="ex02" type="topic" connection="amqp-02" />
                         <exchange name="ex03" autoDelete="true" durable="false" internal="true" type="topic" connection="db">
                             <arguments>
                                 <argument name="arg1" xsi:type="string">10</argument>
                             </arguments>
                         </exchange>
-                        <exchange name="ex04" connection="amqp">
+                        <exchange name="ex04" connection="amqp-03">
                             <binding id="bind01" destinationType="queue" destination="queue01" topic="top01" disabled="true" />
                             <binding id="bind02" destinationType="queue" destination="queue01" topic="top01">
                                 <arguments>
