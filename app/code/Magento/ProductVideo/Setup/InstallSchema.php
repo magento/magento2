@@ -11,7 +11,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
- * Class InstallSchema adds new table `eav_attribute_option_swatch`
+ * Class InstallSchema adds new table `catalog_product_entity_media_gallery_value_video`
  */
 class InstallSchema implements InstallSchemaInterface
 {
