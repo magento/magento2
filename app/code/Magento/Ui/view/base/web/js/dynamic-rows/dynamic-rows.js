@@ -153,7 +153,7 @@ define([
                 dnd: '${ $.dndConfig.name }'
             },
             pages: 1,
-            pageSize: 5,
+            pageSize: 20,
             relatedData: [],
             currentPage: 1,
             recordDataCache: [],
@@ -659,8 +659,6 @@ define([
          * @param {Number|String} prop - additional property to element
          */
         processingAddChild: function (ctx, index, prop) {
-            console.log('3', this.name);
-
             this.bubble('addChild', false);
 
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
