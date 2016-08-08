@@ -16,7 +16,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
      * {@inheritdoc}
      */
     protected $_idAttributes = [
-        '/config/exchange' => 'name',
+        '/config/exchange' => ['name', 'connection'],
         '/config/exchange/arguments/argument' => 'name',
         '/config/exchange/arguments/argument(/item)+' => 'name',
         '/config/exchange/binding' => 'id',
