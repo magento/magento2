@@ -4,9 +4,9 @@
  */
 
 'use strict';
-angular.module('readiness-check', [])
+angular.module('readiness-check', ['remove-dialog'])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', 'ngDialog', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER, ngDialog) {
         $scope.Object = Object;
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
@@ -362,6 +362,9 @@ angular.module('readiness-check', [])
                     }
                 } else {
                     $actionString += 'package';
+                    if ($scope.getObjectSize($localStorage.packages) > 1) {
+                        $actionString += 's';
+                    }
                 }
             }
             $actionString += " to be " + $state.current.type;
@@ -377,10 +380,9 @@ angular.module('readiness-check', [])
             return $scope.componentDependency.packages ? $scope.componentDependency.packages : {};
         };
 
-        $scope.removeExtension = function (name) {
-            delete $scope.componentDependency.packages[name];
-            $localStorage.packages = $scope.componentDependency.packages;
-            $rootScope.needReCheck = true;
+        $scope.openDialog = function (name) {
+            $scope.extensionToRemove = name;
+            ngDialog.open({scope: $scope, template: 'removeDialog', controller: 'removeDialogController'});
         };
 
         $scope.getCurrentVersion = function (name) {

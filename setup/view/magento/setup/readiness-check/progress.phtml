@@ -7,15 +7,24 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="message" ng-class="{'message-warning':needReCheck && !checkingInProgress()}"
-     ng-show="getObjectSize(getExtensionsList()) > 0"
+<style>
+    .top-ico:before {
+        margin-top: 0;
+        top: 1.8rem;
+    }
+    .list select:disabled {
+        background: #cccccc;
+    }
+</style>
+<div class="message top-ico" ng-class="{'message-warning':needReCheck && !checkingInProgress()}"
+     ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0"
 >
-    <div><strong>Extensions to {{$state.current.type}}:</strong></div>
-    <div>You can change the version or remove the extension from the updating.</div>
+    <h3>Extensions to {{$state.current.type}}:</h3>
+    <div style="padding: 0 0 2rem 0;">You can change the version or remove the extension from the updating.</div>
 
     <ul class="list">
         <li ng-repeat="extension in getExtensionsList()">
-            {{extension.name}} {{getCurrentVersion(extension.name)}} to
+            <strong>{{extension.name}} {{getCurrentVersion(extension.name)}}</strong> to
             <select ng-change="versionChanged()"
                     ng-model="extension.version"
                     ng-disabled="checkingInProgress()"
@@ -26,7 +35,7 @@
                 >Version {{version}}</option>
             </select>
             <button style="padding-top: 0;" class="abs-action-delete"
-               ng-click="removeExtension(extension.name)"
+               ng-click="openDialog(extension.name)"
                ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1"></button>
         </li>
     </ul>
@@ -526,3 +535,43 @@
 <div class="readiness-check-item" id="warning-message" ng-show="true">
     * - In some cases, you might have two PHP configuration files: one for the PHP command line and for the web server. If so, make the change in both php.ini files. For details, see the <a href="http://php.net/manual/en/configuration.file.php">php.ini reference</a>.
 </div>
+
+<script type="text/ng-template" id="removeDialog">
+    <div class="modals-wrapper">
+        <aside class="modal-popup modal-connect-signin _show" data-role="modal">
+            <div class="modal-inner-wrap">
+                <header class="modal-header">
+                    <button ng-click="closeThisDialog()" class="action-close" data-role="closeBtn" type="button">
+                        <span>Close</span>
+                    </button>
+                </header>
+                <div class="modal-content" data-role="content">
+                    <div class="sync-login-wrap" style="padding: 0 4% 4rem;">
+                        <div class="login-header">
+                            <span>Remove Product</span>
+                        </div>
+
+                        <div>Are you sure you want to remove “{{extensionToRemove}}” from
+                            the list?</div>
+                        <br>
+                        <div>
+                            Please be aware that removing this product will remove it from the current
+                            update wizard flow. You can update this product at a later time by selecting
+                            the product in the update grid.
+                        </div>
+                        <div class="form-actions">
+                            <div class="actions" style="padding: 5rem 0 0;">
+                                <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
+                                    <span>Remove</span>
+                                </button>
+                                <button ng-click="closeThisDialog()" class="btn btn-large btn-cancel">
+                                    <span>Cancel</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</script>
