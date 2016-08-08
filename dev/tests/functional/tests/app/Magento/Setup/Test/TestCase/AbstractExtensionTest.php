@@ -79,14 +79,34 @@ abstract class AbstractExtensionTest extends Injectable
         AssertSuccessfulReadinessCheck $assertReadiness,
         BackupOptions $backupOptions
     ) {
+        $this->readinessCheck($assertReadiness);
+        $this->setupWizard->getReadiness()->clickNext();
+        $this->backup($backupOptions);
+        $this->setupWizard->getCreateBackup()->clickNext();
+    }
+
+    /**
+     * Perform Readiness check.
+     *
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     */
+    protected function readinessCheck(AssertSuccessfulReadinessCheck $assertReadiness)
+    {
         // Readiness Check
         $this->setupWizard->getReadiness()->clickReadinessCheck();
-        $assertReadiness->processAssert($this->setupWizard);
-        $this->setupWizard->getReadiness()->clickNext();
 
+        $assertReadiness->processAssert($this->setupWizard);
+    }
+
+    /**
+     * Perform Backup.
+     *
+     * @param BackupOptions $backupOptions
+     */
+    protected function backup(BackupOptions $backupOptions)
+    {
         // Create Backup page
         $this->setupWizard->getCreateBackup()->fill($backupOptions);
-        $this->setupWizard->getCreateBackup()->clickNext();
     }
 
     /**

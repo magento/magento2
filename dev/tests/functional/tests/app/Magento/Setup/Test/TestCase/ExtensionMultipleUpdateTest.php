@@ -34,6 +34,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
      * @param AssertSelectSeveralExtensions $assertSelectSeveralExtensions
      * @param $needAuthentication
      * @param array $extensions
+     * @param array $removeExtensions
      */
     public function test(
         FixtureFactory $fixtureFactory,
@@ -46,10 +47,15 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         AssertMultipleUpdateSuccessMessage $assertMultipleUpdateSuccessMessage,
         AssertSelectSeveralExtensions $assertSelectSeveralExtensions,
         $needAuthentication,
-        array $extensions
+        array $extensions,
+        array $removeExtensions
     ) {
         foreach ($extensions as $key => $options) {
             $extensions[$key] = $fixtureFactory->create(Extension::class, $options);
+        }
+
+        foreach ($removeExtensions as $key => $options) {
+            $removeExtensions[$key] = $fixtureFactory->create(Extension::class, $options);
         }
 
         // Authenticate in admin area
@@ -83,15 +89,28 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         // Click general "Update" button
         $this->setupWizard->getExtensionsUpdateGrid()->clickUpdateAllButton();
 
-        $this->readinessCheckAndBackup($assertReadiness, $backupOptions);
+        $this->readinessCheck($assertReadiness);
+
+        /** @var Extension $removeExtension */
+        foreach ($removeExtensions as $removeExtension) {
+            $this->setupWizard->getReadiness()->clickRemoveExtension($removeExtension);
+        }
+
+        $this->setupWizard->getReadiness()->clickTryAgain();
+        $assertReadiness->processAssert($this->setupWizard);
+        $this->setupWizard->getReadiness()->clickNext();
+        $this->backup($backupOptions);
+        $this->setupWizard->getCreateBackup()->clickNext();
 
         // Start installing
         $this->setupWizard->getUpdaterExtension()->clickStartButton();
 
+        $updatedExtensions = array_diff_key($extensions, $removeExtensions);
+
         // Check success message
         $assertMultipleUpdateSuccessMessage->processAssert(
             $this->setupWizard,
-            $extensions,
+            $updatedExtensions,
             AssertSuccessMessage::TYPE_UPDATE
         );
 

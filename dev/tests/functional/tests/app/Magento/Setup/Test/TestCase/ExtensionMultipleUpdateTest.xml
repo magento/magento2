@@ -17,6 +17,11 @@
                     <item name="dataset" xsi:type="string">secondExtension</item>
                 </item>
             </data>
+            <data name="removeExtensions" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">firstExtension</item>
+                </item>
+            </data>
         </variation>
     </testCase>
 </config>
