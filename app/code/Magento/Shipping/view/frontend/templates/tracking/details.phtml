@@ -67,7 +67,7 @@ $fields = [
             <?php foreach ($fields as $title => $property): ?>
                 <?php if (!empty($track->$property())): ?>
                     <tr>
-                        <th class="col label" scope="row"><?php echo $block->escapeHtml(__($title . ':')); ?></th>
+                        <th class="col label" scope="row"><?php /* @noEscape */ echo $block->escapeHtml(__($title . ':')); ?></th>
                         <td class="col value"><?php echo $block->escapeHtml($track->$property()); ?></td>
                     </tr>
                 <?php endif;?>

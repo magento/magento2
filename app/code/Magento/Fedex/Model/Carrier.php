@@ -1550,8 +1550,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * Parse track details response from Fedex
      * @param \stdClass $trackInfo
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function processTrackingDetails(\stdClass $trackInfo)
     {
