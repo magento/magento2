@@ -35,6 +35,8 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
      * @param $needAuthentication
      * @param array $extensions
      * @param array $removeExtensions
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function test(
         FixtureFactory $fixtureFactory,
