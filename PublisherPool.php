@@ -18,7 +18,6 @@ class PublisherPool implements PublisherInterface
     const MODE_SYNC = 'sync';
     const MODE_ASYNC = 'async';
 
-
     /**
      * @deprecated
      */

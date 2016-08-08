@@ -11,7 +11,7 @@ namespace Magento\Framework\MessageQueue;
 class QueueFactory implements QueueFactoryInterface
 {
     /**
-     * @var ExchangeFactoryInterface[]
+     * @var QueueFactoryInterface[]
      */
     private $queueFactories;
 
@@ -30,8 +30,9 @@ class QueueFactory implements QueueFactoryInterface
     /**
      * Initialize dependencies.
      *
-     * @param ExchangeFactoryInterface[] $queueFactories
      * @param ConnectionTypeResolver $connectionTypeResolver
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param QueueFactoryInterface[] $queueFactories
      */
     public function __construct(
         ConnectionTypeResolver $connectionTypeResolver,

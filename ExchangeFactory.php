@@ -30,8 +30,9 @@ class ExchangeFactory implements ExchangeFactoryInterface
     /**
      * Initialize dependencies.
      *
-     * @param ExchangeFactoryInterface[] $exchangeFactories
      * @param ConnectionTypeResolver $connectionTypeResolver
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ExchangeFactoryInterface[] $exchangeFactories
      */
     public function __construct(
         ConnectionTypeResolver $connectionTypeResolver,
