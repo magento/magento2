@@ -162,9 +162,7 @@ class StaticProperties
         $namespacePattern = '/namespace [a-zA-Z0-9\\\\]+;/';
         $classPattern = '/\nclass [a-zA-Z0-9_]+/';
         foreach ($classFiles as $classFile) {
-            $file = @fopen($classFile, 'r');
-            $code = fread($file, 4096);
-            fclose($file);
+            $code = file_get_contents($classFile);
             preg_match($namespacePattern, $code, $namespace);
             preg_match($classPattern, $code, $class);
             if (!isset($namespace[0]) || !isset($class[0])) {
