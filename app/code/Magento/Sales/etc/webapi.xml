@@ -254,7 +254,7 @@
         </resources>
     </route>
     <route url="/V1/order/:orderId/invoice" method="POST">
-        <service class="Magento\Sales\Api\OrderInvoiceInterface" method="execute"/>
+        <service class="Magento\Sales\Api\InvoiceOrderInterface" method="execute"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
