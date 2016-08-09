@@ -41,7 +41,7 @@ class Readiness extends Block
      *
      * @var string
      */
-    protected $removeExtension = '//li[contains(text(), \'%s\')]//button';
+    protected $removeExtension = '//li//strong[contains(text(), \'%s\')]//..//button';
 
     /**
      * 'Completed!' message.

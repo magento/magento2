@@ -11,15 +11,15 @@
             <data name="needAuthentication" xsi:type="boolean">false</data>
             <data name="extensions" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="dataset" xsi:type="string">firstExtension</item>
+                    <item name="dataset" xsi:type="string">thirdExtension</item>
                 </item>
                 <item name="1" xsi:type="array">
-                    <item name="dataset" xsi:type="string">secondExtension</item>
+                    <item name="dataset" xsi:type="string">fourthExtension</item>
                 </item>
             </data>
             <data name="removeExtensions" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="dataset" xsi:type="string">firstExtension</item>
+                    <item name="dataset" xsi:type="string">thirdExtension</item>
                 </item>
             </data>
         </variation>
