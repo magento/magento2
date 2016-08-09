@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Test\TestCase;
+
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
@@ -15,6 +16,7 @@ use Magento\Review\Test\Fixture\Review;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+
 /**
  * Preconditions:
  * 1. Create customer.
@@ -39,36 +41,42 @@ class ReviewReportEntityTest extends Injectable
     const MVP = 'no';
     const DOMAIN = 'MX';
     /* end tags */
+
     /**
      * Customer frontend logout page.
      *
      * @var CustomerAccountLogout
      */
     protected $customerAccountLogout;
+
     /**
      * Product reviews report page.
      *
      * @var ProductReportReview
      */
     protected $productReportReview;
+
     /**
      * Frontend product view page.
      *
      * @var CatalogProductView
      */
     protected $pageCatalogProductView;
+
     /**
      * Cms Index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
+
     /**
      * Catalog Category page.
      *
      * @var CatalogCategoryView
      */
     protected $catalogCategoryView;
+
     /**
      * Prepare data.
      *
@@ -81,6 +89,7 @@ class ReviewReportEntityTest extends Injectable
         $customer->persist();
         return ['customer' => $customer];
     }
+
     /**
      * Preparing pages for test.
      *
@@ -104,6 +113,7 @@ class ReviewReportEntityTest extends Injectable
         $this->catalogCategoryView = $catalogCategoryView;
         $this->customerAccountLogout = $customerAccountLogout;
     }
+
     /**
      * Test Creation for ReviewReportEntity.
      *
@@ -140,6 +150,7 @@ class ReviewReportEntityTest extends Injectable
         
         return ['product' => $product];
     }
+
     /**
      * Login customer on frontend.
      *
@@ -153,6 +164,7 @@ class ReviewReportEntityTest extends Injectable
             ['customer' => $customer]
         )->run();
     }
+
     /**
      * Logout customer from frontend account.
      *

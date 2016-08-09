@@ -28,6 +28,7 @@ class View extends Block
      * @var string
      */
     protected $newProducts = '.block-new-products strong.product-item-name';
+
     /**
      * Description CSS selector.
      *
