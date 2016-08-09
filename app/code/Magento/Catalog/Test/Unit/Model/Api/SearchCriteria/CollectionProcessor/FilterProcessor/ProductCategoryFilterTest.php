@@ -3,20 +3,20 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
+namespace Magento\Catalog\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
 
-use Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter;
+use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
 
-class CategoryFilterTest extends \PHPUnit_Framework_TestCase
+class ProductCategoryFilterTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var CategoryFilter */
+    /** @var ProductCategoryFilter */
     private $model;
 
     protected function setUp()
     {
-        $this->model = new CategoryFilter();
+        $this->model = new ProductCategoryFilter();
     }
 
     public function testApply()
