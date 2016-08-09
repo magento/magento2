@@ -6,7 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\ConfigurableProductsFixture;
+use Magento\Setup\Fixtures\ConfigurableProductsFixture;
+use Magento\Setup\Model\Complex\Generator;
 
 class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,34 +78,41 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
 
-        $valueMap = [
-            [\Magento\ImportExport\Model\Import::class,
-                [
-                    'data' => [
-                        'entity' => 'catalog_product',
-                        'behavior' => 'append',
-                        'validation_strategy' => 'validation-stop-on-errors'
-                    ]
-                ],
-                $importMock
-            ],
-            [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock]
-        ];
+        $source = $this->getMockBuilder(Generator::class)->disableOriginalConstructor()->getMock();
 
         $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
-        $objectManagerMock->expects($this->exactly(2))
-            ->method('create')
-            ->will($this->returnValueMap($valueMap));
-        $objectManagerMock->expects($this->once())
+
+        $objectManagerMock->expects($this->at(0))
             ->method('get')
+            ->with(\Magento\Store\Model\StoreManager::class)
+            ->willReturn($storeManagerMock);
+
+        $objectManagerMock->expects($this->at(1))
+            ->method('create')
             ->will($this->returnValue($categoryMock));
 
+        $objectManagerMock->expects($this->at(2))
+            ->method('create')
+            ->with(\Magento\ImportExport\Model\Import::class)
+            ->willReturn($importMock);
+
+        $objectManagerMock->expects($this->at(3))
+            ->method('create')
+            ->with(Generator::class)
+            ->willReturn($source);
+        $importMock->expects($this->once())->method('validateSource')->with($source)->willReturn(1);
+        $importMock->expects($this->once())->method('importSource')->willReturn(1);
+
         $this->fixtureModelMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1));
+            ->willReturnMap([
+                ['configurable_products', 0, 1],
+                ['configurable_products_variation', 3, 1],
+            ]);
+
         $this->fixtureModelMock
-            ->expects($this->exactly(3))
+            ->expects($this->atLeastOnce())
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
 
@@ -143,7 +151,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
     public function testIntroduceParamLabels()
     {
         $this->assertSame([
-            'configurable_products' => 'Configurable products'
+            'configurable_products' => 'Configurable products',
         ], $this->model->introduceParamLabels());
     }
 }
