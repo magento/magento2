@@ -104,7 +104,7 @@
                     </item>
                     <item name="tooltip" xsi:type="array">
                         <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</item>
-                        <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
+                        <item name="description" xsi:type="string" translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</item>
                     </item>
                 </item>
             </argument>
