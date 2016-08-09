@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Composer\MagentoComposerApplication;
 use Magento\Composer\InfoCommand;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Composer\MagentoComposerApplication;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
  * Class SystemPackage returns system package and available for update versions
@@ -74,20 +74,16 @@ class SystemPackage
                 $versions[0]['name'] .= ' (latest)';
             }
 
-            if (count($versions) >= 1) {
-                $versions[count($versions) - 1]['name'] .= ' (current)';
-            }
-
             $result[] = [
                 'package' => $systemPackageInfo['name'],
-                'versions' => $versions
+                'versions' => $versions,
             ];
         }
 
         if (!in_array('magento/product-enterprise-edition', $systemPackages)) {
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
-        
+
         $result = $this->formatPackages($result);
 
         return $result;
@@ -114,7 +110,7 @@ class SystemPackage
         if (!empty($eeVersions)) {
             $result[] = [
                 'package' => 'magento/product-enterprise-edition',
-                'versions' => $eeVersions
+                'versions' => $eeVersions,
             ];
         }
         return $result;
@@ -130,17 +126,18 @@ class SystemPackage
         $editionType = '';
         if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
             $editionType .= 'CE';
-        } else if ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
+        } elseif ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
             $editionType .= 'EE';
         }
         foreach ($systemPackageInfo[InfoCommand::NEW_VERSIONS] as $version) {
-            $versions[] = ['id' => $version, 'name' => 'Version ' . $version . ' ' . $editionType];
+            $versions[] = ['id' => $version, 'name' => 'Version ' . $version . ' ' . $editionType, 'current' => false];
         }
 
         if ($systemPackageInfo[InfoCommand::CURRENT_VERSION]) {
             $versions[] = [
                 'id' => $systemPackageInfo[InfoCommand::CURRENT_VERSION],
-                'name' => 'Version ' . $systemPackageInfo[InfoCommand::CURRENT_VERSION] . ' ' . $editionType
+                'name' => 'Version ' . $systemPackageInfo[InfoCommand::CURRENT_VERSION] . ' ' . $editionType,
+                'current' => true,
             ];
         }
         return  $versions;
@@ -210,7 +207,7 @@ class SystemPackage
             foreach ($package['versions'] as $version) {
                 $version['package'] = $package['package'];
 
-                if (preg_match('/^[0-9].[0-9].[0-9]$/', $version['id']) || strpos($version['name'], 'current')) {
+                if (preg_match('/^[0-9].[0-9].[0-9]$/', $version['id']) || $version['current']) {
                     $version['stable'] = true;
                 } else {
                     $version['name'] = $version['name'] . ' (unstable version)';
@@ -257,7 +254,7 @@ class SystemPackage
                     if ($maxVersion == $version) {
                         $name .= ' (latest)';
                     }
-                    $eeVersions[] = ['id' => $version, 'name' => $name];
+                    $eeVersions[] = ['id' => $version, 'name' => $name, 'current' => false];
                 }
             }
         }
