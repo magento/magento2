@@ -82,5 +82,16 @@
     <type name="Magento\Eav\Model\Entity\AbstractEntity">
         <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
     </type>
+    <type name="Magento\Eav\Setup\AttributeConfiguration\Provider\FrontendInputUiProvider">
+        <arguments>
+            <argument name="uiTypeValidator" xsi:type="object">Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Setup\AttributeConfiguration\MainConfiguration">
+        <arguments>
+            <argument name="frontendInputTypeProvider" xsi:type="object">Magento\Eav\Setup\AttributeConfiguration\Provider\FrontendInputUiProvider</argument>
+            <argument name="scopeProvider" xsi:type="object">Magento\Eav\Setup\AttributeConfiguration\Provider\ScopeProvider</argument>
+        </arguments>
+    </type>
 </config>
 
