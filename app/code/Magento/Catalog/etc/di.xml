@@ -805,17 +805,17 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="customFilters" xsi:type="array">
-                <item name="category_id" xsi:type="object">Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter</item>
+                <item name="category_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessorComposite" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessorComposite" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="filters" xsi:type="object">Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="filters" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor</item>
                 <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
             </argument>
@@ -823,7 +823,7 @@
     </virtualType>
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessorComposite</argument>
         </arguments>
     </type>
 </config>
