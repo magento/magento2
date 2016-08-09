@@ -9,7 +9,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
 use Magento\Setup\Test\Constraint\Extension\AssertExtensionAndVersionCheck;
 use Magento\Setup\Test\Constraint\Extension\AssertFindExtensionOnGrid;
-use Magento\Setup\Test\Constraint\Extension\AssertMultipleUpdateSuccessMessage;
+use Magento\Setup\Test\Constraint\Extension\AssertMultipleSuccessMessage;
 use Magento\Setup\Test\Constraint\Extension\AssertSelectSeveralExtensions;
 use Magento\Setup\Test\Constraint\Extension\AssertSuccessMessage;
 use Magento\Setup\Test\Fixture\BackupOptions;
@@ -30,7 +30,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
      * @param AssertSuccessfulReadinessCheck $assertReadiness
      * @param AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck
      * @param AssertSuccessMessage $assertSuccessMessage
-     * @param AssertMultipleUpdateSuccessMessage $assertMultipleUpdateSuccessMessage
+     * @param AssertMultipleSuccessMessage $assertMultipleSuccessMessage
      * @param AssertSelectSeveralExtensions $assertSelectSeveralExtensions
      * @param $needAuthentication
      * @param array $extensions
@@ -46,7 +46,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck,
         AssertSuccessMessage $assertSuccessMessage,
-        AssertMultipleUpdateSuccessMessage $assertMultipleUpdateSuccessMessage,
+        AssertMultipleSuccessMessage $assertMultipleSuccessMessage,
         AssertSelectSeveralExtensions $assertSelectSeveralExtensions,
         $needAuthentication,
         array $extensions,
@@ -80,7 +80,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
             );
         }
 
-        // Open Extension Grid with extensions to install
+        // Open Extension Grid with extensions to update
         $this->setupWizard->getSetupHome()->clickExtensionManager();
         $this->setupWizard->getExtensionsGrid()->waitLoader();
         $this->setupWizard->getExtensionsGrid()->clickUpdateButton();
@@ -104,13 +104,13 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         $this->backup($backupOptions);
         $this->setupWizard->getCreateBackup()->clickNext();
 
-        // Start installing
+        // Start updating
         $this->setupWizard->getUpdaterExtension()->clickStartButton();
 
         $updatedExtensions = array_diff_key($extensions, $removeExtensions);
 
         // Check success message
-        $assertMultipleUpdateSuccessMessage->processAssert(
+        $assertMultipleSuccessMessage->processAssert(
             $this->setupWizard,
             $updatedExtensions,
             AssertSuccessMessage::TYPE_UPDATE
