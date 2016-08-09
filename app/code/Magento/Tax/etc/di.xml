@@ -125,13 +125,14 @@
                 <item name="ctc.customer_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CustomerTaxClass</item>
                 <item name="ptc.product_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\ProductTaxClass</item>
                 <item name="cd.customer_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CalculationData</item>
-                <item name="cd.product_tax_class_id" xsi:type="object">Magento\Tax\Modsel\Api\SearchCriteria\JoinProcessor\CalculationData</item>
+                <item name="cd.product_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CalculationData</item>
             </argument>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
+                <item name="tax_calculation_rate_id" xsi:type="string">rate.tax_calculation_rate_id</item>
             </argument>
         </arguments>
     </virtualType>
@@ -142,6 +143,7 @@
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
+                <item name="tax_calculation_rate_id" xsi:type="string">rate.tax_calculation_rate_id</item>
             </argument>
         </arguments>
     </virtualType>
@@ -152,6 +154,7 @@
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
+                <item name="tax_calculation_rate_id" xsi:type="string">rate.tax_calculation_rate_id</item>
             </argument>
         </arguments>
     </virtualType>
