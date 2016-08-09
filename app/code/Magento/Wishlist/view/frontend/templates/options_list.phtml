@@ -19,11 +19,7 @@
           <?php foreach ($options as $option): ?>
           <dt class="label"><?php echo $block->escapeHtml($option['label']) ?></dt>
           <dd class="values">
-              <?php if (is_array($option['value'])): ?>
-              <?php /* @noEscape */ echo nl2br(implode("\n", $option['value'])) ?>
-              <?php else: ?>
-              <?php echo $block->escapeHtml($option['value']) ?>
-              <?php endif; ?>
+              <?php /* @noEscape */ echo $option['value'] ?>
           </dd>
           <?php endforeach; ?>
       </dl>
