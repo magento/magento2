@@ -21,7 +21,7 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quantity = new Quantity();
-        
+
         $contextStub = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

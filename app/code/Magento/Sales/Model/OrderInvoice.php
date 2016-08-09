@@ -6,18 +6,18 @@
 
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\OrderInvoiceInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\InvoiceDocumentFactory;
-use Magento\Sales\Model\Order\Invoice\NotifierInterface;
-use Magento\Sales\Model\Order\InvoiceValidatorInterface;
-use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Invoice\NotifierInterface;
+use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
+use Magento\Sales\Model\Order\InvoiceValidatorInterface;
+use Magento\Sales\Model\Order\OrderStateResolverInterface;
+use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Psr\Log\LoggerInterface;
 
 /**

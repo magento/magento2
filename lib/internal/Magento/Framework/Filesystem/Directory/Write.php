@@ -6,7 +6,6 @@
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\DriverInterface;
 
 class Write extends Read implements WriteInterface
 {

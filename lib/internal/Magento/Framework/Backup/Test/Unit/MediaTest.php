@@ -101,7 +101,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             [
                 'filesystem' => $this->_filesystemMock,
                 'backupFactory' => $this->_backupFactoryMock,
-                'rollBackFs' => $this->fsMock
+                'rollBackFs' => $this->fsMock,
             ]
         );
         $model->setRootDir($rootDir);

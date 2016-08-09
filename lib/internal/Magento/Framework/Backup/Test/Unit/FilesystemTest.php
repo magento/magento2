@@ -44,7 +44,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Backup\Filesystem::class,
             [
                 'rollBackFtp' => $this->ftpMock,
-                'rollBackFs' => $this->fsMock
+                'rollBackFs' => $this->fsMock,
             ]
         );
     }

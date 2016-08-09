@@ -6,10 +6,10 @@
 namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\View\Model\Layout\Update\Validator;
-use Magento\Framework\Config\Dom\ValidationException;
 
 /**
  * Layout merge model
