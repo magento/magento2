@@ -90,7 +90,7 @@ $orderStoreDate = $block->formatDate(
                 <?php if ($_order->getRemoteIp() && $block->shouldDisplayCustomerIp()): ?>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Placed from IP') ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $_order->getRemoteIp(); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
+                        <td><?php /* @escapeNotVerified */ echo $block->escapeHtml($_order->getRemoteIp()); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
                     </tr>
                 <?php endif; ?>
                 <?php if ($_order->getGlobalCurrencyCode() != $_order->getBaseCurrencyCode()): ?>
