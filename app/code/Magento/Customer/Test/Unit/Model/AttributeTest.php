@@ -130,7 +130,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $attributeCacheMock;
 
     /**
-     * Test method
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
      */
     protected function setUp()
     {

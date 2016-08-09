@@ -154,7 +154,6 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'payment' => [
                         ConfigProvider::CODE => [
                             'isActive' => true,
-                            'isSingleUse' => false,
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
