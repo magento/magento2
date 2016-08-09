@@ -21,7 +21,7 @@ class CouldNotSaveException extends LocalizedCouldNotSaveException implements Te
      * @param int $code [optional] The Exception code.
      * @param \Exception $previous [optional] The previous exception used for the exception chaining.
      */
-    public function __construct(Phrase $phrase, $code = 0, \Exception $previous = null)
+    public function __construct(Phrase $phrase, \Exception $previous = null, $code = 0)
     {
         parent::__construct($phrase, $previous);
         $this->code = $code;

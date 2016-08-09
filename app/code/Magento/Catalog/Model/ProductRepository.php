@@ -541,20 +541,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (ConnectionException $exception) {
             throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
                 __('Database connection error'),
-                $exception->getCode(),
-                $exception
+                $exception,
+                $exception->getCode()
             );
         } catch (DeadlockException $exception) {
             throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
                 __('Database deadlock found when trying to get lock'),
-                $exception->getCode(),
-                $exception
+                $exception,
+                $exception->getCode()
             );
         } catch (LockWaitException $exception) {
             throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
                 __('Database lock wait timeout exceeded'),
-                $exception->getCode(),
-                $exception
+                $exception,
+                $exception->getCode()
             );
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
