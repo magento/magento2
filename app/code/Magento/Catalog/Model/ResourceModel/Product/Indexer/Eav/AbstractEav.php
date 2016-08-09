@@ -94,7 +94,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
-        $this->_prepareVisibilityIndex();
+        $this->_prepareVisibilityIndex($processIds);
 
         $connection->beginTransaction();
         try {
