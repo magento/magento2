@@ -42,7 +42,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testAddMediaDataToProduct()
     {
         $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
@@ -55,7 +54,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('media_gallery')
             ->willReturn($attribute);
-
 
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -71,5 +69,4 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $this->model->addMediaDataToProduct($product, [['value_id' => 10]]);
     }
-
 }
