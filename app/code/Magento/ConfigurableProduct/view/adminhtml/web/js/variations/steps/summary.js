@@ -30,13 +30,25 @@ define([
             variationsNew: [],
             variationsDeleted: [],
             pagingExisting: paging({
-                name: 'configurableWizard.pagingExisting'
+                name: 'configurableWizard.pagingExisting',
+                sizesConfig: {
+                    component: 'Magento_ConfigurableProduct/js/variations/paging/sizes',
+                    name: 'configurableWizard.pagingExisting_sizes'
+                }
             }),
             pagingNew: paging({
-                name: 'configurableWizard.pagingNew'
+                name: 'configurableWizard.pagingNew',
+                sizesConfig: {
+                    component: 'Magento_ConfigurableProduct/js/variations/paging/sizes',
+                    name: 'configurableWizard.pagingNew_sizes'
+                }
             }),
             pagingDeleted: paging({
-                name: 'configurableWizard.pagingDeleted'
+                name: 'configurableWizard.pagingDeleted',
+                sizesConfig: {
+                    component: 'Magento_ConfigurableProduct/js/variations/paging/sizes',
+                    name: 'configurableWizard.pagingDeleted_sizes'
+                }
             }),
             attributes: [],
             attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
