@@ -18,8 +18,8 @@ class CouldNotSaveException extends LocalizedCouldNotSaveException implements Te
      * Class constructor
      *
      * @param Phrase $phrase The Exception message to throw.
-     * @param int $code [optional] The Exception code.
      * @param \Exception $previous [optional] The previous exception used for the exception chaining.
+     * @param int $code [optional] The Exception code.
      */
     public function __construct(Phrase $phrase, \Exception $previous = null, $code = 0)
     {
