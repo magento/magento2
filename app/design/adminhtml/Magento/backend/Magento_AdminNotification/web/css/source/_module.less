@@ -33,11 +33,20 @@
     }
 
     .message {
-        padding: 1.5rem 0 1.5rem @indent__l;
+        display: inline-block;
+        margin: 0 0 -3px;
+        overflow: hidden;
+        padding: @message-system-short-message__padding-vertical 0 @message-system-short-message__padding-vertical 3.3rem;
 
         &:before {
-            left: 0;
+            left: .3rem;
         }
+    }
+
+    .action-menu-item {
+        display: inline-block;
+        vertical-align: top;
+        padding: @message-system-short-message__padding-vertical 0 0;
     }
 }
 
@@ -45,32 +54,18 @@
     border-bottom: 1px solid @message-system__border-color;
     border-top: 1px solid @message-system__border-color;
     list-style: none;
+    margin: 0 0 1.5rem;
 
     li {
-
-        &:not(:last-child) {
-            border-bottom: 1px dashed @message-system__border-color;
+        + li {
+            border-top: 1px dashed @message-system__border-color;
         }
     }
 }
 
-.message-system-short {
+.message-system-short-wrapper {
     overflow: hidden;
     padding: 0 1.5rem 0 @indent__l;
-
-    .message-system-short-label {
-        display: inline-block;
-        padding: @message-system-short-message__padding-vertical .3rem @message-system-short-message__padding-vertical 1rem;
-    }
-
-    .message {
-        overflow: hidden;
-        padding: @message-system-short-message__padding-vertical 2rem @message-system-short-message__padding-vertical 3.3rem;
-
-        &:before {
-            left: .3rem;
-        }
-    }
 }
 
 .message-system-collapsible {
@@ -78,9 +73,10 @@
     border: 1px solid @message-system__border-color;
     border-top: 0;
     display: none;
-    margin: 0 -1px;
+    left: -1px;
     padding: 0 @indent__l @message-system-short-message__padding-vertical;
     position: absolute;
+    right: -1px;
     top: 100%;
     z-index: @z-index-10;
 
@@ -92,7 +88,7 @@
 .message-system-action-dropdown {
     .lib-button-reset();
     float: right;
-    margin-top: @message-system-short-message__padding-vertical;
+    margin: @message-system-short-message__padding-vertical 0;
     position: relative;
 
     .action-toggle-triangle (
@@ -109,16 +105,13 @@
     text-align: right;
 
     .action__message-log {
+        border-right: 1px solid @message-system__border-color;
         display: inline-block;
-        margin: 0 @indent__xs;
-
-        &:not(:last-child) {
-            border-right: 1px solid @message-system__border-color;
-            margin-right: .2rem;
-            padding-right: @indent__xs;
-        }
+        margin: 0 .2rem 0 @indent__xs;
+        padding-right: @indent__xs;
 
         &:last-child {
+            border-right: 0;
             margin: 0;
             padding: 0;
         }

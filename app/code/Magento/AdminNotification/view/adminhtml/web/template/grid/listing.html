@@ -13,7 +13,7 @@
                     <text args="rows.length"/>
                 </span>
             </button>
-            <div if="rows[0]"  repeat="foreach: [rows[0]], item: '$row'" visible="!$collapsible.opened()">
+            <div class="message-system-short-wrapper" if="rows[0]" repeat="foreach: [rows[0]], item: '$row'" visible="!$collapsible.opened()">
                 <fastForEach args="data: getVisible(), as: '$col'" >
                     <render args="$col.getBody()"/>
                 </fastForEach>
