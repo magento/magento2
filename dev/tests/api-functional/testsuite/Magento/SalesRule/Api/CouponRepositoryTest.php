@@ -99,7 +99,7 @@ class CouponRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupons.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupons_advanced.php
      */
     public function testGetListWithMultipleFiltersAndSorting()
     {

@@ -172,7 +172,7 @@ class RuleRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/SalesRule/_files/rules.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/rules_advanced.php
      */
     public function testGetListWithMultipleFiltersAndSorting()
     {
