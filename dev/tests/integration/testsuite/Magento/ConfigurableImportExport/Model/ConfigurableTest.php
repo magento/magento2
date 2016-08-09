@@ -110,5 +110,4 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         $this->markTestSkipped('MAGETWO-56530');
         parent::testImportReplace($fixtures, $skus, $skippedAttributes);
     }
-
 }
