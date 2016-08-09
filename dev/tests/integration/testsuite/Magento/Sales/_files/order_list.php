@@ -5,6 +5,7 @@
  */
 
 use Magento\Sales\Model\Order;
+
 require 'order.php';
 /** @var Order $order */
 /** @var  Order\Payment $payment */
