@@ -826,4 +826,9 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessorComposite</argument>
         </arguments>
     </type>
+    <type name="\Magento\Catalog\Model\CategoryList">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite</argument>
+        </arguments>
+    </type>
 </config>

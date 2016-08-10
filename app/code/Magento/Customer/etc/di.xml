@@ -355,4 +355,9 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessorComposite</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite</argument>
+        </arguments>
+    </type>
 </config>
