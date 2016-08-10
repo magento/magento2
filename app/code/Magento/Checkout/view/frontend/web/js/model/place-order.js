@@ -24,7 +24,7 @@ define(
                 function () {
                     fullScreenLoader.stopLoader();
                 }
-            )
+            );
         };
     }
 );
