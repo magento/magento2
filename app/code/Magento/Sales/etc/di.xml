@@ -32,6 +32,7 @@
     <preference for="Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection"/>
     <preference for="Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface" type="Magento\Sales\Model\Order\Shipment\CreationArguments"/>
     <preference for="Magento\Sales\Api\Data\ShipmentInterface" type="Magento\Sales\Model\Order\Shipment"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentItemCreationInterface" type="Magento\Sales\Model\Order\Shipment\ItemCreation"/>
     <preference for="Magento\Sales\Api\Data\ShipmentItemInterface" type="Magento\Sales\Model\Order\Shipment\Item"/>
     <preference for="Magento\Sales\Api\Data\ShipmentItemSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Item\Collection"/>
     <preference for="Magento\Sales\Api\Data\ShipmentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Collection"/>
