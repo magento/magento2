@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\CustomerAuthenticationRepository;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -46,19 +46,19 @@ class Authentication implements AuthenticationInterface
     protected $encryptor;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var CustomerAuthenticationRepository
      */
     protected $customerRepository;
 
     /**
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerAuthenticationRepository $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository,
+        CustomerAuthenticationRepository $customerRepository,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
