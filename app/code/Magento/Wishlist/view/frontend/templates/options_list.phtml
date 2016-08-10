@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Options */
+/* @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Options $block */
 ?>
 
 <?php $options = $block->getOptionList(); ?>
@@ -19,11 +19,7 @@
           <?php foreach ($options as $option): ?>
           <dt class="label"><?php echo $block->escapeHtml($option['label']) ?></dt>
           <dd class="values">
-              <?php if (is_array($option['value'])): ?>
-              <?php /* @escapeNotVerified */ echo nl2br(implode("\n", $option['value'])) ?>
-              <?php else: ?>
-              <?php /* @escapeNotVerified */ echo $option['value'] ?>
-              <?php endif; ?>
+              <?php /* @noEscape */ echo $option['value'] ?>
           </dd>
           <?php endforeach; ?>
       </dl>

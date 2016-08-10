@@ -10,7 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test class for \Magento\Backend\Block\Menu
- *
+ * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MenuTest extends \PHPUnit_Framework_TestCase
