@@ -27,7 +27,7 @@
                     <td data-th="<?php echo $block->escapeHtml(__('Created')) ?>" class="col date"><?php echo $block->escapeHtml($block->dateFormat($_review->getReviewCreatedAt())); ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Product Name')) ?>" class="col item">
                         <strong class="product-name">
-                            <a href="<?php echo $block->escapeUrl($block->getProductUrl()) ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a>
+                            <a href="<?php echo $block->escapeUrl($block->getProductUrl($_review)) ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a>
                         </strong>
                     </td>
                     <td data-th="<?php echo $block->escapeHtml(__('Rating')) ?>" class="col summary">
