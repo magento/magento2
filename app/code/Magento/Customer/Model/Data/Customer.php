@@ -168,6 +168,15 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
+     * Get customer is active
+     *
+     * @return int|null
+     */
+    public function getIsActive() {
+        return $this->_get(self::IS_ACTIVE);
+    }
+
+    /**
      * Get last name
      *
      * @return string
@@ -266,6 +275,16 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setId($id)
     {
         return $this->setData(self::ID, $id);
+    }
+
+    /**
+     * Set customer is active
+     *
+     * @param int $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive) {
+        return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
     /**

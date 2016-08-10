@@ -15,6 +15,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Constants defined for keys of the data array. Identical to the name of the getter in snake case
      */
     const ID = 'id';
+    const IS_ACTIVE = 'is_active';
     const CONFIRMATION = 'confirmation';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -51,6 +52,21 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * @return $this
      */
     public function setId($id);
+
+    /**
+     * Get customer is active
+     *
+     * @return int|null
+     */
+    public function getIsActive();
+
+    /**
+     * Set customer is active
+     *
+     * @param int $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive);
 
     /**
      * Get group id
