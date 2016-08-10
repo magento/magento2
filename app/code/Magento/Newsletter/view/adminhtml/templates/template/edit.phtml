@@ -176,9 +176,9 @@ require([
 
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = <?php echo $block->escapeJs(TemplateTypesInterface::TYPE_TEXT) ?>;
+                $('preview_type').value = <?php echo $block->escapeHtml(TemplateTypesInterface::TYPE_TEXT) ?>;
             } else {
-                $('preview_type').value = <?php echo $block->escapeJs($block->getTemplateType()) ?>;
+                $('preview_type').value = <?php echo $block->escapeHtml($block->getTemplateType()) ?>;
             }
             if (this.isEditor() && tinyMCE.get(this.id)) {
                 tinyMCE.triggerSave();
@@ -219,7 +219,7 @@ require([
     };
 
     templateControl.init();
-    templateControl.templateName = "<?php echo $block->escapeJs($block->getJsTemplateName()) ?>";
+    templateControl.templateName = "<?php echo $block->escapeHtml($block->getJsTemplateName()) ?>";
 //]]>
 
 });
