@@ -98,7 +98,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
                     [
                         'magento/package-2',
                         '1.0.1',
-                        ['x-magento-ext-title'=> 'Package2 title', 'x-magento-ext-package-link' => 'http://test.de']
+                        ['x-magento-ext-title'=> 'Package2 title', 'x-magento-ext-package-link' => 'http://example.com']
                     ],
                 ]
             );
@@ -122,7 +122,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
                 'update' => false,
                 'uninstall' => true,
                 'vendor' => 'Magento',
-                'link' => 'http://test.de',
+                'link' => 'http://example.com',
             ],
         ];
 
