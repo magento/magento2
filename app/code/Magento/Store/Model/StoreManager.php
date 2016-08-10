@@ -295,7 +295,7 @@ class StoreManager implements
      * @deprecated
      * @return StoreWebsiteRelation
      */
-    public function getStoreWebsiteRelation()
+    private function getStoreWebsiteRelation()
     {
         return ObjectManager::getInstance()->get(StoreWebsiteRelation::class);
     }
