@@ -11,7 +11,8 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
  */
-interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface,
+interface InvoiceItemInterface
+    extends \Magento\Framework\Api\ExtensibleDataInterface,
     \Magento\Sales\Api\Data\LineItemInterface
 {
     /**#@+
@@ -448,4 +449,19 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setBaseDiscountTaxCompensationAmount($amount);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes);
 }

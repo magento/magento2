@@ -45,8 +45,7 @@ class CommentCreation implements ShipmentCommentCreationInterface
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes
-    )
-    {
+    ) {
         $this->extensionAttributes = $extensionAttributes;
         return $this;
     }

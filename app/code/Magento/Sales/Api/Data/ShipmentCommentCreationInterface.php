@@ -7,8 +7,10 @@ namespace Magento\Sales\Api\Data;
 
 /**
  * Interface ShipmentCommentCreationInterface
+ * @api
  */
-interface ShipmentCommentCreationInterface extends \Magento\Framework\Api\ExtensibleDataInterface,
+interface ShipmentCommentCreationInterface
+    extends \Magento\Framework\Api\ExtensibleDataInterface,
     \Magento\Sales\Api\Data\CommentInterface
 {
     /**

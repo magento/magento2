@@ -7,6 +7,7 @@ namespace Magento\Sales\Api\Data;
 
 /**
  * Interface EntityInterface
+ * @api
  */
 interface EntityInterface
 {
