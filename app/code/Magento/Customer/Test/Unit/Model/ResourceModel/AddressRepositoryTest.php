@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
+
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**

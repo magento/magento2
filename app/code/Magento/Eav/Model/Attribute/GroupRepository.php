@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +10,9 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterface
 {
     /**
@@ -193,26 +195,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         foreach ($searchCriteria->getFilterGroups() as $group) {
             foreach ($group->getFilters() as $filter) {
                 if ($filter->getField() == 'attribute_set_id') {
-                    return $filter->getValue();
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Retrieve attribute group code
-     *
-     * @deprecated
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return null|string
-     */
-    private function retrieveAttributeGroupCodeFromSearchCriteria(
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-    ) {
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            foreach ($group->getFilters() as $filter) {
-                if ($filter->getField() === 'attribute_group_code') {
                     return $filter->getValue();
                 }
             }
