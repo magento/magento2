@@ -390,9 +390,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $transactionIdSort,
             $createdAtSort
         );
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addFilters')
-            ->with([$this->filter, $this->filter])
+            ->with([$this->filter])
             ->willReturnSelf();
         $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addSortOrder')

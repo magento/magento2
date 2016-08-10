@@ -11,7 +11,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\Api\Filter;
 
-class EntityTypeCodeFilterTest extends \PHPUnit_Framework_TestCase
+class AttributeSetEntityTypeCodeFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var AttributeSetEntityTypeCodeFilter
@@ -53,9 +53,6 @@ class EntityTypeCodeFilterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $filterMock->expects($this->once())
-            ->method('getField')
-            ->willReturn('entity_type_code');
-        $filterMock->expects($this->once())
             ->method('getValue')
             ->willReturn($filterValue);
 
@@ -68,21 +65,5 @@ class EntityTypeCodeFilterTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertTrue($this->filter->apply($filterMock, $collectionMock));
-    }
-
-    public function testApplyIdle()
-    {
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterMock->expects($this->once())
-            ->method('getField')
-            ->willReturn(null);
-
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertFalse($this->filter->apply($filterMock, $collectionMock));
     }
 }

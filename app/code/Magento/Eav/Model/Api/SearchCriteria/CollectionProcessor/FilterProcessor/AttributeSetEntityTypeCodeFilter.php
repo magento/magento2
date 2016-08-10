@@ -35,13 +35,11 @@ class AttributeSetEntityTypeCodeFilter implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
-        if ($filter->getField() == 'entity_type_code') {
-            $entityTypeCode = $filter->getValue();
-            $entityType = $this->eavConfig->getEntityType($entityTypeCode);
-            /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection */
-            $collection->setEntityTypeFilter($entityType->getId());
-            return true;
-        }
-        return false;
+        $entityType = $this->eavConfig->getEntityType($filter->getValue());
+
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection */
+        $collection->setEntityTypeFilter($entityType->getId());
+
+        return true;
     }
 }

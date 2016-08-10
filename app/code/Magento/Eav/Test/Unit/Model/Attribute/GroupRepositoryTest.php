@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Attribute;
+
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**

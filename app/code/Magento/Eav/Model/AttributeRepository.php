@@ -1,12 +1,12 @@
 <?php
 /**
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -192,33 +192,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
-     * Helper function that adds a FilterGroup to the collection.
-     *
-     * @deprecated
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
-     * @return void
-     * @throws \Magento\Framework\Exception\InputException
-     */
-    private function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
-        Collection $collection
-    ) {
-        foreach ($filterGroup->getFilters() as $filter) {
-            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-            $field = $filter->getField();
-            // Prevent ambiguity during filtration
-            if ($field == \Magento\Eav\Api\Data\AttributeInterface::ATTRIBUTE_ID) {
-                $field = 'main_table.' . $field;
-            }
-            $collection->addFieldToFilter(
-                $field,
-                [$condition => $filter->getValue()]
-            );
-        }
-    }
-
-    /**
      * Retrieve collection processor
      *
      * @deprecated
@@ -228,7 +201,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\AttributeCollectionProcessorComposite'
+                CollectionProcessorComposite::class
             );
         }
         return $this->collectionProcessor;
