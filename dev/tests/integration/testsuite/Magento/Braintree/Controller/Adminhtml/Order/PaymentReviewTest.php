@@ -7,12 +7,10 @@ namespace Magento\Braintree\Controller\Adminhtml\Order;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Area;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Payment\Model\Method\Adapter;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Controller\Adminhtml\Order\ReviewPayment;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -33,9 +31,6 @@ class PaymentReviewTest extends AbstractBackendController
 
     protected function setUp()
     {
-        $this->resource = ReviewPayment::ADMIN_RESOURCE;
-        $this->uri = 'backend/sales/order/reviewpayment';
-        $this->_getBootstrap()->loadArea(Area::AREA_ADMINHTML);
         parent::setUp();
 
         /** @var FilterBuilder $filterBuilder */
@@ -61,6 +56,7 @@ class PaymentReviewTest extends AbstractBackendController
     /**
      * @covers \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment::execute
      * @magentoDataFixture Magento/Braintree/_files/fraud_order.php
+     * @magentoAppArea adminhtml
      */
     public function testExecuteAccept()
     {
@@ -81,6 +77,7 @@ class PaymentReviewTest extends AbstractBackendController
     /**
      * @covers \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment::execute
      * @magentoDataFixture Magento/Braintree/_files/fraud_order.php
+     * @magentoAppArea adminhtml
      */
     public function testExecuteDeny()
     {
