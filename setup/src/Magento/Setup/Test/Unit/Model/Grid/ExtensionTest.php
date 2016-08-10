@@ -90,6 +90,19 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
+        $this->packagesDataMock->expects($this->exactly(2))
+            ->method('getPackageExtraInfo')
+            ->willReturnMap(
+                [
+                    ['magento/package-1', '1.0.0', []],
+                    [
+                        'magento/package-2',
+                        '1.0.1',
+                        ['x-magento-ext-title'=> 'Package2 title', 'x-magento-ext-package-link' => 'http://test.de']
+                    ],
+                ]
+            );
+
         $expected = [
             [
                 'name' => 'magento/package-1',
@@ -99,15 +112,17 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
                 'update' => true,
                 'uninstall' => true,
                 'vendor' => 'Magento',
+                'link' => '',
             ],
             [
                 'name' => 'magento/package-2',
-                'product_name' => 'magento/package-2',
+                'product_name' => 'Package2 title',
                 'type' => 'Extension',
                 'version' => '1.0.1',
                 'update' => false,
                 'uninstall' => true,
                 'vendor' => 'Magento',
+                'link' => 'http://test.de',
             ],
         ];
 
