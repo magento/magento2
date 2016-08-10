@@ -17,11 +17,13 @@ define([
             }
         },
 
+        /** @inheritdoc */
         getLabel: function (record) {
             return record[this.messageIndex];
         },
 
-        getFieldClasses: function ($row) {
+        /** @inheritdoc */
+        getFieldClass: function ($row) {
             var status = $row.status || 'info';
 
             this.fieldClass['message-' + status] = true;
