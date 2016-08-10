@@ -124,11 +124,11 @@ class Repository implements TransactionRepositoryInterface
         $cacheStorage = 'txn_type';
         $entity = $this->entityStorage->getByIdentifyingFields($identityFieldsForCache, $cacheStorage);
         if (!$entity) {
-            $filters[] = $this->filterBuilder
+            $typeFilter = $this->filterBuilder
                 ->setField(TransactionInterface::TXN_TYPE)
                 ->setValue($transactionType)
                 ->create();
-            $filters[] = $this->filterBuilder
+            $idFilter = $this->filterBuilder
                 ->setField(TransactionInterface::PAYMENT_ID)
                 ->setValue($paymentId)
                 ->create();
@@ -143,7 +143,8 @@ class Repository implements TransactionRepositoryInterface
             $entity = current(
                 $this->getList(
                     $this->searchCriteriaBuilder
-                        ->addFilters($filters)
+                        ->addFilters([$typeFilter])
+                        ->addFilters([$idFilter])
                         ->addSortOrder($transactionIdSort)
                         ->addSortOrder($createdAtSort)
                         ->create()
