@@ -62,18 +62,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
                 'data' => '<span><b>some text in tags</b></span>',
                 'expected' => '<span><b>some text in tags</b></span>',
                 'allowedTags' => ['span', 'b'],
-            ],
-            'string data with allowed tags 2' => [
-                'data' => '<span><b class="price">some text in tags</b></span>',
-                'expected' => '<span><b class=&quot;price&quot;>some text in tags</b></span>',
-                'allowedTags' => ['span', 'b'],
-            ],
-            'string data with allowed tags 3' => [
-                'data' => '<span><b class="price"/></span>',
-                'expected' => '<span><b class=&quot;price&quot;/></span>',
-                'allowedTags' => ['span', 'b'],
             ]
-
         ];
     }
 
