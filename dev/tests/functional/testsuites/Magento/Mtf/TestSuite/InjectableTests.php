@@ -102,9 +102,9 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
             if (!isset($filter['filter'])) {
                 $configData->setFileName($configFileName . '.xml')->load($configFilePath);
             } else {
-                preg_match('`variation::(.*?)$`', $filter['filter'], $variation);
-                if (isset($variation[1]) && !empty($variation[1])) {
-                    $configData->setFileName('basic.xml')->load($configFilePath);
+                $isValid = preg_match('`variation::(.*?)$`', $filter['filter'], $variation);
+                if ($isValid === 1) {
+                    $configData->setFileName($configFileName . '.xml')->load($configFilePath);
                     $data['rule']['variation']['allow'][0]['name'][0]['value'] = $variation[1];
                     $configData->merge($data);
                 }
