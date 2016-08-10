@@ -8,5 +8,5 @@
 
 ?>
 <div class="widget block block-static-block">
-    <?php echo $block->escapeHtml($block->getText()); ?>
+    <?php /* @noEscape */ echo $block->getText(); ?>
 </div>
