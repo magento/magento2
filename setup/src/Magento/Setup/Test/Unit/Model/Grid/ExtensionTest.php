@@ -93,6 +93,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $expected = [
             [
                 'name' => 'magento/package-1',
+                'product_name' => 'magento/package-1',
                 'type' => 'Extension',
                 'version' => '1.0.0',
                 'update' => true,
@@ -101,6 +102,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'name' => 'magento/package-2',
+                'product_name' => 'magento/package-2',
                 'type' => 'Extension',
                 'version' => '1.0.1',
                 'update' => false,

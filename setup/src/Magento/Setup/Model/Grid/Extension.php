@@ -88,8 +88,12 @@ class Extension
     private function formatExtensions(array $extensions)
     {
         foreach ($extensions as &$extension) {
+            $extraInfo = $this->packagesData->getPackageExtraInfo($extension['name'], $extension['version']);
             $extension['vendor'] = ucfirst(current(explode('/', $extension['name'])));
-            $extension['type'] = $this->typeMapper->map($extension['name'], $extension['type']);
+            $extension['product_name'] = isset($extraInfo['x-magento-ext-title']) ?
+                $extraInfo['x-magento-ext-title'] : $extension['name'];
+            $extension['type'] = isset($extraInfo['x-magento-ext-type']) ?
+                $extraInfo['x-magento-ext-type'] : $this->typeMapper->map($extension['name'], $extension['type']);
         }
         return array_values($extensions);
     }

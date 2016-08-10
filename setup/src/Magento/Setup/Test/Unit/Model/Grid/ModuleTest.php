@@ -155,14 +155,13 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $this->packageInfoMock->expects(static::never())
             ->method('getModuleName');
 
-        $this->typeMapperMock->expects(static::exactly(2))
+        $this->typeMapperMock->expects(static::once())
             ->method('map')
             ->willReturnMap([
-                ['magento/sample-module-one', 'magento2-module', 'Module'],
-                ['Sample_ModuleTwo', 'magento2-module', 'Module'],
+                [Module::UNKNOWN_PACKAGE_NAME, 'magento2-module', 'Module'],
             ]);
 
-        $this->packageInfoMock->expects(static::exactly(2))
+        $this->packageInfoMock->expects(static::once())
             ->method('getRequiredBy')
             ->willReturn([]);
         $this->packageInfoMock->expects(static::exactly(2))
@@ -177,6 +176,22 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 ['Sample_ModuleOne', '1.0.0'],
                 ['Sample_ModuleTwo', ''],
             ]);
+
+        $this->packagesDataMock->expects(static::exactly(2))
+            ->method('getPackageExtraInfo')
+            ->willReturnMap([
+                [
+                    'magento/sample-module-one',
+                    '1.0.0',
+                    [
+                        'x-magento-ext-title' => 'Sample Module Full Name',
+                        'x-magento-ext-type' => 'Extension'
+
+                    ]
+                ],
+            ]);
+
+
         $this->moduleListMock->expects(static::exactly(2))
             ->method('has')
             ->willReturn(true);
@@ -187,11 +202,12 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $expected = [
             [
                 'name' => 'magento/sample-module-one',
-                'type' => 'Module',
+                'type' => 'Extension',
                 'version' => '1.0.0',
                 'vendor' => 'Magento',
                 'moduleName' => 'Sample_ModuleOne',
                 'enable' => true,
+                'product_name' => 'Sample Module Full Name',
                 'requiredBy' => [],
             ],
             [
@@ -201,6 +217,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 'vendor' => 'Sample',
                 'moduleName' => 'Sample_ModuleTwo',
                 'enable' => true,
+                'product_name' => Module::UNKNOWN_PACKAGE_NAME,
                 'requiredBy' => [],
             ],
         ];
