@@ -205,7 +205,7 @@ final class TokensConfigProvider
 
     /**
      * Get active vault payment by code
-     * @param $vaultPaymentCode
+     * @param string $vaultPaymentCode
      * @return VaultPaymentInterface|null
      */
     private function getVaultPayment($vaultPaymentCode)
