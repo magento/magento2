@@ -228,7 +228,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\AttributeCollectionProcessorComposite'
+                'Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite'
             );
         }
         return $this->collectionProcessor;

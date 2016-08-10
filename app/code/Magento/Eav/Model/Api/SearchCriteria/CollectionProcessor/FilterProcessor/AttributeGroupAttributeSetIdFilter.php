@@ -20,11 +20,9 @@ class AttributeGroupAttributeSetIdFilter implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
-        if ($filter->getField() == 'attribute_set_id') {
-            /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $collection */
-            $collection->setAttributeSetFilter($filter->getValue());
-            return true;
-        }
-        return false;
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $collection */
+        $collection->setAttributeSetFilter($filter->getValue());
+
+        return true;
     }
 }

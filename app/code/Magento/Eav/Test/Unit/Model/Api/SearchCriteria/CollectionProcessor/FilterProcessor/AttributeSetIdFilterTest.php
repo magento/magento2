@@ -29,9 +29,6 @@ class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $filterMock->expects($this->once())
-            ->method('getField')
-            ->willReturn('attribute_set_id');
-        $filterMock->expects($this->once())
             ->method('getValue')
             ->willReturn($filterValue);
 
@@ -44,21 +41,5 @@ class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertTrue($this->filter->apply($filterMock, $collectionMock));
-    }
-
-    public function testApplyIdle()
-    {
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterMock->expects($this->once())
-            ->method('getField')
-            ->willReturn(null);
-
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertFalse($this->filter->apply($filterMock, $collectionMock));
     }
 }

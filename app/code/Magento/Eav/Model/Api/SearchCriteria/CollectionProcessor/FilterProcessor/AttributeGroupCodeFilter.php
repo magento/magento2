@@ -20,10 +20,8 @@ class AttributeGroupCodeFilter implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
-        if ($filter->getField() == 'attribute_group_code') {
-            $collection->addFilter('attribute_group_code', $filter->getValue());
-            return true;
-        }
-        return false;
+        $collection->addFilter('attribute_group_code', $filter->getValue());
+
+        return true;
     }
 }
