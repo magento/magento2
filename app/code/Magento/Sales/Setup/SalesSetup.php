@@ -49,6 +49,11 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     protected $encryptor;
 
     /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
+    /**
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -105,8 +110,11 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _flatTableExist($table)
     {
-        $tablesList = $this->getSetup()->getConnection()->listTables();
-        return in_array(strtoupper($this->getSetup()->getTable($table)), array_map('strtoupper', $tablesList));
+        $tablesList = $this->getSetup()->getConnection(self::$connectionName)->listTables();
+        return in_array(
+            strtoupper($this->getSetup()->getTable($table, self::$connectionName)),
+            array_map('strtoupper', $tablesList)
+        );
     }
 
     /**
@@ -143,13 +151,15 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _addFlatAttribute($table, $attribute, $attr)
     {
-        $tableInfo = $this->getSetup()->getConnection()->describeTable($this->getSetup()->getTable($table));
+        $tableInfo = $this->getSetup()
+            ->getConnection(self::$connectionName)
+            ->describeTable($this->getSetup()->getTable($table, self::$connectionName));
         if (isset($tableInfo[$attribute])) {
             return $this;
         }
         $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-        $this->getSetup()->getConnection()->addColumn(
-            $this->getSetup()->getTable($table),
+        $this->getSetup()->getConnection(self::$connectionName)->addColumn(
+            $this->getSetup()->getTable($table, self::$connectionName),
             $attribute,
             $columnDefinition
         );
@@ -169,8 +179,8 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         if (in_array($entityTypeId, $this->_flatEntitiesGrid) && !empty($attr['grid'])) {
             $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-            $this->getSetup()->getConnection()->addColumn(
-                $this->getSetup()->getTable($table . '_grid'),
+            $this->getSetup()->getConnection(self::$connectionName)->addColumn(
+                $this->getSetup()->getTable($table . '_grid', self::$connectionName),
                 $attribute,
                 $columnDefinition
             );
