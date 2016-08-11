@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class PaymentsPro extends Block
 {
     /**
+     * Payments Pro enablers fields sectors array.
+     *
      * @var array
      */
     private $fields = [
@@ -31,6 +33,8 @@ class PaymentsPro extends Block
     ];
 
     /**
+     * Payments Pro enablers fields sectors array.
+     *
      * @var array
      */
     private $enablers = [
@@ -43,6 +47,8 @@ class PaymentsPro extends Block
     ];
 
     /**
+     * Payments Pro 'Configure' button selector.
+     *
      * @var string
      */
     private $configureProButton = '#payment_us_paypal_group_all_in_one_wpp_usuk-head';

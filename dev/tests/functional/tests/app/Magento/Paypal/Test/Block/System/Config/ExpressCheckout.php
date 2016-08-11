@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class ExpressCheckout extends Block
 {
     /**
+     * PayPal Express Checkout credentials fields sectors array.
+     *
      * @var array
      */
     private $fields = [
@@ -33,6 +35,8 @@ class ExpressCheckout extends Block
     ];
 
     /**
+     * PayPal Express Checkout enablers fields sectors array.
+     *
      * @var array
      */
     private $enablers = [
@@ -45,6 +49,8 @@ class ExpressCheckout extends Block
     ];
 
     /**
+     * PayPal Express Checkout 'Configure' button selector.
+     *
      * @var string
      */
     private $configureExpressButton = '#payment_us_paypal_alternative_payment_methods_express_checkout_us-head';

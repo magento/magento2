@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class PayflowLink extends Block
 {
     /**
+     * Payflow Link credentials fields sectors array.
+     *
      * @var array
      */
     private $fields = [
@@ -31,6 +33,8 @@ class PayflowLink extends Block
     ];
 
     /**
+     * Payflow Link enablers fields sectors array.
+     *
      * @var array
      */
     private $enablers = [
@@ -43,6 +47,8 @@ class PayflowLink extends Block
     ];
 
     /**
+     * Payflow Link 'Configure' button selector.
+     *
      * @var string
      */
     private $configurePayflowLinkButton = '#payment_us_paypal_payment_gateways_payflow_link_us-head';

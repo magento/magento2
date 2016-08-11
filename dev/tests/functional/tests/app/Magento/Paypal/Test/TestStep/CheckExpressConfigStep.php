@@ -19,6 +19,8 @@ use Magento\Payment\Test\Constraint\AssertFieldsArePresent;
 class CheckExpressConfigStep implements TestStepInterface
 {
     /**
+     * Payments configuration page.
+     *
      * @var SystemConfigEditSectionPayment
      */
     private $systemConfigEditSectionPayment;
@@ -44,12 +46,16 @@ class CheckExpressConfigStep implements TestStepInterface
     private $assertFieldsAreEnabled;
 
     /**
-     * @var
+     * Country code.
+     *
+     * @var string
      */
     private $countryCode;
 
     /**
-     * @var
+     * Payment sections on Payments configuration page.
+     *
+     * @var array
      */
     private $sections;
 
@@ -64,8 +70,8 @@ class CheckExpressConfigStep implements TestStepInterface
      * @param AssertFieldsArePresent $assertFieldsArePresent
      * @param AssertFieldsAreActive $assertFieldsAreActive
      * @param AssertFieldsAreEnabled $assertFieldsAreEnabled
-     * @param $countryCode
-     * @param $sections
+     * @param string $countryCode
+     * @param array $sections
      */
     public function __construct(
         SystemConfigEditSectionPayment $systemConfigEditSectionPayment,
@@ -74,7 +80,7 @@ class CheckExpressConfigStep implements TestStepInterface
         AssertFieldsAreActive $assertFieldsAreActive,
         AssertFieldsAreEnabled $assertFieldsAreEnabled,
         $countryCode,
-        $sections
+        array $sections
     ) {
         $this->systemConfigEditSectionPayment = $systemConfigEditSectionPayment;
         $this->assertFieldsAreDisabled = $assertFieldsAreDisabled;

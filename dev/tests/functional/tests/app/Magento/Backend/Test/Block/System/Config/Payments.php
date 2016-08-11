@@ -8,14 +8,22 @@ namespace Magento\Backend\Test\Block\System\Config;
 
 use Magento\Mtf\Block\Block;
 
+/**
+ * Class Payments
+ * Payments configuration block on Stores > Configuration > Sales > Payment Methods page
+ */
 class Payments extends Block
 {
     /**
+     * Merchant Country selector.
+     *
      * @var string
      */
     protected $merchantCountrySelector = "select[id$='_account_merchant_country'] > option[value='%s']";
 
     /**
+     * Solution title(e.g. PayPal Express Checkout, Payments Advanced, etc.) selector
+     *
      * @var string
      */
     protected $solutionTitle = './strong[contains(text(), "%s")]';

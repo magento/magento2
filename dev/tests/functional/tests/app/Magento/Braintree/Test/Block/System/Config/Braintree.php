@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class Braintree extends Block
 {
     /**
+     * Braintree credentials fields sectors array.
+     *
      * @var array
      */
     private $fields = [
@@ -24,6 +26,8 @@ class Braintree extends Block
     ];
 
     /**
+     * Braintree enablers fields sectors array.
+     *
      * @var array
      */
     private $enablers = [
@@ -33,6 +37,8 @@ class Braintree extends Block
     ];
 
     /**
+     * Braintree 'Configure' button.
+     *
      * @var string
      */
     private $configureBraintreeButton = '#payment_us_braintree_section_braintree-head';

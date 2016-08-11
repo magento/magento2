@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Payment\Test\TestCase\ConflictResolutionTest" summary="Conflict resolution for US"
-              ticketId="MAGETWO-55707, 38531">
+              ticketId="MAGETWO-55707, MAGETWO-38531">
         <variation name="ConflictResolutionTestVariation1">
             <data name="countryCode" xsi:type="string">US</data>
             <data name="sections" xsi:type="array">

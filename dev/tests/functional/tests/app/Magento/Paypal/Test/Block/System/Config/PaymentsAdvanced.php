@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class PaymentsAdvanced extends Block
 {
     /**
+     * Payments Advanced credentials fields sectors array.
+     *
      * @var array
      */
     private $fields = [
@@ -27,6 +29,8 @@ class PaymentsAdvanced extends Block
     ];
 
     /**
+     * Payments Advanced enablers fields sectors array.
+     *
      * @var array
      */
     private $enablers = [
@@ -37,6 +41,8 @@ class PaymentsAdvanced extends Block
     ];
 
     /**
+     * Payments Advanced 'Configure' button selector.
+     *
      * @var string
      */
     private $configureAdvancedButton = '#payment_us_paypal_group_all_in_one_payflow_advanced-head';

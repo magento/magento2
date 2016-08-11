@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class PayflowPro extends Block
 {
     /**
+     * Payflow Pro credentials fields sectors array.
+     *
      * @var array
      */
     private $fields = [
@@ -31,6 +33,8 @@ class PayflowPro extends Block
     ];
 
     /**
+     * Payflow Pro enablers fields sectors array.
+     *
      * @var array
      */
     private $enablers = [
@@ -43,6 +47,8 @@ class PayflowPro extends Block
     ];
 
     /**
+     * Payflow Pro 'Configure' button selector.
+     *
      * @var string
      */
     private $configureProButton = '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout-head';
