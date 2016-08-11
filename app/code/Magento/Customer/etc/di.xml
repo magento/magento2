@@ -317,7 +317,7 @@
     </type>
     <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
@@ -341,7 +341,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor</item>
@@ -352,12 +352,12 @@
     </virtualType>
     <type name="Magento\Customer\Model\ResourceModel\GroupRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
 </config>

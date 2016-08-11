@@ -344,7 +344,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessorComposite'
+                'Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor'
             );
         }
         return $this->collectionProcessor;
