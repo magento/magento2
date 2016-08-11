@@ -302,6 +302,35 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
                 ],
             ],
+            'zeroRegionToNull' => [
+                'expectedResult' => [
+                    'isDisplayShippingPriceExclTax' => 1,
+                    'isDisplayShippingBothPrices' => 1,
+                    'reviewShippingDisplayMode' => 'excluding',
+                    'reviewItemPriceDisplayMode' => 'including',
+                    'reviewTotalsDisplayMode' => 'both',
+                    'includeTaxInGrandTotal' => 1,
+                    'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1,
+                    'reloadOnBillingAddress' => false,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => null,
+                    'defaultPostcode' => '*',
+                ],
+                'cartShippingBoth' => 0,
+                'cartShippingExclTax' => 1,
+                'cartBothPrices' => 0,
+                'cartPriceExclTax' => 0,
+                'cartSubTotalBoth' => 1,
+                'cartSubTotalExclTax' => 0,
+                'isQuoteVirtual' => false,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 0,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
+            ],
         ];
     }
 }
