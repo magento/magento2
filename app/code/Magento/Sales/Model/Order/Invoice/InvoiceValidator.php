@@ -27,9 +27,7 @@ class InvoiceValidator
     }
 
     /**
-     * @param InvoiceInterface $entity
-     * @param array $validators
-     * @return string[]
+     * @inheritdoc
      */
     public function validate(InvoiceInterface $entity, array $validators)
     {

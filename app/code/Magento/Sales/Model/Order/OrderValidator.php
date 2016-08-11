@@ -11,7 +11,7 @@ use Magento\Sales\Exception\DocumentValidationException;
 /**
  * Class OrderValidatorRunner
  */
-class OrderValidator
+class OrderValidator implements OrderValidatorInterface
 {
     /**
      * @var \Magento\Sales\Model\Validator
@@ -24,10 +24,7 @@ class OrderValidator
     }
 
     /**
-     * @param OrderInterface $entity
-     * @param array $validators
-     * @return string[]
-     * @throws DocumentValidationException
+     * @inheritdoc
      */
     public function validate(OrderInterface $entity, array $validators)
     {

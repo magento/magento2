@@ -96,6 +96,8 @@
     <preference for="Magento\Sales\Model\Order\OrderStateResolverInterface" type="Magento\Sales\Model\Order\StateResolver"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" type="Magento\Sales\Model\Order\Shipment\TrackCreation"/>
     <preference for="Magento\Sales\Api\Data\ShipmentPackageInterface" type="Magento\Sales\Model\Order\Shipment\Package"/>
+    <preference for="Magento\Sales\Model\Order\OrderValidatorInterface" type="Magento\Sales\Model\Order\OrderValidator"/>
+    <preference for="Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface" type="Magento\Sales\Model\Order\Invoice\InvoiceValidator"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
@@ -913,11 +915,6 @@
             <argument name="senders" xsi:type="array">
                 <item name="email" xsi:type="object">Magento\Sales\Model\Order\Invoice\Sender\EmailSender</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sales\Model\Order\InvoiceValidator">
-        <arguments>
-            <argument name="invoiceOrderValidator" xsi:type="object">Magento\Sales\Model\Invoice\Validator\InvoiceOrder</argument>
         </arguments>
     </type>
 </config>
