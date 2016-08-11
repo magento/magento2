@@ -28,7 +28,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
  * 9. Click on the "Save" button.
  * 10. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-21128
  */
 class MassProductUpdateTest extends Injectable

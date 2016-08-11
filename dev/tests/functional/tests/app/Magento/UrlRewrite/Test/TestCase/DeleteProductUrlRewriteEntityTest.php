@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click 'Delete' button.
  * 5. Perform asserts.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites
  * @ZephyrId  MAGETWO-23287
  */
 class DeleteProductUrlRewriteEntityTest extends Injectable

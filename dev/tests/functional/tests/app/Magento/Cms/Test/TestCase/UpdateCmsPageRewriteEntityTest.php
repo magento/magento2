@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save Redirect.
  * 6. Perform all assertions.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites
  * @ZephyrId MAGETWO-26173
  */
 class UpdateCmsPageRewriteEntityTest extends Injectable

@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Click "Cancel".
  * 6. Perform asserts.
  *
- * @group PayPal_(CS)
+ * @group PayPal
  * @ZephyrId MAGETWO-47261
  */
 class InContextExpressOnePageCheckoutTest extends Scenario

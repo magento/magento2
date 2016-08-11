@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Delete Redirect.
  * 5. Perform all assertions.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites
  * @ZephyrId MAGETWO-25915
  */
 class DeleteCmsPageUrlRewriteEntityTest extends Injectable

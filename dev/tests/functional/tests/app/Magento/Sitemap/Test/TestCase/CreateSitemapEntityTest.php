@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  *  5. Click "Save" button.
  *  6. Perform all assertions.
  *
- * @group XML_Sitemap_(PS)
+ * @group XML_Sitemap
  * @ZephyrId MAGETWO-23277
  */
 class CreateSitemapEntityTest extends Injectable

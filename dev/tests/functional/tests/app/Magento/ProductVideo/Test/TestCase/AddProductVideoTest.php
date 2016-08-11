@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Click "Save" button on product page.
  * 7. Perform asserts.
  *
- * @group ProductVideo_(MX)
+ * @group ProductVideo
  * @ZephyrId MAGETWO-43673
  */
 class AddProductVideoTest extends Injectable

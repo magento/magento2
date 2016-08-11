@@ -22,7 +22,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
  * 4. Navigate to compare page(click "compare product" link at the top of the page).
  * 5. Perform all asserts.
  *
- * @group Compare_Products_(MX)
+ * @group Compare_Products
  * @ZephyrId MAGETWO-25843
  */
 class AddCompareProductsTest extends AbstractCompareProductsTest

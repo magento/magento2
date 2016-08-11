@@ -27,7 +27,7 @@ use Magento\Customer\Test\Fixture\Customer;
  * 3. Create Cart Price rule according to dataset and click "Save" button.
  * 4. Perform asserts.
  *
- * @group Shopping_Cart_Price_Rules_(CS)
+ * @group Shopping_Cart_Price_Rules
  * @ZephyrId MAGETWO-24855
  */
 class CreateSalesRuleEntityTest extends Injectable

@@ -25,7 +25,7 @@ use Magento\Mtf\Util\Command\Cli\Cron;
  * 6. Create simple product with category.
  * 7. Perform all asserts.
  *
- * @group Catalog_Price_Rules_(MX)
+ * @group Catalog_Price_Rules
  * @ZephyrId MAGETWO-25187
  */
 class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest

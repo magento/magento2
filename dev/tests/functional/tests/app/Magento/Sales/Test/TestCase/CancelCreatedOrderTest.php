@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Do cancel Order.
  * 5. Perform all assetions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28191
  */
 class CancelCreatedOrderTest extends Injectable

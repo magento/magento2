@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save CMS Page.
  * 6. Verify created CMS Page.
  *
- * @group CMS_Content_(PS)
+ * @group CMS_Content
  * @ZephyrId MAGETWO-25580
  */
 class CreateCmsPageEntityTest extends Injectable

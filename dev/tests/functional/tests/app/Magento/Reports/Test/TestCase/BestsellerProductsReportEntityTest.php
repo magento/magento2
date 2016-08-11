@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Show report".
  * 5. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28222
  */
 class BestsellerProductsReportEntityTest extends Injectable

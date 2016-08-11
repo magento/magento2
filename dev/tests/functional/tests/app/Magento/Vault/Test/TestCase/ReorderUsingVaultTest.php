@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 10. Select any available payment token.
  * 11. Place order.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-54870, MAGETWO-54872
  */
 class ReorderUsingVaultTest extends Scenario

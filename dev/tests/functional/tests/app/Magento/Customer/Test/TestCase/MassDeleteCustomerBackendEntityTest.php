@@ -27,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click Submit button
  * 6. Perform all assertions according to dataset
  *
- * @group Customers_(CS)
+ * @group Customers
  * @ZephyrId MAGETWO-26848
  */
 class MassDeleteCustomerBackendEntityTest extends Injectable

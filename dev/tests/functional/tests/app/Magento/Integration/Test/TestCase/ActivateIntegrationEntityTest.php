@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Click on the "Activate" link near required integration.
  * 4. Perform all assertions.
  *
- * @group Web_API_Framework_(PS)
+ * @group Web_API_Framework
  * @ZephyrId MAGETWO-26119
  */
 class ActivateIntegrationEntityTest extends Injectable

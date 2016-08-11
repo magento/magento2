@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  *  4. Click "Delete" button.
  *  5. Perform all assertions.
  *
- * @group XML_Sitemap_(PS)
+ * @group XML_Sitemap
  * @ZephyrId MAGETWO-23296
  */
 class DeleteSitemapEntityTest extends Injectable

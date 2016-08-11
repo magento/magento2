@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Refresh button"
  * 5. Perform all assertions
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28200
  */
 class OrderedProductsReportEntityTest extends Injectable

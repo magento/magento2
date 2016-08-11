@@ -27,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Click "Save Review" button.
  * 7. Perform Asserts.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-26476
  */
 class CreateProductReviewBackendEntityTest extends Injectable

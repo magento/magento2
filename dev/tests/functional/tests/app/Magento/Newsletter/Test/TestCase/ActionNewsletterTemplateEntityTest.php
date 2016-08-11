@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Select action in action dropdown for created template according to dataset
  * 5. Perform all assertions
  *
- * @group Newsletters_(MX)
+ * @group Newsletters
  * @ZephyrId MAGETWO-27043
  */
 class ActionNewsletterTemplateEntityTest extends Injectable

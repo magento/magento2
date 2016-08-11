@@ -27,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click 'Delete' button.
  * 5. Perform all assertions.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-25473
  */
 class DeleteAttributeSetTest extends Injectable

@@ -17,7 +17,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * 1. Navigate through up-sell products.
  *
  * @ZephyrId MAGETWO-12391
- * @group Up-sells_(MX)
+ * @group Up-sells
  */
 class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
 {

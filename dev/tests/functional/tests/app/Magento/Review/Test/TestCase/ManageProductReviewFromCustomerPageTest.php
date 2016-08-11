@@ -34,7 +34,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Click "Submit review".
  * 8. Perform all assertions.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-27625
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

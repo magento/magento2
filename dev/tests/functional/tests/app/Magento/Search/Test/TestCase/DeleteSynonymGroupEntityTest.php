@@ -22,7 +22,7 @@ use Magento\Search\Test\Fixture\SynonymGroup;
  * 3. Delete created Synonym Group
  * 4. Perform all assertions.
  *
- * @group Search_(MX)
+ * @group Search
  * @ZephyrId MAGETWO-47683
  */
 class DeleteSynonymGroupEntityTest extends Injectable

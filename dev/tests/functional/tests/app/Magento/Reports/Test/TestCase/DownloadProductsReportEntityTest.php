@@ -25,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Go to Reports > Products > Downloads.
  * 3. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28823
  */
 class DownloadProductsReportEntityTest extends Injectable

@@ -26,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 8. Click "Save" button on product page.
  * 9. Perform asserts.
  *
- * @group ProductVideo_(MX)
+ * @group ProductVideo
  * @ZephyrId MAGETWO-43660
  */
 class DeleteProductVideoTest extends Injectable

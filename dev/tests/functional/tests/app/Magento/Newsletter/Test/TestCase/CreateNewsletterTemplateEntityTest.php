@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save.
  * 6. Perform asserts.
  *
- * @group Newsletters_(MX)
+ * @group Newsletters
  * @ZephyrId MAGETWO-23302
  */
 class CreateNewsletterTemplateEntityTest extends Injectable

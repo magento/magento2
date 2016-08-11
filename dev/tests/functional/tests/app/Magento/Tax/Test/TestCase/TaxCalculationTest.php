@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Save tax configuration.
  * 13. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-27809
  */
 class TaxCalculationTest extends Scenario

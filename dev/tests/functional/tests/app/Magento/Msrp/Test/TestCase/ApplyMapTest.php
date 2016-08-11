@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Create product.
  * 2. Perform all assertions.
  *
- * @group MAP_(MX)
+ * @group MAP
  * @ZephyrId MAGETWO-12430, MAGETWO-12847
  */
 class ApplyMapTest extends Injectable

@@ -33,7 +33,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Save product
  * 7. Perform all assertions
  *
- * @group Configurable_Product_(MX)
+ * @group Configurable_Product
  * @ZephyrId MAGETWO-26041
  */
 class CreateConfigurableProductEntityTest extends Injectable

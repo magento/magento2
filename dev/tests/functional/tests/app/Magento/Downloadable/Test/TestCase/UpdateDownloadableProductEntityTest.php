@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts.
  *
- * @group Downloadable_Product_(MX)
+ * @group Downloadable_Product
  * @ZephyrId MAGETWO-24775
  */
 class UpdateDownloadableProductEntityTest extends Injectable

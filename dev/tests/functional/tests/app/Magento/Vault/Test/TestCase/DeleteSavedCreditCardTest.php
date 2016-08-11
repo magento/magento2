@@ -23,7 +23,7 @@ use Magento\Vault\Test\Constraint\AssertCreditCardNotPresentOnCheckout;
  * 6. Go to One page Checkout
  * 7. Perform assertions.
  *
- * @group Vault_(CS)
+ * @group Vault
  * @ZephyrId MAGETWO-54059, MAGETWO-54072, MAGETWO-54068, MAGETWO-54015, MAGETWO-54011
  */
 class DeleteSavedCreditCardTest extends Injectable

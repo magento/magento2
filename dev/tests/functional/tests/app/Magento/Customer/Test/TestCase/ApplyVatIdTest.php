@@ -25,7 +25,7 @@ use Magento\Customer\Test\Fixture\Customer;
  * 5. Save Customer Address.
  * 6. Perform assertions.
  *
- * @group VAT_ID_(CS)
+ * @group VAT_ID
  * @ZephyrId MAGETWO-12447
  */
 class ApplyVatIdTest extends AbstractApplyVatIdTest

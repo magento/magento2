@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 4. Complete Checkout steps
  * 5. Perform all asserts
  *
- * @group Gift_Messages_(CS)
+ * @group Gift_Messages
  * @ZephyrId MAGETWO-28978
  */
 class CheckoutWithGiftMessagesTest extends Scenario

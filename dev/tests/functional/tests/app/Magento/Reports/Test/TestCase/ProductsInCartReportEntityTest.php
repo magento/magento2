@@ -25,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Add product to cart as unregistered customer
  * 5. Perform all assertions
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-27952
  */
 class ProductsInCartReportEntityTest extends Injectable

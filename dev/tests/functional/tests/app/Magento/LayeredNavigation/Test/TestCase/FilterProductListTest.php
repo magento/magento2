@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Create product with created category.
  * 3. Perform all assertions.
  *
- * @group Layered_Navigation_(MX)
+ * @group Layered_Navigation
  * @ZephyrId MAGETWO-12419
  */
 class FilterProductListTest extends Injectable

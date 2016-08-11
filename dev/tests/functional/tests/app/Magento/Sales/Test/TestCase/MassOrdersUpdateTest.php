@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Submit.
  * 5. Perform Asserts.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-27897
  */
 class MassOrdersUpdateTest extends Injectable

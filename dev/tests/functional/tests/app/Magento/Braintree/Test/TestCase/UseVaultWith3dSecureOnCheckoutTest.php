@@ -35,7 +35,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 16. Click 'Submit' to place order.
  * 17. Perform assertions.
  *
- * @group One_Page_Checkout_(CS)
+ * @group One_Page_Checkout
  * @ZephyrId MAGETWO-55310
  */
 class UseVaultWith3dSecureOnCheckoutTest extends Scenario

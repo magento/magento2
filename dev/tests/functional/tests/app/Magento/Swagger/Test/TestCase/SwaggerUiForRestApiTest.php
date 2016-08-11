@@ -21,7 +21,7 @@ use Magento\Swagger\Test\Page\SwaggerUiPage;
  * 5. Click operation name to show operation details
  * 6. Perform all assertions
  *
- * @group Swagger_(PS)
+ * @group Swagger
  * @ZephyrId MAGETWO-41381, MAGETWO-41383
  */
 class SwaggerUiForRestApiTest extends Injectable

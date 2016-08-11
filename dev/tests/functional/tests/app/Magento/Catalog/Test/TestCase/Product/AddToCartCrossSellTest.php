@@ -20,7 +20,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * 2. Verify Cross-sell block on checkout page.
  *
  * @ZephyrId MAGETWO-12390
- * @group Cross-sells_(MX)
+ * @group Cross-sells
  */
 class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
 {

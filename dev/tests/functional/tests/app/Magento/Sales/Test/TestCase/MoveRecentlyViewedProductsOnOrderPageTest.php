@@ -28,7 +28,7 @@ use Magento\Customer\Test\Fixture\Customer;
  * 10. Click Update Items and Qty's button.
  * 11. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29723
  */
 class MoveRecentlyViewedProductsOnOrderPageTest extends Injectable

@@ -25,7 +25,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Save product.
  * 6. Perform all assertions.
  *
- * @group Configurable_Product_(MX)
+ * @group Configurable_Product
  * @ZephyrId MAGETWO-29916
  */
 class UpdateConfigurableProductEntityTest extends Scenario

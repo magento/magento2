@@ -32,7 +32,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 13. Place order.
  * 14. Perform assertions.
  *
- * @group One_Page_Checkout_(CS)
+ * @group One_Page_Checkout
  * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429
  * @ZephyrId MAGETWO-12444, MAGETWO-12848, MAGETWO-12849, MAGETWO-12850
  */

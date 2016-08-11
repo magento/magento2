@@ -26,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Save the Search Term.
  * 8. Perform all assertions.
  *
- * @group Search_Terms_(MX)
+ * @group Search_Terms
  * @ZephyrId MAGETWO-26100
  */
 class UpdateSearchTermEntityTest extends Injectable

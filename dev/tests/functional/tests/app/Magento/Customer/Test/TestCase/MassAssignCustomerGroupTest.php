@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Click "Submit" button
  * 7. Perform all assertions
  *
- * @group Customer_Groups_(CS), Customers_(CS)
+ * @group Customer_Groups, Customers
  * @ZephyrId MAGETWO-27892
  */
 class MassAssignCustomerGroupTest extends Injectable

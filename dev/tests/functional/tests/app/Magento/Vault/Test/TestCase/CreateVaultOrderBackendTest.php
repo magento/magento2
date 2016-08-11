@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 15. Select any available payment token.
  * 16. Place order.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-48127, MAGETWO-48091
  */
 class CreateVaultOrderBackendTest extends Scenario

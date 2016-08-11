@@ -23,7 +23,7 @@ use Magento\Search\Test\Fixture\SynonymGroup;
  * 4. Fill data according to dataset.
  * 5. Perform all assertions.
  *
- * @group Search_(MX)
+ * @group Search
  * @ZephyrId MAGETWO-47684
  */
 class MergeSynonymGroupEntityTest extends Injectable

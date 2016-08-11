@@ -25,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Save new Attribute Set.
  * 7. Verify created Attribute Set.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-25104
  */
 class CreateAttributeSetEntityTest extends Injectable

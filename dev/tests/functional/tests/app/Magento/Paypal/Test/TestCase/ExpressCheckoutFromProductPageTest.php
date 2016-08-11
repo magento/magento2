@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Process checkout via PayPal.
  * 6. Perform asserts.
  *
- * @group PayPal_(CS)
+ * @group PayPal
  * @ZephyrId MAGETWO-12415
  */
 class ExpressCheckoutFromProductPageTest extends Scenario

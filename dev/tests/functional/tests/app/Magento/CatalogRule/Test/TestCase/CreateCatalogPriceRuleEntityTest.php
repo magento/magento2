@@ -20,7 +20,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
  * 5. Save rule.
  * 6. Perform appropriate assertions.
  *
- * @group Catalog_Price_Rules_(MX)
+ * @group Catalog_Price_Rules
  * @ZephyrId MAGETWO-24341
  */
 class CreateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest

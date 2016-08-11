@@ -31,7 +31,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Click 'Submit' to place order.
  * 13. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-46479
  */
 class OnePageCheckoutWith3dSecureTest extends Scenario

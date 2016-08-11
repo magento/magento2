@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Save & Duplicate".
  * 5. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-23294
  */
 class DuplicateProductEntityTest extends Injectable

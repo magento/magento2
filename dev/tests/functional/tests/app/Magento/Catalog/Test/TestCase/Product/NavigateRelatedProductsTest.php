@@ -20,7 +20,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * 3. Verify checkout cart.
  *
  * @ZephyrId MAGETWO-12392
- * @group Related_Products_(MX)
+ * @group Related_Products
  */
 class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 {

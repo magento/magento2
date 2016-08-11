@@ -17,7 +17,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 3.  Create credit memo.
  * 4. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-48689, MAGETWO-48698
  */
 class CreateOnlineCreditMemoBraintreePaypalTest extends Scenario

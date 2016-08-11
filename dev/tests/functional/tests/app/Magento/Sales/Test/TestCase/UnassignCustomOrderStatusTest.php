@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Click "Unassign" for appropriate status.
  * 4. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29450
  */
 class UnassignCustomOrderStatusTest extends Injectable

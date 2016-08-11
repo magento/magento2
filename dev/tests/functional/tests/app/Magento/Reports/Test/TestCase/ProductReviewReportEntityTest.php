@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Navigate to the Reports>Reviews>By Products
  * 3. Perform appropriate assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-27223
  */
 class ProductReviewReportEntityTest extends Injectable

@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click on line with search results.
  * 5. Perform assertion.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-24771
  */
 class DeleteSystemProductAttributeTest extends Injectable

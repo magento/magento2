@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save Tax Rate.
  * 6. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-23286
  */
 class CreateTaxRateEntityTest extends Injectable

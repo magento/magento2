@@ -25,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Fill data according to dataset.
  * 5. Perform all assertions.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites
  * @ZephyrId MAGETWO-24819
  */
 class UpdateProductUrlRewriteEntityTest extends Injectable

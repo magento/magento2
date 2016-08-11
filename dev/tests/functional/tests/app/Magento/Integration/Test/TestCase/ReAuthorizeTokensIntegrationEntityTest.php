@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Done.
  * 5. Perform assertions.
  *
- * @group Integrations_(PS)
+ * @group Integrations
  * @ZephyrId MAGETWO-29648
  */
 class ReAuthorizeTokensIntegrationEntityTest extends Injectable

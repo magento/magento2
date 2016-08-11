@@ -20,7 +20,7 @@ use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
  * 4. Click 'Save Currency Symbols' button
  * 5. Perform all asserts.
  *
- * @group Currency_(PS)
+ * @group Currency
  * @ZephyrId MAGETWO-26600
  */
 class EditCurrencySymbolEntityTest extends AbstractCurrencySymbolEntityTest

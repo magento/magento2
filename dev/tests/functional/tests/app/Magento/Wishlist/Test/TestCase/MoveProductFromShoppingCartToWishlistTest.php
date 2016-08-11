@@ -21,7 +21,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
  * 2. Click 'Move to Wishlist' button from Shopping Cart for added product.
  * 3. Perform asserts.
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-29545
  */
 class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest

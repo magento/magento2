@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 11. Click 'Proceed purchase' in popup.
  * 12. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-47805
  * @ZephyrId MAGETWO-47810
  */

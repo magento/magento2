@@ -17,7 +17,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Select system Customer Group specified in data set from grid.
  * 4. Perform all assertions.
  *
- * @group Customer_Groups_(CS)
+ * @group Customer_Groups
  * @ZephyrId MAGETWO-52481
  */
 class VerifyDisabledCustomerGroupFieldTest extends Injectable

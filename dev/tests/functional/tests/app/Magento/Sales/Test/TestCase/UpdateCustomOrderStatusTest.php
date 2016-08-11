@@ -27,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save order status.
  * 6. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29868
  */
 class UpdateCustomOrderStatusTest extends Injectable

@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Submit Shipment' button.
  * 6. Perform all asserts.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28708
  */
 class CreateShipmentEntityTest extends Injectable

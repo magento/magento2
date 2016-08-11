@@ -41,7 +41,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 9. Go to frontend and login with customer
  * 10. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-29551
  */
 class CreateTaxWithFptTest extends Injectable

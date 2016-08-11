@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Input in "Search" field test data.
  * 3. Perform asserts.
  *
- * @group Search_Frontend_(CS)
+ * @group Search_Frontend
  * @ZephyrId MAGETWO-24671
  */
 class SuggestSearchingResultEntityTest extends Injectable

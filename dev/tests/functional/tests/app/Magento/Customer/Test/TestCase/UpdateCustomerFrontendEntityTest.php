@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Fill fields with test data and save.
  * 7. Perform all assertions.
  *
- * @group Customer_Account_(CS)
+ * @group Customer_Account
  * @ZephyrId MAGETWO-25925
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

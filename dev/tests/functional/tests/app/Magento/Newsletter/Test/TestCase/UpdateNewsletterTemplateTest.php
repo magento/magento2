@@ -27,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Save Template' button
  * 6. Perform asserts
  *
- * @group Newsletters_(MX)
+ * @group Newsletters
  * @ZephyrId MAGETWO-29427
  */
 class UpdateNewsletterTemplateTest extends Injectable

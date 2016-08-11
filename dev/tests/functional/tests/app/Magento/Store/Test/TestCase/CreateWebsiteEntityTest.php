@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save Web Site" button
  * 6. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27665
  */
 class CreateWebsiteEntityTest extends Injectable

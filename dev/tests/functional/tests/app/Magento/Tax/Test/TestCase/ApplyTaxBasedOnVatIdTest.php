@@ -31,7 +31,7 @@ use Magento\Customer\Test\TestCase\AbstractApplyVatIdTest;
  * 5. In 'Estimate Shipping and Tax' section specify destination and click 'Get a Quote' button.
  * 6. Perform assertions.
  *
- * @group VAT_ID_(CS)
+ * @group VAT_ID
  * @ZephyrId MAGETWO-13436
  */
 class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest

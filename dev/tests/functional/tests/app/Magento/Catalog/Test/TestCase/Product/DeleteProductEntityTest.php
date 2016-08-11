@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Submit form.
  * 6. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-23272
  */
 class DeleteProductEntityTest extends Injectable

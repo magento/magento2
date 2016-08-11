@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Navigate to: Reports > Search Terms.
  * 4. Perform appropriate assertions.
  *
- * @group Search_Terms_(MX)
+ * @group Search_Terms
  * @ZephyrId MAGETWO-27106
  */
 class SearchTermsReportEntityTest extends Injectable

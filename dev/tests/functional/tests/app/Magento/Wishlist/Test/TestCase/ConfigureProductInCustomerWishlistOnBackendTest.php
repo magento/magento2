@@ -26,7 +26,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
  * 7. Click Ok
  * 8. Perform assertions
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-29257
  */
 class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTest

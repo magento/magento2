@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 13. Register two customers on front end that will match two different rates
  * 14. Login with each customer and verify prices
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-29052
  */
 class TaxWithCrossBorderTest extends Injectable

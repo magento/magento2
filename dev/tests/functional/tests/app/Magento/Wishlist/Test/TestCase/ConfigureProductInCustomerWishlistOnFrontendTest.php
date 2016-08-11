@@ -22,7 +22,7 @@ use Magento\Customer\Test\Fixture\Customer;
  * 4. Click 'Ok'
  * 5. Perform assertions
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-29507
  */
 class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistTest

@@ -35,7 +35,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 13. Log in using new admin user (before the bug was fixed, it was impossible to log in from the first attempt)
  * 14. Perform assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-28828
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

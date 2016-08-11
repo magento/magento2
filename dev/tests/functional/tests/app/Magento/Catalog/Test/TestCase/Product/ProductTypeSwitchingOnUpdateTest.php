@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Save
  * 7. Perform all assertions
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-29633
  */
 class ProductTypeSwitchingOnUpdateTest extends Injectable
