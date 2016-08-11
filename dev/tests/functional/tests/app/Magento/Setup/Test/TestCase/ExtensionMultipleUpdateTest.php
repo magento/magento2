@@ -96,6 +96,7 @@ class ExtensionMultipleUpdateTest extends AbstractExtensionTest
         /** @var Extension $removeExtension */
         foreach ($removeExtensions as $removeExtension) {
             $this->setupWizard->getReadiness()->clickRemoveExtension($removeExtension);
+            $this->setupWizard->getReadiness()->clickRemoveExtensionOnModal();
         }
 
         $this->setupWizard->getReadiness()->clickTryAgain();

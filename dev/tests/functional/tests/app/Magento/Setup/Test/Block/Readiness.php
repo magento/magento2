@@ -41,7 +41,21 @@ class Readiness extends Block
      *
      * @var string
      */
-    protected $removeExtension = '//li//strong[contains(text(), \'%s\')]//..//button';
+    protected $removeExtension = '//li[contains(text(), \'%s\')]//button';
+
+    /**
+     * Remove button on modal.
+     *
+     * @var string
+     */
+    protected $removeExtensionButtonOnModal = "[ng-click*='removeExtension']";
+
+    /**
+     * Remove popup modal.
+     *
+     * @var string
+     */
+    protected $popupRemoveModal = '.modal-popup';
 
     /**
      * 'Completed!' message.
@@ -135,6 +149,17 @@ class Readiness extends Block
         $removeExtension = sprintf($this->removeExtension, $extension->getExtensionName());
 
         $this->_rootElement->find($removeExtension, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Click Remove button on modal.
+     *
+     * @return void
+     */
+    public function clickRemoveExtensionOnModal()
+    {
+        $this->_rootElement->find($this->removeExtensionButtonOnModal, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->popupRemoveModal, Locator::SELECTOR_CSS);
     }
 
     /**
