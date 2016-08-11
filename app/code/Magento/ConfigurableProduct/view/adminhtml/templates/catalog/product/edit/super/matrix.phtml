@@ -172,7 +172,10 @@ $currencySymbol = $block->getCurrencySymbol();
                                                     id: $parent.getRowId(variation, 'price'),
                                                     name: $parent.getVariationRowName(variation, 'price')
                                                 },
-                                                value: variation.price
+                                                value: variation.price,
+                                                event: {
+                                                    keyup: validatePrice()
+                                                }
                                             "/>
                                             <label class="addafter"
                                                    data-bind="attr: {for: $parent.getRowId(variation, 'price')">

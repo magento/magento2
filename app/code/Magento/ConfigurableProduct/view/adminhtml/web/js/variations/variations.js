@@ -82,12 +82,34 @@ define([
             }, this);
 
             $('#save-split-button, #save-split-button .item').click(function () {
-                this.productMatrixSerialized(JSON.stringify(this.prepareVariations()));
+                var variations = this.prepareVariations(),
+                    validationError = this.validateVariationPrices(this.variations) || false;
+
+                if (validationError) {
+                    pagingObservables.current(
+                        Math.floor(this.variations.indexOf(validationError) / pagingObservables.pageSize() + 1)
+                    );
+                    $('[data-form="edit-product"]').validation('isValid');
+
+                    return;
+                }
+
+                this.productMatrixSerialized(JSON.stringify(variations));
                 this.associatedProductsSerialized(JSON.stringify(this.associatedProducts));
                 this.configurationsSerialized(JSON.stringify(this.configurations));
             }.bind(this));
 
             return this;
+        },
+
+        /**
+         * Validate variations data.
+         * @param {Array} variations
+         */
+        validateVariationPrices: function (variations) {
+            return _.find(variations, function (variation) {
+                return variation.hasOwnProperty('price') && variation.price === '';
+            });
         },
 
         /**
@@ -400,7 +422,14 @@ define([
                     variationKey: this.getVariationKey(variation.options),
                     editable: variation.editable === undefined ? !variation.productId : variation.editable,
                     productUrl: this.buildProductUrl(variation.productId),
-                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10)
+                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
+
+                    /**
+                     * Validates variation price.
+                     */
+                    validatePrice: function () {
+                        $('[data-form="edit-product"]').validation('isValid');
+                    }
                 }));
             }, this);
             this.productMatrix(tempMatrix);
