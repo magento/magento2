@@ -5,50 +5,66 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group as StoreGroupIndexerPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
+use Magento\Store\Model\Group as StoreGroup;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var StoreGroupIndexerPlugin
      */
-    protected $indexerMock;
+    private $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Group
+     * @var ObjectManagerHelper
      */
-    protected $subjectMock;
+    private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
-     * @var Group
+     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $indexerMock;
+
+    /**
+     * @var StoreGroupResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectMock;
+
+    /**
+     * @var StoreGroup|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeGroupMock;
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock(\Magento\Store\Model\ResourceModel\Group::class, [], [], '', false);
-        $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
+        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
+            ->getMockForAbstractClass();
+        $this->subjectMock = $this->getMockBuilder(StoreGroupResourceModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeGroupMock = $this->getMockBuilder(StoreGroup::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['dataHasChangedFor', 'isObjectNew'])
+            ->getMock();
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->plugin = $this->objectManagerHelper->getObject(
+            StoreGroupIndexerPlugin::class,
+            ['indexerRegistry' => $this->indexerRegistryMock]
         );
-        $this->indexerRegistryMock = $this->getMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->model = new Group($this->indexerRegistryMock);
     }
 
     /**
@@ -56,72 +72,58 @@ class GroupTest extends \PHPUnit_Framework_TestCase
      * @param bool $websiteChanged
      * @param int $invalidateCounter
      * @return void
-     * @dataProvider aroundSaveDataProvider
+     * @dataProvider beforeAfterSaveDataProvider
      */
-    public function testAroundSave($isObjectNew, $websiteChanged, $invalidateCounter)
+    public function testBeforeAfterSave($isObjectNew, $websiteChanged, $invalidateCounter)
     {
-        $groupMock = $this->getMock(
-            \Magento\Store\Model\Group::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $groupMock->expects($this->any())
+        $this->prepareIndexer($invalidateCounter);
+        $this->storeGroupMock->expects(static::any())
             ->method('dataHasChangedFor')
             ->with('website_id')
-            ->will($this->returnValue($websiteChanged));
-        $groupMock->expects($this->once())->method('isObjectNew')->will($this->returnValue($isObjectNew));
+            ->willReturn($websiteChanged);
+        $this->storeGroupMock->expects(static::once())
+            ->method('isObjectNew')
+            ->willReturn($isObjectNew);
+        $this->indexerMock->expects(static::exactly($invalidateCounter))
+            ->method('invalidate');
 
-        $closureMock = function (\Magento\Store\Model\Group $object) use ($groupMock) {
-            $this->assertEquals($object, $groupMock);
-            return $this->subjectMock;
-        };
-
-        $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
-        $this->prepareIndexer($invalidateCounter);
-
-        $this->assertEquals(
-            $this->subjectMock,
-            $this->model->aroundSave($this->subjectMock, $closureMock, $groupMock)
-        );
+        $this->plugin->beforeSave($this->subjectMock, $this->storeGroupMock);
+        $this->assertSame($this->subjectMock, $this->plugin->afterSave($this->subjectMock, $this->subjectMock));
     }
 
     /**
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public function beforeAfterSaveDataProvider()
     {
         return [
             [false, false, 0],
             [false, true, 1],
             [true, false, 0],
-            [true, true, 0],
+            [true, true, 0]
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testAfterDelete()
     {
-        $this->indexerMock->expects($this->once())->method('invalidate');
         $this->prepareIndexer(1);
+        $this->indexerMock->expects(static::once())
+            ->method('invalidate');
 
-        $this->assertEquals(
-            $this->subjectMock,
-            $this->model->afterDelete($this->subjectMock, $this->subjectMock)
-        );
+        $this->assertSame($this->subjectMock, $this->plugin->afterDelete($this->subjectMock, $this->subjectMock));
     }
 
     /**
+     * Prepare expectations for indexer
+     * 
      * @param int $invalidateCounter
+     * @return void
      */
-    protected function prepareIndexer($invalidateCounter)
+    private function prepareIndexer($invalidateCounter)
     {
-        $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
+        $this->indexerRegistryMock->expects(static::exactly($invalidateCounter))
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->with(FulltextIndexer::INDEXER_ID)
+            ->willReturn($this->indexerMock);
     }
 }
