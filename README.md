@@ -79,3 +79,4 @@ To report security vulnerabilities in Magento software or web sites, please e-ma
 
 Stay up-to-date on the latest vulnerabilities and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
 
+hallo welt
