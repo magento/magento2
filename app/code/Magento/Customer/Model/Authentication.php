@@ -5,7 +5,8 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Model\ResourceModel\CustomerAuthenticationRepository;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -46,19 +47,24 @@ class Authentication implements AuthenticationInterface
     protected $encryptor;
 
     /**
-     * @var CustomerAuthenticationRepository
+     * @var CustomerRepository
      */
     protected $customerRepository;
 
     /**
-     * @param CustomerAuthenticationRepository $customerRepository
+     * @var CustomerAuthUpdate
+     */
+    private $customerAuthUpdate;
+
+    /**
+     * @param CustomerRepository $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
      */
     public function __construct(
-        CustomerAuthenticationRepository $customerRepository,
+        CustomerRepository $customerRepository,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -105,7 +111,7 @@ class Authentication implements AuthenticationInterface
         }
 
         $customerSecure->setFailuresNum($failuresNum);
-        $this->customerRepository->save($this->customerRepository->getById($customerId));
+        $this->getCustomerAuthUpdate()->saveAuth($customerId);
     }
 
     /**
@@ -117,7 +123,7 @@ class Authentication implements AuthenticationInterface
         $customerSecure->setFailuresNum(0);
         $customerSecure->setFirstFailure(null);
         $customerSecure->setLockExpires(null);
-        $this->customerRepository->save($this->customerRepository->getById($customerId));
+        $this->getCustomerAuthUpdate()->saveAuth($customerId);
     }
 
     /**
@@ -164,5 +170,20 @@ class Authentication implements AuthenticationInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
         return true;
+    }
+    
+    /**
+     * Get customer authentication update model
+     *
+     * @return \Magento\Customer\Model\CustomerAuthUpdate
+     * @deprecated
+     */
+    private function getCustomerAuthUpdate()
+    {
+        if ($this->customerAuthUpdate === null) {
+            $this->customerAuthUpdate =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerAuthUpdate::class);
+        }
+        return $this->customerAuthUpdate;
     }
 }
