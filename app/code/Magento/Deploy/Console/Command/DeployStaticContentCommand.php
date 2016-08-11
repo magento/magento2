@@ -322,19 +322,20 @@ class DeployStaticContentCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @param $magentoLanguages array
      * @param $languagesInclude array
      * @param $languagesExclude array
      * @throws \InvalidArgumentException
      */
-    private function checkLanguagesInput($magentoLanguages, $languagesInclude, $languagesExclude)
+    private function checkLanguagesInput($languagesInclude, $languagesExclude)
     {
-       foreach ($magentoLanguages as $lang) {
-            if (!$this->validator->isValid($lang)) {
-                throw new \InvalidArgumentException(
-                    $lang .
-                    ' argument has invalid value, please run info:language:list for list of available locales'
-                );
+        if ($languagesInclude[0] != 'all') {
+            foreach ($languagesInclude as $lang) {
+                if (!$this->validator->isValid($lang)) {
+                    throw new \InvalidArgumentException(
+                        $lang .
+                        ' argument has invalid value, please run info:language:list for list of available locales'
+                    );
+                }
             }
         }
 
@@ -342,28 +343,6 @@ class DeployStaticContentCommand extends Command
             throw new \InvalidArgumentException(
                 '--language (-l) and --exclude-language cannot be used at the same time'
             );
-        }
-
-        if ($languagesInclude[0] != 'all') {
-            foreach ($languagesInclude as $language) {
-                if (!in_array($language, $magentoLanguages)) {
-                    throw new \InvalidArgumentException(
-                        $language .
-                        ' argument has invalid value, available languages are: ' . implode(', ', $magentoLanguages)
-                    );
-                }
-            }
-        }
-
-        if ($languagesExclude[0] != 'none') {
-            foreach ($languagesExclude as $language) {
-                if (!in_array($language, $magentoLanguages)) {
-                    throw new \InvalidArgumentException(
-                        $language .
-                        ' argument has invalid value, available languages are: ' . implode(', ', $magentoLanguages)
-                    );
-                }
-            }
         }
     }
 
@@ -462,10 +441,13 @@ class DeployStaticContentCommand extends Command
         $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
         $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
 
-        $languagesInclude = $input->getArgument(self::LANGUAGES_ARGUMENT) ?: $input->getOption(self::LANGUAGE_OPTION);
+        $languagesInclude = $input->getArgument(self::LANGUAGES_ARGUMENT)
+            ?: $input->getOption(self::LANGUAGE_OPTION);
         $languagesExclude = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
-        $this->checkLanguagesInput($magentoLanguages, $languagesInclude, $languagesExclude);
-        $deployableLanguages = $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude);
+        $this->checkLanguagesInput($languagesInclude, $languagesExclude);
+        $deployableLanguages = $languagesInclude[0] == 'all'
+            ? $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude)
+            : $languagesInclude;
 
         $themesInclude = $input->getOption(self::THEME_OPTION);
         $themesExclude = $input->getOption(self::EXCLUDE_THEME_OPTION);
@@ -585,9 +567,9 @@ class DeployStaticContentCommand extends Command
     private function getProcessesAmount()
     {
         $jobs = (int)$this->input->getOption(self::JOBS_AMOUNT);
-        if ($jobs <= 1) {
+        if ($jobs < 1) {
             throw new \InvalidArgumentException(
-                self::JOBS_AMOUNT . 'argument has invalid value. It must be greater than 1'
+                self::JOBS_AMOUNT . ' argument has invalid value. It must be greater than 0'
             );
         }
         return $jobs;
