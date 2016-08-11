@@ -126,7 +126,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'assets' => $assets,
         ]);
 
-        $mergedAsset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $mergedAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $this->mergeStrategy
             ->expects($this->once())
             ->method('merge')

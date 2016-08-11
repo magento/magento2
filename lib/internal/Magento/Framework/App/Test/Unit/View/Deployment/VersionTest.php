@@ -29,8 +29,8 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->versionStorage = $this->getMock('Magento\Framework\App\View\Deployment\Version\StorageInterface');
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->versionStorage = $this->getMock(\Magento\Framework\App\View\Deployment\Version\StorageInterface::class);
         $this->object = new Version($this->appState, $this->versionStorage);
     }
 

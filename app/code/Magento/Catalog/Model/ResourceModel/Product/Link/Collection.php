@@ -40,7 +40,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Product\Link', 'Magento\Catalog\Model\ResourceModel\Product\Link');
+        $this->_init(
+            \Magento\Catalog\Model\Product\Link::class,
+            \Magento\Catalog\Model\ResourceModel\Product\Link::class
+        );
     }
 
     /**

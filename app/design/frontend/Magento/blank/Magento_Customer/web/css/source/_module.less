@@ -41,7 +41,7 @@
                 .lib-font-size(18);
             }
         }
-    
+
         .fieldset {
             .lib-form-hasrequired(bottom);
             &:after {
@@ -49,35 +49,35 @@
             }
         }
     }
-    
+
     .block-addresses-list {
         .items.addresses {
             > .item {
                 margin-bottom: @indent__base;
-    
+
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
         }
     }
-    
+
     .form-address-edit {
         #region_id {
             display: none;
         }
-    
+
         .actions-toolbar .action.primary {
             &:extend(.abs-button-l all);
         }
     }
-    
+
     .form-edit-account {
         .fieldset.password {
             display: none;
         }
     }
-    
+
     .box-billing-address,
     .box-shipping-address,
     .box-information,
@@ -96,43 +96,43 @@
             h2 {
                 margin-top: 0;
             }
-    
+
             .toolbar {
                 text-align: center;
                 .limiter-options {
                     width: auto;
                 }
             }
-    
+
             .limiter {
                 >.label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
-    
+
             .block:not(.widget) {
                 &:extend(.abs-account-blocks all);
             }
         }
-    
+
         .sidebar-additional {
             margin-top: 40px;
         }
-    
+
         .table-wrapper {
             &:last-child {
                 margin-bottom: 0;
             }
-    
+
             .action {
                 margin-right: 15px;
-    
+
                 &:last-child {
                     margin-right: 0;
                 }
             }
         }
-    
+
         .table-return-items {
             .qty {
                 .input-text {
@@ -141,7 +141,7 @@
             }
         }
     }
-    
+
     //  Checkout address (create shipping address)
     .field.street {
         .field.additional {
@@ -214,10 +214,10 @@
                 margin-bottom: 0;
             }
         }
-    
+
         .title {
             margin-bottom: @indent__s;
-    
+
             strong {
                 .lib-heading(h4);
                 .column.main & {
@@ -250,6 +250,7 @@
 
             .input-text {
                 .lib-vendor-prefix-order(0);
+                z-index: 2;
             }
         }
     }
@@ -271,42 +272,42 @@
             z-index: -1;
         }
 
-        .password-strength-meter-0 & {
+        .password-none & {
             &:before {
                 background-color: @_password-default;
                 width: 100%;
             }
         }
 
-        .password-strength-meter-1 & {
+        .password-weak & {
             &:before {
                 background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
                 background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
                 background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
                 background-color: @_password-very-strong;
                 width: 100%;
             }
         }
     }
-    
+
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
 

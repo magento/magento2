@@ -10,6 +10,9 @@ use \Magento\Bundle\Pricing\Price\TierPrice;
 
 use Magento\Customer\Model\Group;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TierPriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,9 +50,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
 
-        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -58,19 +61,22 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->calculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->calculator = $this->getMock(\Magento\Framework\Pricing\Adjustment\Calculator::class, [], [], '', false);
         $this->groupManagement = $this
-            ->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
+            ->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\TierPrice', [
-            'saleableItem' => $this->product,
-            'calculator' => $this->calculator,
-            'priceCurrency' => $this->priceCurrencyMock,
-            'groupManagement' => $this->groupManagement
-            ]);
+        $this->model = $objectHelper->getObject(
+            \Magento\Bundle\Pricing\Price\TierPrice::class,
+            [
+                'saleableItem' => $this->product,
+                'calculator' => $this->calculator,
+                'priceCurrency' => $this->priceCurrencyMock,
+                'groupManagement' => $this->groupManagement
+            ]
+        );
     }
 
     /**
@@ -81,7 +87,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
 
-        $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
+        $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $price->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($basePrice));
@@ -94,11 +100,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getAmount')
             ->will($this->returnArgument(0));
 
-        $this->priceCurrencyMock->expects($this->never())
-            ->method('convertAndRound');
+        $this->priceCurrencyMock->expects($this->never())->method('convertAndRound');
 
         $group = $this->getMock(
-            '\Magento\Customer\Model\Data\Group',
+            \Magento\Customer\Model\Data\Group::class,
             [],
             [],
             '',
@@ -183,7 +188,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSavePercent($baseAmount, $savePercent)
     {
-        $amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $amount->expects($this->once())->method('getBaseAmount')->willReturn($baseAmount);
 
         $this->assertEquals($savePercent, $this->model->getSavePercent($amount));

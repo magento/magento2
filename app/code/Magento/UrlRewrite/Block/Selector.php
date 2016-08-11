@@ -29,8 +29,8 @@ class Selector extends \Magento\Backend\Block\Template
     {
         $this->_modes = [
             'id' => __('Custom'),
-            'category' => __('For category'),
-            'product' => __('For product'),
+            'category' => __('For Category'),
+            'product' => __('For Product'),
             'cms_page' => __('For CMS page'),
         ];
     }
@@ -52,7 +52,7 @@ class Selector extends \Magento\Backend\Block\Template
      */
     public function getSelectorLabel()
     {
-        return __('Create URL Rewrite:');
+        return __('Create URL Rewrite');
     }
 
     /**

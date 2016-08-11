@@ -283,6 +283,12 @@
             <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
+    <route url="/V1/categories/list" method="GET">
+        <service class="Magento\Catalog\Api\CategoryListInterface" method="getList" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
 
     <!-- Product Custom Options -->
     <route url="/V1/products/options/types" method="GET">

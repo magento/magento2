@@ -115,7 +115,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
              */
             /** @var $formAfterBlock \Magento\Backend\Block\Widget\Form\Element\Dependence */
             $formAfterBlock = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence',
+                \Magento\Backend\Block\Widget\Form\Element\Dependence::class,
                 'adminhtml.block.widget.form.element.dependence'
             );
             $formAfterBlock->addFieldMap(

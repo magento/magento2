@@ -468,7 +468,7 @@ class DeployStaticContentCommand extends Command
 
         $options = $input->getOptions();
         $deployer = $this->objectManager->create(
-            'Magento\Deploy\Model\Deployer',
+            Magento\Deploy\Model\Deployer::class,
             [
                 'filesUtil' => $filesUtil,
                 'output' => $output,

@@ -61,6 +61,7 @@ class MethodList
     {
         return $this->methodSpecificationFactory->create(
             [
+                AbstractMethod::CHECK_USE_CHECKOUT,
                 AbstractMethod::CHECK_USE_FOR_COUNTRY,
                 AbstractMethod::CHECK_USE_FOR_CURRENCY,
                 AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,

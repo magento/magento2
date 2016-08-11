@@ -37,9 +37,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->varReaderWriter = $this->getMockForAbstractClass(
-            'Magento\Framework\Filesystem\Directory\WriteInterface',
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
             [],
             '',
             false
@@ -47,8 +47,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->varReaderWriter));
-        $this->logger = $this->getMockForAbstractClass('\Psr\Log\LoggerInterface', [], '', false);
-        $this->setupLoggerFactory = $this->getMock('\Magento\Setup\Model\Cron\SetupLoggerFactory', [], [], '', false);
+        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
+        $this->setupLoggerFactory =
+            $this->getMock(\Magento\Setup\Model\Cron\SetupLoggerFactory::class, [], [], '', false);
         $this->setupLoggerFactory
             ->expects($this->once())
             ->method('create')

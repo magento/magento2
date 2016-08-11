@@ -117,7 +117,7 @@ define([
             this._super();
 
             if (this.customEntry) {
-                this.initInput();
+                registry.get(this.name, this.initInput.bind(this));
             }
 
             if (this.filterBy) {

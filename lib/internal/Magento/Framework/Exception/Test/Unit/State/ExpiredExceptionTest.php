@@ -20,7 +20,7 @@ class ExpiredExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $instanceClass = 'Magento\Framework\Exception\State\ExpiredException';
+        $instanceClass = \Magento\Framework\Exception\State\ExpiredException::class;
         $message =  'message %1 %2';
         $params = [
             'parameter1',

@@ -18,7 +18,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // init and load sitemap model
         $id = $this->getRequest()->getParam('sitemap_id');
-        $sitemap = $this->_objectManager->create('Magento\Sitemap\Model\Sitemap');
+        $sitemap = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
         /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
         $sitemap->load($id);
         // if sitemap record exists

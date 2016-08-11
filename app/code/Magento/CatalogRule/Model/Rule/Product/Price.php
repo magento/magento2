@@ -39,7 +39,7 @@ class Price extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price');
+        $this->_init(\Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price::class);
     }
 
     /**

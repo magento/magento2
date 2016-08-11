@@ -98,7 +98,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $resourceCollection,
             $data
         );
-        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rule');
+        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
         $this->_taxClass = $taxClass;
     }
 

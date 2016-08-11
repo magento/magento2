@@ -306,10 +306,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         // If Flat Index enabled then use it but only on frontend
         if ($this->flatState->isAvailable()) {
-            $this->_init('Magento\Catalog\Model\ResourceModel\Category\Flat');
+            $this->_init(\Magento\Catalog\Model\ResourceModel\Category\Flat::class);
             $this->_useFlatResource = true;
         } else {
-            $this->_init('Magento\Catalog\Model\ResourceModel\Category');
+            $this->_init(\Magento\Catalog\Model\ResourceModel\Category::class);
         }
     }
 

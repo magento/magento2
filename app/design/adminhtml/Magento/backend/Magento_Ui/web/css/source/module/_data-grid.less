@@ -783,21 +783,10 @@ body._in-resize {
 .data-grid-checkbox-cell-inner {
     display: block;
     padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
-    position: relative;
     text-align: right;
 
     &:hover {
         cursor: pointer;
-    }
-
-    &:before {
-        bottom: 0;
-        content: '';
-        height: 500%;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
     }
 }
 
@@ -1012,3 +1001,55 @@ body._in-resize {
         }
     }
 }
+
+//  Fix for Not whole column area is clickable in data-grid.
+//  Purpose to expand clickable area for new data-grids.
+.admin__data-grid-outer-wrap {
+    .data-grid-checkbox-cell {
+        overflow: hidden;
+    }
+
+    .data-grid-checkbox-cell-inner {
+        position: relative;
+
+        &:before {
+            bottom: 0;
+            content: '';
+            height: 500%;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+}
+
+//  And to shrink clickable area for old data-grid.
+.admin__data-grid-wrap-static {
+    .data-grid-checkbox-cell {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .data-grid-checkbox-cell-inner {
+        margin: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+        padding: 0;
+    }
+
+    //  Content Hierarchy specific
+    .adminhtml-cms-hierarchy-index & {
+        .data-grid-actions-cell:first-child {
+            padding: 0;
+        }
+    }
+
+    //  System Export specific
+    .adminhtml-export-index & {
+        .data-grid-checkbox-cell-inner {
+            margin: 0;
+            padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal 1.9rem;
+        }
+    }
+}
+//  End Fix for Not whole column area is clickable in data-grid.

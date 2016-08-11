@@ -16,7 +16,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockDirectoryList = $this->getMockBuilder('\Magento\Framework\App\Filesystem\DirectoryList')
+        $this->mockDirectoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -27,7 +27,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
     public function testPopulateMappings()
     {
-        $mockAutoloader = $this->getMockBuilder('\Magento\Framework\Autoload\AutoloaderInterface')
+        $mockAutoloader = $this->getMockBuilder(\Magento\Framework\Autoload\AutoloaderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

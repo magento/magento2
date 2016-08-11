@@ -49,7 +49,7 @@
                 </tr>
                 </tbody>
 
-                <tfoot>
+                <tfoot visible="element.addButton || (!!$data.recordData().length && (pages() > 1))">
                     <tr>
                         <td attr="{'colspan': element.getColumnsCount()}">
                             <button if="element.addButton"

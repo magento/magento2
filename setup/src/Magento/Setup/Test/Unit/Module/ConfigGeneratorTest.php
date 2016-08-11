@@ -18,9 +18,9 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
+        $random = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
         $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deployConfig= $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
         $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
     }

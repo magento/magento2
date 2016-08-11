@@ -19,6 +19,26 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class SalesSetup extends \Magento\Eav\Setup\EavSetup
 {
     /**
+     * This should be set explicitly
+     */
+    const ORDER_ENTITY_TYPE_ID = 5;
+
+    /**
+     * This should be set explicitly
+     */
+    const INVOICE_PRODUCT_ENTITY_TYPE_ID = 6;
+
+    /**
+     * This should be set explicitly
+     */
+    const CREDITMEMO_PRODUCT_ENTITY_TYPE_ID = 7;
+
+    /**
+     * This should be set explicitly
+     */
+    const SHIPMENT_PRODUCT_ENTITY_TYPE_ID = 8;
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $config;
@@ -214,30 +234,34 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         $entities = [
             'order' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order',
+                'entity_type_id' => self::ORDER_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order::class,
                 'table' => 'sales_order',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'invoice' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Invoice',
+                'entity_type_id' => self::INVOICE_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
                 'table' => 'sales_invoice',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'creditmemo' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Creditmemo',
+                'entity_type_id' => self::CREDITMEMO_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class,
                 'table' => 'sales_creditmemo',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'shipment' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Shipment',
+                'entity_type_id' => self::SHIPMENT_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Shipment::class,
                 'table' => 'sales_shipment',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],

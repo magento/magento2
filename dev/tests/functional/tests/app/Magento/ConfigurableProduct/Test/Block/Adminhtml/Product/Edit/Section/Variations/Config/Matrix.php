@@ -186,7 +186,7 @@ class Matrix extends Form
     public function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
         );
     }
@@ -213,7 +213,7 @@ class Matrix extends Form
     public function getAssociatedProductGrid()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid::class,
             ['element' => $this->browser->find($this->associatedProductGrid)]
         );
     }

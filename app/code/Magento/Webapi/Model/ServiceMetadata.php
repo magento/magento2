@@ -174,8 +174,8 @@ class ServiceMetadata
      *
      * Example:
      * <pre>
-     * - 'Magento\Customer\Api\CustomerAccountInterface', 'V1', false => customerCustomerAccount
-     * - 'Magento\Customer\Api\CustomerAddressInterface', 'V1', true  => customerCustomerAddressV1
+     * - \Magento\Customer\Api\CustomerAccountInterface::class, 'V1', false => customerCustomerAccount
+     * - \Magento\Customer\Api\CustomerAddressInterface::class, 'V1', true  => customerCustomerAddressV1
      * </pre>
      *
      * @param string $interfaceName

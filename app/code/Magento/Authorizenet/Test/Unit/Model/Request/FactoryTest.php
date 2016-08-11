@@ -28,16 +28,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMock('Magento\Authorizenet\Model\Request', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Authorizenet\Model\Request::class, [], [], '', false);
 
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Authorizenet\Model\Request', [])
+            ->with(\Magento\Authorizenet\Model\Request::class, [])
             ->willReturn($this->requestMock);
 
         $this->requestFactory = $objectManager->getObject(
-            'Magento\Authorizenet\Model\Request\Factory',
+            \Magento\Authorizenet\Model\Request\Factory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }

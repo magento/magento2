@@ -136,5 +136,17 @@
                 <item name="subtotal" xsi:type="string">10</item>
             </field>
         </dataset>
+
+        <dataset name="simple_order_qty_25">
+            <field name="qty" xsi:type="string">25</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">10</item>
+                <item name="subtotal" xsi:type="string">250</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_order_qty_3">
+            <field name="qty" xsi:type="string">3</field>
+        </dataset>
     </repository>
 </config>

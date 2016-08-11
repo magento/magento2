@@ -11,6 +11,7 @@ use Magento\Eav\Model\Entity\Attribute;
  * Export filter block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -92,7 +93,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         ];
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->createBlock(
-            'Magento\Framework\View\Element\Html\Date',
+            \Magento\Framework\View\Element\Html\Date::class,
             '',
             ['data' => $arguments]
         );
@@ -157,7 +158,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
-                'Magento\Framework\View\Element\Html\Select',
+                \Magento\Framework\View\Element\Html\Select::class,
                 '',
                 ['data' => $arguments]
             );
@@ -240,7 +241,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
-                'Magento\Framework\View\Element\Html\Select',
+                \Magento\Framework\View\Element\Html\Select::class,
                 '',
                 ['data' => $arguments]
             );

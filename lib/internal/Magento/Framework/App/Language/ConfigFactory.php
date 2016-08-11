@@ -33,6 +33,6 @@ class ConfigFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Magento\Framework\App\Language\Config', $arguments);
+        return $this->_objectManager->create(\Magento\Framework\App\Language\Config::class, $arguments);
     }
 }

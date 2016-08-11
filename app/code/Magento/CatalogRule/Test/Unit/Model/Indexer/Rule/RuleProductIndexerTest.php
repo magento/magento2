@@ -27,10 +27,10 @@ class RuleProductIndexerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->indexBuilder = $this->getMock('Magento\CatalogRule\Model\Indexer\IndexBuilder', [], [], '', false);
+        $this->indexBuilder = $this->getMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class, [], [], '', false);
 
         $this->indexer = (new ObjectManager($this))->getObject(
-            'Magento\CatalogRule\Model\Indexer\Rule\RuleProductIndexer',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductIndexer::class,
             [
                 'indexBuilder' => $this->indexBuilder,
             ]

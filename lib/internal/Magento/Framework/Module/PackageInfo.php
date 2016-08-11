@@ -214,6 +214,25 @@ class PackageInfo
     }
 
     /**
+     * Get all module names a module required by
+     *
+     * @param string $requiredModuleName
+     * @return array
+     */
+    public function getRequiredBy($requiredModuleName)
+    {
+        $this->load();
+        $requiredBy = [];
+        foreach ($this->requireMap as $moduleName => $moduleRequireList) {
+            if (in_array($requiredModuleName, $moduleRequireList)) {
+                $requiredBy[] = $moduleName;
+            }
+        }
+       
+        return $requiredBy;
+    }
+
+    /**
      * Get all module names a module conflicts
      *
      * @param string $moduleName

@@ -25,6 +25,9 @@ class AssertBundleProductPage extends AssertProductPage
         $priceData = $this->product->getDataFieldConfig('price')['source']->getPriceData();
         $priceView = $this->product->getPriceView();
         $priceBlock = $this->productView->getPriceBlock();
+        if (!$priceBlock->isVisible()) {
+            return "Price block for '{$this->product->getName()}' product' is not visible.";
+        }
 
         if ($this->product->hasData('special_price')) {
             $priceLow = $priceBlock->getPrice();

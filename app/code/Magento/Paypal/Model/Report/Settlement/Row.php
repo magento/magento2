@@ -72,7 +72,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\ResourceModel\Report\Settlement\Row');
+        $this->_init(\Magento\Paypal\Model\ResourceModel\Report\Settlement\Row::class);
     }
 
     /**

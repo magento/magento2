@@ -33,7 +33,7 @@ class ConstraintFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\Validator\Constraint')
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = \Magento\Framework\Validator\Constraint::class)
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

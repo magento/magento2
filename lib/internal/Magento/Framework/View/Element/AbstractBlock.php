@@ -168,6 +168,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Framework\App\CacheInterface
+     */
+    protected $_cache;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Context $context
@@ -860,7 +865,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities
+     * Escape HTML entities
      *
      * @param string|array $data
      * @param array|null $allowedTags
@@ -869,6 +874,40 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function escapeHtml($data, $allowedTags = null)
     {
         return $this->_escaper->escapeHtml($data, $allowedTags);
+    }
+
+    /**
+     * Escape string for the JavaScript context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeJs($string)
+    {
+        return $this->_escaper->escapeJs($string);
+    }
+
+    /**
+     * Escape a string for the HTML attribute context
+     *
+     * @param string $string
+     * @param boolean $escapeSingleQuote
+     * @return string
+     */
+    public function escapeHtmlAttr($string, $escapeSingleQuote = true)
+    {
+        return $this->_escaper->escapeHtmlAttr($string, $escapeSingleQuote);
+    }
+
+    /**
+     * Escape string for the CSS context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeCss($string)
+    {
+        return $this->_escaper->escapeCss($string);
     }
 
     /**
@@ -888,14 +927,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities in url
+     * Escape URL
      *
-     * @param string $data
+     * @param string $string
      * @return string
      */
-    public function escapeUrl($data)
+    public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($data);
+        return $this->_escaper->escapeUrl($string);
     }
 
     /**
@@ -903,6 +942,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
+     * @deprecated
      */
     public function escapeXssInUrl($data)
     {
@@ -917,6 +957,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param  string $data
      * @param  bool $addSlashes
      * @return string
+     * @deprecated
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -929,6 +970,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
+     * @deprecated
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -1004,14 +1046,20 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Get block cache life time
      *
-     * @return int
+     * @return int|bool|null
      */
     protected function getCacheLifetime()
     {
         if (!$this->hasData('cache_lifetime')) {
             return null;
         }
-        return $this->getData('cache_lifetime');
+
+        $cacheLifetime = $this->getData('cache_lifetime');
+        if (false === $cacheLifetime || null === $cacheLifetime) {
+            return $cacheLifetime;
+        }
+
+        return (int)$cacheLifetime;
     }
 
     /**

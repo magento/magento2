@@ -92,7 +92,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Track');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Track::class);
     }
 
     /**

@@ -104,6 +104,9 @@ class OrderSender extends Sender
                 $this->orderResource->saveAttribute($order, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $order->setEmailSent(null);
+            $this->orderResource->saveAttribute($order, 'email_sent');
         }
 
         $this->orderResource->saveAttribute($order, 'send_email');

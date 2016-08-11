@@ -89,6 +89,7 @@ class Observer
      * Generate sitemaps
      *
      * @return void
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function scheduledGenerateSitemaps()
@@ -108,11 +109,11 @@ class Observer
         /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
-
             try {
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
+                throw $e;
             }
         }
 

@@ -16,5 +16,5 @@ interface AddressMetadataInterface extends MetadataInterface
 
     const ENTITY_TYPE_ADDRESS = 'customer_address';
 
-    const DATA_INTERFACE_NAME = 'Magento\Customer\Api\Data\AddressInterface';
+    const DATA_INTERFACE_NAME = \Magento\Customer\Api\Data\AddressInterface::class;
 }

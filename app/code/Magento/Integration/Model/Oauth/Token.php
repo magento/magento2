@@ -122,7 +122,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\ResourceModel\Oauth\Token');
+        $this->_init(\Magento\Integration\Model\ResourceModel\Oauth\Token::class);
     }
 
     /**

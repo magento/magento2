@@ -49,7 +49,9 @@
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
+    <preference for="Magento\Sales\Api\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
+    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Model\Order\ItemRepository"/>
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Repository"/>
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
@@ -61,9 +63,12 @@
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
+    <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>
+    <preference for="Magento\Sales\Model\Order\InvoiceValidatorInterface" type="Magento\Sales\Model\Order\InvoiceValidator"/>
+    <preference for="Magento\Sales\Model\Order\PaymentAdapterInterface" type="Magento\Sales\Model\Order\PaymentAdapter"/>
+    <preference for="Magento\Sales\Model\Order\OrderValidatorInterface" type="Magento\Sales\Model\Order\OrderValidator"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
-    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo"/>
@@ -80,6 +85,11 @@
     <preference for="Magento\Sales\Model\Spi\ShipmentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment"/>
     <preference for="Magento\Sales\Model\Spi\ShipmentTrackResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Model\Spi\TransactionResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction"/>
+    <preference for="Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface" type="Magento\Sales\Model\ResourceModel\Order\CollectionFactory"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCommentCreationInterface" type="Magento\Sales\Model\Order\Invoice\Comment"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
+    <preference for="Magento\Sales\Api\OrderInvoiceInterface" type="Magento\Sales\Model\OrderInvoice"/>
+    <preference for="Magento\Sales\Model\Order\OrderStateResolverInterface" type="Magento\Sales\Model\Order\StateResolver"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
@@ -420,7 +430,6 @@
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation</item>
-                <item name="creditmemo_refund" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund</item>
             </argument>
         </arguments>
     </virtualType>
@@ -891,6 +900,13 @@
     <type name="Magento\Sales\Model\ResourceModel\Order\Tax\Item">
         <arguments>
             <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Invoice\Notifier">
+        <arguments>
+            <argument name="senders" xsi:type="array">
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Invoice\Sender\EmailSender</item>
+            </argument>
         </arguments>
     </type>
 </config>
