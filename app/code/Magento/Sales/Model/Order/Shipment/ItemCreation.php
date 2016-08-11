@@ -1,17 +1,16 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order\Invoice;
+namespace Magento\Sales\Model\Order\Shipment;
 
-use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
- * Class LineItem
+ * Class ItemCreation
  */
-class ItemCreation implements InvoiceItemCreationInterface
+class ItemCreation implements ShipmentItemCreationInterface
 {
     /**
      * @var int
@@ -24,10 +23,11 @@ class ItemCreation implements InvoiceItemCreationInterface
     private $qty;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface
+     * @var \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface
      */
     private $extensionAttributes;
 
+    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
@@ -61,9 +61,9 @@ class ItemCreation implements InvoiceItemCreationInterface
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * {@inheritdoc}
      *
-     * @return \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface|null
+     * @return \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -71,15 +71,16 @@ class ItemCreation implements InvoiceItemCreationInterface
     }
 
     /**
-     * Set an extension attributes object.
+     * {@inheritdoc}
      *
-     * @param \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+     * @param \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+        \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes
     ) {
         $this->extensionAttributes = $extensionAttributes;
         return $this;
     }
+    //@codeCoverageIgnoreEnd
 }
