@@ -246,7 +246,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite::class
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessor::class
             );
         }
         return $this->collectionProcessor;

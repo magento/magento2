@@ -153,7 +153,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\PageFilterProcessor</item>
@@ -164,7 +164,7 @@
     </virtualType>
     <type name="Magento\Cms\Model\PageRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
@@ -174,7 +174,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor</item>
@@ -185,7 +185,7 @@
     </virtualType>
     <type name="Magento\Cms\Model\BlockRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor</argument>
         </arguments>
     </type>
 </config>

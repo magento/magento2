@@ -685,7 +685,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessorComposite'
+                'Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor'
             );
         }
         return $this->collectionProcessor;

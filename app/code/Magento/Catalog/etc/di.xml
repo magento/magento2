@@ -812,7 +812,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessorComposite" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor</item>
@@ -823,12 +823,12 @@
     </virtualType>
     <type name="Magento\Catalog\Model\ProductRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
         </arguments>
     </type>
     <type name="\Magento\Catalog\Model\CategoryList">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
 </config>

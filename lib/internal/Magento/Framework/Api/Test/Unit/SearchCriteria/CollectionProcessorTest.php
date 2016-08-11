@@ -5,22 +5,22 @@
  */
 namespace Magento\Framework\Api\Test\Unit\SearchCriteria;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class CollectionProcessorCompositeTest extends \PHPUnit_Framework_TestCase
+class CollectionProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Return model
      *
      * @param CollectionProcessorInterface[] $processors
-     * @return CollectionProcessorComposite
+     * @return CollectionProcessor
      */
     private function getModel(array $processors)
     {
-        return new CollectionProcessorComposite($processors);
+        return new CollectionProcessor($processors);
     }
 
     public function testProcess()

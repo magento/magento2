@@ -110,6 +110,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->getList(null, $searchCriteriaMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetList()
     {
         $entityTypeCode = 'entity_type_code';

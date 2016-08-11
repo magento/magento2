@@ -299,7 +299,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite::class
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessor::class
             );
         }
         return $this->collectionProcessor;

@@ -212,7 +212,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessorComposite'
+                'Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessor'
             );
         }
         return $this->collectionProcessor;
