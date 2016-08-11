@@ -30,17 +30,60 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
     /* end tags */
 
     /**
+     * Cache data.
+     *
+     * @var array
+     */
+    private $caches = [];
+
+    /**
      * Create for New Widget.
      *
      * @param Widget $widget
+     * @param array $caches [optional]
      * @return void
      */
-    public function test(Widget $widget)
+    public function test(Widget $widget, array $caches = [])
     {
+        // Preconditions
+        $this->caches = $caches;
+        $this->adjustCacheSettings();
+        
         // Steps
         $this->widgetInstanceIndex->open();
         $this->widgetInstanceIndex->getPageActionsBlock()->addNew();
         $this->widgetInstanceNew->getWidgetForm()->fill($widget);
         $this->widgetInstanceEdit->getPageActionsBlock()->save();
+    }
+
+    /**
+     * Adjust cache settings.
+     *
+     * @return void
+     */
+    private function adjustCacheSettings()
+    {
+        $this->cache->flush();
+        foreach ($this->caches as $cacheType => $cacheStatus) {
+            if ($cacheStatus === 'Disabled') {
+                $this->cache->disableCache($cacheType);
+            }
+        }
+        if (in_array('Invalidated', $this->caches)) {
+            $this->cmsIndex->open();
+        }
+    }
+    
+    /**
+     * Enable and flush all cache.
+     *
+     * return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        if (!empty($this->caches)) {
+            $this->cache->enableCache();
+        }
     }
 }
