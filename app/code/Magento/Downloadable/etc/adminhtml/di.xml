@@ -36,4 +36,11 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\BaseAllowedProductTypes">
+        <arguments>
+            <argument name="productTypes" xsi:type="array">
+                <item name="downloadable" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

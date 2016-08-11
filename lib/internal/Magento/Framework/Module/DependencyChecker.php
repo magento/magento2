@@ -50,7 +50,6 @@ class DependencyChecker
         $this->enabledModuleList = $list->getNames();
         $this->fullModuleList = $loader->load();
         $this->packageInfo = $packageInfoFactory->create();
-        $this->graph = $this->createGraph();
     }
 
     /**
@@ -93,6 +92,7 @@ class DependencyChecker
      */
     private function checkDependencyGraph($isEnable, $moduleNames, $enabledModules)
     {
+        $this->graph = $this->createGraph();
         $dependenciesMissingAll = [];
         $graphMode = $isEnable ? Graph::DIRECTIONAL : Graph::INVERSE;
         foreach ($moduleNames as $moduleName) {

@@ -3,12 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Setup\Test\Unit;
 
 use \Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Driver\File;
 
 class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,31 +26,36 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     private $directoryListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Driver\File
-     */
-    private $driverFileMock;
-
-    /**
      * @var FilePermissions
      */
     private $filePermissions;
 
     public function setUp()
     {
-        $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->driverFileMock = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->directoryWriteMock = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\Write::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->directoryListMock = $this->getMock(
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,
-            $this->directoryListMock,
-            $this->driverFileMock
+            $this->directoryListMock
         );
     }
 
@@ -142,8 +145,8 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\FilePermissions::getMissingWritableDirectoriesForInstallation
-     * @covers \Magento\Framework\FilePermissions::getMissingWritablePathsForInstallation
+     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
+     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritablePathsForInstallation
      */
     public function testGetMissingWritableDirectoriesAndPathsForInstallation()
     {

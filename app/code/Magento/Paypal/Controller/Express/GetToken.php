@@ -25,7 +25,7 @@ class GetToken extends AbstractExpress
      *
      * @var string
      */
-    protected $_configType = 'Magento\Paypal\Model\Config';
+    protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * Config method type
@@ -39,7 +39,7 @@ class GetToken extends AbstractExpress
      *
      * @var string
      */
-    protected $_checkoutType = 'Magento\Paypal\Model\Express\Checkout';
+    protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 
     /**
      * @inheritdoc
@@ -53,8 +53,9 @@ class GetToken extends AbstractExpress
             if ($token === null) {
                 $token = false;
             }
+            $url = $this->_checkout->getRedirectUrl();
             $this->_initToken($token);
-            $controllerResult->setData(['token' => $token]);
+            $controllerResult->setData(['url' => $url]);
         } catch (LocalizedException $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,

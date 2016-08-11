@@ -129,7 +129,9 @@ class ActionPool implements ActionPoolInterface
     {
         $toolbar = $this->getToolbar();
         $container = $this->context->getPageLayout()->createBlock($type, $name, $arguments);
-        $toolbar->setChild($name, $container);
+        if ($toolbar) {
+            $toolbar->setChild($name, $container);
+        }
     }
 
     /**
@@ -142,7 +144,7 @@ class ActionPool implements ActionPoolInterface
     protected function createContainer($key, UiComponentInterface $view)
     {
         $container = $this->context->getPageLayout()->createBlock(
-            'Magento\Ui\Component\Control\Container',
+            \Magento\Ui\Component\Control\Container::class,
             'container-' . $view->getName() . '-' . $key,
             [
                 'data' => [

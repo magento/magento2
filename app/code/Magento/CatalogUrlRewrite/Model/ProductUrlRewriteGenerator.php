@@ -9,9 +9,16 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
+use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Product\Visibility;
 
+/**
+ * Class ProductUrlRewriteGenerator
+ * @package Magento\CatalogUrlRewrite\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductUrlRewriteGenerator
 {
     /**
@@ -43,6 +50,9 @@ class ProductUrlRewriteGenerator
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
+    /** @var AnchorUrlRewriteGenerator */
+    private $anchorUrlRewriteGenerator;
+
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
@@ -68,6 +78,20 @@ class ProductUrlRewriteGenerator
     }
 
     /**
+     * @return AnchorUrlRewriteGenerator
+     *
+     * @deprecated
+     */
+    private function getAnchorUrlRewriteGenerator()
+    {
+        if ($this->anchorUrlRewriteGenerator === null) {
+            $this->anchorUrlRewriteGenerator = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator::class);
+        }
+        return $this->anchorUrlRewriteGenerator;
+    }
+
+    /**
      * Generate product url rewrites
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -75,6 +99,10 @@ class ProductUrlRewriteGenerator
      */
     public function generate(Product $product)
     {
+        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
+            return [];
+        }
+
         $this->product = $product;
         $storeId = $this->product->getStoreId();
 
@@ -143,7 +171,8 @@ class ProductUrlRewriteGenerator
         $urls = array_merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $this->product),
             $this->categoriesUrlRewriteGenerator->generate($storeId, $this->product, $this->productCategories),
-            $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->productCategories)
+            $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->productCategories),
+            $this->getAnchorUrlRewriteGenerator()->generate($storeId, $this->product, $this->productCategories)
         );
 
         /* Reduce duplicates. Last wins */

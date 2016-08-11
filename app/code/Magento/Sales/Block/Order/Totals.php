@@ -164,7 +164,7 @@ class Totals extends \Magento\Framework\View\Element\Template
             $this->_totals['base_grandtotal'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'base_grandtotal',
-                    'value' => $this->getOrder()->formatPrice($source->getGrandTotal()),
+                    'value' => $this->getOrder()->formatBasePrice($source->getBaseGrandTotal()),
                     'label' => __('Grand Total to be Charged'),
                     'is_formated' => true,
                 ]

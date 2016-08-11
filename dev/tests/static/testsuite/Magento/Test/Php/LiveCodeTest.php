@@ -47,18 +47,42 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns base folder for suite scope
+     *
+     * @return string
+     */
+    private static function getBaseFilesFolder() {
+        return __DIR__;
+    }
+
+    /**
+     * Returns base directory for whitelisted files
+     *
+     * @return string
+     */
+    private static function getChangedFilesBaseDir() {
+        return __DIR__ . '/..';
+    }
+
+    /**
      * Returns whitelist based on blacklist and git changed files
      *
      * @param array $fileTypes
      * @param string $changedFilesBaseDir
+     * @param string $baseFilesFolder
      * @return array
      */
-    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = __DIR__)
+    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
     {
-        $directoriesToCheck = Files::init()->readLists($changedFilesBaseDir . '/_files/whitelist/common.txt');
+        $globPatternsFolder = self::getBaseFilesFolder();
+        if ('' !== $baseFilesFolder) {
+            $globPatternsFolder = $baseFilesFolder;
+        }
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
 
         $changedFiles = [];
-        foreach (glob($changedFilesBaseDir . '/../_files/changed_files*') as $listFile) {
+        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
+        foreach (glob($globFilesListPattern) as $listFile) {
             $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
         array_walk(
@@ -246,118 +270,5 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $result,
             "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
         );
-    }
-
-    public function testDeadCode()
-    {
-        if (!class_exists('SebastianBergmann\PHPDCD\Analyser')) {
-            $this->markTestSkipped('PHP Dead Code Detector is not available.');
-        }
-        $analyser = new \SebastianBergmann\PHPDCD\Analyser();
-        $declared = [];
-        $called = [];
-        $collectedFiles = Files::init()->getPhpFiles(
-            Files::INCLUDE_APP_CODE
-            | Files::INCLUDE_PUB_CODE
-            | Files::INCLUDE_LIBS
-            | Files::INCLUDE_TEMPLATES
-            | Files::INCLUDE_TESTS
-            | Files::AS_DATA_SET
-            | Files::INCLUDE_NON_CLASSES
-        );
-        foreach ($collectedFiles as $file) {
-            $file = array_pop($file);
-            $analyser->analyseFile($file);
-            foreach ($analyser->getFunctionDeclarations() as $function => $declaration) {
-                $declaration = $declaration; //avoid "unused local variable" error and non-effective array_keys call
-                if (strpos($function, '::') === false) {
-                    $method = $function;
-                } else {
-                    list($class, $method) = explode('::', $function);
-                }
-                $declared[$method] = $function;
-            }
-            foreach ($analyser->getFunctionCalls() as $function => $usages) {
-                $usages = $usages; //avoid "unused local variable" error and non-effective array_keys call
-                if (strpos($function, '::') === false) {
-                    $method = $function;
-                } else {
-                    list($class, $method) = explode('::', $function);
-                }
-                $called[$method] = 1;
-            }
-        }
-
-        foreach ($called as $method => $value) {
-            $value = $value; //avoid "unused local variable" error and non-effective array_keys call
-            unset($declared[$method]);
-        }
-        $declared = $this->filterUsedObserverMethods($declared);
-        $declared = $this->filterUsedPersistentObserverMethods($declared);
-        $declared = $this->filterUsedCrontabObserverMethods($declared);
-        if ($declared) {
-            $this->fail('Dead code detected:' . PHP_EOL . implode(PHP_EOL, $declared));
-        }
-    }
-
-    /**
-     * @param string[] $methods
-     * @return string[]
-     * @throws \Exception
-     */
-    private function filterUsedObserverMethods($methods)
-    {
-        foreach (Files::init()->getConfigFiles('{*/events.xml,events.xml}') as $file) {
-            $file = array_pop($file);
-
-            $doc = new \DOMDocument();
-            $doc->load($file);
-            foreach ($doc->getElementsByTagName('observer') as $observer) {
-                /** @var \DOMElement $observer */
-                $method = $observer->getAttribute('method');
-                unset($methods[$method]);
-            }
-        }
-        return $methods;
-    }
-
-    /**
-     * @param string[] $methods
-     * @return string[]
-     * @throws \Exception
-     */
-    private function filterUsedPersistentObserverMethods($methods)
-    {
-        foreach (Files::init()->getConfigFiles('{*/persistent.xml,persistent.xml}') as $file) {
-            $file = array_pop($file);
-
-            $doc = new \DOMDocument();
-            $doc->load($file);
-            foreach ($doc->getElementsByTagName('method') as $method) {
-                /** @var \DOMElement $method */
-                unset($methods[$method->textContent]);
-            }
-        }
-        return $methods;
-    }
-
-    /**
-     * @param string[] $methods
-     * @return string[]
-     * @throws \Exception
-     */
-    private function filterUsedCrontabObserverMethods($methods)
-    {
-        foreach (Files::init()->getConfigFiles('{*/crontab.xml,crontab.xml}') as $file) {
-            $file = array_pop($file);
-
-            $doc = new \DOMDocument();
-            $doc->load($file);
-            foreach ($doc->getElementsByTagName('job') as $job) {
-                /** @var \DOMElement $job */
-                unset($methods[$job->getAttribute('method')]);
-            }
-        }
-        return $methods;
     }
 }

@@ -6,12 +6,19 @@
 
 namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @var Collection
      */
     protected $collection;
 
@@ -31,10 +38,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /** @var  string */
     protected $sql = "SELECT `main_table`.* FROM `testMainTableName` AS `main_table`
- INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id=main_table.product_id
- AND product_name_table.store_id=1
- AND product_name_table.attribute_id=12
+ INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id = main_table.product_id
+ AND product_name_table.store_id = 1
+ AND product_name_table.attribute_id = 12
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
+
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -43,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['quote', 'select'],
             [],
             '',
@@ -59,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($select);
         $resource = $this->getMock(
-            'Magento\Wishlist\Model\ResourceModel\Item',
+            \Magento\Wishlist\Model\ResourceModel\Item::class,
             ['getConnection', 'getMainTable', 'getTableName', 'getTable'],
             [],
             '',
@@ -84,7 +96,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('testMainTableName'));
 
         $catalogConfFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\ConfigFactory',
+            \Magento\Catalog\Model\ResourceModel\ConfigFactory::class,
             ['create'],
             [],
             '',
@@ -92,7 +104,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $catalogConf = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Config',
+            \Magento\Catalog\Model\ResourceModel\Config::class,
             ['getEntityTypeId'],
             [],
             '',
@@ -109,7 +121,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($catalogConf));
 
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\Entity\Attribute',
+            \Magento\Catalog\Model\Entity\Attribute::class,
             ['loadByCode', 'getBackendTable', 'getId'],
             [],
             '',
@@ -130,7 +142,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->attrId));
 
         $catalogAttrFactory = $this->getMock(
-            'Magento\Catalog\Model\Entity\AttributeFactory',
+            \Magento\Catalog\Model\Entity\AttributeFactory::class,
             ['create'],
             [],
             '',
@@ -143,7 +155,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($attribute));
 
         $store = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getId'],
             [],
             '',
@@ -155,7 +167,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->storeId));
 
         $storeManager = $this->getMock(
-            'Magento\Store\Model\StoreManager',
+            \Magento\Store\Model\StoreManager::class,
             ['getStore'],
             [],
             '',
@@ -167,7 +179,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($store));
 
         $this->collection = $this->objectManager->getObject(
-            'Magento\Wishlist\Model\ResourceModel\Item\Collection',
+            \Magento\Wishlist\Model\ResourceModel\Item\Collection::class,
             [
                 'resource' => $resource,
                 'catalogConfFactory' => $catalogConfFactory,
@@ -175,10 +187,31 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager
             ]
         );
+
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $reflection = new \ReflectionClass(get_class($this->collection));
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->collection, $this->metadataPool);
     }
 
     public function testAddProductNameFilter()
     {
+        $entityMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
+        $this->metadataPool->expects($this->once())
+            ->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($entityMetadata);
+
         $collection = $this->collection->addProductNameFilter('TestProductName');
         $sql = $collection->getSelect()->__toString();
         $sql = trim(preg_replace('/\s+/', ' ', $sql));

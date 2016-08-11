@@ -77,7 +77,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $exportData = $this->model->export();
         $this->assertContains('New Product', $exportData);
 
-        $this->assertContains('Option 1 Value 1', $exportData);
+        $this->assertContains('Option 1 & Value 1"', $exportData);
+        $this->assertContains('Option 1 & Value 2"', $exportData);
+        $this->assertContains('Option 1 & Value 3"', $exportData);
+        $this->assertContains('Option 4 ""!@#$%^&*', $exportData);
         $this->assertContains('test_option_code_2', $exportData);
         $this->assertContains('max_characters=10', $exportData);
     }
@@ -89,7 +92,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
         $this->assertNotEmpty($this->model->export());

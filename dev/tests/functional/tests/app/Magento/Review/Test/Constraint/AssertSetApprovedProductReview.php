@@ -9,7 +9,7 @@ namespace Magento\Review\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 
 /**

@@ -85,7 +85,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $_indexValueAttributes = [
         'status',
-        'gift_message_available',
     ];
 
     /**
@@ -256,6 +255,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
+     * Attributes codes which shows as date
+     *
+     * @var array
+     */
+    protected $dateAttrCodes = [
+        'special_from_date',
+        'special_to_date'
+    ];
+
+    /**
      * Attributes codes which are appropriate for export and not the part of additional_attributes.
      *
      * @var array
@@ -311,7 +320,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -339,6 +348,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param array $dateAttrCodes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -357,7 +367,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
-        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
+        array $dateAttrCodes = []
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -372,6 +383,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_typeFactory = $_typeFactory;
         $this->_linkTypeProvider = $linkTypeProvider;
         $this->rowCustomizer = $rowCustomizer;
+        $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
 
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
@@ -762,12 +774,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $memoryUsagePercent = 0.8;
             // Minimum Products limit
             $minProductsLimit = 500;
+            // Maximal Products limit
+            $maxProductsLimit = 5000;
 
             $this->_itemsPerPage = intval(
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
             );
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
+            }
+            if ($this->_itemsPerPage > $maxProductsLimit) {
+                $this->_itemsPerPage = $maxProductsLimit;
             }
         }
         return $this->_itemsPerPage;
@@ -850,8 +867,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
-
-                    $exportData = array_merge($exportData, $this->addMultirowData($dataRow, $multirawData));
+                    $this->appendMultirowData($dataRow, $multirawData);
+                    if ($dataRow) {
+                        $exportData[] = $dataRow;
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -891,7 +910,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
-                    if ($this->_attributeTypes[$code] === 'datetime') {
+                    if (in_array($code, $this->dateAttrCodes)) {
+                        $attrValue = $this->_localeDate->formatDateTime(
+                            new \DateTime($attrValue),
+                            \IntlDateFormatter::SHORT,
+                            \IntlDateFormatter::NONE,
+                            null,
+                            date_default_timezone_get()
+                        );
+                    } else if ($this->_attributeTypes[$code] === 'datetime') {
                         $attrValue = $this->_localeDate->formatDateTime(
                             new \DateTime($attrValue),
                             \IntlDateFormatter::SHORT,
@@ -912,7 +939,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
                             }
-                            $data[$itemId][$storeId][$fieldName] = $attrValue;
+                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
@@ -927,6 +954,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
+                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {
@@ -1053,9 +1081,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function addMultirowData($dataRow, $multiRawData)
+    private function appendMultirowData(&$dataRow, &$multiRawData)
     {
-        $result = [];
         $productId = $dataRow['product_id'];
         $productLinkId = $dataRow['product_link_id'];
         $storeId = $dataRow['store_id'];
@@ -1121,7 +1148,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
             }
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
-
         }
 
         if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
@@ -1144,7 +1170,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         if (empty($dataRow)) {
-            return $result;
+            return null;
         } elseif ($storeId != Store::DEFAULT_STORE_ID) {
             $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
             if (isset($productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY])) {
@@ -1152,9 +1178,19 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         $dataRow[self::COL_SKU] = $sku;
-        $result[] = $dataRow;
+        return $dataRow;
+    }
 
-        return $result;
+    /**
+     * @deprecated
+     * @param array $dataRow
+     * @param array $multiRawData
+     * @return array
+     */
+    protected function addMultirowData($dataRow, $multiRawData)
+    {
+        $data = $this->appendMultirowData($dataRow, $multiRawData);
+        return $data ? [$data] : [];
     }
 
     /**
@@ -1343,13 +1379,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Get product metadata pool
      *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

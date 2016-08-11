@@ -53,8 +53,10 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $this->attributeHelper->setProductIds($collection->getAllIds());
+        if ($this->getRequest()->getParam('filters')) {
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+            $this->attributeHelper->setProductIds($collection->getAllIds());
+        }
 
         if (!$this->_validateProducts()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);

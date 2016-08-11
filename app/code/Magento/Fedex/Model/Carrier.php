@@ -9,10 +9,10 @@
 namespace Magento\Fedex\Model;
 
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\Xml\Security;
 
 /**
  * Fedex shipping implementation
@@ -123,7 +123,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @inheritdoc
      */
     protected $_debugReplacePrivateDataKeys = [
-        'Key', 'Password', 'MeterNumber'
+        'Key', 'Password', 'MeterNumber',
     ];
 
     /**
@@ -338,6 +338,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
         }
 
+        if ($request->getDestCity()) {
+            $r->setDestCity($request->getDestCity());
+        }
+
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeight($weight);
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
@@ -432,6 +436,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             ],
         ];
 
+        if ($r->getDestCity()) {
+            $ratesRequest['RequestedShipment']['Recipient']['Address']['City'] = $r->getDestCity();
+        }
+
         if ($purpose == self::RATE_REQUEST_GENERAL) {
             $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][0]['InsuredValue'] = [
                 'Amount' => $r->getValue(),
@@ -501,7 +509,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // make general request for all methods
         $response = $this->_doRatesRequest(self::RATE_REQUEST_GENERAL);
         $preparedGeneral = $this->_prepareRateResponse($response);
-        if (!$preparedGeneral->getError() || $this->_result->getError() && $preparedGeneral->getError()) {
+        if (!$preparedGeneral->getError()
+            || $this->_result->getError() && $preparedGeneral->getError()
+            || empty($this->_result->getAllRates())
+        ) {
             $this->_result->append($preparedGeneral);
         }
 
@@ -635,6 +646,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $r = $this->_rawRequest;
         $xml = $this->_xmlElFactory->create(
+
             ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>']
         );
 
@@ -721,7 +733,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $priceArr = [];
 
         if (strlen(trim($response)) > 0) {
-            $xml = $this->parseXml($response, 'Magento\Shipping\Model\Simplexml\Element');
+            $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (is_object($xml)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
                     $errorTitle = (string)$xml->Error->Message;
@@ -866,14 +878,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['FEDEX_10KG_BOX', 'FEDEX_25KG_BOX'],
                     'filters' => [
                         'within_us' => [],
                         'from_us' => ['method' => ['INTERNATIONAL_PRIORITY']],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['YOUR_PACKAGING'],
@@ -911,7 +923,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'INTERNATIONAL_PRIORITY_FREIGHT',
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
             'delivery_confirmation_types' => [
@@ -1228,7 +1240,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'TransactionDetail' => [
                 'CustomerTransactionId' => '*** Express Domestic Shipping Request v9 using PHP ***',
             ],
-            'Version' => ['ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0']
+            'Version' => ['ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0'],
         ];
     }
 
@@ -1257,7 +1269,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $width = $packageParams->getWidth();
         $length = $packageParams->getLength();
         $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LB' : 'KG';
-        $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
         $unitPrice = 0;
         $itemsQty = 0;
         $itemsDesc = [];
@@ -1400,12 +1411,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         // set dimensions
         if ($length || $width || $height) {
-            $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [];
-            $dimenssions = &$requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
-            $dimenssions['Length'] = $length;
-            $dimenssions['Width'] = $width;
-            $dimenssions['Height'] = $height;
-            $dimenssions['Units'] = $dimensionsUnits;
+            $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [
+                'Length' => $length,
+                'Width' => $width,
+                'Height' => $height,
+                'Units' => $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM',
+            ];
         }
 
         return $this->_getAuthDetails() + $requestClient;
@@ -1460,9 +1471,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array|object $trackingIds
      * @return string
      */
-    private function getTrackingNumber($trackingIds) {
+    private function getTrackingNumber($trackingIds)
+    {
         return is_array($trackingIds) ? array_map(
-            function($val) {
+            function ($val) {
                 return $val->TrackingNumber;
             },
             $trackingIds

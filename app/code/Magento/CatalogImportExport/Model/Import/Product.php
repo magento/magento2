@@ -8,16 +8,16 @@
 
 namespace Magento\CatalogImportExport\Model\Import;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
-use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 
 /**
  * Import entity product model
@@ -103,6 +103,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Column product category.
      */
     const COL_CATEGORY = 'categories';
+
+    /**
+     * Column product visibility.
+     */
+    const COL_VISIBILITY = 'visibility';
 
     /**
      * Column product sku.
@@ -192,7 +197,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_indexValueAttributes = [
         'status',
         'tax_class_id',
-        'gift_message_available',
     ];
 
     /**
@@ -204,6 +208,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         '_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
         '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
         '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
+    ];
+
+    /**
+     * Attributes codes which shows as date
+     *
+     * @var array
+     */
+    protected $dateAttrCodes = [
+        'special_from_date',
+        'special_to_date'
     ];
 
     /**
@@ -259,7 +273,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Specified url key already exists',
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Specified URL key already exists',
     ];
 
     /**
@@ -357,7 +371,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         self::COL_MEDIA_IMAGE,
         '_media_label',
         '_media_position',
-        '_media_is_disabled'
+        '_media_is_disabled',
     ];
 
     /**
@@ -405,7 +419,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Array of supported product types as keys with appropriate model object as value.
      *
-     * @var array
+     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType[]
      */
     protected $_productTypeModels = [];
 
@@ -660,6 +674,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param Product\TaxClassProcessor $taxClassProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
+     * @param array $dateAttrCodes
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -701,7 +716,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\TaxClassProcessor $taxClassProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\Url $productUrl,
-        array $data = []
+        array $data = [],
+        array $dateAttrCodes = []
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -730,6 +746,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->taxClassProcessor = $taxClassProcessor;
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
+        $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -812,7 +829,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @param string $name
-     * @return mixed
+     * @return Product\Type\AbstractType
      */
     public function retrieveProductTypeByName($name)
     {
@@ -886,7 +903,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         [
                             'adapter' => $this,
                             'bunch' => $bunch,
-                            'ids_to_delete' => $idsToDelete
+                            'ids_to_delete' => $idsToDelete,
                         ]
                     );
                     $this->transactionManager->commit();
@@ -1009,7 +1026,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Entity type model must be an instance of '
-                        . 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
+                        . \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
                     )
                 );
             }
@@ -1160,7 +1177,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 }
 
                                 $linkKey = "{$productId}-{$linkedId}-{$linkId}";
-                                if(empty($productLinkKeys[$linkKey])) {
+                                if (empty($productLinkKeys[$linkKey])) {
                                     $productLinkKeys[$linkKey] = $nextLinkId;
                                 }
                                 if (!isset($linkRows[$linkKey])) {
@@ -1270,7 +1287,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
             }
             if ($categoriesIn) {
-                $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['position']);
+                $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['product_id', 'category_id']);
             }
         }
         return $this;
@@ -1473,8 +1490,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     // existing row
                     $entityRowsUp[] = [
                         'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
-                        $this->getProductEntityLinkField()
-                            => $this->_oldSku[$rowSku][$this->getProductEntityLinkField()],
+                        $this->getProductEntityLinkField() => $this->_oldSku[$rowSku][$this->getProductEntityLinkField()],
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {
@@ -1639,7 +1655,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $attrTable = $attribute->getBackend()->getTable();
                     $storeIds = [0];
 
-                    if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
+                    if (
+                        'datetime' == $attribute->getBackendType()
+                        && in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                    ) {
+                        $attrValue = $this->dateTime->formatDate($attrValue, false);
+                    } else if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
                         $attrValue = $this->dateTime->gmDate(
                             'Y-m-d H:i:s',
                             $this->_localeDate->date($attrValue)->getTimestamp()
@@ -1961,7 +1982,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $this;
     }
 
-
     /**
      * Save product websites.
      *
@@ -2274,7 +2294,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
-            $rowAttributesValid = $this->_productTypeModels[$newSku['type_id']]->isRowValid(
+            /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
+            $rowAttributesValid = $productTypeValidator->isRowValid(
                 $rowData,
                 $rowNum,
                 !isset($this->_oldSku[$sku])
@@ -2286,7 +2308,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
-        if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
+
+        if ($this->isNeedToValidateUrlKey($rowData)) {
             $urlKey = $this->getUrlKey($rowData);
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
@@ -2306,6 +2329,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
+    }
+
+    /**
+     * @param array $rowData
+     * @return bool
+     */
+    private function isNeedToValidateUrlKey($rowData)
+    {
+        return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
+            && (empty($rowData[self::COL_VISIBILITY])
+            || $rowData[self::COL_VISIBILITY]
+            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
     }
 
     /**
@@ -2363,7 +2398,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function _setStockUseConfigFieldsValues($rowData)
     {
-        $useConfigFields = array();
+        $useConfigFields = [];
         foreach ($rowData as $key => $value) {
             $useConfigName = self::INVENTORY_USE_CONFIG_PREFIX . $key;
             if (isset($this->defaultStockData[$key])

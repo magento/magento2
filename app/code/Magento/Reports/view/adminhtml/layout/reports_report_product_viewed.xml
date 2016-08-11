@@ -9,6 +9,9 @@
     <body>
         <referenceBlock name="messages">
             <action method="addNotice">
+                <argument translate="true" name="message" xsi:type="string">The report displays the top 5 most viewed products for each interval.</argument>
+            </action>
+            <action method="addNotice">
                 <argument translate="true" name="message" xsi:type="string">For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.</argument>
             </action>
         </referenceBlock>

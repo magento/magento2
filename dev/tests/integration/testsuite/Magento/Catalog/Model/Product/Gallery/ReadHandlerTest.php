@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -31,7 +31,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->readHandler = $this->objectManager->create(
-            'Magento\Catalog\Model\Product\Gallery\ReadHandler'
+            \Magento\Catalog\Model\Product\Gallery\ReadHandler::class
         );
     }
 
@@ -42,11 +42,11 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
         /**
-         * @var $entityMetadata \Magento\Framework\Model\Entity\EntityMetadata
+         * @var $entityMetadata \Magento\Framework\EntityManager\EntityMetadata
          */
         $entityMetadata = $this->objectManager
             ->get(MetadataPool::class)
@@ -55,19 +55,17 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $linkFieldId = $productRepository->get('simple')->getData($entityMetadata->getLinkField());
 
         $product->setData($entityMetadata->getLinkField(), $linkFieldId);
-        $this->readHandler->execute(
-            'Magento\Catalog\Api\Data\ProductInterface',
-            $product
-        );
+        $this->readHandler->execute($product);
 
         $data = $product->getData();
 
         $this->assertArrayHasKey('media_gallery', $data);
         $this->assertArrayHasKey('images', $data['media_gallery']);
+        $image = array_shift($data['media_gallery']['images']);
 
         $this->assertEquals(
             'Image Alt Text',
-            $data['media_gallery']['images'][0]['label']
+            $image['label']
         );
     }
 }

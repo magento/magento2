@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model;
 
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\EntitySnapshot\AttributeProvider;
 
 /**

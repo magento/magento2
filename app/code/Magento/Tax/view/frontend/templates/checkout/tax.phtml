@@ -39,10 +39,10 @@
 
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value != 0): ?>
     <?php $isTop = 1; ?>
-    <?php foreach (unserialize($block->getTotal()->getFullInfo()) as $info): ?>
+    <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
         <?php if (isset($info['hidden']) && $info['hidden']) {
-    continue;
-} ?>
+            continue;
+        } ?>
         <?php $percent = $info['percent']; ?>
         <?php $amount = $info['amount']; ?>
         <?php $rates = $info['rates']; ?>

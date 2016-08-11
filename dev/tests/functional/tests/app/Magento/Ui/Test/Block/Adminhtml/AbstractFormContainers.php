@@ -40,6 +40,13 @@ abstract class AbstractFormContainers extends Form
     protected $header = 'header.page-header';
 
     /**
+     * Close button locator.
+     *
+     * @var string
+     */
+    protected $closeButton = 'aside[style]:not([style=""]) [data-role="closeBtn"]';
+
+    /**
      * Initialize.
      *
      * @return $this
@@ -188,11 +195,14 @@ abstract class AbstractFormContainers extends Form
             if ($this->openContainer($containerName)) {
                 $mapping = $container->dataMapping($this->unassignedFields);
                 foreach ($mapping as $fieldName => $data) {
-                    $element = $container->_rootElement->find($data['selector'], $data['strategy'], $data['input']);
+                    $element = $this->getElement($this->_rootElement, $data);
                     if ($element->isVisible()) {
                         $element->setValue($data['value']);
                         unset($this->unassignedFields[$fieldName]);
                     }
+                }
+                if ($this->browser->find($this->closeButton)->isVisible()) {
+                    $this->browser->find($this->closeButton)->click();
                 }
                 if (empty($this->unassignedFields)) {
                     break;

@@ -306,10 +306,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         // If Flat Index enabled then use it but only on frontend
         if ($this->flatState->isAvailable()) {
-            $this->_init('Magento\Catalog\Model\ResourceModel\Category\Flat');
+            $this->_init(\Magento\Catalog\Model\ResourceModel\Category\Flat::class);
             $this->_useFlatResource = true;
         } else {
-            $this->_init('Magento\Catalog\Model\ResourceModel\Category');
+            $this->_init(\Magento\Catalog\Model\ResourceModel\Category::class);
         }
     }
 
@@ -661,9 +661,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $url = false;
         $image = $this->getImage();
         if ($image) {
-            $url = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-            ) . 'catalog/category/' . $image;
+            if (is_string($image)) {
+                $url = $this->_storeManager->getStore()->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . 'catalog/category/' . $image;
+            } else {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while getting the image url.')
+                );
+            }
         }
         return $url;
     }

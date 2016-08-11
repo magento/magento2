@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {
@@ -55,11 +56,17 @@ class Link extends \Magento\Framework\Model\AbstractModel
     protected $saveProductLinks;
 
     /**
+     * @var \Magento\CatalogInventory\Helper\Stock
+     * @deprecated
+     */
+    protected $stockHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Link\SaveHandler $saveProductLinks
+     * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -69,14 +76,14 @@ class Link extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Link\SaveHandler $saveProductLinks,
+        \Magento\CatalogInventory\Helper\Stock $stockHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_linkCollectionFactory = $linkCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->saveProductLinks = $saveProductLinks;
+        $this->stockHelper = $stockHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -87,7 +94,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Link');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
     }
 
     /**
@@ -174,7 +181,19 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     public function saveProductRelations($product)
     {
-        $this->saveProductLinks->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
+        $this->getProductLinkSaveHandler()->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
         return $this;
+    }
+
+    /**
+     * @return Link\SaveHandler
+     */
+    private function getProductLinkSaveHandler()
+    {
+        if (null === $this->saveProductLinks) {
+            $this->saveProductLinks = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Link\SaveHandler::class);
+        }
+        return $this->saveProductLinks;
     }
 }

@@ -6,7 +6,7 @@
 /**
  * @var \Magento\Catalog\Model\Product $product
  */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product
     ->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
     ->setId(1)
@@ -17,13 +17,19 @@ $product
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setLinksPurchasedSeparately(true);
+    ->setLinksPurchasedSeparately(true)
+    ->setStockData(
+        [
+            'qty' => 100,
+            'is_in_stock' => 1,
+        ]
+    );
 
 /**
  * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory
  */
 $linkFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Downloadable\Api\Data\LinkInterfaceFactory');
+    ->get(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
 $links = [];
 $linkData = [
     'title' => 'Downloadable Product Link',
@@ -47,4 +53,6 @@ $extension = $product->getExtensionAttributes();
 $extension->setDownloadableProductLinks($links);
 $product->setExtensionAttributes($extension);
 
-$product->save();
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository->save($product);

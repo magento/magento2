@@ -18,6 +18,12 @@
                 <base>USD</base>
                 <default>USD</default>
             </options>
+            <yahoofinance>
+                <timeout>100</timeout>
+            </yahoofinance>
+            <fixerio>
+                <timeout>100</timeout>
+            </fixerio>
             <webservicex>
                 <timeout>100</timeout>
             </webservicex>

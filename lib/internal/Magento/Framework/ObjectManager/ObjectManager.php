@@ -27,7 +27,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     protected $_sharedInstances = [];
 
     /**
-     * @var Config\Config
+     * @var ConfigInterface
      */
     protected $_config;
 
@@ -41,7 +41,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
         $this->_config = $config;
         $this->_factory = $factory;
         $this->_sharedInstances = &$sharedInstances;
-        $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
+        $this->_sharedInstances[\Magento\Framework\ObjectManagerInterface::class] = $this;
     }
 
     /**

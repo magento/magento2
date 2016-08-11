@@ -9,8 +9,10 @@ use Magento\Ui\Component\Form\Element\CheckboxSet;
 
 /**
  * Class CheckboxSetTest
+ *
+ * @method CheckboxSet getModel
  */
-class CheckboxSetTest extends AbstractOptionsFieldTest
+class CheckboxSetTest extends AbstractElementTest
 {
     /**
      * {@inheritdoc}
@@ -23,5 +25,10 @@ class CheckboxSetTest extends AbstractOptionsFieldTest
     public function testGetComponentName()
     {
         $this->assertSame(CheckboxSet::NAME, $this->getModel()->getComponentName());
+    }
+
+    public function testGetIsSelected()
+    {
+        $this->assertSame(false, $this->getModel()->getIsSelected(''));
     }
 }

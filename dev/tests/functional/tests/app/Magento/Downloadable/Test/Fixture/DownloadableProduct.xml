@@ -75,7 +75,7 @@
         <field name="tax_class_id" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\TaxClass" />
         <field name="thumbnail" is_required="0" />
         <field name="thumbnail_label" is_required="0" />
-        <field name="tier_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
+        <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\Product\TierPrice" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
         <field name="updated_at" is_required="1" />
         <field name="upsell_tgtr_position_behavior" is_required="0" />
         <field name="upsell_tgtr_position_limit" is_required="0" />
@@ -86,7 +86,7 @@
         <field name="id" />
         <field name="weight" is_required="0" group="product-details" />
         <field name="product_has_weight" group="product-details" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="checkout_data" group="null" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\CheckoutData" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
         <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />

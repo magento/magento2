@@ -37,12 +37,13 @@ define(
                     click: function (event) {
                         event.preventDefault();
 
-                        paypalExpressCheckout.checkout.initXO();
-
                         if (additionalValidators.validate()) {
+                            paypalExpressCheckout.checkout.initXO();
                             this.selectPaymentMethod();
                             setPaymentMethodAction(this.messageContainer).done(
                                 function () {
+                                    $('body').trigger('processStart');
+
                                     $.get(
                                         this.path,
                                         {
@@ -50,8 +51,8 @@ define(
                                         }
                                     ).done(
                                         function (response) {
-                                            if (response && response.token) {
-                                                paypalExpressCheckout.checkout.startFlow(response.token);
+                                            if (response && response.url) {
+                                                paypalExpressCheckout.checkout.startFlow(response.url);
 
                                                 return;
                                             }

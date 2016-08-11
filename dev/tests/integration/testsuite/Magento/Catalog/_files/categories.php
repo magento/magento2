@@ -10,30 +10,37 @@ $defaultAttributeSet = $objectManager->get(Magento\Eav\Model\Config::class)
     ->getDefaultAttributeSetId();
 
 $productRepository = $objectManager->create(
-    'Magento\Catalog\Api\ProductRepositoryInterface'
+    \Magento\Catalog\Api\ProductRepositoryInterface::class
 );
 
 $categoryLinkRepository = $objectManager->create(
-    'Magento\Catalog\Api\CategoryLinkRepositoryInterface',
+    \Magento\Catalog\Api\CategoryLinkRepositoryInterface::class,
     [
         'productRepository' => $productRepository
     ]
 );
 
 /** @var Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagement */
-$categoryLinkManagement = $objectManager->create(
-    'Magento\Catalog\Api\CategoryLinkManagementInterface',
-    [
-        'productRepository' => $productRepository,
-        'categoryLinkRepository' => $categoryLinkRepository
-    ]
-);
+$categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+$reflectionClass = new \ReflectionClass(get_class($categoryLinkManagement));
+$properties = [
+    'productRepository' => $productRepository,
+    'categoryLinkRepository' => $categoryLinkRepository
+];
+foreach ($properties as $key => $value) {
+    if ($reflectionClass->hasProperty($key)) {
+        $reflectionProperty = $reflectionClass->getProperty($key);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($categoryLinkManagement, $value);
+    }
+}
+
 
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
  */
 /** @var $category \Magento\Catalog\Model\Category */
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(3)
     ->setName('Category 1')
@@ -46,7 +53,7 @@ $category->setId(3)
     ->setPosition(1)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(4)
     ->setName('Category 1.1')
@@ -60,7 +67,7 @@ $category->setId(4)
     ->setPosition(1)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(5)
     ->setName('Category 1.1.1')
@@ -75,7 +82,7 @@ $category->setId(5)
     ->setCustomDesign('Magento/blank')
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(6)
     ->setName('Category 2')
@@ -88,7 +95,7 @@ $category->setId(6)
     ->setPosition(2)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(7)
     ->setName('Movable')
@@ -101,7 +108,7 @@ $category->setId(7)
     ->setPosition(3)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(8)
     ->setName('Inactive')
@@ -113,7 +120,7 @@ $category->setId(8)
     ->setPosition(4)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(9)
     ->setName('Movable Position 1')
@@ -126,7 +133,7 @@ $category->setId(9)
     ->setPosition(5)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(10)
     ->setName('Movable Position 2')
@@ -139,7 +146,7 @@ $category->setId(10)
     ->setPosition(6)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(11)
     ->setName('Movable Position 3')
@@ -152,7 +159,7 @@ $category->setId(11)
     ->setPosition(7)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(12)
     ->setName('Category 12')
@@ -165,7 +172,7 @@ $category->setId(12)
     ->setPosition(8)
     ->save();
 
-$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(13)
     ->setName('Category 1.2')
@@ -180,7 +187,7 @@ $category->setId(13)
     ->save();
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($defaultAttributeSet)
@@ -200,7 +207,7 @@ $categoryLinkManagement->assignProductToCategories(
     [2, 3, 4, 13]
 );
 
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($defaultAttributeSet)
@@ -220,7 +227,7 @@ $categoryLinkManagement->assignProductToCategories(
     [5, 4]
 );
 
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($defaultAttributeSet)
@@ -241,7 +248,7 @@ $categoryLinkManagement->assignProductToCategories(
 );
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($defaultAttributeSet)

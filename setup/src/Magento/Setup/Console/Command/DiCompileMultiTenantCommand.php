@@ -276,11 +276,11 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $this->entities['interceptors'] = $interceptorScanner->collectEntities($this->files['di']);
         // 1.2 Generation of Factory and Additional Classes
         $generatorIo = $this->objectManager->create(
-            'Magento\Framework\Code\Generator\Io',
+            \Magento\Framework\Code\Generator\Io::class,
             ['generationDirectory' => $generationDir]
         );
         $this->generator = $this->objectManager->create(
-            'Magento\Framework\Code\Generator',
+            \Magento\Framework\Code\Generator::class,
             ['ioObject' => $generatorIo]
         );
         /** Initialize object manager for code generation based on configs */

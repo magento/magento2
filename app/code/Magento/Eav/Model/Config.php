@@ -247,7 +247,9 @@ class Config
      */
     protected function _getAttributeKey($entityTypeCode, $attributeCode)
     {
-        return 'ATTRIBUTE/' . $entityTypeCode . '/' . $attributeCode;
+        $codeSegments = explode('.', $attributeCode);
+
+        return 'ATTRIBUTE/' . $entityTypeCode . '/' . array_pop($codeSegments);
     }
 
     /**
@@ -288,7 +290,7 @@ class Config
         $entityTypesData = $this->entityTypeCollectionFactory->create()->getData();
         foreach ($entityTypesData as $typeData) {
             if (!isset($typeData['attribute_model'])) {
-                $typeData['attribute_model'] = 'Magento\Eav\Model\Entity\Attribute';
+                $typeData['attribute_model'] = \Magento\Eav\Model\Entity\Attribute::class;
             }
 
             $typeCode = $typeData['entity_type_code'];

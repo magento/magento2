@@ -17,8 +17,7 @@
                     <div data-bind="text: error_message"></div>
                     <!-- /ko -->
                     <!-- ko if: (available) -->
-                    <input name="estimate_method"
-                           type="radio"
+                    <input type="radio"
                            class="radio"
                            data-bind="
                                 click: $parents[1].selectShippingMethod,
@@ -29,7 +28,7 @@
                                         }
                                 "/>
                     <label class="label" data-bind="attr: {for: 's_method_' + method_code}">
-                        <!-- ko text: method_title --><!-- /ko -->
+                        <!-- ko text: $data.method_title --><!-- /ko -->
                         <!-- ko text: $parents[1].getFormattedPrice(amount) --><!-- /ko -->
                     </label>
                     <!-- /ko -->

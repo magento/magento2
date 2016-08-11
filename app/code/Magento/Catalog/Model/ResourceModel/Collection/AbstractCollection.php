@@ -97,12 +97,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     /**
      * Set store scope
      *
-     * @param int|string|\Magento\Store\Model\Store $storeId
+     * @param int|string|\Magento\Store\Api\Data\StoreInterface $storeId
      * @return $this
      */
     public function setStoreId($storeId)
     {
-        if ($storeId instanceof \Magento\Store\Model\Store) {
+        if ($storeId instanceof \Magento\Store\Api\Data\StoreInterface) {
             $storeId = $storeId->getId();
         }
         $this->_storeId = (int)$storeId;

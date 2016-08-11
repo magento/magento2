@@ -5,6 +5,10 @@
  */
 namespace Magento\Eav\Api\Data;
 
+/**
+ * Interface AttributeSetInterface
+ * @api
+ */
 interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**

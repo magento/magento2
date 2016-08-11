@@ -6,8 +6,16 @@
  */
 namespace Magento\Contact\Controller\Index;
 
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\ObjectManager;
+
 class Post extends \Magento\Contact\Controller\Index
 {
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
     /**
      * Post user question
      *
@@ -65,6 +73,7 @@ class Post extends \Magento\Contact\Controller\Index
             $this->messageManager->addSuccess(
                 __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
             );
+            $this->getDataPersistor()->clear('contact_us');
             $this->_redirect('contact/index');
             return;
         } catch (\Exception $e) {
@@ -72,8 +81,24 @@ class Post extends \Magento\Contact\Controller\Index
             $this->messageManager->addError(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
+            $this->getDataPersistor()->set('contact_us', $post);
             $this->_redirect('contact/index');
             return;
         }
+    }
+
+    /**
+     * Get Data Persistor
+     *
+     * @return DataPersistorInterface
+     */
+    private function getDataPersistor()
+    {
+        if ($this->dataPersistor === null) {
+            $this->dataPersistor = ObjectManager::getInstance()
+                ->get(DataPersistorInterface::class);
+        }
+
+        return $this->dataPersistor;
     }
 }

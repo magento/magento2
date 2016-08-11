@@ -5,10 +5,13 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Catalog\Model\Product;
+
 /**
  * Read handler for catalog product gallery.
  */
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
@@ -38,39 +41,67 @@ class ReadHandler
     }
 
     /**
-     * @param string $entityType
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param Product $entity
+     * @param array $arguments
+     * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $product)
+    public function execute($entity, $arguments = [])
     {
         $value = [];
         $value['images'] = [];
 
-        $localAttributes = ['label', 'position', 'disabled'];
-
         $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
-            $product,
+            $entity,
             $this->getAttribute()->getAttributeId()
         );
 
-        foreach ($mediaEntries as $mediaEntry) {
-            foreach ($localAttributes as $localAttribute) {
-                if ($mediaEntry[$localAttribute] === null) {
-                    $mediaEntry[$localAttribute] = $this->findDefaultValue($localAttribute, $mediaEntry);
-                }
-            }
+        $this->addMediaDataToProduct(
+            $entity,
+            $mediaEntries
+        );
+        
+        return $entity;
+    }
 
+    /**
+     * @param Product $product
+     * @param array $mediaEntries
+     * @return void
+     */
+    public function addMediaDataToProduct(Product $product, array $mediaEntries)
+    {
+        $attrCode = $this->getAttribute()->getAttributeCode();
+        $value = [];
+        $value['images'] = [];
+        $value['values'] = [];
+
+        foreach ($mediaEntries as $mediaEntry) {
+            $mediaEntry = $this->substituteNullsWithDefaultValues($mediaEntry);
             $value['images'][] = $mediaEntry;
         }
+        $product->setData($attrCode, $value);
+    }
 
-        $product->setData(
-            $this->getAttribute()->getAttributeCode(),
-            $value
-        );
+    /**
+     * @param array $rawData
+     * @return array
+     */
+    private function substituteNullsWithDefaultValues(array $rawData)
+    {
+        $processedData = [];
+        foreach ($rawData as $key => $rawValue) {
+            if (null !== $rawValue) {
+                $processedValue = $rawValue;
+            } elseif (isset($rawData[$key . '_default'])) {
+                $processedValue = $rawData[$key . '_default'];
+            } else {
+                $processedValue = null;
+            }
+            $processedData[$key] = $processedValue;
+        }
 
-        return $product;
+        return $processedData;
     }
 
     /**
@@ -79,9 +110,7 @@ class ReadHandler
     public function getAttribute()
     {
         if (!$this->attribute) {
-            $this->attribute = $this->attributeRepository->get(
-                'media_gallery'
-            );
+            $this->attribute = $this->attributeRepository->get('media_gallery');
         }
 
         return $this->attribute;
@@ -91,6 +120,7 @@ class ReadHandler
      * @param string $key
      * @param string[] &$image
      * @return string
+     * @deprecated
      */
     protected function findDefaultValue($key, &$image)
     {

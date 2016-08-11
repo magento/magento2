@@ -75,9 +75,6 @@ class UpdateStoreGroupEntityTest extends Injectable
      */
     public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup)
     {
-        $this->markTestIncomplete(
-            "MAGETWO-50405: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
-        );
 
         //Preconditions
         $storeGroupOrigin->persist();

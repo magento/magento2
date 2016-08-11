@@ -38,10 +38,6 @@ define([
                 galleryElement.gallery('option', 'showNav', false);
                 galleryElement.gallery('option', 'showThumbs', true);
             }
-
-            setTimeout(function () {
-                $('.product.data.items').tabs('option', 'openOnFocus', true);
-            }, 500);
         },
         // Switch to Mobile Version
         exit: function () {
@@ -72,10 +68,6 @@ define([
                     galleryElement.gallery('option', 'showThumbs', false);
                 }
             }, 2000);
-
-            setTimeout(function () {
-                $('.product.data.items').tabs('option', 'openOnFocus', false);
-            }, 500);
         }
     });
 });

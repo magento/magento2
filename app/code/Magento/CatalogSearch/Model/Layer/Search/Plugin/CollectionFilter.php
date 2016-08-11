@@ -41,6 +41,10 @@ class CollectionFilter
         Category $category
     ) {
         $proceed($collection, $category);
-        $collection->addSearchFilter($this->queryFactory->get()->getQueryText());
+        /** @var \Magento\Search\Model\Query $query */
+        $query = $this->queryFactory->get();
+        if (!$query->isQueryTextShort()) {
+            $collection->addSearchFilter($query->getQueryText());
+        }
     }
 }

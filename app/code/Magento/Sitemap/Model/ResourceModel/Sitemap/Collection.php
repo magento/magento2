@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init('Magento\Sitemap\Model\Sitemap', 'Magento\Sitemap\Model\ResourceModel\Sitemap');
+        $this->_init(\Magento\Sitemap\Model\Sitemap::class, \Magento\Sitemap\Model\ResourceModel\Sitemap::class);
     }
 
     /**

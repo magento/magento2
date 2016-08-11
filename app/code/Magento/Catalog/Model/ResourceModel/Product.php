@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product entity resource model
@@ -59,7 +61,7 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
-     * @var \Magento\Framework\Model\EntityManager
+     * @var \Magento\Framework\EntityManager\EntityManager
      */
     protected $entityManager;
 
@@ -74,6 +76,11 @@ class Product extends AbstractResource
     protected $availableCategoryIdsCache = [];
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     */
+    private $productCategoryLink;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -83,7 +90,6 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
-     * @param \Magento\Framework\Model\EntityManager $entityManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -98,7 +104,6 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        \Magento\Framework\Model\EntityManager $entityManager,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -106,7 +111,6 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
-        $this->entityManager = $entityManager;
         $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
@@ -147,6 +151,7 @@ class Product extends AbstractResource
     /**
      * Product Category table name getter
      *
+     * @deprecated
      * @return string
      */
     public function getProductCategoryTable()
@@ -170,28 +175,19 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
+     * @deprecated
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */
     public function getWebsiteIds($product)
     {
-        $connection = $this->getConnection();
-
         if ($product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product->getEntityId();
         } else {
             $productId = $product;
         }
 
-        $select = $connection->select()->from(
-            $this->getProductWebsiteTable(),
-            'website_id'
-        )->where(
-            'product_id = ?',
-            (int)$productId
-        );
-
-        return $connection->fetchCol($select);
+        return $this->getProductWebsiteLink()->getWebsiteIdsByProductId($productId);
     }
 
     /**
@@ -229,17 +225,8 @@ class Product extends AbstractResource
      */
     public function getCategoryIds($product)
     {
-        $connection = $this->getConnection();
-
-        $select = $connection->select()->from(
-            $this->getProductCategoryTable(),
-            'category_id'
-        )->where(
-            'product_id = ?',
-            (int)$product->getId()
-        );
-
-        return $connection->fetchCol($select);
+        $result = $this->getProductCategoryLink()->getCategoryLinks($product);
+        return array_column($result, 'category_id');
     }
 
     /**
@@ -267,14 +254,6 @@ class Product extends AbstractResource
      */
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
-        /**
-         * Check if declared category ids in object data.
-         */
-        if ($object->hasCategoryIds()) {
-            $categoryIds = $this->_catalogCategory->verifyIds($object->getCategoryIds());
-            $object->setCategoryIds($categoryIds);
-        }
-
         $self = parent::_beforeSave($object);
         /**
          * Try detect product id by sku if id is not declared
@@ -302,7 +281,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $this->entityManager->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
+        $this->getEntityManager()->delete($object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -313,41 +292,24 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
+     * @deprecated
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     protected function _saveWebsiteIds($product)
     {
-        $websiteIds = $product->getWebsiteIds();
-        $oldWebsiteIds = [];
-
-        $product->setIsChangedWebsites(false);
-
-        $connection = $this->getConnection();
-
-        $oldWebsiteIds = $this->getWebsiteIds($product);
-
-        $insert = array_diff($websiteIds, $oldWebsiteIds);
-        $delete = array_diff($oldWebsiteIds, $websiteIds);
-
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $websiteId) {
-                $data[] = ['product_id' => (int)$product->getEntityId(), 'website_id' => (int)$websiteId];
+        if ($product->hasWebsiteIds()) {
+            if ($this->_storeManager->isSingleStoreMode()) {
+                $id = $this->_storeManager->getDefaultStoreView()->getWebsiteId();
+                $product->setWebsiteIds([$id]);
             }
-            $connection->insertMultiple($this->getProductWebsiteTable(), $data);
-        }
+            $websiteIds = $product->getWebsiteIds();
+            $product->setIsChangedWebsites(false);
+            $changed = $this->getProductWebsiteLink()->saveWebsiteIds($product, $websiteIds);
 
-        if (!empty($delete)) {
-            foreach ($delete as $websiteId) {
-                $condition = ['product_id = ?' => (int)$product->getEntityId(), 'website_id = ?' => (int)$websiteId];
-
-                $connection->delete($this->getProductWebsiteTable(), $condition);
+            if ($changed) {
+                $product->setIsChangedWebsites(true);
             }
-        }
-
-        if (!empty($insert) || !empty($delete)) {
-            $product->setIsChangedWebsites(true);
         }
 
         return $this;
@@ -358,55 +320,11 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
      */
     protected function _saveCategories(\Magento\Framework\DataObject $object)
     {
-        /**
-         * If category ids data is not declared we haven't do manipulations
-         */
-        if (!$object->hasCategoryIds()) {
-            return $this;
-        }
-        $categoryIds = $object->getCategoryIds();
-        $oldCategoryIds = $this->getCategoryIds($object);
-
-        $object->setIsChangedCategories(false);
-
-        $insert = array_diff($categoryIds, $oldCategoryIds);
-        $delete = array_diff($oldCategoryIds, $categoryIds);
-
-        $connection = $this->getConnection();
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $categoryId) {
-                if (empty($categoryId)) {
-                    continue;
-                }
-                $data[] = [
-                    'category_id' => (int)$categoryId,
-                    'product_id' => (int)$object->getEntityId(),
-                    'position' => 1,
-                ];
-            }
-            if ($data) {
-                $connection->insertMultiple($this->getProductCategoryTable(), $data);
-            }
-        }
-
-        if (!empty($delete)) {
-            foreach ($delete as $categoryId) {
-                $where = ['product_id = ?' => (int)$object->getEntityId(), 'category_id = ?' => (int)$categoryId];
-
-                $connection->delete($this->getProductCategoryTable(), $where);
-            }
-        }
-
-        if (!empty($insert) || !empty($delete)) {
-            $object->setAffectedCategoryIds(array_merge($insert, $delete));
-            $object->setIsChangedCategories(true);
-        }
-
         return $this;
     }
 
@@ -468,7 +386,7 @@ class Product extends AbstractResource
      */
     public function getDefaultAttributeSourceModel()
     {
-        return 'Magento\Eav\Model\Entity\Attribute\Source\Table';
+        return \Magento\Eav\Model\Entity\Attribute\Source\Table::class;
     }
 
     /**
@@ -521,9 +439,6 @@ class Product extends AbstractResource
             )->where(
                 $this->getLinkField() . ' = ?',
                 $oldId
-            )->where(
-                'store_id > ?',
-                0
             );
 
             $connection->query(
@@ -531,7 +446,7 @@ class Product extends AbstractResource
                     $select,
                     $tableName,
                     ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
                 )
             );
         }
@@ -540,7 +455,6 @@ class Product extends AbstractResource
         $statusAttribute = $this->getAttribute('status');
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
-        $updateCond[] = 'store_id > 0';
         $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(
@@ -654,7 +568,7 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-        $this->entityManager->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
+        $this->getEntityManager()->load($object, $entityId);
         return $this;
     }
 
@@ -694,7 +608,41 @@ class Product extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->entityManager->save(ProductInterface::class, $object);
+        $this->getEntityManager()->save($object);
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+        }
+        return $this->entityManager;
+    }
+
+    /**
+     * @deprecated
+     * @return ProductWebsiteLink
+     */
+    private function getProductWebsiteLink()
+    {
+        return ObjectManager::getInstance()->get(ProductWebsiteLink::class);
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     */
+    private function getProductCategoryLink()
+    {
+        if (null === $this->productCategoryLink) {
+            $this->productCategoryLink = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\ResourceModel\Product\CategoryLink::class);
+        }
+        return $this->productCategoryLink;
     }
 }

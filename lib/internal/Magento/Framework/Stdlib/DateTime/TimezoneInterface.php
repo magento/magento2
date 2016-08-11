@@ -8,6 +8,10 @@
 
 namespace Magento\Framework\Stdlib\DateTime;
 
+/**
+ * Timezone Interface
+ * @api
+ */
 interface TimezoneInterface
 {
     /**

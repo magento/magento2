@@ -106,8 +106,8 @@ define([
 
             this._super();
 
-            scope   = this.dataScope;
-            name    = scope.split('.').slice(1);
+            scope = this.dataScope;
+            name = scope.split('.').slice(1);
 
             valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
 
@@ -240,7 +240,7 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        disable: function() {
+        disable: function () {
             this.disabled(true);
 
             return this;
@@ -251,7 +251,7 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        enable: function() {
+        enable: function () {
             this.disabled(false);
 
             return this;
@@ -264,11 +264,11 @@ define([
          * @returns {Abstract} Chainable.
          */
         setValidation: function (rule, options) {
-            var rules =  utils.copy(this.validation),
+            var rules = utils.copy(this.validation),
                 changed;
 
             if (_.isObject(rule)) {
-                _.extend(this.validation, rule)
+                _.extend(this.validation, rule);
             } else {
                 this.validation[rule] = options;
             }
@@ -306,7 +306,7 @@ define([
          *
          * @returns {Boolean}
          */
-        hasService: function() {
+        hasService: function () {
             return this.service && this.service.template;
         },
 
@@ -332,10 +332,14 @@ define([
 
         /**
          * Sets value observable to initialValue property.
+         *
+         * @returns {Abstract} Chainable.
          */
         reset: function () {
             this.value(this.initialValue);
             this.error(false);
+
+            return this;
         },
 
         /**
@@ -375,12 +379,13 @@ define([
          * @returns {Object} Validate information.
          */
         validate: function () {
-            var value   = this.value(),
-                result  = validator(this.validation, value),
+            var value = this.value(),
+                result = validator(this.validation, value, this.validationParams),
                 message = !this.disabled() && this.visible() ? result.message : '',
                 isValid = this.disabled() || !this.visible() || result.passed;
 
             this.error(message);
+            this.bubble('error', message);
 
             //TODO: Implement proper result propagation for form
             if (!isValid) {
@@ -407,6 +412,7 @@ define([
          */
         restoreToDefault: function () {
             this.value(this.default);
+            this.focused(true);
         },
 
         /**
@@ -428,7 +434,7 @@ define([
         /**
          *  Callback when value is changed by user
          */
-        userChanges: function() {
+        userChanges: function () {
             this.valueChangedByUser = true;
         }
     });

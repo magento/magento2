@@ -113,7 +113,8 @@ class EmulateCustomerObserver implements ObserverInterface
             }
             $this->_customerSession
                 ->setCustomerId($customer->getId())
-                ->setCustomerGroupId($customer->getGroupId());
+                ->setCustomerGroupId($customer->getGroupId())
+                ->setIsCustomerEmulated(true);
         }
         return $this;
     }

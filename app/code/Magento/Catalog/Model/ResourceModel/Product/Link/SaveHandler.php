@@ -10,7 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\CouldNotSaveException;
 
@@ -84,7 +84,7 @@ class SaveHandler
         $links = [];
         $extensions = $this->dataObjectProcessor->buildOutputDataArray(
             $entity->getExtensionAttributes(),
-            'Magento\Catalog\Api\Data\ProductLinkExtensionInterface'
+            \Magento\Catalog\Api\Data\ProductLinkExtensionInterface::class
         );
         $extensions = is_array($extensions) ? $extensions : [];
         $data = $entity->__toArray();

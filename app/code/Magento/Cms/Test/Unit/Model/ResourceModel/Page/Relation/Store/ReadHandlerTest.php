@@ -7,7 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,11 +28,11 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourcePage = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->resourcePage = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +51,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('lookupStoreIds')
             ->willReturn([$storeId]);
 
-        $page = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -63,13 +63,13 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('store_id', [$storeId])
             ->willReturnSelf();
 
-        $result = $this->model->execute('', $page);
-        $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
+        $result = $this->model->execute($page);
+        $this->assertInstanceOf(\Magento\Cms\Model\Page::class, $result);
     }
 
     public function testExecuteWithNoId()
     {
-        $page = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,7 +77,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(false);
 
-        $result = $this->model->execute('', $page);
-        $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
+        $result = $this->model->execute($page);
+        $this->assertInstanceOf(\Magento\Cms\Model\Page::class, $result);
     }
 }

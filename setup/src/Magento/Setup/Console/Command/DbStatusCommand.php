@@ -65,7 +65,7 @@ class DbStatusCommand extends AbstractSetupCommand
         }
         /** @var DbVersionInfo $dbVersionInfo */
         $dbVersionInfo = $this->objectManagerProvider->get()
-            ->get('Magento\Framework\Module\DbVersionInfo');
+            ->get(\Magento\Framework\Module\DbVersionInfo::class);
         $outdated = $dbVersionInfo->getDbVersionErrors();
         if (!empty($outdated)) {
             $output->writeln("<info>The module code base doesn't match the DB schema and data.</info>");
@@ -93,6 +93,8 @@ class DbStatusCommand extends AbstractSetupCommand
                     '<info>Some modules use code versions newer or older than the database. ' .
                     "First update the module code, then run 'setup:upgrade'.</info>"
                 );
+                // we must have an exit code higher than zero to indicate something was wrong
+                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } else {
                 $output->writeln("<info>Run 'setup:upgrade' to update your DB schema and data.</info>");
             }

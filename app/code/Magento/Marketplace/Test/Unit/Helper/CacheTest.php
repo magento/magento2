@@ -19,7 +19,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Marketplace\Helper::loadPartnersFromCache
+     * @covers \Magento\Marketplace\Helper\Cache::loadPartnersFromCache
      */
     public function testLoadPartnersFromCache()
     {
@@ -36,7 +36,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Marketplace\Helper::savePartnersToCache
+     * @covers \Magento\Marketplace\Helper\Cache::savePartnersToCache
      */
     public function testSavePartnersToCache()
     {
@@ -60,7 +60,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function getCacheHelperMock($methods = null)
     {
-        return $this->getMock('Magento\Marketplace\Helper\Cache', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Helper\Cache::class, $methods, [], '', false);
     }
 
     /**
@@ -70,6 +70,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function getCacheMock()
     {
-        return $this->getMockForAbstractClass('Magento\Framework\Config\CacheInterface');
+        return $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
     }
 }

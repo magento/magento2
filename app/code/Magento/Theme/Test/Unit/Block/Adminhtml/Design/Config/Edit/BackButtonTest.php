@@ -52,11 +52,11 @@ class BackButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function initContext()
     {
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\Block\Widget\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Widget\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

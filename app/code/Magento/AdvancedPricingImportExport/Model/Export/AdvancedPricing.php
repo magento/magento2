@@ -95,10 +95,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param ImportProduct\StoreResolver $storeResolver
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -119,7 +117,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
     ) {
@@ -398,7 +395,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         $storeName = ($websiteId == 0)
             ? ImportAdvancedPricing::VALUE_ALL_WEBSITES
-            : $this->_storeManager->getWebsite($websiteId)->getName();
+            : $this->_storeManager->getWebsite($websiteId)->getCode();
+        $currencyCode = '';
         if ($websiteId == 0) {
             $currencyCode = $this->_storeManager->getWebsite($websiteId)->getBaseCurrencyCode();
         }

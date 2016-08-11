@@ -7,6 +7,7 @@ namespace Magento\Vault\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
@@ -37,7 +38,13 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
     {
         $dataObject = $this->readDataArgument($observer);
 
-        $tokenPublicHash = $dataObject->getData(PaymentTokenInterface::PUBLIC_HASH);
+        $additionalData = $dataObject->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+
+        if (!is_array($additionalData) || !isset($additionalData[PaymentTokenInterface::PUBLIC_HASH])) {
+            return;
+        }
+
+        $tokenPublicHash = $additionalData[PaymentTokenInterface::PUBLIC_HASH];
 
         if ($tokenPublicHash === null) {
             return;
@@ -50,10 +57,7 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
         }
 
         $quote = $paymentModel->getQuote();
-        $customerId = $quote->getCustomer()->getId();
-        if ($customerId === null) {
-            return;
-        }
+        $customerId = (int) $quote->getCustomer()->getId();
 
         $paymentToken = $this->paymentTokenManagement->getByPublicHash($tokenPublicHash, $customerId);
         if ($paymentToken === null) {

@@ -9,6 +9,8 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Interface of locating view files in the file system
+ *
+ * @api
  */
 interface CollectorInterface
 {

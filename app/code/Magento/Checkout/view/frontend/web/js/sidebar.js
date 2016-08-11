@@ -12,13 +12,16 @@ define([
     'Magento_Ui/js/modal/confirm',
     'jquery/ui',
     'mage/decorate',
-    'mage/collapsible'
+    'mage/collapsible',
+    'mage/cookies'
 ], function ($, authenticationPopup, customerData, alert, confirm) {
 
     $.widget('mage.sidebar', {
         options: {
             isRecursive: true,
-            maxItemsVisible: 3
+            minicart: {
+                maxItemsVisible: 3
+            }
         },
         scrollHeight: 0,
 
@@ -53,7 +56,7 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
+                if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
                     if (this.options.url.isRedirectRequired) {
@@ -190,12 +193,16 @@ define([
         },
 
         /**
-         * @param url - ajax url
-         * @param data - post data for ajax call
-         * @param elem - element that initiated the event
-         * @param callback - callback method to execute after AJAX success
+         * @param {String} url - ajax url
+         * @param {Object} data - post data for ajax call
+         * @param {Object} elem - element that initiated the event
+         * @param {Function} callback - callback method to execute after AJAX success
          */
         _ajax: function (url, data, elem, callback) {
+            $.extend(data, {
+                'form_key': $.mage.cookies.get('form_key')
+            });
+
             $.ajax({
                 url: url,
                 data: data,
@@ -235,10 +242,11 @@ define([
         _calcHeight: function () {
             var self = this,
                 height = 0,
-                counter = this.options.maxItemsVisible,
+                counter = this.options.minicart.maxItemsVisible,
                 target = $(this.options.minicart.list),
                 outerHeight;
 
+            self.scrollHeight = 0;
             target.children().each(function () {
 
                 if ($(this).find('.options').length > 0) {
@@ -252,7 +260,7 @@ define([
                 self.scrollHeight += outerHeight;
             });
 
-            target.height(height);
+            target.parent().height(height);
         }
     });
 

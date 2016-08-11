@@ -99,7 +99,7 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Save Gift Message'), 'class' => 'save']
         );
 

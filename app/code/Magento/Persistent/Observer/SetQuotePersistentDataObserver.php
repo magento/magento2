@@ -79,7 +79,7 @@ class SetQuotePersistentDataObserver implements ObserverInterface
             && $this->quoteManager->isPersistent()
         ) {
             //Quote is not actual customer's quote, just persistent
-            $quote->setIsActive(false)->setIsPersistent(true);
+            $quote->setIsPersistent(true);
         }
     }
 }

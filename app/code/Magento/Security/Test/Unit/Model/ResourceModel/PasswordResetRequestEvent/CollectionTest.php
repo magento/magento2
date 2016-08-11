@@ -6,8 +6,6 @@
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\PasswordResetRequestEvent;
 
-use Magento\Security\Model\ConfigInterface;
-
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
  */
@@ -16,7 +14,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection */
     protected $collectionMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
+    /** @var \Magento\Framework\Stdlib\DateTime\DateTime */
     protected $dateTimeMock;
 
     /** @var \Magento\Framework\DB\Select */
@@ -32,28 +30,28 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $entityFactory = $this->getMock(
-            '\Magento\Framework\Data\Collection\EntityFactoryInterface',
+            \Magento\Framework\Data\Collection\EntityFactoryInterface::class,
             [],
             [],
             '',
             false
         );
         $logger = $this->getMock(
-            '\Psr\Log\LoggerInterface',
+            \Psr\Log\LoggerInterface::class,
             [],
             [],
             '',
             false
         );
         $fetchStrategy = $this->getMock(
-            '\Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             [],
             [],
             '',
             false
         );
         $eventManager = $this->getMock(
-            '\Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             [],
             '',
@@ -61,7 +59,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->dateTimeMock = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime',
+            \Magento\Framework\Stdlib\DateTime\DateTime::class,
             [],
             [],
             '',
@@ -69,19 +67,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->selectMock = $this->getMock(
-            '\Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['limit', 'from'],
             [],
             '',
             false
         );
 
-        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connection->expects($this->any())->method('select')->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getMainTable', 'getTable', 'deleteRecordsOlderThen'])
             ->getMockForAbstractClass();
@@ -94,7 +92,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
 
         $this->collectionMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class,
             ['addFieldToFilter', 'addOrder'],
             [$entityFactory, $logger, $fetchStrategy, $eventManager,
                 $this->dateTimeMock,
@@ -175,14 +173,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $timestamp = time();
 
         $this->dateTimeMock->expects($this->once())
-            ->method('gmDate')
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'created_at',
-                ['gt' => $this->dateTimeMock->formatDate($timestamp - $lifetime)]
+                ['gt' => $this->collectionMock->getConnection()->formatDate($timestamp - $lifetime)]
             )
             ->willReturnSelf();
 

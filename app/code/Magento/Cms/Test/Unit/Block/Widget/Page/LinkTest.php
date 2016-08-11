@@ -30,11 +30,18 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->mockCmsPage = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false, false);
-        $this->mockResourcePage = $this->getMock('Magento\Cms\Model\ResourceModel\Page', [], [], '', false, false);
+        $this->mockCmsPage = $this->getMock(\Magento\Cms\Helper\Page::class, [], [], '', false, false);
+        $this->mockResourcePage = $this->getMock(
+            \Magento\Cms\Model\ResourceModel\Page::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
 
         $this->linkElement = $this->objectManager->getObject(
-            'Magento\Cms\Block\Widget\Page\Link',
+            \Magento\Cms\Block\Widget\Page\Link::class,
             [
                 'cmsPage' => $this->mockCmsPage,
                 'resourcePage' => $this->mockResourcePage,

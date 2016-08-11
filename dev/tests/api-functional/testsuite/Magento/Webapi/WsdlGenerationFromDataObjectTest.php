@@ -30,7 +30,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     protected function setUp()
     {
         $this->_markTestAsSoapOnly("WSDL generation tests are intended to be executed for SOAP adapter only.");
-        $this->_storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+        $this->_storeCode = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()->getCode();
         parent::setUp();
     }
@@ -63,6 +63,16 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->_checkServiceDeclaration($wsdlContent);
         $this->_checkMessagesDeclaration($wsdlContent);
         $this->_checkFaultsDeclaration($wsdlContent);
+    }
+
+    public function testNoAuthorizedServices()
+    {
+        $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV2';
+        $connection = curl_init($wsdlUrl);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        $responseContent = curl_exec($connection);
+        $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
+        $this->assertContains("Consumer is not authorized to access %resources", $responseContent);
     }
 
     public function testInvalidWsdlUrlNoServices()

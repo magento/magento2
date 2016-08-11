@@ -16,7 +16,7 @@ class CustomersMost extends AjaxBlock
     public function execute()
     {
         $output = $this->layoutFactory->create()
-            ->createBlock('Magento\Backend\Block\Dashboard\Tab\Customers\Most')
+            ->createBlock(\Magento\Backend\Block\Dashboard\Tab\Customers\Most::class)
             ->toHtml();
         $resultRaw = $this->resultRawFactory->create();
         return $resultRaw->setContents($output);

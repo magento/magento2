@@ -15,6 +15,7 @@ define([
     return {
         apiClient: null,
         config: {},
+        checkout: null,
 
         /**
          * Get Braintree api client
@@ -75,6 +76,11 @@ define([
             globalMessageList.addErrorMessage({
                 message: errorMessage
             });
-        }
+        },
+
+        /**
+         * May be triggered on Braintree SDK setup
+         */
+        onReady: function () {}
     };
 });

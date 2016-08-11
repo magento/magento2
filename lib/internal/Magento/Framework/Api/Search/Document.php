@@ -6,26 +6,9 @@
 namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\AbstractSimpleObject;
-use Magento\Framework\Api\AttributeValueFactory;
 
-class Document extends AbstractSimpleObject implements DocumentInterface
+class Document extends AbstractSimpleObject implements DocumentInterface, \IteratorAggregate
 {
-    /**
-     * @var AttributeValueFactory
-     */
-    private $attributeValueFactory;
-
-    /**
-     * @param AttributeValueFactory $attributeValueFactory
-     * @param array $data
-     */
-    public function __construct(AttributeValueFactory $attributeValueFactory, array $data = [])
-    {
-        parent::__construct($data);
-        $this->attributeValueFactory = $attributeValueFactory;
-    }
-
-
     /**
      * {@inheritdoc}
      */
@@ -47,17 +30,9 @@ class Document extends AbstractSimpleObject implements DocumentInterface
      */
     public function getCustomAttribute($attributeCode)
     {
-        $resultAttribute = null;
-        /** @var \Magento\Framework\Api\AttributeInterface[] $attributes */
-        $attributes = is_array($this->_get(self::CUSTOM_ATTRIBUTES)) ? $this->_get(self::CUSTOM_ATTRIBUTES) : [];
-        foreach ($attributes as $attribute) {
-            if ($attribute->getAttributeCode() === $attributeCode) {
-                $resultAttribute = $attribute;
-                break;
-            }
-        }
-
-        return $resultAttribute;
+        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
+            ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
+            : null;
     }
 
     /**
@@ -65,22 +40,10 @@ class Document extends AbstractSimpleObject implements DocumentInterface
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
-        $isAlreadyAdded = false;
         /** @var \Magento\Framework\Api\AttributeInterface[] $attributes */
-        $attributes = is_array($this->getCustomAttributes()) ? $this->getCustomAttributes() : [];
-        foreach ($attributes as $attribute) {
-            if ($attribute->getAttributeCode() === $attributeCode) {
-                $attribute->setValue($attributeValue);
-                $isAlreadyAdded = true;
-                break;
-            }
-        }
-        if (!$isAlreadyAdded) {
-            $attributes[] = $this->attributeValueFactory->create()
-                ->setAttributeCode($attributeCode)
-                ->setValue($attributeValue);
-        }
-        return $this->setData(self::CUSTOM_ATTRIBUTES, $attributes);
+        $attributes = $this->getCustomAttributes();
+        $attributes[$attributeCode] = $attributeValue;
+        return $this->setCustomAttributes($attributes);
     }
 
     /**
@@ -97,5 +60,16 @@ class Document extends AbstractSimpleObject implements DocumentInterface
     public function setCustomAttributes(array $attributes)
     {
         return $this->setData(self::CUSTOM_ATTRIBUTES, $attributes);
+    }
+
+    /**
+     * Implementation of \IteratorAggregate::getIterator()
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        $attributes = (array)$this->getCustomAttributes();
+        return new \ArrayIterator($attributes);
     }
 }

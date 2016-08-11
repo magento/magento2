@@ -71,7 +71,7 @@ class BackupCommand extends AbstractSetupCommand
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
@@ -115,8 +115,10 @@ class BackupCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable()
             && ($input->getOption(self::INPUT_KEY_MEDIA) || $input->getOption(self::INPUT_KEY_DB))) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // We need exit code higher than 0 here as an indication
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');
@@ -143,10 +145,12 @@ class BackupCommand extends AbstractSetupCommand
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+        return $returnValue;
     }
 
     /**
@@ -158,10 +162,10 @@ class BackupCommand extends AbstractSetupCommand
     {
         $areaCode = 'adminhtml';
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode($areaCode);
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

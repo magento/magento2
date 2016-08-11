@@ -412,13 +412,14 @@ class AdvancedPricing extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'dynamicRows',
-                        'label' => __('Tier Price'),
+                        'label' => __('Customer Group Price'),
                         'renderDefaultRecord' => false,
                         'recordTemplate' => 'record',
                         'dataScope' => '',
                         'dndConfig' => [
                             'enabled' => false,
                         ],
+                        'disabled' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
@@ -479,6 +480,11 @@ class AdvancedPricing extends AbstractModifier
                                         'dataType' => Number::NAME,
                                         'label' => __('Quantity'),
                                         'dataScope' => 'price_qty',
+                                        'validation' => [
+                                            'required-entry' => true,
+                                            'validate-greater-than-zero' => true,
+                                            'validate-digits' => true,
+                                        ],
                                     ],
                                 ],
                             ],
@@ -493,6 +499,14 @@ class AdvancedPricing extends AbstractModifier
                                         'label' => __('Price'),
                                         'enableLabel' => true,
                                         'dataScope' => 'price',
+                                        'addbefore' => $this->locator->getStore()
+                                                                     ->getBaseCurrency()
+                                                                     ->getCurrencySymbol(),
+                                        'validation' => [
+                                            'required-entry' => true,
+                                            'validate-greater-than-zero' => true,
+                                            'validate-number' => true,
+                                        ],
                                     ],
                                 ],
                             ],

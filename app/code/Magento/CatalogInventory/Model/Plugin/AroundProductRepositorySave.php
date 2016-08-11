@@ -24,6 +24,7 @@ class AroundProductRepositorySave
 
     /**
      * @var StoreManagerInterface
+     * @deprecated
      */
     protected $storeManager;
 
@@ -80,7 +81,7 @@ class AroundProductRepositorySave
 
         // set fields that the customer should not care about
         $stockItem->setProductId($product->getId());
-        $stockItem->setWebsiteId($this->storeManager->getStore($product->getStoreId())->getWebsiteId());
+        $stockItem->setWebsiteId($this->stockConfiguration->getDefaultScopeId());
 
         $this->stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);
 

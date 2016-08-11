@@ -10,11 +10,11 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, _, Component, Braintree, quote, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Vault/js/view/payment/vault-enabler'
+], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators, VaultEnabler) {
     'use strict';
-
-    var checkout;
 
     return Component.extend({
         defaults: {
@@ -23,20 +23,34 @@ define([
             active: false,
             paymentMethodNonce: null,
             grandTotalAmount: null,
+            isReviewRequired: false,
+            customerEmail: null,
+
+            /**
+             * Additional payment data
+             *
+             * {Object}
+             */
+            additionalData: {},
 
             /**
              * PayPal client configuration
              * {Object}
              */
             clientConfig: {
+                dataCollector: {
+                    paypal: true
+                },
 
                 /**
                  * Triggers when widget is loaded
-                 * @param {Object} integration
+                 * @param {Object} checkout
                  */
-                onReady: function (integration) {
-                    checkout = integration;
+                onReady: function (checkout) {
+                    Braintree.checkout = checkout;
+                    this.additionalData['device_data'] = checkout.deviceData;
                     this.enableButton();
+                    Braintree.onReady();
                 },
 
                 /**
@@ -60,7 +74,13 @@ define([
             var self = this;
 
             this._super()
-                .observe(['active']);
+                .observe(['active', 'isReviewRequired', 'customerEmail']);
+
+            this.vaultEnabler = new VaultEnabler();
+            this.vaultEnabler.setPaymentCode(this.getVaultCode());
+            this.vaultEnabler.isActivePaymentTokenEnabler.subscribe(function () {
+                self.onVaultPaymentTokenEnablerChange();
+            });
 
             this.grandTotalAmount = quote.totals()['base_grand_total'];
 
@@ -71,6 +91,8 @@ define([
                 }
             });
 
+            // for each component initialization need update property
+            this.isReviewRequired(false);
             this.initClientConfig();
 
             return this;
@@ -131,8 +153,6 @@ define([
                     this.clientConfig[name] = fn.bind(this);
                 }
             }, this);
-
-            Braintree.config = _.extend(Braintree.config, this.clientConfig);
         },
 
         /**
@@ -144,36 +164,59 @@ define([
         },
 
         /**
+         * Update quote billing address
+         * @param {Object}customer
+         * @param {Object}address
+         */
+        setBillingAddress: function (customer, address) {
+            var billingAddress = {
+                street: [address.streetAddress],
+                city: address.locality,
+                regionCode: address.region,
+                postcode: address.postalCode,
+                countryId: address.countryCodeAlpha2,
+                firstname: customer.firstName,
+                lastname: customer.lastName,
+                telephone: customer.phone
+            };
+
+            quote.billingAddress(billingAddress);
+        },
+
+        /**
          * Prepare data to place order
          * @param {Object} data
          */
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
-            this.placeOrder();
+
+            if (quote.billingAddress() === null && typeof data.details.billingAddress !== 'undefined') {
+                this.setBillingAddress(data.details, data.details.billingAddress);
+            }
+
+            if (this.isSkipOrderReview()) {
+                this.placeOrder();
+            } else {
+                this.customerEmail(data.details.email);
+                this.isReviewRequired(true);
+            }
         },
 
         /**
          * Re-init PayPal Auth Flow
          */
         reInitPayPal: function () {
-            if (!checkout) {
-                return;
+            if (Braintree.checkout) {
+                Braintree.checkout.teardown(function () {
+                    Braintree.checkout = null;
+                });
             }
-            checkout.teardown(function () {
-                checkout = null;
-            });
+
             this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
 
             Braintree.setConfig(this.clientConfig);
             Braintree.setup();
-        },
-
-        /**
-         * Triggers when customer click "Continue to PayPal" button
-         */
-        payWithPayPal: function () {
-            checkout.paypal.initAuthFlow();
         },
 
         /**
@@ -197,28 +240,18 @@ define([
          * @returns {Object}
          */
         getPayPalConfig: function () {
-            var address = quote.shippingAddress(),
-                totals = quote.totals(),
-                config = {};
+            var totals = quote.totals(),
+                config = {},
+                isActiveVaultEnabler = this.isActiveVault();
 
             config.paypal = {
                 container: 'paypal-container',
-                singleUse: true,
+                singleUse: !isActiveVaultEnabler,
                 headless: true,
-                amount: this.amount,
+                amount: this.grandTotalAmount,
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,
-                shippingAddressOverride: {
-                    recipientName: address.firstname + ' ' + address.lastname,
-                    streetAddress: address.street[0],
-                    locality: address.city,
-                    countryCodeAlpha2: address.countryId,
-                    postalCode: address.postcode,
-                    region: address.regionCode,
-                    phone: address.telephone,
-                    editable: this.isAllowOverrideShippingAddress()
-                },
 
                 /**
                  * Triggers on any Braintree error
@@ -235,11 +268,37 @@ define([
                 }
             };
 
+            config.paypal.shippingAddressOverride = this.getShippingAddress();
+
             if (this.getMerchantName()) {
                 config.paypal.displayName = this.getMerchantName();
             }
 
             return config;
+        },
+
+        /**
+         * Get shipping address
+         * @returns {Object}
+         */
+        getShippingAddress: function () {
+            var address = quote.shippingAddress();
+
+            if (address.postcode === null) {
+
+                return {};
+            }
+
+            return {
+                recipientName: address.firstname + ' ' + address.lastname,
+                streetAddress: address.street[0],
+                locality: address.city,
+                countryCodeAlpha2: address.countryId,
+                postalCode: address.postcode,
+                region: address.regionCode,
+                phone: address.telephone,
+                editable: this.isAllowOverrideShippingAddress()
+            };
         },
 
         /**
@@ -255,12 +314,18 @@ define([
          * @returns {Object}
          */
         getData: function () {
-            return {
+            var data = {
                 'method': this.getCode(),
                 'additional_data': {
                     'payment_method_nonce': this.paymentMethodNonce
                 }
             };
+
+            data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+
+            this.vaultEnabler.visitAdditionalData(data);
+
+            return data;
         },
 
         /**
@@ -273,9 +338,42 @@ define([
         },
 
         /**
+         * @returns {String}
+         */
+        getVaultCode: function () {
+            return window.checkoutConfig.payment[this.getCode()].vaultCode;
+        },
+
+        /**
+         * Check if need to skip order review
+         * @returns {Boolean}
+         */
+        isSkipOrderReview: function () {
+            return window.checkoutConfig.payment[this.getCode()].skipOrderReview;
+        },
+
+        /**
+         * Checks if vault is active
+         * @returns {Boolean}
+         */
+        isActiveVault: function () {
+            return this.vaultEnabler.isVaultEnabled() && this.vaultEnabler.isActivePaymentTokenEnabler();
+        },
+
+        /**
+         * Re-init PayPal Auth flow to use Vault
+         */
+        onVaultPaymentTokenEnablerChange: function () {
+            this.clientConfig.paypal.singleUse = !this.isActiveVault();
+            this.reInitPayPal();
+        },
+
+        /**
          * Disable submit button
          */
         disableButton: function () {
+            // stop any previous shown loaders
+            fullScreenLoader.stopLoader(true);
             fullScreenLoader.startLoader();
             $('[data-button="place"]').attr('disabled', 'disabled');
         },
@@ -286,6 +384,31 @@ define([
         enableButton: function () {
             $('[data-button="place"]').removeAttr('disabled');
             fullScreenLoader.stopLoader();
+        },
+
+        /**
+         * Triggers when customer click "Continue to PayPal" button
+         */
+        payWithPayPal: function () {
+            if (additionalValidators.validate()) {
+                Braintree.checkout.paypal.initAuthFlow();
+            }
+        },
+
+        /**
+         * Get button title
+         * @returns {String}
+         */
+        getButtonTitle: function () {
+            return this.isSkipOrderReview() ? 'Pay with PayPal' : 'Continue to PayPal';
+        },
+
+        /**
+         * Get button id
+         * @returns {String}
+         */
+        getButtonId: function () {
+            return this.getCode() + (this.isSkipOrderReview() ? '_pay_with' : '_continue_to');
         }
     });
 });

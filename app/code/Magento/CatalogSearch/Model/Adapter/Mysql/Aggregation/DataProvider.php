@@ -73,7 +73,7 @@ class DataProvider implements DataProviderInterface
         array $dimensions,
         Table $entityIdsTable
     ) {
-        $currentScope = $dimensions['scope']->getValue();
+        $currentScope = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
 
         $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $bucket->getField());
 

@@ -118,7 +118,7 @@
             }
         }
 
-        input[type="file"] {
+        input[type='file'] {
             border: 500px solid transparent;
             bottom: 0;
             cursor: pointer;
@@ -152,8 +152,8 @@
 
                 > span {
                     left: 50%;
-                    top: 50%;
                     margin: 0 0 0 -@indent__base;
+                    top: 50%;
                 }
             }
         }
@@ -175,9 +175,9 @@
     }
 
     .image-placeholder-text {
-        font-size: @image-gallery-image-title__font-size;
         bottom: 0;
         color: @color-blue-dodger;
+        font-size: @image-gallery-image-title__font-size;
         left: 0;
         line-height: 1.333;
         margin-bottom: 15%;
@@ -282,8 +282,8 @@
         color: @color-brownie;
         font-size: @font-size__s;
         line-height: 1;
-        padding: 0.6rem;
         margin: 0 .4rem .4rem 0;
+        padding: .6rem;
     }
 }
 
@@ -321,15 +321,15 @@
 
 .image-panel-controls,
 .image-panel-preview {
+    -ms-flex: 1;
     -webkit-box-flex: 1;
     -webkit-flex: 1;
-    -ms-flex: 1;
     flex: 1;
 }
 
 .image-panel-preview {
-    -webkit-align-self: center;
     -ms-flex-item-align: center;
+    -webkit-align-self: center;
     align-self: center;
 
     img {
@@ -339,9 +339,9 @@
 }
 
 .image-panel-controls {
+    -ms-flex: 0 0 33%;
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 33%;
-    -ms-flex: 0 0 33%;
     flex: 0 0 33%;
     padding-left: @indent__l;
 
@@ -402,8 +402,8 @@
 .gallery {
     //  ToDo UI: remove after new gallery images editing design implementation
     .multiselect-alt {
-        border-radius: 5px;
         border: 1px solid @color-gray80;
+        border-radius: 5px;
         color: @color-gray20;
         list-style: none;
         margin: 0;
@@ -444,12 +444,12 @@
         }
 
         label {
-            display: block;
             cursor: pointer;
+            display: block;
             padding: 6px @indent__m @indent__xs;
         }
 
-        input[type="checkbox"] {
+        input[type='checkbox'] {
             height: 0;
             margin: 0;
             opacity: 0;

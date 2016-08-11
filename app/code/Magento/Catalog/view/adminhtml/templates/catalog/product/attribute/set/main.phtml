@@ -8,6 +8,14 @@
 
 ?>
 <div class="attribute-set">
+
+    <div class="admin__data-grid-loading-mask"
+         data-role="spinner">
+        <div class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
     <div class="edit-attribute-set attribute-set-col">
         <?php echo $block->getSetFormHtml() ?>
         <script>
@@ -206,7 +214,7 @@
 
                             if( editSet.SystemNodesExists(editSet.currentNode) ) {
                                 alert({
-                                    content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
+                                    content: '<?php echo $block->escapeJs(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
                                 });
                                 return;
                             }
@@ -335,7 +343,7 @@
 
                         failure : function(o) {
                             alert({
-                                content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Sorry, we\'re unable to complete this request.')) ?>'
+                                content: '<?php echo $block->escapeJs(__('Sorry, we\'re unable to complete this request.')) ?>'
                             });
                         },
 
@@ -352,7 +360,7 @@
                         rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                             if (node.attributes.is_user_defined == 0) {
                                 alert({
-                                    content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                    content: '<?php echo $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
                                 });
                                 return false;
                             } else {
@@ -368,7 +376,7 @@
 
                             if (node.attributes.is_unassignable == 0) {
                                 alert({
-                                    content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                    content: '<?php echo $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
                                 });
                                 return false;
                             } else {
@@ -423,6 +431,7 @@
                 jQuery(function() {
                     initVars();
                     TreePanels.init();
+                    jQuery("[data-role='spinner']").hide();
                 });
                 //]]>
 

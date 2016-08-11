@@ -18,7 +18,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree'
+            \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class
         );
     }
 

@@ -7,9 +7,10 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Api\Data\ProductInterface;
 
-class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+class Grouped extends DefaultPrice implements GroupedInterface
 {
     /**
      * Reindex temporary (price result data) for all products
@@ -58,7 +59,7 @@ class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price
         }
         $connection = $this->getConnection();
         $table = $this->getIdxTable();
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             'entity_id'

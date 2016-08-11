@@ -150,7 +150,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Action'),
                 'sortable' => false,
                 'filter' => false,
-                'renderer' => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action',
+                'renderer' => \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action::class,
                 'header_css_class' => 'col-action',
                 'column_css_class' => 'col-action'
             ]

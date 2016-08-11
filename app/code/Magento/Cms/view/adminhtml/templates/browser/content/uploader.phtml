@@ -69,10 +69,16 @@ require([
         },
         done: function (e, data) {
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            var tempErrorMessage = document.createElement("div");
             $(progressSelector).css('width', '100%');
+            $('[data-action="show-error"]').children(".message").remove();
             if (data.result && !data.result.hasOwnProperty('errorcode')) {
                 $(progressSelector).removeClass('upload-progress').addClass('upload-success');
             } else {
+                tempErrorMessage.className = "message message-warning warning";
+                tempErrorMessage.innerHTML = data.result.error;
+
+                $('[data-action="show-error"]').append(tempErrorMessage);
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
             }
         },

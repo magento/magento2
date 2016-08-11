@@ -35,7 +35,6 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
         return $this->fillContainers($sections, $element);
     }
 
-
     /**
      * Create data array for filling tabs.
      * Skip Advanced Price tab
@@ -45,10 +44,10 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
      */
     protected function getFixtureFieldsByContainers(InjectableFixture $fixture)
     {
-        $tabs = parent::getFixtureFieldsByContainers($fixture);
-        if (isset($tabs['advanced-pricing'])) {
-            unset($tabs['advanced-pricing']);
+        $sections = parent::getFixtureFieldsByContainers($fixture);
+        if (isset($sections['advanced-pricing'])) {
+            unset($sections['advanced-pricing']);
         }
-        return $tabs;
+        return $sections;
     }
 }

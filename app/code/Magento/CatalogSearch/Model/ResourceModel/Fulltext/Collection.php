@@ -5,10 +5,15 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
+use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Response\QueryResponse;
+use Magento\Framework\Search\Request\EmptyRequestDataException;
+use Magento\Framework\Search\Request\NonExistingRequestNameException;
+use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -79,6 +84,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $searchResult;
 
     /**
+     * @var SearchResultFactory
+     */
+    private $searchResultFactory;
+
+    /**
      * @var \Magento\Framework\Api\FilterBuilder
      */
     private $filterBuilder;
@@ -103,13 +113,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param \Magento\Search\Model\QueryFactory $catalogSearchData
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $searchRequestName
+     * @param SearchResultFactory $searchResultFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -132,15 +142,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         \Magento\Search\Model\QueryFactory $catalogSearchData,
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        $searchRequestName = 'catalog_view_container'
+        $searchRequestName = 'catalog_view_container',
+        SearchResultFactory $searchResultFactory = null
     ) {
         $this->queryFactory = $catalogSearchData;
+        if ($searchResultFactory === null) {
+            $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
+        }
         parent::__construct(
             $entityFactory,
             $logger,
@@ -161,7 +175,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitation,
             $connection
         );
         $this->requestBuilder = $requestBuilder;
@@ -177,7 +190,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private function getSearch()
     {
         if ($this->search === null) {
-            $this->search = ObjectManager::getInstance()->get('\Magento\Search\Api\SearchInterface');
+            $this->search = ObjectManager::getInstance()->get(\Magento\Search\Api\SearchInterface::class);
         }
         return $this->search;
     }
@@ -200,7 +213,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         if ($this->searchCriteriaBuilder === null) {
             $this->searchCriteriaBuilder = ObjectManager::getInstance()
-                ->get('\Magento\Framework\Api\Search\SearchCriteriaBuilder');
+                ->get(\Magento\Framework\Api\Search\SearchCriteriaBuilder::class);
         }
         return $this->searchCriteriaBuilder;
     }
@@ -222,7 +235,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private function getFilterBuilder()
     {
         if ($this->filterBuilder === null) {
-            $this->filterBuilder = ObjectManager::getInstance()->get('\Magento\Framework\Api\FilterBuilder');
+            $this->filterBuilder = ObjectManager::getInstance()->get(\Magento\Framework\Api\FilterBuilder::class);
         }
         return $this->filterBuilder;
     }
@@ -310,7 +323,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchCriteria->setRequestName($this->searchRequestName);
-        $this->searchResult = $this->search->search($searchCriteria);
+        try {
+            $this->searchResult = $this->getSearch()->search($searchCriteria);
+        } catch (EmptyRequestDataException $e) {
+            /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
+            $this->searchResult = $this->searchResultFactory->create()->setItems([]);
+        } catch (NonExistingRequestNameException $e) {
+            $this->_logger->error($e->getMessage());
+            throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+        }
 
         $temporaryStorage = $this->temporaryStorageFactory->create();
         $table = $temporaryStorage->storeApiDocuments($this->searchResult->getItems());
@@ -378,14 +399,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_renderFilters();
         $result = [];
         $aggregations = $this->searchResult->getAggregations();
-        $bucket = $aggregations->getBucket($field . '_bucket');
-        if ($bucket) {
-            foreach ($bucket->getValues() as $value) {
-                $metrics = $value->getMetrics();
-                $result[$metrics['value']] = $metrics;
+        // This behavior is for case with empty object when we got EmptyRequestDataException
+        if (null !== $aggregations) {
+            $bucket = $aggregations->getBucket($field . RequestGenerator::BUCKET_SUFFIX);
+            if ($bucket) {
+                foreach ($bucket->getValues() as $value) {
+                    $metrics = $value->getMetrics();
+                    $result[$metrics['value']] = $metrics;
+                }
+            } else {
+                throw new StateException(__('Bucket does not exist'));
             }
-        } else {
-            throw new StateException(__('Bucket do not exists'));
         }
         return $result;
     }

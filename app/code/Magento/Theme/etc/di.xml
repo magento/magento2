@@ -98,7 +98,7 @@
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="theme_uninstall" xsi:type="object">Magento\Theme\Console\Command\ThemeUninstallCommand</item>
@@ -210,6 +210,15 @@
                 <item name="footer_absolute_footer" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
+                </item>
+                <item name="default_robots" xsi:type="array">
+                    <item name="path" xsi:type="string">design/search_engine_robots/default_robots</item>
+                    <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
+                </item>
+                <item name="custom_instructions" xsi:type="array">
+                    <item name="path" xsi:type="string">design/search_engine_robots/custom_instructions</item>
+                    <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Admin\Robots</item>
+                    <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
                 </item>
             </argument>
         </arguments>

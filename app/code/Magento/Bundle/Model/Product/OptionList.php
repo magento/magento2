@@ -71,10 +71,11 @@ class OptionList
             $this->dataObjectHelper->populateWithArray(
                 $optionDataObject,
                 $option->getData(),
-                '\Magento\Bundle\Api\Data\OptionInterface'
+                \Magento\Bundle\Api\Data\OptionInterface::class
             );
             $optionDataObject->setOptionId($option->getOptionId())
                 ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())
+                ->setDefaultTitle($option->getDefaultTitle())
                 ->setSku($product->getSku())
                 ->setProductLinks($productLinks);
             $optionList[] = $optionDataObject;

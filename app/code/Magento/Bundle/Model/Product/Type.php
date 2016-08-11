@@ -456,7 +456,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $selectionsCollection = $this->_bundleCollection->create()
                 ->addAttributeToSelect($this->_config->getProductAttributes())
                 ->addAttributeToSelect('tax_class_id')//used for calculation item taxes in Bundle with Dynamic Price
-                ->setFlag('require_stock_items', true)
                 ->setFlag('product_children', true)
                 ->setPositionOrder()
                 ->addStoreFilter($this->getStoreFilter($product))
@@ -806,7 +805,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedSelections = $this->_bundleCollection
                 ->create()
                 ->addAttributeToSelect('*')
-                ->setFlag('require_stock_items', true)
                 ->setFlag('product_children', true)
                 ->addStoreFilter($this->getStoreFilter($product))
                 ->setStoreId($storeId)

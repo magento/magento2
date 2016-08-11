@@ -19,6 +19,8 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * api-functional test for \Magento\Integration\Model\CustomerTokenService.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTokenServiceTest extends WebapiAbstract
 {
@@ -57,15 +59,17 @@ class CustomerTokenServiceTest extends WebapiAbstract
     public function setUp()
     {
         $this->_markTestAsRestOnly();
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\CustomerTokenService');
+        $this->tokenService = Bootstrap::getObjectManager()->get(
+            \Magento\Integration\Model\CustomerTokenService::class
+        );
         $this->customerAccountManagement = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\AccountManagementInterface'
+            \Magento\Customer\Api\AccountManagementInterface::class
         );
         $tokenCollectionFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory'
+            \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class
         );
         $this->tokenCollection = $tokenCollectionFactory->create();
-        $this->userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $this->userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
         /** @var TokenThrottlerConfig $tokenThrottlerConfig */
         $tokenThrottlerConfig = Bootstrap::getObjectManager()->get(TokenThrottlerConfig::class);
         $this->attemptsCountToLockAccount = $tokenThrottlerConfig->getMaxFailuresCount();
@@ -161,16 +165,16 @@ class CustomerTokenServiceTest extends WebapiAbstract
         $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         $exceptionData = $this->processRestExceptionResult($e);
         $expectedExceptionData = [
-            'message' => InputException::DEFAULT_MESSAGE,
+            'message' => 'One or more input exceptions have occurred.',
             'errors' => [
                 [
-                    'message' => InputException::REQUIRED_FIELD,
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'username',
                     ],
                 ],
                 [
-                    'message' => InputException::REQUIRED_FIELD,
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'password',
                     ]

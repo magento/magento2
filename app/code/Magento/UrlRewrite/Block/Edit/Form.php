@@ -257,7 +257,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             }
             /** @var $renderer \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element */
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $storeElement->setRenderer($renderer);
         }

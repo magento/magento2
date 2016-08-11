@@ -23,7 +23,7 @@ class Address extends \Magento\Sales\Controller\Adminhtml\Order
     public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
-        $address = $this->_objectManager->create('Magento\Sales\Model\Order\Address')->load($addressId);
+        $address = $this->_objectManager->create(\Magento\Sales\Model\Order\Address::class)->load($addressId);
         if ($address->getId()) {
             $this->_coreRegistry->register('order_address', $address);
             $resultPage = $this->resultPageFactory->create();

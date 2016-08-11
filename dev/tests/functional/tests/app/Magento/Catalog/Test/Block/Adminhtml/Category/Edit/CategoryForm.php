@@ -48,11 +48,15 @@ class CategoryForm extends FormSections
     {
         if ($fixture->hasData('store_id')) {
             $store = $fixture->getStoreId();
+            $this->browser->find($this->header)->hover();
             $storeSwitcherBlock = $this->browser->find($this->storeSwitcherBlock);
             $storeSwitcherBlock->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')->setValue($store);
             $modalElement = $this->browser->find($this->confirmModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $modalElement]);
+            $modal = $this->blockFactory->create(
+                \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+                ['element' => $modalElement]
+            );
             $modal->acceptAlert();
         }
         return parent::fill($fixture, $element);

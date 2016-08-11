@@ -1233,6 +1233,15 @@ class InstallSchema implements InstallSchemaInterface
                 $installer->getIdxName('catalog_category_product', ['product_id']),
                 ['product_id']
             )
+            ->addIndex(
+                $installer->getIdxName(
+                    'catalog_category_product',
+                    ['category_id', 'product_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['category_id', 'product_id'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+            )
             ->addForeignKey(
                 $installer->getFkName('catalog_category_product', 'product_id', 'catalog_product_entity', 'entity_id'),
                 'product_id',

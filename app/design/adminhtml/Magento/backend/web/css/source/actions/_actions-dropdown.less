@@ -9,7 +9,7 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 //
 //  Utilities
@@ -36,8 +36,8 @@
 ) when (@_align = right) {
     .admin__action-dropdown-text {
         &:after {
-            right: -(@component__shadow-size__base + 1);
             left: 0;
+            right: -(@component__shadow-size__base + 1);
         }
     }
 
@@ -161,10 +161,6 @@
 
 .selectmenu {
     &:extend(.abs-form-control-pattern);
-    &._focus {
-        &:extend(.abs-form-control-pattern:focus);
-    }
-
     display: inline-block;
     padding-left: 1.5rem;
     position: relative;
@@ -176,9 +172,13 @@
         &:extend(.abs-form-control-pattern:hover);
     }
 
+    &._focus {
+        &:extend(.abs-form-control-pattern:focus);
+    }
+
     &._active {
-        z-index: @action-select__z-index;
         border-color: @action__active__border-color;
+        z-index: @action-select__z-index;
     }
 
     .action-save,
@@ -226,10 +226,8 @@
 .selectmenu-value {
     display: inline-block;
 
-    input[type="text"] {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
+    input[type='text'] {
+        .lib-css(appearance, none, 1);
         border: 0;
         display: inline;
         margin: 0;
@@ -302,7 +300,7 @@
     left: -1px;
     margin-top: 3px;
     max-width: 20rem;
-    min-width: ~"calc(100% + 2px)";
+    min-width: ~'calc(100% + 2px)';
     position: absolute;
     top: 100%;
 
@@ -359,8 +357,8 @@
     }
 
     .admin__control-text {
-        width: 5.4rem;
         margin: 0;
+        width: 5.4rem;
     }
 
     li._edit & {
@@ -369,9 +367,7 @@
 }
 
 .selectmenu-item-action {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+    .lib-css(appearance, none, 1);
     background: transparent;
     border: 0;
     color: @text__color;

@@ -62,7 +62,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::FORM_NAME . '.affectedAttributeSetError' => $this->getAttributeSetErrorContainer(),
+                        'affectedAttributeSetError' => $this->getAttributeSetErrorContainer(),
                         'affectedAttributeSetCurrent' => [
                             'arguments' => [
                                 'data' => [
@@ -73,7 +73,6 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'prefer' => 'radio',
                                         'description' => __('Add configurable attributes to the current Attribute Set'),
                                         'dataScope' => 'configurableAffectedAttributeSet',
-                                        'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'current',
                                             'false' => '0',
@@ -96,7 +95,6 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'Add configurable attributes to the new Attribute Set based on current'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
-                                        'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'new',
                                             'false' => '0',
@@ -120,7 +118,6 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'Add configurable attributes to the existing Attribute Set'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
-                                        'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'existing',
                                             'false' => '0',
@@ -170,7 +167,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' => 'configurableVariations',
+                                        'targetName' => 'product_form.product_form.configurableVariations',
                                         'actionName' => 'addNewAttributeSetHandler',
                                     ],
                                 ],
@@ -199,6 +196,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         'formElement' => Form\Element\Input::NAME,
                         'componentType' => Form\Field::NAME,
                         'dataScope' => 'configurableNewAttributeSetName',
+                        'additionalClasses' => 'new-attribute-set-name',
                         'label' => __('New Attribute Set Name'),
                         'sortOrder' => 40,
                         'validation' => ['required-entry' => true],

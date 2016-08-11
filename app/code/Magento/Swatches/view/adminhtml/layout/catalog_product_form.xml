@@ -9,6 +9,5 @@
     <head>
         <css src="Magento_Swatches::css/swatches.css"/>
         <css src="jquery/colorpicker/css/colorpicker.css"/>
-        <link src="jquery/colorpicker/js/colorpicker.js"/>
     </head>
 </page>

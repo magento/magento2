@@ -25,7 +25,7 @@ To,To
 Message,Message
 "Edit Order #%1","Edit Order #%1"
 "Create New Order for %1 in %2","Create New Order for %1 in %2"
-"Create New Order for New Customer in %1","Create New Order for New Customer in %1"
+"Create New Order in %1","Create New Order in %1"
 "Create New Order for %1","Create New Order for %1"
 "Create New Order for New Customer","Create New Order for New Customer"
 "Items Ordered","Items Ordered"

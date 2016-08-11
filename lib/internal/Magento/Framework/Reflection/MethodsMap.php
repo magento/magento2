@@ -18,7 +18,7 @@ class MethodsMap
 {
     const SERVICE_METHOD_PARAMS_CACHE_PREFIX = 'service_method_params_';
     const SERVICE_INTERFACE_METHODS_CACHE_PREFIX = 'serviceInterfaceMethodsMap';
-    const BASE_MODEL_CLASS = 'Magento\Framework\Model\AbstractExtensibleModel';
+    const BASE_MODEL_CLASS = \Magento\Framework\Model\AbstractExtensibleModel::class;
 
     const METHOD_META_NAME = 'name';
     const METHOD_META_TYPE = 'type';

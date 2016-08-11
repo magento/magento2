@@ -44,6 +44,7 @@ class BackendAppList
         if ($appName && isset($this->backendApps[$appName])) {
             return $this->backendApps[$appName];
         }
+        return null;
     }
 
     /**

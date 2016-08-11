@@ -18,7 +18,7 @@ define([
         optionsSelector: '.product-custom-option',
         optionConfig: {},
         optionHandlers: {},
-        optionTemplate: '<%- data.label %>' +
+        optionTemplate: '<%= data.label %>' +
         '<% if (data.finalPrice.value) { %>' +
         ' +<%- data.finalPrice.formatted %>' +
         '<% } %>',
@@ -27,6 +27,13 @@ define([
 
     $.widget('mage.priceOptions', {
         options: globalOptions,
+
+        /**
+         * @private
+         */
+        _init: function initPriceBundle() {
+            $(this.options.optionsSelector, this.element).trigger('change');
+        },
 
         /**
          * Widget creating method.
@@ -68,7 +75,6 @@ define([
             }
             $(this.options.priceHolderSelector).trigger('updatePrice', changes);
         },
-
 
         /**
          * Helper to fix issue with option nodes:
@@ -167,7 +173,10 @@ define([
                 break;
 
             case 'radio':
-
+                if (element.is(':checked')) {
+                    changes[optionHash] = optionConfig[optionValue] && optionConfig[optionValue].prices || {};
+                }
+                break;
             case 'select-one':
                 changes[optionHash] = optionConfig[optionValue] && optionConfig[optionValue].prices || {};
                 break;

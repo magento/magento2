@@ -11,8 +11,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductAttributeInGrid
- * Assert that created product attribute is found in grid
+ * Assert that created product attribute is found in grid.
  */
 class AssertProductAttributeInGrid extends AbstractConstraint
 {

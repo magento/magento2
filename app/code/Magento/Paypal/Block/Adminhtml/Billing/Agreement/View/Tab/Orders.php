@@ -101,6 +101,16 @@ class Orders extends ExtendedGrid implements TabInterface
     }
 
     /**
+     * Get grid url
+     *
+     * @return string
+     */
+    public function getGridUrl()
+    {
+        return $this->getUrl('paypal/billing_agreement/ordersGrid', ['_current' => true]);
+    }
+
+    /**
      * Apply various selection filters to prepare the sales order grid collection.
      *
      * @return $this

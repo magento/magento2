@@ -23,14 +23,14 @@ class DeleteEntityRowTest extends \PHPUnit_Framework_TestCase
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
     protected function setUp()
     {
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -40,7 +40,7 @@ class DeleteEntityRowTest extends \PHPUnit_Framework_TestCase
         );
 
         $metadata = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',
@@ -60,7 +60,7 @@ class DeleteEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connection);
 
         $this->metadataPool = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',

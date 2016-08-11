@@ -60,16 +60,14 @@ class AuthSession
      */
     public function aroundProlong(Session $session, \Closure $proceed)
     {
-        if (!$this->isSessionCheckRequest()) {
-            if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
-                $session->destroy();
-                $this->addUserLogoutNotification();
-                return null;
-            }
-            $result = $proceed();
-            $this->sessionsManager->processProlong();
-            return $result;
+        if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
+            $session->destroy();
+            $this->addUserLogoutNotification();
+            return null;
         }
+        $result = $proceed();
+        $this->sessionsManager->processProlong();
+        return $result;
     }
 
     /**
@@ -88,16 +86,6 @@ class AuthSession
         }
 
         return $this;
-    }
-
-    /**
-     * Check if a request is session check
-     *
-     * @return bool
-     */
-    private function isSessionCheckRequest()
-    {
-        return $this->request->getModuleName() == 'security' && $this->request->getActionName() == 'check';
     }
 
     /**

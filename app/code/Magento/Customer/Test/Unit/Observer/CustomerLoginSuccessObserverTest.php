@@ -45,7 +45,7 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->customerModelMock = $this->getMock(
-            'Magento\Customer\Model\Customer',
+            \Magento\Customer\Model\Customer::class,
             ['getId'],
             [],
             '',
@@ -62,8 +62,8 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $customerId = 1;
-        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getData'], [], '', false);
+        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getData'], [], '', false);
         $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);

@@ -51,7 +51,19 @@ var config = {
     },
     "deps": [
         "jquery/jquery-migrate"
-    ]
+    ],
+    "config": {
+        "mixins": {
+            "jquery/jstree/jquery.jstree": {
+                "mage/backend/jstree-mixin": true
+            }
+        },
+        "text": {
+            "headers": {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        }
+    }
 };
 
 require(['jquery'], function ($) {

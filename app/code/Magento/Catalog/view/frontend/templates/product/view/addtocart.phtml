@@ -40,7 +40,6 @@
     </div>
 </div>
 <?php endif; ?>
-<?php if ($block->isRedirectToCartEnabled()) : ?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
@@ -50,28 +49,14 @@
         }
     }
 </script>
-<?php else : ?>
-<script>
-    require([
-        'jquery',
-        'mage/mage',
-        'Magento_Catalog/product/view/validation',
-        'Magento_Catalog/js/catalog-add-to-cart'
-    ], function ($) {
-        'use strict';
-
-        $('#product_addtocart_form').mage('validation', {
-            radioCheckboxClosest: '.nested',
-            submitHandler: function (form) {
-                var widget = $(form).catalogAddToCart({
-                    bindSubmit: false
-                });
-
-                widget.catalogAddToCart('submitForm', $(form));
-
-                return false;
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "catalogAddToCart": {
+                "bindSubmit": false
             }
-        });
-    });
+        }
+    }
 </script>
 <?php endif; ?>

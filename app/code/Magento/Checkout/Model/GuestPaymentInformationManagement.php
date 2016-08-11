@@ -80,7 +80,10 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Cannot place order'), $e);
+            throw new CouldNotSaveException(
+                __('An error occurred on the server. Please try to place the order again.'),
+                $e
+            );
         }
         return $orderId;
     }

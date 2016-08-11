@@ -20,7 +20,7 @@ class Save extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $model = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Group');
+        $model = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Group::class);
 
         $model->setAttributeGroupName(
             $this->getRequest()->getParam('attribute_group_name')

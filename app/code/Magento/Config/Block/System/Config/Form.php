@@ -235,7 +235,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getDependence()
     {
         if (!$this->getChildBlock('element_dependence')) {
-            $this->addChild('element_dependence', 'Magento\Backend\Block\Widget\Form\Element\Dependence');
+            $this->addChild('element_dependence', \Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         }
         return $this->getChildBlock('element_dependence');
     }
@@ -361,7 +361,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
                 'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
-                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite())
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
+                'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore())
             ]
         );
         $field->populateInput($formField);
@@ -503,6 +504,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Check if can use restore value
+     *
+     * @param int $fieldValue
+     * @return bool
+     */
+    public function isCanRestoreToDefault($fieldValue)
+    {
+        if ($this->getScope() == self::SCOPE_DEFAULT && $fieldValue) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Retrieve current scope
      *
      * @return string
@@ -594,9 +609,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getAdditionalElementTypes()
     {
         return [
-            'allowspecific' => 'Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific',
-            'image' => 'Magento\Config\Block\System\Config\Form\Field\Image',
-            'file' => 'Magento\Config\Block\System\Config\Form\Field\File'
+            'allowspecific' => \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            'image' => \Magento\Config\Block\System\Config\Form\Field\Image::class,
+            'file' => \Magento\Config\Block\System\Config\Form\Field\File::class
         ];
     }
 

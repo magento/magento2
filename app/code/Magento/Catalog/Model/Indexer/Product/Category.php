@@ -24,4 +24,30 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
     ) {
         parent::__construct($fullActionFactory, $rowsActionFactory, $indexerRegistry);
     }
+
+    /**
+     * Add tags to cache context
+     *
+     * @return void
+     */
+    protected function registerTags()
+    {
+        $this->getCacheContext()->registerTags(
+            [
+                \Magento\Catalog\Model\Category::CACHE_TAG,
+                \Magento\Catalog\Model\Product::CACHE_TAG
+            ]
+        );
+    }
+
+    /**
+     * Add entities to cache context
+     *
+     * @param int[] $ids
+     * @return void
+     */
+    protected function registerEntities($ids)
+    {
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+    }
 }

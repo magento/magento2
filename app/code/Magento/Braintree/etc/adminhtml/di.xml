@@ -19,29 +19,26 @@
         </arguments>
     </type>
 
-    <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
-        <arguments>
-            <argument name="options" xsi:type="array">
-                <item xsi:type="object" name="braintree">BraintreeFacade</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="BraintreeAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\Braintree\Gateway\Request\CustomerDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\Braintree\Gateway\Request\PaymentDataBuilder</item>
+                <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="vault" xsi:type="string">Magento\Braintree\Gateway\Request\VaultDataBuilder</item>
+                <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeVaultAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeVaultAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\Braintree\Gateway\Request\CustomerDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\Braintree\Gateway\Request\PaymentDataBuilder</item>
+                <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
+                <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>

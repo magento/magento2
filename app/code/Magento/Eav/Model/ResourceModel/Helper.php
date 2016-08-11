@@ -80,6 +80,6 @@ class Helper extends \Magento\Framework\DB\Helper
         foreach ($selects as $selectGroup) {
             $mainGroup = array_merge($mainGroup, $selectGroup);
         }
-        return [$mainGroup];
+        return $mainGroup;
     }
 }

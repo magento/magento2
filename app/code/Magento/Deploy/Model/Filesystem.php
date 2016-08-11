@@ -116,7 +116,8 @@ class Filesystem
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
-        $this->functionCallPath = 'php -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
+        $this->functionCallPath =
+            PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     /**
@@ -137,10 +138,11 @@ class Filesystem
                 DirectoryList::TMP_MATERIALIZATION_DIR
             ]
         );
-        // Trigger static assets compilation and deployment
-        $this->deployStaticContent($output);
+        
         // Trigger code generation
         $this->compile($output);
+        // Trigger static assets compilation and deployment
+        $this->deployStaticContent($output);
     }
 
     /**

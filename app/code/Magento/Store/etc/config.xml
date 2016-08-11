@@ -76,7 +76,7 @@
                 <base_link_url>{{secure_base_url}}</base_link_url>
                 <use_in_frontend>0</use_in_frontend>
                 <use_in_adminhtml>0</use_in_adminhtml>
-                <offloader_header>SSL_OFFLOADED</offloader_header>
+                <offloader_header>X-Forwarded-Proto</offloader_header>
             </secure>
             <session>
                 <use_remote_addr>0</use_remote_addr>

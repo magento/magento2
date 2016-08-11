@@ -35,6 +35,9 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCartPriceRuleForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCatalogPriceRuleForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnProductForm" />
         </variation>
     </testCase>
 </config>

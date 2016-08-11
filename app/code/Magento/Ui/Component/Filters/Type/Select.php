@@ -96,9 +96,14 @@ class Select extends AbstractFilter
     {
         if (isset($this->filterData[$this->getName()])) {
             $value = $this->filterData[$this->getName()];
-            $conditionType = is_array($value) ? 'in' : 'eq';
 
             if (!empty($value) || is_numeric($value)) {
+                if (is_array($value)) {
+                    $conditionType = 'in';
+                } else {
+                    $dataType = $this->getData('config/dataType');
+                    $conditionType = $dataType == 'multiselect' ? 'finset' : 'eq';
+                }
                 $filter = $this->filterBuilder->setConditionType($conditionType)
                     ->setField($this->getName())
                     ->setValue($value)

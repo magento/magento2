@@ -21,7 +21,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->media = $this->objectManagerHelper->getObject(
-            'Magento\CatalogImportExport\Model\Import\Product\Validator\Media',
+            \Magento\CatalogImportExport\Model\Import\Product\Validator\Media::class,
             [
                 
             ]
@@ -50,7 +50,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     public function testIsValidClearMessagesCall()
     {
         $media = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\Validator\Media',
+            \Magento\CatalogImportExport\Model\Import\Product\Validator\Media::class,
             ['_clearMessages'],
             [],
             '',

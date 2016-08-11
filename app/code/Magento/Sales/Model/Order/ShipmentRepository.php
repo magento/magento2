@@ -91,7 +91,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-
+        $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
 

@@ -9,8 +9,10 @@ use Magento\Ui\Component\Form\Element\MultiSelect;
 
 /**
  * Class MultiSelectTest
+ *
+ * @method MultiSelect getModel
  */
-class MultiSelectTest extends AbstractOptionsFieldTest
+class MultiSelectTest extends AbstractElementTest
 {
     /**
      * {@inheritdoc}

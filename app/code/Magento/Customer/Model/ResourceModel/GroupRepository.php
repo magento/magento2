@@ -109,12 +109,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         /** @var \Magento\Customer\Model\Group $groupModel */
         $groupModel = null;
-        if ($group->getId()) {
+        if ($group->getId() || (string)$group->getId() === '0') {
             $this->_verifyTaxClassModel($group->getTaxClassId(), $group);
             $groupModel = $this->groupRegistry->retrieve($group->getId());
             $groupDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
                 $group,
-                '\Magento\Customer\Api\Data\GroupInterface'
+                \Magento\Customer\Api\Data\GroupInterface::class
             );
             foreach ($groupDataAttributes as $attributeCode => $attributeData) {
                 $groupModel->setDataUsingMethod($attributeCode, $attributeData);
@@ -175,7 +175,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         /** @var \Magento\Customer\Model\ResourceModel\Group\Collection $collection */
         $collection = $this->groupFactory->create()->getCollection();
-        $groupInterfaceName = 'Magento\Customer\Api\Data\GroupInterface';
+        $groupInterfaceName = \Magento\Customer\Api\Data\GroupInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $groupInterfaceName);
         $collection->addTaxClass();
 
@@ -317,7 +317,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     {
         $exception = new InputException();
         if (!\Zend_Validate::is($group->getCode(), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'code']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'code']));
         }
 
         if ($exception->wasErrorAdded()) {

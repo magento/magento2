@@ -42,6 +42,6 @@ class ResolutionRules extends Template
      */
     public function getJson()
     {
-        return json_encode($this->rulesReader->read());
+        return json_encode($this->rulesReader->read(), JSON_FORCE_OBJECT);
     }
 }

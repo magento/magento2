@@ -36,10 +36,8 @@
             <!-- /ko -->
         </div>
 
-        <!-- ko if: getCartParam('possible_onepage_checkout') -->
-            <!-- ko foreach: getRegion('subtotalContainer') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
+        <!-- ko foreach: getRegion('subtotalContainer') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
 
         <!-- ko foreach: getRegion('extraInfo') -->
@@ -53,8 +51,14 @@
                         id="top-cart-btn-checkout"
                         type="button"
                         class="action primary checkout"
-                        data-bind="attr: {title: $t('Go to Checkout')}">
-                    <!-- ko i18n: 'Go to Checkout' --><!-- /ko -->
+                        data-action="close"
+                        data-bind="
+                            attr: {
+                                title: $t('Proceed to Checkout')
+                            },
+                            click: closeMinicart()
+                        ">
+                    <!-- ko i18n: 'Proceed to Checkout' --><!-- /ko -->
                 </button>
                 <div data-bind="html: getCartParam('extra_actions')"></div>
             </div>

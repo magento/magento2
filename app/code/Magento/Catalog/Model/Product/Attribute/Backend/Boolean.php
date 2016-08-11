@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean as BooleanSource;
+
 /**
  * Product attribute for enable/disable option
  *
@@ -22,7 +24,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     {
         $attributeCode = $this->getAttribute()->getName();
         if ($object->getData('use_config_' . $attributeCode)) {
-            $object->setData($attributeCode, '');
+            $object->setData($attributeCode, BooleanSource::VALUE_USE_CONFIG);
         }
         return $this;
     }

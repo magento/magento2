@@ -68,7 +68,7 @@ class RollbackCommand extends AbstractSetupCommand
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
@@ -112,8 +112,10 @@ class RollbackCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable() && ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)
                 || $input->getOption(self::INPUT_KEY_DB_BACKUP_FILE))) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
@@ -123,17 +125,20 @@ class RollbackCommand extends AbstractSetupCommand
                 false
             );
             if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
-                return;
+                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
             $this->doRollback($input, $output);
             $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
 
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+        return $returnValue;
     }
 
     /**
@@ -177,10 +182,10 @@ class RollbackCommand extends AbstractSetupCommand
     {
         $areaCode = 'adminhtml';
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode($areaCode);
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

@@ -7,7 +7,8 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product linked products collection
@@ -55,7 +56,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -77,8 +78,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
-     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -102,11 +101,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
-        MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
-        $this->metadataPool = $metadataPool;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -127,11 +123,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitation,
             $connection
         );
     }
-
 
     /**
      * Declare link model and initialize type attributes join
@@ -225,7 +219,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             if (!is_array($products)) {
                 $products = [$products];
             }
-            $this->getSelect()->where('links.product_id IN (?)', $products);
+            $identifierField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
+            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
             $this->_hasLinkFilter = true;
         }
 
@@ -264,6 +259,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         if ($this->getLinkModel()) {
             $this->_joinLinks();
+            $this->joinProductsToLinks();
         }
         return parent::_beforeLoad();
     }
@@ -283,7 +279,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         if ($this->getProduct() && $this->getProduct()->getId()) {
             $linkFieldId = $this->getProduct()->getData(
                 $linkField
@@ -424,5 +420,33 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             }
         }
         return $this;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     * @deprecated
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Join Product To Links
+     * @return void
+     */
+    private function joinProductsToLinks()
+    {
+        if ($this->_hasLinkFilter) {
+            $metaDataPool = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $linkField = $metaDataPool->getLinkField();
+            $entityTable = $metaDataPool->getEntityTable();
+            $this->getSelect()
+                ->join(['product_entity_table' => $entityTable], "links.product_id = product_entity_table.$linkField", []);
+        }
     }
 }

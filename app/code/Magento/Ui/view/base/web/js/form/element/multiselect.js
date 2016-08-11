@@ -17,9 +17,18 @@ define([
         },
 
         /**
-         * Splits incoming string value.
-         *
-         * @returns {Array}
+         * @inheritdoc
+         */
+        setInitialValue: function () {
+            this._super();
+
+            this.initialValue = utils.copy(this.initialValue);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
          */
         normalizeData: function (value) {
             if (utils.isEmpty(value)) {
@@ -30,15 +39,50 @@ define([
         },
 
         /**
-         * Defines if value has changed
-         *
-         * @returns {Boolean}
+         * @inheritdoc
+         */
+        getInitialValue: function () {
+            var values = [
+                    this.normalizeData(this.source.get(this.dataScope)),
+                    this.normalizeData(this.default)
+                ],
+                value;
+
+            values.some(function (v) {
+                return _.isArray(v) && (value = utils.copy(v)) && !_.isEmpty(v);
+            });
+
+            return value;
+        },
+
+        /**
+         * @inheritdoc
          */
         hasChanged: function () {
             var value = this.value(),
                 initial = this.initialValue;
 
             return !utils.equalArrays(value, initial);
+        },
+
+        /**
+         * @inheritdoc
+         */
+        reset: function () {
+            this.value(utils.copy(this.initialValue));
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        clear: function () {
+            this.value([]);
+            this.error(false);
+
+            return this;
         }
     });
 });

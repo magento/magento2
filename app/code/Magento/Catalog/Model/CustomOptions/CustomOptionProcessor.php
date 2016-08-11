@@ -25,6 +25,9 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /** @var CustomOptionFactory  */
     protected $customOptionFactory;
 
+    /** @var \Magento\Catalog\Model\Product\Option\UrlBuilder */
+    private $urlBuilder;
+
     /**
      * @param DataObject\Factory $objectFactory
      * @param ProductOptionFactory $productOptionFactory
@@ -62,7 +65,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
         }
         return null;
     }
-
 
     /**
      * @inheritDoc
@@ -117,10 +119,64 @@ class CustomOptionProcessor implements CartItemProcessorInterface
             $option = $this->customOptionFactory->create();
             $option->setOptionId($optionId);
             if (is_array($optionValue)) {
+                $optionValue = $this->processFileOptionValue($optionValue);
+                $optionValue = $this->processDateOptionValue($optionValue);
                 $optionValue = implode(',', $optionValue);
             }
             $option->setOptionValue($optionValue);
             $optionValue = $option;
         }
+    }
+
+    /**
+     * Returns option value with file built URL
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processFileOptionValue(array $optionValue)
+    {
+        if (array_key_exists('url', $optionValue) &&
+            array_key_exists('route', $optionValue['url']) &&
+            array_key_exists('params', $optionValue['url'])
+        ) {
+            $optionValue['url'] = $this->getUrlBuilder()->getUrl(
+                $optionValue['url']['route'],
+                $optionValue['url']['params']
+            );
+        }
+        return $optionValue;
+    }
+
+    /**
+     * Returns date option value only with 'date_internal data
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processDateOptionValue(array $optionValue)
+    {
+        if (array_key_exists('date_internal', $optionValue)
+        ) {
+            $closure = function ($key) {
+                return $key === 'date_internal';
+            };
+            $optionValue = array_filter($optionValue, $closure, ARRAY_FILTER_USE_KEY);
+        }
+        return $optionValue;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
+     *
+     * @deprecated
+     */
+    private function getUrlBuilder()
+    {
+        if ($this->urlBuilder === null) {
+            $this->urlBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
+        }
+        return $this->urlBuilder;
     }
 }

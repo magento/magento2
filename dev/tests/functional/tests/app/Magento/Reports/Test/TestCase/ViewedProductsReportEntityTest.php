@@ -11,6 +11,7 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Cms\Test\Page\CmsIndex;
 
 /**
  * Preconditions:
@@ -62,10 +63,17 @@ class ViewedProductsReportEntityTest extends Injectable
      * @var CatalogProductIndex
      */
     protected $catalogProductIndexPage;
+    /**
+     * Catalog product index page
+     *
+     * @var CmsIndex
+     */
+    protected $cmsIndex;
 
     /**
      * Inject pages
      *
+     * @param CmsIndex $cmsIndex
      * @param ProductReportView $productReportView
      * @param FixtureFactory $fixtureFactory
      * @param BrowserInterface $browser
@@ -73,11 +81,13 @@ class ViewedProductsReportEntityTest extends Injectable
      * @return void
      */
     public function __inject(
+        CmsIndex $cmsIndex,
         ProductReportView $productReportView,
         FixtureFactory $fixtureFactory,
         BrowserInterface $browser,
         CatalogProductIndex $catalogProductIndexPage
     ) {
+        $this->cmsIndex = $cmsIndex;
         $this->productReportView = $productReportView;
         $this->fixtureFactory = $fixtureFactory;
         $this->browser = $browser;
@@ -140,6 +150,7 @@ class ViewedProductsReportEntityTest extends Injectable
         foreach ($products as $key => $product) {
             for ($i = 0; $i < $total[$key]; $i++) {
                 $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+                $this->assertEquals($product->getName(), $this->cmsIndex->getTitleBlock()->getTitle(), 'Could not open product page');
             }
         }
     }

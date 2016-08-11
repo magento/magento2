@@ -35,18 +35,19 @@ class UpgradeData implements UpgradeDataInterface
     {
         $setup->startSetup();
 
+        /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
+        $attributeSetId = $categorySetup->getDefaultAttributeSetId(Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
+
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
-            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+
             $groupName = 'Gift Options';
 
-            if (!$categorySetup->getAttributeGroup(Product::ENTITY, 'Default', $groupName)) {
-                $categorySetup->addAttributeGroup(Product::ENTITY, 'Default', $groupName, 60);
+            if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
+                $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
             }
-
-            $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
-            $attributeSetId = $categorySetup->getAttributeSetId($entityTypeId, 'Default');
-            $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
 
             $categorySetup->addAttributeToGroup(
                 $entityTypeId,
@@ -54,6 +55,16 @@ class UpgradeData implements UpgradeDataInterface
                 $groupName,
                 $attribute['attribute_id'],
                 10
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+
+            $categorySetup->updateAttribute(
+                $entityTypeId,
+                $attribute['attribute_id'],
+                'source_model',
+                \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class
             );
         }
 

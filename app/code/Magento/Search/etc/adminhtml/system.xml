@@ -13,11 +13,6 @@
                     <label>Search Engine</label>
                     <source_model>Magento\Search\Model\Adminhtml\System\Config\Source\Engine</source_model>
                 </field>
-                <field id="search_type">
-                    <depends>
-                        <field id="engine">mysql</field>
-                    </depends>
-                </field>
             </group>
         </section>
     </system>

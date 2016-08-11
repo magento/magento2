@@ -12,7 +12,4 @@
     <event name="customer_logout">
         <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLogoutObserver" shared="false" />
     </event>
-    <event name="page_block_html_topmenu_gethtml_before">
-        <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Observer\AddCatalogToTopmenuItemsObserver" />
-    </event>
 </config>

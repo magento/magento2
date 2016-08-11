@@ -50,19 +50,20 @@ class CreditmemoListTest extends WebapiAbstract
     {
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
 
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
         $filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
 
         $searchCriteriaBuilder->addFilters(
             [
                 $filterBuilder
                     ->setField('state')
-                    ->setValue(\Magento\Sales\Model\Order\Creditmemo::STATE_OPEN)
+                    ->setValue((string)\Magento\Sales\Model\Order\Creditmemo::STATE_OPEN)
+                    ->setConditionType('eq')
                     ->create(),
             ]
         );
@@ -85,5 +86,7 @@ class CreditmemoListTest extends WebapiAbstract
         // TODO Test fails, due to the inability of the framework API to handle data collection
         $this->assertArrayHasKey('items', $result);
         $this->assertCount(1, $result['items']);
+        $this->assertArrayHasKey('search_criteria', $result);
+        $this->assertEquals($searchData, $result['search_criteria']);
     }
 }

@@ -20,10 +20,10 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->backendModelFactory = $this->getMockBuilder('Magento\Theme\Model\Design\BackendModelFactory')
+        $this->backendModelFactory = $this->getMockBuilder(\Magento\Theme\Model\Design\BackendModelFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModel = $this->getMockBuilder('Magento\Framework\App\Config\Value')
+        $this->backendModel = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'afterLoad'])
             ->getMock();
@@ -35,16 +35,26 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'design/head/logo';
         $value = 'path/to/logo';
+        $scope = 'websites';
+        $scopeId = 1;
 
         $this->backendModelFactory->expects($this->once())
             ->method('createByPath')
-            ->with($path, ['value' => $value])
+            ->with(
+                $path,
+                [
+                    'value' => $value,
+                    'field_config' => ['path' => $path],
+                    'scope' => $scope,
+                    'scope_id' => $scopeId
+                ]
+            )
             ->willReturn($this->backendModel);
         $this->backendModel->expects($this->once())
             ->method('afterLoad');
         $this->backendModel->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->assertEquals($value, $this->valueProcessor->process($value, $path));
+        $this->assertEquals($value, $this->valueProcessor->process($value, $scope, $scopeId, ['path' => $path]));
     }
 }

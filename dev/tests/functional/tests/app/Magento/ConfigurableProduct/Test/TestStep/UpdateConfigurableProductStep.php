@@ -9,6 +9,8 @@ namespace Magento\ConfigurableProduct\Test\TestStep;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -60,8 +62,14 @@ class UpdateConfigurableProductStep implements TestStepInterface
     protected $attributeTypeAction = '';
 
     /**
+     * @var CatalogProductIndex
+     */
+    private $productGrid;
+
+    /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
+     * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $catalogProductEdit
      * @param ConfigurableProduct $product
      * @param ConfigurableProduct $updatedProduct
@@ -69,6 +77,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
+        CatalogProductIndex $productGrid,
         CatalogProductEdit $catalogProductEdit,
         ConfigurableProduct $product,
         ConfigurableProduct $updatedProduct,
@@ -79,6 +88,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
         $this->initialProduct = $product;
         $this->product = $updatedProduct;
         $this->attributeTypeAction = $attributeTypeAction;
+        $this->productGrid = $productGrid;
     }
 
     /**
@@ -186,9 +196,17 @@ class UpdateConfigurableProductStep implements TestStepInterface
      */
     protected function updateProduct(ConfigurableProduct $product)
     {
+        //open product
+        $filter = ['sku' => $this->initialProduct->getSku()];
+        $this->productGrid->open();
+        $this->productGrid->getProductGrid()->searchAndOpen($filter);
+
+        //update
         $productForm = $this->catalogProductEdit->getProductForm();
-        $productForm->openTab('variations');
-        $productForm->getTab('variations')->deleteVariations();
+        $productForm->openSection('variations');
+        /** @var Config $variationsSection */
+        $variationsSection = $productForm->getSection('variations');
+        $variationsSection->deleteVariations();
         $this->catalogProductEdit->getProductForm()->fill($product);
     }
 }

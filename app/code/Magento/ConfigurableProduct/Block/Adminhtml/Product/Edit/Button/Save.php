@@ -142,7 +142,7 @@ class Save extends Generic
     {
         $target = 'product_form.product_form';
         if ($this->isConfigurableProduct()) {
-            $target = 'configurableVariations';
+            $target = 'product_form.product_form.configurableVariations';
         }
         return $target;
     }

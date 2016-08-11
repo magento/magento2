@@ -17,15 +17,17 @@
 
 @account-nav-item-hover: @color-gray91;
 
+@_password-default: @color-gray-light01;
+@_password-weak: #ffafae;
+@_password-medium: #ffd6b3;
+@_password-strong: #c5eeac;
+@_password-very-strong: #81b562;
+
 //
 //  Common
 //  _____________________________________________
 
 & when (@media-common = true) {
-#password-strength-meter-container {
-    background-color: silver;
-}
-
     .login-container {
         .block {
             &-new-customer {
@@ -39,7 +41,7 @@
                 .lib-font-size(18);
             }
         }
-    
+
         .fieldset {
             .lib-form-hasrequired(bottom);
             &:after {
@@ -47,35 +49,35 @@
             }
         }
     }
-    
+
     .block-addresses-list {
         .items.addresses {
             > .item {
                 margin-bottom: @indent__base;
-    
+
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
         }
     }
-    
+
     .form-address-edit {
         #region_id {
             display: none;
         }
-    
+
         .actions-toolbar .action.primary {
             &:extend(.abs-button-l all);
         }
     }
-    
+
     .form-edit-account {
         .fieldset.password {
             display: none;
         }
     }
-    
+
     .box-billing-address,
     .box-shipping-address,
     .box-information,
@@ -94,43 +96,43 @@
             h2 {
                 margin-top: 0;
             }
-    
+
             .toolbar {
                 text-align: center;
                 .limiter-options {
                     width: auto;
                 }
             }
-    
+
             .limiter {
                 >.label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
-    
+
             .block:not(.widget) {
                 &:extend(.abs-account-blocks all);
             }
         }
-    
+
         .sidebar-additional {
             margin-top: 40px;
         }
-    
+
         .table-wrapper {
             &:last-child {
                 margin-bottom: 0;
             }
-    
+
             .action {
                 margin-right: 15px;
-    
+
                 &:last-child {
                     margin-right: 0;
                 }
             }
         }
-    
+
         .table-return-items {
             .qty {
                 .input-text {
@@ -139,7 +141,7 @@
             }
         }
     }
-    
+
     //  Checkout address (create shipping address)
     .field.street {
         .field.additional {
@@ -212,10 +214,10 @@
                 margin-bottom: 0;
             }
         }
-    
+
         .title {
             margin-bottom: @indent__s;
-    
+
             strong {
                 .lib-heading(h4);
                 .column.main & {
@@ -233,33 +235,82 @@
         }
     }
 
-.password-strength-meter-0 {
-    background-color: red;
-    width: 0%;
-}
+    //
+    //  Password Strength Meter
+    //  ---------------------------------------------
 
-.password-strength-meter-1 {
-    background-color: orange;
-    width: 25%;
-}
+    .field.password {
+        .control {
+            .lib-vendor-prefix-display();
+            .lib-vendor-prefix-flex-direction();
 
-.password-strength-meter-2 {
-    background-color: yellow;
-    width: 50%;
-}
+            .mage-error {
+                .lib-vendor-prefix-order(2);
+            }
 
-.password-strength-meter-3 {
-    background-color: yellowgreen;
-    width: 75%;
-}
+            .input-text {
+                .lib-vendor-prefix-order(0);
+                z-index: 2;
+            }
+        }
+    }
 
-.password-strength-meter-4 {
-    background-color: green;
-    width: 100%;
-}
-    
+    .password-strength-meter {
+        background-color: @_password-default;
+        height: @form-element-input__height;
+        line-height: @form-element-input__height;
+        padding: @form-element-input__padding;
+        position: relative;
+        z-index: 1;
+
+        &:before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            z-index: -1;
+        }
+
+        .password-none & {
+            &:before {
+                background-color: @_password-default;
+                width: 100%;
+            }
+        }
+
+        .password-weak & {
+            &:before {
+                background-color: @_password-weak;
+                width: 25%;
+            }
+        }
+
+        .password-medium & {
+            &:before {
+                background-color: @_password-medium;
+                width: 50%;
+            }
+        }
+
+        .password-strong & {
+            &:before {
+                background-color: @_password-strong;
+                width: 75%;
+            }
+        }
+
+        .password-very-strong & {
+            &:before {
+                background-color: @_password-very-strong;
+                width: 100%;
+            }
+        }
+    }
+
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
+
         .captcha-img {
             vertical-align: middle;
         }

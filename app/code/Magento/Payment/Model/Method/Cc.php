@@ -5,21 +5,26 @@
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote\Payment;
+
 /**
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Form\Cc';
+    protected $_formBlockType = \Magento\Payment\Block\Form\Cc::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Cc';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Cc::class;
 
     /**
      * @var bool
@@ -144,6 +149,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     '|8[6-9][0-9]{10}|9[0-9]{11})|62(2(12[6-9][0-9]{10}|1[3-9][0-9]{11}|[2-8][0-9]{12}' .
                     '|9[0-1][0-9]{11}|92[0-5][0-9]{10})|[4-6][0-9]{13}|8[2-8][0-9]{12})|6(4[4-9][0-9]{13}' .
                     '|5[0-9]{14}))$/',
+                    'MI' => '/^(5(0|[6-9])|63|67(?!59|6770|6774))\d*$/',
+                    'MD' => '/^(6759(?!24|38|40|6[3-9]|70|76)|676770|676774)\d*$/',
                 ];
 
                 $ccNumAndTypeMatches = isset(
@@ -213,6 +220,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             'SO' => '/^[0-9]{3,4}$/',
             'OT' => '/^[0-9]{3,4}$/',
             'JCB' => '/^[0-9]{3,4}$/',
+            'MI' => '/^[0-9]{3}$/',
+            'MD' => '/^[0-9]{3}$/',
         ];
         return $verificationExpList;
     }
@@ -231,6 +240,40 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             return false;
         }
         return true;
+    }
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param \Magento\Framework\DataObject|mixed $data
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function assignData(\Magento\Framework\DataObject $data)
+    {
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        if (!is_object($additionalData)) {
+            $additionalData = new DataObject($additionalData ?: []);
+        }
+
+        /** @var DataObject $info */
+        $info = $this->getInfoInstance();
+        $info->addData(
+            [
+                'cc_type' => $additionalData->getCcType(),
+                'cc_owner' => $additionalData->getCcOwner(),
+                'cc_last_4' => substr($additionalData->getCcNumber(), -4),
+                'cc_number' => $additionalData->getCcNumber(),
+                'cc_cid' => $additionalData->getCcCid(),
+                'cc_exp_month' => $additionalData->getCcExpMonth(),
+                'cc_exp_year' => $additionalData->getCcExpYear(),
+                'cc_ss_issue' => $additionalData->getCcSsIssue(),
+                'cc_ss_start_month' => $additionalData->getCcSsStartMonth(),
+                'cc_ss_start_year' => $additionalData->getCcSsStartYear()
+            ]
+        );
+
+        return $this;
     }
 
     /**

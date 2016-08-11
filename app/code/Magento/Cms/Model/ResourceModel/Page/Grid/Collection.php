@@ -21,17 +21,12 @@ class Collection extends PageCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document[]
-     */
-    private $loadedData;
-
-    /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param mixed|null $mainTable
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
      * @param mixed $eventObject
@@ -48,12 +43,12 @@ class Collection extends PageCollection implements SearchResultInterface
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $mainTable,
         $eventPrefix,
         $eventObject,
         $resourceModel,
-        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
+        $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -144,26 +139,5 @@ class Collection extends PageCollection implements SearchResultInterface
     public function setItems(array $items = null)
     {
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getItems()
-    {
-        if (isset($this->loadedData)) {
-            return $this->loadedData;
-        }
-        /** @var \Magento\Cms\Model\Page $page */
-        $page = $this->_entityFactory->create(\Magento\Cms\Model\Page::class);
-        /** Load every record separately to make sure the list of associated stores is available */
-        /** @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document $pageDocument */
-        foreach (parent::getItems() as $pageDocument) {
-            $this->loadedData[$pageDocument->getId()] = $pageDocument->setData(
-                $page->load($pageDocument->getId())->getData()
-            );
-        }
-
-        return $this->loadedData;
     }
 }

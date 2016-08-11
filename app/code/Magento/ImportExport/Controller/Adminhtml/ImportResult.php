@@ -84,7 +84,7 @@ abstract class ImportResult extends Import
             try {
                 $resultBlock->addNotice(
                     '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
-                    . '<div class="import-error-wrapper">' . __('Only first 100 errors are displayed here. ')
+                    . '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
                     . '<a href="'
                     . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
                     . '">' . __('Download full report') . '</a><br>'
@@ -109,7 +109,7 @@ abstract class ImportResult extends Import
         $messages = [];
         $rowMessages = $errorAggregator->getRowsGroupedByErrorCode([], [AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
         foreach ($rowMessages as $errorCode => $rows) {
-            $messages[] = $errorCode . ' ' . __('in rows:') . ' ' . implode(', ', $rows);
+            $messages[] = $errorCode . ' ' . __('in row(s):') . ' ' . implode(', ', $rows);
         }
         return $messages;
     }

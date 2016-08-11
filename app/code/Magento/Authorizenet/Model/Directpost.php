@@ -24,12 +24,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info';
+    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
     /**
      * Payment Method feature
@@ -118,6 +118,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @var \Magento\Sales\Api\TransactionRepositoryInterface
      */
     protected $transactionRepository;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $psrLogger;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -761,7 +766,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $transactionId = $this->getResponse()->getXTransId();
-            $data = $payment->getMethodInstance()->getTransactionDetails($transactionId);
+            $data = $this->transactionService->getTransactionDetails($this, $transactionId);
             $transactionStatus = (string)$data->transaction->transactionStatus;
             $fdsFilterAction = (string)$data->transaction->FDSFilterAction;
 
@@ -779,6 +784,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 $payment->getOrder()->addStatusHistoryComment($message);
             }
         } catch (\Exception $e) {
+            $this->getPsrLogger()->critical($e);
             //this request is optional
         }
         return $this;
@@ -805,7 +811,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $order->registerCancellation($message)->save();
         } catch (\Exception $e) {
             //quiet decline
-            $this->logger->critical($e);
+            $this->getPsrLogger()->critical($e);
         }
     }
 
@@ -972,5 +978,19 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
 
         return $response;
+    }
+
+    /**
+     * @return \Psr\Log\LoggerInterface
+     *
+     * @deprecated
+     */
+    private function getPsrLogger()
+    {
+        if (null === $this->psrLogger) {
+            $this->psrLogger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->psrLogger;
     }
 }

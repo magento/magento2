@@ -14,19 +14,26 @@ define([
      * @param {String} id - Rule identifier.
      * @param {*} value - Value to be checked.
      * @param {*} [params]
+     * @param {*} additionalParams - additional validation params set by method caller
      * @returns {Object}
      */
-    function validate(id, value, params) {
-        var rule    = rulesList[id],
-            message = rule.message,
-            valid   = rule.handler(value, params),
-            result;
+    function validate(id, value, params, additionalParams) {
+        var rule,
+            message,
+            valid,
+            result = {
+                rule: id,
+                passed: true,
+                message: ''
+            };
 
-        result = {
-            rule: id,
-            passed: true,
-            message: ''
-        };
+        if (!rulesList[id]) {
+            return result;
+        }
+
+        rule    = rulesList[id];
+        message = rule.message;
+        valid   = rule.handler(value, params, additionalParams);
 
         if (!valid) {
             params = Array.isArray(params) ?
@@ -49,9 +56,10 @@ define([
      *
      * @param {(String|Object)} rules - One or many validation rules.
      * @param {*} value - Value to be checked.
+     * @param {*} additionalParams - additional validation params set by method caller
      * @returns {Object}
      */
-    function validator(rules, value) {
+    function validator(rules, value, additionalParams) {
         var result;
 
         if (typeof rules === 'object') {
@@ -59,9 +67,9 @@ define([
                 passed: true
             };
 
-            _.every(rules, function (params, id) {
-                if (params !== false) {
-                    result = validate(id, value, params);
+            _.every(rules, function (ruleParams, id) {
+                if (ruleParams !== false || additionalParams) {
+                    result = validate(id, value, ruleParams, additionalParams);
 
                     return result.passed;
                 }

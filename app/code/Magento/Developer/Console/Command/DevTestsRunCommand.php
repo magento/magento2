@@ -101,10 +101,12 @@ class DevTestsRunCommand extends Command
             foreach ($failures as $message) {
                 $output->writeln(' - ' . $message);
             }
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } else {
             $output->writeln('PASSED (' . count($runCommands) . ')');
         }
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

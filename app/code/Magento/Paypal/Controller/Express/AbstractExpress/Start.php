@@ -21,7 +21,6 @@ class Start extends GetToken
     public function execute()
     {
         try {
-
             $token = $this->getToken();
             if ($token === null) {
 

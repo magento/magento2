@@ -15,9 +15,9 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Captcha\Block\Captcha\DefaultCaptcha'
+            \Magento\Captcha\Block\Captcha\DefaultCaptcha::class
         );
     }
 

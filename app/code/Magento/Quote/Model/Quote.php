@@ -487,7 +487,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote::class);
     }
 
     /**
@@ -962,7 +962,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             )
         );
         $customer->setAddresses($origAddresses);
@@ -1024,6 +1024,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
+        $this->updateCustomerData($this->customerRepository->save($this->getCustomer()));
         return $this;
     }
 
@@ -1629,7 +1630,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
-
         return $parentItem;
     }
 
@@ -1828,6 +1828,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /*********************** PAYMENTS ***************************/
+
     /**
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */

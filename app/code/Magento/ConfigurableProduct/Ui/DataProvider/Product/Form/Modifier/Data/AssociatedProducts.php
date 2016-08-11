@@ -231,6 +231,7 @@ class AssociatedProducts
             $usedProductAttributes = $this->getUsedAttributes();
             $productByUsedAttributes = $this->getAssociatedProducts();
             $currency = $this->localeCurrency->getCurrency($this->locator->getBaseCurrencyCode());
+            $configurableAttributes = $this->getAttributes();
             foreach ($variations as $variation) {
                 $attributeValues = [];
                 foreach ($usedProductAttributes as $attribute) {
@@ -247,7 +248,7 @@ class AssociatedProducts
                                 'code' => $attribute->getAttributeCode(),
                                 'label' => $attribute->getStoreLabel(),
                                 'id' => $attribute->getAttributeId(),
-                                'position' => $attribute->getPosition(),
+                                'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
                                 'chosen' => [],
                             ];
                             foreach ($attribute->getOptions() as $option) {

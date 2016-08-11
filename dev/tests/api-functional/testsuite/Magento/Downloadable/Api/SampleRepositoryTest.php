@@ -34,7 +34,6 @@ class SampleRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
-        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links/samples',
@@ -81,10 +80,12 @@ class SampleRepositoryTest extends WebapiAbstract
     protected function getTargetProduct($isScopeGlobal = false)
     {
         if ($isScopeGlobal) {
-            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')
+            $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductFactory::class)
                 ->create()->setStoreId(0)->load(1);
         } else {
-            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
+            $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductFactory::class)
+                ->create()
+                ->load(1);
         }
 
         return $product;
@@ -99,13 +100,14 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected function getTargetSample(Product $product, $sampleId = null)
     {
-        /** @var $samples \Magento\Downloadable\Model\ResourceModel\Sample\Collection */
-        $samples = $product->getTypeInstance()->getSamples($product);
-        if ($sampleId !== null) {
+        $samples = $product->getExtensionAttributes()->getDownloadableProductSamples();
+        if ($sampleId) {
             /* @var $sample \Magento\Downloadable\Model\Sample */
-            foreach ($samples as $sample) {
-                if ($sample->getId() == $sampleId) {
-                    return $sample;
+            if ($samples) {
+                foreach ($samples as $sample) {
+                    if ($sample->getId() == $sampleId) {
+                        return $sample;
+                    }
                 }
             }
 
@@ -113,7 +115,7 @@ class SampleRepositoryTest extends WebapiAbstract
         }
 
         // return first sample
-        return $samples->getFirstItem();
+        return $samples[0];
     }
 
     /**
@@ -323,7 +325,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Product type of the product must be 'downloadable'.
+     * @expectedExceptionMessage Provided product must be type 'downloadable'.
      */
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
@@ -547,6 +549,7 @@ class SampleRepositoryTest extends WebapiAbstract
         foreach ($expectations['fields'] as $index => $value) {
             $this->assertEquals($value, $link[$index]);
         }
+        $this->assertNotEmpty($link['sample_file']);
     }
 
     public function getListForAbsentProductProvider()
@@ -555,7 +558,6 @@ class SampleRepositoryTest extends WebapiAbstract
             'fields' => [
                 'title' => 'Downloadable Product Sample Title',
                 'sort_order' => 0,
-                'sample_file' => '/f/u/jellyfish_1_4.jpg',
                 'sample_type' => 'file'
             ]
         ];

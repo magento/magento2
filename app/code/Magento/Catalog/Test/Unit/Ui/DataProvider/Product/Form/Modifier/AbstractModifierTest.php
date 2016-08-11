@@ -8,9 +8,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
@@ -57,6 +55,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods([
+                'getId',
                 'getStoreId',
                 'getResource',
                 'getData',
@@ -66,7 +65,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
                 'getExistsStoreValueFlag'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load', 'getId'])
+            ->setMethods(['load', 'getId', 'getConfig'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()

@@ -7,16 +7,7 @@ app/code/Magento/Authorizenet/view/frontend/web/js/view/payment/authorizenet.js
 app/code/Magento/Authorizenet/view/frontend/web/js/view/payment/method-renderer/authorizenet-directpost.js
 app/code/Magento/Backend/view/adminhtml/web/js/bootstrap/editor.js
 app/code/Magento/Braintree/view/adminhtml/requirejs-config.js
-app/code/Magento/Braintree/view/adminhtml/web/js/cc-data.js
-app/code/Magento/Braintree/view/adminhtml/web/js/cc-form.js
 app/code/Magento/Braintree/view/frontend/requirejs-config.js
-app/code/Magento/Braintree/view/frontend/web/js/braintree-paypal-shortcut.js
-app/code/Magento/Braintree/view/frontend/web/js/cc-data.js
-app/code/Magento/Braintree/view/frontend/web/js/cc-edit-form.js
-app/code/Magento/Braintree/view/frontend/web/js/cc-form.js
-app/code/Magento/Braintree/view/frontend/web/js/view/payment/braintree-methods.js
-app/code/Magento/Braintree/view/frontend/web/js/view/payment/method-renderer/braintree-paypal.js
-app/code/Magento/Braintree/view/frontend/web/js/view/payment/method-renderer/cc-form.js
 app/code/Magento/Bundle/view/adminhtml/web/js/bundle-product.js
 app/code/Magento/Bundle/view/base/web/js/price-bundle.js
 app/code/Magento/Bundle/view/frontend/requirejs-config.js
@@ -113,7 +104,6 @@ app/code/Magento/Checkout/view/frontend/web/js/view/authentication-messages.js
 app/code/Magento/Checkout/view/frontend/web/js/view/authentication.js
 app/code/Magento/Checkout/view/frontend/web/js/view/beforePlaceOrder.js
 app/code/Magento/Checkout/view/frontend/web/js/view/billing-address.js
-app/code/Magento/Checkout/view/frontend/web/js/view/cart/shipping-estimation.js
 app/code/Magento/Checkout/view/frontend/web/js/view/cart/shipping-rates.js
 app/code/Magento/Checkout/view/frontend/web/js/view/cart/totals.js
 app/code/Magento/Checkout/view/frontend/web/js/view/cart/totals/shipping.js
@@ -675,7 +665,6 @@ vendor/magento/module-checkout/view/frontend/web/js/sidebar.js
 vendor/magento/module-checkout/view/frontend/web/js/view/authentication.js
 vendor/magento/module-checkout/view/frontend/web/js/view/before-place-order.js
 vendor/magento/module-checkout/view/frontend/web/js/view/billing-address.js
-vendor/magento/module-checkout/view/frontend/web/js/view/cart/shipping-estimation.js
 vendor/magento/module-checkout/view/frontend/web/js/view/cart/shipping-rates.js
 vendor/magento/module-checkout/view/frontend/web/js/view/cart/totals.js
 vendor/magento/module-checkout/view/frontend/web/js/view/cart/totals/shipping.js
@@ -1052,5 +1041,4 @@ vendor/magento/theme-adminhtml-backend/web/js/theme.js
 vendor/magento/theme-frontend-blank/web/js/navigation-menu.js
 vendor/magento/theme-frontend-blank/web/js/responsive.js
 vendor/magento/theme-frontend-blank/web/js/theme.js
-app/code/Magento/Braintree/view/frontend/requirejs-config.js
 app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js

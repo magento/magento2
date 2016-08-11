@@ -12,7 +12,7 @@
         <fieldset_css>pp-method-payflow</fieldset_css>
         <comment>Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.</comment>
         <attribute type="activity_path">payment/payflowpro/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payflow-pro?partner_id=NB9WWHYEMVUMS</more_url>
+        <more_url>https://www.paypal.com/webapps/mpp/payflow-payment-gateway?partner_id=NB9WWHYEMVUMS</more_url>
         <attribute type="paypal_ec_separate">1</attribute>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
@@ -80,6 +80,15 @@
                     <group id="paypal_payflow_api_settings"/>
                 </requires>
             </field>
+            <field id="payflowpro_cc_vault_active" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <config_path>payment/payflowpro_cc_vault/active</config_path>
+                <attribute type="shared">1</attribute>
+                <requires>
+                    <group id="paypal_payflow_api_settings"/>
+                </requires>
+            </field>
         </group>
         <group id="settings_paypal_payflow" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
             <label>Basic Settings - PayPal Payflow Pro</label>
@@ -89,6 +98,10 @@
                 <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
                 <config_path>payment/payflowpro/title</config_path>
                 <attribute type="shared">1</attribute>
+            </field>
+            <field id="payflowpro_cc_vault_title" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault Title</label>
+                <config_path>payment/payflowpro_cc_vault/title</config_path>
             </field>
             <field id="sort_order" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sort Order</label>

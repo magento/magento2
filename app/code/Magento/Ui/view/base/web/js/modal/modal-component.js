@@ -18,6 +18,7 @@ define([
             title: '',
             subTitle: '',
             options: {
+                modalClass: '',
                 title: '',
                 subTitle: '',
                 buttons: [],
@@ -107,7 +108,7 @@ define([
          * Init toolbar section so other components will be able to place something in it
          */
         initToolbarSection: function () {
-            this.set('toolbarSection', this.modal.data('modal').modal.find('header').get(0));
+            this.set('toolbarSection', this.modal.data('mage-modal').modal.find('header').get(0));
         },
 
         /**

@@ -59,7 +59,9 @@ class PaymentVaultAttributesLoad
         $paymentToken = $paymentExtension->getVaultPaymentToken();
         if ($paymentToken === null) {
             $paymentToken = $this->paymentTokenManagement->getByPaymentId($payment->getEntityId());
-            $paymentExtension->setVaultPaymentToken($paymentToken);
+            if ($paymentToken instanceof \Magento\Vault\Api\Data\PaymentTokenInterface) {
+                $paymentExtension->setVaultPaymentToken($paymentToken);
+            }
             $payment->setExtensionAttributes($paymentExtension);
         }
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Client\BrowserInterface;

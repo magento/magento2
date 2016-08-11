@@ -38,8 +38,8 @@ class Collection extends AbstractCollection implements InvoiceCommentSearchResul
     {
         parent::_construct();
         $this->_init(
-            'Magento\Sales\Model\Order\Invoice\Comment',
-            'Magento\Sales\Model\ResourceModel\Order\Invoice\Comment'
+            \Magento\Sales\Model\Order\Invoice\Comment::class,
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment::class
         );
     }
 
