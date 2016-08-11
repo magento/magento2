@@ -113,6 +113,7 @@ class Transaction
             $this->_getConnection()->rollbackTransparentTransaction();
             $this->_isTransactionActive = false;
             $this->_eventManager->fireEvent('rollbackTransaction');
+            $this->_getConnection()->closeConnection();
         }
     }
 
