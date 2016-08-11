@@ -45,11 +45,11 @@ class CustomerAuthUpdate
 
         $this->customerResourceModel->getConnection()->update(
             $this->customerResourceModel->getTable('customer_entity'),
-            array(
+            [
                 'failures_num' => $customerSecure->getData('failures_num'),
                 'first_failure' => $customerSecure->getData('first_failure'),
                 'lock_expires' => $customerSecure->getData('lock_expires'),
-            ),
+            ],
             $this->customerResourceModel->getConnection()->quoteInto('entity_id = ?', $customerId)
         );
 
