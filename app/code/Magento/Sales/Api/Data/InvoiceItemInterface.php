@@ -6,6 +6,7 @@
 namespace Magento\Sales\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Invoice item interface.
  *
