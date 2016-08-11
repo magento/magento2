@@ -344,7 +344,6 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                 <item name="template" xsi:type="string">ui/form/field</item>
                 <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
-                <item name="addbefore" xsi:type="string">@email:</item>
             </item>
         </argument>
     </email>

@@ -97,7 +97,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private function validateComposerJsonFile($path)
     {
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
-        $appFactory = self::$objectManager->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+        $appFactory = self::$objectManager->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $app = $appFactory->create();
         $app->runComposerCommand(['command' => 'validate'], $path);
     }
@@ -341,11 +341,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 "The {$component} is specified in 'extra->component_paths', but missing in 'replace' section"
             );
         }
-        $allowedMissingComponents =  file(__DIR__ . '/_files/blacklist/missing_components.txt');
         foreach (array_keys(self::$rootJson['replace']) as $replace) {
-            if (in_array($replace, $allowedMissingComponents)) {
-                continue;
-            }
             if (!MagentoComponent::matchMagentoComponent($replace)) {
                 $this->assertArrayHasKey(
                     $replace,

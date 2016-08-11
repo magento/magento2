@@ -8,6 +8,13 @@ namespace Magento\Directory\Model\Country\Postcode\Config;
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
+     * List of id attributes for merge
+     *
+     * @var array
+     */
+    protected $_idAttributes = ['/config/zip' => 'countryCode'];
+
+    /**
      * Construct the FileSystem Reader Class
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
@@ -26,7 +33,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'zip_codes.xml',
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         parent::__construct(

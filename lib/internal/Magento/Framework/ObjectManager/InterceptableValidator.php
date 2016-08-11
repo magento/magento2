@@ -39,7 +39,7 @@ class InterceptableValidator
     {
         return !is_subclass_of(
             $instanceName,
-            \Magento\Framework\ObjectManager\Code\Generator\Proxy::NON_INTERCEPTABLE_INTERFACE
+            '\\' . \Magento\Framework\ObjectManager\Code\Generator\Proxy::NON_INTERCEPTABLE_INTERFACE
         );
     }
 

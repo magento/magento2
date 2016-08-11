@@ -97,14 +97,14 @@ class ProductsInCartReportEntityTest extends Injectable
 
         //Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $productUrl = $_ENV['app_frontend_url'] . $product->getUrlKey() . '.html';
         $browser->open($productUrl);
         $this->catalogProductView->getViewBlock()->addToCart($product);
         if ($isGuest) {
-            $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+            $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
             $browser->open($productUrl);
             $this->catalogProductView->getViewBlock()->addToCart($product);
         }
@@ -117,6 +117,6 @@ class ProductsInCartReportEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
     }
 }

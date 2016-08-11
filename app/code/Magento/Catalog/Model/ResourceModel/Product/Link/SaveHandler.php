@@ -84,7 +84,7 @@ class SaveHandler
         $links = [];
         $extensions = $this->dataObjectProcessor->buildOutputDataArray(
             $entity->getExtensionAttributes(),
-            'Magento\Catalog\Api\Data\ProductLinkExtensionInterface'
+            \Magento\Catalog\Api\Data\ProductLinkExtensionInterface::class
         );
         $extensions = is_array($extensions) ? $extensions : [];
         $data = $entity->__toArray();

@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -49,8 +47,6 @@ class JobUpgrade extends AbstractJob
         $params = []
     ) {
         $this->command = $command;
-        $this->output = $output;
-        $this->status = $status;
         $this->queue = $queue;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
@@ -67,31 +63,12 @@ class JobUpgrade extends AbstractJob
             $this->queue->addJobs(
                 [['name' => JobFactory::JOB_STATIC_REGENERATE, 'params' => []]]
             );
+
             $this->queue->addJobs(
-                [['name' => \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE, 'params' => ['enable' => false]]]
+                [['name' => \Magento\Setup\Model\Cron\JobFactory::JOB_MAINTENANCE_MODE_DISABLE, 'params' => []]]
             );
             $this->params['command'] = 'setup:upgrade';
             $this->command->run(new ArrayInput($this->params), $this->output);
-
-            /**
-             * @var \Magento\Framework\Filesystem\Directory\WriteFactory $writeFactory
-             */
-            $writeFactory = $this->objectManager->get('\Magento\Framework\Filesystem\Directory\WriteFactory');
-            $write = $writeFactory->create(BP);
-            $dirList = $this->objectManager->get('\Magento\Framework\App\Filesystem\DirectoryList');
-            $pathToCacheStatus = $write->getRelativePath(
-                $dirList->getPath(DirectoryList::VAR_DIR) . '/.cachestates.json'
-            );
-
-            if ($write->isExist($pathToCacheStatus)) {
-                $params = array_keys(json_decode($write->readFile($pathToCacheStatus), true));
-
-                $this->queue->addJobs(
-                    [['name' => JobFactory::JOB_ENABLE_CACHE, 'params' =>  [implode(' ', $params)]]]
-                );
-                $write->delete($pathToCacheStatus);
-            }
-
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));

@@ -23,6 +23,8 @@ use Magento\Framework\View;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ *
+ * @api
  */
 class Page extends Layout
 {

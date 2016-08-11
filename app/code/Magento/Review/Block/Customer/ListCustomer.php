@@ -83,7 +83,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     {
         if ($this->getReviews()) {
             $toolbar = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'customer_review_list.toolbar'
             )->setCollection(
                 $this->getReviews()

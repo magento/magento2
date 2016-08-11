@@ -55,7 +55,7 @@ foreach ($options as $option) {
     $product = $productRepository->save($product);
 
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-    $stockItem = Bootstrap::getObjectManager()->create('Magento\CatalogInventory\Model\Stock\Item');
+    $stockItem = Bootstrap::getObjectManager()->create(\Magento\CatalogInventory\Model\Stock\Item::class);
     $stockItem->load($productId, 'product_id');
 
     if (!$stockItem->getProductId()) {
@@ -101,7 +101,7 @@ $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 // Remove any previously created product with the same id.
 /** @var \Magento\Framework\Registry $registry */
-$registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 try {

@@ -137,22 +137,22 @@ class AdminAccount
      * @return void
      * @throws \Exception If the username and email do not both match data provided to install
      */
-    private function validateUserMatches($username, $email)
+    public function validateUserMatches($username, $email)
     {
         if ((strcasecmp($email, $this->data[self::KEY_EMAIL]) == 0) &&
             (strcasecmp($username, $this->data[self::KEY_USER]) != 0)) {
             // email matched but username did not
             throw new \Exception(
-                'An existing user has the given email but different username. ' . self::KEY_USER .
-                ' and ' . self::KEY_EMAIL . ' both need to match an existing user or both be new.'
+                'An existing user has the given email but different username. '
+                . 'Username and email both need to match an existing user or both be new.'
             );
         }
         if ((strcasecmp($username, $this->data[self::KEY_USER]) == 0) &&
             (strcasecmp($email, $this->data[self::KEY_EMAIL]) != 0)) {
             // username matched but email did not
             throw new \Exception(
-                'An existing user has the given username but different email. ' . self::KEY_USER .
-                ' and ' . self::KEY_EMAIL . ' both need to match an existing user or both be new.'
+                'An existing user has the given username but different email. '
+                . 'Username and email both need to match an existing user or both be new.'
             );
         }
     }

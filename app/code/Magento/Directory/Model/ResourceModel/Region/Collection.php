@@ -49,6 +49,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_localeResolver = $localeResolver;
+        $this->_resource = $resource;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -59,7 +60,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Region', 'Magento\Directory\Model\ResourceModel\Region');
+        $this->_init(\Magento\Directory\Model\Region::class, \Magento\Directory\Model\ResourceModel\Region::class);
 
         $this->_countryTable = $this->getTable('directory_country');
         $this->_regionNameTable = $this->getTable('directory_country_region_name');
@@ -186,15 +187,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionArray()
     {
-        $options = $this->_toOptionArray(
-            'region_id',
-            'default_name',
-            ['title' => 'default_name', 'country_id' => 'country_id']
-        );
+        $options = [];
+        $propertyMap = [
+            'value' => 'region_id',
+            'title' => 'default_name',
+            'country_id' => 'country_id',
+        ];
+
+        foreach ($this as $item) {
+            $option = [];
+            foreach ($propertyMap as $code => $field) {
+                $option[$code] = $item->getData($field);
+            }
+            $option['label'] = $item->getName();
+            $options[] = $option;
+        }
+
         if (count($options) > 0) {
             array_unshift(
                 $options,
-                ['title ' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
+                ['title' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
             );
         }
         return $options;

@@ -19,7 +19,7 @@ class ExportRefundedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sal
     public function execute()
     {
         $fileName = 'refunded.csv';
-        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid');
+        $grid = $this->_view->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid::class);
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getCsvFile(), DirectoryList::VAR_DIR);
     }

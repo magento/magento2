@@ -17,6 +17,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init('Magento\Vault\Model\PaymentToken', 'Magento\Vault\Model\ResourceModel\PaymentToken');
+        $this->_init(\Magento\Vault\Model\PaymentToken::class, \Magento\Vault\Model\ResourceModel\PaymentToken::class);
     }
 }

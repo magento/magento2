@@ -90,6 +90,32 @@
             <argument name="configFactory" xsi:type="object">payflowproConfigFactory</argument>
         </arguments>
     </type>
+    <!-- Configuration for PayflowPro Vault payment -->
+    <virtualType name="PayflowProVaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Payflow\Transparent::CC_VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayflowProVaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">PayflowProVaultPaymentConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayflowProVaultPaymentValueHandlerPool" type="VaultPaymentValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PayflowProVaultPaymentValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayflowProCreditCardVaultFacade" type="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">PayflowProVaultPaymentConfig</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayflowProVaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\Paypal\Model\Payflow\Transparent</argument>
+            <argument name="code" xsi:type="const">Magento\Paypal\Model\Payflow\Transparent::CC_VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Paypal\Model\Payflowlink">
         <arguments>
             <argument name="configFactory" xsi:type="object">payflowlinkConfigFactory</argument>
@@ -148,6 +174,12 @@
             <argument name="executors" xsi:type="array">
                 <item name="payflowpro" xsi:type="string">PayflowproCommandManager</item>
             </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Paypal\Model\Payflow\Transparent">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
         </arguments>
     </type>
 </config>

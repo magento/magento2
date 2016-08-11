@@ -56,7 +56,7 @@ class CreateAttributes
         $entityData = array_merge($hydrator->extract($entity), $arguments);
         $actions = $this->attributePool->getActions($entityType, 'create');
         foreach ($actions as $action) {
-            $action->execute($entityType, $entityData);
+            $action->execute($entityType, $entityData, $arguments);
         }
         $entity = $hydrator->hydrate($entity, $entityData);
         return $entity;

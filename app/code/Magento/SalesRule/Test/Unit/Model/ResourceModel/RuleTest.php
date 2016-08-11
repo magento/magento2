@@ -8,6 +8,9 @@ namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
 use Magento\SalesRule\Api\Data\RuleInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,25 +64,25 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->rule = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ruleResource = $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule')
+        $this->ruleResource = $this->getMockBuilder(\Magento\SalesRule\Model\ResourceModel\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
+        $context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connectionName = 'test';
-        $this->resourcesMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resourcesMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->relationProcessorMock =
-            $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
+            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->transactionManagerMock =
-            $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface')
+            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,12 +90,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getResources')
             ->willReturn($this->resourcesMock);
 
-        $this->entityManager = $this->getMockBuilder('Magento\Framework\EntityManager\EntityManager')
+        $this->entityManager = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityManager::class)
             ->setMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourcesMock->expects($this->any())
@@ -110,11 +113,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getTransactionManager')
             ->willReturn($this->transactionManagerMock);
 
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $associatedEntitiesMap = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $associatedEntitiesMap->expects($this->once())
             ->method('getData')
             ->willReturn(
@@ -134,13 +137,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareObjectManager([
             [
-                'Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap',
+                \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class,
                 $associatedEntitiesMap
             ],
         ]);
 
         $this->model = $objectManager->getObject(
-            'Magento\SalesRule\Model\ResourceModel\Rule',
+            \Magento\SalesRule\Model\ResourceModel\Rule::class,
             [
                 'context' => $context,
                 'connectionName' => $connectionName,
@@ -156,7 +159,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $ruleId = 1;
         /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $abstractModel */
-        $abstractModel = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $abstractModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->entityManager->expects($this->once())
@@ -187,12 +190,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareObjectManager($map)
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $reflectionProperty = $reflectionClass->getProperty('_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock);

@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,18 +44,18 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
-        $converter = $this->objectManager->create('Magento\Framework\Search\Request\Config\Converter');
+        $converter = $this->objectManager->create(\Magento\Framework\Search\Request\Config\Converter::class);
 
         $document = new \DOMDocument();
         $document->load($this->getRequestConfigPath());
         $requestConfig = $converter->convert($document);
 
         /** @var \Magento\Framework\Search\Request\Config $config */
-        $config = $this->objectManager->create('Magento\Framework\Search\Request\Config');
+        $config = $this->objectManager->create(\Magento\Framework\Search\Request\Config::class);
         $config->merge($requestConfig);
 
         $this->requestBuilder = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Builder',
+            \Magento\Framework\Search\Request\Builder::class,
             ['config' => $config]
         );
 
@@ -63,7 +64,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get request config path
-     * 
+     *
      * @return string
      */
     protected function getRequestConfigPath()
@@ -76,7 +77,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertPreConditions()
     {
-        $currentEngine = $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+        $currentEngine = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->getValue(EngineInterface::CONFIG_ENGINE_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $this->assertEquals($this->searchEngine, $currentEngine);
     }
@@ -86,7 +87,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function createAdapter()
     {
-        return $this->objectManager->create('Magento\Framework\Search\Adapter\Mysql\Adapter');
+        return $this->objectManager->create(\Magento\Framework\Search\Adapter\Mysql\Adapter::class);
     }
 
     /**
@@ -110,7 +111,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         $actualIds = [];
         foreach ($queryResponse as $document) {
-            /** @var \Magento\Framework\Search\Document $document */
+            /** @var \Magento\Framework\Api\Search\Document $document */
             $actualIds[] = $document->getId();
         }
         sort($actualIds);
@@ -370,17 +371,17 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function testCustomFilterableAttribute()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
         $multiselectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
@@ -405,11 +406,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
     {
-        array_walk($rangeFilter, function (&$item) {
-            if (!empty($item)) {
-                $item = gmdate('c', strtotime($item)) . 'Z';
-            }
-        });
         $this->requestBuilder->bind('date.from', $rangeFilter['from']);
         $this->requestBuilder->bind('date.to', $rangeFilter['to']);
         $this->requestBuilder->setRequestName('advanced_search_date_field');
@@ -421,10 +417,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function dateDataProvider()
     {
         return [
-            [['from' => '2000-01-01', 'to' => '2000-01-01'], 1], //Y-m-d
-            [['from' => '2000-01-01', 'to' => ''], 1],
-            [['from' => '1999-12-31', 'to' => '2000-01-01'], 1],
-            [['from' => '2000-02-01', 'to' => ''], 0],
+            [['from' => '2000-01-01T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1], //Y-m-d
+            [['from' => '2000-01-01T00:00:00Z', 'to' => ''], 1],
+            [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
+            [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
         ];
     }
 }

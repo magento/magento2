@@ -18,7 +18,7 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
      */
     protected function _getReaderClassName()
     {
-        return 'Magento\Framework\DataObject\Copy\Config\Reader';
+        return \Magento\Framework\DataObject\Copy\Config\Reader::class;
     }
 
     /**

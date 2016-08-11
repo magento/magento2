@@ -14,9 +14,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Controller\CardsManagement;
 use Magento\Vault\Model\PaymentTokenManagement;
-use Magento\Vault\Model\PaymentTokenRepositoryProxy;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,7 +45,7 @@ class DeleteAction extends CardsManagement
     private $fkValidator;
 
     /**
-     * @var PaymentTokenRepositoryProxy
+     * @var PaymentTokenRepositoryInterface
      */
     private $tokenRepository;
 
@@ -59,7 +59,7 @@ class DeleteAction extends CardsManagement
      * @param Session $customerSession
      * @param JsonFactory $jsonFactory
      * @param Validator $fkValidator
-     * @param PaymentTokenRepositoryProxy $tokenRepository
+     * @param PaymentTokenRepositoryInterface $tokenRepository
      * @param PaymentTokenManagement $paymentTokenManagement
      */
     public function __construct(
@@ -67,7 +67,7 @@ class DeleteAction extends CardsManagement
         Session $customerSession,
         JsonFactory $jsonFactory,
         Validator $fkValidator,
-        PaymentTokenRepositoryProxy $tokenRepository,
+        PaymentTokenRepositoryInterface $tokenRepository,
         PaymentTokenManagement $paymentTokenManagement
     ) {
         parent::__construct($context, $customerSession);
@@ -133,7 +133,7 @@ class DeleteAction extends CardsManagement
     private function createSuccessMessage()
     {
         $this->messageManager->addSuccessMessage(
-            __('Credit Card was successfully removed')
+            __('Stored Payment Method was successfully removed')
         );
         return $this->_redirect('vault/cards/listaction');
     }

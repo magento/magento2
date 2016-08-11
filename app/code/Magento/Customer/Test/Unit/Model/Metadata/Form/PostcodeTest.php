@@ -20,7 +20,7 @@ class PostcodeTest extends AbstractFormTestCase
     {
         parent::setUp();
 
-        $this->directoryHelper = $this->getMockBuilder('Magento\Directory\Helper\Data')
+        $this->directoryHelper = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

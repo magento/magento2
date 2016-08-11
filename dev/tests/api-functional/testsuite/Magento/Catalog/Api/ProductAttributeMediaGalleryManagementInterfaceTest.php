@@ -86,7 +86,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     protected function getTargetSimpleProduct()
     {
         $objectManager = Bootstrap::getObjectManager();
-        return $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
+        return $objectManager->get(\Magento\Catalog\Model\ProductFactory::class)->create()->load(1);
     }
 
     /**
@@ -275,8 +275,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $targetProduct = $this->getTargetSimpleProduct();
         $this->assertEquals('/m/a/magento_image.jpg', $targetProduct->getData('thumbnail'));
-        $this->assertNull($targetProduct->getData('image'));
-        $this->assertNull($targetProduct->getData('small_image'));
         $mediaGallery = $targetProduct->getData('media_gallery');
         $this->assertCount(1, $mediaGallery['images']);
         $updatedImage = array_shift($mediaGallery['images']);
@@ -521,7 +519,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Model\ProductRepository $repository */
-        $repository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get($productSku);
         $image = current($product->getMediaGallery('images'));
         $imageId = $image['value_id'];

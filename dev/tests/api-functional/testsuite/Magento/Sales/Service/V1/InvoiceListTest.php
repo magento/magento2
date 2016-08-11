@@ -35,19 +35,20 @@ class InvoiceListTest extends WebapiAbstract
     {
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
 
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
         $filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
 
         $searchCriteriaBuilder->addFilters(
             [
                 $filterBuilder
                     ->setField('state')
-                    ->setValue(2)
+                    ->setValue((string)\Magento\Sales\Model\Order\Invoice::STATE_PAID)
+                    ->setConditionType('eq')
                     ->create(),
             ]
         );
@@ -70,5 +71,7 @@ class InvoiceListTest extends WebapiAbstract
         // TODO Test fails, due to the inability of the framework API to handle data collection
         $this->assertArrayHasKey('items', $result);
         $this->assertCount(1, $result['items']);
+        $this->assertArrayHasKey('search_criteria', $result);
+        $this->assertEquals($searchData, $result['search_criteria']);
     }
 }

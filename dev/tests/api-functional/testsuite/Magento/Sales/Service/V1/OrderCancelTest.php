@@ -20,7 +20,7 @@ class OrderCancelTest extends WebapiAbstract
     public function testOrderCancel()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $order = $objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
+        $order = $objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/orders/' . $order->getId() . '/cancel',

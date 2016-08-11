@@ -11,6 +11,8 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Class FilterPool
+ *
+ * @api
  */
 class FilterPool
 {

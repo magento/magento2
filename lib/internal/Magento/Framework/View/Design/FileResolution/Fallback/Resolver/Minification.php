@@ -54,7 +54,7 @@ class Minification implements ResolverInterface
     {
         $file = $this->minification->addMinifiedSign($file);
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
-        if (!$path && ($newFile = $this->minification->removeMinifiedSign($file))) {
+        if (!$path && $file != ($newFile = $this->minification->removeMinifiedSign($file))) {
             $path = $this->fallback->resolve($type, $newFile, $area, $theme, $locale, $module);
         }
         return $path;

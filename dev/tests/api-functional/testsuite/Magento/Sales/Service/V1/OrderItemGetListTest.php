@@ -32,13 +32,13 @@ class OrderItemGetListTest extends WebapiAbstract
     public function testGetList()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
+        $searchCriteriaBuilder = $this->objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
-        $filterBuilder = $this->objectManager->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = $this->objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
 
         $searchCriteriaBuilder->addFilters(
             [

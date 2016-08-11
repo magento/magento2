@@ -24,12 +24,12 @@ class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Checkmo';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Checkmo::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\OfflinePayments\Block\Info\Checkmo';
+    protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Checkmo::class;
 
     /**
      * Availability option

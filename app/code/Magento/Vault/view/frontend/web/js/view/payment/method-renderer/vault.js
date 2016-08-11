@@ -67,7 +67,7 @@ define(
              * @returns {String}
              */
             getCode: function () {
-                return 'vault';
+                return this.code;
             },
 
             /**

@@ -73,6 +73,8 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
             (int)$this->_storeManager->getStore()->isCurrentlySecure(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(Context::CONTEXT_AUTH),
+            $this->getTemplateFile(),
+            'template' => $this->getTemplate()
         ];
     }
 

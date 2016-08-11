@@ -55,6 +55,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods([
+                'getId',
                 'getStoreId',
                 'getResource',
                 'getData',

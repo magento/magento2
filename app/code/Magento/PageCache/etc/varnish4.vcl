@@ -7,6 +7,7 @@ import std;
 backend default {
     .host = "/* {{ host }} */";
     .port = "/* {{ port }} */";
+    .first_byte_timeout = 600s;
 }
 
 acl purge {
@@ -41,8 +42,8 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass shopping cart and checkout requests
-    if (req.url ~ "/checkout") {
+    # Bypass shopping cart, checkout and search requests
+    if (req.url ~ "/checkout" || req.url ~ "/catalogsearch") {
         return (pass);
     }
 
@@ -136,6 +137,16 @@ sub vcl_backend_response {
             set beresp.grace = 1m;
         }
     }
+
+   # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
+   if (beresp.ttl <= 0s ||
+        beresp.http.Surrogate-control ~ "no-store" ||
+        (!beresp.http.Surrogate-Control && beresp.http.Vary == "*")) {
+        # Mark as Hit-For-Pass for the next 2 minutes
+        set beresp.ttl = 120s;
+        set beresp.uncacheable = true;
+    }
+    return (deliver);
 }
 
 sub vcl_deliver {

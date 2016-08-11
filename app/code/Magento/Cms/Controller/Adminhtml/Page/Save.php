@@ -66,7 +66,7 @@ class Save extends \Magento\Backend\App\Action
             }
 
             /** @var \Magento\Cms\Model\Page $model */
-            $model = $this->_objectManager->create('Magento\Cms\Model\Page');
+            $model = $this->_objectManager->create(\Magento\Cms\Model\Page::class);
 
             $id = $this->getRequest()->getParam('page_id');
             if ($id) {

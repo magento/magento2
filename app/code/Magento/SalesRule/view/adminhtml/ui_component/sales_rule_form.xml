@@ -51,7 +51,7 @@
     <fieldset name="general">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string">Currently Active</item>
+                <item name="label" xsi:type="string" translate="true">Currently Active</item>
                 <item name="additionalClasses" xsi:type="string">fieldset-schedule</item>
             </item>
         </argument>

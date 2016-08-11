@@ -60,7 +60,7 @@ abstract class AbstractAssertOrderOnFrontend extends AbstractConstraint
     {
         $this->cmsIndex->open();
         $loginCustomerOnFrontendStep = $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         );
         $loginCustomerOnFrontendStep->run();

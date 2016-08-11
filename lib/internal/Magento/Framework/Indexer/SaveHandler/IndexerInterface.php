@@ -11,6 +11,11 @@ namespace Magento\Framework\Indexer\SaveHandler;
 
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Indexer persistence handler
+ *
+ * @api
+ */
 interface IndexerInterface
 {
     /**

@@ -16,9 +16,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Edit
          */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Edit'
+            \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Edit::class
         );
 
         $this->assertEquals('Encryption Key', $block->getHeaderText());

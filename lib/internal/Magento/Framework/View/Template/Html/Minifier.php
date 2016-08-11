@@ -131,7 +131,7 @@ class Minifier implements MinifierInterface
                             '#(?<!:|\\\\|\'|")//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                             '',
                             preg_replace(
-                                '#(?<!:)//[^\n\r]*(\s\?\>)#',
+                                '#(?<!:|\'|")//[^\n\r]*(\s\?\>)#',
                                 '$1',
                                 preg_replace(
                                     '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
