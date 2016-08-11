@@ -51,7 +51,10 @@
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
-    <preference for="Magento\Sales\Api\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCommentCreationInterface" type="Magento\Sales\Model\Order\Invoice\CommentCreation"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentCommentCreationInterface" type="Magento\Sales\Model\Order\Shipment\CommentCreation"/>
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
     <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Model\Order\ItemRepository"/>
@@ -89,8 +92,6 @@
     <preference for="Magento\Sales\Model\Spi\ShipmentTrackResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Model\Spi\TransactionResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction"/>
     <preference for="Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface" type="Magento\Sales\Model\ResourceModel\Order\CollectionFactory"/>
-    <preference for="Magento\Sales\Api\Data\InvoiceCommentCreationInterface" type="Magento\Sales\Model\Order\Invoice\Comment"/>
-    <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
     <preference for="Magento\Sales\Api\OrderInvoiceInterface" type="Magento\Sales\Model\OrderInvoice"/>
     <preference for="Magento\Sales\Model\Order\OrderStateResolverInterface" type="Magento\Sales\Model\Order\StateResolver"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" type="Magento\Sales\Model\Order\Shipment\TrackCreation"/>

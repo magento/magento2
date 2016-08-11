@@ -3,34 +3,30 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Input argument for invoice creation
- *
- * Interface InvoiceItemCreationInterface
- *
+ * Interface ShipmentCommentCreationInterface
  * @api
  */
-interface InvoiceItemCreationInterface extends LineItemInterface, ExtensibleDataInterface
+interface ShipmentCommentCreationInterface extends ExtensibleDataInterface, CommentInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface|null
+     * @return \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+     * @param \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+        \Magento\Sales\Api\Data\ShipmentCommentCreationExtensionInterface $extensionAttributes
     );
 }
