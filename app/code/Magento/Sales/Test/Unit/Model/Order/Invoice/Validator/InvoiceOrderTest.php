@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Test\Unit\Model\Order;
+namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Validator;
 
 use Magento\Sales\Model\Order;
 
 /**
  * Test for \Magento\Sales\Model\Order\OrderValidator class
  */
-class OrderValidatorTest extends \PHPUnit_Framework_TestCase
+class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -47,7 +47,7 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Sales\Model\Order\OrderValidator();
+        $this->model = new \Magento\Sales\Model\Order\Invoice\Validator\InvoiceOrder();
     }
 
     /**
@@ -64,7 +64,7 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getItems');
         $this->assertEquals(
             false,
-            $this->model->canInvoice($this->orderMock)
+            $this->model->validate($this->orderMock)
         );
     }
 
@@ -95,7 +95,7 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             false,
-            $this->model->canInvoice($this->orderMock)
+            $this->model->validate($this->orderMock)
         );
     }
 
@@ -125,7 +125,7 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedResult,
-            $this->model->canInvoice($this->orderMock)
+            $this->model->validate($this->orderMock)
         );
     }
 

@@ -909,4 +909,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\InvoiceValidator">
+        <arguments>
+            <argument name="invoiceOrderValidator" xsi:type="object">Magento\Sales\Model\Invoice\Validator\InvoiceOrder</argument>
+        </arguments>
+    </type>
 </config>

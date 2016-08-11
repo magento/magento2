@@ -58,7 +58,7 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Sales\Model\Order\InvoiceValidator::class,
+            \Magento\Sales\Model\Order\InvoiceQuantityValidator::class,
             ['orderValidator' => $this->orderValidatorMock]
         );
     }

@@ -12,12 +12,15 @@ use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\OrderInvoiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Invoice\InvoiceValidator;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
+use Magento\Sales\Model\Order\InvoiceQuantityValidator;
 use Magento\Sales\Model\Order\InvoiceRepository;
-use Magento\Sales\Model\Order\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\Order\Validation\CanInvoice;
+use Magento\Sales\Model\Order\OrderValidator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,7 +45,7 @@ class OrderInvoice implements OrderInvoiceInterface
     private $invoiceDocumentFactory;
 
     /**
-     * @var InvoiceValidatorInterface
+     * @var InvoiceValidator
      */
     private $invoiceValidator;
 
@@ -77,11 +80,17 @@ class OrderInvoice implements OrderInvoiceInterface
     private $logger;
 
     /**
+     * @var OrderValidator
+     */
+    private $orderValidator;
+
+    /**
      * OrderInvoice constructor.
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
-     * @param InvoiceValidatorInterface $invoiceValidator
+     * @param InvoiceValidator $invoiceValidator
+     * @param OrderValidator $orderValidator
      * @param PaymentAdapterInterface $paymentAdapter
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderConfig $config
@@ -94,7 +103,8 @@ class OrderInvoice implements OrderInvoiceInterface
         ResourceConnection $resourceConnection,
         OrderRepositoryInterface $orderRepository,
         InvoiceDocumentFactory $invoiceDocumentFactory,
-        InvoiceValidatorInterface $invoiceValidator,
+        InvoiceValidator $invoiceValidator,
+        OrderValidator $orderValidator,
         PaymentAdapterInterface $paymentAdapter,
         OrderStateResolverInterface $orderStateResolver,
         OrderConfig $config,
@@ -106,6 +116,7 @@ class OrderInvoice implements OrderInvoiceInterface
         $this->orderRepository = $orderRepository;
         $this->invoiceDocumentFactory = $invoiceDocumentFactory;
         $this->invoiceValidator = $invoiceValidator;
+        $this->orderValidator = $orderValidator;
         $this->paymentAdapter = $paymentAdapter;
         $this->orderStateResolver = $orderStateResolver;
         $this->config = $config;
@@ -147,7 +158,16 @@ class OrderInvoice implements OrderInvoiceInterface
             ($appendComment && $notify),
             $arguments
         );
-        $errorMessages = $this->invoiceValidator->validate($invoice, $order);
+        $errorMessages = array_merge(
+            $this->invoiceValidator->validate(
+                $invoice,
+                [InvoiceQuantityValidator::class]
+            ),
+            $this->orderValidator->validate(
+                $order,
+                [CanInvoice::class]
+            )
+        );
         if (!empty($errorMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))

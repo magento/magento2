@@ -3,33 +3,35 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order;
+namespace Magento\Sales\Model\Order\Invoice;
 
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Api\Data\InvoiceInterface;
 
 /**
- * Class OrderValidatorRunner
+ * Class InvoiceValidatorRunner
  */
-class OrderValidator
+class InvoiceValidator
 {
     /**
      * @var \Magento\Sales\Model\Validator
      */
     private $validator;
 
+    /**
+     * InvoiceValidatorRunner constructor.
+     * @param \Magento\Sales\Model\Validator $validator
+     */
     public function __construct(\Magento\Sales\Model\Validator $validator)
     {
         $this->validator = $validator;
     }
 
     /**
-     * @param OrderInterface $entity
+     * @param InvoiceInterface $entity
      * @param array $validators
      * @return string[]
-     * @throws DocumentValidationException
      */
-    public function validate(OrderInterface $entity, array $validators)
+    public function validate(InvoiceInterface $entity, array $validators)
     {
         return $this->validator->validate($entity, $validators);
     }

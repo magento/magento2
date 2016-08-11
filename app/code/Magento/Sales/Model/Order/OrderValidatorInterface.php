@@ -19,5 +19,5 @@ interface OrderValidatorInterface
      * @param OrderInterface $order
      * @return bool
      */
-    public function canInvoice(OrderInterface $order);
+    public function validate(OrderInterface $order);
 }

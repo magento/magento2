@@ -9,42 +9,42 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Invoice\Validator\InvoiceValidatorRunner;
+use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Interface InvoiceValidatorInterface
  */
-class InvoiceValidator implements InvoiceValidatorInterface
+class InvoiceQuantityValidator implements ValidatorInterface
 {
     /**
-     * @var OrderValidatorInterface
+     * @var InvoiceValidatorRunner
      */
-    private $orderValidator;
+    private $invoiceValidatorRunner;
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * InvoiceValidator constructor.
-     * @param OrderValidatorInterface $orderValidator
+     * @param InvoiceValidatorRunner $invoiceValidatorRunner
      */
-    public function __construct(OrderValidatorInterface $orderValidator)
+    public function __construct(InvoiceValidatorRunner $invoiceValidatorRunner, OrderRepositoryInterface $orderRepository)
     {
-        $this->orderValidator = $orderValidator;
+        $this->invoiceValidatorRunner = $invoiceValidatorRunner;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
      * @param InvoiceInterface $invoice
-     * @param OrderInterface $order
      * @return array
      */
-    public function validate(InvoiceInterface $invoice, OrderInterface $order)
+    public function validate($invoice)
     {
-        $messages = $this->checkQtyAvailability($invoice, $order);
-
-        if (!$this->orderValidator->canInvoice($order)) {
-            $messages[] = __(
-                'An invoice cannot be created when an order has a status of %1.',
-                $order->getStatus()
-            );
-        }
-        return $messages;
+        $order = $this->orderRepository->get($invoice->getOrderId());
+        return $this->checkQtyAvailability($invoice, $order);
     }
 
     /**
