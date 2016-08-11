@@ -125,6 +125,30 @@ class CanInvoiceTest extends \PHPUnit_Framework_TestCase
             $expectedResult, empty($this->model->validate($this->orderMock))
         );
     }
+    
+    public function testValidateCanNotInvoiceOrder()
+    {
+        $orderStatus = 'Test Status';
+        $expectedResult = [__('An invoice cannot be created when an order has a status of %1.', $orderStatus)];
+        $orderItemMock = $orderItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getQtyToInvoice', 'isDummy', 'getSku'])
+            ->getMockForAbstractClass();
+        $orderItemMock->expects($this->any())->method('getId')->willReturn(1);
+        $orderItemMock->expects($this->any())->method('getQtyToInvoice')->willReturn(0);
+        $orderItemMock->expects($this->any())->method('isDummy')->willReturn(true);
+        $orderItemMock->expects($this->any())->method('getSku')->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$orderItemMock]);
+        $this->orderMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn($orderStatus);
+        $this->assertEquals(
+            $expectedResult,
+            $this->model->validate($this->orderMock)
+        );
+    }
 
     /**
      * Data provider for testCanInvoice
