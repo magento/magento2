@@ -69,34 +69,37 @@
 .extensions-information {
     margin-bottom: 5rem;
 
+    h3 {
+        font-size: @base__font-size;
+        margin-bottom: 1.3rem;
+    }
     .message:before {
         margin-top: 0;
         top: 1.8rem;
     }
 
     .message {
-        margin-bottom: 1rem;
+        margin-bottom: @indent__m;
     }
 
     .extensions-container {
-        padding: 0 2rem;
+        padding: 0 @indent__base;
     }
 
     .list {
-        margin-bottom: 1rem;
-    }
+        margin-bottom: @indent__s;
 
-    .list select {
-        cursor: pointer;
-    }
-    
-    .list select:disabled {
-        cursor: default;
-        background: #cccccc;
-    }
+        select {
+            cursor: pointer;
 
-    .list {
-        .abs-action-delete {
+            &:disabled {
+                background: @color-gray80;
+                cursor: default;
+            }
+        }
+
+        .extension-delete {
+            &:extend(.abs-action-delete all);
             font-size: 1.7rem;
             padding-top: 0;
         }
@@ -106,29 +109,17 @@
 .delete-modal-wrap {
     padding: 0 4% @indent__xl;
 
-    .delete-modal-header {
+    h3 {
         .lib-font-size(34);
+        display: inline-block;
         font-weight: @font-weight__light;
         margin: 0 0 @indent__base;
-
-        span {
-            display: inline-block;
-            padding: .9rem 0 0;
-            vertical-align: top;
-        }
+        padding: .9rem 0 0;
+        vertical-align: top;
     }
 
-    .form-actions {
-        display: table;
-        margin-top: -1.3rem;
-
-        .links {
-            display: table-header-group;
-        }
-
-        .actions {
-            padding: @indent__xl 0 0;
-        }
+    .actions {
+        padding: @indent__l 0 0;
     }
 }
 

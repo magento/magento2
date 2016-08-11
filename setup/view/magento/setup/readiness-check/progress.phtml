@@ -45,7 +45,7 @@
         the installation process.
     </div>
     <div class="extensions-container">
-        <p><strong>Update these extension(s)</strong></p>
+        <h3>Update these extension(s)</h3>
         <ul class="list">
             <li ng-repeat="extension in getExtensionsList()">
                 {{extension.name}} {{getCurrentVersion(extension.name)}} to
@@ -58,9 +58,12 @@
                             value="{{version}}"
                     >Version {{version}}</option>
                 </select>
-                <button class="abs-action-delete"
+                <button class="extension-delete"
+                        title="Delete"
                         ng-click="openDialog(extension.name)"
-                        ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1"></button>
+                        ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1">
+                    <span>Delete</span>
+                </button>
             </li>
         </ul>
 
@@ -544,33 +547,32 @@
         <aside class="modal-popup modal-connect-signin _show" data-role="modal">
             <div class="modal-inner-wrap">
                 <header class="modal-header">
-                    <button ng-click="closeThisDialog()" class="action-close" data-role="closeBtn" type="button">
+                    <button ng-click="closeThisDialog()"
+                            title="Close"
+                            class="action-close"
+                            data-role="closeBtn"
+                            type="button">
                         <span>Close</span>
                     </button>
                 </header>
                 <div class="modal-content" data-role="content">
                     <div class="delete-modal-wrap">
-                        <div class="delete-modal-header">
-                            <span>Remove Product</span>
-                        </div>
+                        <h3>Remove Product</h3>
 
-                        <div>Are you sure you want to remove “{{extensionToRemove}}” from
-                            the list?</div>
-                        <br>
-                        <div>
+                        <p>Are you sure you want to remove “{{extensionToRemove}}” from
+                            the list?</p>
+                        <p>
                             Please be aware that removing this product will remove it from the current
                             update wizard flow. You can update this product at a later time by selecting
                             the product in the update grid.
-                        </div>
-                        <div class="form-actions">
-                            <div class="actions">
-                                <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
-                                    <span>Remove</span>
-                                </button>
-                                <button ng-click="closeThisDialog()" class="btn btn-large btn-secondary">
-                                    <span>Cancel</span>
-                                </button>
-                            </div>
+                        </p>
+                        <div class="actions">
+                            <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
+                                <span>Remove</span>
+                            </button>
+                            <button ng-click="closeThisDialog()" class="btn btn-large btn-secondary">
+                                <span>Cancel</span>
+                            </button>
                         </div>
                     </div>
                 </div>
