@@ -98,6 +98,7 @@
     <preference for="Magento\Sales\Api\Data\ShipmentPackageInterface" type="Magento\Sales\Model\Order\Shipment\Package"/>
     <preference for="Magento\Sales\Model\Order\OrderValidatorInterface" type="Magento\Sales\Model\Order\OrderValidator"/>
     <preference for="Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface" type="Magento\Sales\Model\Order\Invoice\InvoiceValidator"/>
+    <preference for="Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentValidator"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>

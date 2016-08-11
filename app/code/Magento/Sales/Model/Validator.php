@@ -29,7 +29,10 @@ class Validator
     }
 
     /**
-     * @inheritdoc
+     * @param object $entity
+     * @param ValidatorInterface[] $validators
+     * @return string[]
+     * @throws ConfigurationMismatchException
      */
     public function validate($entity, array $validators)
     {
