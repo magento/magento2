@@ -9,12 +9,11 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
-use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 
 /**
  * Data object converter for REST
  */
-class ServiceOutputProcessor implements ServicePayloadConverterInterface
+class ServiceOutputProcessor
 {
     /**
      * @var DataObjectProcessor
