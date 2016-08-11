@@ -9,7 +9,9 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteRepository\LoadHandler;
+use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -66,9 +68,15 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $collectionProcessor;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    private $objectManagerMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->quoteFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteFactory::class, ['create'], [], '', false);
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -411,55 +419,48 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->delete($this->quoteMock);
     }
 
-    /**
-     * @param int $direction
-     * @param string $expectedDirection
-     */
-    public function testGetListSuccess()
+    public function testGetList()
     {
-        $this->markTestSkipped('MAGETWO-48531');
+        $pageSize = 10;
+        $collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->quoteCollectionMock);
+        $cartMock = $this->getMock(CartInterface::class, [], [], '', false);
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($cartMock);
+        $this->objectManagerMock->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnOnConsecutiveCalls($collectionFactoryMock);
+
         $searchResult = $this->getMock(\Magento\Quote\Api\Data\CartSearchResultsInterface::class, [], [], '', false);
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $cartMock = $this->getMock(\Magento\Payment\Model\Cart::class, [], [], '', false);
-        $pageSize = 10;
-
         $this->searchResultsDataFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($searchResult));
+            ->willReturn($searchResult);
 
-        $searchResult
-            ->expects($this->once())
-            ->method('setSearchCriteria');
-
-        //back in getList()
-        $this->quoteCollectionMock->expects($this->once())->method('getSize')->willReturn($pageSize);
-        $searchResult->expects($this->once())->method('setTotalCount')->with($pageSize);
         $this->collectionProcessor->expects($this->once())
             ->method('process')
             ->with($searchCriteriaMock, $this->quoteCollectionMock);
+
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with(
                 $this->isInstanceOf(\Magento\Quote\Model\ResourceModel\Quote\Collection::class)
             );
-
-        $this->quoteCollectionMock->expects($this->once())->method('getItems')->willReturn([$cartMock]);
-        $searchResult->expects($this->once())->method('setItems')->with([$cartMock]);
-
-        $this->model = $this->getMock(
-            \Magento\Quote\Model\QuoteRepository::class,
-            ['getQuoteCollection'],
-            [
-                'quoteFactory' => $this->quoteFactoryMock,
-                'storeManager' => $this->storeManagerMock,
-                'quoteCollection' => $this->quoteCollectionMock,
-                'searchResultsDataFactory' => $this->searchResultsDataFactory,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'collectionProcessor' => $this->collectionProcessor,
-            ]
-        );
-        $this->model->expects($this->once())->method('getQuoteCollection')->willReturn($this->quoteCollectionMock);
+        $this->quoteCollectionMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$cartMock]);
+        $searchResult->expects($this->once())->method('setTotalCount')->with($pageSize);
+        $this->quoteCollectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn($pageSize);
+        $searchResult->expects($this->once())
+            ->method('setItems')
+            ->with([$cartMock]);
         $this->assertEquals($searchResult, $this->model->getList($searchCriteriaMock));
     }
 
