@@ -47,11 +47,11 @@ class Reader
     protected $readFactory;
 
     /**
-     * Cache storage
+     * Found configuration files grouped by configuration types (filename).
      *
      * @var array
      */
-    protected $cache = [];
+    private $fileIterators = [];
 
     /**
      * @param Dir $moduleDirs
@@ -72,27 +72,42 @@ class Reader
     }
 
     /**
-     * Go through all modules and find configuration files of active modules
+     * Go through all modules and find configuration files of active modules.
      *
      * @param string $filename
      * @return FileIterator
      */
     public function getConfigurationFiles($filename)
     {
-        if (isset($this->cache[$filename])) {
-            return $this->cache[$filename];
-        }
-        return $this->cache[$filename] = $this->fileIteratorFactory->create($this->getFiles($filename, Dir::MODULE_ETC_DIR));
+        return $this->getFilesIterator($filename, Dir::MODULE_ETC_DIR);
     }
 
     /**
-     * Go through all modules and find composer.json files of active modules
+     * Go through all modules and find composer.json files of active modules.
      *
      * @return FileIterator
      */
     public function getComposerJsonFiles()
     {
-        return $this->fileIteratorFactory->create($this->getFiles('composer.json'));
+        return $this->getFilesIterator('composer.json');
+    }
+
+    /**
+     * Retrieve iterator for files with $filename from components located in component $subDir.
+     *
+     * @param $filename
+     * @param string $subDir
+     *
+     * @return FileIterator
+     */
+    private function getFilesIterator($filename, $subDir = '')
+    {
+        if (!isset($this->fileIterators[$subDir][$filename])) {
+            $this->fileIterators[$subDir][$filename] = $this->fileIteratorFactory->create(
+                $this->getFiles($filename, $subDir)
+            );
+        }
+        return $this->fileIterators[$subDir][$filename];
     }
 
     /**
@@ -106,9 +121,9 @@ class Reader
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $moduleEtcDir = $this->getModuleDir($subDir, $moduleName);
-            $file = $moduleEtcDir . '/' . $filename;
-            $directoryRead = $this->readFactory->create($moduleEtcDir);
+            $moduleSubDir = $this->getModuleDir($subDir, $moduleName);
+            $file = $moduleSubDir . '/' . $filename;
+            $directoryRead = $this->readFactory->create($moduleSubDir);
             $path = $directoryRead->getRelativePath($file);
             if ($directoryRead->isExist($path)) {
                 $result[] = $file;
@@ -169,5 +184,6 @@ class Reader
     public function setModuleDir($moduleName, $type, $path)
     {
         $this->customModuleDirs[$moduleName][$type] = $path;
+        $this->fileIterators = [];
     }
 }
