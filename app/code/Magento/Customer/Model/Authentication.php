@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Backend\App\ConfigInterface;
@@ -47,7 +48,7 @@ class Authentication implements AuthenticationInterface
     protected $encryptor;
 
     /**
-     * @var CustomerRepository
+     * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
 
@@ -57,14 +58,14 @@ class Authentication implements AuthenticationInterface
     private $customerAuthUpdate;
 
     /**
-     * @param CustomerRepository $customerRepository
+     * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
      */
     public function __construct(
-        CustomerRepository $customerRepository,
+        CustomerRepositoryInterface $customerRepository,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -171,7 +172,7 @@ class Authentication implements AuthenticationInterface
         }
         return true;
     }
-    
+
     /**
      * Get customer authentication update model
      *
