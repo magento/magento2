@@ -7,44 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<style>
-    .top-ico:before {
-        margin-top: 0;
-        top: 1.8rem;
-    }
-    .list select:disabled {
-        background: #cccccc;
-    }
-</style>
-<div class="message top-ico" ng-class="{'message-warning':needReCheck && !checkingInProgress()}"
-     ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0"
->
-    <h3>Extensions to {{$state.current.type}}:</h3>
-    <div style="padding: 0 0 2rem 0;">You can change the version or remove the extension from the updating.</div>
 
-    <ul class="list">
-        <li ng-repeat="extension in getExtensionsList()">
-            <strong>{{extension.name}} {{getCurrentVersion(extension.name)}}</strong> to
-            <select ng-change="versionChanged()"
-                    ng-model="extension.version"
-                    ng-disabled="checkingInProgress()"
-            >
-                <option ng-repeat="version in getVersionsList(extension.name)"
-                        ng-selected="version == extension.version"
-                        value="{{version}}"
-                >Version {{version}}</option>
-            </select>
-            <button style="padding-top: 0;" class="abs-action-delete"
-               ng-click="openDialog(extension.name)"
-               ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1"></button>
-        </li>
-    </ul>
-
-    <div ng-show="needReCheck && !checkingInProgress()">
-        <strong>After your changes You need to recheck component dependency. Please click
-            <a href="#" ng-click="$state.forceReload()">here</a>.</strong>
-    </div>
-</div>
 
 <div ng-switch="isCompleted()">
 
@@ -72,6 +35,46 @@
         <span class="message-text">{{wordingOfReadinessCheckAction()}}.</span>
     </div>
 
+</div>
+
+<div class="extensions-information" ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0">
+    <div class="message message-warning">
+        We found some extensions with available version updates. We recommend that you update to the recommended
+        versions or remove these extensions from the installation process. We found some extensions with available
+        version updates. We recommend that you update to the recommended versions or remove these extensions from
+        the installation process.
+    </div>
+    <div class="extensions-container">
+        <p><strong>Update these extension(s)</strong></p>
+        <ul class="list">
+            <li ng-repeat="extension in getExtensionsList()">
+                {{extension.name}} {{getCurrentVersion(extension.name)}} to
+                <select ng-change="versionChanged()"
+                        ng-model="extension.version"
+                        ng-disabled="checkingInProgress()"
+                >
+                    <option ng-repeat="version in getVersionsList(extension.name)"
+                            ng-selected="version == extension.version"
+                            value="{{version}}"
+                    >Version {{version}}</option>
+                </select>
+                <button class="abs-action-delete"
+                        ng-click="openDialog(extension.name)"
+                        ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1"></button>
+            </li>
+        </ul>
+
+        <div ng-show="needReCheck && !checkingInProgress()">
+            <button ng-click="$state.forceReload()" class="btn btn-medium btn-secondary">
+                <span>Recheck</span>
+            </button>
+        </div>
+        <div ng-show="!needReCheck && !checkingInProgress()">
+            <button ng-click="nextState()" class="btn btn-medium btn-prime">
+                <span>Update</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <div id="updater-application" class="readiness-check-item" ng-show="updater.visible">
@@ -546,8 +549,8 @@
                     </button>
                 </header>
                 <div class="modal-content" data-role="content">
-                    <div class="sync-login-wrap" style="padding: 0 4% 4rem;">
-                        <div class="login-header">
+                    <div class="delete-modal-wrap">
+                        <div class="delete-modal-header">
                             <span>Remove Product</span>
                         </div>
 
@@ -560,11 +563,11 @@
                             the product in the update grid.
                         </div>
                         <div class="form-actions">
-                            <div class="actions" style="padding: 5rem 0 0;">
+                            <div class="actions">
                                 <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
                                     <span>Remove</span>
                                 </button>
-                                <button ng-click="closeThisDialog()" class="btn btn-large btn-cancel">
+                                <button ng-click="closeThisDialog()" class="btn btn-large btn-secondary">
                                     <span>Cancel</span>
                                 </button>
                             </div>

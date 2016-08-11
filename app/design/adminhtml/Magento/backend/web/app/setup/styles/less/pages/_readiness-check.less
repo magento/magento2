@@ -66,6 +66,72 @@
     margin-top: .3rem;
 }
 
+.extensions-information {
+    margin-bottom: 5rem;
+
+    .message:before {
+        margin-top: 0;
+        top: 1.8rem;
+    }
+
+    .message {
+        margin-bottom: 1rem;
+    }
+
+    .extensions-container {
+        padding: 0 2rem;
+    }
+
+    .list {
+        margin-bottom: 1rem;
+    }
+
+    .list select {
+        cursor: pointer;
+    }
+    
+    .list select:disabled {
+        cursor: default;
+        background: #cccccc;
+    }
+
+    .list {
+        .abs-action-delete {
+            font-size: 1.7rem;
+            padding-top: 0;
+        }
+    }
+}
+
+.delete-modal-wrap {
+    padding: 0 4% @indent__xl;
+
+    .delete-modal-header {
+        .lib-font-size(34);
+        font-weight: @font-weight__light;
+        margin: 0 0 @indent__base;
+
+        span {
+            display: inline-block;
+            padding: .9rem 0 0;
+            vertical-align: top;
+        }
+    }
+
+    .form-actions {
+        display: table;
+        margin-top: -1.3rem;
+
+        .links {
+            display: table-header-group;
+        }
+
+        .actions {
+            padding: @indent__xl 0 0;
+        }
+    }
+}
+
 //
 //  Mobile
 //  _____________________________________________
