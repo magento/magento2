@@ -6,6 +6,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 
 /**
  * Unit test for shipment factory class.
@@ -32,6 +33,11 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Shipment\TrackFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $trackFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shipmentValidatorMock;
 
     /**
      * @return void
@@ -67,6 +73,9 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->shipmentValidatorMock = $this->getMockBuilder(
+            ShipmentValidatorInterface::class
+        )->getMockForAbstractClass();
 
         $this->subject = $objectManager->getObject(
             \Magento\Sales\Model\Order\ShipmentFactory::class,
@@ -74,6 +83,12 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
                 'convertOrderFactory' => $convertOrderFactory,
                 'trackFactory' => $this->trackFactory
             ]
+        );
+
+        $objectManager->setBackwardCompatibleProperty(
+            $this->subject,
+            'shipmentValidator',
+            $this->shipmentValidatorMock
         );
     }
 
@@ -180,6 +195,8 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
                     ->with($shipmentTrack);
             }
         }
+
+        $this->shipmentValidatorMock->expects($this->once())->method('validate')->willReturn([]);
 
         $this->assertEquals($shipment, $this->subject->create($order, ['1' => 5], $tracks));
     }

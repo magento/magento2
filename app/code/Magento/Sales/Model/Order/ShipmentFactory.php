@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
  */
@@ -30,6 +34,11 @@ class ShipmentFactory
      * @var string
      */
     protected $instanceName;
+
+    /**
+     * @var ShipmentValidatorInterface
+     */
+    private $shipmentValidator;
 
     /**
      * Factory constructor.
@@ -72,6 +81,7 @@ class ShipmentFactory
      * @param \Magento\Sales\Model\Order $order
      * @param array $items
      * @return \Magento\Sales\Api\Data\ShipmentInterface
+     * @throws LocalizedException
      */
     protected function prepareItems(
         \Magento\Sales\Api\Data\ShipmentInterface $shipment,
@@ -129,7 +139,15 @@ class ShipmentFactory
             $item->setQty($qty);
             $shipment->addItem($item);
         }
-
+        $errorMessages = $this->getShipmentValidator()->validate(
+            $shipment,
+            [ShipmentQuantityValidator::class]
+        );
+        if (!empty($errors)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
+            );
+        }
         return $shipment->setTotalQty($totalQty);
     }
 
@@ -210,5 +228,18 @@ class ShipmentFactory
         } else {
             return $item->getQtyToShip() > 0;
         }
+    }
+
+    /**
+     * @return ShipmentValidatorInterface
+     * @deprecated
+     */
+    private function getShipmentValidator()
+    {
+        if ($this->shipmentValidator === null) {
+            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
+        }
+
+        return $this->shipmentValidator;
     }
 }

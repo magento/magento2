@@ -9,8 +9,10 @@
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
 /**
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
@@ -43,6 +45,11 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * @var \Magento\Sales\Model\Order\ItemFactory
      */
     protected $_orderItemFactory;
+
+    /**
+     * @var ShipmentValidatorInterface
+     */
+    private $shipmentValidator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -151,22 +158,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     public function setQty($qty)
     {
-        if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        /**
-         * Check qty availability
-         */
-        if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to ship for item "%1".', $this->getName())
-            );
-        }
+        $this->setData('qty', $qty);
         return $this;
     }
 
@@ -174,11 +166,34 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Applying qty to order item
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
+        $errorMessages = $this->getShipmentValidator()->validate(
+            $this->getShipment(),
+            [ShipmentQuantityValidator::class]
+        );
+        if (!empty($errors)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
+            );
+        }
         $this->getOrderItem()->setQtyShipped($this->getOrderItem()->getQtyShipped() + $this->getQty());
         return $this;
+    }
+
+    /**
+     * @return ShipmentValidatorInterface
+     * @deprecated
+     */
+    private function getShipmentValidator()
+    {
+        if ($this->shipmentValidator === null) {
+            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
+        }
+
+        return $this->shipmentValidator;
     }
 
     //@codeCoverageIgnoreStart
