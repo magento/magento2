@@ -93,6 +93,7 @@
     <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
     <preference for="Magento\Sales\Api\OrderInvoiceInterface" type="Magento\Sales\Model\OrderInvoice"/>
     <preference for="Magento\Sales\Model\Order\OrderStateResolverInterface" type="Magento\Sales\Model\Order\StateResolver"/>
+    <preference for="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" type="Magento\Sales\Model\Order\Shipment\TrackCreation"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
