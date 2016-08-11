@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Model\ResourceModel;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
@@ -181,7 +181,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                CollectionProcessorComposite::class
+                CollectionProcessor::class
             );
         }
         return $this->collectionProcessor;
