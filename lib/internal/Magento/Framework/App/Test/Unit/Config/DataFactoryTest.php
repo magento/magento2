@@ -9,8 +9,8 @@ class DataFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFact
 {
     protected function setUp()
     {
-        $this->instanceClassName = 'Magento\Framework\App\Config\Data';
-        $this->factoryClassName = 'Magento\Framework\App\Config\DataFactory';
+        $this->instanceClassName = \Magento\Framework\App\Config\Data::class;
+        $this->factoryClassName = \Magento\Framework\App\Config\DataFactory::class;
         parent::setUp();
     }
 }

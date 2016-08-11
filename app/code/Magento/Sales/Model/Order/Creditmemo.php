@@ -9,7 +9,6 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
@@ -176,7 +175,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Creditmemo');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class);
     }
 
     /**
@@ -787,7 +786,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns base_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -807,7 +806,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns base_shipping_discount_tax_compensation_amnt
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingDiscountTaxCompensationAmnt()
     {
@@ -965,7 +964,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -1025,7 +1024,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Returns shipping_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingDiscountTaxCompensationAmount()
     {

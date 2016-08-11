@@ -169,7 +169,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Payment::class);
     }
 
     /**
@@ -759,7 +759,7 @@ class Payment extends Info implements OrderPaymentInterface
             true
         )->setAutomaticallyCreated(
             true
-        )->register()->addComment(
+        )->addComment(
             __('The credit memo has been created automatically.')
         );
         $creditmemo->save();

@@ -16,10 +16,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
-            'context' => $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false),
+            'context' => $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false),
         ];
 
-        $this->_helperData = $helper->getObject('Magento\Usps\Helper\Data', $arguments);
+        $this->_helperData = $helper->getObject(\Magento\Usps\Helper\Data::class, $arguments);
     }
 
     /**

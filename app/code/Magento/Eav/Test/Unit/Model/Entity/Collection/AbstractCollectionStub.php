@@ -28,6 +28,6 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Abstra
      */
     protected function _construct()
     {
-        return $this->_init('Magento\Framework\DataObject', 'test_entity_model');
+        return $this->_init(\Magento\Framework\DataObject::class, 'test_entity_model');
     }
 }

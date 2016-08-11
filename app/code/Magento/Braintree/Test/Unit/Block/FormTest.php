@@ -11,9 +11,12 @@ use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
 use Magento\Braintree\Model\Adminhtml\Source\CcType;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
-use Magento\Vault\Model\Ui\VaultConfigProvider;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class FormTest
@@ -40,32 +43,41 @@ class FormTest extends \PHPUnit_Framework_TestCase
     private $block;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     private $sessionQuote;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $gatewayConfig;
 
     /**
-     * @var CcType|\PHPUnit_Framework_MockObject_MockObject
+     * @var CcType|MockObject
      */
     private $ccType;
 
     /**
-     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    private $vaultService;
+    private $storeManager;
+
+    /**
+     * @var Data|MockObject
+     */
+    private $paymentDataHelper;
 
     protected function setUp()
     {
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
-
-        $this->vaultService = $this->getMock(VaultPaymentInterface::class);
+        
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->paymentDataHelper = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getMethodInstance'])
+            ->getMock();
 
         $managerHelper = new ObjectManager($this);
         $this->block = $managerHelper->getObject(Form::class, [
@@ -73,8 +85,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'sessionQuote' => $this->sessionQuote,
             'gatewayConfig' => $this->gatewayConfig,
             'ccType' => $this->ccType,
-            'vaultService' => $this->vaultService
+            'storeManager' => $this->storeManager
         ]);
+
+        $managerHelper->setBackwardCompatibleProperty($this->block, 'paymentDataHelper', $this->paymentDataHelper);
     }
 
     /**
@@ -117,11 +131,30 @@ class FormTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @covers \Magento\Braintree\Block\Form::isVaultEnabled
+     */
     public function testIsVaultEnabled()
     {
-        $this->vaultService->expects(static::once())
-            ->method('isActiveForPayment')
-            ->with(ConfigProvider::CODE)
+        $storeId = 1;
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->storeManager->expects(static::once())
+            ->method('getStore')
+            ->willReturn($store);
+        
+        $store->expects(static::once())
+            ->method('getId')
+            ->willReturn($storeId);
+
+        $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
+        $this->paymentDataHelper->expects(static::once())
+            ->method('getMethodInstance')
+            ->with(ConfigProvider::CC_VAULT_CODE)
+            ->willReturn($vaultPayment);
+
+        $vaultPayment->expects(static::once())
+            ->method('isActive')
+            ->with($storeId)
             ->willReturn(true);
 
         static::assertTrue($this->block->isVaultEnabled());

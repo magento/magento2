@@ -6,7 +6,6 @@
 namespace Magento\Fedex\Test\Unit\Model;
 
 use Magento\Fedex\Model\Carrier;
-use Magento\Framework\DataObject;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
@@ -14,6 +13,8 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Class CarrierTest
  * @package Magento\Fedex\Model
  * TODO refactor me
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,53 +51,42 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scope = $this->getMockBuilder(
-            '\Magento\Framework\App\Config\ScopeConfigInterface'
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->scope->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->will(
-            $this->returnCallback([$this, 'scopeConfiggetValue'])
-        );
-
+        $this->scope->expects($this->any())->method('getValue')->willReturnCallback([$this, 'scopeConfiggetValue']);
         $country = $this->getMock(
-            'Magento\Directory\Model\Country',
+            \Magento\Directory\Model\Country::class,
             ['load', 'getData', '__wakeup'],
             [],
             '',
             false
         );
         $country->expects($this->any())->method('load')->will($this->returnSelf());
-        $countryFactory = $this->getMock('Magento\Directory\Model\CountryFactory', ['create'], [], '', false);
+        $countryFactory = $this->getMock(\Magento\Directory\Model\CountryFactory::class, ['create'], [], '', false);
         $countryFactory->expects($this->any())->method('create')->will($this->returnValue($country));
 
-        $rate = $this->getMock('Magento\Shipping\Model\Rate\Result', ['getError'], [], '', false);
-        $rateFactory = $this->getMock('Magento\Shipping\Model\Rate\ResultFactory', ['create'], [], '', false);
+        $rate = $this->getMock(\Magento\Shipping\Model\Rate\Result::class, ['getError'], [], '', false);
+        $rateFactory = $this->getMock(\Magento\Shipping\Model\Rate\ResultFactory::class, ['create'], [], '', false);
         $rateFactory->expects($this->any())->method('create')->will($this->returnValue($rate));
-
-        $this->error = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\RateResult\Error')
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
-            ->getMock();
-        $this->errorFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->error = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\Error::class)
+            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])->getMock();
+        $this->errorFactory = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory::class)
+            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
-        $store = $this->getMock('Magento\Store\Model\Store', ['getBaseCurrencyCode', '__wakeup'], [], '', false);
-        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getBaseCurrencyCode', '__wakeup'], [], '', false);
+        $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock();
 
         $rateMethod = $this->getMock(
-            'Magento\Quote\Model\Quote\Address\RateResult\Method',
+            \Magento\Quote\Model\Quote\Address\RateResult\Method::class,
             null,
             ['priceCurrency' => $priceCurrency]
         );
         $rateMethodFactory = $this->getMock(
-            'Magento\Quote\Model\Quote\Address\RateResult\MethodFactory',
+            \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory::class,
             ['create'],
             [],
             '',
@@ -104,33 +94,78 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         );
         $rateMethodFactory->expects($this->any())->method('create')->will($this->returnValue($rateMethod));
         $this->_model = $this->getMock(
-            'Magento\Fedex\Model\Carrier',
+            \Magento\Fedex\Model\Carrier::class,
             ['_getCachedQuotes', '_debug'],
             [
                 'scopeConfig' => $this->scope,
                 'rateErrorFactory' => $this->errorFactory,
-                'logger' => $this->getMock('Psr\Log\LoggerInterface'),
+                'logger' => $this->getMock(\Psr\Log\LoggerInterface::class),
                 'xmlSecurity' => new Security(),
-                'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
+                'xmlElFactory' => $this->getMock(
+                    \Magento\Shipping\Model\Simplexml\ElementFactory::class,
+                    [],
+                    [],
+                    '',
+                    false
+                ),
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,
-                'trackFactory' => $this->getMock('Magento\Shipping\Model\Tracking\ResultFactory', [], [], '', false),
-                'trackErrorFactory' =>
-                    $this->getMock('Magento\Shipping\Model\Tracking\Result\ErrorFactory', [], [], '', false),
-                'trackStatusFactory' =>
-                    $this->getMock('Magento\Shipping\Model\Tracking\Result\StatusFactory', [], [], '', false),
-                'regionFactory' => $this->getMock('Magento\Directory\Model\RegionFactory', [], [], '', false),
+                'trackFactory' => $this->getMock(
+                    \Magento\Shipping\Model\Tracking\ResultFactory::class,
+                    [],
+                    [],
+                    '',
+                    false
+                ),
+                'trackErrorFactory' => $this->getMock(\Magento\Shipping\Model\Tracking\Result\ErrorFactory::class, [], [], '', false),
+                'trackStatusFactory' => $this->getMock(\Magento\Shipping\Model\Tracking\Result\StatusFactory::class, [], [], '', false),
+                'regionFactory' => $this->getMock(\Magento\Directory\Model\RegionFactory::class, [], [], '', false),
                 'countryFactory' => $countryFactory,
-                'currencyFactory' => $this->getMock('Magento\Directory\Model\CurrencyFactory', [], [], '', false),
-                'directoryData' => $this->getMock('Magento\Directory\Helper\Data', [], [], '', false),
-                'stockRegistry' => $this->getMock('Magento\CatalogInventory\Model\StockRegistry', [], [], '', false),
+                'currencyFactory' => $this->getMock(\Magento\Directory\Model\CurrencyFactory::class, [], [], '', false),
+                'directoryData' => $this->getMock(\Magento\Directory\Helper\Data::class, [], [], '', false),
+                'stockRegistry' => $this->getMock(
+                    \Magento\CatalogInventory\Model\StockRegistry::class,
+                    [],
+                    [],
+                    '',
+                    false
+                ),
                 'storeManager' => $storeManager,
-                'configReader' => $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false),
-                'productCollectionFactory' =>
-                    $this->getMock('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory', [], [], '', false),
-                'data' => []
+                'configReader' => $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false),
+                'productCollectionFactory' => $this->getMock(
+                        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+                        [],
+                        [],
+                        '',
+                        false
+                    ),
+                'data' => [],
             ]
         );
+    }
+
+    public function testSetRequestWithoutCity()
+    {
+        $requestMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDestCity'])
+            ->getMock();
+        $requestMock->expects($this->once())
+            ->method('getDestCity')
+            ->willReturn(null);
+        $this->_model->setRequest($requestMock);
+    }
+
+    public function testSetRequestWithCity()
+    {
+        $requestMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDestCity'])
+            ->getMock();
+        $requestMock->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Small Town');
+        $this->_model->setRequest($requestMock);
     }
 
     /**
@@ -179,7 +214,16 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_model->expects($this->any())->method('_getCachedQuotes')->will(
             $this->returnValue(serialize($response))
         );
-        $request = $this->getMock('Magento\Quote\Model\Quote\Address\RateRequest', [], [], '', false);
+        $request = $this->getMock(
+            \Magento\Quote\Model\Quote\Address\RateRequest::class,
+            ['getDestCity'],
+            [],
+            '',
+            false
+        );
+        $request->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Wonderful City');
         foreach ($this->_model->collectRates($request)->getAllRates() as $allRates) {
             $this->assertEquals($expected, $allRates->getData('cost'));
         }
@@ -244,26 +288,26 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                     'WebAuthenticationDetail' => [
                         'UserCredential' => [
                             'Key' => 'testKey',
-                            'Password' => 'testPassword'
-                        ]
+                            'Password' => 'testPassword',
+                        ],
                     ],
                     'ClientDetail' => [
                         'AccountNumber' => 4121213,
-                        'MeterNumber' => 'testMeterNumber'
-                    ]
+                        'MeterNumber' => 'testMeterNumber',
+                    ],
                 ],
                 ['Key', 'Password', 'MeterNumber'],
                 [
                     'WebAuthenticationDetail' => [
                         'UserCredential' => [
                             'Key' => '****',
-                            'Password' => '****'
-                        ]
+                            'Password' => '****',
+                        ],
                     ],
                     'ClientDetail' => [
                         'AccountNumber' => 4121213,
-                        'MeterNumber' => '****'
-                    ]
+                        'MeterNumber' => '****',
+                    ],
                 ],
             ],
         ];

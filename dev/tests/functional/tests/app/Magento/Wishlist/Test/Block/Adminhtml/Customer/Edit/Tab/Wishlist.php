@@ -31,7 +31,7 @@ class Wishlist extends Tab
     public function getSearchGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist\Grid',
+            \Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist\Grid::class,
             ['element' => $this->_rootElement->find($this->wishlistGrid)]
         );
     }

@@ -25,8 +25,8 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_policyMock = $this->getMock('Magento\Framework\Authorization\PolicyInterface');
-        $roleLocatorMock = $this->getMock('Magento\Framework\Authorization\RoleLocatorInterface');
+        $this->_policyMock = $this->getMock(\Magento\Framework\Authorization\PolicyInterface::class);
+        $roleLocatorMock = $this->getMock(\Magento\Framework\Authorization\RoleLocatorInterface::class);
         $roleLocatorMock->expects($this->any())->method('getAclRoleId')->will($this->returnValue('U1'));
         $this->_model = new \Magento\Framework\Authorization($this->_policyMock, $roleLocatorMock);
     }

@@ -651,7 +651,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 } else {
                     /** @var \Magento\Eav\Model\Entity\Attribute\Exception $e */
                     $e = $this->_universalFactory->create(
-                        'Magento\Eav\Model\Entity\Attribute\Exception',
+                        \Magento\Eav\Model\Entity\Attribute\Exception::class,
                         ['phrase' => __($e->getMessage())]
                     );
                     $e->setAttributeCode($attrCode)->setPart($part);
@@ -1015,7 +1015,11 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $selectGroups = $this->_resourceHelper->getLoadAttributesSelectGroups($selects);
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
-                $select = $this->_prepareLoadSelect($selects);
+                if (is_array($selects)) {
+                    $select = $this->_prepareLoadSelect($selects);
+                } else {
+                    $select = $selects;
+                }
                 $values = $this->getConnection()->fetchAll($select);
                 foreach ($values as $valueRow) {
                     $this->_setAttributeValue($object, $valueRow);

@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->dataStorageMock = $this->getMock(
-            '\Magento\Directory\Model\Country\Postcode\Config\Data',
+            \Magento\Directory\Model\Country\Postcode\Config\Data::class,
             [],
             [],
             '',

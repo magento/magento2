@@ -22,6 +22,7 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -111,7 +112,7 @@ class CustomOptions extends AbstractModifier
      * @var UrlInterface
      */
     protected $urlBuilder;
-
+    
     /**
      * @var ArrayManager
      */
@@ -121,6 +122,11 @@ class CustomOptions extends AbstractModifier
      * @var array
      */
     protected $meta = [];
+
+    /**
+     * @var CurrencyInterface
+     */
+    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -380,6 +386,7 @@ class CustomOptions extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Fieldset::NAME,
+                                        'collapsible' => true,
                                         'label' => null,
                                         'sortOrder' => 10,
                                         'opened' => true,
@@ -591,6 +598,22 @@ class CustomOptions extends AbstractModifier
      */
     protected function getSelectTypeGridConfig($sortOrder)
     {
+        $options = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'imports' => [
+                            'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
+                            'optionTypeId' => '${ $.provider }:${ $.parentScope }.option_type_id',
+                        ],
+                        'service' => [
+                            'template' => 'Magento_Catalog/form/element/helper/custom-option-type-service',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         return [
             'arguments' => [
                 'data' => [
@@ -620,7 +643,10 @@ class CustomOptions extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::FIELD_TITLE_NAME => $this->getTitleFieldConfig(10),
+                        static::FIELD_TITLE_NAME => $this->getTitleFieldConfig(
+                            10,
+                            $this->locator->getProduct()->getStoreId() ? $options : []
+                        ),
                         static::FIELD_PRICE_NAME => $this->getPriceFieldConfig(20),
                         static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(30, ['fit' => true]),
                         static::FIELD_SKU_NAME => $this->getSkuFieldConfig(40),
@@ -1068,5 +1094,39 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+    
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }

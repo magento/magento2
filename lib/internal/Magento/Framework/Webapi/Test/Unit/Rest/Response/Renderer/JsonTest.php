@@ -18,7 +18,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks and objects for SUT constructor. */
-        $this->encoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
+        $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
             ->disableOriginalConstructor()
             ->setMethods(['encode'])
             ->getMock();

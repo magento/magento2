@@ -7,6 +7,8 @@ namespace Magento\Framework\Setup;
 
 /**
  * Interface for DB schema upgrades of a module
+ *
+ * @api
  */
 interface UpgradeSchemaInterface
 {

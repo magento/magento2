@@ -29,7 +29,7 @@ $passwordWizard = sprintf(
             <button
                 type="button"
                 class="btn btn-prime"
-                ng-click="nextState()"
+                ng-click="validateCredentials()"
                 ng-disabled="account.$invalid && account.submitted"
                 >Next</button>
         </div>
@@ -40,6 +40,25 @@ $passwordWizard = sprintf(
 </div>
 
 <h2 class="page-sub-title">{{$state.current.header}}</h2>
+
+<div
+    class="message message-success"
+    ng-show="validateCredentials.result.success && validateCredentials.pressed"
+>
+    <span class="message-text">Credentials validation successfully passed.</span>
+</div>
+<div
+    class="message message-error"
+    ng-show="validateCredentials.result.success === false && validateCredentials.result !== undefined"
+>
+    <span class="message-text">{{validateCredentials.result.error}}</span>
+</div>
+<div
+    class="message message-error"
+    ng-show="validateCredentials.failed !== undefined"
+>
+    <span class="message-text">{{validateCredentials.failed}}</span>
+</div>
 
 <p>
     Create a new Admin account to manage your store.

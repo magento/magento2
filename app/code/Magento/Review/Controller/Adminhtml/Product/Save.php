@@ -29,7 +29,7 @@ class Save extends ProductController
 
                     $arrRatingId = $this->getRequest()->getParam('ratings', []);
                     /** @var \Magento\Review\Model\Rating\Option\Vote $votes */
-                    $votes = $this->_objectManager->create('Magento\Review\Model\Rating\Option\Vote')
+                    $votes = $this->_objectManager->create(\Magento\Review\Model\Rating\Option\Vote::class)
                         ->getResourceCollection()
                         ->setReviewFilter($reviewId)
                         ->addOptionInfo()

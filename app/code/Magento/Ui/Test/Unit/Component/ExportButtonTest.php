@@ -29,19 +29,19 @@ class ExportButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->objectManager = new ObjectManager($this);
 
-        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
-            'Magento\Ui\Component\ExportButton',
+            \Magento\Ui\Component\ExportButton::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
                 'context' => $context,

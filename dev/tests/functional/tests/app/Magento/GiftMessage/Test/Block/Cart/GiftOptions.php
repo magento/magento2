@@ -90,7 +90,7 @@ class GiftOptions extends Form
         if ($giftMessage->getAllowGiftMessagesForOrder() === 'Yes') {
             $this->_rootElement->find($this->allowGiftOptions)->click();
             $giftMessageForm = $this->blockFactory->create(
-                'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
+                \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm::class,
                 ['element' => $this->_rootElement->find($this->giftMessageOrderForm)]
             );
             $formData = [

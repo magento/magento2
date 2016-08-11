@@ -186,7 +186,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function _clearUserRoles(ModelUser $user)
     {
-        $conditions = ['user_id = ?' => (int)$user->getId()];
+        $conditions = ['user_id = ?' => (int)$user->getId(), 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN];
         $this->getConnection()->delete($this->getTable('authorization_role'), $conditions);
     }
 
@@ -255,13 +255,13 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $uid = $user->getId();
         $connection->beginTransaction();
         try {
-            $conditions = ['user_id = ?' => $uid];
-
-            $connection->delete($this->getMainTable(), $conditions);
-            $connection->delete($this->getTable('authorization_role'), $conditions);
+            $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
+            $connection->delete(
+                $this->getTable('authorization_role'),
+                ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
+            );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             throw $e;
-            return false;
         } catch (\Exception $e) {
             $connection->rollBack();
             return false;
@@ -329,7 +329,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $dbh = $this->getConnection();
 
-        $condition = ['user_id = ?' => (int)$user->getId(), 'parent_id = ?' => (int)$user->getRoleId()];
+        $condition = [
+            'user_id = ?' => (int)$user->getId(),
+            'parent_id = ?' => (int)$user->getRoleId(),
+            'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN
+        ];
 
         $dbh->delete($this->getTable('authorization_role'), $condition);
         return $this;
@@ -348,9 +352,16 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $dbh = $this->getConnection();
 
-            $binds = ['parent_id' => $user->getRoleId(), 'user_id' => $user->getUserId()];
+            $binds = [
+                'parent_id' => $user->getRoleId(),
+                'user_id' => $user->getUserId(),
+                'user_type' => UserContextInterface::USER_TYPE_ADMIN
+            ];
 
-            $select = $dbh->select()->from($roleTable)->where('parent_id = :parent_id')->where('user_id = :user_id');
+            $select = $dbh->select()->from($roleTable)
+                ->where('parent_id = :parent_id')
+                ->where('user_type = :user_type')
+                ->where('user_id = :user_id');
 
             return $dbh->fetchCol($select, $binds);
         } else {

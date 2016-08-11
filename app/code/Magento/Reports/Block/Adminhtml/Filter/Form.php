@@ -160,6 +160,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('From'),
                 'title' => __('From'),
                 'required' => true,
+                'css_class' => 'admin__field-small',
                 'class' => 'admin__control-text'
             ]
         );
@@ -173,6 +174,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('To'),
                 'title' => __('To'),
                 'required' => true,
+                'css_class' => 'admin__field-small',
                 'class' => 'admin__control-text'
             ]
         );

@@ -23,7 +23,7 @@ class PathPatternTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->pathPatternHelper = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Helper\PathPattern'
+            \Magento\Framework\View\Helper\PathPattern::class
         );
     }
 

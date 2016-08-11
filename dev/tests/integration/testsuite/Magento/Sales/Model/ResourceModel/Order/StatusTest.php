@@ -27,7 +27,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceModel = Bootstrap::getObjectManager()
             ->create(
-                'Magento\Sales\Model\ResourceModel\Order\Status',
+                \Magento\Sales\Model\ResourceModel\Order\Status::class,
                 [
                     'data' => ['status' => 'fake_status']
                 ]

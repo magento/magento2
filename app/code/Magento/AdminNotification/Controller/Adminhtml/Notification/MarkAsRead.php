@@ -24,7 +24,7 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
         if ($notificationId) {
             try {
                 $this->_objectManager->create(
-                    'Magento\AdminNotification\Model\NotificationService'
+                    \Magento\AdminNotification\Model\NotificationService::class
                 )->markAsRead(
                     $notificationId
                 );

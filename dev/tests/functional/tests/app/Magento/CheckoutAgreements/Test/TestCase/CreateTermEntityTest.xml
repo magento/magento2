@@ -10,7 +10,7 @@
         <variation name="CreateTermEntityTestVariation1" summary="Create enabled term entity with text value">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="configData" xsi:type="string">checkout_term_condition</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
             <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
             <data name="agreement/data/is_html" xsi:type="string">Text</data>
@@ -27,7 +27,7 @@
         </variation>
         <variation name="CreateTermEntityTestVariation2" summary="Create enabled term entity with HTML value">
             <data name="configData" xsi:type="string">checkout_term_condition</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
             <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
             <data name="agreement/data/is_html" xsi:type="string">HTML</data>
@@ -44,7 +44,7 @@
         </variation>
         <variation name="CreateTermEntityTestVariation3" summary="Create disabled term entity">
             <data name="configData" xsi:type="string">checkout_term_condition</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
             <data name="agreement/data/is_active" xsi:type="string">Disabled</data>
             <data name="agreement/data/is_html" xsi:type="string">Text</data>
@@ -62,7 +62,8 @@
         <variation name="CreateTermEntityTestVariation4" summary="Terms and conditions on multishipping" ticketId="MAGETWO-32499">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="configData" xsi:type="string">checkout_term_condition</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
             <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
             <data name="agreement/data/is_html" xsi:type="string">Text</data>

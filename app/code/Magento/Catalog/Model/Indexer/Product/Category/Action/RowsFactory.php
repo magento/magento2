@@ -18,7 +18,7 @@ class RowsFactory extends \Magento\Catalog\Model\Indexer\Category\Product\Action
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Catalog\Model\Indexer\Product\Category\Action\Rows'
+        $instanceName = \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows::class
     ) {
         parent::__construct($objectManager, $instanceName);
     }
