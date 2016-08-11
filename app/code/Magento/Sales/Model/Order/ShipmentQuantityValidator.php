@@ -1,0 +1,103 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Sales\Model\Order;
+
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Model\ValidatorInterface;
+
+/**
+ * Class ShipmentQuantityValidator
+ */
+class ShipmentQuantityValidator implements ValidatorInterface
+{
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * InvoiceValidator constructor.
+     * @param OrderRepositoryInterface $orderRepository
+     */
+    public function __construct(
+        OrderRepositoryInterface $orderRepository
+    ) {
+        $this->orderRepository = $orderRepository;
+    }
+
+    /**
+     * @param ShipmentInterface $entity
+     * @return string[]
+     * @throws DocumentValidationException
+     */
+    public function validate($entity)
+    {
+        $messages = [];
+
+        $order = $this->orderRepository->get($entity->getOrderId());
+        foreach ($entity->getItems() as $shipmentItem) {
+            $messages = array_merge($messages, $this->validateShipmentItem($shipmentItem, $order));
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @param ShipmentItemInterface $item
+     * @param OrderInterface $order
+     * @return string[]
+     */
+    public function validateShipmentItem(ShipmentItemInterface $item, OrderInterface $order)
+    {
+        $messages = [];
+        $orderItem = $this->getOrderItemById($order, $item->getOrderItemId());
+        if ($orderItem === null) {
+            return [__('We can not found item "%1".', $item->getOrderItemId())];
+        }
+        if ($orderItem->getIsQtyDecimal()) {
+            $qty = (double)$item->getQty();
+        } else {
+            $qty = (int)$item->getQty();
+        }
+        $qty = $qty > 0 ? $qty : 0;
+
+        if (!$this->isQtyAvailable($orderItem, $qty)) {
+            $messages[] =__('We found an invalid quantity to ship for item "%1".', $item->getName());
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @param OrderInterface $order
+     * @param $id
+     * @return \Magento\Sales\Api\Data\OrderItemInterface|null
+     */
+    private function getOrderItemById(OrderInterface $order, $id)
+    {
+        foreach ($order->getItems() as $item) {
+            if ($item->getItemId() === $id) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Item $orderItem
+     * @param int $qty
+     * @return bool
+     */
+    private function isQtyAvailable(Item $orderItem, $qty)
+    {
+        return $qty <= $orderItem->getQtyToShip() || $orderItem->isDummy(true);
+    }
+}
