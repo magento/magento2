@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Shipment comment interface.
  *
@@ -12,10 +14,7 @@ namespace Magento\Sales\Api\Data;
  * document lists the products and their quantities in the delivery package. A shipment document can contain comments.
  * @api
  */
-interface ShipmentCommentInterface
-    extends \Magento\Framework\Api\ExtensibleDataInterface,
-    \Magento\Sales\Api\Data\CommentInterface,
-    \Magento\Sales\Api\Data\EntityInterface
+interface ShipmentCommentInterface extends ExtensibleDataInterface, CommentInterface, EntityInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.

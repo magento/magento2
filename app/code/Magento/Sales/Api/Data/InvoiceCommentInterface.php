@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Invoice comment interface.
  *
@@ -12,10 +14,7 @@ namespace Magento\Sales\Api\Data;
  * invoice history.
  * @api
  */
-interface InvoiceCommentInterface
-    extends \Magento\Framework\Api\ExtensibleDataInterface,
-    \Magento\Sales\Api\Data\CommentInterface,
-    \Magento\Sales\Api\Data\EntityInterface
+interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterface, EntityInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.

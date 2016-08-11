@@ -6,12 +6,14 @@
 
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface InvoiceCommentCreationInterface
  *
  * @api
  */
-interface InvoiceCommentCreationInterface extends \Magento\Sales\Api\Data\CommentInterface
+interface InvoiceCommentCreationInterface extends ExtensibleDataInterface, CommentInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.

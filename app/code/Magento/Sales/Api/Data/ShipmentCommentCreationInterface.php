@@ -5,13 +5,13 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface ShipmentCommentCreationInterface
  * @api
  */
-interface ShipmentCommentCreationInterface
-    extends \Magento\Framework\Api\ExtensibleDataInterface,
-    \Magento\Sales\Api\Data\CommentInterface
+interface ShipmentCommentCreationInterface extends ExtensibleDataInterface, CommentInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.
