@@ -223,7 +223,7 @@ class PageRepository implements PageRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessorComposite'
+                'Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor'
             );
         }
         return $this->collectionProcessor;

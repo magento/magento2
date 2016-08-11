@@ -82,7 +82,7 @@
     <type name="Magento\Eav\Model\Entity\AbstractEntity">
         <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
     </type>
-    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
@@ -93,7 +93,7 @@
     </virtualType>
     <type name="Magento\Eav\Model\AttributeRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
@@ -103,7 +103,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetFilterProcessor</item>
@@ -114,7 +114,7 @@
     </virtualType>
     <type name="Magento\Eav\Model\AttributeSetRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessor</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeGroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
@@ -138,7 +138,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeGroupFilterProcessor</item>
@@ -149,7 +149,7 @@
     </virtualType>
     <type name="Magento\Eav\Model\Attribute\GroupRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessorComposite</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessor</argument>
         </arguments>
     </type>
 </config>

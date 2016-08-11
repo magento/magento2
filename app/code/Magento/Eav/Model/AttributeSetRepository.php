@@ -184,7 +184,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessorComposite'
+                'Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessor'
             );
         }
         return $this->collectionProcessor;
