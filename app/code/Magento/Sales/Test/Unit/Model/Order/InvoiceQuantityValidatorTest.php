@@ -6,15 +6,16 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
 /**
  * Test for \Magento\Sales\Model\Order\InvoiceValidator class
  */
-class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
+class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\InvoiceQuantityValidator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $model;
 
@@ -24,14 +25,13 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $orderValidatorMock;
-
-    /**
      * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderMock;
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderRepositoryMock;
 
     /**
      * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -42,11 +42,6 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderValidatorMock = $this->getMockBuilder(\Magento\Sales\Model\Order\OrderValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['canInvoice'])
-            ->getMockForAbstractClass();
-
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStatus'])
@@ -56,10 +51,13 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getTotalQty', 'getItems'])
             ->getMockForAbstractClass();
-
+        $this->orderRepositoryMock = $this->getMockBuilder(
+            OrderRepositoryInterface::class
+        )->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->orderRepositoryMock->expects($this->any())->method('get')->willReturn($this->orderMock);
         $this->model = $this->objectManager->getObject(
             \Magento\Sales\Model\Order\InvoiceQuantityValidator::class,
-            ['orderValidator' => $this->orderValidatorMock]
+            ['orderRepository' => $this->orderRepositoryMock]
         );
     }
 
@@ -75,39 +73,9 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('canInvoice')
-            ->with($this->orderMock)
-            ->willReturn(true);
         $this->assertEquals(
             $expectedResult,
-            $this->model->validate($this->invoiceMock, $this->orderMock)
-        );
-    }
-
-    public function testValidateCanNotInvoiceOrder()
-    {
-        $orderStatus = 'Test Status';
-        $expectedResult = [__('An invoice cannot be created when an order has a status of %1.', $orderStatus)];
-        $invoiceItemMock = $this->getInvoiceItemMock(1, 1);
-        $this->invoiceMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$invoiceItemMock]);
-
-        $orderItemMock = $this->getOrderItemMock(1, 1, true);
-        $this->orderMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$orderItemMock]);
-        $this->orderMock->expects($this->once())
-            ->method('getStatus')
-            ->willReturn($orderStatus);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('canInvoice')
-            ->with($this->orderMock)
-            ->willReturn(false);
-        $this->assertEquals(
-            $expectedResult,
-            $this->model->validate($this->invoiceMock, $this->orderMock)
+            $this->model->validate($this->invoiceMock)
         );
     }
 
@@ -125,13 +93,9 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('canInvoice')
-            ->with($this->orderMock)
-            ->willReturn(true);
         $this->assertEquals(
             $expectedResult,
-            $this->model->validate($this->invoiceMock, $this->orderMock)
+            $this->model->validate($this->invoiceMock)
         );
     }
 
@@ -146,13 +110,9 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('canInvoice')
-            ->with($this->orderMock)
-            ->willReturn(true);
         $this->assertEquals(
             $expectedResult,
-            $this->model->validate($this->invoiceMock, $this->orderMock)
+            $this->model->validate($this->invoiceMock)
         );
     }
 
@@ -169,13 +129,9 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('canInvoice')
-            ->with($this->orderMock)
-            ->willReturn(true);
         $this->assertEquals(
             $expectedResult,
-            $this->model->validate($this->invoiceMock, $this->orderMock)
+            $this->model->validate($this->invoiceMock)
         );
     }
 

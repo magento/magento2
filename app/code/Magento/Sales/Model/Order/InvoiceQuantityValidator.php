@@ -10,7 +10,6 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Invoice\Validator\InvoiceValidatorRunner;
 use Magento\Sales\Model\ValidatorInterface;
 
 /**
@@ -19,21 +18,16 @@ use Magento\Sales\Model\ValidatorInterface;
 class InvoiceQuantityValidator implements ValidatorInterface
 {
     /**
-     * @var InvoiceValidatorRunner
-     */
-    private $invoiceValidatorRunner;
-    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
 
     /**
      * InvoiceValidator constructor.
-     * @param InvoiceValidatorRunner $invoiceValidatorRunner
+     * @param OrderRepositoryInterface $orderRepository
      */
-    public function __construct(InvoiceValidatorRunner $invoiceValidatorRunner, OrderRepositoryInterface $orderRepository)
+    public function __construct(OrderRepositoryInterface $orderRepository)
     {
-        $this->invoiceValidatorRunner = $invoiceValidatorRunner;
         $this->orderRepository = $orderRepository;
     }
 

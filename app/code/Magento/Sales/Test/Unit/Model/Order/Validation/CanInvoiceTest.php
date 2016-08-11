@@ -11,10 +11,10 @@ use Magento\Sales\Model\Order;
 /**
  * Test for \Magento\Sales\Model\Order\OrderValidator class
  */
-class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
+class CanInvoiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Validation\CanInvoice|\PHPUnit_Framework_MockObject_MockObject
      */
     private $model;
 
@@ -47,7 +47,7 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Sales\Model\Order\Invoice\Validator\InvoiceOrder();
+        $this->model = new \Magento\Sales\Model\Order\Validation\CanInvoice();
     }
 
     /**
@@ -62,8 +62,7 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($state);
         $this->orderMock->expects($this->never())
             ->method('getItems');
-        $this->assertEquals(
-            false,
+        $this->assertNotEmpty(
             $this->model->validate($this->orderMock)
         );
     }
@@ -93,8 +92,7 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([]);
 
-        $this->assertEquals(
-            false,
+        $this->assertNotEmpty(
             $this->model->validate($this->orderMock)
         );
     }
@@ -124,8 +122,7 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($itemLockedDoInvoice);
 
         $this->assertEquals(
-            $expectedResult,
-            $this->model->validate($this->orderMock)
+            $expectedResult, empty($this->model->validate($this->orderMock))
         );
     }
 
