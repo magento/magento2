@@ -77,7 +77,7 @@ class ReindexQuoteInventoryObserver implements ObserverInterface
             $this->priceIndexer->reindexList($productIds);
         }
 
-        $this->itemsForReindex ->clear();
+        $this->itemsForReindex->clear();
         // Clear list of remembered items - we don't need it anymore
     }
 }
