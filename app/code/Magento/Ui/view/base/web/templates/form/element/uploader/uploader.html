@@ -6,7 +6,7 @@
 -->
 <div class="admin__field" visible="visible" css="$data.additionalClasses">
     <label class="admin__field-label" if="$data.label" attr="for: uid">
-        <span text="label" attr="'data-config-scope': $data.scopeLabel"/>
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
     </label>
 
     <div class="admin__field-control" css="'_with-tooltip': $data.tooltip">
@@ -22,7 +22,7 @@
             <render args="tooltipTpl" if="$data.tooltip"/>
 
             <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
-                <span html="notice"/>
+                <span translate="notice"/>
             </div>
 
             <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
