@@ -39,7 +39,7 @@ require([
         },
         sequentialUploads: true,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        maxFileSize: <?php  echo $block->escapeHtml($block->getFileSizeService()->getMaxFileSize()) ?> ,
+        maxFileSize: <?php  echo $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?>,
         add: function (e, data) {
             var progressTmpl = mageTemplate('#<?php echo $block->getHtmlId(); ?>-template'),
                 fileSize,
