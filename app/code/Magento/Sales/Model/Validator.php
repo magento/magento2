@@ -5,25 +5,25 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class ValidatorRunner
+ * Class Validator
  */
 class Validator
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
      * ValidatorRunner constructor.
      *
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
