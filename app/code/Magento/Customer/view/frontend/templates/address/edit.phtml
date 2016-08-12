@@ -123,7 +123,7 @@
             <div class="control">
                 <select id="region_id" name="region_id"
                         title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>"
-                        class="validate-select" <?php echo !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : ''; ?>>
+                        class="validate-select" <?php /* @noEscape */ echo !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : ''; ?>>
                     <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
                 </select>
                 <input type="text"
