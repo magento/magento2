@@ -67,6 +67,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setWeight($weight)
     {
         $this->weight = $weight;
+        return $this;
     }
 
     /**
@@ -83,6 +84,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setQty($qty)
     {
         $this->qty = $qty;
+        return $this;
     }
 
     /**
@@ -99,6 +101,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setOrderId($orderId)
     {
         $this->orderId = $orderId;
+        return $this;
     }
 
     /**
@@ -115,6 +118,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setTrackNumber($trackNumber)
     {
         $this->trackNumber = $trackNumber;
+        return $this;
     }
 
     /**
@@ -131,6 +135,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
     }
 
     /**
@@ -147,6 +152,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setTitle($title)
     {
         $this->title = $title;
+        return $this;
     }
 
     /**
@@ -163,12 +169,11 @@ class TrackCreation implements ShipmentTrackCreationInterface
     public function setCarrierCode($carrierCode)
     {
         $this->carrierCode = $carrierCode;
+        return $this;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -177,9 +182,6 @@ class TrackCreation implements ShipmentTrackCreationInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes
-     * @return $this
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes)
     {
