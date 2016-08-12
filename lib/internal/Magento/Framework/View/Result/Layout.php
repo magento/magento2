@@ -16,6 +16,8 @@ use Magento\Framework\View;
  * A generic layout response can be used for rendering any kind of layout
  * So it comprises a response body from the layout elements it has and sets it to the HTTP response
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
  * @api
  */
 class Layout extends AbstractResult
@@ -160,10 +162,10 @@ class Layout extends AbstractResult
     {
         \Magento\Framework\Profiler::start('LAYOUT');
         \Magento\Framework\Profiler::start('layout_render');
-        
+
         $this->eventManager->dispatch('layout_render_before');
         $this->eventManager->dispatch('layout_render_before_' . $this->request->getFullActionName());
-        
+
         $this->applyHttpHeaders($httpResponse);
         $this->render($httpResponse);
 
