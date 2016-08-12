@@ -39,7 +39,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Block', 'Magento\Cms\Model\ResourceModel\Block');
+        $this->_init(\Magento\Cms\Model\Block::class, \Magento\Cms\Model\ResourceModel\Block::class);
         $this->_map['fields']['store'] = 'store_table.store_id';
     }
 

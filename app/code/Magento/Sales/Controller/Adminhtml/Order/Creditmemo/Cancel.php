@@ -44,7 +44,7 @@ class Cancel extends \Magento\Backend\App\Action
         if ($creditmemoId) {
             try {
                 $creditmemoManagement = $this->_objectManager->create(
-                    'Magento\Sales\Api\CreditmemoManagementInterface'
+                    \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
                 $creditmemoManagement->cancel($creditmemoId);
                 $this->messageManager->addSuccess(__('The credit memo has been canceled.'));

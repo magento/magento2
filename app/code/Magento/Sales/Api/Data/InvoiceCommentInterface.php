@@ -12,7 +12,8 @@ namespace Magento\Sales\Api\Data;
  * invoice history.
  * @api
  */
-interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface,
+\Magento\Sales\Api\Data\InvoiceCommentCreationInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -41,13 +42,6 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Created-at timestamp.
      */
     const CREATED_AT = 'created_at';
-
-    /**
-     * Gets the comment for the invoice.
-     *
-     * @return string Comment.
-     */
-    public function getComment();
 
     /**
      * Gets the created-at timestamp for the invoice.
@@ -87,13 +81,6 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getIsCustomerNotified();
 
     /**
-     * Gets the is-visible-on-storefront flag value for the invoice.
-     *
-     * @return int Is-visible-on-storefront flag value.
-     */
-    public function getIsVisibleOnFront();
-
-    /**
      * Gets the parent ID for the invoice.
      *
      * @return int Parent ID.
@@ -115,22 +102,6 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setIsCustomerNotified($isCustomerNotified);
-
-    /**
-     * Sets the is-visible-on-storefront flag value for the invoice.
-     *
-     * @param int $isVisibleOnFront
-     * @return $this
-     */
-    public function setIsVisibleOnFront($isVisibleOnFront);
-
-    /**
-     * Sets the comment for the invoice.
-     *
-     * @param string $comment
-     * @return $this
-     */
-    public function setComment($comment);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

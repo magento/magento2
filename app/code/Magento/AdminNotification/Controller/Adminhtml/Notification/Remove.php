@@ -22,7 +22,7 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
     public function execute()
     {
         if ($id = $this->getRequest()->getParam('id')) {
-            $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);
+            $model = $this->_objectManager->create(\Magento\AdminNotification\Model\Inbox::class)->load($id);
 
             if (!$model->getId()) {
                 $this->_redirect('adminhtml/*/');

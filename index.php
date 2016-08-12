@@ -10,7 +10,7 @@
  * $params[\Magento\Store\Model\StoreManager::PARAM_RUN_TYPE] = 'website';
  * $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
  * \/** @var \Magento\Framework\App\Http $app *\/
- * $app = $bootstrap->createApplication('Magento\Framework\App\Http');
+ * $app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
  * $bootstrap->run($app);
  * --------------------------------------------
  *
@@ -35,5 +35,5 @@ HTML;
 
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
-$app = $bootstrap->createApplication('Magento\Framework\App\Http');
+$app = $bootstrap->createApplication(\Magento\Framework\App\Http::class);
 $bootstrap->run($app);

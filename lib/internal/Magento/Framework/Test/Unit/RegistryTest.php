@@ -27,7 +27,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
         $this->registry = new Registry();
         $this->data = [
             'key' => 'customer',
-            'value' => '\Magento\Customer\Model\Customer',
+            'value' => \Magento\Customer\Model\Customer::class,
         ];
         $this->registry->register($this->data['key'], $this->data['value']);
     }
@@ -65,7 +65,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     public function testUnregister()
     {
         $key = 'csv_adapter';
-        $valueObj = $this->getMock('\Magento\ImportExport\Model\Export\Adapter\Csv', [], [], '', false, false);
+        $valueObj = $this->getMock(\Magento\ImportExport\Model\Export\Adapter\Csv::class, [], [], '', false, false);
         $this->registry->register($key, $valueObj);
         $this->assertEquals($valueObj, $this->registry->registry($key));
         $this->registry->unregister($key);

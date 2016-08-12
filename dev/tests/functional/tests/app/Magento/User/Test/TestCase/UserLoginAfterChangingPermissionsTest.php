@@ -37,6 +37,7 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group ACL_(PS)
  * @ZephyrId MAGETWO-28828
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserLoginAfterChangingPermissionsTest extends Injectable
 {
@@ -136,7 +137,7 @@ class UserLoginAfterChangingPermissionsTest extends Injectable
         $role->persist();
         /** @var User $user */
         $user = $this->fixtureFactory->create(
-            'Magento\User\Test\Fixture\User',
+            \Magento\User\Test\Fixture\User::class,
             ['data' => array_merge($user->getData(), ['role_id' => ['role' => $role]])]
         );
         $user->persist();

@@ -5,6 +5,9 @@
  */
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MultishippingTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -74,50 +77,57 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $orderFactoryMock = $this->getMock('\Magento\Sales\Model\OrderFactory', [], [], '', false);
-        $eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $sessionMock = $this->getMock('\Magento\Framework\Session\Generic', [], [], '', false);
-        $addressFactoryMock = $this->getMock('\Magento\Quote\Model\Quote\AddressFactory', [], [], '', false);
-        $toOrderMock = $this->getMock('\Magento\Quote\Model\Quote\Address\ToOrder', [], [], '', false);
-        $toOrderAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address\ToOrderAddress', [], [], '', false);
-        $toOrderPaymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment\ToOrderPayment', [], [], '', false);
-        $toOrderItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
-        $storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $paymentSpecMock = $this->getMock('\Magento\Payment\Model\Method\SpecificationInterface', [], [], '', false);
-        $this->helperMock = $this->getMock('\Magento\Multishipping\Helper\Data', [], [], '', false);
-        $orderSenderMock = $this->getMock('\Magento\Sales\Model\Order\Email\Sender\OrderSender', [], [], '', false);
-        $priceMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->filterBuilderMock = $this->getMock('\Magento\Framework\Api\FilterBuilder', [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $orderFactoryMock = $this->getMock(\Magento\Sales\Model\OrderFactory::class, [], [], '', false);
+        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
+        $sessionMock = $this->getMock(\Magento\Framework\Session\Generic::class, [], [], '', false);
+        $addressFactoryMock = $this->getMock(\Magento\Quote\Model\Quote\AddressFactory::class, [], [], '', false);
+        $toOrderMock = $this->getMock(\Magento\Quote\Model\Quote\Address\ToOrder::class, [], [], '', false);
+        $toOrderAddressMock =
+            $this->getMock(\Magento\Quote\Model\Quote\Address\ToOrderAddress::class, [], [], '', false);
+        $toOrderPaymentMock =
+            $this->getMock(\Magento\Quote\Model\Quote\Payment\ToOrderPayment::class, [], [], '', false);
+        $toOrderItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $paymentSpecMock =
+            $this->getMock(\Magento\Payment\Model\Method\SpecificationInterface::class, [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Multishipping\Helper\Data::class, [], [], '', false);
+        $orderSenderMock =
+            $this->getMock(\Magento\Sales\Model\Order\Email\Sender\OrderSender::class, [], [], '', false);
+        $priceMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class, [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->filterBuilderMock = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
         $this->searchCriteriaBuilderMock = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             [],
             [],
             '',
             false
         );
         $this->addressRepositoryMock = $this->getMock(
-            '\Magento\Customer\Api\AddressRepositoryInterface',
+            \Magento\Customer\Api\AddressRepositoryInterface::class,
             [],
             [],
             '',
             false
         );
-
-        /**
-         * This is used to get past _init() which is called in construct.
-         */
+        /** This is used to get past _init() which is called in construct. */
         $data['checkout_session'] = $this->checkoutSessionMock;
-        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-        $this->customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $this->customerMock->expects($this->atLeastOnce())->method('getId')->willReturn(null);
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
         $this->customerSessionMock->expects($this->atLeastOnce())->method('getCustomerDataObject')
             ->willReturn($this->customerMock);
-        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
+        $this->totalsCollectorMock = $this->getMock(
+            \Magento\Quote\Model\Quote\TotalsCollector::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Multishipping\Model\Checkout\Type\Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -194,14 +204,20 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('setConditionType')->willReturnSelf();
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('create')->willReturnSelf();
 
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $this->searchCriteriaBuilderMock->expects($this->atLeastOnce())->method('addFilters')->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->atLeastOnce())->method('create')
             ->willReturn($searchCriteriaMock);
 
-        $resultMock = $this->getMock('\Magento\Customer\Api\Data\AddressSearchResultsInterface', [], [], '', false);
+        $resultMock = $this->getMock(
+            \Magento\Customer\Api\Data\AddressSearchResultsInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->addressRepositoryMock->expects($this->atLeastOnce())->method('getList')->willReturn($resultMock);
-        $addressItemMock = $this->getMock('\Magento\Customer\Api\Data\AddressInterface', [], [], '', false);
+        $addressItemMock = $this->getMock(\Magento\Customer\Api\Data\AddressInterface::class, [], [], '', false);
         $resultMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$addressItemMock]);
         $addressItemMock->expects($this->atLeastOnce())->method('getId')->willReturn(null);
 
@@ -224,11 +240,11 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         ];
         $customerAddressId = 42;
 
-        $customerAddressMock = $this->getMock('\Magento\Customer\Model\Data\Address', [], [], '', false);
+        $customerAddressMock = $this->getMock(\Magento\Customer\Model\Data\Address::class, [], [], '', false);
         $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
         $customerAddresses = [$customerAddressMock];
 
-        $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $this->quoteMock->expects($this->once())->method('getItemById')->willReturn($quoteItemMock);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([]);
 
@@ -244,7 +260,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $addressId = 42;
         $customerAddressId = 42;
 
-        $customerAddressMock = $this->getMock('\Magento\Customer\Model\Data\Address', [], [], '', false);
+        $customerAddressMock = $this->getMock(\Magento\Customer\Model\Data\Address::class, [], [], '', false);
         $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
         $customerAddresses = [$customerAddressMock];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
@@ -263,7 +279,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $addressId = 43;
         $customerAddressId = 42;
 
-        $customerAddressMock = $this->getMock('\Magento\Customer\Model\Data\Address', [], [], '', false);
+        $customerAddressMock = $this->getMock(\Magento\Customer\Model\Data\Address::class, [], [], '', false);
         $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
         $customerAddresses = [$customerAddressMock];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
@@ -276,7 +292,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $addressId = 42;
         $customerAddressId = 42;
 
-        $customerAddressMock = $this->getMock('\Magento\Customer\Model\Data\Address', [], [], '', false);
+        $customerAddressMock = $this->getMock(\Magento\Customer\Model\Data\Address::class, [], [], '', false);
         $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
         $customerAddresses = [$customerAddressMock];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
@@ -293,7 +309,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $addressId = 43;
         $customerAddressId = 42;
 
-        $customerAddressMock = $this->getMock('\Magento\Customer\Model\Data\Address', [], [], '', false);
+        $customerAddressMock = $this->getMock(\Magento\Customer\Model\Data\Address::class, [], [], '', false);
         $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
         $customerAddresses = [$customerAddressMock];
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);

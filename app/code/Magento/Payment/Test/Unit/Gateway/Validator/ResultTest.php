@@ -31,7 +31,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     public function resultDataProvider()
     {
-        $phraseMock = $this->getMockBuilder('Magento\Framework\Phrase')->disableOriginalConstructor()->getMock();
+        $phraseMock = $this->getMockBuilder(\Magento\Framework\Phrase::class)->disableOriginalConstructor()->getMock();
         return [
             [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
             ['', [], false, []],

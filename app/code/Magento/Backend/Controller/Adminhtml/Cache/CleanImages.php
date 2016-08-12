@@ -19,7 +19,7 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
     public function execute()
     {
         try {
-            $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();
+            $this->_objectManager->create(\Magento\Catalog\Model\Product\Image::class)->clearCache();
             $this->_eventManager->dispatch('clean_catalog_images_cache_after');
             $this->messageManager->addSuccess(__('The image cache was cleaned.'));
         } catch (LocalizedException $e) {

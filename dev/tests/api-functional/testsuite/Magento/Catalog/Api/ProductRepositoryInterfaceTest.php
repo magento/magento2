@@ -23,6 +23,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products';
 
     const KEY_TIER_PRICES = 'tier_prices';
+    const KEY_CATEGORY_LINKS = 'category_links';
 
     /**
      * @var array
@@ -253,7 +254,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         );
 
         foreach ($storeManager->getStores(true) as $store) {
@@ -321,10 +322,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->saveProduct($productData);
 
-        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "related",
-                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0, "extension_attributes" => []];
-        $productWithRelatedData =  [
+        $productLinkData = [
+            "sku" => "product_simple_with_related_500",
+            "link_type" => "related",
+            "linked_product_sku" => "product_simple_500",
+            "linked_product_type" => "simple",
+            "position" => 0,
+            "extension_attributes" => []
+        ];
+        $productWithRelatedData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -345,10 +351,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information
-        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "upsell",
-                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0, "extension_attributes" => []];
-        $productWithUpsellData =  [
+        $productLinkData = [
+            "sku" => "product_simple_with_related_500",
+            "link_type" => "upsell",
+            "linked_product_sku" => "product_simple_500",
+            "linked_product_type" => "simple",
+            "position" => 0,
+            "extension_attributes" => []
+        ];
+        $productWithUpsellData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -368,7 +379,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // Remove link
-        $productWithNoLinkData =  [
+        $productWithNoLinkData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -498,32 +509,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $filename1 = 'tiny1' . time() . '.jpg';
         $filename2 = 'tiny2' . time() . '.jpeg';
         $productData = $this->getSimpleProductData();
-        $productData['media_gallery_entries'] = [
-            [
-                'position' => 1,
-                'media_type' => 'image',
-                'disabled' => true,
-                'label' => 'tiny1',
-                'types' => [],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename1,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-            [
-                'position' => 2,
-                'media_type' => 'image',
-                'disabled' => false,
-                'label' => 'tiny2',
-                'types' => ['image', 'small_image'],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename2,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-        ];
+        $productData['media_gallery_entries'] = $this->getMediaGalleryData($filename1, $encodedImage, $filename2);
         $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
@@ -567,14 +553,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $expectedValue = [[
-            'label' => 'tiny1_new_label',
-            'media_type' => 'image',
-            'position' => 1,
-            'disabled' => false,
-            'types' => ['image', 'small_image'],
-            'file' => '/t/i/' . $filename1,
-        ]];
+        $expectedValue = [
+            [
+                'label' => 'tiny1_new_label',
+                'media_type' => 'image',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1,
+            ]
+        ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
@@ -600,7 +588,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::SKU => 'simple', //sku from fixture
         ];
         $product = $this->getSimpleProductData($productData);
-        $response =  $this->updateProduct($product);
+        $response = $this->updateProduct($product);
 
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
         $this->assertArrayHasKey(ProductInterface::NAME, $response);
@@ -631,7 +619,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response =  $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
 
@@ -930,6 +918,114 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             StockItemInterface::LOW_STOCK_DATE => null,
             StockItemInterface::IS_DECIMAL_DIVIDED => 0,
             StockItemInterface::STOCK_STATUS_CHANGED_AUTO => 0,
+        ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testProductCategoryLinks()
+    {
+        // Create simple product
+        $productData = $this->getSimpleProductData();
+        $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = [
+            self::KEY_CATEGORY_LINKS => [['category_id' => 333, 'position' => 0]]
+        ];
+        $response = $this->saveProduct($productData);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 0]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertArrayHasKey(ProductInterface::EXTENSION_ATTRIBUTES_KEY, $response);
+        $extensionAttributes = $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+        $this->assertArrayHasKey(self::KEY_CATEGORY_LINKS, $extensionAttributes);
+        $this->assertEquals([['category_id' => 333, 'position' => 0]], $extensionAttributes[self::KEY_CATEGORY_LINKS]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksNullOrNotExists()
+    {
+        $response = $this->getProduct('simple333');
+        // update product without category_link or category_link is null
+        $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = null;
+        $response = $this->updateProduct($response);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 0]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+        unset($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]);
+        $response = $this->updateProduct($response);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 0]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksPosistion()
+    {
+        $response = $this->getProduct('simple333');
+        // update category_link position
+        $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [
+            ['category_id' => 333, 'position' => 10]
+        ];
+        $response = $this->updateProduct($response);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 10]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksUnassign()
+    {
+        $response = $this->getProduct('simple333');
+        // unassign category_links from product
+        $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [];
+        $response = $this->updateProduct($response);
+        $this->assertArrayNotHasKey(self::KEY_CATEGORY_LINKS, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
+    }
+
+    /**
+     * @param $filename1
+     * @param $encodedImage
+     * @param $filename2
+     * @return array
+     */
+    private function getMediaGalleryData($filename1, $encodedImage, $filename2)
+    {
+        return [
+            [
+                'position' => 1,
+                'media_type' => 'image',
+                'disabled' => true,
+                'label' => 'tiny1',
+                'types' => [],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename1,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ],
+            [
+                'position' => 2,
+                'media_type' => 'image',
+                'disabled' => false,
+                'label' => 'tiny2',
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename2,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ],
         ];
     }
 }

@@ -55,7 +55,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
             }
 
             /** @var \Magento\Cms\Model\Block $model */
-            $model = $this->_objectManager->create('Magento\Cms\Model\Block')->load($id);
+            $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class)->load($id);
             if (!$model->getId() && $id) {
                 $this->messageManager->addError(__('This block no longer exists.'));
                 return $resultRedirect->setPath('*/*/');

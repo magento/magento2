@@ -38,7 +38,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Item\Option');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Item\Option::class);
     }
 
     /**

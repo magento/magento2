@@ -22,7 +22,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function testApplyConfigWithDrivers(array $config, array $expectedDrivers)
     {
         \Magento\Framework\Profiler::applyConfig($config, '');
-        $this->assertAttributeEquals($expectedDrivers, '_drivers', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals($expectedDrivers, '_drivers', \Magento\Framework\Profiler::class);
     }
 
     /**

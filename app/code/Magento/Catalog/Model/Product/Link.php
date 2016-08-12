@@ -57,6 +57,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
+     * @deprecated
      */
     protected $stockHelper;
 
@@ -93,7 +94,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Link');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
     }
 
     /**
@@ -191,7 +192,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     {
         if (null === $this->saveProductLinks) {
             $this->saveProductLinks = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Link\SaveHandler');
+                ->get(\Magento\Catalog\Model\Product\Link\SaveHandler::class);
         }
         return $this->saveProductLinks;
     }

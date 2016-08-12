@@ -21,7 +21,7 @@ class ProductItem extends \Magento\Catalog\Test\Block\Product\ProductList\Produc
     public function getPriceBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Weee\Test\Block\Product\Price',
+            \Magento\Weee\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBox)]
         );
     }

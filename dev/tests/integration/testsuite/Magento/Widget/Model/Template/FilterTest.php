@@ -15,7 +15,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Widget\Model\Template\Filter $filter */
         $filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Template\Filter'
+            \Magento\Widget\Model\Template\Filter::class
         );
         $result = $filter->mediaDirective($construction);
         $this->assertEquals($baseUrl . $image, $result);

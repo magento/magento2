@@ -15,11 +15,11 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
+        $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('\Magento\Customer\Block\Account\Customer', ['httpContext' => $this->httpContext]);
+            ->getObject(\Magento\Customer\Block\Account\Customer::class, ['httpContext' => $this->httpContext]);
     }
 
     public function customerLoggedInDataProvider()

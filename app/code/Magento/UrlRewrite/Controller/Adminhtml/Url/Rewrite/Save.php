@@ -141,12 +141,14 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             /** @var $session \Magento\Backend\Model\Session */
-            $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+            $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
             try {
                 $model = $this->_getUrlRewrite();
 
                 $requestPath = $this->getRequest()->getParam('request_path');
-                $this->_objectManager->get('Magento\UrlRewrite\Helper\UrlRewrite')->validateRequestPath($requestPath);
+                $this->_objectManager->get(
+                    \Magento\UrlRewrite\Helper\UrlRewrite::class
+                )->validateRequestPath($requestPath);
 
                 $model->setEntityType($this->getRequest()->getParam('entity_type') ?: self::ENTITY_TYPE_CUSTOM)
                     ->setRequestPath($requestPath)

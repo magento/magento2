@@ -19,7 +19,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -29,7 +29,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
          * Unset messages
          */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\Session'
+            \Magento\Backend\Model\Session::class
         )->getMessages(
             true
         );
@@ -38,7 +38,6 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
 
     /**
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
-     * @magentoAppIsolation disabled
      */
     public function testSaveActionQueueTemplateAndVerifySuccessMessage()
     {

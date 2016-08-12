@@ -82,7 +82,7 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionMock($class)
     {
         $connection = $this->getMock($class, ['beginTransaction', 'rollback', 'commit'], [], '', false);
-        $this->assertInstanceOf('Magento\TestFramework\Db\Adapter\TransactionInterface', $connection);
+        $this->assertInstanceOf(\Magento\TestFramework\Db\Adapter\TransactionInterface::class, $connection);
         return $connection;
     }
 }

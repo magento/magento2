@@ -119,7 +119,7 @@ class Auth
     protected function _initCredentialStorage()
     {
         $this->_credentialStorage = $this->_modelFactory->create(
-            'Magento\Backend\Model\Auth\Credential\StorageInterface'
+            \Magento\Backend\Model\Auth\Credential\StorageInterface::class
         );
     }
 
