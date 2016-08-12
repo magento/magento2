@@ -7,8 +7,6 @@
 // @codingStandardsIgnoreFile
 
 ?>
-
-
 <div ng-switch="isCompleted()">
 
     <div ng-switch-when="true" ng-switch="hasErrors">
@@ -38,7 +36,9 @@
 </div>
 
 <div class="extensions-information" ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0">
-    <div class="message message-warning">
+    <div class="message message-warning"
+         ng-show="componentDependency.processed && componentDependency.responseType != 'success'"
+    >
         We found some extensions with available version updates. We recommend that you update to the recommended
         versions or remove these extensions from the installation process. We found some extensions with available
         version updates. We recommend that you update to the recommended versions or remove these extensions from
@@ -67,12 +67,12 @@
             </li>
         </ul>
 
-        <div ng-show="needReCheck && !checkingInProgress()">
+        <div ng-show="(needReCheck || hasErrors) && !checkingInProgress()">
             <button ng-click="$state.forceReload()" class="btn btn-medium btn-secondary">
-                <span>Recheck</span>
+                <span>Try Again</span>
             </button>
         </div>
-        <div ng-show="!needReCheck && !checkingInProgress()">
+        <div ng-show="!needReCheck && !checkingInProgress() && !hasErrors">
             <button ng-click="nextState()" class="btn btn-medium btn-prime">
                 <span>Update</span>
             </button>
