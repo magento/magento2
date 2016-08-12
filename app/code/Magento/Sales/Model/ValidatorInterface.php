@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Exception\DocumentValidationException;
 
 /**
@@ -16,7 +17,7 @@ interface ValidatorInterface
      * @param object $entity
      * @return string[]
      * @throws DocumentValidationException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function validate($entity);
 }
