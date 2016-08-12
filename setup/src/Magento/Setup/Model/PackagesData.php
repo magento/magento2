@@ -9,6 +9,7 @@ use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class PackagesData returns system packages and available for update versions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PackagesData
 {
