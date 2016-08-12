@@ -26,7 +26,7 @@ class CanShip implements ValidatorInterface
     {
         $messages = [];
         if (!$this->canShip($entity)) {
-            $messages[] = __('The order does not allow an shipment to be created.');
+            $messages[] = __('The order does not allow a shipment to be created.');
         }
 
         return $messages;

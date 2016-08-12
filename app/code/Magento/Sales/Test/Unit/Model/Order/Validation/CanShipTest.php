@@ -132,9 +132,9 @@ class CanShipTest extends \PHPUnit_Framework_TestCase
     public function canShipDataProvider()
     {
         return [
-            [0, null, [__('The order does not allow an shipment to be created.')]],
-            [-1, null, [__('The order does not allow an shipment to be created.')]],
-            [1, true, [__('The order does not allow an shipment to be created.')]],
+            [0, null, [__('The order does not allow a shipment to be created.')]],
+            [-1, null, [__('The order does not allow a shipment to be created.')]],
+            [1, true, [__('The order does not allow a shipment to be created.')]],
             [0.5, false, []],
         ];
     }
