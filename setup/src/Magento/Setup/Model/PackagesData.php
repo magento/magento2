@@ -290,6 +290,21 @@ class PackagesData
     }
 
     /**
+     * Get package extra info
+     *
+     * @param string $packageName
+     * @param string $packageVersion
+     * @return array
+     */
+    public function getPackageExtraInfo($packageName, $packageVersion)
+    {
+        $packagesJson = $this->getPackagesJson();
+
+        return isset($packagesJson[$packageName][$packageVersion]['extra']) ?
+            $packagesJson[$packageName][$packageVersion]['extra'] : [] ;
+    }
+
+    /**
      * Check if this new user package
      *
      * @param array $package

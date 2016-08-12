@@ -110,7 +110,8 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
                 . '}, "magento\/package-3":{'
                 . '"1.0.0":{"name":"magento\/package-3","version":"1.0.0","vendor":"test","type":"magento2-module"},'
                 . '"1.0.1":{"name":"magento\/package-3","version":"1.0.1","vendor":"test","type":"magento2-module"},'
-                . '"1.0.2":{"name":"magento\/package-3","version":"1.0.2","vendor":"test","type":"magento2-module"}'
+                . '"1.0.2":{"name":"magento\/package-3","version":"1.0.2","vendor":"test","type":"magento2-module",'
+                . '"extra":{"x-magento-ext-title":"Package 3 title", "x-magento-ext-type":"Extension"}}'
                 . '}}}'
             );
 
@@ -161,6 +162,14 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         static::assertEquals(
             ['magento/package-3' => 'magento/package-1'],
             $this->packagesData->getMetaPackagesMap()
+        );
+    }
+
+    public function testGetPackageExtraInfo()
+    {
+        static::assertEquals(
+            ['x-magento-ext-title' => 'Package 3 title', 'x-magento-ext-type' => 'Extension'],
+            $this->packagesData->getPackageExtraInfo('magento/package-3', '1.0.2')
         );
     }
 }

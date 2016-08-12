@@ -62,7 +62,12 @@ class InstallExtensionGrid extends AbstractActionController
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
         array_walk($packages, function (&$package) {
             $package['vendor'] = ucfirst($package['vendor']);
-            $package['type'] =  $this->typeMapper->map($package['name'], $package['type']);
+            $package['link'] = isset($package['extra']['x-magento-ext-package-link']) ?
+                $package['extra']['x-magento-ext-package-link'] : '';
+            $package['product_name'] = isset($package['extra']['x-magento-ext-title']) ?
+                $package['extra']['x-magento-ext-title'] : $package['name'];
+            $package['type'] = isset($package['extra']['x-magento-ext-type']) ?
+                $package['extra']['x-magento-ext-type'] : $this->typeMapper->map($package['name'], $package['type']);
         });
 
         return new JsonModel(

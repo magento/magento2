@@ -78,7 +78,7 @@
                           ng-class="{'_show-dependencies': item.requiredBy.length > 0 && showDependencies,
                                      '_hide-dependencies': item.requiredBy.length > 0 && !showDependencies,
                                      '_no-dependencies': item.requiredBy.length == 0}">
-                        {{item.name}}
+                        {{item.product_name}}
                     </div>
                     <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
                         <div class="product-modules-title">
@@ -94,7 +94,7 @@
                                       data-label="{{getIndicatorInfo(product, 'label')}}">
                                     <span>{{getIndicatorInfo(product, 'label')}}</span>
                                 </span>
-                                {{product.name}}
+                                {{product.product_name}}
                             </li>
                         </ul>
                     </div>
