@@ -16,6 +16,7 @@ interface ValidatorInterface
      * @param object $entity
      * @return string[]
      * @throws DocumentValidationException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function validate($entity);
 }

@@ -116,6 +116,15 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testValidateNoOrder()
+    {
+        $expectedResult = [__('Order Id is required for invoice document')];
+        $this->assertEquals(
+            $expectedResult,
+            $this->model->validate($this->invoiceMock)
+        );
+    }
+
     public function testValidateNoInvoiceItems()
     {
         $expectedResult = [__('You can\'t create an invoice without products.')];
