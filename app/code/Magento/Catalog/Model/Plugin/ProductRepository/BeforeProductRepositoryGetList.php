@@ -41,6 +41,7 @@ class BeforeProductRepositoryGetList
      * @param ProductRepositoryInterface $subject
      * @param SearchCriteriaInterface $searchCriteria
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetList(ProductRepositoryInterface $subject, SearchCriteriaInterface $searchCriteria)
     {
