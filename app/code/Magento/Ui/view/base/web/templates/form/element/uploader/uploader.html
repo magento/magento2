@@ -22,7 +22,7 @@
             <render args="tooltipTpl" if="$data.tooltip"/>
 
             <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
-                <span translate="notice"/>
+                <span html="notice"/>
             </div>
 
             <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
