@@ -73,6 +73,9 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn(1);
         $this->assertEquals(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
@@ -93,6 +96,9 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn(1);
         $this->assertEquals(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
@@ -110,6 +116,9 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([]);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn(1);
         $this->assertEquals(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
@@ -138,6 +147,9 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn(1);
         $this->assertEquals(
             $expectedResult,
             $this->model->validate($this->invoiceMock)
