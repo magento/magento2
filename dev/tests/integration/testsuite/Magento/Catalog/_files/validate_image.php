@@ -7,7 +7,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Filesystem $filesystem */
-$filesystem = $objectManager->create('Magento\Framework\Filesystem');
+$filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);
 
 /** @var $tmpDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
 $tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);

@@ -39,24 +39,24 @@ class AssertCatalogPriceRuleAppliedOnepageCheckout extends AbstractConstraint
         array $payment
     ) {
         $this->objectManager->create(
-            '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->objectManager->create(
-            '\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         )->run();
-        $this->objectManager->create('\Magento\Checkout\Test\TestStep\ProceedToCheckoutStep')->run();
+        $this->objectManager->create(\Magento\Checkout\Test\TestStep\ProceedToCheckoutStep::class)->run();
         $this->objectManager->create(
-            '\Magento\Checkout\Test\TestStep\FillBillingInformationStep',
+            \Magento\Checkout\Test\TestStep\FillBillingInformationStep::class,
             ['customer' => $customer, 'checkoutMethod' => 'register']
         )->run();
         $this->objectManager->create(
-            '\Magento\Checkout\Test\TestStep\FillShippingMethodStep',
+            \Magento\Checkout\Test\TestStep\FillShippingMethodStep::class,
             ['shipping' => $shipping]
         )->run();
         $this->objectManager->create(
-            '\Magento\Checkout\Test\TestStep\SelectPaymentMethodStep',
+            \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,
             ['payment' => $payment]
         )->run();
         $actualPrices['grand_total'] = $checkoutOnepage->getReviewBlock()->getGrandTotal();

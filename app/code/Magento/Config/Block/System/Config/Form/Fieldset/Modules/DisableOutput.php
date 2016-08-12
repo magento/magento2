@@ -97,7 +97,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         if (empty($this->_fieldRenderer)) {
             $this->_fieldRenderer = $this->_layout->getBlockSingleton(
-                'Magento\Config\Block\System\Config\Form\Field'
+                \Magento\Config\Block\System\Config\Form\Field::class
             );
         }
         return $this->_fieldRenderer;

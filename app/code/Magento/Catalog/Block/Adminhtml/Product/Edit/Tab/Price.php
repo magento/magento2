@@ -43,7 +43,7 @@ class Price extends \Magento\Backend\Block\Widget\Form\Generic
         $form->getElement(
             'tier_price'
         )->setRenderer(
-            $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier')
+            $this->getLayout()->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier::class)
         );
 
         $this->setForm($form);

@@ -9,7 +9,7 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\DataObject;
 
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
-    const EXPECTED_CLASS = 'Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\ObjectTest';
+    const EXPECTED_CLASS = \Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\ObjectTest::class;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -28,7 +28,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new DataObject($this->_objectManager, self::EXPECTED_CLASS);
     }
 
@@ -72,7 +72,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         return [
             'no class' => [[], '\InvalidArgumentException', 'Object class name is missing'],
             'unexpected class' => [
-                ['value' => 'Magento\Framework\ObjectManagerInterface'],
+                ['value' => \Magento\Framework\ObjectManagerInterface::class],
                 '\UnexpectedValueException',
                 'Instance of ' . self::EXPECTED_CLASS . ' is expected',
             ]

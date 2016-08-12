@@ -19,6 +19,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\User', 'Magento\User\Model\ResourceModel\User');
+        $this->_init(\Magento\User\Model\User::class, \Magento\User\Model\ResourceModel\User::class);
     }
 }

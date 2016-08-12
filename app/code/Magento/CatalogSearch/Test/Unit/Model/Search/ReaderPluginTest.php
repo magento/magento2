@@ -18,13 +18,13 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestGenerator = $this->getMockBuilder('Magento\\CatalogSearch\\Model\\Search\\RequestGenerator')
+        $this->requestGenerator = $this->getMockBuilder(\Magento\CatalogSearch\Model\Search\RequestGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\\CatalogSearch\\Model\\Search\\ReaderPlugin',
+            \Magento\CatalogSearch\Model\Search\ReaderPlugin::class,
             ['requestGenerator' => $this->requestGenerator]
         );
     }
@@ -36,7 +36,8 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['test' => 'a']));
 
         $result = $this->object->aroundRead(
-            $this->getMockBuilder('Magento\Framework\Config\ReaderInterface')->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)
+                ->disableOriginalConstructor()->getMock(),
             function () {
                 return ['test' => 'b', 'd' => 'e'];
             }

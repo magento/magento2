@@ -94,21 +94,22 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMockBuilder('Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader')
+        $this->shipmentLoader = $this->getMockBuilder(
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->labelGenerator = $this->getMockBuilder('Magento\Shipping\Model\Shipping\LabelGenerator')
+        $this->labelGenerator = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\LabelGenerator::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->shipmentSender = $this->getMockBuilder('Magento\Sales\Model\Order\Email\Sender\ShipmentSender')
+        $this->shipmentSender = $this->getMockBuilder(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'getRequest', 'getResponse', 'getMessageManager', 'getRedirect',
                 'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
@@ -119,40 +120,40 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse'],
             [],
             '',
             false
         );
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->objectManager = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create', 'get'],
             [],
             '',
             false
         );
         $this->messageManager = $this->getMock(
-            'Magento\Framework\Message\Manager',
+            \Magento\Framework\Message\Manager::class,
             ['addSuccess', 'addError'],
             [],
             '',
             false
         );
         $this->session = $this->getMock(
-            'Magento\Backend\Model\Session',
+            \Magento\Backend\Model\Session::class,
             ['setIsUrlNotice', 'getCommentText'],
             [],
             '',
             false
         );
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $this->helper = $this->getMock('Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
+        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get'], [], '', false);
+        $this->helper = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
 
         $this->resultRedirect = $this->getMock(
-            'Magento\Framework\Controller\Result\Redirect',
+            \Magento\Framework\Controller\Result\Redirect::class,
             ['setPath'],
             [],
             '',
@@ -163,7 +164,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirect);
 
         $resultRedirectFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
+            \Magento\Framework\Controller\Result\RedirectFactory::class,
             ['create'],
             [],
             '',
@@ -174,7 +175,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirect);
 
         $this->formKeyValidator = $this->getMock(
-            'Magento\Framework\Data\Form\FormKey\Validator',
+            \Magento\Framework\Data\Form\FormKey\Validator::class,
             ['validate'],
             [],
             '',
@@ -210,7 +211,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->formKeyValidator));
 
         $this->saveAction = $objectManagerHelper->getObject(
-            'Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save',
+            \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save::class,
             [
                 'labelGenerator' => $this->labelGenerator,
                 'shipmentSender' => $this->shipmentSender,
@@ -256,14 +257,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $tracking = [];
             $shipmentData = ['items' => [], 'send_email' => ''];
             $shipment = $this->getMock(
-                'Magento\Sales\Model\Order\Shipment',
+                \Magento\Sales\Model\Order\Shipment::class,
                 ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup'],
                 [],
                 '',
                 false
             );
             $order = $this->getMock(
-                'Magento\Sales\Model\Order',
+                \Magento\Sales\Model\Order::class,
                 ['setCustomerNoteNotify', '__wakeup'],
                 [],
                 '',
@@ -311,7 +312,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ->method('create')
                 ->with($shipment, $this->request)
                 ->will($this->returnValue(true));
-            $saveTransaction = $this->getMockBuilder('Magento\Framework\DB\Transaction')
+            $saveTransaction = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
                 ->disableOriginalConstructor()
                 ->setMethods([])
                 ->getMock();
@@ -332,11 +333,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
             $this->objectManager->expects($this->once())
                 ->method('create')
-                ->with('Magento\Framework\DB\Transaction')
+                ->with(\Magento\Framework\DB\Transaction::class)
                 ->will($this->returnValue($saveTransaction));
             $this->objectManager->expects($this->once())
                 ->method('get')
-                ->with('Magento\Backend\Model\Session')
+                ->with(\Magento\Backend\Model\Session::class)
                 ->will($this->returnValue($this->session));
             $path = 'sales/order/view';
             $arguments = ['order_id' => $orderId];

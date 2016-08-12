@@ -9,7 +9,8 @@
     <testCase name="Magento\Sales\Test\TestCase\CreateOnlineInvoiceEntityTest" summary="Capture for order placed within Braintree Credit Card">
         <variation name="CreateOnlineInvoiceEntityTestBraintreeVariation1" summary="Full capture of order placed within Braintree Credit Card" ticketId="MAGETWO-38319">
             <data name="description" xsi:type="string">Full capture of order placed within Braintree Credit Card</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/1" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
@@ -36,7 +37,7 @@
         </variation>
         <variation name="CreateOnlineInvoiceEntityTestBraintreeVariation2" summary="Partial capture for order placed within Braintree Credit Card" ticketId="MAGETWO-38322">
             <data name="description" xsi:type="string">Partial capture for order placed within Braintree Credit Card</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>

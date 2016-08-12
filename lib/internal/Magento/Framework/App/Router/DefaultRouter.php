@@ -48,6 +48,6 @@ class DefaultRouter implements RouterInterface
             }
         }
 
-        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+        return $this->actionFactory->create(\Magento\Framework\App\Action\Forward::class);
     }
 }

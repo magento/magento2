@@ -263,7 +263,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }
         return $this->_associatedEntitiesMap;

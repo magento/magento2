@@ -8,5 +8,5 @@ require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
+$order = $objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 $order->setItems([])->setTotalItemCount(0)->save();

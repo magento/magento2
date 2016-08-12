@@ -16,7 +16,7 @@ class Refresh extends \Magento\Backend\App\Action
     public function execute()
     {
         $formId = $this->getRequest()->getPost('formId');
-        $captchaModel = $this->_objectManager->get('Magento\Captcha\Helper\Data')->getCaptcha($formId);
+        $captchaModel = $this->_objectManager->get(\Magento\Captcha\Helper\Data::class)->getCaptcha($formId);
         $this->_view->getLayout()->createBlock(
             $captchaModel->getBlockName()
         )->setFormId(

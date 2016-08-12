@@ -83,7 +83,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $yearEnd = $this->_catalogProductOptionTypeDate->getYearEnd();
 
         $calendar = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Date'
+            \Magento\Framework\View\Element\Html\Date::class
         )->setId(
             'options_' . $this->getOption()->getId() . '_date'
         )->setName(
@@ -185,7 +185,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         // $require = $this->getOption()->getIsRequire() ? ' required-entry' : '';
         $require = '';
         $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setId(
             'options_' . $this->getOption()->getId() . '_' . $name
         )->setClass(

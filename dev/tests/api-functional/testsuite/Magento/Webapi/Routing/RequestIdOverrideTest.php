@@ -41,7 +41,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         $this->_version = 'V1';
         $this->_restResourcePath = "/{$this->_version}/TestModule5/";
         $this->itemFactory = Bootstrap::getObjectManager()
-            ->create('Magento\TestModule5\Service\V1\Entity\AllSoapAndRestFactory');
+            ->create(\Magento\TestModule5\Service\V1\Entity\AllSoapAndRestFactory::class);
     }
 
     public function testOverride()

@@ -21,7 +21,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->binder = $helper->getObject('Magento\Framework\Search\Request\Binder');
+        $this->binder = $helper->getObject(\Magento\Framework\Search\Request\Binder::class);
     }
 
     /**

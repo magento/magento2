@@ -15,6 +15,7 @@ angular.module('readiness-check', [])
             ++$scope.progressCounter;
         };
         $scope.componentDependency = {
+            enabled: true,
             visible: false,
             processed: false,
             expanded: false,
@@ -31,6 +32,7 @@ angular.module('readiness-check', [])
                 break;
             case 'enable':
             case 'disable':
+                $scope.componentDependency.enabled = $localStorage.packages[0].isComposerPackage;
                 $scope.dependencyUrl = 'index.php/dependency-check/enable-disable-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = {
@@ -235,26 +237,29 @@ angular.module('readiness-check', [])
                     $scope.requestFailedHandler($scope.cronScript);
                 }
             };
-            $scope.items['component-dependency'] = {
-                url: $scope.dependencyUrl,
-                params: $scope.componentDependency.packages,
-                show: function() {
-                    $scope.startProgress();
-                    $scope.componentDependency.visible = true;
-                },
-                process: function(data) {
-                    $scope.componentDependency.processed = true;
-                    if (data.errorMessage) {
-                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+            if ($scope.componentDependency.enabled) {
+                $scope.items['component-dependency'] = {
+                    url: $scope.dependencyUrl,
+                    params: $scope.componentDependency.packages,
+                    show: function() {
+                        $scope.startProgress();
+                        $scope.componentDependency.visible = true;
+                    },
+                    process: function(data) {
+                        $scope.componentDependency.processed = true;
+                        if (data.errorMessage) {
+                            data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                        }
+                        angular.extend($scope.componentDependency, data);
+                        $scope.updateOnProcessed($scope.componentDependency.responseType);
+                        $scope.stopProgress();
+                    },
+                    fail: function() {
+                        $scope.requestFailedHandler($scope.componentDependency);
                     }
-                    angular.extend($scope.componentDependency, data);
-                    $scope.updateOnProcessed($scope.componentDependency.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.componentDependency);
-                }
-            };
+                };
+            }
+
         }
 
         $scope.isCompleted = function() {
@@ -262,8 +267,14 @@ angular.module('readiness-check', [])
                 && $scope.settings.processed
                 && $scope.extensions.processed
                 && ($scope.permissions.processed || ($scope.actionFrom === 'updater'))
-                && (($scope.cronScript.processed && $scope.componentDependency.processed && $scope.updater.processed)
-                || ($scope.actionFrom !== 'updater'));
+                && (
+                    (
+                        $scope.cronScript.processed
+                        && ($scope.componentDependency.processed || !$scope.componentDependency.enabled)
+                        && $scope.updater.processed
+                    )
+                    || ($scope.actionFrom !== 'updater')
+                );
         };
 
         $scope.updateOnProcessed = function(value) {

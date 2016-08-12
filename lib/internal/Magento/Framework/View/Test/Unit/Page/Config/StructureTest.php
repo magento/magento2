@@ -24,7 +24,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->structure = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Page\Config\Structure'
+            \Magento\Framework\View\Page\Config\Structure::class
         );
     }
 

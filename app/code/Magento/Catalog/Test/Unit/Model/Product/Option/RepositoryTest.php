@@ -9,6 +9,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use \Magento\Catalog\Model\Product\Option\Repository;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -38,35 +41,47 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRepositoryMock = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
-        $this->optionResourceMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Option',
+        $this->productRepositoryMock = $this->getMock(
+            \Magento\Catalog\Model\ProductRepository::class,
             [],
             [],
             '',
             false
         );
-        $this->converterMock = $this->getMock('\Magento\Catalog\Model\Product\Option\Converter', [], [], '', false);
-        $this->optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->optionResourceMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Option::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->converterMock = $this->getMock(
+            \Magento\Catalog\Model\Product\Option\Converter::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $optionFactory = $this->getMock(
-            'Magento\Catalog\Model\Product\OptionFactory',
+            \Magento\Catalog\Model\Product\OptionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $optionCollectionFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);

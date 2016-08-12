@@ -30,7 +30,7 @@ return [
     ],
     'customCacheInstance' => [
         'shared' => true,
-        'type' => 'Magento\Framework\App\Cache',
+        'type' => \Magento\Framework\App\Cache::class,
         'arguments' => [],
     ],
     'customOverriddenInstance' => [

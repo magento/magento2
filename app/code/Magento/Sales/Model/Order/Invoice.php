@@ -22,7 +22,7 @@ use Magento\Sales\Model\EntityInterface;
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
-    /**
+    /**#@+
      * Invoice states
      */
     const STATE_OPEN = 1;
@@ -30,6 +30,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     const STATE_PAID = 2;
 
     const STATE_CANCELED = 3;
+    /**#@-*/
 
     const CAPTURE_ONLINE = 'online';
 
@@ -172,7 +173,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Invoice');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Invoice::class);
     }
 
     /**
@@ -792,6 +793,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns increment id
      *

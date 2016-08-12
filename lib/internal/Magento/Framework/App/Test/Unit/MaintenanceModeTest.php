@@ -22,8 +22,8 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->flagDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->flagDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->flagDir));

@@ -6,7 +6,7 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Email\Model\Template $template */
-$template = $objectManager->create('Magento\Email\Model\Template');
+$template = $objectManager->create(\Magento\Email\Model\Template::class);
 $template->setOptions(['area' => 'test area', 'store' => 1]);
 $template->setData(
     [

@@ -19,7 +19,7 @@ class SizeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileSize = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\File\Size');
+            ->get(\Magento\Framework\File\Size::class);
     }
 
     /**

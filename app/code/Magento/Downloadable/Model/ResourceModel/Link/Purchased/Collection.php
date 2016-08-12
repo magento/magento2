@@ -20,8 +20,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Downloadable\Model\Link\Purchased',
-            'Magento\Downloadable\Model\ResourceModel\Link\Purchased'
+            \Magento\Downloadable\Model\Link\Purchased::class,
+            \Magento\Downloadable\Model\ResourceModel\Link\Purchased::class
         );
     }
 
