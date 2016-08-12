@@ -11,6 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
@@ -599,6 +600,36 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
         $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
+
+        $this->model->save($this->productMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\TemporaryState\CouldNotSaveException
+     * @expectedExceptionMessage Database connection error
+     */
+    public function testSaveThrowsTemporaryStateExceptionIfDatabaseConnectionErrorOccurred()
+    {
+        $this->productFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->initializationHelperMock->expects($this->never())
+            ->method('initialize');
+        $this->resourceModelMock->expects($this->once())
+            ->method('validate')
+            ->with($this->productMock)
+            ->willReturn(true);
+        $this->resourceModelMock->expects($this->once())
+            ->method('save')
+            ->with($this->productMock)
+            ->willThrowException(new ConnectionException('Connection lost'));
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+        $this->productMock->expects($this->once())
+            ->method('getWebsiteIds')
+            ->willReturn([]);
 
         $this->model->save($this->productMock);
     }

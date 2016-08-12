@@ -14,6 +14,9 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -543,6 +546,24 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             unset($this->instances[$product->getSku()]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
+        } catch (ConnectionException $exception) {
+            throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
+                __('Database connection error'),
+                $exception,
+                $exception->getCode()
+            );
+        } catch (DeadlockException $exception) {
+            throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
+                __('Database deadlock found when trying to get lock'),
+                $exception,
+                $exception->getCode()
+            );
+        } catch (LockWaitException $exception) {
+            throw new \Magento\Framework\Exception\TemporaryState\CouldNotSaveException(
+                __('Database lock wait timeout exceeded'),
+                $exception,
+                $exception->getCode()
+            );
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
                 $exception->getAttributeCode(),
