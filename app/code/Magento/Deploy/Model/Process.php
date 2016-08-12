@@ -15,16 +15,16 @@ class Process
     private $status;
 
     /** @var callable */
-    private $callable;
+    private $handler;
 
     /**
-     * @param callable $callable
+     * @param callable $handler
      */
-    public function __construct($callable)
+    public function __construct($handler)
     {
         $this->pid = 0;
         $this->status = null;
-        $this->callable = $callable;
+        $this->handler = $handler;
     }
 
     /**
@@ -50,7 +50,7 @@ class Process
      */
     public function run()
     {
-        $status = call_user_func($this->callable, $this);
+        $status = call_user_func($this->handler, $this);
 
         $status = is_integer($status) ? $status : 0;
         exit($status);

@@ -451,6 +451,8 @@ class DeployStaticContentCommand extends Command
     /**
      * @param Files $filesUtil
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function prepareDeployableEntities($filesUtil)
     {

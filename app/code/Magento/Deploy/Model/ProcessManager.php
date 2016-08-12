@@ -14,15 +14,15 @@ class ProcessManager
     /**
      * Forks the currently running process.
      *
-     * @param callable $callable
+     * @param callable $handler
      *
      * @return Process
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function fork(callable $callable)
+    public function fork(callable $handler)
     {
-        $process = $this->createProcess($callable);
+        $process = $this->createProcess($handler);
         $pid = pcntl_fork();
 
         if ($pid === -1) {
@@ -61,12 +61,12 @@ class ProcessManager
     }
 
     /**
-     * @param callable $callable
+     * @param callable $handler
      * @return Process
      */
-    private function createProcess(callable $callable)
+    private function createProcess(callable $handler)
     {
-        return new Process($callable);
+        return new Process($handler);
     }
 
     /**
