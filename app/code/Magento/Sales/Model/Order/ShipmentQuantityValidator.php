@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
@@ -36,9 +37,13 @@ class ShipmentQuantityValidator implements ValidatorInterface
      * @param ShipmentInterface $entity
      * @return string[]
      * @throws DocumentValidationException
+     * @throws NoSuchEntityException
      */
     public function validate($entity)
     {
+        if ($entity->getOrderId() === null) {
+            return [__('Order Id is required for shipment document')];
+        }
         $messages = [];
 
         $order = $this->orderRepository->get($entity->getOrderId());
