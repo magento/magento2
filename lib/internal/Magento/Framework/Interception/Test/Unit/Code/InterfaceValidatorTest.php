@@ -114,7 +114,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Invalid method signature. Detected extra parameters
+     * @expectedExceptionMessage Invalid method signature. Invalid method parameters count
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
     public function testValidateExtraParameters()
