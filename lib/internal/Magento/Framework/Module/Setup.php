@@ -74,6 +74,8 @@ class Setup implements SetupInterface
     }
 
     /**
+     * Returns default setup connection instance
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private function getDefaultConnection()

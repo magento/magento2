@@ -142,7 +142,6 @@ class InstallSchema implements InstallSchemaInterface
             'agreement_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            // TODO: refactor without FK.
             $installer->getFkName('paypal_billing_agreement_order', 'order_id', 'sales_order', 'entity_id'),
             'order_id',
             $installer->getTable('sales_order'),

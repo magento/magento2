@@ -145,7 +145,6 @@ class InstallSchema implements InstallSchemaInterface
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Payment token Id'
             )->addForeignKey(
-                // TODO: refactor without FK.
                 $setup->getFkName(
                     $setup->getTable(self::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
                     'order_payment_id',
