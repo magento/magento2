@@ -44,21 +44,6 @@ interface TrackInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getQty();
 
     /**
-     * Sets the order_id for the shipment package.
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setOrderId($id);
-
-    /**
-     * Gets the order_id for the shipment package.
-     *
-     * @return int
-     */
-    public function getOrderId();
-
-    /**
      * Sets the track number for the shipment package.
      *
      * @param string $trackNumber

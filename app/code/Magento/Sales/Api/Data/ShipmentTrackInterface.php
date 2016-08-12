@@ -64,6 +64,21 @@ interface ShipmentTrackInterface extends TrackInterface
     const UPDATED_AT = 'updated_at';
 
     /**
+     * Sets the order_id for the shipment package.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderId($id);
+
+    /**
+     * Gets the order_id for the shipment package.
+     *
+     * @return int
+     */
+    public function getOrderId();
+
+    /**
      * Gets the created-at timestamp for the shipment package.
      *
      * @return string|null Created-at timestamp.
