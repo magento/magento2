@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Result;
 
 use Magento\Framework;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\View;
@@ -101,7 +102,7 @@ class Layout extends AbstractResult
     /**
      * Get layout instance for current page
      *
-     * @return \Magento\Framework\View\Layout
+     * @return \Magento\Framework\View\LayoutInterface
      */
     public function getLayout()
     {
@@ -152,10 +153,10 @@ class Layout extends AbstractResult
     /**
      * Render current layout
      *
-     * @param ResponseInterface $response
+     * @param HttpResponseInterface|ResponseInterface $httpResponse
      * @return $this
      */
-    public function renderResult(ResponseInterface $response)
+    public function renderResult(ResponseInterface $httpResponse)
     {
         \Magento\Framework\Profiler::start('LAYOUT');
         \Magento\Framework\Profiler::start('layout_render');
@@ -163,8 +164,8 @@ class Layout extends AbstractResult
         $this->eventManager->dispatch('layout_render_before');
         $this->eventManager->dispatch('layout_render_before_' . $this->request->getFullActionName());
         
-        $this->applyHttpHeaders($response);
-        $this->render($response);
+        $this->applyHttpHeaders($httpResponse);
+        $this->render($httpResponse);
 
         \Magento\Framework\Profiler::stop('layout_render');
         \Magento\Framework\Profiler::stop('LAYOUT');
@@ -172,12 +173,9 @@ class Layout extends AbstractResult
     }
 
     /**
-     * Render current layout
-     *
-     * @param ResponseInterface $response
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         $output = $this->layout->getOutput();
         $this->translateInline->processResponseBody($output);
