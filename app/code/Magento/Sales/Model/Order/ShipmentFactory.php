@@ -143,7 +143,7 @@ class ShipmentFactory
             $shipment,
             [ShipmentQuantityValidator::class]
         );
-        if (!empty($errors)) {
+        if (!empty($errorMessages)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
             );
