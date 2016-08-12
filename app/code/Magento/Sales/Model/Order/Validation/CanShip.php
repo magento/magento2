@@ -20,7 +20,6 @@ class CanShip implements ValidatorInterface
      * @param OrderInterface $entity
      * @return string[]
      * @throws DocumentValidationException
-     * @throws NoSuchEntityException
      */
     public function validate($entity)
     {
