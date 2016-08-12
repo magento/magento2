@@ -32,11 +32,13 @@ class InvoiceQuantityValidator implements ValidatorInterface
     }
 
     /**
-     * @param InvoiceInterface $invoice
-     * @return array
+     * @inheritdoc
      */
     public function validate($invoice)
     {
+        if ($invoice->getOrderId() === null) {
+            return [__('OrderId in invoice document is required')];
+        }
         $order = $this->orderRepository->get($invoice->getOrderId());
         return $this->checkQtyAvailability($invoice, $order);
     }

@@ -22,10 +22,7 @@ class CanInvoice implements ValidatorInterface
     {
         $messages = [];
         if (!$this->canInvoice($entity)) {
-            $messages[] = __(
-                'An invoice cannot be created when an order has a status of %1.',
-                $entity->getStatus()
-            );
+            $messages[] = __('The order does not allow an invoice to be created.');
         }
 
         return $messages;

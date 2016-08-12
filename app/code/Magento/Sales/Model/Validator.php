@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Validator
+ *
+ * @internal
  */
 class Validator
 {
@@ -19,7 +21,7 @@ class Validator
     private $objectManager;
 
     /**
-     * ValidatorRunner constructor.
+     * Validator constructor.
      *
      * @param ObjectManagerInterface $objectManager
      */

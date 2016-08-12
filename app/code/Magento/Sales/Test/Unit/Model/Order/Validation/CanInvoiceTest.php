@@ -122,31 +122,7 @@ class CanInvoiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($itemLockedDoInvoice);
 
         $this->assertEquals(
-            $expectedResult, empty($this->model->validate($this->orderMock))
-        );
-    }
-    
-    public function testValidateCanNotInvoiceOrder()
-    {
-        $orderStatus = 'Test Status';
-        $expectedResult = [__('An invoice cannot be created when an order has a status of %1.', $orderStatus)];
-        $orderItemMock = $orderItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getQtyToInvoice', 'isDummy', 'getSku'])
-            ->getMockForAbstractClass();
-        $orderItemMock->expects($this->any())->method('getId')->willReturn(1);
-        $orderItemMock->expects($this->any())->method('getQtyToInvoice')->willReturn(0);
-        $orderItemMock->expects($this->any())->method('isDummy')->willReturn(true);
-        $orderItemMock->expects($this->any())->method('getSku')->willReturn(1);
-        $this->orderMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$orderItemMock]);
-        $this->orderMock->expects($this->once())
-            ->method('getStatus')
-            ->willReturn($orderStatus);
-        $this->assertEquals(
-            $expectedResult,
-            $this->model->validate($this->orderMock)
+            $expectedResult, $this->model->validate($this->orderMock)
         );
     }
 
@@ -158,10 +134,10 @@ class CanInvoiceTest extends \PHPUnit_Framework_TestCase
     public function canInvoiceDataProvider()
     {
         return [
-            [0, null, false],
-            [-1, null, false],
-            [1, true, false],
-            [0.5, false, true],
+            [0, null, [__('The order does not allow an invoice to be created.')]],
+            [-1, null, [__('The order does not allow an invoice to be created.')]],
+            [1, true, [__('The order does not allow an invoice to be created.')]],
+            [0.5, false, []],
         ];
     }
 }

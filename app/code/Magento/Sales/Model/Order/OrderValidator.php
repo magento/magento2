@@ -9,7 +9,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Exception\DocumentValidationException;
 
 /**
- * Class OrderValidatorRunner
+ * Class OrderValidator
  */
 class OrderValidator implements OrderValidatorInterface
 {
@@ -18,6 +18,10 @@ class OrderValidator implements OrderValidatorInterface
      */
     private $validator;
 
+    /**
+     * OrderValidator constructor.
+     * @param \Magento\Sales\Model\Validator $validator
+     */
     public function __construct(\Magento\Sales\Model\Validator $validator)
     {
         $this->validator = $validator;
