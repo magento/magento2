@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Locator;
 class Landing extends Block
 {
     /**
+     * Developer Documentation link.
+     *
+     * @var string
+     */
+    protected $devdocsLink = '//a[text()="%s"]';
+
+    /**
      * 'Agree and Set up Magento' button.
      *
      * @var string
@@ -46,5 +53,15 @@ class Landing extends Block
     public function clickTermsAndAgreement()
     {
         $this->_rootElement->find($this->termsAndAgreement, Locator::SELECTOR_CSS)->click();
+    }
+    /**
+     * Click on Developer Documentation link.
+     *
+     * @param string $text
+     * @return void
+     */
+    public function clickDevdocsLink($text)
+    {
+        $this->_rootElement->find(sprintf($this->devdocsLink, $text), Locator::SELECTOR_XPATH)->click();
     }
 }
