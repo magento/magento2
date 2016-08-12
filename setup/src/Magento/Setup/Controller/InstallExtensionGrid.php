@@ -60,6 +60,25 @@ class InstallExtensionGrid extends AbstractActionController
     {
         $extensions = $this->packagesData->getPackagesForInstall();
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
+        $packages = $this->formatPackageList($packages);
+
+        return new JsonModel(
+            [
+                'success' => true,
+                'extensions' => array_values($packages),
+                'total' => count($packages)
+            ]
+        );
+    }
+
+    /**
+     * Format package list
+     *
+     * @param array $packages
+     * @return array
+     */
+    private function formatPackageList(array $packages)
+    {
         array_walk($packages, function (&$package) {
             $package['vendor'] = ucfirst($package['vendor']);
             $package['link'] = isset($package['extra']['x-magento-ext-package-link']) ?
@@ -70,12 +89,6 @@ class InstallExtensionGrid extends AbstractActionController
                 $package['extra']['x-magento-ext-type'] : $this->typeMapper->map($package['name'], $package['type']);
         });
 
-        return new JsonModel(
-            [
-                'success' => true,
-                'extensions' => array_values($packages),
-                'total' => count($packages)
-            ]
-        );
+        return $packages;
     }
 }

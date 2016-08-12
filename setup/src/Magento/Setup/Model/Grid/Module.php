@@ -6,10 +6,8 @@
 namespace Magento\Setup\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfoFactory;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\PackagesData;
 
 /**
@@ -36,14 +34,14 @@ class Module
     private $packageInfo;
 
     /**
-     * @var ObjectManagerProvider
+     * @var \Magento\Setup\Model\ObjectManagerProvider
      */
     private $objectManagerProvider;
 
     /**
      * Full Module info
      *
-     * @var FullModuleList
+     * @var \Magento\Framework\Module\FullModuleList
      */
     private $fullModuleList;
 
@@ -66,17 +64,17 @@ class Module
 
     /**
      * @param ComposerInformation $composerInformation
-     * @param FullModuleList $fullModuleList
+     * @param \Magento\Framework\Module\FullModuleList $fullModuleList
      * @param ModuleList $moduleList
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param TypeMapper $typeMapper
      * @param PackagesData $packagesData
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        FullModuleList $fullModuleList,
+        \Magento\Framework\Module\FullModuleList $fullModuleList,
         ModuleList $moduleList,
-        ObjectManagerProvider $objectManagerProvider,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         TypeMapper $typeMapper,
         PackagesData $packagesData
     ) {
@@ -189,10 +187,23 @@ class Module
         foreach ($items as &$item) {
             $item['moduleName'] = $item['moduleName'] ?: $this->packageInfo->getModuleName($item['name']);
             $item['enable'] = $this->moduleList->has($item['moduleName']);
-
             $vendorSource = $item['name'] == self::UNKNOWN_PACKAGE_NAME ? $item['moduleName'] : $item['name'];
             $item['vendor'] = ucfirst(current(preg_split('%[/_]%', $vendorSource)));
+        }
+        $items = $this->addExtraInfo($items);
 
+        return array_values($items);
+    }
+
+    /**
+     * Add extra info to result array
+     *
+     * @param array $items
+     * @return array
+     */
+    private function addExtraInfo(array $items)
+    {
+        foreach ($items as &$item) {
             $extraInfo = $this->packagesData->getPackageExtraInfo($item['name'], $item['version']);
             $item['product_name'] =  isset($extraInfo['x-magento-ext-title']) ?
                 $extraInfo['x-magento-ext-title'] : $item['name'];
@@ -200,6 +211,6 @@ class Module
                 $this->typeMapper->map($item['name'], ComposerInformation::MODULE_PACKAGE_TYPE);
         }
 
-        return array_values($items);
+        return $items;
     }
 }

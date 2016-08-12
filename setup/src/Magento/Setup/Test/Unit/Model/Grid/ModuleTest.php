@@ -191,7 +191,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-
         $this->moduleListMock->expects(static::exactly(2))
             ->method('has')
             ->willReturn(true);

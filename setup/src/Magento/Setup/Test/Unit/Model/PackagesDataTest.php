@@ -13,6 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests Magento\Setup\Model\PackagesData
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PackagesDataTest extends \PHPUnit_Framework_TestCase
 {
