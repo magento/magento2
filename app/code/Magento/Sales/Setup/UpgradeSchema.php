@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
+
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -35,7 +36,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'product_id',
                     'catalog_product_entity',
                     'entity_id',
-                    self::$connectionName)
+                    self::$connectionName
+                )
             );
             //sales_bestsellers_aggregated_monthly
             $connection->dropForeignKey(
@@ -45,7 +47,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'product_id',
                     'catalog_product_entity',
                     'entity_id',
-                    self::$connectionName)
+                    self::$connectionName
+                )
             );
 
             //sales_bestsellers_aggregated_yearly
@@ -56,7 +59,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'product_id',
                     'catalog_product_entity',
                     'entity_id',
-                    self::$connectionName)
+                    self::$connectionName
+                )
             );
 
             $installer->endSetup();

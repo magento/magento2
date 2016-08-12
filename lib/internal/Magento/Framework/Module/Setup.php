@@ -144,6 +144,7 @@ class Setup implements SetupInterface
      * Check is table exists
      *
      * @param string $table
+     * @param string $connectionName
      * @return bool
      */
     public function tableExists($table, $connectionName = ResourceConnection::DEFAULT_CONNECTION)

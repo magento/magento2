@@ -100,7 +100,8 @@ class InstallSchema implements InstallSchemaInterface
                 'sales_sequence_profile',
                 'meta_id',
                 'sales_sequence_meta',
-                'meta_id', self::$connectionName
+                'meta_id',
+                self::$connectionName
             ),
             'meta_id',
             $installer->getTable('sales_sequence_meta', self::$connectionName),

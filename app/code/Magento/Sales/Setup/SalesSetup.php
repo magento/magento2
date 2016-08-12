@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Setup Model of Sales Module
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SalesSetup extends \Magento\Eav\Setup\EavSetup
 {
