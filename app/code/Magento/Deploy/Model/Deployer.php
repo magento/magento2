@@ -264,7 +264,7 @@ class Deployer
 
                     /** @var \Magento\Theme\Model\View\Design $design */
                     try {
-                        $design = $this->objectManager->create(Magento\Theme\Model\View\Design::class);
+                        $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
                         $design->setDesignTheme($themePath, $area);
                     } catch (\LogicException $e) {
                         continue;
