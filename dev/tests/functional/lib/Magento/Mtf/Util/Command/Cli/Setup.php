@@ -19,12 +19,19 @@ class Setup extends Cli
     const PARAM_SETUP_UNINSTALL = 'setup:uninstall';
 
     /**
+     * Options for uninstall magento command.
+     *
+     * @var array
+     */
+    private $options = ['-n'];
+
+    /**
      * Uninstall magento.
      *
      * @return void
      */
     public function uninstall()
     {
-        parent::execute(Setup::PARAM_SETUP_UNINSTALL);
+        parent::execute(Setup::PARAM_SETUP_UNINSTALL, $this->options);
     }
 }

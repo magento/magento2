@@ -7,7 +7,7 @@
 namespace Magento\Install\Test\TestCase;
 
 use Magento\Install\Test\Page\Install;
-use Magento\Install\Test\Page\Devdocs;
+use Magento\Install\Test\Page\DevdocsInstall;
 use Magento\Install\Test\Fixture\Install as InstallConfig;
 use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -54,11 +54,11 @@ class InstallTest extends Injectable
     const DEVDOCS_LINK_TEXT = 'Getting Started';
 
     /**
-     * Developer Documentation page.
+     * Developer Documentation install page.
      *
-     * @var Devdocs
+     * @var DevdocsInstall
      */
-    protected $devdocsPage;
+    protected $devdocsInstallPage;
 
     /**
      * Install page.
@@ -91,15 +91,15 @@ class InstallTest extends Injectable
      *
      * @param Install $installPage
      * @param Setup $magentoSetup
-     * @param Devdocs $devdocsPage
+     * @param DevdocsInstall $devdocsInstallPage
      * @return void
      */
-    public function __inject(Install $installPage, Setup $magentoSetup, Devdocs $devdocsPage)
+    public function __inject(Install $installPage, Setup $magentoSetup, DevdocsInstall $devdocsInstallPage)
     {
         // Uninstall Magento.
         $magentoSetup->uninstall();
         $this->installPage = $installPage;
-        $this->devdocsPage = $devdocsPage;
+        $this->devdocsInstallPage = $devdocsInstallPage;
     }
 
     /**
@@ -138,8 +138,9 @@ class InstallTest extends Injectable
         // Verify Developer Documentation link.
         $this->installPage->getLandingBlock()->clickDevdocsLink(self::DEVDOCS_LINK_TEXT);
         $browser->selectWindow();
-        $assertDevdocsLink->processAssert($this->devdocsPage);
+        $assertDevdocsLink->processAssert($this->devdocsInstallPage);
         $browser->closeWindow();
+        $browser->selectWindow();
         // Verify license agreement.
         $this->installPage->getLandingBlock()->clickTermsAndAgreement();
         $assertLicense->processAssert($this->installPage);

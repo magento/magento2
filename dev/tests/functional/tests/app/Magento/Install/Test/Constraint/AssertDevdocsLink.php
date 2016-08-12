@@ -6,7 +6,7 @@
 
 namespace Magento\Install\Test\Constraint;
 
-use Magento\Install\Test\Page\Devdocs;
+use Magento\Install\Test\Page\DevdocsInstall;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -22,14 +22,14 @@ class AssertDevdocsLink extends AbstractConstraint
     /**
      * Check Developer Documentation link.
      *
-     * @param Devdocs $devdocsPage
+     * @param DevdocsInstall $devdocsInstallPage
      * @return void
      */
-    public function processAssert(Devdocs $devdocsPage)
+    public function processAssert(DevdocsInstall $devdocsInstallPage)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::DEVDOCS_TITLE_TEXT,
-            $devdocsPage->getDevdocsBlock()->getDevdocsTitle(),
+            $devdocsInstallPage->getDevdocsBlock()->getDevdocsTitle(),
             'Developer Documentation link is wrong.'
         );
     }
