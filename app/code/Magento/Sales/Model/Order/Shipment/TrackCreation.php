@@ -90,23 +90,6 @@ class TrackCreation implements ShipmentTrackCreationInterface
     /**
      * {@inheritdoc}
      */
-    public function getOrderId()
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setOrderId($orderId)
-    {
-        $this->orderId = $orderId;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTrackNumber()
     {
         return $this->trackNumber;
