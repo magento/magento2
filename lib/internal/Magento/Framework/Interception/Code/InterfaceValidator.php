@@ -49,7 +49,6 @@ class InterfaceValidator
         $plugin = new \ReflectionClass($pluginClass);
         $type = new \ReflectionClass($interceptedType);
 
-        $pluginMethods = [];
         foreach ($plugin->getMethods(\ReflectionMethod::IS_PUBLIC) as $pluginMethod) {
             /** @var  $pluginMethod \ReflectionMethod */
             $originMethodName = $this->getOriginMethodName($pluginMethod->getName());
@@ -112,12 +111,15 @@ class InterfaceValidator
                     );
                     break;
                 case self::METHOD_AFTER:
+                    // TODO: Remove this condition check in scope of MAGETWO-56123
                     if (count($pluginMethodParameters) > 1) {
-                        throw new ValidatorException(
-                            new Phrase(
-                                'Invalid method signature. Detected extra parameters in %1::%2',
-                                [$pluginClass, $pluginMethod->getName()]
-                            )
+                        // remove result
+                        array_shift($pluginMethodParameters);
+                        $this->validateMethodsParameters(
+                            $pluginMethodParameters,
+                            $originMethodParameters,
+                            $pluginClass,
+                            $pluginMethod->getName()
                         );
                     }
                     break;
