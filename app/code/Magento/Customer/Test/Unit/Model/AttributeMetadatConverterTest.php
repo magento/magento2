@@ -148,8 +148,8 @@ class AttributeMetadatConverterTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->expects($this->exactly(2))
             ->method('populateWithArray')
             ->withConsecutive(
-                [$optionObject1, ['1'], '\Magento\Customer\Api\Data\OptionInterface'],
-                [$optionObject2, ['2'], '\Magento\Customer\Api\Data\OptionInterface']
+                [$optionObject1, ['1'], 'Magento\Customer\Api\Data\OptionInterface'],
+                [$optionObject2, ['2'], 'Magento\Customer\Api\Data\OptionInterface']
             );
         $validationRule1 = $this->getMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
         $validationRule2 = $this->getMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
