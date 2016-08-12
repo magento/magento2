@@ -135,7 +135,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</thead>'+
         '<tbody>'+
             '<tr>'+
-                '<td><?php echo $block->escapeJs($block->getLayoutsChooser()) ?></td>'+
+                '<td><?php /* @noEscape */ echo $block->getLayoutsChooser() ?></td>'+
                 '<td>'+
                     '<div class="block_reference_container">'+
                         '<div class="block_reference"></div>'+
@@ -166,7 +166,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</thead>'+
         '<tbody>'+
             '<tr>'+
-                '<td><?php echo $block->escapeJs($block->getPageLayoutsPageChooser()) ?></td>'+
+                '<td><?php /* @noEscape */ echo $block->getPageLayoutsPageChooser() ?></td>'+
                 '<td>'+
                     '<div class="block_reference_container">'+
                         '<div class="block_reference"></div>'+
