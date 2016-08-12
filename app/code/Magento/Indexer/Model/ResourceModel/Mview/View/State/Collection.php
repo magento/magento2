@@ -15,6 +15,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Indexer\Model\Mview\View\State', 'Magento\Indexer\Model\ResourceModel\Mview\View\State');
+        $this->_init(
+            \Magento\Indexer\Model\Mview\View\State::class,
+            \Magento\Indexer\Model\ResourceModel\Mview\View\State::class
+        );
     }
 }

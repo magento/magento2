@@ -15,7 +15,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      *
      * @var string
      */
-    protected $dataInterface = 'Magento\Framework\DataObject';
+    protected $dataInterface = \Magento\Framework\DataObject::class;
 
     /**
      * @var AbstractSearchResult

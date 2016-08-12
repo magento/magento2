@@ -48,11 +48,11 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function setUp()
     {
-        $this->pageFactory = Bootstrap::getObjectManager()->create('Magento\Cms\Api\Data\PageInterfaceFactory');
-        $this->pageRepository = Bootstrap::getObjectManager()->create('Magento\Cms\Api\PageRepositoryInterface');
-        $this->dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
+        $this->pageFactory = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\Data\PageInterfaceFactory::class);
+        $this->pageRepository = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
         $this->dataObjectProcessor = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Reflection\DataObjectProcessor');
+            ->create(\Magento\Framework\Reflection\DataObjectProcessor::class);
     }
 
     /**
@@ -152,11 +152,11 @@ class PageRepositoryTest extends WebapiAbstract
         $this->dataObjectHelper->populateWithArray(
             $this->currentPage,
             [PageInterface::TITLE => $newPageTitle],
-            'Magento\Cms\Api\Data\PageInterface'
+            \Magento\Cms\Api\Data\PageInterface::class
         );
         $pageData = $this->dataObjectProcessor->buildOutputDataArray(
             $this->currentPage,
-            'Magento\Cms\Api\Data\PageInterface'
+            \Magento\Cms\Api\Data\PageInterface::class
         );
 
         $serviceInfo = [
@@ -213,23 +213,26 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function testSearch()
     {
-        $pageTitle = 'Page title';
-        $pageIdentifier = 'page-title' . uniqid();
-        /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
-        $pageDataObject = $this->pageFactory->create();
-        $pageDataObject->setTitle($pageTitle)
-            ->setIdentifier($pageIdentifier);
-        $this->currentPage = $this->pageRepository->save($pageDataObject);
+        $cmsPages = $this->prepareCmsPages();
 
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
-        $filter = $filterBuilder
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $filterIdentifier = $filterBuilder
             ->setField(PageInterface::IDENTIFIER)
-            ->setValue($pageIdentifier)
+            ->setValue($cmsPages['first']->getIdentifier())
             ->create();
-        $searchCriteriaBuilder->addFilters([$filter]);
+        $searchCriteriaBuilder->addFilters([$filterIdentifier]);
+        $filterTitle = $filterBuilder
+            ->setField(PageInterface::TITLE)
+            ->setValue($cmsPages['second']->getTitle())
+            ->create();
+        $filterStatus = $filterBuilder
+            ->setField(PageInterface::IS_ACTIVE)
+            ->setValue($cmsPages['first']->isActive())
+            ->create();
+        $searchCriteriaBuilder->addFilters([$filterTitle, $filterStatus]);
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -247,6 +250,33 @@ class PageRepositoryTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResult['total_count']);
-        $this->assertEquals($searchResult['items'][0][PageInterface::IDENTIFIER], $pageIdentifier);
+        $this->assertEquals($searchResult['items'][0][PageInterface::IDENTIFIER], $cmsPages['first']->getIdentifier());
+    }
+
+    /**
+     * @return PageInterface[]
+     */
+    private function prepareCmsPages()
+    {
+        $result = [];
+        $pagesData['first'][PageInterface::TITLE] = 'Page title 1';
+        $pagesData['first'][PageInterface::IDENTIFIER] = 'page-title-1' . uniqid();
+        $pagesData['first'][PageInterface::IS_ACTIVE] = true;
+        $pagesData['second'][PageInterface::TITLE] = 'Page title 2';
+        $pagesData['second'][PageInterface::IDENTIFIER] = 'page-title-2' . uniqid();
+        $pagesData['second'][PageInterface::IS_ACTIVE] = false;
+
+        foreach ($pagesData as $key => $pageData) {
+            /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
+            $pageDataObject = $this->pageFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $pageDataObject,
+                $pageData,
+                \Magento\Cms\Api\Data\PageInterface::class
+            );
+            $result[$key] = $this->pageRepository->save($pageDataObject);
+        }
+
+        return $result;
     }
 }

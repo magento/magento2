@@ -17,7 +17,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\Oauth\Token', 'Magento\Integration\Model\ResourceModel\Oauth\Token');
+        $this->_init(
+            \Magento\Integration\Model\Oauth\Token::class,
+            \Magento\Integration\Model\ResourceModel\Oauth\Token::class
+        );
     }
 
     /**

@@ -30,7 +30,7 @@ class Email extends \Magento\Backend\App\Action
         if (!$creditmemoId) {
             return;
         }
-        $this->_objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface')
+        $this->_objectManager->create(\Magento\Sales\Api\CreditmemoManagementInterface::class)
             ->notify($creditmemoId);
 
         $this->messageManager->addSuccess(__('You sent the message.'));

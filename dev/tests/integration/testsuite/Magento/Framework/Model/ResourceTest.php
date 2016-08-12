@@ -17,7 +17,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\ResourceConnection');
+            ->create(\Magento\Framework\App\ResourceConnection::class);
     }
 
     public function testGetTableName()
@@ -27,7 +27,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $tableNameOrig = 'store_website';
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['tablePrefix' => 'prefix_']
         );
 
@@ -47,11 +47,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
         $connection = $objectManager->create(
-            'Magento\TestFramework\Db\Adapter\Mysql',
+            \Magento\TestFramework\Db\Adapter\Mysql::class,
             [
                 'config' => [
                     'profiler' => [
-                        'class' => 'Magento\Framework\Model\ResourceModel\Db\Profiler',
+                        'class' => \Magento\Framework\Model\ResourceModel\Db\Profiler::class,
                         'enabled' => 'true',
                     ],
                     'username' => 'username',
@@ -66,7 +66,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Model\ResourceModel\Db\Profiler $profiler */
         $profiler = $connection->getProfiler();
 
-        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\Profiler', $profiler);
+        $this->assertInstanceOf(\Magento\Framework\Model\ResourceModel\Db\Profiler::class, $profiler);
         $this->assertTrue($profiler->getEnabled());
     }
 }

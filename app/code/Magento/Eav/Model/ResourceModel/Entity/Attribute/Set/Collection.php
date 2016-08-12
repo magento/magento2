@@ -20,7 +20,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Entity\Attribute\Set', 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set');
+        $this->_init(
+            \Magento\Eav\Model\Entity\Attribute\Set::class,
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class
+        );
     }
 
     /**

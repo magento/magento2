@@ -35,6 +35,6 @@ class PropertyGroupFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Asset\PropertyGroup', $data);
+        return $this->objectManager->create(\Magento\Framework\View\Asset\PropertyGroup::class, $data);
     }
 }

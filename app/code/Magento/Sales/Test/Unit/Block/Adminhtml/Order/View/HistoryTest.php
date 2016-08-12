@@ -19,12 +19,12 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adminHelperMock = $this->getMockBuilder('Magento\Sales\Helper\Admin')
+        $this->adminHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Admin::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->viewHistory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\View\History',
+            \Magento\Sales\Block\Adminhtml\Order\View\History::class,
             [
                 'adminHelper' => $this->adminHelperMock
             ]

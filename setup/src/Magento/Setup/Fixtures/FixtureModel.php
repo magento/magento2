@@ -14,6 +14,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Xml\Parser;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FixtureModel
 {
     /**
@@ -155,7 +158,7 @@ class FixtureModel
                 $this->initArguments
             );
             $this->objectManager = $objectManagerFactory->create($this->initArguments);
-            $this->objectManager->get('Magento\Framework\App\State')->setAreaCode(self::AREA_CODE);
+            $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode(self::AREA_CODE);
         }
         return $this->objectManager;
     }
@@ -170,10 +173,11 @@ class FixtureModel
         $this->getObjectManager()
             ->configure(
                 $this->getObjectManager()
-                    ->get('Magento\Framework\ObjectManager\ConfigLoaderInterface')
+                    ->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class)
                     ->load(self::AREA_CODE)
             );
-        $this->getObjectManager()->get('Magento\Framework\Config\ScopeInterface')->setCurrentScope(self::AREA_CODE);
+        $this->getObjectManager()->get(\Magento\Framework\Config\ScopeInterface::class)
+            ->setCurrentScope(self::AREA_CODE);
         return $this;
     }
 

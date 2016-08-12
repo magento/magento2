@@ -27,6 +27,7 @@ State/Province,State/Province
 "One-page checkout is turned off.","One-page checkout is turned off."
 "Guest checkout is disabled.","Guest checkout is disabled."
 Checkout,Checkout
+"Checkout Section","Checkout Section"
 "Page not found.","Page not found."
 "Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
 "Something went wrong while processing your order. Please try again later.","Something went wrong while processing your order. Please try again later."
@@ -120,7 +121,6 @@ Login,Login
 Close,Close
 item,item
 items,items
-"Go to Checkout","Go to Checkout"
 "Recently added item(s)","Recently added item(s)"
 "View and edit cart","View and edit cart"
 "See Details","See Details"

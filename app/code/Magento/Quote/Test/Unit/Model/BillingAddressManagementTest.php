@@ -10,6 +10,9 @@ namespace Magento\Quote\Test\Unit\Model;
 use \Magento\Quote\Model\BillingAddressManagement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -43,12 +46,12 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->validatorMock = $this->getMock('\Magento\Quote\Model\QuoteAddressValidator', [], [], '', false);
-        $this->addressRepository = $this->getMock('\Magento\Customer\Api\AddressRepositoryInterface');
-        $logger = $this->getMock('\Psr\Log\LoggerInterface');
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->validatorMock = $this->getMock(\Magento\Quote\Model\QuoteAddressValidator::class, [], [], '', false);
+        $this->addressRepository = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->model = $this->objectManager->getObject(
-            '\Magento\Quote\Model\BillingAddressManagement',
+            \Magento\Quote\Model\BillingAddressManagement::class,
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'addressValidator' => $this->validatorMock,
@@ -63,11 +66,11 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddress()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with('cartId')->will($this->returnValue($quoteMock));
 
-        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
 
         $this->assertEquals($addressMock, $this->model->get('cartId'));
@@ -81,8 +84,8 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     public function testSetAddressValidationFailed()
     {
         $this->markTestSkipped('MAGETWO-48531');
-        $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $address = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cartId')
@@ -107,13 +110,13 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $customerAddressId = 10;
 
         $address = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['setSaveInAddressBook', 'getCustomerAddressId', 'getSaveInAddressBook'],
             [],
             '',
             false
         );
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -126,13 +129,13 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $address->expects($this->once())->method('getCustomerAddressId')->willReturn($customerAddressId);
         $address->expects($this->once())->method('getSaveInAddressBook')->willReturn(1);
 
-        $customerAddressMock = $this->getMock('Magento\Customer\Api\Data\AddressInterface', [], [], '', false);
+        $customerAddressMock = $this->getMock(\Magento\Customer\Api\Data\AddressInterface::class, [], [], '', false);
         $this->addressRepository->expects($this->once())
             ->method('getById')
             ->with($customerAddressId)
             ->willReturn($customerAddressMock);
 
-        $quoteBillingAddress = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $quoteBillingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $quoteBillingAddress->expects($this->once())->method('getId')->will($this->returnValue($addressId));
         $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($quoteBillingAddress);
         $quoteBillingAddress->expects($this->once())
@@ -141,7 +144,7 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $quoteShippingAddress = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['setSaveInAddressBook', 'setSameAsBilling', 'setCollectShippingRates', 'importCustomerAddressData'],
             [],
             '',
@@ -175,9 +178,9 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     public function testSetAddressWithInabilityToSaveQuote()
     {
         $this->markTestSkipped('MAGETWO-48531');
-        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false, false);
+        $address = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false, false);
 
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cartId')

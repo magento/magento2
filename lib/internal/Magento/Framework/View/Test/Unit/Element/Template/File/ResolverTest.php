@@ -32,7 +32,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_viewFileSystemMock = $this->getMock('\Magento\Framework\View\FileSystem', [], [], '', false);
+        $this->_viewFileSystemMock = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
         $this->_resolver = new \Magento\Framework\View\Element\Template\File\Resolver(
             $this->_viewFileSystemMock
         );

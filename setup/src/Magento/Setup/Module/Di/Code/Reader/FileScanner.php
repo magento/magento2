@@ -316,7 +316,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
                 // process the name
                 if ($infos[$infoIndex]['shortName'] == ''
-                    && (($this->tokenType === T_CLASS || $this->tokenType === T_INTERFACE || $this->tokenType === T_TRAIT) && $infos[$infoIndex]['type'] === 'class'
+                    && (($this->tokenType === T_CLASS || $this->tokenType === T_INTERFACE || $this->tokenType === T_TRAIT) && $infos[$infoIndex]['type'] === 'class' && $tokens[$tokenIndex - 1][0] !== T_DOUBLE_COLON
                         || ($this->tokenType === T_FUNCTION && $infos[$infoIndex]['type'] === 'function'))
                 ) {
                     $infos[$infoIndex]['shortName'] = $tokens[$tokenIndex + 2][1];

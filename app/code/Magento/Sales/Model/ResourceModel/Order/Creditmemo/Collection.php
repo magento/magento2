@@ -50,7 +50,10 @@ class Collection extends AbstractCollection implements CreditmemoSearchResultInt
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Creditmemo', 'Magento\Sales\Model\ResourceModel\Order\Creditmemo');
+        $this->_init(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
+        );
     }
 
     /**

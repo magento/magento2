@@ -66,7 +66,7 @@ class DeleteCustomerAddressTest extends Injectable
 
         // Steps:
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->customerAccountIndex->getAccountMenuBlock()->openMenuItem('Address Book');

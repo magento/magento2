@@ -60,7 +60,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Region', 'Magento\Directory\Model\ResourceModel\Region');
+        $this->_init(\Magento\Directory\Model\Region::class, \Magento\Directory\Model\ResourceModel\Region::class);
 
         $this->_countryTable = $this->getTable('directory_country');
         $this->_regionNameTable = $this->getTable('directory_country_region_name');

@@ -532,7 +532,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         if ($addressId) {
             $addressDataObject->setId($addressId);
