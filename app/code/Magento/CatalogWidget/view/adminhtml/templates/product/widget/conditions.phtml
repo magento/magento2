@@ -33,6 +33,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?php echo $block->escapeHtml($block->getHtmlId()) ?> = new VarienRulesForm('<?php echo $block->escapeHtml($block->getHtmlId()) ?>', '<?php echo $block->escapeUrl($block->getNewChildUrl()) ?>');
+        window.<?php echo $block->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?php echo $block->escapeJs($block->getHtmlId()) ?>', '<?php echo $block->escapeUrl($block->getNewChildUrl()) ?>');
     });
 </script>

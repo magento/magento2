@@ -29,19 +29,19 @@ require([
     "Magento_Catalog/catalog/product/composite/configure"
 ], function(alert, confirm){
 
-<?php echo $block->escapeHtml($block->getJsObjectName()) ?>cartControl = {
+<?php echo $block->escapeJs($block->getJsObjectName()) ?>cartControl = {
     reload: function (params) {
         if (!params) {
             params = {};
         }
-        <?php echo $block->escapeHtml($block->getJsObjectName()) ?>.reloadParams = params;
-        <?php echo $block->escapeHtml($block->getJsObjectName()) ?>.reload();
-        <?php echo $block->escapeHtml($block->getJsObjectName()) ?>.reloadParams = {};
+        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = params;
+        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reload();
+        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = {};
     },
 
     configureItem: function (itemId) {
-        productConfigure.setOnLoadIFrameCallback('<?php echo $block->escapeHtml($listType) ?>', this.cbOnLoadIframe.bind(this));
-        productConfigure.showItemConfiguration('<?php echo $block->escapeHtml($listType) ?>', itemId);
+        productConfigure.setOnLoadIFrameCallback('<?php echo $block->escapeJs($listType) ?>', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('<?php echo $block->escapeJs($listType) ?>', itemId);
         return false;
     },
 
@@ -81,7 +81,7 @@ $params = [
 ];
 ?>
 productConfigure.addListType(
-    '<?php echo $block->escapeHtml($listType) ?>',
+    '<?php echo $block->escapeJs($listType) ?>',
     {
         urlFetch: '<?php echo $block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params)) ?>',
         urlConfirm: '<?php echo $block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params)) ?>'
