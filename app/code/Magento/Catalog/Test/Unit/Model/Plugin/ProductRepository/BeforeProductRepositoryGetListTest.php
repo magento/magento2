@@ -17,8 +17,10 @@ class BeforeProductRepositoryGetListTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  ObjectManager */
     private $objectManager;
+
     /** @var  StoreManagerInterface */
     private $storeManagerMock;
+
     /** @var  ProductRepositoryInterface */
     private $subjectMock;
 

@@ -10,10 +10,21 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class BeforeProductRepositoryGetList
 {
+    /** @var StoreManagerInterface */
     private $storeManager;
+
+    /** @var FilterGroupBuilder  */
     private $filterGroupBuilder;
+
+    /** @var FilterBuilder  */
     private $filterBuilder;
 
+    /**
+     * BeforeProductRepositoryGetList constructor.
+     * @param StoreManagerInterface $storeManager
+     * @param FilterGroupBuilder $filterGroupBuilder
+     * @param FilterBuilder $filterBuilder
+     */
     public function __construct(
         StoreManagerInterface $storeManager,
         FilterGroupBuilder $filterGroupBuilder,
@@ -24,6 +35,13 @@ class BeforeProductRepositoryGetList
         $this->filterBuilder = $filterBuilder;
     }
 
+    /**
+     * Append a store filter at the end of search criteria.
+     *
+     * @param ProductRepositoryInterface $subject
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return array
+     */
     public function beforeGetList(ProductRepositoryInterface $subject, SearchCriteriaInterface $searchCriteria)
     {
         $filterGroups = $searchCriteria->getFilterGroups();
