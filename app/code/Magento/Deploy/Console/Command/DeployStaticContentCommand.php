@@ -21,6 +21,7 @@ use Magento\Deploy\Model\Process;
 
 /**
  * Deploy static content command
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContentCommand extends Command
 {
@@ -163,6 +164,7 @@ class DeployStaticContentCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function configure()
     {
@@ -412,9 +414,46 @@ class DeployStaticContentCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
-
         $filesUtil = $this->objectManager->create(Files::class);
 
+        list ($deployableLanguages, $deployableAreaThemeMap, $requestedThemes)
+            = $this->prepareDeployableEntities($filesUtil);
+
+        $output->writeln("Requested languages: " . implode(', ', $deployableLanguages));
+        $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
+        $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
+
+        $options = $this->input->getOptions();
+        $deployer = $this->objectManager->create(
+            \Magento\Deploy\Model\Deployer::class,
+            [
+                'filesUtil' => $filesUtil,
+                'output' => $output,
+                'isDryRun' => $options[self::DRY_RUN_OPTION],
+                'skipJavaScript' => $options[self::JAVASCRIPT_OPTION],
+                'skipCss' => $options[self::CSS_OPTION],
+                'skipLess' => $options[self::LESS_OPTION],
+                'skipImages' => $options[self::IMAGES_OPTION],
+                'skipFonts' => $options[self::FONTS_OPTION],
+                'skipHtml' => $options[self::HTML_OPTION],
+                'skipMisc' => $options[self::MISC_OPTION],
+                'skipHtmlMinify' => $options[self::HTML_MINIFY_OPTION]
+            ]
+        );
+
+        if ($this->isCanBeParalleled()) {
+            return $this->runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages);
+        } else {
+            return $this->deploy($deployer, $deployableLanguages, $deployableAreaThemeMap);
+        }
+    }
+
+    /**
+     * @param Files $filesUtil
+     * @return array
+     */
+    private function prepareDeployableEntities($filesUtil)
+    {
         $magentoAreas = [];
         $magentoThemes = [];
         $magentoLanguages = [self::DEFAULT_LANGUAGE_VALUE];
@@ -436,21 +475,21 @@ class DeployStaticContentCommand extends Command
             }
         }
 
-        $areasInclude = $input->getOption(self::AREA_OPTION);
-        $areasExclude = $input->getOption(self::EXCLUDE_AREA_OPTION);
+        $areasInclude = $this->input->getOption(self::AREA_OPTION);
+        $areasExclude = $this->input->getOption(self::EXCLUDE_AREA_OPTION);
         $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
         $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
 
-        $languagesInclude = $input->getArgument(self::LANGUAGES_ARGUMENT)
-            ?: $input->getOption(self::LANGUAGE_OPTION);
-        $languagesExclude = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
+        $languagesInclude = $this->input->getArgument(self::LANGUAGES_ARGUMENT)
+            ?: $this->input->getOption(self::LANGUAGE_OPTION);
+        $languagesExclude = $this->input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
         $this->checkLanguagesInput($languagesInclude, $languagesExclude);
         $deployableLanguages = $languagesInclude[0] == 'all'
             ? $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude)
             : $languagesInclude;
 
-        $themesInclude = $input->getOption(self::THEME_OPTION);
-        $themesExclude = $input->getOption(self::EXCLUDE_THEME_OPTION);
+        $themesInclude = $this->input->getOption(self::THEME_OPTION);
+        $themesExclude = $this->input->getOption(self::EXCLUDE_THEME_OPTION);
         $this->checkThemesInput($magentoThemes, $themesInclude, $themesExclude);
         $deployableThemes = $this->getDeployableEntities($magentoThemes, $themesInclude, $themesExclude);
 
@@ -462,33 +501,8 @@ class DeployStaticContentCommand extends Command
                 $requestedThemes += $themes;
             }
         }
-        $output->writeln("Requested languages: " . implode(', ', $deployableLanguages));
-        $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
-        $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
 
-        $options = $input->getOptions();
-        $deployer = $this->objectManager->create(
-            \Magento\Deploy\Model\Deployer::class,
-            [
-                'filesUtil' => $filesUtil,
-                'output' => $output,
-                'isDryRun' => $options[self::DRY_RUN_OPTION],
-                'isJavaScript' => $options[self::JAVASCRIPT_OPTION],
-                'isCss' => $options[self::CSS_OPTION],
-                'isLess' => $options[self::LESS_OPTION],
-                'isImages' => $options[self::IMAGES_OPTION],
-                'isFonts' => $options[self::FONTS_OPTION],
-                'isHtml' => $options[self::HTML_OPTION],
-                'isMisc' => $options[self::MISC_OPTION],
-                'isHtmlMinify' => $options[self::HTML_MINIFY_OPTION]
-            ]
-        );
-
-        if ($this->isCanBeParalleled()) {
-            return $this->runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages);
-        } else {
-            return $this->deploy($deployer, $deployableLanguages, $deployableAreaThemeMap);
-        }
+        return [$deployableLanguages, $deployableAreaThemeMap, $requestedThemes];
     }
 
     /**
@@ -507,10 +521,11 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * @param $deployer
-     * @param $deployableAreaThemeMap
-     * @param $deployableLanguages
+     * @param \Magento\Deploy\Model\Deployer $deployer
+     * @param array $deployableAreaThemeMap
+     * @param array $deployableLanguages
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages)
     {
@@ -534,7 +549,7 @@ class DeployStaticContentCommand extends Command
             }
         }
         $returnStatus = null;
-        while (count($processManager->getProcesses()) > 0)  {
+        while (count($processManager->getProcesses()) > 0) {
             foreach ($processManager->getProcesses() as $process) {
                 if ($process->isCompleted()) {
                     $processManager->delete($process);

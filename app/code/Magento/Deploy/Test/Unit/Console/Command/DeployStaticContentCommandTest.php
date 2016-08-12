@@ -9,6 +9,8 @@ use Magento\Deploy\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Validator\Locale;
 
+require 'FunctionExistMock.php';
+
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,6 +55,10 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->deployer = $this->getMock(\Magento\Deploy\Model\Deployer::class, [], [], '', false);
         $this->filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
+
+        $this->filesUtil->expects(self::once())->method('getStaticPreProcessingFiles')->willReturn([
+            ['area', 'theme', '', 'module', 'filePath', 'fullPath'],
+        ]);
         $this->validator = $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $this->command = new DeployStaticContentCommand(
             $this->objectManagerFactory,
@@ -64,19 +70,65 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->deployer->expects($this->once())->method('deploy');
-
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->willReturn($this->filesUtil);
-
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->willReturn($this->deployer);
-
-        $this->validator->expects($this->once())->method('isValid')->with('en_US')->willReturn(true);
+        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->deployer);
 
         $tester = new CommandTester($this->command);
         $tester->execute([]);
+    }
+
+    public function testExecuteValidateLanguages()
+    {
+        $this->deployer->expects($this->once())->method('deploy');
+        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->deployer);
+        $this->validator->expects(self::exactly(2))->method('isValid')->willReturnMap([
+            ['en_US', true],
+            ['uk_UA', true],
+        ]);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['languages' => ['en_US', 'uk_UA']]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage --language (-l) and --exclude-language cannot be used at the same tim
+     */
+    public function testExecuteIncludedExcludedLanguages()
+    {
+        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
+        $this->validator->expects(self::exactly(2))->method('isValid')->willReturnMap([
+            ['en_US', true],
+            ['uk_UA', true],
+        ]);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--language' => ['en_US', 'uk_UA'], '--exclude-language' => 'ru_RU']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage --area (-a) and --exclude-area cannot be used at the same tim
+     */
+    public function testExecuteIncludedExcludedAreas()
+    {
+        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--area' => ['a1', 'a2'], '--exclude-area' => 'a3']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage --theme (-t) and --exclude-theme cannot be used at the same tim
+     */
+    public function testExecuteIncludedExcludedThemes()
+    {
+        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--theme' => ['t1', 't2'], '--exclude-theme' => 't3']);
     }
 
     /**
@@ -85,6 +137,9 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidLanguageArgument()
     {
+        $this->objectManager->expects($this->at(0))
+            ->method('create')
+            ->willReturn($this->filesUtil);
         $wrongParam = ['languages' => ['ARG_IS_WRONG']];
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($wrongParam);

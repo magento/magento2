@@ -20,7 +20,7 @@ class Process
     /**
      * @param callable $callable
      */
-    public function __construct(callable $callable)
+    public function __construct($callable)
     {
         $this->pid = 0;
         $this->status = null;
@@ -46,6 +46,7 @@ class Process
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function run()
     {
@@ -61,7 +62,7 @@ class Process
     public function isCompleted()
     {
         $pid = pcntl_waitpid($this->getPid(), $status, WNOHANG);
-        if($pid == -1 || $pid === $this->getPid()) {
+        if ($pid == -1 || $pid === $this->getPid()) {
             $this->status = pcntl_wexitstatus($status);
             return true;
         }

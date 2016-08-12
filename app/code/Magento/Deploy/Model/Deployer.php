@@ -26,6 +26,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Deployer
 {
@@ -54,28 +55,28 @@ class Deployer
     private $isDryRun;
 
     /** @var bool */
-    private $isJavaScript;
+    private $skipJavaScript;
 
     /** @var bool */
-    private $isCss;
+    private $skipCss;
 
     /** @var bool */
-    private $isLess;
+    private $skipLess;
 
     /** @var bool */
-    private $isImages;
+    private $skipImages;
 
     /** @var bool */
-    private $isFonts;
+    private $skipFonts;
 
     /** @var bool */
-    private $isHtml;
+    private $skipHtml;
 
     /** @var bool */
-    private $isMisc;
+    private $skipMisc;
 
     /** @var bool */
-    private $isHtmlMinify;
+    private $skipHtmlMinify;
 
     /** @var int */
     private $count;
@@ -141,14 +142,15 @@ class Deployer
      * @param JsTranslationConfig $jsTranslationConfig
      * @param AlternativeSourceInterface[] $alternativeSources
      * @param bool $isDryRun
-     * @param bool $isJavaScript
-     * @param bool $isCss
-     * @param bool $isLess
-     * @param bool $isImages
-     * @param bool $isFonts
-     * @param bool $isHtml
-     * @param bool $isMisc
-     * @param bool $isHtmlMinify
+     * @param bool $skipJavaScript
+     * @param bool $skipCss
+     * @param bool $skipLess
+     * @param bool $skipImages
+     * @param bool $skipFonts
+     * @param bool $skipHtml
+     * @param bool $skipMisc
+     * @param bool $skipHtmlMinify
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Files $filesUtil,
@@ -157,27 +159,27 @@ class Deployer
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
         $isDryRun = false,
-        $isJavaScript = false,
-        $isCss = false,
-        $isLess = false,
-        $isImages = false,
-        $isFonts = false,
-        $isHtml = false,
-        $isMisc = false,
-        $isHtmlMinify = false
+        $skipJavaScript = false,
+        $skipCss = false,
+        $skipLess = false,
+        $skipImages = false,
+        $skipFonts = false,
+        $skipHtml = false,
+        $skipMisc = false,
+        $skipHtmlMinify = false
     ) {
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
         $this->isDryRun = $isDryRun;
-        $this->isJavaScript = $isJavaScript;
-        $this->isCss = $isCss;
-        $this->isLess = $isLess;
-        $this->isImages = $isImages;
-        $this->isFonts = $isFonts;
-        $this->isHtml = $isHtml;
-        $this->isMisc = $isMisc;
-        $this->isHtmlMinify = $isHtmlMinify;
+        $this->skipJavaScript = $skipJavaScript;
+        $this->skipCss = $skipCss;
+        $this->skipLess = $skipLess;
+        $this->skipImages = $skipImages;
+        $this->skipFonts = $skipFonts;
+        $this->skipHtml = $skipHtml;
+        $this->skipMisc = $skipMisc;
+        $this->skipHtmlMinify = $skipHtmlMinify;
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->parentTheme = [];
 
@@ -203,28 +205,28 @@ class Deployer
         $path = $filePath;
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        $check = ($this->isJavaScript
-            || $this->isCss
-            || $this->isLess
-            || $this->isHtml
-            || $this->isImages
-            || $this->isFonts
-            || $this->isMisc);
+        $check = ($this->skipJavaScript
+            || $this->skipCss
+            || $this->skipLess
+            || $this->skipHtml
+            || $this->skipImages
+            || $this->skipFonts
+            || $this->skipMisc);
 
         if ($check && $filePath != '.') {
-            if ($this->isJavaScript && in_array($ext, $this->fileExtensionsJs)) {
+            if ($this->skipJavaScript && in_array($ext, $this->fileExtensionsJs)) {
                 return true;
-            } elseif ($this->isCss && in_array($ext, $this->fileExtensionsCss)) {
+            } elseif ($this->skipCss && in_array($ext, $this->fileExtensionsCss)) {
                 return true;
-            } elseif ($this->isLess && in_array($ext, $this->fileExtensionsLess)) {
+            } elseif ($this->skipLess && in_array($ext, $this->fileExtensionsLess)) {
                 return true;
-            } elseif ($this->isHtml && in_array($ext, $this->fileExtensionsHtml)) {
+            } elseif ($this->skipHtml && in_array($ext, $this->fileExtensionsHtml)) {
                 return true;
-            } elseif ($this->isImages && in_array($ext, $this->fileExtensionsImages)) {
+            } elseif ($this->skipImages && in_array($ext, $this->fileExtensionsImages)) {
                 return true;
-            } elseif ($this->isFonts && in_array($ext, $this->fileExtensionsFonts)) {
+            } elseif ($this->skipFonts && in_array($ext, $this->fileExtensionsFonts)) {
                 return true;
-            } elseif ($this->isMisc && in_array($ext, $this->fileExtensionsMisc)) {
+            } elseif ($this->skipMisc && in_array($ext, $this->fileExtensionsMisc)) {
                 return true;
             }
 
@@ -241,6 +243,7 @@ class Deployer
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function deploy(ObjectManagerFactory $omFactory, array $deployableLanguages, array $deployableAreaThemeMap)
     {
@@ -331,7 +334,7 @@ class Deployer
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
-                    if (!$this->isJavaScript) {
+                    if (!$this->skipJavaScript) {
                         if ($this->jsTranslationConfig->dictionaryEnabled()) {
                             $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                             $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
@@ -346,7 +349,7 @@ class Deployer
                 }
             }
         }
-        if (!$this->isHtmlMinify) {
+        if (!$this->skipHtmlMinify) {
             $this->output->writeln('=== Minify templates ===');
             $this->count = 0;
             foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
@@ -365,6 +368,7 @@ class Deployer
                 $this->versionStorage->save($version);
             }
         }
+
         if ($this->errorCount > 0) {
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
@@ -396,7 +400,7 @@ class Deployer
     private function emulateApplicationArea($areaCode)
     {
         $this->objectManager = $this->omFactory->create(
-            [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
+            [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_PRODUCTION]
         );
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManager->get(\Magento\Framework\App\State::class);

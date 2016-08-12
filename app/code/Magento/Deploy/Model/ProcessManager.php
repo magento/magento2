@@ -18,6 +18,7 @@ class ProcessManager
      *
      * @return Process
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function fork(callable $callable)
     {
@@ -52,6 +53,7 @@ class ProcessManager
 
     /**
      * @param Process $process
+     * @return void
      */
     public function delete(Process $process)
     {
@@ -70,6 +72,7 @@ class ProcessManager
     /**
      * Protect against zombie process
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function freeResources()
     {
