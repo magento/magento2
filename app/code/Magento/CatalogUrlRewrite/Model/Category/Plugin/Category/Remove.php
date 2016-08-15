@@ -23,6 +23,9 @@ class Remove
     /** @var ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
+    /** @var array */
+    private $categoryIds;
+
     /**
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
@@ -39,24 +42,40 @@ class Remove
     }
 
     /**
+     * Save category ids before delete
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Category $subject
+     * @param \Magento\Framework\DataObject|int|string $object
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeDelete(\Magento\Catalog\Model\ResourceModel\Category $subject, $object)
+    {
+        if ($object instanceof CategoryInterface) {
+            $this->categoryIds = $this->childrenCategoriesProvider->getChildrenIds($object, true);
+            $this->categoryIds[] = $object->getId();
+        }
+        return [$object];
+    }
+
+    /**
      * Remove product urls from storage
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
-     * @param callable $proceed
-     * @param CategoryInterface $category
-     * @return mixed
+     * @param \Magento\Catalog\Model\ResourceModel\Category $result
+     * @param \Magento\Framework\DataObject|int|string $object
+     * @return \Magento\Catalog\Model\ResourceModel\Category
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
+    public function afterDelete(
         \Magento\Catalog\Model\ResourceModel\Category $subject,
-        \Closure $proceed,
-        CategoryInterface $category
+        \Magento\Catalog\Model\ResourceModel\Category $result,
+        $object
     ) {
-        $categoryIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
-        $categoryIds[] = $category->getId();
-        $result = $proceed($category);
-        foreach ($categoryIds as $categoryId) {
-            $this->deleteRewritesForCategory($categoryId);
+        if ($object instanceof CategoryInterface) {
+            foreach ($this->categoryIds as $categoryId) {
+                $this->deleteRewritesForCategory($categoryId);
+            }
         }
         return $result;
     }
