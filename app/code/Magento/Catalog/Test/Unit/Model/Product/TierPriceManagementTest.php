@@ -12,6 +12,7 @@ use \Magento\Catalog\Model\Product\TierPriceManagement;
 
 use Magento\Customer\Model\GroupManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\TemporaryState\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -390,6 +391,30 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->groupRepositoryMock->expects($this->once())->method('getById')->will($this->returnValue($group));
         $this->repositoryMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
+        $this->service->add('product_sku', 1, 100, 2);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\TemporaryState\CouldNotSaveException
+     */
+    public function testAddRethrowsTemporaryStateExceptionIfRecoverableErrorOccurred()
+    {
+        $group = $this->getMock(\Magento\Customer\Model\Data\Group::class, [], [], '', false);
+        $group->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getData')
+            ->with('tier_price')
+            ->will($this->returnValue([]));
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->willReturn($group);
+        $this->repositoryMock->expects($this->once())
+            ->method('save')
+            ->willThrowException(new CouldNotSaveException(__('Lock wait timeout')));
+
         $this->service->add('product_sku', 1, 100, 2);
     }
 
