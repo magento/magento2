@@ -14,11 +14,12 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
-use Magento\Sales\Model\Order\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
+use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\OrderInvoice;
 use Psr\Log\LoggerInterface;
@@ -49,6 +50,11 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
      * @var InvoiceValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $invoiceValidatorMock;
+
+    /**
+     * @var OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderValidatorMock;
 
     /**
      * @var PaymentAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -128,6 +134,10 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->orderValidatorMock = $this->getMockBuilder(OrderValidatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->paymentAdapterMock = $this->getMockBuilder(PaymentAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -177,6 +187,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             $this->orderRepositoryMock,
             $this->invoiceDocumentFactoryMock,
             $this->invoiceValidatorMock,
+            $this->orderValidatorMock,
             $this->paymentAdapterMock,
             $this->orderStateResolverMock,
             $this->configMock,
@@ -212,7 +223,11 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $this->invoiceValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->invoiceMock, $this->orderMock)
+            ->with($this->invoiceMock)
+            ->willReturn([]);
+        $this->orderValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->orderMock)
             ->willReturn([]);
 
         $this->paymentAdapterMock->expects($this->once())
@@ -311,8 +326,12 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $this->invoiceValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->invoiceMock, $this->orderMock)
+            ->with($this->invoiceMock)
             ->willReturn($errorMessages);
+        $this->orderValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->orderMock)
+            ->willReturn([]);
 
         $this->orderInvoice->execute(
             $orderId,
@@ -356,7 +375,11 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $this->invoiceValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->invoiceMock, $this->orderMock)
+            ->with($this->invoiceMock)
+            ->willReturn([]);
+        $this->orderValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->orderMock)
             ->willReturn([]);
         $e = new \Exception();
 
