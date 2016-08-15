@@ -53,11 +53,6 @@ class Module
     private $moduleList;
 
     /**
-     * @var TypeMapper
-     */
-    private $typeMapper;
-
-    /**
      * @var PackagesData
      */
     private $packagesData;
@@ -67,7 +62,6 @@ class Module
      * @param \Magento\Framework\Module\FullModuleList $fullModuleList
      * @param ModuleList $moduleList
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param TypeMapper $typeMapper
      * @param PackagesData $packagesData
      */
     public function __construct(
@@ -75,14 +69,12 @@ class Module
         \Magento\Framework\Module\FullModuleList $fullModuleList,
         ModuleList $moduleList,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
-        TypeMapper $typeMapper,
         PackagesData $packagesData
     ) {
         $this->composerInformation = $composerInformation;
         $this->fullModuleList = $fullModuleList;
         $this->moduleList = $moduleList;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->typeMapper = $typeMapper;
         $this->packagesData = $packagesData;
     }
 
@@ -169,6 +161,7 @@ class Module
             $result[$key] = [
                 'name' => $packageName ?: self::UNKNOWN_PACKAGE_NAME,
                 'moduleName' => $moduleName,
+                'type' => ComposerInformation::MODULE_PACKAGE_TYPE,
                 'version' => $this->packageInfo->getVersion($moduleName) ?: self::UNKNOWN_VERSION,
             ];
         }
@@ -189,28 +182,9 @@ class Module
             $item['enable'] = $this->moduleList->has($item['moduleName']);
             $vendorSource = $item['name'] == self::UNKNOWN_PACKAGE_NAME ? $item['moduleName'] : $item['name'];
             $item['vendor'] = ucfirst(current(preg_split('%[/_]%', $vendorSource)));
+            $item = $this->packagesData->addPackageExtraInfo($item);
         }
-        $items = $this->addExtraInfo($items);
 
         return array_values($items);
-    }
-
-    /**
-     * Add extra info to result array
-     *
-     * @param array $items
-     * @return array
-     */
-    private function addExtraInfo(array $items)
-    {
-        foreach ($items as &$item) {
-            $extraInfo = $this->packagesData->getPackageExtraInfo($item['name'], $item['version']);
-            $item['product_name'] =  isset($extraInfo['x-magento-ext-title']) ?
-                $extraInfo['x-magento-ext-title'] : $item['name'];
-            $item['type'] = isset($extraInfo['x-magento-ext-type']) ? $extraInfo['x-magento-ext-type'] :
-                $this->typeMapper->map($item['name'], ComposerInformation::MODULE_PACKAGE_TYPE);
-        }
-
-        return $items;
     }
 }

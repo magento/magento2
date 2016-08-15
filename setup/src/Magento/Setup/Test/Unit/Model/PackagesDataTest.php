@@ -10,6 +10,7 @@ use Composer\Package\RootPackage;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\PackagesData;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Setup\Model\Grid\TypeMapper;
 
 /**
  * Tests Magento\Setup\Model\PackagesData
@@ -116,12 +117,23 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
                 . '}}}'
             );
 
+        $typeMapper = $this->getMockBuilder(TypeMapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeMapper->expects(static::any())
+            ->method('map')
+            ->willReturnMap([
+                [ComposerInformation::MODULE_PACKAGE_TYPE, TypeMapper::MODULE_PACKAGE_TYPE],
+            ]);
+
+
         $this->packagesData = new PackagesData(
             $this->composerInformation,
             $timeZoneProvider,
             $packagesAuth,
             $filesystem,
-            $objectManagerProvider
+            $objectManagerProvider,
+            $typeMapper
         );
     }
 
@@ -166,11 +178,17 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetPackageExtraInfo()
+    public function testAddPackageExtraInfo()
     {
         static::assertEquals(
-            ['x-magento-ext-title' => 'Package 3 title', 'x-magento-ext-type' => 'Extension'],
-            $this->packagesData->getPackageExtraInfo('magento/package-3', '1.0.2')
+            [
+                'package_title' => 'Package 3 title',
+                'package_type' => 'Extension',
+                'name' => 'magento/package-3',
+                'version' => '1.0.2',
+                'package_link' => ''
+            ],
+            $this->packagesData->addPackageExtraInfo(['name' => 'magento/package-3', 'version' => '1.0.2'])
         );
     }
 }

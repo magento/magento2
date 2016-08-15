@@ -62,24 +62,27 @@ class PackagesData
     /**
      * PackagesData constructor.
      *
-     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation,
-     * @param \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
-     * @param \Magento\Setup\Model\PackagesAuth $packagesAuth,
-     * @param \Magento\Framework\Filesystem $filesystem,
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation ,
+     * @param \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider ,
+     * @param \Magento\Setup\Model\PackagesAuth $packagesAuth ,
+     * @param \Magento\Framework\Filesystem $filesystem ,
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param TypeMapper $typeMapper
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
         \Magento\Setup\Model\PackagesAuth $packagesAuth,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Magento\Setup\Model\Grid\TypeMapper $typeMapper
     ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->composerInformation = $composerInformation;
         $this->timeZoneProvider = $timeZoneProvider;
         $this->packagesAuth = $packagesAuth;
         $this->filesystem = $filesystem;
+        $this->typeMapper = $typeMapper;
     }
 
     /**
@@ -172,10 +175,16 @@ class PackagesData
      */
     public function getInstalledPackages()
     {
-        return array_intersect_key(
+        $installedPackages = array_intersect_key(
             $this->composerInformation->getInstalledMagentoPackages(),
             $this->composerInformation->getRootPackage()->getRequires()
         );
+
+        foreach ($installedPackages as &$package) {
+            $package = $this->addPackageExtraInfo($package);
+        }
+
+        return $this->filterPackagesList($installedPackages);
     }
 
     /**
@@ -276,11 +285,11 @@ class PackagesData
                         $installPackage['versions'] = $versions;
                         $installPackage['name'] = $packageName;
                         $installPackage['vendor'] = explode('/', $packageName)[0];
-                        $installPackages[$packageName] = $installPackage;
+                        $installPackages[$packageName] = $this->addPackageExtraInfo($installPackage);
                     }
                 }
             }
-            $packagesForInstall['packages'] = $installPackages;
+            $packagesForInstall['packages'] = $this->filterPackagesList($installPackages);
             return $packagesForInstall;
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in syncing packages for Install');
@@ -294,12 +303,32 @@ class PackagesData
      * @param string $packageVersion
      * @return array
      */
-    public function getPackageExtraInfo($packageName, $packageVersion)
+    private function getPackageExtraInfo($packageName, $packageVersion)
     {
         $packagesJson = $this->getPackagesJson();
 
         return isset($packagesJson[$packageName][$packageVersion]['extra']) ?
             $packagesJson[$packageName][$packageVersion]['extra'] : [] ;
+    }
+
+    /**
+     * Add package extra info
+     *
+     * @param array $package
+     * @return array
+     */
+    public function addPackageExtraInfo(array $package)
+    {
+        $extraInfo = $this->getPackageExtraInfo($package['name'], $package['version']);
+
+        $package['package_title'] =  isset($extraInfo['x-magento-ext-title']) ?
+            $extraInfo['x-magento-ext-title'] : $package['name'];
+        $package['package_type'] = isset($extraInfo['x-magento-ext-type']) ? $extraInfo['x-magento-ext-type'] :
+            $this->typeMapper->map($package['type']);
+        $package['package_link'] = isset($extraInfo['x-magento-ext-package-link']) ?
+            $extraInfo['x-magento-ext-package-link'] : '';
+
+        return $package;
     }
 
     /**
@@ -363,6 +392,30 @@ class PackagesData
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in getting new packages to install');
         }
+    }
+
+    /**
+     * Filter packages by allowed types
+     *
+     * @param array $packages
+     * @return array
+     */
+    private function filterPackagesList(array $packages)
+    {
+        return array_filter(
+            $packages,
+            function ($item) {
+                return in_array(
+                    $item['package_type'],
+                    [
+                        \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::EXTENSION_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::THEME_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::METAPACKAGE_PACKAGE_TYPE
+                    ]
+                );
+            }
+        );
     }
 
     /**
