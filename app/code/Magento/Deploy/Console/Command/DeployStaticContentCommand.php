@@ -575,7 +575,7 @@ class DeployStaticContentCommand extends Command
      */
     private function isCanBeParalleled()
     {
-        return function_exists('pcntl_fork');
+        return function_exists('pcntl_fork') && $this->getProcessesAmount() > 1;
     }
 
     /**

@@ -240,7 +240,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => false]
         );
 
-        $deployer->deploy($omFactory, ['en_US']);
+        $deployer->deploy($omFactory, ['en_US'], ['frontend' => ['FrameworkViewMinifier/default']]);
 
         $this->assertFileExists($fileToBePublished);
         $this->assertEquals(
