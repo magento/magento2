@@ -91,7 +91,7 @@ class FieldPluginTest extends \PHPUnit_Framework_TestCase
             ['payment_us/group/field', 'payment/group/field'],
             ['payment_other/group/field', 'payment/group/field'],
             ['payment_us', 'payment_us'],
-            ['payment_wrong_country/group/field', 'payment_wrong_country/group/field'],
+            ['payment_wrong_country/group/field', 'payment_wrong_country/group/field']
         ];
     }
 }
