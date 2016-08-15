@@ -16,6 +16,7 @@ class CustomerAuthUpdateTest extends \PHPUnit_Framework_TestCase
      * @var CustomerAuthUpdate
      */
     protected $model;
+
     /**
      * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -38,14 +39,13 @@ class CustomerAuthUpdateTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $className = '\Magento\Customer\Model\CustomerRegistry';
-        $this->customerRegistry = $this->getMock($className, [], [], '', false);
-
-        $className = '\Magento\Customer\Model\ResourceModel\Customer';
-        $this->customerResourceModel = $this->getMock($className, [], [], '', false);
+        $this->customerRegistry =
+            $this->getMock(\Magento\Customer\Model\CustomerRegistry::class, [], [], '', false);
+        $this->customerResourceModel =
+            $this->getMock(\Magento\Customer\Model\ResourceModel\Customer::class, [], [], '', false);
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Customer\Model\CustomerAuthUpdate',
+            \Magento\Customer\Model\CustomerAuthUpdate::class,
             [
                 'customerRegistry' => $this->customerRegistry,
                 'customerResourceModel' => $this->customerResourceModel,
