@@ -167,15 +167,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                 break;
         }
 
-        // we should override default behaviour of Magento\Framework\Exception\LocalizedException\AbstractBackend
-        // but can't do this in abstract model and can't update DB records because of backward compatibility
-        if ($this->getFrontendInput() == 'select'
-            && !$this->getIsRequired()
-            && !$this->getBackendModel()
-        ) {
-            return \Magento\Eav\Model\Entity\Attribute\Backend\SelectBackend::class;
-        }
-
         return parent::_getDefaultBackendModel();
     }
 

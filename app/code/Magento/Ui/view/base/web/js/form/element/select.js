@@ -163,6 +163,10 @@ define([
             this.observe('options')
                 .setOptions(this.options());
 
+            if (_.isUndefined(this.value()) && !this.default) {
+                this.clear();
+            }
+
             return this;
         },
 
@@ -194,7 +198,7 @@ define([
         },
 
         /**
-         * Matches specfied value with existing options
+         * Matches specified value with existing options
          * or, if value is not specified, returns value of the first option.
          *
          * @returns {*}

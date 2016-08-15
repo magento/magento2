@@ -523,11 +523,11 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Check is product already exists or we trying to create one
+     * Check is product already new or we trying to create one
      *
      * @return bool
      */
-    private function isProductExists()
+    private function isProductNew()
     {
         return (bool) $this->locator->getProduct()->getId();
     }
@@ -552,7 +552,7 @@ class Eav extends AbstractModifier
      */
     private function isShowDefaultValue(ProductAttributeInterface $attribute)
     {
-        if (!$this->isProductExists()) {
+        if (!$this->isProductNew()) {
             return true;
         } elseif ($attribute->getIsRequired() && !$this->isProductHasValueForAttribute($attribute)) {
             return true;
