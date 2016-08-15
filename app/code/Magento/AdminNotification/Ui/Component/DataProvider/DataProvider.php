@@ -6,6 +6,8 @@
 
 namespace Magento\AdminNotification\Ui\Component\DataProvider;
 
+use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\SynchronizedFactory;
+
 /**
  * Class DataProvider
  */
@@ -20,7 +22,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\CollectionFactory $messageCollectionFactory
+     * @param SynchronizedFactory $messageCollectionFactory
      * @param array $meta
      * @param array $data
      */
@@ -28,7 +30,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        \Magento\AdminNotification\Model\ResourceModel\System\Message\CollectionFactory $messageCollectionFactory,
+        SynchronizedFactory $messageCollectionFactory,
         array $meta = [],
         array $data = []
     ) {
