@@ -24,7 +24,7 @@ class CustomerAuthUpdate
     /**
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      * @param \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel
-      */
+     */
     public function __construct(
         \Magento\Customer\Model\CustomerRegistry $customerRegistry,
         \Magento\Customer\Model\ResourceModel\Customer $customerResourceModel

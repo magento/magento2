@@ -13,6 +13,10 @@ use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
+/**
+ * Class Authentication
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Authentication implements AuthenticationInterface
 {
     /**
