@@ -17,7 +17,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $localeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -51,7 +51,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\Exception');
 
-        $localeMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $localeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(

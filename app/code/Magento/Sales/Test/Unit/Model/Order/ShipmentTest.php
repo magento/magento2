@@ -115,11 +115,11 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty = $reflection->getProperty('_items');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->commentCollection, $collection);
-        
+
         $this->commentCollection->expects(static::once())
             ->method('getItems')
             ->willReturn($collection);
-        
+
         static::assertEquals($this->shipmentModel->getComments(), $collection);
     }
 

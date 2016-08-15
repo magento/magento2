@@ -33,7 +33,7 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
         }
         $output .= 'interface ' . $this->getName();
         if (!empty($this->extendedClass)) {
-            $output .= ' extends ' . $this->extendedClass;
+            $output .= ' extends \\' . ltrim($this->extendedClass, '\\');
         }
 
         $output .= self::LINE_FEED . '{' . self::LINE_FEED . self::LINE_FEED

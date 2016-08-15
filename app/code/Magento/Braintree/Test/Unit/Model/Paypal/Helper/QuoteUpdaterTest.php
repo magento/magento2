@@ -9,7 +9,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;

@@ -25,7 +25,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $helper \Magento\Tax\Helper\Data */
-        $this->helper = $this->objectManager->get('Magento\Tax\Helper\Data');
+        $this->helper = $this->objectManager->get(\Magento\Tax\Helper\Data::class);
     }
 
     /**

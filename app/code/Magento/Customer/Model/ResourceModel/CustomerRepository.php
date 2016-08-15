@@ -151,7 +151,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         $customer->setAddresses($origAddresses);
@@ -168,20 +168,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
             );
         }
-        // Populate model with secure data
-        if ($customer->getId()) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerModel->setRpToken($customerSecure->getRpToken());
-            $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
-            $customerModel->setPasswordHash($customerSecure->getPasswordHash());
-            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
-            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
-            $customerModel->setLockExpires($customerSecure->getLockExpires());
-        } else {
-            if ($passwordHash) {
-                $customerModel->setPasswordHash($passwordHash);
-            }
-        }
+        $this->populateCustomerWithSecureData($customerModel, $passwordHash);
 
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData
@@ -220,13 +207,42 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $this->addressRepository->deleteById($addressId);
             }
         }
-
+        $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
             ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $customer]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * Set secure data to customer model
+     *
+     * @param \Magento\Customer\Model\Customer $customerModel
+     * @param string|null $passwordHash
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return void
+     */
+    private function populateCustomerWithSecureData($customerModel, $passwordHash = null)
+    {
+        if ($customerModel->getId()) {
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customerModel->getId());
+
+            $customerModel->setRpToken($passwordHash ? null : $customerSecure->getRpToken());
+            $customerModel->setRpTokenCreatedAt($passwordHash ? null : $customerSecure->getRpTokenCreatedAt());
+            $customerModel->setPasswordHash($passwordHash ?: $customerSecure->getPasswordHash());
+
+            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
+            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
+            $customerModel->setLockExpires($customerSecure->getLockExpires());
+        } elseif ($passwordHash) {
+            $customerModel->setPasswordHash($passwordHash);
+        }
+
+        if ($passwordHash && $customerModel->getId()) {
+            $this->customerRegistry->remove($customerModel->getId());
+        }
     }
 
     /**
@@ -256,7 +272,10 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $searchResults->setSearchCriteria($searchCriteria);
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $collection = $this->customerFactory->create()->getCollection();
-        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\CustomerInterface');
+        $this->extensionAttributesJoinProcessor->process(
+            $collection,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         // This is needed to make sure all the attributes are properly loaded
         foreach ($this->customerMetadata->getAllAttributesMetadata() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());

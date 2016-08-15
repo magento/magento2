@@ -114,7 +114,7 @@ interface TotalInterface extends ExtensibleDataInterface
     /**
      * Gets the base shipping discount tax compensation amount.
      *
-     * @return float Base shipping discount tax compensation amount.
+     * @return float|null Base shipping discount tax compensation amount.
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -177,7 +177,7 @@ interface TotalInterface extends ExtensibleDataInterface
     /**
      * Gets the shipping discount tax compensation amount.
      *
-     * @return float Shipping discount tax compensation amount.
+     * @return float|null Shipping discount tax compensation amount.
      */
     public function getShippingDiscountTaxCompensationAmount();
 

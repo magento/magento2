@@ -26,16 +26,16 @@ class RadioTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock('\Magento\Backend\Block\Context', [], [], '', false);
+        $context = $this->getMock(\Magento\Backend\Block\Context::class, [], [], '', false);
         $this->_converter = $this->getMock(
-            '\Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter',
+            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter::class,
             ['toFlatArray'],
             [],
             '',
             false
         );
         $this->_column = $this->getMock(
-            'Magento\Backend\Block\Widget\Grid\Column',
+            \Magento\Backend\Block\Widget\Grid\Column::class,
             ['getValues', 'getIndex', 'getHtmlName'],
             [],
             '',

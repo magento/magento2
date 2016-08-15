@@ -43,11 +43,11 @@ class ViewFactory
                 );
             }
             /** @var \Magento\Theme\Model\View\Design $design */
-            $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+            $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
             $design->setDesignTheme($arguments['themeModel'], $arguments['area']);
             /** @var \Magento\Framework\Config\FileResolver $fileResolver */
             $fileResolver = $this->objectManager->create(
-                'Magento\Framework\Config\FileResolver',
+                \Magento\Framework\Config\FileResolver::class,
                 [
                     'designInterface' => $design,
                 ]
@@ -56,7 +56,7 @@ class ViewFactory
         }
 
         return $this->objectManager->create(
-            'Magento\Framework\Config\View',
+            \Magento\Framework\Config\View::class,
             $viewConfigArguments
         );
     }

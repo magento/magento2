@@ -74,10 +74,13 @@ class SalesRefundsReportEntityTest extends Injectable
         $initialRefundsResult = $this->refundsReport->getGridBlock()->getLastResult();
 
         $order->persist();
-        $invoice = $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order]);
+        $invoice = $this->objectManager->create(
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
+            ['order' => $order]
+        );
         $invoice->run();
         $creditMemo = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateCreditMemoStep',
+            \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
             ['order' => $order]
         );
         $creditMemo->run();

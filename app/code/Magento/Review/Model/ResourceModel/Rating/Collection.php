@@ -65,7 +65,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Rating', 'Magento\Review\Model\ResourceModel\Rating');
+        $this->_init(\Magento\Review\Model\Rating::class, \Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**

@@ -9,6 +9,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -40,34 +43,34 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->uploaderFactory = $this->getMockBuilder('Magento\MediaStorage\Model\File\UploaderFactory')
+        $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->uploader = $this->getMockBuilder('Magento\MediaStorage\Model\File\Uploader')
+        $this->uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModelFactory = $this->getMockBuilder('Magento\Theme\Model\Design\BackendModelFactory')
+        $this->backendModelFactory = $this->getMockBuilder(\Magento\Theme\Model\Design\BackendModelFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModel = $this->getMockBuilder('Magento\Theme\Model\Design\Backend\File')
+        $this->backendModel = $this->getMockBuilder(\Magento\Theme\Model\Design\Backend\File::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
+        $this->metadataProvider = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\MetadataProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryWrite = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $this->directoryWrite = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->directoryWrite);
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
@@ -87,7 +90,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         $metadata = [
             $fieldCode => [
                 'path' => $path,
-                'backend_model' => 'Magento\Theme\Model\Design\Backend\File'
+                'backend_model' => \Magento\Theme\Model\Design\Backend\File::class
             ],
         ];
         $this->storeManager->expects($this->once())

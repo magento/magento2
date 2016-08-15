@@ -112,7 +112,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     protected function loginCustomer()
     {
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
         )->run();
     }

@@ -75,7 +75,7 @@
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
         <field name="custom_attribute" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="is_returnable" is_required="0" group="product-details" />
         <field name="news_from_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="news_to_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />

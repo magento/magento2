@@ -50,6 +50,20 @@ class Method extends Block
     protected $preloaderSpinner = '#preloaderSpinner';
 
     /**
+     * Continue to PayPal button for Braintree.
+     *
+     * @var string
+     */
+    protected $continueToBraintreePaypalButton = '#braintree_paypal_continue_to';
+
+    /**
+     * Pay with Paypal button for Braintree.
+     *
+     * @var string
+     */
+    protected $payWithBraintreePaypalButton = '#braintree_paypal_pay_with';
+
+    /**
      * Wait for PayPal page is loaded.
      *
      * @return void
@@ -78,7 +92,22 @@ class Method extends Block
     public function clickContinueToPaypal()
     {
         $currentWindow = $this->browser->getCurrentWindow();
-        $this->_rootElement->find($this->placeOrderButton)->click();
+        $this->waitForElementNotVisible($this->waitElement);
+        $this->_rootElement->find($this->continueToBraintreePaypalButton)->click();
+        $this->waitForElementNotVisible($this->waitElement);
+        return $currentWindow;
+    }
+
+    /**
+     * Click Pay with Paypal button.
+     *
+     * @return string
+     */
+    public function clickPayWithPaypal()
+    {
+        $currentWindow = $this->browser->getCurrentWindow();
+        $this->waitForElementNotVisible($this->waitElement);
+        $this->_rootElement->find($this->payWithBraintreePaypalButton)->click();
         $this->waitForElementNotVisible($this->waitElement);
         return $currentWindow;
     }
@@ -104,7 +133,7 @@ class Method extends Block
         $element = $this->_rootElement->find($this->billingAddressSelector);
 
         return $this->blockFactory->create(
-            '\Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing',
+            \Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing::class,
             ['element' => $element]
         );
     }

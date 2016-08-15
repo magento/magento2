@@ -13,11 +13,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetJobs()
     {
         $reader = $this->getMockBuilder(
-            'Magento\Cron\Model\Config\Reader\Xml'
+            \Magento\Cron\Model\Config\Reader\Xml::class
         )->disableOriginalConstructor()->getMock();
-        $cache = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $cache = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         $dbReader = $this->getMockBuilder(
-            'Magento\Cron\Model\Config\Reader\Db'
+            \Magento\Cron\Model\Config\Reader\Db::class
         )->disableOriginalConstructor()->getMock();
 
         $jobs = [

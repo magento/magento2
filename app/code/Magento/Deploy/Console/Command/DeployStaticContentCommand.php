@@ -115,7 +115,7 @@ class DeployStaticContentCommand extends Command
         $filesUtil = $this->objectManager->create(Files::class);
 
         $deployer = $this->objectManager->create(
-            'Magento\Deploy\Model\Deployer',
+            \Magento\Deploy\Model\Deployer::class,
             ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
         );
         return $deployer->deploy($this->objectManagerFactory, $languages);

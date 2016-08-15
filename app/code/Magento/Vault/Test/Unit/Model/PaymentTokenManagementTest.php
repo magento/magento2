@@ -474,7 +474,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->with('gt')
             ->willReturnSelf();
 
-        $date = $this->getMockBuilder('DateTime')
+        $date = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateTimeFactory->expects(static::once())
