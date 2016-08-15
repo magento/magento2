@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
-use Magento\Catalog\Api\Data\ProductExtension;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockInterface;
@@ -23,22 +23,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Closure
-     */
-    private $closure;
-
-    /**
-     * @var ProductInterface
+     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $product;
 
     /**
-     * @var ProductInterface
+     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $savedProduct;
 
     /**
-     * @var ProductExtension|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $productExtension;
 
@@ -73,7 +68,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     private $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave
+     * @var AroundProductRepositorySave
      */
     private $plugin;
 
@@ -97,13 +92,9 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             $this->stockConfiguration
         );
 
-        $this->savedProduct = $savedProduct = $this->getMockBuilder(ProductInterface::class)
+        $this->savedProduct = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getExtensionAttributes', 'getStoreId'])
             ->getMockForAbstractClass();
-
-        $this->closure = function () use ($savedProduct) {
-            return $savedProduct;
-        };
 
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->setMethods(['get'])
@@ -111,9 +102,15 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getExtensionAttributes', 'getStoreId'])
             ->getMockForAbstractClass();
-        $this->productExtension = $this->getMockBuilder(ProductExtension::class)
-            ->setMethods(['getStockItem'])
-            ->getMock();
+        $this->productExtension = $this->getMockForAbstractClass(
+            ProductExtensionInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getStockItem']
+        );
         $this->stockItem = $this->getMockBuilder(StockItemInterface::class)
             ->setMethods(['setWebsiteId', 'getWebsiteId', 'getStockId'])
             ->getMockForAbstractClass();
@@ -122,7 +119,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testAroundSaveWhenProductHasNoStockItemNeedingToBeUpdated()
+    public function testAfterSaveWhenProductHasNoStockItemNeedingToBeUpdated()
     {
         // pretend we have no extension attributes at all
         $this->product->expects($this->once())
@@ -137,14 +134,14 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->stockItem->expects($this->never())->method('setWebsiteId');
 
         // expect that there are no changes to the existing stock item information
-        $result = $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $result = $this->plugin->afterSave($this->productRepository, $this->savedProduct, $this->product);
         $this->assertEquals(
             $this->savedProduct,
             $result
         );
     }
 
-    public function testAroundSaveWhenProductHasNoPersistentStockItemInfo()
+    public function testAfterSaveWhenProductHasNoPersistentStockItemInfo()
     {
         // pretend we do have extension attributes, but none for 'stock_item'
         $this->product->expects($this->once())
@@ -169,11 +166,11 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $newProductMock,
-            $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product)
+            $this->plugin->afterSave($this->productRepository, $this->savedProduct, $this->product)
         );
     }
 
-    public function testAroundSave()
+    public function testAfterSave()
     {
         $productId = 5494;
         $storeId = 2;
@@ -224,7 +221,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $newProductMock,
-            $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product)
+            $this->plugin->afterSave($this->productRepository, $this->savedProduct, $this->product)
         );
     }
 
@@ -232,7 +229,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid stock id: 100500. Only default stock with id 50 allowed
      */
-    public function testAroundSaveWithInvalidStockId()
+    public function testAfterSaveWithInvalidStockId()
     {
         $stockId = 100500;
         $defaultScopeId = 100;
@@ -259,14 +256,14 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn($this->stockItem);
 
-        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->savedProduct, $this->product);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid stock item id: 0. Should be null or numeric value greater than 0
      */
-    public function testAroundSaveWithInvalidStockItemId()
+    public function testAfterSaveWithInvalidStockItemId()
     {
         $stockId = 80;
         $stockItemId = 0;
@@ -298,14 +295,14 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getItemId')
             ->willReturn($stockItemId);
 
-        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->savedProduct, $this->product);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid stock item id: 35. Assigned stock item id is 40
      */
-    public function testAroundSaveWithNotAssignedStockItemId()
+    public function testAfterSaveWithNotAssignedStockItemId()
     {
         $stockId = 80;
         $stockItemId = 35;
@@ -348,6 +345,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn($storedStockItem);
 
-        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->savedProduct, $this->product);
     }
 }
