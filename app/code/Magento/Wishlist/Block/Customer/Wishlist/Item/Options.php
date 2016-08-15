@@ -106,12 +106,16 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         $options = $helper->getOptions($item);
         foreach ($options as $index => $option) {
             if (is_array($option) && array_key_exists('value', $option)) {
-                if (is_array($option['value'])) {
-                    $option['value'] = nl2br(implode("\n", $option['value']));
-                }
-
                 if (!(array_key_exists('has_html', $option) && $option['has_html'] === true)) {
-                    $option['value'] = $this->escapeHtml($option['value']);
+                    if (is_array($option['value'])) {
+                        foreach ($option['value'] as $key => $value) {
+                            $option['value'][$key] = $this->escapeHtml($value);
+                        }
+
+                    } else {
+                        $option['value'] = $this->escapeHtml($option['value']);
+                    }
+
                 }
                 $options[$index]['value'] = $option['value'];
             }

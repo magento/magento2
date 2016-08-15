@@ -131,11 +131,11 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'label' => 'title',
-                        'value' => '1 x name <span class="price">$15.00</span>',
+                        'value' => ['1 x name <span class="price">$15.00</span>'],
                         'has_html' => true,
                     ],
                     ['label' => 'title', 'value' => 'value'],
-                    ['label' => 'title', 'value' => 'value'],
+                    ['label' => 'title', 'value' => ['value']],
                 ],
             ]
         ];
