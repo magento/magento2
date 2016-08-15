@@ -19,7 +19,7 @@
             <div class="col-xs-3">
                 <button type="button" class="btn" ng-click="installAll()">Install</button>
                 <div class="admin__control-support-text">
-                    <span>{{total}}</span> products
+                    <span>{{total}}</span> extensions
                 </div>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap"
@@ -65,7 +65,7 @@
                 </th>
                 <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
                 && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
-                    <span>Product Name</span>
+                    <span>Extension Name</span>
                 </th>
                 <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' &&
                 !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th _sortable">
