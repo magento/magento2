@@ -61,6 +61,7 @@ class AttributeLoader implements AttributeLoaderInterface
      * @param DataObject|null $object
      * @return AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
