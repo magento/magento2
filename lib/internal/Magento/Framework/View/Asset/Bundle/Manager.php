@@ -18,6 +18,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Manager
 {
+    const BUNDLE_JS_DIR = 'js/bundle';
+
     const BUNDLE_PATH = '/js/bundle/bundle';
 
     const ASSET_TYPE_JS = 'js';
@@ -177,7 +179,7 @@ class Manager
      */
     public function addAsset(LocalInterface $asset)
     {
-        if (!($this->isValidAsset($asset))) {
+        if (!$this->assetConfig->isBundlingJsFiles() || !$this->isValidAsset($asset)) {
             return false;
         }
 
@@ -248,6 +250,8 @@ class Manager
      */
     public function flush()
     {
-        $this->bundle->flush();
+        if ($this->assetConfig->isBundlingJsFiles()) {
+            $this->bundle->flush();
+        }
     }
 }

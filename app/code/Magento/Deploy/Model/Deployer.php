@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Asset\ConfigInterface;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -132,6 +133,9 @@ class Deployer
      * @var LoggerInterface
      */
     private $logger;
+
+    /** @var ConfigInterface */
+    private $assetConfig;
 
     /**
      * Constructor
@@ -342,14 +346,13 @@ class Deployer
                         if ($this->getMinification()->isEnabled('js')) {
                             $fileManager->createMinResolverAsset();
                         }
-                        $fileManager->clearBundleJsPool();
                     }
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
         }
-        if (!$this->skipHtmlMinify) {
+        if (!$this->skipHtmlMinify && $this->getAssetConfig()->isMinifyHtml()) {
             $this->output->writeln('=== Minify templates ===');
             $this->count = 0;
             foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
@@ -409,7 +412,6 @@ class Deployer
         $this->assetPublisher = $this->objectManager->create(\Magento\Framework\App\View\Asset\Publisher::class);
         $this->htmlMinifier = $this->objectManager->get(\Magento\Framework\View\Template\Html\MinifierInterface::class);
         $this->bundleManager = $this->objectManager->get(\Magento\Framework\View\Asset\Bundle\Manager::class);
-
     }
 
     /**
@@ -519,6 +521,18 @@ class Deployer
             $ancestorThemeFullPath[] = $ancestor->getFullPath();
         }
         return $ancestorThemeFullPath;
+    }
+
+    /**
+     * @return \Magento\Framework\View\Asset\ConfigInterface
+     * @deprecated
+     */
+    private function getAssetConfig()
+    {
+        if (null === $this->assetConfig) {
+            $this->assetConfig = ObjectManager::getInstance()->get(ConfigInterface::class);
+        }
+        return $this->assetConfig;
     }
 
     /**
