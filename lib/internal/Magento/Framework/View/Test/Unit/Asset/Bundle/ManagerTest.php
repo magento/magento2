@@ -70,6 +70,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAssetWithInvalidType()
     {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(true);
         $this->asset->expects($this->once())
             ->method('getContentType')
             ->willReturn('testType');
@@ -79,6 +80,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAssetWithExcludedFile()
     {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(true);
         $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -122,6 +124,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAssetWithExcludedDirectory()
     {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(true);
         $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -174,6 +177,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAsset()
     {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(true);
         $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -217,10 +221,27 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->manager->addAsset($this->asset));
     }
 
+    public function testDoNotAddAssetIfBundlingDisabled()
+    {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(false);
+        $this->asset->expects(self::never())->method('getContentType');
+
+        $this->manager->addAsset($this->asset);
+    }
+
     public function testFlush()
     {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(true);
         $this->bundle->expects($this->once())
             ->method('flush');
+        $this->manager->flush();
+    }
+
+    public function testDoNoFlushIfBundlingDisabled()
+    {
+        $this->assetConfig->expects(self::once())->method('isBundlingJsFiles')->willReturn(false);
+        $this->bundle->expects(self::never())->method('flush');
+
         $this->manager->flush();
     }
 }
