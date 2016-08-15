@@ -296,7 +296,7 @@ class DeployStaticContentCommand extends Command
     private function getAppState()
     {
         if (null === $this->appState) {
-            $this->appState = $this->objectManager->get('Magento\Framework\App\State');
+            $this->appState = $this->objectManager->get(State::class);
         }
         return $this->appState;
     }
