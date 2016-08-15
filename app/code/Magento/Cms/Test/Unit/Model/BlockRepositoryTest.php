@@ -265,7 +265,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($field, [$condition => $value])
+            ->with([$field], [[$condition => $value]])
             ->willReturnSelf();
         $this->blockSearchResult->expects($this->once())->method('setTotalCount')->with($total)->willReturnSelf();
         $this->collection->expects($this->once())->method('getSize')->willReturn($total);

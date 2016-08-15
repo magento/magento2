@@ -6,7 +6,6 @@
 namespace Magento\Fedex\Test\Unit\Model;
 
 use Magento\Fedex\Model\Carrier;
-use Magento\Framework\DataObject;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
@@ -118,10 +117,8 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                     '',
                     false
                 ),
-                'trackErrorFactory' =>
-                    $this->getMock(\Magento\Shipping\Model\Tracking\Result\ErrorFactory::class, [], [], '', false),
-                'trackStatusFactory' =>
-                    $this->getMock(\Magento\Shipping\Model\Tracking\Result\StatusFactory::class, [], [], '', false),
+                'trackErrorFactory' => $this->getMock(\Magento\Shipping\Model\Tracking\Result\ErrorFactory::class, [], [], '', false),
+                'trackStatusFactory' => $this->getMock(\Magento\Shipping\Model\Tracking\Result\StatusFactory::class, [], [], '', false),
                 'regionFactory' => $this->getMock(\Magento\Directory\Model\RegionFactory::class, [], [], '', false),
                 'countryFactory' => $countryFactory,
                 'currencyFactory' => $this->getMock(\Magento\Directory\Model\CurrencyFactory::class, [], [], '', false),
@@ -135,17 +132,40 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 ),
                 'storeManager' => $storeManager,
                 'configReader' => $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false),
-                'productCollectionFactory' =>
-                    $this->getMock(
+                'productCollectionFactory' => $this->getMock(
                         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
                         [],
                         [],
                         '',
                         false
                     ),
-                'data' => []
+                'data' => [],
             ]
         );
+    }
+
+    public function testSetRequestWithoutCity()
+    {
+        $requestMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDestCity'])
+            ->getMock();
+        $requestMock->expects($this->once())
+            ->method('getDestCity')
+            ->willReturn(null);
+        $this->_model->setRequest($requestMock);
+    }
+
+    public function testSetRequestWithCity()
+    {
+        $requestMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDestCity'])
+            ->getMock();
+        $requestMock->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Small Town');
+        $this->_model->setRequest($requestMock);
     }
 
     /**
@@ -194,7 +214,16 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_model->expects($this->any())->method('_getCachedQuotes')->will(
             $this->returnValue(serialize($response))
         );
-        $request = $this->getMock(\Magento\Quote\Model\Quote\Address\RateRequest::class, [], [], '', false);
+        $request = $this->getMock(
+            \Magento\Quote\Model\Quote\Address\RateRequest::class,
+            ['getDestCity'],
+            [],
+            '',
+            false
+        );
+        $request->expects($this->exactly(2))
+            ->method('getDestCity')
+            ->willReturn('Wonderful City');
         foreach ($this->_model->collectRates($request)->getAllRates() as $allRates) {
             $this->assertEquals($expected, $allRates->getData('cost'));
         }
@@ -259,26 +288,26 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                     'WebAuthenticationDetail' => [
                         'UserCredential' => [
                             'Key' => 'testKey',
-                            'Password' => 'testPassword'
-                        ]
+                            'Password' => 'testPassword',
+                        ],
                     ],
                     'ClientDetail' => [
                         'AccountNumber' => 4121213,
-                        'MeterNumber' => 'testMeterNumber'
-                    ]
+                        'MeterNumber' => 'testMeterNumber',
+                    ],
                 ],
                 ['Key', 'Password', 'MeterNumber'],
                 [
                     'WebAuthenticationDetail' => [
                         'UserCredential' => [
                             'Key' => '****',
-                            'Password' => '****'
-                        ]
+                            'Password' => '****',
+                        ],
                     ],
                     'ClientDetail' => [
                         'AccountNumber' => 4121213,
-                        'MeterNumber' => '****'
-                    ]
+                        'MeterNumber' => '****',
+                    ],
                 ],
             ],
         ];
