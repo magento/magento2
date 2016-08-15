@@ -3,132 +3,122 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Product;
 
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action as ProductActionIndexerPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Catalog\Model\Product\Action as ProductAction;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 class ActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var ProductActionIndexerPlugin
      */
-    protected $indexerMock;
+    private $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Action
+     * @var ObjectManagerHelper
      */
-    protected $subjectMock;
+    private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
-     * @var Action
+     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $indexerMock;
+
+    /**
+     * @var ProductAction|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectMock;
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
+        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
+            ->getMockForAbstractClass();
+        $this->subjectMock = $this->getMockBuilder(ProductAction::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
-        );
-        $this->indexerRegistryMock = $this->getMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
-
-        $this->model = new Action($this->indexerRegistryMock);
-    }
-
-    public function testAroundUpdateAttributesNonScheduled()
-    {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexList')->with([1, 2, 3]);
-        $this->prepareIndexer();
-
-        $closureMock = function ($productIds, $attrData, $storeId) {
-            $this->assertEquals([1, 2, 3], $productIds);
-            $this->assertEquals([4, 5, 6], $attrData);
-            $this->assertEquals(1, $storeId);
-            return $this->subjectMock;
-        };
-
-        $this->assertEquals(
-            $this->subjectMock,
-            $this->model->aroundUpdateAttributes($this->subjectMock, $closureMock, [1, 2, 3], [4, 5, 6], 1)
-        );
-    }
-
-    public function testAroundUpdateAttributesScheduled()
-    {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexList');
-        $this->prepareIndexer();
-
-        $closureMock = function ($productIds, $attrData, $storeId) {
-            $this->assertEquals([1, 2, 3], $productIds);
-            $this->assertEquals([4, 5, 6], $attrData);
-            $this->assertEquals(1, $storeId);
-            return $this->subjectMock;
-        };
-
-        $this->assertEquals(
-            $this->subjectMock,
-            $this->model->aroundUpdateAttributes($this->subjectMock, $closureMock, [1, 2, 3], [4, 5, 6], 1)
-        );
-    }
-
-    public function testAroundUpdateWebsitesNonScheduled()
-    {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexList')->with([1, 2, 3]);
-        $this->prepareIndexer();
-
-        $closureMock = function ($productIds, $websiteIds, $type) {
-            $this->assertEquals([1, 2, 3], $productIds);
-            $this->assertEquals([4, 5, 6], $websiteIds);
-            $this->assertEquals('type', $type);
-            return $this->subjectMock;
-        };
-
-        $this->model->aroundUpdateWebsites($this->subjectMock, $closureMock, [1, 2, 3], [4, 5, 6], 'type');
-    }
-
-    public function testAroundUpdateWebsitesScheduled()
-    {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexList');
-        $this->prepareIndexer();
-
-        $closureMock = function ($productIds, $websiteIds, $type) {
-            $this->assertEquals([1, 2, 3], $productIds);
-            $this->assertEquals([4, 5, 6], $websiteIds);
-            $this->assertEquals('type', $type);
-            return $this->subjectMock;
-        };
-
-        $this->model->aroundUpdateWebsites($this->subjectMock, $closureMock, [1, 2, 3], [4, 5, 6], 'type');
-    }
-
-    protected function prepareIndexer()
-    {
-        $this->indexerRegistryMock->expects($this->once())
+        $this->indexerRegistryMock->expects(static::once())
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->with(FulltextIndexer::INDEXER_ID)
+            ->willReturn($this->indexerMock);
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->plugin = $this->objectManagerHelper->getObject(
+            ProductActionIndexerPlugin::class,
+            ['indexerRegistry' => $this->indexerRegistryMock]
+        );
+    }
+
+    public function testAfterUpdateAttributesNonScheduled()
+    {
+        $productIds = [1, 2, 3];
+
+        $this->indexerMock->expects(static::once())
+            ->method('isScheduled')
+            ->willReturn(false);
+        $this->indexerMock->expects(static::once())
+            ->method('reindexList')
+            ->with($productIds);
+
+        $this->assertSame(
+            $this->subjectMock,
+            $this->plugin->afterUpdateAttributes($this->subjectMock, $this->subjectMock, $productIds, [], null)
+        );
+    }
+
+    public function testAfterUpdateAttributesScheduled()
+    {
+        $productIds = [1, 2, 3];
+
+        $this->indexerMock->expects(static::once())
+            ->method('isScheduled')
+            ->willReturn(true);
+        $this->indexerMock->expects(static::never())
+            ->method('reindexList');
+
+        $this->assertSame(
+            $this->subjectMock,
+            $this->plugin->afterUpdateAttributes($this->subjectMock, $this->subjectMock, $productIds, [], null)
+        );
+    }
+
+    public function testAfterUpdateWebsitesNonScheduled()
+    {
+        $productIds = [1, 2, 3];
+
+        $this->indexerMock->expects(static::once())
+            ->method('isScheduled')
+            ->willReturn(false);
+        $this->indexerMock->expects(static::once())
+            ->method('reindexList')
+            ->with($productIds);
+
+        $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds, [], null);
+    }
+
+    public function testAfterUpdateWebsitesScheduled()
+    {
+        $productIds = [1, 2, 3];
+
+        $this->indexerMock->expects(static::once())
+            ->method('isScheduled')
+            ->willReturn(true);
+        $this->indexerMock->expects(static::never())
+            ->method('reindexList');
+
+        $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds, [], null);
     }
 }
