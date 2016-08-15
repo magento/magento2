@@ -11,6 +11,9 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Plugin for \Magento\Payment\Model\Checks\Composite
+ */
 class SpecificationPlugin
 {
     /**
