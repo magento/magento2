@@ -16,44 +16,46 @@ class SpecificationPlugin
     /**
      * @var AgreementFactory
      */
-    protected $_agreementFactory;
+    private $agreementFactory;
 
     /**
      * @param AgreementFactory $agreementFactory
      */
     public function __construct(AgreementFactory $agreementFactory)
     {
-        $this->_agreementFactory = $agreementFactory;
+        $this->agreementFactory = $agreementFactory;
     }
 
     /**
      * Override check for Billing Agreements
      *
      * @param SpecificationInterface $specification
-     * @param \Closure $proceed
+     * @param bool $result
      * @param MethodInterface $paymentMethod
      * @param Quote $quote
      * @return bool
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundIsApplicable(
+    public function afterIsApplicable(
         SpecificationInterface $specification,
-        \Closure $proceed,
+        $result,
         MethodInterface $paymentMethod,
         Quote $quote
     ) {
-        $originallyIsApplicable = $proceed($paymentMethod, $quote);
-        if (!$originallyIsApplicable) {
+        if (!$result) {
             return false;
         }
 
         if ($paymentMethod->getCode() == Config::METHOD_BILLING_AGREEMENT) {
             if ($quote->getCustomerId()) {
-                $availableBA = $this->_agreementFactory->create()->getAvailableCustomerBillingAgreements(
+                $availableBA = $this->agreementFactory->create()->getAvailableCustomerBillingAgreements(
                     $quote->getCustomerId()
                 );
+
                 return count($availableBA) > 0;
             }
+
             return false;
         }
 
