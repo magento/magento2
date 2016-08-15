@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
 
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -30,9 +29,6 @@ class View
 
     /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
-
-    /** @var  AbstractModel */
-    private $store;
 
     /**
      * @param UrlPersistInterface $urlPersist
