@@ -419,6 +419,7 @@ class PackagesData
     }
 
     /**
+     * Get MetaPackage for package
      *
      * @param array $packages
      * @return array
