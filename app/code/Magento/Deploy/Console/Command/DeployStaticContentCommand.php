@@ -122,6 +122,11 @@ class DeployStaticContentCommand extends Command
      */
     const DEFAULT_JOBS_AMOUNT = 3;
 
+    /**
+     * Force run of static deploy
+     */
+    const FORCE_RUN_OPTION = 'force';
+
     /** @var InputInterface */
     private $input;
 
@@ -181,6 +186,12 @@ class DeployStaticContentCommand extends Command
                     '-d',
                     InputOption::VALUE_NONE,
                     'If specified, then no files will be actually deployed.'
+                ),
+                new InputOption(
+                    self::FORCE_RUN_OPTION,
+                    '-f',
+                    InputOption::VALUE_NONE,
+                    'If specified, then run files will be deployed in any mode.'
                 ),
                 new InputOption(
                     self::JAVASCRIPT_OPTION,
@@ -430,7 +441,7 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
+        if (!$input->getOption(self::FORCE_RUN_OPTION) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
             throw new LocalizedException(
                 __(
                     "Deploy static content is applicable only for production mode.\n"
