@@ -6,6 +6,7 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection as AppResource;
@@ -48,6 +49,11 @@ class ReadHandler implements AttributeInterface
      * @var ScopeResolver
      */
     protected $scopeResolver;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     /**
      * ReadHandler constructor.
@@ -163,9 +169,30 @@ class ReadHandler implements AttributeInterface
                 \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
             foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
-                $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+                if (isset($attributesMap[$attributeValue['attribute_id']])) {
+                    $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+                } else {
+                    $this->getLogger()->warning(
+                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}' 
+                        for entity type '$entityType'."
+                    );
+                }
             }
         }
         return $entityData;
+    }
+
+    /**
+     * Get logger
+     *
+     * @return \Psr\Log\LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if ($this->logger == null) {
+            $this->logger = ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }
