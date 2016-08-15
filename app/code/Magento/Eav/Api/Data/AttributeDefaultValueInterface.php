@@ -7,10 +7,11 @@
 namespace Magento\Eav\Api\Data;
 
 /**
- * Interface AttributeInterface
+ * Interface AttributeDefaultValueInterface
+ * Allows to manage attribute default value through interface
  * @api
+ * @package Magento\Eav\Api\Data
  */
-
 interface AttributeDefaultValueInterface
 {
     const DEFAULT_VALUE = "default_value";

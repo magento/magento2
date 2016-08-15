@@ -393,7 +393,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if (!$regionId) {
             if (is_numeric($region)) {
                 $this->setData('region_id', $region);
-                //@TODO method unsRegion() is neither defined in abstract model nor in it's children
                 $this->unsRegion();
             } else {
                 $regionModel = $this->_createRegionInstance()->loadByCode(
@@ -631,6 +630,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
+     * Unset Region from address
      * @return $this
      */
     public function unsRegion()

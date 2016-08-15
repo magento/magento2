@@ -6,9 +6,11 @@
 namespace Magento\Store\Api;
 
 /**
+ * Interface StoreWebsiteRelationInterface
+ * Provides stores information by website id
+ * @package Magento\Store\Api
  * @api
  */
-
 interface StoreWebsiteRelationInterface
 {
     /**
