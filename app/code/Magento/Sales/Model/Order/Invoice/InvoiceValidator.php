@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 /**
  * Class InvoiceValidatorRunner
  */
-class InvoiceValidator
+class InvoiceValidator implements InvoiceValidatorInterface
 {
     /**
      * @var \Magento\Sales\Model\Validator
