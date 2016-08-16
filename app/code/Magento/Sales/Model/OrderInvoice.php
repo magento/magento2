@@ -12,15 +12,15 @@ use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\OrderInvoiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
-use Magento\Sales\Model\Order\Invoice\InvoiceValidator;
+use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceQuantityValidator;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
+use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\Order\Validation\CanInvoice;
-use Magento\Sales\Model\Order\OrderValidator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -45,7 +45,7 @@ class OrderInvoice implements OrderInvoiceInterface
     private $invoiceDocumentFactory;
 
     /**
-     * @var InvoiceValidator
+     * @var InvoiceValidatorInterface
      */
     private $invoiceValidator;
 
@@ -80,7 +80,7 @@ class OrderInvoice implements OrderInvoiceInterface
     private $logger;
 
     /**
-     * @var OrderValidator
+     * @var OrderValidatorInterface
      */
     private $orderValidator;
 
@@ -89,8 +89,8 @@ class OrderInvoice implements OrderInvoiceInterface
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
-     * @param InvoiceValidator $invoiceValidator
-     * @param OrderValidator $orderValidator
+     * @param InvoiceValidatorInterface $invoiceValidator
+     * @param OrderValidatorInterface $orderValidator
      * @param PaymentAdapterInterface $paymentAdapter
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderConfig $config
@@ -103,8 +103,8 @@ class OrderInvoice implements OrderInvoiceInterface
         ResourceConnection $resourceConnection,
         OrderRepositoryInterface $orderRepository,
         InvoiceDocumentFactory $invoiceDocumentFactory,
-        InvoiceValidator $invoiceValidator,
-        OrderValidator $orderValidator,
+        InvoiceValidatorInterface $invoiceValidator,
+        OrderValidatorInterface $orderValidator,
         PaymentAdapterInterface $paymentAdapter,
         OrderStateResolverInterface $orderStateResolver,
         OrderConfig $config,

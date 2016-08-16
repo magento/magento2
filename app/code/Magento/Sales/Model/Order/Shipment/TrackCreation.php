@@ -24,11 +24,6 @@ class TrackCreation implements ShipmentTrackCreationInterface
     private $qty;
 
     /**
-     * @var int
-     */
-    private $orderId;
-
-    /**
      * @var string
      */
     private $trackNumber;
