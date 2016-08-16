@@ -26,6 +26,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Data\ConditionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -2783,26 +2784,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function prepareSqlCondition($fieldName, $condition)
     {
         $conditionKeyMap = [
-            self::SQL_CONDITION_EQ            => "{{fieldName}} = ?",
-            self::SQL_CONDITION_NEQ           => "{{fieldName}} != ?",
-            self::SQL_CONDITION_LIKE          => "{{fieldName}} LIKE ?",
-            self::SQL_CONDITION_NOT_LIKE      => "{{fieldName}} NOT LIKE ?",
-            self::SQL_CONDITION_IN            => "{{fieldName}} IN(?)",
-            self::SQL_CONDITION_NOT_IN        => "{{fieldName}} NOT IN(?)",
-            self::SQL_CONDITION_IS            => "{{fieldName}} IS ?",
-            self::SQL_CONDITION_NOT_NULL      => "{{fieldName}} IS NOT NULL",
-            self::SQL_CONDITION_NULL          => "{{fieldName}} IS NULL",
-            self::SQL_CONDITION_GT            => "{{fieldName}} > ?",
-            self::SQL_CONDITION_LT            => "{{fieldName}} < ?",
-            self::SQL_CONDITION_GTEQ          => "{{fieldName}} >= ?",
-            self::SQL_CONDITION_LTEQ          => "{{fieldName}} <= ?",
-            self::SQL_CONDITION_FINSET        => "FIND_IN_SET(?, {{fieldName}})",
-            self::SQL_CONDITION_REGEXP        => "{{fieldName}} REGEXP ?",
-            self::SQL_CONDITION_FROM          => "{{fieldName}} >= ?",
-            self::SQL_CONDITION_TO            => "{{fieldName}} <= ?",
-            self::SQL_CONDITION_SEQ           => null,
-            self::SQL_CONDITION_SNEQ          => null,
-            self::SQL_CONDITION_NTOA          => "INET_NTOA({{fieldName}}) LIKE ?",
+            ConditionInterface::EQ            => "{{fieldName}} = ?",
+            ConditionInterface::NEQ           => "{{fieldName}} != ?",
+            ConditionInterface::LIKE          => "{{fieldName}} LIKE ?",
+            ConditionInterface::NOT_LIKE      => "{{fieldName}} NOT LIKE ?",
+            ConditionInterface::IN            => "{{fieldName}} IN(?)",
+            ConditionInterface::NOT_IN        => "{{fieldName}} NOT IN(?)",
+            ConditionInterface::IS            => "{{fieldName}} IS ?",
+            ConditionInterface::NOT_NULL      => "{{fieldName}} IS NOT NULL",
+            ConditionInterface::NULL          => "{{fieldName}} IS NULL",
+            ConditionInterface::GT            => "{{fieldName}} > ?",
+            ConditionInterface::LT            => "{{fieldName}} < ?",
+            ConditionInterface::GTEQ          => "{{fieldName}} >= ?",
+            ConditionInterface::LTEQ          => "{{fieldName}} <= ?",
+            ConditionInterface::FINSET        => "FIND_IN_SET(?, {{fieldName}})",
+            ConditionInterface::REGEXP        => "{{fieldName}} REGEXP ?",
+            ConditionInterface::FROM          => "{{fieldName}} >= ?",
+            ConditionInterface::TO            => "{{fieldName}} <= ?",
+            ConditionInterface::SEQ           => null,
+            ConditionInterface::SNEQ          => null,
+            ConditionInterface::NTOA          => "INET_NTOA({{fieldName}}) LIKE ?",
         ];
 
         $query = '';
