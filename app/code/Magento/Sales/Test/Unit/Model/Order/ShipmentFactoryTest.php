@@ -5,9 +5,6 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
-
 /**
  * Unit test for shipment factory class.
  */
@@ -45,7 +42,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->converter = $this->getMock(
             \Magento\Sales\Model\Convert\Order::class,
@@ -74,7 +71,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->shipmentValidatorMock = $this->getMockBuilder(
-            ShipmentValidatorInterface::class
+            \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface::class
         )->getMockForAbstractClass();
 
         $this->subject = $objectManager->getObject(

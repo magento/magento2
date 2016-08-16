@@ -21,8 +21,15 @@ use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
  */
 class ShipmentDocumentFactory
 {
+    /**
+     * @var ShipmentFactory
+     */
     private $shipmentFactory;
 
+    /**
+     * ShipmentDocumentFactory constructor.
+     * @param ShipmentFactory $shipmentFactory
+     */
     public function __construct(
         ShipmentFactory $shipmentFactory
     ) {
@@ -37,6 +44,7 @@ class ShipmentDocumentFactory
      * @param bool $appendComment
      * @param array $packages
      * @return Shipment
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function create(
         OrderInterface $order,

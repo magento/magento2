@@ -122,7 +122,8 @@ class CanInvoiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($itemLockedDoInvoice);
 
         $this->assertEquals(
-            $expectedResult, $this->model->validate($this->orderMock)
+            $expectedResult,
+            $this->model->validate($this->orderMock)
         );
     }
 
