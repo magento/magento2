@@ -14,6 +14,12 @@ define([
             messageIndex: 'text',
             fieldClass: {
                 message: true
+            },
+            statusMap: {
+                0: 'info',
+                1: 'progress',
+                2: 'success',
+                3: 'error'
             }
         },
 
@@ -24,11 +30,13 @@ define([
 
         /** @inheritdoc */
         getFieldClass: function ($row) {
-            var status = $row.status || 'info';
+            var status = this.statusMap[$row.status] || 'warning',
+                result = {};
 
-            this.fieldClass['message-' + status] = true;
+            result['message-' + status] = true;
+            result = _.extend({}, this.fieldClass, result);
 
-            return this.fieldClass;
+            return result;
         }
     });
 });
