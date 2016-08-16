@@ -9,10 +9,8 @@
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
-use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
 /**
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
@@ -170,30 +168,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     public function register()
     {
-        $errorMessages = $this->getShipmentValidator()->validate(
-            $this->getShipment(),
-            [ShipmentQuantityValidator::class]
-        );
-        if (!empty($errorMessages)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
-            );
-        }
         $this->getOrderItem()->setQtyShipped($this->getOrderItem()->getQtyShipped() + $this->getQty());
         return $this;
-    }
-
-    /**
-     * @return ShipmentValidatorInterface
-     * @deprecated
-     */
-    private function getShipmentValidator()
-    {
-        if ($this->shipmentValidator === null) {
-            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
-        }
-
-        return $this->shipmentValidator;
     }
 
     //@codeCoverageIgnoreStart
