@@ -74,9 +74,22 @@ class AttributeLoader implements AttributeLoaderInterface
             }
             return $resource;
         }
+        $attributes = $this->checkAndInitAttributes($resource, $object);
 
+        $this->cache->saveAttributes($typeCode, $attributes, $suffix);
+        return $resource;
+    }
+
+    /**
+     * @param AbstractEntity $resource
+     * @param DataObject|null $object
+     * @return array
+     */
+    private function checkAndInitAttributes(AbstractEntity $resource, DataObject $object = null)
+    {
         $attributeCodes = $this->config->getEntityAttributeCodes($resource->getEntityType(), $object);
         $attributes = [];
+
         /**
          * Check and init default attributes
          */
@@ -97,8 +110,7 @@ class AttributeLoader implements AttributeLoaderInterface
             $attribute = $resource->getAttribute($code);
             $attributes[] = $attribute;
         }
-        $this->cache->saveAttributes($typeCode, $attributes, $suffix);
-        return $resource;
+        return $attributes;
     }
 
     /**
