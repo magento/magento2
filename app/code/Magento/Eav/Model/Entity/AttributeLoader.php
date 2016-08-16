@@ -64,7 +64,7 @@ class AttributeLoader implements AttributeLoaderInterface
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
-        $suffix = $this->getLoadAllAttributesCacheSuffix();
+        $suffix = $this->getLoadAllAttributesCacheSuffix($object);
 
         $typeCode = $resource->getEntityType()->getEntityTypeCode();
         $attributes = $this->cache->getAttributes($typeCode, $suffix);
