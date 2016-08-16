@@ -32,7 +32,8 @@ class CanInvoice implements ValidatorInterface
      * @param OrderInterface $order
      * @return bool
      */
-    private function canInvoice(OrderInterface $order) {
+    private function canInvoice(OrderInterface $order)
+    {
         if ($order->getState() === Order::STATE_PAYMENT_REVIEW ||
             $order->getState() === Order::STATE_HOLDED ||
             $order->getState() === Order::STATE_CANCELED ||
