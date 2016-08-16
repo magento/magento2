@@ -66,9 +66,10 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
      * @param string $attributeCode
      * @param string $backendType
      * @param string $frontendType
-     * @return array
+     * @param string $expectedFieldType
+     * @return void
      */
-    public function testGetFieldType($attributeCode, $backendType, $frontendType)
+    public function testGetFieldType($attributeCode, $backendType, $frontendType, $expectedFieldType)
     {
         $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType', 'getFrontendInput', 'getAttributeCode'])
@@ -84,10 +85,7 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->any())->method('getAttributeCode')
             ->will($this->returnValue($attributeCode));
 
-        $this->assertInternalType(
-            'string',
-            $this->type->getFieldType($attributeMock)
-        );
+        $this->assertEquals($expectedFieldType, $this->type->getFieldType($attributeMock));
     }
 
     /**
@@ -96,15 +94,17 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
     public static function attributeTypesProvider()
     {
         return [
-            ['attr1','static', 'select'],
-            ['attr1','static', 'text'],
-            ['attr1','timestamp', 'select'],
-            ['attr1','int', 'select'],
-            ['attr1','decimal', 'text'],
-            ['attr1','varchar', 'select'],
-            ['attr1','array', 'multiselect'],
-            ['price','int', 'text'],
-            ['tier_price','int', 'text'],
+            ['attr1', 'static', 'select', 'integer'],
+            ['attr1', 'static', 'text', 'string'],
+            ['attr1', 'timestamp', 'select', 'date'],
+            ['attr1', 'datetime', 'text', 'date'],
+            ['attr1', 'int', 'select', 'integer'],
+            ['attr1', 'decimal', 'text', 'float'],
+            ['attr1', 'varchar', 'select', 'string'],
+            ['attr1', 'array', 'multiselect', 'string'],
+            ['price', 'int', 'text', 'integer'],
+            ['tier_price', 'int', 'text', 'integer'],
+            ['tier_price', 'smallint', 'text', 'integer'],
         ];
     }
 }

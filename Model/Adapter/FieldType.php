@@ -19,6 +19,7 @@ class FieldType
     const ES_DATA_TYPE_FLOAT = 'float';
     const ES_DATA_TYPE_INT = 'integer';
     const ES_DATA_TYPE_DATE = 'date';
+    /** @deprecated */
     const ES_DATA_TYPE_ARRAY = 'array';
     /**#@-*/
 
@@ -41,8 +42,6 @@ class FieldType
             $fieldType = self::ES_DATA_TYPE_INT;
         } elseif ($backendType === 'decimal') {
             $fieldType = self::ES_DATA_TYPE_FLOAT;
-        } elseif ($frontendInput === 'multiselect' && $backendType !== 'varchar') {
-            $fieldType = self::ES_DATA_TYPE_ARRAY;
         } else {
             $fieldType = self::ES_DATA_TYPE_STRING;
         }
