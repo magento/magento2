@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
 
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -53,19 +52,17 @@ class View
     }
 
     /**
-     * @param \Magento\Store\Model\ResourceModel\Store $object
-     * @param callable $proceed
+     * @param \Magento\Store\Model\ResourceModel\Store $subject
+     * @param \Magento\Store\Model\ResourceModel\Store $result
      * @param AbstractModel $store
      * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Store\Model\ResourceModel\Store $object,
-        \Closure $proceed,
+    public function afterSave(
+        \Magento\Store\Model\ResourceModel\Store $subject,
+        \Magento\Store\Model\ResourceModel\Store $result,
         AbstractModel $store
     ) {
-        $originStore = $store;
-        $result = $proceed($originStore);
         if ($store->isObjectNew() || $store->dataHasChangedFor('group_id')) {
             if (!$store->isObjectNew()) {
                 $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $store->getId()]);
@@ -79,7 +76,6 @@ class View
                 $this->generateProductUrls($store->getWebsiteId(), $store->getOrigData('website_id'), $store->getId())
             );
         }
-
         return $result;
     }
 
@@ -134,18 +130,17 @@ class View
     }
 
     /**
-     * @param \Magento\Store\Model\ResourceModel\Store $object
-     * @param callable $proceed
+     * @param \Magento\Store\Model\ResourceModel\Store $subject
+     * @param \Magento\Store\Model\ResourceModel\Store $result
      * @param AbstractModel $store
-     * @return mixed
+     * @return \Magento\Store\Model\ResourceModel\Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
-        \Magento\Store\Model\ResourceModel\Store $object,
-        \Closure $proceed,
+    public function afterDelete(
+        \Magento\Store\Model\ResourceModel\Store $subject,
+        \Magento\Store\Model\ResourceModel\Store $result,
         AbstractModel $store
     ) {
-        $result = $proceed($store);
         $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $store->getId()]);
         return $result;
     }
