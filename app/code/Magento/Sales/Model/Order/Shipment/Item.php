@@ -45,11 +45,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
     protected $_orderItemFactory;
 
     /**
-     * @var ShipmentValidatorInterface
-     */
-    private $shipmentValidator;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory

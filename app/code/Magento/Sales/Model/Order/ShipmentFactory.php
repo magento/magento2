@@ -82,6 +82,7 @@ class ShipmentFactory
      * @param array $items
      * @return \Magento\Sales\Api\Data\ShipmentInterface
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function prepareItems(
         \Magento\Sales\Api\Data\ShipmentInterface $shipment,

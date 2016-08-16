@@ -7,6 +7,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 
 /**
  * Unit test for shipment factory class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
 {
