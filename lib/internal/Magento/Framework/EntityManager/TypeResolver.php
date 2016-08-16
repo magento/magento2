@@ -64,7 +64,9 @@ class TypeResolver
                 $this->typeMapping[$className] = $dataInterface;
             }
         }
-
+        if (empty($this->typeMapping[$className])) {
+            $this->typeMapping[$className] = reset($dataInterfaces);
+        }
         return $this->typeMapping[$className];
     }
 }
