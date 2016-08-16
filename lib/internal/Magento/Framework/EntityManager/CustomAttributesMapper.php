@@ -55,6 +55,9 @@ class CustomAttributesMapper implements MapperInterface
      */
     public function entityToDatabase($entityType, $data)
     {
+        if (!$this->metadataPool->hasConfiguration($entityType)) {
+            return $data;
+        }
         $metadata = $this->metadataPool->getMetadata($entityType);
         if (!$metadata->getEavEntityType()) {
             return $data;
