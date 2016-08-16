@@ -3,13 +3,14 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\GroupedProduct\Test\Unit\Model\ResourceModel\Product\Link;
 
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister;
 use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Link as ResourceLink;
 
 class RelationPersisterTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,12 +23,27 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
     /** @var  Relation */
     private $relationProcessor;
 
+    /** @var ObjectManager */
+    private $objectManager;
+
+    /**
+     * @var LinkFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $linkFactory;
+
+    /**
+     * @var ResourceLink|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subject;
+
     /**
      * @inheritDoc
      */
     protected function setUp()
     {
-        $linkFactory = $this->getMockBuilder(LinkFactory::class)
+        $this->objectManager = new ObjectManager($this);
+
+        $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -41,37 +57,56 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $linkFactory->expects($this->any())->method('create')->willReturn($this->link);
+        $this->linkFactory->expects($this->any())->method('create')->willReturn($this->link);
 
-        $this->object = new RelationPersister(
-            $this->relationProcessor,
-            $linkFactory
+        $this->subject = $this->getMockBuilder(ResourceLink::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->object = $this->objectManager->getObject(
+            RelationPersister::class,
+            [
+                'relationProcessor' => $this->relationProcessor,
+                'linkFactory' => $this->linkFactory
+            ]
         );
     }
 
-    public function testAroundSaveProductLinks()
+    public function testAfterSaveProductLinks()
     {
-        $subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->relationProcessor->expects($this->once())->method('addRelation')->with(2, 10);
-        $this->assertEquals($subject, $this->object->aroundSaveProductLinks(
-            $subject,
-            function() use ($subject) { return $subject; },
+        $this->assertEquals($this->subject, $this->object->afterSaveProductLinks(
+            $this->subject,
+            $this->subject,
             2,
             [['product_id' => 10]],
             3
         ));
     }
 
-    public function testAroundDeleteProductLink()
+    public function testBeforeDeleteProductLink()
     {
-        $subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $subject->expects($this->any())->method('getIdFieldName')->willReturn('id');
-        $subject->expects($this->once())->method('load')->with($this->link, 155, 'id');
+        $this->subject->expects($this->any())->method('getIdFieldName')->willReturn('id');
+        $this->subject->expects($this->once())->method('load')->with($this->link, 155, 'id');
+        $this->assertEquals(
+            [155],
+            $this->object->beforeDeleteProductLink(
+                $this->subject,
+                155
+            )
+        );
+    }
 
+    public function testAfterDeleteProductLink()
+    {
+        $object = $this->objectManager->getObject(
+            RelationPersister::class,
+            [
+                'relationProcessor' => $this->relationProcessor,
+                'linkFactory' => $this->linkFactory,
+                'link' => $this->link
+            ]
+        );
         $this->link->expects($this->any())
             ->method('getLinkTypeId')
             ->willReturn(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
@@ -84,13 +119,11 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->relationProcessor->expects($this->once())->method('removeRelations')->with(12, 13);
         $this->assertEquals(
-            $subject,
-            $this->object->aroundDeleteProductLink(
-                $subject,
-                function() use ($subject) { return $subject; },
+            155,
+            $object->afterDeleteProductLink(
+                $this->subject,
                 155
             )
         );
-
     }
 }

@@ -9,6 +9,8 @@ namespace Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Catalog\Model\ProductLink\Link as ProductLink;
+use Magento\GroupedProduct\Model\ResourceModel\Product\Link as GroupedLink;
 
 class RelationPersister
 {
@@ -23,6 +25,11 @@ class RelationPersister
     private $linkFactory;
 
     /**
+     * @var ProductLink
+     */
+    private $link;
+
+    /**
      * RelationPersister constructor.
      *
      * @param Relation $relationProcessor
@@ -35,20 +42,17 @@ class RelationPersister
     }
 
     /**
-     * Save grouped products to product relation table
-     *
      * @param Link $subject
-     * @param \Closure $proceed
+     * @param Link $result
      * @param int $parentId
      * @param array $data
      * @param int $typeId
      * @return Link
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSaveProductLinks(Link $subject, \Closure $proceed, $parentId, $data, $typeId)
+    public function afterSaveProductLinks(Link $subject, Link $result, $parentId, array $data, $typeId)
     {
-        $result = $proceed($parentId, $data, $typeId);
-        if ($typeId == \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED) {
+        if ($typeId == GroupedLink::LINK_TYPE_GROUPED) {
             foreach ($data as $linkData) {
                 $this->relationProcessor->addRelation(
                     $parentId,
@@ -60,23 +64,29 @@ class RelationPersister
     }
 
     /**
-     * Remove grouped products from product relation table
-     *
      * @param Link $subject
-     * @param \Closure $proceed
      * @param int $linkId
-     * @return Link
+     * @return array
      */
-    public function aroundDeleteProductLink(Link $subject, \Closure $proceed, $linkId)
+    public function beforeDeleteProductLink(Link $subject, $linkId)
     {
-        /** @var \Magento\Catalog\Model\ProductLink\Link $link */
-        $link = $this->linkFactory->create();
-        $subject->load($link, $linkId, $subject->getIdFieldName());
-        $result = $proceed($linkId);
-        if ($link->getLinkTypeId() == \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED) {
+        $this->link = $this->linkFactory->create();
+        $subject->load($this->link, $linkId, $subject->getIdFieldName());
+        return [$linkId];
+    }
+
+    /**
+     * @param Link $subject
+     * @param int $result
+     * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterDeleteProductLink(Link $subject, $result)
+    {
+        if ($this->link->getLinkTypeId() == GroupedLink::LINK_TYPE_GROUPED) {
             $this->relationProcessor->removeRelations(
-                $link->getProductId(),
-                $link->getLinkedProductId()
+                $this->link->getProductId(),
+                $this->link->getLinkedProductId()
             );
         }
         return $result;
