@@ -328,11 +328,12 @@ class Deployer
                 $this->count++;
             }
             $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
-            $version = (new \DateTime())->getTimestamp();
-            $this->output->writeln("New version of deployed files: {$version}");
-            if (!$this->getOption(Options::DRY_RUN_OPTION)) {
-                $this->versionStorage->save($version);
-            }
+        }
+
+        $version = (new \DateTime())->getTimestamp();
+        $this->output->writeln("New version of deployed files: {$version}");
+        if (!$this->getOption(Options::DRY_RUN_OPTION)) {
+            $this->versionStorage->save($version);
         }
 
         if ($this->errorCount > 0) {
