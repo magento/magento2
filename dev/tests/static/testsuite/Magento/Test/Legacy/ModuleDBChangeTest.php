@@ -1,18 +1,17 @@
 <?php
 /**
- *
- * Scan source code for DB schema or data updates for patch releases in non-actual branches
- * Backwards compatibility test
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Legacy;
 
+/**
+ * Scan source code for DB schema or data updates for patch releases in non-actual branches
+ * Backwards compatibility test
+ */
+namespace Magento\Test\Legacy;
 
 class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var string
      */
