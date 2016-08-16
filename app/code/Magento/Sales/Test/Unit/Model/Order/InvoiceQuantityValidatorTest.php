@@ -28,6 +28,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderMock;
+
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */

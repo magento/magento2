@@ -28,6 +28,7 @@ class ItemCreation implements ShipmentItemCreationInterface
     private $extensionAttributes;
 
     //@codeCoverageIgnoreStart
+    
     /**
      * {@inheritdoc}
      */

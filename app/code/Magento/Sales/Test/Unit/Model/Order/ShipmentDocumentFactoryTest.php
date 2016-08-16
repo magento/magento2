@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -70,7 +69,6 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['addComment'])
             ->getMockForAbstractClass();
-
 
         $this->invoiceDocumentFactory = new ShipmentDocumentFactory($this->shipmentFactoryMock);
     }

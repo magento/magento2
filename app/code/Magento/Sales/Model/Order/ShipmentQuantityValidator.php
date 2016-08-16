@@ -82,7 +82,7 @@ class ShipmentQuantityValidator implements ValidatorInterface
 
     /**
      * @param OrderInterface $order
-     * @param $id
+     * @param int $id
      * @return \Magento\Sales\Api\Data\OrderItemInterface|null
      */
     private function getOrderItemById(OrderInterface $order, $id)

@@ -161,8 +161,9 @@ class TrackCreation implements ShipmentTrackCreationInterface
     /**
      * {@inheritdoc}
      */
-    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes)
-    {
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\ShipmentTrackCreationExtensionInterface $extensionAttributes
+    ) {
         $this->extensionAttributes = $extensionAttributes;
         return $this;
     }
