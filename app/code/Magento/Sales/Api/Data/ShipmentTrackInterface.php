@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Shipment track interface.
  *
@@ -13,7 +15,7 @@ namespace Magento\Sales\Api\Data;
  * shipments.
  * @api
  */
-interface ShipmentTrackInterface extends TrackInterface
+interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.

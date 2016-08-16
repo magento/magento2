@@ -6,12 +6,14 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Shipment Track Creation interface.
  *
  * @api
  */
-interface ShipmentTrackCreationInterface extends TrackInterface
+interface ShipmentTrackCreationInterface extends TrackInterface, ExtensibleDataInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -11,7 +11,7 @@ namespace Magento\Sales\Api\Data;
  *
  * @api
  */
-interface TrackInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface TrackInterface
 {
     /**
      * Sets the weight for the shipment package.
