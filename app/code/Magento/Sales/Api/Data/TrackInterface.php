@@ -102,4 +102,21 @@ interface TrackInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return string Carrier code.
      */
     public function getCarrierCode();
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\TrackExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\TrackExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\TrackExtensionInterface $extensionAttributes
+    );
 }

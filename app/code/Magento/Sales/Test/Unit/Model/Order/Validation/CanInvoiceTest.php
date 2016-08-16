@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Validator;
+namespace Magento\Sales\Test\Unit\Model\Order\Validation;
 
 use Magento\Sales\Model\Order;
 
