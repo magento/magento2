@@ -352,7 +352,7 @@ angular.module('readiness-check', [])
         $scope.wordingOfReadinessCheckAction = function() {
             var $actionString = 'We\'re making sure your server environment is ready for ';
             if ($localStorage.moduleName) {
-                $actionString += $localStorage.moduleName;
+                $actionString += $localStorage.packageTitle ? $localStorage.packageTitle : $localStorage.moduleName;
             } else {
                 if($state.current.type === 'install' || $state.current.type === 'upgrade') {
                     $actionString += 'Magento';
@@ -369,6 +369,14 @@ angular.module('readiness-check', [])
             } else {
                 $actionString +='ed';
             }
+
+            if ($localStorage.moduleName
+                && $localStorage.packageTitle
+                && $localStorage.moduleName != $localStorage.packageTitle
+            ) {
+                $actionString += ', which consists of the following packages:<br/>- ' + $localStorage.moduleName;
+            }
+
             return $actionString;
         }
     }]);

@@ -7,6 +7,7 @@ namespace Magento\Setup\Model;
 
 /**
  * Class PackagesData returns system packages and available for update versions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PackagesData
 {

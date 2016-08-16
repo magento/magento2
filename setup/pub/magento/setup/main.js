@@ -251,13 +251,19 @@ main.controller('navigationController',
 .service('titleService', ['$localStorage', '$rootScope',
     function ($localStorage, $rootScope) {
         return {
-            setTitle: function(type, moduleName) {
-                $localStorage.moduleName = moduleName;
+            setTitle: function(type, component) {
+                if (type === 'enable' || type === 'disable') {
+                    $localStorage.packageTitle = $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.moduleName ? component.moduleName : component.name;
+                    $localStorage.packageTitle = component.package_title;
+                }
+
                 if (typeof $localStorage.titles === 'undefined') {
                     $localStorage.titles = [];
                 }
                 $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                    + $localStorage.moduleName;
+                    + ($localStorage.packageTitle ? $localStorage.packageTitle : $localStorage.moduleName);
                 $rootScope.titles = $localStorage.titles;
             }
         };
