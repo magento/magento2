@@ -44,6 +44,10 @@ class ShipmentQuantityValidator implements ValidatorInterface
         if ($entity->getOrderId() === null) {
             return [__('Order Id is required for shipment document')];
         }
+
+        if ($entity->getItems() === null) {
+            return [__('You can\'t create a shipment without products.')];
+        }
         $messages = [];
 
         $order = $this->orderRepository->get($entity->getOrderId());
@@ -64,7 +68,7 @@ class ShipmentQuantityValidator implements ValidatorInterface
         $messages = [];
         $orderItem = $this->getOrderItemById($order, $item->getOrderItemId());
         if ($orderItem === null) {
-            return [__('We can not found item "%1".', $item->getOrderItemId())];
+            return [__('We can not found item "%1" in order.', $item->getOrderItemId())];
         }
         if ($orderItem->getIsQtyDecimal()) {
             $qty = (double)$item->getQty();
