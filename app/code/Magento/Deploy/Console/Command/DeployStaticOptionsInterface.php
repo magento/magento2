@@ -11,85 +11,85 @@ interface DeployStaticOptionsInterface
     /**
      * Key for dry-run option
      */
-    const DRY_RUN_OPTION = 'dry-run';
+    const DRY_RUN = 'dry-run';
 
     /**
      * Key for languages parameter
      */
-    const LANGUAGE_OPTION = 'language';
+    const LANGUAGE = 'language';
 
     /**
      * Key for exclude languages parameter
      */
-    const EXCLUDE_LANGUAGE_OPTION = 'exclude-language';
+    const EXCLUDE_LANGUAGE = 'exclude-language';
 
     /**
      * Key for javascript option
      */
-    const JAVASCRIPT_OPTION = 'no-javascript';
+    const NO_JAVASCRIPT = 'no-javascript';
 
     /**
      * Key for css option
      */
-    const CSS_OPTION = 'no-css';
+    const NO_CSS = 'no-css';
 
     /**
      * Key for less option
      */
-    const LESS_OPTION = 'no-less';
+    const NO_LESS = 'no-less';
 
     /**
      * Key for images option
      */
-    const IMAGES_OPTION = 'no-images';
+    const NO_IMAGES = 'no-images';
 
     /**
      * Key for fonts option
      */
-    const FONTS_OPTION = 'no-fonts';
+    const NO_FONTS = 'no-fonts';
 
     /**
      * Key for misc option
      */
-    const MISC_OPTION = 'no-misc';
+    const NO_MISC = 'no-misc';
 
     /**
      * Key for html option
      */
-    const HTML_OPTION = 'no-html';
+    const NO_HTML = 'no-html';
 
     /**
      * Key for html option
      */
-    const HTML_MINIFY_OPTION = 'no-html-minify';
+    const NO_HTML_MINIFY = 'no-html-minify';
 
     /**
      * Key for theme option
      */
-    const THEME_OPTION = 'theme';
+    const THEME = 'theme';
 
     /**
      * Key for exclude theme option
      */
-    const EXCLUDE_THEME_OPTION = 'exclude-theme';
+    const EXCLUDE_THEME = 'exclude-theme';
 
     /**
      * Key for area option
      */
-    const AREA_OPTION = 'area';
+    const AREA = 'area';
 
     /**
      * Key for exclude area option
      */
-    const EXCLUDE_AREA_OPTION = 'exclude-area';
+    const EXCLUDE_AREA = 'exclude-area';
 
     /**
      * Jey for jobs option
      */
-    const JOBS_AMOUNT_OPTION = 'jobs';
+    const JOBS_AMOUNT = 'jobs';
 
     /**
      * Force run of static deploy
      */
-    const FORCE_RUN_OPTION = 'force';
+    const FORCE_RUN = 'force';
 }

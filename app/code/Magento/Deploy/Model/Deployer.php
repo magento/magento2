@@ -77,26 +77,36 @@ class Deployer
      */
     private $alternativeSources;
 
-    /** @var array **/
-    private $fileExtensionsJs = ['js', 'map'];
-
-    /** @var array **/
-    private $fileExtensionsCss = ['css'];
-
-    /** @var array **/
-    private $fileExtensionsLess = ['less'];
-
-    /** @var array **/
-    private $fileExtensionsHtml = ['html', 'htm'];
-
-    /** @var array **/
-    private $fileExtensionsImages = ['jpg', 'jpeg', 'gif', 'png', 'ico', 'svg'];
-
-    /** @var array **/
-    private $fileExtensionsFonts = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
-
-    /** @var array **/
-    private $fileExtensionsMisc = ['md', 'txt', 'jbf', 'csv', 'json', 'txt', 'htc', 'swf', 'LICENSE', ''];
+    /**
+     * @var array
+     */
+    private static $fileExtensionOptionMap = [
+        'js' => Options::NO_JAVASCRIPT,
+        'map' => Options::NO_JAVASCRIPT,
+        'css' => Options::NO_CSS,
+        'less' => Options::NO_LESS,
+        'html' => Options::NO_HTML,
+        'htm' => Options::NO_HTML,
+        'jpg' => Options::NO_IMAGES,
+        'jpeg' => Options::NO_IMAGES,
+        'gif' => Options::NO_IMAGES,
+        'png' => Options::NO_IMAGES,
+        'ico' => Options::NO_IMAGES,
+        'svg' => Options::NO_IMAGES,
+        'eot' => Options::NO_FONTS,
+        'ttf' => Options::NO_FONTS,
+        'woff' => Options::NO_FONTS,
+        'woff2' => Options::NO_FONTS,
+        'md' => Options::NO_MISC,
+        'jbf' => Options::NO_MISC,
+        'csv' => Options::NO_MISC,
+        'json' => Options::NO_MISC,
+        'txt' => Options::NO_MISC,
+        'htc' => Options::NO_MISC,
+        'swf' => Options::NO_MISC,
+        'LICENSE' => Options::NO_MISC,
+        '' => Options::NO_MISC,
+    ];
 
     /**
      * @var Minification
@@ -132,13 +142,18 @@ class Deployer
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
-        array $options = []
+        $options = []
     ) {
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
         $this->jsTranslationConfig = $jsTranslationConfig;
-        $this->options = $options;
+        if (is_array($options)) {
+            $this->options = $options;
+        } else {
+            // backward compatibility support
+            $this->options = [Options::DRY_RUN => (bool)$options];
+        }
         $this->parentTheme = [];
 
         array_map(
@@ -169,54 +184,32 @@ class Deployer
      */
     private function checkSkip($filePath)
     {
-        $path = $filePath;
-        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        if ($filePath != '.') {
+            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+            $option = isset(self::$fileExtensionOptionMap[$ext]) ? self::$fileExtensionOptionMap[$ext] : null;
 
-        $check = ($this->getOption(Options::JAVASCRIPT_OPTION)
-            || $this->getOption(Options::CSS_OPTION)
-            || $this->getOption(Options::LESS_OPTION)
-            || $this->getOption(Options::HTML_OPTION)
-            || $this->getOption(Options::IMAGES_OPTION)
-            || $this->getOption(Options::FONTS_OPTION)
-            || $this->getOption(Options::MISC_OPTION));
-
-        if ($check && $filePath != '.') {
-            if ($this->getOption(Options::JAVASCRIPT_OPTION) && in_array($ext, $this->fileExtensionsJs)) {
-                return true;
-            } elseif ($this->getOption(Options::CSS_OPTION) && in_array($ext, $this->fileExtensionsCss)) {
-                return true;
-            } elseif ($this->getOption(Options::LESS_OPTION) && in_array($ext, $this->fileExtensionsLess)) {
-                return true;
-            } elseif ($this->getOption(Options::HTML_OPTION) && in_array($ext, $this->fileExtensionsHtml)) {
-                return true;
-            } elseif ($this->getOption(Options::IMAGES_OPTION) && in_array($ext, $this->fileExtensionsImages)) {
-                return true;
-            } elseif ($this->getOption(Options::FONTS_OPTION) && in_array($ext, $this->fileExtensionsFonts)) {
-                return true;
-            } elseif ($this->getOption(Options::MISC_OPTION) && in_array($ext, $this->fileExtensionsMisc)) {
-                return true;
-            }
-
-            return false;
+            return $option ? $this->getOption($option) : false;
         }
+
+        return false;
     }
 
     /**
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
-     * @param array $deployableLanguages
+     * @param array $locales
      * @param array $deployableAreaThemeMap
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $deployableLanguages, array $deployableAreaThemeMap)
+    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $deployableAreaThemeMap = [])
     {
         $this->omFactory = $omFactory;
 
-        if ($this->getOption(Options::DRY_RUN_OPTION)) {
+        if ($this->getOption(Options::DRY_RUN)) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
@@ -224,7 +217,7 @@ class Deployer
 
         foreach ($deployableAreaThemeMap as $area => $themes) {
             $this->emulateApplicationArea($area);
-            foreach ($deployableLanguages as $locale) {
+            foreach ($locales as $locale) {
                 $this->emulateApplicationLocale($locale, $area);
                 foreach ($themes as $themePath) {
 
@@ -233,12 +226,8 @@ class Deployer
                     $this->errorCount = 0;
 
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    try {
-                        $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
-                        $design->setDesignTheme($themePath, $area);
-                    } catch (\LogicException $e) {
-                        continue;
-                    }
+                    $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
+                    $design->setDesignTheme($themePath, $area);
 
                     $assetRepo = $this->objectManager->create(
                         \Magento\Framework\View\Asset\Repository::class,
@@ -301,7 +290,7 @@ class Deployer
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
-                    if (!$this->getOption(Options::JAVASCRIPT_OPTION)) {
+                    if (!$this->getOption(Options::NO_JAVASCRIPT)) {
                         if ($this->jsTranslationConfig->dictionaryEnabled()) {
                             $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                             $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
@@ -315,7 +304,7 @@ class Deployer
                 }
             }
         }
-        if (!($this->getOption(Options::HTML_MINIFY_OPTION) ?: !$this->getAssetConfig()->isMinifyHtml())) {
+        if (!($this->getOption(Options::NO_HTML_MINIFY) ?: !$this->getAssetConfig()->isMinifyHtml())) {
             $this->output->writeln('=== Minify templates ===');
             $this->count = 0;
             foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
@@ -332,7 +321,7 @@ class Deployer
 
         $version = (new \DateTime())->getTimestamp();
         $this->output->writeln("New version of deployed files: {$version}");
-        if (!$this->getOption(Options::DRY_RUN_OPTION)) {
+        if (!$this->getOption(Options::DRY_RUN)) {
             $this->versionStorage->save($version);
         }
 
@@ -444,7 +433,7 @@ class Deployer
             } else {
                 $this->output->write('.');
             }
-            if ($this->getOption(Options::DRY_RUN_OPTION)) {
+            if ($this->getOption(Options::DRY_RUN)) {
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);

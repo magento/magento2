@@ -29,6 +29,20 @@ use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 class DeployStaticContentCommand extends Command
 {
     /**
+     * Key for dry-run option
+     * @deprecated
+     * @see Magento\Deploy\Console\Command\DeployStaticOptionsInterface::DRY_RUN
+     */
+    const DRY_RUN_OPTION = 'dry-run';
+
+    /**
+     * Key for languages parameter
+     * @deprecated
+     * @see DeployStaticContentCommand::LANGUAGES_ARGUMENT
+     */
+    const LANGUAGE_OPTION = 'languages';
+
+    /**
      * Default language value
      */
     const DEFAULT_LANGUAGE_VALUE = 'en_US';
@@ -98,109 +112,109 @@ class DeployStaticContentCommand extends Command
             ->setDescription('Deploys static view files')
             ->setDefinition([
                 new InputOption(
-                    Options::DRY_RUN_OPTION,
+                    Options::DRY_RUN,
                     '-d',
                     InputOption::VALUE_NONE,
                     'If specified, then no files will be actually deployed.'
                 ),
                 new InputOption(
-                    Options::FORCE_RUN_OPTION,
+                    Options::FORCE_RUN,
                     '-f',
                     InputOption::VALUE_NONE,
                     'If specified, then run files will be deployed in any mode.'
                 ),
                 new InputOption(
-                    Options::JAVASCRIPT_OPTION,
+                    Options::NO_JAVASCRIPT,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no JavaScript will be deployed.'
                 ),
                 new InputOption(
-                    Options::CSS_OPTION,
+                    Options::NO_CSS,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no CSS will be deployed.'
                 ),
                 new InputOption(
-                    Options::LESS_OPTION,
+                    Options::NO_LESS,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no LESS will be deployed.'
                 ),
                 new InputOption(
-                    Options::IMAGES_OPTION,
+                    Options::NO_IMAGES,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no images will be deployed.'
                 ),
                 new InputOption(
-                    Options::FONTS_OPTION,
+                    Options::NO_FONTS,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no font files will be deployed.'
                 ),
                 new InputOption(
-                    Options::HTML_OPTION,
+                    Options::NO_HTML,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no html files will be deployed.'
                 ),
                 new InputOption(
-                    Options::MISC_OPTION,
+                    Options::NO_MISC,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no miscellaneous files will be deployed.'
                 ),
                 new InputOption(
-                    Options::HTML_MINIFY_OPTION,
+                    Options::NO_HTML_MINIFY,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, just html will not be minified and actually deployed.'
+                    'If specified, html will not be minified.'
                 ),
                 new InputOption(
-                    Options::THEME_OPTION,
+                    Options::THEME,
                     '-t',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, just specific theme(s) will be actually deployed.',
                     ['all']
                 ),
                 new InputOption(
-                    Options::EXCLUDE_THEME_OPTION,
+                    Options::EXCLUDE_THEME,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, exclude specific theme(s) from deployment.',
                     ['none']
                 ),
                 new InputOption(
-                    Options::LANGUAGE_OPTION,
+                    Options::LANGUAGE,
                     '-l',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of languages you want the tool populate files for.',
                     ['all']
                 ),
                 new InputOption(
-                    Options::EXCLUDE_LANGUAGE_OPTION,
+                    Options::EXCLUDE_LANGUAGE,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of langiages you do not want the tool populate files for.',
                     ['none']
                 ),
                 new InputOption(
-                    Options::AREA_OPTION,
+                    Options::AREA,
                     '-a',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you want the tool populate files for.',
                     ['all']
                 ),
                 new InputOption(
-                    Options::EXCLUDE_AREA_OPTION,
+                    Options::EXCLUDE_AREA,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you do not want the tool populate files for.',
                     ['none']
                 ),
                 new InputOption(
-                    Options::JOBS_AMOUNT_OPTION,
+                    Options::JOBS_AMOUNT,
                     '-j',
                     InputOption::VALUE_OPTIONAL,
                     'Amount of jobs to which script can be paralleled.',
@@ -357,9 +371,7 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption(Options::FORCE_RUN_OPTION)
-            && $this->getAppState()->getMode() !== State::MODE_PRODUCTION
-        ) {
+        if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
             throw new LocalizedException(
                 __(
                     "Deploy static content is applicable only for production mode.\n"
@@ -423,21 +435,21 @@ class DeployStaticContentCommand extends Command
             }
         }
 
-        $areasInclude = $this->input->getOption(Options::AREA_OPTION);
-        $areasExclude = $this->input->getOption(Options::EXCLUDE_AREA_OPTION);
+        $areasInclude = $this->input->getOption(Options::AREA);
+        $areasExclude = $this->input->getOption(Options::EXCLUDE_AREA);
         $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
         $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
 
         $languagesInclude = $this->input->getArgument(self::LANGUAGES_ARGUMENT)
-            ?: $this->input->getOption(Options::LANGUAGE_OPTION);
-        $languagesExclude = $this->input->getOption(Options::EXCLUDE_LANGUAGE_OPTION);
+            ?: $this->input->getOption(Options::LANGUAGE);
+        $languagesExclude = $this->input->getOption(Options::EXCLUDE_LANGUAGE);
         $this->checkLanguagesInput($languagesInclude, $languagesExclude);
         $deployableLanguages = $languagesInclude[0] == 'all'
             ? $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude)
             : $languagesInclude;
 
-        $themesInclude = $this->input->getOption(Options::THEME_OPTION);
-        $themesExclude = $this->input->getOption(Options::EXCLUDE_THEME_OPTION);
+        $themesInclude = $this->input->getOption(Options::THEME);
+        $themesExclude = $this->input->getOption(Options::EXCLUDE_THEME);
         $this->checkThemesInput($magentoThemes, $themesInclude, $themesExclude);
         $deployableThemes = $this->getDeployableEntities($magentoThemes, $themesInclude, $themesExclude);
 
@@ -529,10 +541,10 @@ class DeployStaticContentCommand extends Command
      */
     private function getProcessesAmount()
     {
-        $jobs = (int)$this->input->getOption(Options::JOBS_AMOUNT_OPTION);
+        $jobs = (int)$this->input->getOption(Options::JOBS_AMOUNT);
         if ($jobs < 1) {
             throw new \InvalidArgumentException(
-                Options::JOBS_AMOUNT_OPTION . ' argument has invalid value. It must be greater than 0'
+                Options::JOBS_AMOUNT . ' argument has invalid value. It must be greater than 0'
             );
         }
         return $jobs;
