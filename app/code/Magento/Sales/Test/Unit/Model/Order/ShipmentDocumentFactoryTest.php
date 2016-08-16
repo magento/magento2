@@ -11,6 +11,7 @@ use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\ShipmentInterface;
 
 /**
  * Class InvoiceDocumentFactoryTest
@@ -38,6 +39,11 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     private $commentMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentInterface
+     */
+    private $shipmentMock;
+
+    /**
      * @var ShipmentDocumentFactory
      */
     private $invoiceDocumentFactory;
@@ -60,6 +66,12 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['addComment'])
+            ->getMockForAbstractClass();
+
+
         $this->invoiceDocumentFactory = new ShipmentDocumentFactory($this->shipmentFactoryMock);
     }
 
@@ -68,12 +80,52 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         $tracks = ["1234567890"];
         $appendComment = true;
         $packages = [];
-        $this->invoiceDocumentFactory->create(
-            $this->orderMock,
-            $this->itemMock,
-            $this->commentMock,
-            $appendComment,
-            $packages
+        $items = [1 => 10];
+
+        $this->itemMock->expects($this->once())
+            ->method('getOrderItemId')
+            ->willReturn(1);
+
+        $this->itemMock->expects($this->once())
+            ->method('getQty')
+            ->willReturn(10);
+
+        $this->shipmentFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(
+                $this->orderMock,
+                $items,
+                $tracks
+            )
+            ->willReturn($this->shipmentMock);
+
+        if ($appendComment) {
+            $comment = "New comment!";
+            $visibleOnFront = true;
+            $this->commentMock->expects($this->once())
+                ->method('getComment')
+                ->willReturn($comment);
+
+            $this->commentMock->expects($this->once())
+                ->method('getIsVisibleOnFront')
+                ->willReturn($visibleOnFront);
+
+            $this->shipmentMock->expects($this->once())
+                ->method('addComment')
+                ->with($comment, $appendComment, $visibleOnFront)
+                ->willReturnSelf();
+        }
+
+        $this->assertEquals(
+            $this->invoiceDocumentFactory->create(
+                $this->orderMock,
+                [$this->itemMock],
+                $tracks,
+                $this->commentMock,
+                $appendComment,
+                $packages
+            ),
+            $this->shipmentMock
         );
     }
 }
