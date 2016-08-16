@@ -19,8 +19,8 @@ interface OrderRegistrarInterface
 {
     /**
      * @param OrderInterface $order
-     * @param ShipmentInterface $invoice
+     * @param ShipmentInterface $shipment
      * @return OrderInterface
      */
-    public function register(OrderInterface $order, ShipmentInterface $invoice);
+    public function register(OrderInterface $order, ShipmentInterface $shipment);
 }

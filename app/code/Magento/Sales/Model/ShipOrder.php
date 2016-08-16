@@ -17,6 +17,7 @@ use Magento\Sales\Model\Order\Shipment\NotifierInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 use Magento\Sales\Model\Order\Validation\CanShip;
+use Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -76,6 +77,11 @@ class ShipOrder implements ShipOrderInterface
     private $orderValidator;
 
     /**
+     * @var OrderRegistrarInterface
+     */
+    private $orderRegistrar;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param ShipmentDocumentFactory $shipmentDocumentFactory
@@ -98,6 +104,7 @@ class ShipOrder implements ShipOrderInterface
         OrderConfig $config,
         ShipmentRepositoryInterface $shipmentRepository,
         NotifierInterface $notifierInterface,
+        OrderRegistrarInterface $orderRegistrar,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
@@ -110,6 +117,7 @@ class ShipOrder implements ShipOrderInterface
         $this->shipmentRepository = $shipmentRepository;
         $this->notifierInterface = $notifierInterface;
         $this->logger = $logger;
+        $this->orderRegistrar = $orderRegistrar;
     }
 
     /**
@@ -166,6 +174,7 @@ class ShipOrder implements ShipOrderInterface
         }
         $connection->beginTransaction();
         try {
+            $this->orderRegistrar->register($order, $shipment);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
             );
