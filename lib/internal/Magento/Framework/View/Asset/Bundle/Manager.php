@@ -179,7 +179,7 @@ class Manager
      */
     public function addAsset(LocalInterface $asset)
     {
-        if (!$this->assetConfig->isBundlingJsFiles() || !$this->isValidAsset($asset)) {
+        if (!$this->isValidAsset($asset)) {
             return false;
         }
 
@@ -250,8 +250,6 @@ class Manager
      */
     public function flush()
     {
-        if ($this->assetConfig->isBundlingJsFiles()) {
-            $this->bundle->flush();
-        }
+        $this->bundle->flush();
     }
 }

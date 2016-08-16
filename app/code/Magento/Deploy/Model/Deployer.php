@@ -315,7 +315,7 @@ class Deployer
                 }
             }
         }
-        if (!$this->getOption(Options::HTML_MINIFY_OPTION) && $this->getAssetConfig()->isMinifyHtml()) {
+        if (!($this->getOption(Options::HTML_MINIFY_OPTION) ?: !$this->getAssetConfig()->isMinifyHtml())) {
             $this->output->writeln('=== Minify templates ===');
             $this->count = 0;
             foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
