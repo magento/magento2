@@ -93,7 +93,7 @@ class CheckUserLoginObserver implements ObserverInterface
 
         if (!($this->customerRepository instanceof \Magento\Customer\Api\CustomerRepositoryInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Customer\Api\CustomerRepositoryInterface'
+                \Magento\Customer\Api\CustomerRepositoryInterface::class
             );
         } else {
             return $this->customerRepository;

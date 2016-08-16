@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Group', 'Magento\Customer\Model\ResourceModel\Group');
+        $this->_init(\Magento\Customer\Model\Group::class, \Magento\Customer\Model\ResourceModel\Group::class);
     }
 
     /**

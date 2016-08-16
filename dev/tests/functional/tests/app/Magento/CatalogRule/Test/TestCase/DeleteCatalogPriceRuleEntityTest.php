@@ -85,7 +85,7 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
         $this->catalogRuleNew->getFormPageActions()->delete();
         $this->catalogRuleNew->getModalBlock()->acceptAlert();
         $products = $this->objectManager->create(
-            '\Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $product]
         )->run();
 

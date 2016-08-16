@@ -155,7 +155,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function getSession()
     {
         if ($this->session === null) {
-            $this->session = ObjectManager::getInstance()->get('Magento\Framework\Session\SessionManagerInterface');
+            $this->session = ObjectManager::getInstance()->get(
+                \Magento\Framework\Session\SessionManagerInterface::class
+            );
         }
         return $this->session;
     }
@@ -208,6 +210,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Customer|Address $entity
      * @param array $entityData
+     * @return void
      */
     private function overrideFileUploaderData($entity, array &$entityData)
     {
@@ -323,6 +326,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @param AbstractAttribute $attribute
      * @param array $config
+     * @return void
      */
     private function overrideFileUploaderMetadata(
         Type $entityType,
@@ -340,7 +344,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if (isset($config['validation']['file_extensions'])) {
                 $allowedExtensions = explode(',', $config['validation']['file_extensions']);
-                array_walk($allowedExtensions, function(&$value) { $value = strtolower(trim($value)); });
+                array_walk($allowedExtensions, function (&$value) {
+                    $value = strtolower(trim($value));
+                });
             }
 
             $allowedExtensions = implode(' ', $allowedExtensions);
@@ -458,7 +464,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         if ($this->fileProcessorFactory === null) {
             $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get('Magento\Customer\Model\FileProcessorFactory');
+                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
         }
         return $this->fileProcessorFactory;
     }

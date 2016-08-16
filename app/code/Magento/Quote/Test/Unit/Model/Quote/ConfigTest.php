@@ -20,7 +20,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_attributeConfig = $this->getMock(
-            'Magento\Catalog\Model\Attribute\Config',
+            \Magento\Catalog\Model\Attribute\Config::class,
             [],
             [],
             '',

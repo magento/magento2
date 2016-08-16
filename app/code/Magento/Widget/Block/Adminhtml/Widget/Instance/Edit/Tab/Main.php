@@ -182,7 +182,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
         }
@@ -202,7 +202,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         /* @var $layoutBlock \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout */
         $layoutBlock = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout::class
         )->setWidgetInstance(
             $widgetInstance
         );

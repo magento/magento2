@@ -32,9 +32,9 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->setUpMock = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
+        $this->setUpMock = $this->getMock(\Magento\Setup\Module\Setup::class, [], [], '', false);
 
-        $this->dbAdapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->dbAdapterMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
 
         $this->setUpMock
             ->expects($this->any())
@@ -50,7 +50,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 }
             ));
 
-        $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
+        $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->getMockForAbstractClass();
 
         $data = [

@@ -22,12 +22,12 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeDefiner = $this->getMock('Magento\Config\Model\Config\ScopeDefiner', [], [], '', false);
-        $this->_helper = $this->getMock('Magento\Paypal\Helper\Backend', [], [], '', false);
+        $this->_scopeDefiner = $this->getMock(\Magento\Config\Model\Config\ScopeDefiner::class, [], [], '', false);
+        $this->_helper = $this->getMock(\Magento\Paypal\Helper\Backend::class, [], [], '', false);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->_model = $objectManagerHelper->getObject(
-            'Magento\Paypal\Model\Config\StructurePlugin',
+            \Magento\Paypal\Model\Config\StructurePlugin::class,
             ['scopeDefiner' => $this->_scopeDefiner, 'helper' => $this->_helper]
         );
     }
@@ -54,7 +54,7 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     public function testAroundGetElementByPathPartsNonPayment($pathParts, $returnResult)
     {
         $result = $returnResult
-            ? $this->getMockForAbstractClass('Magento\Config\Model\Config\Structure\ElementInterface')
+            ? $this->getMockForAbstractClass(\Magento\Config\Model\Config\Structure\ElementInterface::class)
             : null;
         $this->_aroundGetElementByPathPartsAssertResult(
             $result,
@@ -98,7 +98,7 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     public function testAroundGetElementByPathParts($pathParts, $countryCode, $expectedPathParts)
     {
         $this->_getElementByPathPartsPrepareHelper($countryCode);
-        $result = $this->getMockForAbstractClass('Magento\Config\Model\Config\Structure\ElementInterface');
+        $result = $this->getMockForAbstractClass(\Magento\Config\Model\Config\Structure\ElementInterface::class);
         $this->_aroundGetElementByPathPartsAssertResult(
             $result,
             $this->_getElementByPathPartsCallback($expectedPathParts, $result),
@@ -131,20 +131,36 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     public function testAroundGetSectionByPathParts($pathParts, $countryCode, $expectedPathParts)
     {
         $this->_getElementByPathPartsPrepareHelper($countryCode);
-        $result = $this->getMock('Magento\Config\Model\Config\Structure\Element\Section', [], [], '', false);
+        $result = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Section::class, [], [], '', false);
         $self = $this;
         $getElementByPathParts = function ($pathParts) use ($self, $expectedPathParts, $result) {
             $self->assertEquals($expectedPathParts, $pathParts);
             $scope = 'any scope';
-            $self->_scopeDefiner->expects($self->once())
+            $sectionMap = [
+                'account' => [],
+                'recommended_solutions' => [],
+                'other_paypal_payment_solutions' => [],
+                'other_payment_methods' => []
+            ];
+            $self->_scopeDefiner->expects($self->any())
                 ->method('getScope')
                 ->will($self->returnValue($scope));
-            $result->expects($self->once())
+            $result->expects($self->at(0))
                 ->method('getData')
-                ->will($self->returnValue([]));
-            $result->expects($self->once())
+                ->will($self->returnValue(['children' => []]));
+            $result->expects($self->at(2))
+                ->method('getData')
+                ->will($self->returnValue(['children' => $sectionMap]));
+            $result->expects($self->at(1))
                 ->method('setData')
-                ->with(['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true], $scope)
+                ->with(['children' => $sectionMap], $scope)
+                ->will($self->returnSelf());
+            $result->expects($self->at(3))
+                ->method('setData')
+                ->with(['children' => $sectionMap,
+                    'showInDefault' => true,
+                    'showInWebsite' => true,
+                    'showInStore' => true], $scope)
                 ->will($self->returnSelf());
             return $result;
         };
@@ -169,7 +185,7 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     private function _aroundGetElementByPathPartsAssertResult($result, $getElementByPathParts, $pathParts)
     {
         $this->assertEquals($result, $this->_model->aroundGetElementByPathParts(
-            $this->getMock('Magento\Config\Model\Config\Structure', [], [], '', false),
+            $this->getMock(\Magento\Config\Model\Config\Structure::class, [], [], '', false),
             $getElementByPathParts,
             $pathParts
         ));

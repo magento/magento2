@@ -128,7 +128,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
                 $referer = $this->_redirect->getRefererUrl();
             }
 
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+            $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
 
             $this->messageManager->addComplexSuccessMessage(
                 'addProductSuccessMessage',

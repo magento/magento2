@@ -23,7 +23,7 @@ class MaintenanceStatusCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
+        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
         $this->command = new MaintenanceStatusCommand($this->maintenanceMode);
     }
 

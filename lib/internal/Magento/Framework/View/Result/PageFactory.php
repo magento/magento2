@@ -33,7 +33,7 @@ class PageFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\Result\Page'
+        $instanceName = \Magento\Framework\View\Result\Page::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

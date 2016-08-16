@@ -8,6 +8,9 @@ namespace Magento\Sales\Service\V1;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderCreateTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/orders';
@@ -31,22 +34,22 @@ class OrderCreateTest extends WebapiAbstract
     protected function prepareOrder()
     {
         /** @var \Magento\Sales\Model\Order $orderBuilder */
-        $orderFactory = $this->objectManager->get('Magento\Sales\Model\OrderFactory');
+        $orderFactory = $this->objectManager->get(\Magento\Sales\Model\OrderFactory::class);
         /** @var \Magento\Sales\Api\Data\OrderItemFactory $orderItemFactory */
-        $orderItemFactory = $this->objectManager->get('Magento\Sales\Model\Order\ItemFactory');
+        $orderItemFactory = $this->objectManager->get(\Magento\Sales\Model\Order\ItemFactory::class);
         /** @var \Magento\Sales\Api\Data\OrderPaymentFactory $orderPaymentFactory */
-        $orderPaymentFactory = $this->objectManager->get('Magento\Sales\Model\Order\PaymentFactory');
+        $orderPaymentFactory = $this->objectManager->get(\Magento\Sales\Model\Order\PaymentFactory::class);
         /** @var \Magento\Sales\Model\Order\AddressRepository $orderAddressRepository */
-        $orderAddressRepository = $this->objectManager->get('Magento\Sales\Model\Order\AddressRepository');
+        $orderAddressRepository = $this->objectManager->get(\Magento\Sales\Model\Order\AddressRepository::class);
 
         $order = $orderFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderInterface')]
+            ['data' => $this->getDataStructure(\Magento\Sales\Api\Data\OrderInterface::class)]
         );
         $orderItem = $orderItemFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderItemInterface')]
+            ['data' => $this->getDataStructure(\Magento\Sales\Api\Data\OrderItemInterface::class)]
         );
         $orderPayment = $orderPaymentFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderPaymentInterface')]
+            ['data' => $this->getDataStructure(\Magento\Sales\Api\Data\OrderPaymentInterface::class)]
         );
 
         $email = uniqid() . 'email@example.com';
@@ -104,7 +107,7 @@ class OrderCreateTest extends WebapiAbstract
     protected function addProductOption($orderItem)
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
         $options = [];
         foreach ($product->getOptions() as $option) {
@@ -164,7 +167,7 @@ class OrderCreateTest extends WebapiAbstract
         $this->assertNotEmpty($this->_webApiCall($serviceInfo, ['entity' => $order]));
 
         /** @var \Magento\Sales\Model\Order $model */
-        $model = $this->objectManager->get('Magento\Sales\Model\Order');
+        $model = $this->objectManager->get(\Magento\Sales\Model\Order::class);
         $model->load($order['customer_email'], 'customer_email');
         $this->assertTrue((bool)$model->getId());
         $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());

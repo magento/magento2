@@ -151,7 +151,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         $customer->setAddresses($origAddresses);
@@ -207,7 +207,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $this->addressRepository->deleteById($addressId);
             }
         }
-
+        $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
@@ -221,6 +221,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      *
      * @param \Magento\Customer\Model\Customer $customerModel
      * @param string|null $passwordHash
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return void
      */
     private function populateCustomerWithSecureData($customerModel, $passwordHash = null)
@@ -271,7 +272,10 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $searchResults->setSearchCriteria($searchCriteria);
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $collection = $this->customerFactory->create()->getCollection();
-        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\CustomerInterface');
+        $this->extensionAttributesJoinProcessor->process(
+            $collection,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         // This is needed to make sure all the attributes are properly loaded
         foreach ($this->customerMetadata->getAllAttributesMetadata() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());

@@ -7,7 +7,7 @@
 // refresh report statistics
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Tax\Model\ResourceModel\Report\Tax $reportResource */
-$reportResource = $objectManager->create('Magento\Tax\Model\ResourceModel\Report\Tax');
+$reportResource = $objectManager->create(\Magento\Tax\Model\ResourceModel\Report\Tax::class);
 $reportResource->beginTransaction();
 // prevent table truncation by incrementing the transaction nesting level counter
 try {

@@ -148,20 +148,20 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->get('Magento\Theme\Model\View\Design');
+                    $design = $this->objectManager->get(\Magento\Theme\Model\View\Design::class);
                     $design->setDesignTheme($themePath, $area);
                     $assetRepo = $this->objectManager->create(
-                        'Magento\Framework\View\Asset\Repository',
+                        \Magento\Framework\View\Asset\Repository::class,
                         [
                             'design' => $design,
                         ]
                     );
                     /** @var \Magento\RequireJs\Model\FileManager $fileManager */
                     $fileManager = $this->objectManager->create(
-                        'Magento\RequireJs\Model\FileManager',
+                        \Magento\RequireJs\Model\FileManager::class,
                         [
                             'config' => $this->objectManager->create(
-                                'Magento\Framework\RequireJs\Config',
+                                \Magento\Framework\RequireJs\Config::class,
                                 [
                                     'assetRepo' => $assetRepo,
                                     'design' => $design,
@@ -180,7 +180,14 @@ class Deployer
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
                         ) {
-                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module, $fullPath);
+                            $compiledFile = $this->deployFile(
+                                $filePath,
+                                $area,
+                                $themePath,
+                                $locale,
+                                $module,
+                                $fullPath
+                            );
                             if ($compiledFile !== '') {
                                 $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
                             }
@@ -292,12 +299,12 @@ class Deployer
             [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
         );
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode($areaCode);
-        $this->assetRepo = $this->objectManager->get('Magento\Framework\View\Asset\Repository');
-        $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
-        $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
-        $this->bundleManager = $this->objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
+        $this->assetRepo = $this->objectManager->get(\Magento\Framework\View\Asset\Repository::class);
+        $this->assetPublisher = $this->objectManager->create(\Magento\Framework\App\View\Asset\Publisher::class);
+        $this->htmlMinifier = $this->objectManager->get(\Magento\Framework\View\Template\Html\MinifierInterface::class);
+        $this->bundleManager = $this->objectManager->get(\Magento\Framework\View\Asset\Bundle\Manager::class);
 
     }
 
@@ -311,11 +318,11 @@ class Deployer
     protected function emulateApplicationLocale($locale, $area)
     {
         /** @var \Magento\Framework\TranslateInterface $translator */
-        $translator = $this->objectManager->get('Magento\Framework\TranslateInterface');
+        $translator = $this->objectManager->get(\Magento\Framework\TranslateInterface::class);
         $translator->setLocale($locale);
         $translator->loadData($area, true);
         /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
-        $localeResolver = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
+        $localeResolver = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         $localeResolver->setLocale($locale);
     }
 
@@ -400,7 +407,7 @@ class Deployer
     private function findAncestors($themeFullPath)
     {
         /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
-        $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
+        $themeCollection = $this->objectManager->get(\Magento\Framework\View\Design\Theme\ListInterface::class);
         $theme = $themeCollection->getThemeByFullPath($themeFullPath);
         $ancestors = $theme->getInheritedThemes();
         $ancestorThemeFullPath = [];

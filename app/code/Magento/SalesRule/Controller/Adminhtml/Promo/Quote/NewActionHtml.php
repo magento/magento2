@@ -27,7 +27,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         )->setType(
             $type
         )->setRule(
-            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         )->setPrefix(
             'actions'
         );

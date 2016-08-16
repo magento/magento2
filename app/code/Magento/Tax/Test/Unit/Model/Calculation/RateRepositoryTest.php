@@ -12,6 +12,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,63 +70,63 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->rateConverterMock = $this->getMock(
-            'Magento\Tax\Model\Calculation\Rate\Converter',
+            \Magento\Tax\Model\Calculation\Rate\Converter::class,
             [],
             [],
             '',
             false
         );
         $this->rateRegistryMock = $this->getMock(
-            'Magento\Tax\Model\Calculation\RateRegistry',
+            \Magento\Tax\Model\Calculation\RateRegistry::class,
             [],
             [],
             '',
             false
         );
         $this->searchResultFactory = $this->getMock(
-            'Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory',
+            \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->searchResultMock = $this->getMock(
-            'Magento\Tax\Api\Data\TaxRuleSearchResultsInterface',
+            \Magento\Tax\Api\Data\TaxRuleSearchResultsInterface::class,
             [],
             [],
             '',
             false
         );
         $this->rateFactoryMock = $this->getMock(
-            'Magento\Tax\Model\Calculation\RateFactory',
+            \Magento\Tax\Model\Calculation\RateFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->countryFactoryMock = $this->getMock(
-            'Magento\Directory\Model\CountryFactory',
+            \Magento\Directory\Model\CountryFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->regionFactoryMock = $this->getMock(
-            'Magento\Directory\Model\RegionFactory',
+            \Magento\Directory\Model\RegionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->rateResourceMock = $this->getMock(
-            'Magento\Tax\Model\ResourceModel\Calculation\Rate',
+            \Magento\Tax\Model\ResourceModel\Calculation\Rate::class,
             [],
             [],
             '',
             false
         );
         $this->joinProcessorMock = $this->getMock(
-            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
             [],
             [],
             '',
@@ -144,13 +147,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $countryCode = 'US';
-        $countryMock = $this->getMock('Magento\Directory\Model\Country', [], [], '', false);
+        $countryMock = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
         $countryMock->expects($this->any())->method('getId')->will($this->returnValue(1));
         $countryMock->expects($this->any())->method('loadByCode')->with($countryCode)->will($this->returnSelf());
         $this->countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryMock));
 
         $regionId = 2;
-        $regionMock = $this->getMock('Magento\Directory\Model\Region', [], [], '', false);
+        $regionMock = $this->getMock(\Magento\Directory\Model\Region::class, [], [], '', false);
         $regionMock->expects($this->any())->method('getId')->will($this->returnValue($regionId));
         $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
         $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
@@ -239,7 +242,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteriaInterface');
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $searchCriteriaMock->expects($this->any())->method('getFilterGroups')->will($this->returnValue([]));
         $searchCriteriaMock->expects($this->any())->method('getSortOrders')->will($this->returnValue([]));
         $currentPage = 1;
@@ -251,7 +254,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $items = [$rateMock];
         $collectionMock = $objectManager->getCollectionMock(
-            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection',
+            \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class,
             $items
         );
         $collectionMock->expects($this->once())->method('joinRegionTable');
@@ -282,7 +285,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private function getTaxRateMock(array $taxRateData)
     {
-        $taxRateMock = $this->getMock('Magento\Tax\Model\Calculation\Rate', [], [], '', false);
+        $taxRateMock = $this->getMock(\Magento\Tax\Model\Calculation\Rate::class, [], [], '', false);
         foreach ($taxRateData as $key => $value) {
             // convert key from snake case to upper case
             $taxRateMock->expects($this->any())
@@ -305,13 +308,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveThrowsExceptionIfCannotSaveTitles($expectedException, $exceptionType, $exceptionMessage)
     {
         $countryCode = 'US';
-        $countryMock = $this->getMock('Magento\Directory\Model\Country', [], [], '', false);
+        $countryMock = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
         $countryMock->expects($this->any())->method('getId')->will($this->returnValue(1));
         $countryMock->expects($this->any())->method('loadByCode')->with($countryCode)->will($this->returnSelf());
         $this->countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryMock));
 
         $regionId = 2;
-        $regionMock = $this->getMock('Magento\Directory\Model\Region', [], [], '', false);
+        $regionMock = $this->getMock(\Magento\Directory\Model\Region::class, [], [], '', false);
         $regionMock->expects($this->any())->method('getId')->will($this->returnValue($regionId));
         $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
         $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
@@ -349,13 +352,11 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'entity_already_exists' => [
-                new AlreadyExistsException(__('Entity already exists')),
-                'Magento\Framework\Exception\AlreadyExistsException',
+                new AlreadyExistsException(__('Entity already exists')), \Magento\Framework\Exception\AlreadyExistsException::class,
                 'Entity already exists'
             ],
             'cannot_save_title' => [
-                new LocalizedException(__('Cannot save titles')),
-                'Magento\Framework\Exception\LocalizedException',
+                new LocalizedException(__('Cannot save titles')), \Magento\Framework\Exception\LocalizedException::class,
                 'Cannot save titles'
             ]
         ];
@@ -363,13 +364,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListWhenFilterGroupExists()
     {
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteriaInterface');
-        $filterGroupMock = $this->getMock('Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
         $searchCriteriaMock
             ->expects($this->any())
             ->method('getFilterGroups')
             ->will($this->returnValue([$filterGroupMock]));
-        $filterMock = $this->getMock('Magento\Framework\Api\Filter', [], [], '', false);
+        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
         $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('like');
         $filterMock->expects($this->once())->method('getField')->willReturn('region_name');
@@ -378,14 +379,14 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $rateMock = $this->getTaxRateMock([]);
         $items = [$rateMock];
         $collectionMock = $objectManager->getCollectionMock(
-            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection',
+            \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class,
             $items
         );
         $collectionMock
             ->expects($this->once())
             ->method('addFieldToFilter')
             ->with(['region_table.code'], [['like' => 'condition_value']]);
-        $sortOrderMock = $this->getMock('Magento\Framework\Api\SortOrder', [], [], '', false);
+        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
         $searchCriteriaMock
             ->expects($this->any())
             ->method('getSortOrders')
@@ -427,7 +428,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $regionId = 2;
         $rateTitles = ['Label 1', 'Label 2'];
-        $regionMock = $this->getMock('Magento\Directory\Model\Region', [], [], '', false);
+        $regionMock = $this->getMock(\Magento\Directory\Model\Region::class, [], [], '', false);
         $regionMock->expects($this->any())->method('getId')->will($this->returnValue(''));
         $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
         $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
