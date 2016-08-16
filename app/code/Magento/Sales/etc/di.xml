@@ -925,4 +925,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" xsi:type="string">Magento\Framework\EntityManager\HydratorInterface</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
