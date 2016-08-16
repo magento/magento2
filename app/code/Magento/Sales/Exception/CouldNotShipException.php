@@ -11,6 +11,6 @@ use Magento\Sales\Api\Exception\CouldNotShipExceptionInterface;
 /**
  * Class CouldNotShipException
  */
-class CouldNotInvoiceException extends LocalizedException implements CouldNotShipExceptionInterface
+class CouldNotShipException extends LocalizedException implements CouldNotShipExceptionInterface
 {
 }
