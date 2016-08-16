@@ -9,10 +9,13 @@
     <group id="express_checkout" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
         <label>Express Checkout</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <fieldset_css>pp-method-express</fieldset_css>
+        <fieldset_css>paypal-other-section</fieldset_css>
         <comment>Add PayPal as an additional payment method to your checkout page.</comment>
         <attribute type="activity_path">payment/paypal_express/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-express-checkout?partner_id=NB9WWHYEMVUMS</more_url>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-express-checkout.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="express_checkout_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>

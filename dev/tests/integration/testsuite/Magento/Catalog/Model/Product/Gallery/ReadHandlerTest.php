@@ -31,7 +31,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->readHandler = $this->objectManager->create(
-            'Magento\Catalog\Model\Product\Gallery\ReadHandler'
+            \Magento\Catalog\Model\Product\Gallery\ReadHandler::class
         );
     }
 
@@ -42,7 +42,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
         /**

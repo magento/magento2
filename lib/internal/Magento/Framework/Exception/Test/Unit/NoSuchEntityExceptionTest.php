@@ -30,7 +30,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
-        $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\Renderer\Placeholder')
+        $this->rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\Renderer\Placeholder::class)
             ->setMethods(['render'])
             ->disableOriginalConstructor()
             ->getMock();

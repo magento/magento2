@@ -82,6 +82,6 @@ class ApplySeveralSalesRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
+        $this->objectManager->create(\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep::class)->run();
     }
 }

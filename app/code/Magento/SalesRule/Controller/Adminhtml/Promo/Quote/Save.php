@@ -20,7 +20,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         if ($this->getRequest()->getPostValue()) {
             try {
                 /** @var $model \Magento\SalesRule\Model\Rule */
-                $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
+                $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_salesrule_prepare_save',
                     ['request' => $this->getRequest()]
@@ -40,7 +40,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     }
                 }
 
-                $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+                $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
 
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
@@ -98,8 +98,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->messageManager->addError(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData($data);
                 $this->_redirect('sales_rule/*/edit', ['id' => $this->getRequest()->getParam('rule_id')]);
                 return;
             }

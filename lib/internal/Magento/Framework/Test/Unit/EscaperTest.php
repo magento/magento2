@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Escaper;
 
 /**
  * \Magento\Framework\Escaper test case
@@ -17,9 +18,17 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
      */
     protected $_escaper = null;
 
+    /**
+     * @var \Magento\Framework\ZendEscaper
+     */
+    private $zendEscaper;
+
     protected function setUp()
     {
         $this->_escaper = new Escaper();
+        $this->zendEscaper = new \Magento\Framework\ZendEscaper();
+        $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'escaper', $this->zendEscaper);
     }
 
     /**

@@ -14,7 +14,7 @@ class CustomLayoutTest extends PageLayoutTest
      */
     protected function getSourceClassName()
     {
-        return 'Magento\Cms\Model\Page\Source\CustomLayout';
+        return \Magento\Cms\Model\Page\Source\CustomLayout::class;
     }
 
     /**

@@ -16,7 +16,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\User\Model\ResourceModel\User'
+            \Magento\User\Model\ResourceModel\User::class
         );
     }
 

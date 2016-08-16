@@ -68,7 +68,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         $isEnable = $this->isEnable();
         if ($input->getOption(self::INPUT_KEY_ALL)) {
             /** @var \Magento\Framework\Module\FullModuleList $fullModulesList */
-            $fullModulesList = $this->objectManager->get('Magento\Framework\Module\FullModuleList');
+            $fullModulesList = $this->objectManager->get(\Magento\Framework\Module\FullModuleList::class);
             $modules = $fullModulesList->getNames();
         } else {
             $modules = $input->getArgument(self::INPUT_KEY_MODULES);

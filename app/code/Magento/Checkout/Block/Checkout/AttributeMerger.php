@@ -45,6 +45,7 @@ class AttributeMerger
         'alphanumeric' => 'validate-alphanum',
         'url' => 'validate-url',
         'email' => 'email2',
+        'length' => 'validate-length',
     ];
 
     /**

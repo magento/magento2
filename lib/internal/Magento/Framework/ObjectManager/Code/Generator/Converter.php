@@ -107,7 +107,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => $paramName,
-                    'type' => '\Magento\Framework\Api\AbstractExtensibleObject',
+                    'type' => \Magento\Framework\Api\AbstractExtensibleObject::class,
                 ],
             ],
             'body' => $body,

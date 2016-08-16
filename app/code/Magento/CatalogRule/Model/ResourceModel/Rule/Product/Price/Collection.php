@@ -15,8 +15,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         parent::_construct();
         $this->_init(
-            'Magento\CatalogRule\Model\Rule\Product\Price',
-            'Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price'
+            \Magento\CatalogRule\Model\Rule\Product\Price::class,
+            \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price::class
         );
     }
 

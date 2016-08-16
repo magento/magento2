@@ -40,13 +40,13 @@ class BackupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataHelperMock = $this->getMockBuilder('Magento\Backup\Helper\Data')
+        $this->dataHelperMock = $this->getMockBuilder(\Magento\Backup\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMock();
 
         $this->filesystemMock->expects($this->atLeastOnce())
@@ -56,7 +56,7 @@ class BackupTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new ObjectManager($this);
         $this->backupModel = $this->objectManager->getObject(
-            'Magento\Backup\Model\Backup',
+            \Magento\Backup\Model\Backup::class,
             [
                 'filesystem' => $this->filesystemMock,
                 'helper' => $this->dataHelperMock

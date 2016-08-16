@@ -143,7 +143,7 @@ class UpdateCustomerFrontendEntityTest extends Injectable
 
         // Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $initialCustomer]
         )->run();
         $this->customerAccountIndex->getInfoBlock()->openEditContactInfo();
