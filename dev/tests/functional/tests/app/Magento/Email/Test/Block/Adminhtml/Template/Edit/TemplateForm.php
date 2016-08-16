@@ -1,21 +1,26 @@
 <?php
-
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Email\Test\Block\Adminhtml\Template\Edit;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Synonyms edit form in admin.
- */
-/* this class needs to be created becuase we have a customized click on the 'Load' button, its not a standard click
+ Click Load button in Email template form.
+ this class needs to be created becuase we need a customized click on the 'Load' button, its not a standard click
 */
 class TemplateForm extends Form
 {
-    protected $loadButton = "#load";
+    private $loadButton = "#load";
 
+    /**
+     *
+     */
     public function clickLoadTemplate() {
-        $element = $this->_rootElement->find($this->loadButton, Locator::SELECTOR_CSS); // find this element
-        $element->click(); // perform the action
+        $element = $this->_rootElement->find($this->loadButton, Locator::SELECTOR_CSS); // locate the Load button
+        $element->click(); // click the load button
     }
 }

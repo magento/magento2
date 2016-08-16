@@ -1,12 +1,16 @@
 <?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Email\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Search\Test\Fixture\Synonym;
 use Magento\Email\Test\Page\Adminhtml\EmailTemplateIndex;
 use Magento\Email\Test\Page\Adminhtml\EmailTemplateNew;
 use Magento\Email\Test\Fixture\EmailTemplate;
+
 /**
  * Steps:
  * 1. Log in to Admin.
@@ -15,14 +19,14 @@ use Magento\Email\Test\Fixture\EmailTemplate;
  * 4. Select Email Template.
  * 5. Click the "Load Template" button.
  * 6. Enter Email Template name.
- * 7. Verify the email template saved successfully.
- *
+ * 7. Click the "Save" button.
+ * 8. Verify the email template saved successfully.
  * @group Email_(PS)
  * @ZephyrId MAGETWO-17155
  */
+
 class CreateEmailTemplateEntityTest extends Injectable
 {
-
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
@@ -44,7 +48,7 @@ class CreateEmailTemplateEntityTest extends Injectable
     private $emailTemplateNew;
 
     /**
-     * Inject synonym pages.
+     * Inject Email template pages.
      *
      * @param EmailTemplateIndex $EmailTemplateIndex
      * @param EmailTemplateNew $EmailTemplateNew
@@ -59,11 +63,9 @@ class CreateEmailTemplateEntityTest extends Injectable
     }
 
     /**
-     * Create Email Template test.
-     *
-     * @param Synonym $synonym
-     * @return void
+     * @param EmailTemplate $EmailTemplate
      */
+
     public function test(EmailTemplate $EmailTemplate)
     {
         $this->emailTemplateIndex->open();
@@ -71,6 +73,5 @@ class CreateEmailTemplateEntityTest extends Injectable
         $this->emailTemplateNew->getTemplateForm()->fill($EmailTemplate);
         $this->emailTemplateNew->getTemplateForm()->clickLoadTemplate();
         $this->emailTemplateNew->getFormPageActions()->save();
-        sleep(10);
     }
 }
