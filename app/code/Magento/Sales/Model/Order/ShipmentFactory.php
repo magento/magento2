@@ -6,7 +6,9 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 
 /**
@@ -41,18 +43,26 @@ class ShipmentFactory
     private $shipmentValidator;
 
     /**
-     * Factory constructor.
+     * @var HydratorPool
+     */
+    private $hydratorPool;
+
+    /**
+     * ShipmentFactory constructor.
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
-     * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+     * @param Shipment\TrackFactory $trackFactory
+     * @param HydratorPool $hydratorPool
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
+        HydratorPool $hydratorPool
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;
         $this->instanceName = \Magento\Sales\Api\Data\ShipmentInterface::class;
+        $this->hydratorPool = $hydratorPool;
     }
 
     /**
@@ -168,10 +178,8 @@ class ShipmentFactory
                     __('Please enter a tracking number.')
                 );
             }
-
-            $shipment->addTrack(
-                $this->trackFactory->create()->addData($track->getData())
-            );
+            $hydrator = $this->hydratorPool->getHydrator(ShipmentTrackCreationInterface::class);
+            $shipment->addTrack($hydrator->extract($track));
         }
 
         return $shipment;
