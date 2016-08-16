@@ -83,11 +83,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->assertEquals(
-            'URL Rewrite Result',
-            $this->pageObject->aroundDelete(
+        $this->assertSame(
+            $this->cmsPageResourceMock,
+            $this->pageObject->afterDelete(
                 $this->cmsPageResourceMock,
-                $this->closureMock,
+                $this->cmsPageResourceMock,
                 $this->cmsPageMock
             )
         );
@@ -102,11 +102,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->urlPersistMock->expects($this->never())
             ->method('deleteByData');
 
-        $this->assertEquals(
-            'URL Rewrite Result',
-            $this->pageObject->aroundDelete(
+        $this->assertSame(
+            $this->cmsPageResourceMock,
+            $this->pageObject->afterDelete(
                 $this->cmsPageResourceMock,
-                $this->closureMock,
+                $this->cmsPageResourceMock,
                 $this->cmsPageMock
             )
         );

@@ -9,7 +9,9 @@ use Magento\Customer\Controller\Plugin\Account;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\ResultInterface;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,12 +31,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected $session;
 
     /**
-     * @var \Closure
-     */
-    protected $proceed;
-
-    /**
-     * @var ActionInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAction | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subject;
 
@@ -48,6 +45,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     protected $actionFlag;
 
+    /**
+     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resultInterface;
+
     protected function setUp()
     {
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
@@ -59,15 +61,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->subject = $this->getMockBuilder(\Magento\Framework\App\ActionInterface::class)
+        $this->subject = $this->getMockBuilder(AbstractAction::class)
             ->setMethods([
                 'getActionFlag',
             ])
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
-        $this->proceed = function () {
-            return self::EXPECTED_VALUE;
-        };
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
@@ -75,6 +74,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'getActionName',
             ])
             ->getMock();
+
+        $this->resultInterface = $this->getMockBuilder(ResultInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->actionFlag = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
@@ -87,9 +90,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      * @param boolean $isActionAllowed
      * @param boolean $isAuthenticated
      *
-     * @dataProvider dataProviderAroundDispatch
+     * @dataProvider dataProviderBeforeDispatch
      */
-    public function testAroundDispatch(
+    public function testBeforeDispatch(
         $action,
         $allowedActions,
         $isActionAllowed,
@@ -98,11 +101,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getActionName')
             ->willReturn($action);
-
-        $this->session->expects($this->once())
-            ->method('unsNoReferer')
-            ->with(false)
-            ->willReturnSelf();
 
         if ($isActionAllowed) {
             $this->session->expects($this->once())
@@ -126,13 +124,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         }
 
         $plugin = new Account($this->session, $allowedActions);
-        $this->assertEquals(
-            self::EXPECTED_VALUE,
-            $plugin->aroundDispatch($this->subject, $this->proceed, $this->request)
-        );
+        $plugin->beforeDispatch($this->subject, $this->request);
     }
 
-    public function dataProviderAroundDispatch()
+    public function dataProviderBeforeDispatch()
     {
         return [
             [
@@ -166,5 +161,19 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'is_authenticated' => 1,
             ],
         ];
+    }
+
+    public function testAfterDispatch()
+    {
+        $this->session->expects($this->once())
+            ->method('unsNoReferer')
+            ->with(false)
+            ->willReturnSelf();
+
+        $plugin = new Account($this->session, ['testaction']);
+        $this->assertEquals(
+            $this->resultInterface,
+            $plugin->afterDispatch($this->subject, $this->resultInterface, $this->request)
+        );
     }
 }

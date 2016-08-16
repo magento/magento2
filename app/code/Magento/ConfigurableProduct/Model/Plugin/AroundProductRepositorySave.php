@@ -43,7 +43,7 @@ class AroundProductRepositorySave
 
     /**
      * @param ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param ProductInterface $result
      * @param ProductInterface $product
      * @param bool $saveOptions
      * @return ProductInterface
@@ -52,14 +52,12 @@ class AroundProductRepositorySave
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         ProductRepositoryInterface $subject,
-        \Closure $proceed,
+        ProductInterface $result,
         ProductInterface $product,
         $saveOptions = false
     ) {
-        /** @var ProductInterface $result */
-        $result = $proceed($product, $saveOptions);
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
             return $result;
         }
