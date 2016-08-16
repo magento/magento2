@@ -20,6 +20,7 @@ use Magento\Deploy\Model\ProcessManager;
 use Magento\Deploy\Model\Process;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\State;
+use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 
 /**
  * Deploy static content command
@@ -33,99 +34,14 @@ class DeployStaticContentCommand extends Command
     const DEFAULT_LANGUAGE_VALUE = 'en_US';
 
     /**
-     * Key for dry-run option
-     */
-    const DRY_RUN_OPTION = 'dry-run';
-
-    /**
      * Key for languages parameter
      */
     const LANGUAGES_ARGUMENT = 'languages';
 
     /**
-     * Key for languages parameter
-     */
-    const LANGUAGE_OPTION = 'language';
-
-    /**
-     * Key for exclude languages parameter
-     */
-    const EXCLUDE_LANGUAGE_OPTION = 'exclude-language';
-
-    /**
-     * Key for javascript option
-     */
-    const JAVASCRIPT_OPTION = 'no-javascript';
-
-    /**
-     * Key for css option
-     */
-    const CSS_OPTION = 'no-css';
-
-    /**
-     * Key for less option
-     */
-    const LESS_OPTION = 'no-less';
-
-    /**
-     * Key for images option
-     */
-    const IMAGES_OPTION = 'no-images';
-
-    /**
-     * Key for fonts option
-     */
-    const FONTS_OPTION = 'no-fonts';
-
-    /**
-     * Key for misc option
-     */
-    const MISC_OPTION = 'no-misc';
-
-    /**
-     * Key for html option
-     */
-    const HTML_OPTION = 'no-html';
-
-    /**
-     * Key for html option
-     */
-    const HTML_MINIFY_OPTION = 'no-html-minify';
-
-    /**
-     * Key for theme option
-     */
-    const THEME_OPTION = 'theme';
-
-    /**
-     * Key for exclude theme option
-     */
-    const EXCLUDE_THEME_OPTION = 'exclude-theme';
-
-    /**
-     * Key for area option
-     */
-    const AREA_OPTION = 'area';
-
-    /**
-     * Key for exclude area option
-     */
-    const EXCLUDE_AREA_OPTION = 'exclude-area';
-
-    /**
-     * Jey for jobs option
-     */
-    const JOBS_AMOUNT = 'jobs';
-
-    /**
      * Default jobs amount
      */
-    const DEFAULT_JOBS_AMOUNT = 3;
-
-    /**
-     * Force run of static deploy
-     */
-    const FORCE_RUN_OPTION = 'force';
+    const DEFAULT_JOBS_AMOUNT = 4;
 
     /** @var InputInterface */
     private $input;
@@ -182,109 +98,109 @@ class DeployStaticContentCommand extends Command
             ->setDescription('Deploys static view files')
             ->setDefinition([
                 new InputOption(
-                    self::DRY_RUN_OPTION,
+                    Options::DRY_RUN_OPTION,
                     '-d',
                     InputOption::VALUE_NONE,
                     'If specified, then no files will be actually deployed.'
                 ),
                 new InputOption(
-                    self::FORCE_RUN_OPTION,
+                    Options::FORCE_RUN_OPTION,
                     '-f',
                     InputOption::VALUE_NONE,
                     'If specified, then run files will be deployed in any mode.'
                 ),
                 new InputOption(
-                    self::JAVASCRIPT_OPTION,
+                    Options::JAVASCRIPT_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no JavaScript will be deployed.'
                 ),
                 new InputOption(
-                    self::CSS_OPTION,
+                    Options::CSS_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no CSS will be deployed.'
                 ),
                 new InputOption(
-                    self::LESS_OPTION,
+                    Options::LESS_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no LESS will be deployed.'
                 ),
                 new InputOption(
-                    self::IMAGES_OPTION,
+                    Options::IMAGES_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no images will be deployed.'
                 ),
                 new InputOption(
-                    self::FONTS_OPTION,
+                    Options::FONTS_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no font files will be deployed.'
                 ),
                 new InputOption(
-                    self::HTML_OPTION,
+                    Options::HTML_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no html files will be deployed.'
                 ),
                 new InputOption(
-                    self::MISC_OPTION,
+                    Options::MISC_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no miscellaneous files will be deployed.'
                 ),
                 new InputOption(
-                    self::HTML_MINIFY_OPTION,
+                    Options::HTML_MINIFY_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, just html will not be minified and actually deployed.'
                 ),
                 new InputOption(
-                    self::THEME_OPTION,
+                    Options::THEME_OPTION,
                     '-t',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, just specific theme(s) will be actually deployed.',
                     ['all']
                 ),
                 new InputOption(
-                    self::EXCLUDE_THEME_OPTION,
+                    Options::EXCLUDE_THEME_OPTION,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, exclude specific theme(s) from deployment.',
                     ['none']
                 ),
                 new InputOption(
-                    self::LANGUAGE_OPTION,
+                    Options::LANGUAGE_OPTION,
                     '-l',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of languages you want the tool populate files for.',
                     ['all']
                 ),
                 new InputOption(
-                    self::EXCLUDE_LANGUAGE_OPTION,
+                    Options::EXCLUDE_LANGUAGE_OPTION,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of langiages you do not want the tool populate files for.',
                     ['none']
                 ),
                 new InputOption(
-                    self::AREA_OPTION,
+                    Options::AREA_OPTION,
                     '-a',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you want the tool populate files for.',
                     ['all']
                 ),
                 new InputOption(
-                    self::EXCLUDE_AREA_OPTION,
+                    Options::EXCLUDE_AREA_OPTION,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you do not want the tool populate files for.',
                     ['none']
                 ),
                 new InputOption(
-                    self::JOBS_AMOUNT,
+                    Options::JOBS_AMOUNT_OPTION,
                     '-j',
                     InputOption::VALUE_OPTIONAL,
                     'Amount of jobs to which script can be paralleled.',
@@ -441,7 +357,9 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption(self::FORCE_RUN_OPTION) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
+        if (!$input->getOption(Options::FORCE_RUN_OPTION)
+            && $this->getAppState()->getMode() !== State::MODE_PRODUCTION
+        ) {
             throw new LocalizedException(
                 __(
                     "Deploy static content is applicable only for production mode.\n"
@@ -460,21 +378,12 @@ class DeployStaticContentCommand extends Command
         $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
         $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
 
-        $options = $this->input->getOptions();
         $deployer = $this->objectManager->create(
             \Magento\Deploy\Model\Deployer::class,
             [
                 'filesUtil' => $filesUtil,
                 'output' => $output,
-                'isDryRun' => $options[self::DRY_RUN_OPTION],
-                'skipJavaScript' => $options[self::JAVASCRIPT_OPTION],
-                'skipCss' => $options[self::CSS_OPTION],
-                'skipLess' => $options[self::LESS_OPTION],
-                'skipImages' => $options[self::IMAGES_OPTION],
-                'skipFonts' => $options[self::FONTS_OPTION],
-                'skipHtml' => $options[self::HTML_OPTION],
-                'skipMisc' => $options[self::MISC_OPTION],
-                'skipHtmlMinify' => $options[self::HTML_MINIFY_OPTION]
+                'options' => $this->input->getOptions(),
             ]
         );
 
@@ -514,21 +423,21 @@ class DeployStaticContentCommand extends Command
             }
         }
 
-        $areasInclude = $this->input->getOption(self::AREA_OPTION);
-        $areasExclude = $this->input->getOption(self::EXCLUDE_AREA_OPTION);
+        $areasInclude = $this->input->getOption(Options::AREA_OPTION);
+        $areasExclude = $this->input->getOption(Options::EXCLUDE_AREA_OPTION);
         $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
         $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
 
         $languagesInclude = $this->input->getArgument(self::LANGUAGES_ARGUMENT)
-            ?: $this->input->getOption(self::LANGUAGE_OPTION);
-        $languagesExclude = $this->input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
+            ?: $this->input->getOption(Options::LANGUAGE_OPTION);
+        $languagesExclude = $this->input->getOption(Options::EXCLUDE_LANGUAGE_OPTION);
         $this->checkLanguagesInput($languagesInclude, $languagesExclude);
         $deployableLanguages = $languagesInclude[0] == 'all'
             ? $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude)
             : $languagesInclude;
 
-        $themesInclude = $this->input->getOption(self::THEME_OPTION);
-        $themesExclude = $this->input->getOption(self::EXCLUDE_THEME_OPTION);
+        $themesInclude = $this->input->getOption(Options::THEME_OPTION);
+        $themesExclude = $this->input->getOption(Options::EXCLUDE_THEME_OPTION);
         $this->checkThemesInput($magentoThemes, $themesInclude, $themesExclude);
         $deployableThemes = $this->getDeployableEntities($magentoThemes, $themesInclude, $themesExclude);
 
@@ -620,10 +529,10 @@ class DeployStaticContentCommand extends Command
      */
     private function getProcessesAmount()
     {
-        $jobs = (int)$this->input->getOption(self::JOBS_AMOUNT);
+        $jobs = (int)$this->input->getOption(Options::JOBS_AMOUNT_OPTION);
         if ($jobs < 1) {
             throw new \InvalidArgumentException(
-                self::JOBS_AMOUNT . ' argument has invalid value. It must be greater than 0'
+                Options::JOBS_AMOUNT_OPTION . ' argument has invalid value. It must be greater than 0'
             );
         }
         return $jobs;

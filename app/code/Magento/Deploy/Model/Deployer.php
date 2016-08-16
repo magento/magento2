@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -51,33 +52,6 @@ class Deployer
 
     /** @var \Magento\Framework\View\Asset\Bundle\Manager */
     private $bundleManager;
-
-    /** @var bool */
-    private $isDryRun;
-
-    /** @var bool */
-    private $skipJavaScript;
-
-    /** @var bool */
-    private $skipCss;
-
-    /** @var bool */
-    private $skipLess;
-
-    /** @var bool */
-    private $skipImages;
-
-    /** @var bool */
-    private $skipFonts;
-
-    /** @var bool */
-    private $skipHtml;
-
-    /** @var bool */
-    private $skipMisc;
-
-    /** @var bool */
-    private $skipHtmlMinify;
 
     /** @var int */
     private $count;
@@ -138,6 +112,11 @@ class Deployer
     private $assetConfig;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * Constructor
      *
      * @param Files $filesUtil
@@ -145,16 +124,7 @@ class Deployer
      * @param Version\StorageInterface $versionStorage
      * @param JsTranslationConfig $jsTranslationConfig
      * @param AlternativeSourceInterface[] $alternativeSources
-     * @param bool $isDryRun
-     * @param bool $skipJavaScript
-     * @param bool $skipCss
-     * @param bool $skipLess
-     * @param bool $skipImages
-     * @param bool $skipFonts
-     * @param bool $skipHtml
-     * @param bool $skipMisc
-     * @param bool $skipHtmlMinify
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param array $options
      */
     public function __construct(
         Files $filesUtil,
@@ -162,29 +132,13 @@ class Deployer
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
-        $isDryRun = false,
-        $skipJavaScript = false,
-        $skipCss = false,
-        $skipLess = false,
-        $skipImages = false,
-        $skipFonts = false,
-        $skipHtml = false,
-        $skipMisc = false,
-        $skipHtmlMinify = false
+        array $options = []
     ) {
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
-        $this->isDryRun = $isDryRun;
-        $this->skipJavaScript = $skipJavaScript;
-        $this->skipCss = $skipCss;
-        $this->skipLess = $skipLess;
-        $this->skipImages = $skipImages;
-        $this->skipFonts = $skipFonts;
-        $this->skipHtml = $skipHtml;
-        $this->skipMisc = $skipMisc;
-        $this->skipHtmlMinify = $skipHtmlMinify;
         $this->jsTranslationConfig = $jsTranslationConfig;
+        $this->options = $options;
         $this->parentTheme = [];
 
         array_map(
@@ -194,6 +148,15 @@ class Deployer
         );
         $this->alternativeSources = $alternativeSources;
 
+    }
+
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    private function getOption($name)
+    {
+        return isset($this->options[$name]) ? $this->options[$name] : null;
     }
 
     /**
@@ -209,28 +172,28 @@ class Deployer
         $path = $filePath;
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        $check = ($this->skipJavaScript
-            || $this->skipCss
-            || $this->skipLess
-            || $this->skipHtml
-            || $this->skipImages
-            || $this->skipFonts
-            || $this->skipMisc);
+        $check = ($this->getOption(Options::JAVASCRIPT_OPTION)
+            || $this->getOption(Options::CSS_OPTION)
+            || $this->getOption(Options::LESS_OPTION)
+            || $this->getOption(Options::HTML_OPTION)
+            || $this->getOption(Options::IMAGES_OPTION)
+            || $this->getOption(Options::FONTS_OPTION)
+            || $this->getOption(Options::MISC_OPTION));
 
         if ($check && $filePath != '.') {
-            if ($this->skipJavaScript && in_array($ext, $this->fileExtensionsJs)) {
+            if ($this->getOption(Options::JAVASCRIPT_OPTION) && in_array($ext, $this->fileExtensionsJs)) {
                 return true;
-            } elseif ($this->skipCss && in_array($ext, $this->fileExtensionsCss)) {
+            } elseif ($this->getOption(Options::CSS_OPTION) && in_array($ext, $this->fileExtensionsCss)) {
                 return true;
-            } elseif ($this->skipLess && in_array($ext, $this->fileExtensionsLess)) {
+            } elseif ($this->getOption(Options::LESS_OPTION) && in_array($ext, $this->fileExtensionsLess)) {
                 return true;
-            } elseif ($this->skipHtml && in_array($ext, $this->fileExtensionsHtml)) {
+            } elseif ($this->getOption(Options::HTML_OPTION) && in_array($ext, $this->fileExtensionsHtml)) {
                 return true;
-            } elseif ($this->skipImages && in_array($ext, $this->fileExtensionsImages)) {
+            } elseif ($this->getOption(Options::IMAGES_OPTION) && in_array($ext, $this->fileExtensionsImages)) {
                 return true;
-            } elseif ($this->skipFonts && in_array($ext, $this->fileExtensionsFonts)) {
+            } elseif ($this->getOption(Options::FONTS_OPTION) && in_array($ext, $this->fileExtensionsFonts)) {
                 return true;
-            } elseif ($this->skipMisc && in_array($ext, $this->fileExtensionsMisc)) {
+            } elseif ($this->getOption(Options::MISC_OPTION) && in_array($ext, $this->fileExtensionsMisc)) {
                 return true;
             }
 
@@ -253,7 +216,7 @@ class Deployer
     {
         $this->omFactory = $omFactory;
 
-        if ($this->isDryRun) {
+        if ($this->getOption(Options::DRY_RUN_OPTION)) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
@@ -338,7 +301,7 @@ class Deployer
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
-                    if (!$this->skipJavaScript) {
+                    if (!$this->getOption(Options::JAVASCRIPT_OPTION)) {
                         if ($this->jsTranslationConfig->dictionaryEnabled()) {
                             $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                             $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
@@ -352,7 +315,7 @@ class Deployer
                 }
             }
         }
-        if (!$this->skipHtmlMinify && $this->getAssetConfig()->isMinifyHtml()) {
+        if (!$this->getOption(Options::HTML_MINIFY_OPTION) && $this->getAssetConfig()->isMinifyHtml()) {
             $this->output->writeln('=== Minify templates ===');
             $this->count = 0;
             foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
@@ -367,7 +330,7 @@ class Deployer
             $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
             $version = (new \DateTime())->getTimestamp();
             $this->output->writeln("New version of deployed files: {$version}");
-            if (!$this->isDryRun) {
+            if (!$this->getOption(Options::DRY_RUN_OPTION)) {
                 $this->versionStorage->save($version);
             }
         }
@@ -480,7 +443,7 @@ class Deployer
             } else {
                 $this->output->write('.');
             }
-            if ($this->isDryRun) {
+            if ($this->getOption(Options::DRY_RUN_OPTION)) {
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
