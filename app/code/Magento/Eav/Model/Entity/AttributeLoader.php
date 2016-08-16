@@ -62,17 +62,10 @@ class AttributeLoader implements AttributeLoaderInterface
      * @return AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
-        $attributeSetId = 0;
-        $storeId = 0;
-        if ($object instanceof \Magento\Framework\DataObject) {
-            $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
-            $storeId = $object->getStoreId() ?: $storeId;
-        }
-        $suffix = $storeId . '-' . $attributeSetId;
+        $suffix = $this->getLoadAllAttributesCacheSuffix();
 
         $typeCode = $resource->getEntityType()->getEntityTypeCode();
         $attributes = $this->cache->getAttributes($typeCode, $suffix);
@@ -107,6 +100,22 @@ class AttributeLoader implements AttributeLoaderInterface
         }
         $this->cache->saveAttributes($typeCode, $attributes, $suffix);
         return $resource;
+    }
+
+    /**
+     * @param DataObject|null $object
+     * @return string
+     */
+    private function getLoadAllAttributesCacheSuffix(DataObject $object = null)
+    {
+        $attributeSetId = 0;
+        $storeId = 0;
+        if (null !== $object) {
+            $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
+            $storeId = $object->getStoreId() ?: $storeId;
+        }
+        $suffix = $storeId . '-' . $attributeSetId;
+        return $suffix;
     }
 
     /**
