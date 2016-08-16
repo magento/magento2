@@ -11,6 +11,9 @@ use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Config\Model\Config\Structure\ElementInterface;
 use Magento\Paypal\Helper\Backend as BackendHelper;
 
+/**
+ * Plugin for \Magento\Config\Model\Config\Structure
+ */
 class StructurePlugin
 {
     /**
@@ -27,6 +30,11 @@ class StructurePlugin
      * @var ScopeDefiner
      */
     protected $_scopeDefiner;
+
+    /**
+     * @var bool
+     */
+    private $isSectionChanged;
 
     /**
      * @var string[]
@@ -76,36 +84,52 @@ class StructurePlugin
      * Substitute payment section with PayPal configs
      *
      * @param Structure $subject
-     * @param \Closure $proceed
      * @param array $pathParts
-     * @return ElementInterface
+     * @return array
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetElementByPathParts(
-        Structure $subject,
-        \Closure $proceed,
-        array $pathParts
-    ) {
-        $isSectionChanged = $pathParts[0] == 'payment';
-        if ($isSectionChanged) {
+    public function beforeGetElementByPathParts(Structure $subject, array $pathParts)
+    {
+        $this->isSectionChanged = $pathParts[0] == 'payment';
+
+        if ($this->isSectionChanged) {
             $requestedCountrySection = 'payment_' . strtolower($this->_helper->getConfigurationCountryCode());
+
             if (in_array($requestedCountrySection, self::getPaypalConfigCountries())) {
                 $pathParts[0] = $requestedCountrySection;
             } else {
                 $pathParts[0] = 'payment_other';
             }
         }
-        /** @var ElementInterface $result */
-        $result = $proceed($pathParts);
-        if ($isSectionChanged && isset($result)) {
+
+        return [$pathParts];
+    }
+
+    /**
+     * Substitute payment section with PayPal configs
+     *
+     * @param Structure $subject
+     * @param ElementInterface|null $result
+     * @return ElementInterface|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGetElementByPathParts(Structure $subject, ElementInterface $result = null)
+    {
+        if ($this->isSectionChanged && $result) {
             if ($result instanceof Section) {
                 $this->restructurePayments($result);
-                $result->setData(array_merge(
-                    $result->getData(),
-                    ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
-                ), $this->_scopeDefiner->getScope());
+                $result->setData(
+                    array_merge(
+                        $result->getData(),
+                        ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
+                    ),
+                    $this->_scopeDefiner->getScope()
+                );
             }
         }
+
         return $result;
     }
 
