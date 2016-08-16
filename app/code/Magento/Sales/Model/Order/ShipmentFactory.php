@@ -156,21 +156,21 @@ class ShipmentFactory
      * Adds tracks to the shipment.
      *
      * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
-     * @param array $tracks
+     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Api\Data\ShipmentInterface
      */
     protected function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
     {
-        foreach ($tracks as $data) {
-            if (empty($data['number'])) {
+        foreach ($tracks as $track) {
+            if (!$track->getTrackNumber()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please enter a tracking number.')
                 );
             }
 
             $shipment->addTrack(
-                $this->trackFactory->create()->addData($data)
+                $this->trackFactory->create()->addData($track->getData())
             );
         }
 
