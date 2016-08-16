@@ -185,11 +185,7 @@
           <xs:element name="CountryOfManufacture" type="xs:string" minOccurs="0"/>
           <xs:element name="HarmonizedCode" type="xs:string" minOccurs="0"/>
           <xs:element name="Weight" type="ns:Weight" minOccurs="0"/>
-          <xs:element name="Quantity" type="xs:decimal" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>This field is used for enterprise transactions.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Quantity" type="xs:decimal" minOccurs="0"/>
           <xs:element name="QuantityUnits" type="xs:string" minOccurs="0"/>
           <xs:element name="AdditionalMeasures" type="ns:Measure" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
