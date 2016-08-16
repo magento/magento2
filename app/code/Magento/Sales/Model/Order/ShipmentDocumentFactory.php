@@ -109,9 +109,8 @@ class ShipmentDocumentFactory
                 );
             }
             $hydrator = $this->hydratorPool->getHydrator(ShipmentTrackCreationInterface::class);
-            $shipment->addTrack($this->trackFactory->create($hydrator->extract($track)));
+            $shipment->addTrack($this->trackFactory->create(['data' => $hydrator->extract($track)]));
         }
-
         return $shipment;
     }
 
