@@ -184,7 +184,7 @@ class Sftp extends AbstractIo
      */
     public function write($filename, $source, $mode = null)
     {
-        $mode = is_readable($source) ? NET_SFTP_LOCAL_FILE : NET_SFTP_STRING;
+        $mode = is_readable($source) ? \phpseclib\Net\SFTP::SOURCE_LOCAL_FILE : \phpseclib\Net\SFTP::SOURCE_STRING;
         return $this->_connection->put($filename, $source, $mode);
     }
 
