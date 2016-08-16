@@ -67,6 +67,7 @@
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
+    <preference for="Magento\Sales\Api\ShipOrderInterface" type="Magento\Sales\Model\ShipOrder"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
     <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>
     <preference for="Magento\Sales\Model\Order\PaymentAdapterInterface" type="Magento\Sales\Model\Order\PaymentAdapter"/>
