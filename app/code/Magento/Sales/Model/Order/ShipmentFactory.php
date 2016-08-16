@@ -6,9 +6,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 
 /**
@@ -43,26 +41,18 @@ class ShipmentFactory
     private $shipmentValidator;
 
     /**
-     * @var HydratorPool
-     */
-    private $hydratorPool;
-
-    /**
-     * ShipmentFactory constructor.
+     * Factory constructor.
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
-     * @param Shipment\TrackFactory $trackFactory
-     * @param HydratorPool $hydratorPool
+     * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        HydratorPool $hydratorPool
+        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;
         $this->instanceName = \Magento\Sales\Api\Data\ShipmentInterface::class;
-        $this->hydratorPool = $hydratorPool;
     }
 
     /**
@@ -166,20 +156,22 @@ class ShipmentFactory
      * Adds tracks to the shipment.
      *
      * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
-     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
+     * @param array $tracks
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Api\Data\ShipmentInterface
      */
     protected function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
     {
-        foreach ($tracks as $track) {
-            if (!$track->getTrackNumber()) {
+        foreach ($tracks as $data) {
+            if (empty($data['number'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please enter a tracking number.')
                 );
             }
-            $hydrator = $this->hydratorPool->getHydrator(ShipmentTrackCreationInterface::class);
-            $shipment->addTrack($hydrator->extract($track));
+
+            $shipment->addTrack(
+                $this->trackFactory->create()->addData($data)
+            );
         }
 
         return $shipment;

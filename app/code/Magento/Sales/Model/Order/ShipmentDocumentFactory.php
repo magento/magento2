@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
@@ -13,6 +14,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Api\Data\ShipmentPackageInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
 
 /**
  * Class InvoiceDocumentFactory
@@ -27,13 +29,30 @@ class ShipmentDocumentFactory
     private $shipmentFactory;
 
     /**
+     * @var TrackFactory
+     */
+    private $trackFactory;
+
+    /**
+     * @var HydratorPool
+     */
+    private $hydratorPool;
+
+    /**
      * ShipmentDocumentFactory constructor.
+     *
      * @param ShipmentFactory $shipmentFactory
+     * @param HydratorPool $hydratorPool
+     * @param TrackFactory $trackFactory
      */
     public function __construct(
-        ShipmentFactory $shipmentFactory
+        ShipmentFactory $shipmentFactory,
+        HydratorPool $hydratorPool,
+        TrackFactory $trackFactory
     ) {
         $this->shipmentFactory = $shipmentFactory;
+        $this->trackFactory = $trackFactory;
+        $this->hydratorPool = $hydratorPool;
     }
 
     /**
@@ -59,10 +78,9 @@ class ShipmentDocumentFactory
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
             $order,
-            $shipmentItems,
-            $tracks
+            $shipmentItems
         );
-
+        $this->prepareTracks($shipment, $tracks);
         if ($comment) {
             $shipment->addComment(
                 $comment->getComment(),
@@ -73,6 +91,30 @@ class ShipmentDocumentFactory
 
         return $shipment;
     }
+
+    /**
+     * Adds tracks to the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
+     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Sales\Api\Data\ShipmentInterface
+     */
+    private function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
+    {
+        foreach ($tracks as $track) {
+            if (!$track->getTrackNumber()) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Please enter a tracking number.')
+                );
+            }
+            $hydrator = $this->hydratorPool->getHydrator(ShipmentTrackCreationInterface::class);
+            $shipment->addTrack($this->trackFactory->create($hydrator->extract($track)));
+        }
+
+        return $shipment;
+    }
+
 
     /**
      * Convert Items To Array
