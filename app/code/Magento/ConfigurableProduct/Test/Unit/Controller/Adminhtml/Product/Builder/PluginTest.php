@@ -23,12 +23,12 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     protected $configurableTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
 
@@ -48,7 +48,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     protected $frontendAttrMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
@@ -256,7 +256,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->productMock,
-            $this->plugin->aroundBuild($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
     }
 
@@ -283,7 +283,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
         $this->assertEquals(
             $this->productMock,
-            $this->plugin->aroundBuild($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
     }
 
@@ -299,7 +299,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
         $this->assertEquals(
             $this->productMock,
-            $this->plugin->aroundBuild($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
     }
 }

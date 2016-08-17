@@ -79,7 +79,8 @@ class CustomerPlugin
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(CustomerRepository $subject, $result, CustomerInterface $customer) {
+    public function afterDelete(CustomerRepository $subject, $result, CustomerInterface $customer)
+    {
         $subscriber = $this->subscriberFactory->create();
         $subscriber->loadByEmail($customer->getEmail());
         if ($subscriber->getId()) {
