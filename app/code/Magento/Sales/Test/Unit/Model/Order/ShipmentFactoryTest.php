@@ -33,11 +33,6 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
     protected $trackFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $shipmentValidatorMock;
-
-    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -71,9 +66,6 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->shipmentValidatorMock = $this->getMockBuilder(
-            \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface::class
-        )->getMockForAbstractClass();
 
         $this->subject = $objectManager->getObject(
             \Magento\Sales\Model\Order\ShipmentFactory::class,
@@ -81,12 +73,6 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
                 'convertOrderFactory' => $convertOrderFactory,
                 'trackFactory' => $this->trackFactory
             ]
-        );
-
-        $objectManager->setBackwardCompatibleProperty(
-            $this->subject,
-            'shipmentValidator',
-            $this->shipmentValidatorMock
         );
     }
 
