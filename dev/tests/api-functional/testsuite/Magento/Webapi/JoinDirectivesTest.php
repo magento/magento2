@@ -44,6 +44,8 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+     * Rollback rules
+     * @magentoApiDataFixture Magento/SalesRule/_files/rules_rollback.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetList()
