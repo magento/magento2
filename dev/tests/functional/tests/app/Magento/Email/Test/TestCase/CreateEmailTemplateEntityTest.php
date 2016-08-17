@@ -63,14 +63,14 @@ class CreateEmailTemplateEntityTest extends Injectable
     }
 
     /**
-     * @param EmailTemplate $EmailTemplate
+     * @param EmailTemplate $emailTemplate
      */
 
-    public function test(EmailTemplate $EmailTemplate)
+    public function test(EmailTemplate $emailTemplate)
     {
         $this->emailTemplateIndex->open();
         $this->emailTemplateIndex->getPageActionsBlock()->addNew();
-        $this->emailTemplateNew->getTemplateForm()->fill($EmailTemplate);
+        $this->emailTemplateNew->getTemplateForm()->fill($emailTemplate);
         $this->emailTemplateNew->getTemplateForm()->clickLoadTemplate();
         $this->emailTemplateNew->getFormPageActions()->save();
     }
