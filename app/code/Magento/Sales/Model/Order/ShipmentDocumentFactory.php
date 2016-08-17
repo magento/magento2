@@ -74,7 +74,7 @@ class ShipmentDocumentFactory
         ShipmentCommentCreationInterface $comment = null,
         $appendComment = false,
         $packages = [],
-        ShipmentCreationArgumentsInterface $arguments = []
+        ShipmentCreationArgumentsInterface $arguments = null
     ) {
 
         $shipmentItems = $this->itemsToArray($items);
