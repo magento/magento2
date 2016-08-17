@@ -36,11 +36,6 @@ class ShipmentFactory
     protected $instanceName;
 
     /**
-     * @var ShipmentValidatorInterface
-     */
-    private $shipmentValidator;
-
-    /**
      * Factory constructor.
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory

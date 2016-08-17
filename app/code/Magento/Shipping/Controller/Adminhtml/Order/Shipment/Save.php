@@ -8,10 +8,12 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ObjectManager;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
+/**
+ * Class Save
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -32,7 +34,7 @@ class Save extends \Magento\Backend\App\Action
     protected $labelGenerator;
 
     /**
-     * @var ShipmentSender
+     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
      */
     protected $shipmentSender;
 
@@ -42,16 +44,16 @@ class Save extends \Magento\Backend\App\Action
     private $shipmentValidator;
 
     /**
-     * @param Action\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
-     * @param ShipmentSender $shipmentSender
+     * @param \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender
      */
     public function __construct(
-        Action\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
         \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
-        ShipmentSender $shipmentSender
+        \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->labelGenerator = $labelGenerator;
@@ -183,13 +185,15 @@ class Save extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return ShipmentValidatorInterface
+     * @return \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
      * @deprecated
      */
     private function getShipmentValidator()
     {
         if ($this->shipmentValidator === null) {
-            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
+            $this->shipmentValidator = ObjectManager::getInstance()->get(
+                \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface::class
+            );
         }
 
         return $this->shipmentValidator;
