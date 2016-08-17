@@ -51,10 +51,23 @@ class ShipmentQuantityValidator implements ValidatorInterface
         $messages = [];
 
         $order = $this->orderRepository->get($entity->getOrderId());
-        foreach ($entity->getItems() as $shipmentItem) {
-            $messages = array_merge($messages, $this->validateShipmentItem($shipmentItem, $order));
-        }
+        $totalQuantity = 0;
+        foreach ($entity->getItems() as $item) {
+            $orderItem = $this->getOrderItemById($order, $item->getOrderItemId());
+            if ($orderItem === null) {
+                $messages[] = __('We can not found item "%1" in order.', $item->getOrderItemId());
+                continue;
+            }
 
+            if (!$this->isQtyAvailable($orderItem, $item->getQty())) {
+                $messages[] =__('We found an invalid quantity to ship for item "%1".', $item->getName());
+            } else {
+                $totalQuantity += $item->getQty();
+            }
+        }
+        if ($totalQuantity <= 0) {
+            $messages[] = __('You can\'t create a shipment without products.');
+        }
         return $messages;
     }
 
