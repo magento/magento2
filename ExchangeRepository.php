@@ -50,7 +50,7 @@ class ExchangeRepository
     }
 
     /**
-     * Get connection type resolver.
+     * Get exchange factory.
      *
      * @return ExchangeFactoryInterface
      * @deprecated

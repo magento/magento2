@@ -54,7 +54,7 @@ class QueueRepository
     }
 
     /**
-     * Get connection type resolver.
+     * Get queue factory.
      *
      * @return QueueFactoryInterface
      * @deprecated

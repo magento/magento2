@@ -167,7 +167,7 @@ class PublisherPool implements PublisherInterface
     }
 
     /**
-     * Get publisher config.
+     * Get connection type resolver.
      *
      * @return ConnectionTypeResolver
      *
