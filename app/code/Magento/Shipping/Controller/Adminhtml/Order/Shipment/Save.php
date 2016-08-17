@@ -200,20 +200,4 @@ class Save extends \Magento\Backend\App\Action
 
         return $this->shipmentValidator;
     }
-
-    /**
-     * @param $isNeedCreateLabel
-     * @param $responseAjax
-     * @param $message
-     */
-    private function handleError($isNeedCreateLabel, $responseAjax, $message)
-    {
-        if ($isNeedCreateLabel) {
-            $responseAjax->setError(true);
-            $responseAjax->setMessage($message);
-        } else {
-            $this->messageManager->addError($message);
-            $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
-        }
-    }
 }
