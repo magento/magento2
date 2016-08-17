@@ -1,10 +1,13 @@
 <?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Config\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Config\Test\Page\Adminhtml\AdminAccountSharing;
-use Magento\Config\Test\Fixture\ConfigDataWithAdminAccountSharing;
 
 /**
  * Steps:
@@ -49,10 +52,9 @@ class VerifyAdminAccountSharingEntityTest extends Injectable
     /**
      * Create Verify Admin Account Sharing test.
      *
-     * @param ConfigDataWithAdminAccountSharing $ConfigDataWithAdminAccountSharing
      * @return void
      */
-    public function test(ConfigDataWithAdminAccountSharing $ConfigDataWithAdminAccountSharing)
+    public function test()
     {
         $this->adminAccountSharing->open();
 
