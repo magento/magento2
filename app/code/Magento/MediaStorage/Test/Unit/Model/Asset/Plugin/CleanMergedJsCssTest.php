@@ -23,11 +23,6 @@ class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTes
     private $filesystemMock;
 
     /**
-     * @var bool
-     */
-    private $hasBeenCalled = false;
-
-    /**
      * @var \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
      */
     private $model;
@@ -48,9 +43,7 @@ class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTes
 
     public function testAroundCleanMergedJsCss()
     {
-        $callable = function () {
-            $this->hasBeenCalled = true;
-        };
+        $this->hasBeenCalled = true;
         $readDir = 'read directory';
         $mergedDir = $readDir .  '/' . \Magento\Framework\View\Asset\Merged::getRelativeDir();
 
@@ -65,11 +58,9 @@ class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTes
             ->with(DirectoryList::STATIC_VIEW)
             ->willReturn($readDirectoryMock);
 
-        $this->model->aroundCleanMergedJsCss(
+        $this->model->afterCleanMergedJsCss(
             $this->basicMock(\Magento\Framework\View\Asset\MergeService::class),
-            $callable
+            null
         );
-
-        $this->assertTrue($this->hasBeenCalled);
     }
 }
