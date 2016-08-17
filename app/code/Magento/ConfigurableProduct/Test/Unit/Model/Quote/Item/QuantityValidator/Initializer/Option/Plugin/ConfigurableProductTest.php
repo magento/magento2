@@ -42,12 +42,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             \Magento\Quote\Model\Quote\Item\Option::class, ['getProduct', '__wakeup'], [], '', false
         );
 
-        $proceed = function () use ($stockItemMock) {
-            return $stockItemMock;
-        };
-
         $model = new \Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct();
-        $model->aroundGetStockItem($subjectMock, $proceed, $optionMock, $quoteItemMock, 0);
+        $model->afterGetStockItem($subjectMock, $stockItemMock, $optionMock, $quoteItemMock, 0);
     }
 
     /**

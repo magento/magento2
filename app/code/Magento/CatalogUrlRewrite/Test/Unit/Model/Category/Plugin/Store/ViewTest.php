@@ -18,6 +18,9 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\Product as Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -33,11 +33,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     private $productFactory;
 
     /**
-     * @var \Closure
-     */
-    private $closure;
-
-    /**
      * @var Product|MockObject
      */
     private $product;
@@ -91,10 +86,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getExtensionAttributes'])
             ->getMock();
 
-        $this->closure = function () {
-            return $this->result;
-        };
-
         $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
 
         $this->extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
@@ -122,7 +113,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->result,
-            $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product)
+            $this->plugin->afterSave($this->productRepository, $this->product, $this->product)
         );
     }
 
@@ -148,7 +139,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->result,
-            $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product)
+            $this->plugin->afterSave($this->productRepository, $this->product, $this->product)
         );
     }
 
@@ -191,7 +182,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('getData');
 
-        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->product, $this->product);
     }
 
     /**
@@ -248,7 +239,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willReturn(false);
 
-        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->product, $this->product);
     }
 
     /**
@@ -303,6 +294,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willReturn($attributeId);
 
-        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->product, $this->product);
     }
 }
