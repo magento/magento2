@@ -80,8 +80,6 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
                 'searchCriteriaBuilder' => $searchCriteriaBuilder
             ]);
 
-
-
         $actual = $customAttributesMapper->entityToDatabase(
             \Magento\Customer\Api\Data\AddressInterface::class,
             [

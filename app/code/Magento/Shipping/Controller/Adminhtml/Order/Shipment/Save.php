@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
 /**
  * Class Save
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Backend\App\Action
 {
