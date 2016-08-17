@@ -48,8 +48,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('title="Last Name"', $html);
         $this->assertContains('value="Doe"', $html);
         $this->assertNotContains('title="Middle Name/Initial"', $html);
-        $this->assertNotContains('title="Prefix"', $html);
-        $this->assertNotContains('title="Suffix"', $html);
+        $this->assertNotContains('title="Name Prefix"', $html);
+        $this->assertNotContains('title="Name Suffix"', $html);
     }
 
     /**
@@ -84,9 +84,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('value="Doe"', $html);
         $this->assertContains('title="Middle Name/Initial"', $html);
         $this->assertContains('value="Roe"', $html);
-        $this->assertContains('title="Prefix"', $html);
+        $this->assertContains('title="Name Prefix"', $html);
         $this->assertContains('value="Dr."', $html);
-        $this->assertContains('title="Suffix"', $html);
+        $this->assertContains('title="Name Suffix"', $html);
         $this->assertContains('value="Ph.D."', $html);
     }
 }
