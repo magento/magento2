@@ -194,8 +194,6 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $this->shipmentValidatorMock->expects($this->once())->method('validate')->willReturn([]);
-
         $this->assertEquals($shipment, $this->subject->create($order, ['1' => 5], $tracks));
     }
 
