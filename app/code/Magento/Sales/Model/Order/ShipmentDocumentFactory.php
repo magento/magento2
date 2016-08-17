@@ -47,22 +47,22 @@ class ShipmentDocumentFactory
 
     /**
      * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @param array $items
-     * @param array $tracks
+     * @param \Magento\Sales\Api\Data\ShipmentItemCreationInterface[] $items
+     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
      * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
      * @param bool $appendComment
-     * @param array $packages
-     * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments
+     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
+     * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return Shipment
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function create(
         \Magento\Sales\Api\Data\OrderInterface $order,
-        $items = [],
-        $tracks = [],
+        array $items = [],
+        array $tracks = [],
         \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         $appendComment = false,
-        $packages = [],
+        array $packages = [],
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
 
