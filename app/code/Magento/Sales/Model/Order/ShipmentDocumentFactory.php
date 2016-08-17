@@ -10,6 +10,7 @@ use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
+use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Api\Data\ShipmentPackageInterface;
@@ -62,6 +63,7 @@ class ShipmentDocumentFactory
      * @param ShipmentCommentCreationInterface|null $comment
      * @param bool $appendComment
      * @param array $packages
+     * @param ShipmentCreationArgumentsInterface $arguments
      * @return Shipment
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -71,7 +73,8 @@ class ShipmentDocumentFactory
         $tracks = [],
         ShipmentCommentCreationInterface $comment = null,
         $appendComment = false,
-        $packages = []
+        $packages = [],
+        ShipmentCreationArgumentsInterface $arguments = []
     ) {
 
         $shipmentItems = $this->itemsToArray($items);
