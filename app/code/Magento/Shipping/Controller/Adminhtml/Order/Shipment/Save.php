@@ -8,7 +8,6 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ObjectManager;
-use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
 /**
@@ -39,7 +38,7 @@ class Save extends \Magento\Backend\App\Action
     protected $shipmentSender;
 
     /**
-     * @var ShipmentValidatorInterface
+     * @var \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
      */
     private $shipmentValidator;
 
