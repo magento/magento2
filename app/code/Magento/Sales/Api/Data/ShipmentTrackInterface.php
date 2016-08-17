@@ -141,6 +141,51 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
     public function setParentId($id);
 
     /**
+     * Sets the weight for the shipment package.
+     *
+     * @param float $weight
+     * @return $this
+     */
+    public function setWeight($weight);
+
+    /**
+     * Gets the weight for the shipment package.
+     *
+     * @return float Weight.
+     */
+    public function getWeight();
+
+    /**
+     * Sets the quantity for the shipment package.
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty);
+
+    /**
+     * Gets the quantity for the shipment package.
+     *
+     * @return float Quantity.
+     */
+    public function getQty();
+
+    /**
+     * Sets the description for the shipment package.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description);
+
+    /**
+     * Gets the description for the shipment package.
+     *
+     * @return string Description.
+     */
+    public function getDescription();
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null

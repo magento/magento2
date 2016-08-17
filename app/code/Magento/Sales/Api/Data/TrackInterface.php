@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Api\Data;
 
 /**
@@ -13,36 +12,6 @@ namespace Magento\Sales\Api\Data;
  */
 interface TrackInterface
 {
-    /**
-     * Sets the weight for the shipment package.
-     *
-     * @param float $weight
-     * @return $this
-     */
-    public function setWeight($weight);
-
-    /**
-     * Gets the weight for the shipment package.
-     *
-     * @return float Weight.
-     */
-    public function getWeight();
-
-    /**
-     * Sets the quantity for the shipment package.
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty);
-
-    /**
-     * Gets the quantity for the shipment package.
-     *
-     * @return float Quantity.
-     */
-    public function getQty();
-
     /**
      * Sets the track number for the shipment package.
      *
@@ -57,21 +26,6 @@ interface TrackInterface
      * @return string Track number.
      */
     public function getTrackNumber();
-
-    /**
-     * Sets the description for the shipment package.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function setDescription($description);
-
-    /**
-     * Gets the description for the shipment package.
-     *
-     * @return string Description.
-     */
-    public function getDescription();
 
     /**
      * Sets the title for the shipment package.

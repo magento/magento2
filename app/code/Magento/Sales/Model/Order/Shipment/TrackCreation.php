@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
@@ -14,24 +13,9 @@ use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 class TrackCreation implements ShipmentTrackCreationInterface
 {
     /**
-     * @var float
-     */
-    private $weight;
-
-    /**
-     * @var float
-     */
-    private $qty;
-
-    /**
      * @var string
      */
     private $trackNumber;
-
-    /**
-     * @var string
-     */
-    private $description;
 
     /**
      * @var string
@@ -51,40 +35,6 @@ class TrackCreation implements ShipmentTrackCreationInterface
     /**
      * {@inheritdoc}
      */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getQty()
-    {
-        return $this->qty;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setQty($qty)
-    {
-        $this->qty = $qty;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTrackNumber()
     {
         return $this->trackNumber;
@@ -98,24 +48,6 @@ class TrackCreation implements ShipmentTrackCreationInterface
         $this->trackNumber = $trackNumber;
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
     /**
      * {@inheritdoc}
      */
