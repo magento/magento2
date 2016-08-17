@@ -91,6 +91,7 @@ class ShipOrder implements ShipOrderInterface
      * @param OrderConfig $config
      * @param ShipmentRepositoryInterface $shipmentRepository
      * @param NotifierInterface $notifierInterface
+     * @param OrderRegistrarInterface $orderRegistrar
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

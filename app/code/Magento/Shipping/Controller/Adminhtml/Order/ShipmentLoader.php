@@ -57,11 +57,6 @@ class ShipmentLoader extends DataObject
     protected $orderRepository;
 
     /**
-     * @var ShipmentValidatorInterface
-     */
-    private $shipmentValidator;
-
-    /**
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository

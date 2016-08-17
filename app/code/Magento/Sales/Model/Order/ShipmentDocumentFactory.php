@@ -9,11 +9,8 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
-use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
-use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
-use Magento\Sales\Api\Data\ShipmentPackageInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 
@@ -120,7 +117,7 @@ class ShipmentDocumentFactory
     /**
      * Convert Items To Array
      *
-     * @param InvoiceItemCreationInterface[] $items
+     * @param ShipmentItemCreationInterface[] $items
      * @return array
      */
     private function itemsToArray($items = [])
