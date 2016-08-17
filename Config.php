@@ -34,7 +34,7 @@ class Config
     /**
      * Deployment configuration
      *
-     * @var array
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 
