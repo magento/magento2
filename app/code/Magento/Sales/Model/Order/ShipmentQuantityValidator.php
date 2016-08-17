@@ -72,26 +72,6 @@ class ShipmentQuantityValidator implements ValidatorInterface
     }
 
     /**
-     * @param ShipmentItemInterface $item
-     * @param OrderInterface $order
-     * @return string[]
-     */
-    public function validateShipmentItem(ShipmentItemInterface $item, OrderInterface $order)
-    {
-        $messages = [];
-        $orderItem = $this->getOrderItemById($order, $item->getOrderItemId());
-        if ($orderItem === null) {
-            return [__('We can not found item "%1" in order.', $item->getOrderItemId())];
-        }
-
-        if (!$this->isQtyAvailable($orderItem, $item->getQty())) {
-            $messages[] =__('We found an invalid quantity to ship for item "%1".', $item->getName());
-        }
-
-        return $messages;
-    }
-
-    /**
      * @param OrderInterface $order
      * @param int $id
      * @return \Magento\Sales\Api\Data\OrderItemInterface|null
