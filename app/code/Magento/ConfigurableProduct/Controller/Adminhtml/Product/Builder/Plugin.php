@@ -39,7 +39,7 @@ class Plugin
      * @param Product $product
      * @param RequestInterface $request
      * @return Product
-     * SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterBuild(

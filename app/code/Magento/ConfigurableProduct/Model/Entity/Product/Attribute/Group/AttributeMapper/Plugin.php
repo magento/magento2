@@ -44,7 +44,7 @@ class Plugin
     }
 
     /**
-     * AttributeMapperInterface $subject
+     * @param AttributeMapperInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -57,7 +57,7 @@ class Plugin
      * Add is_configurable field to attribute presentation
      *
      * @param AttributeMapperInterface $subject
-     * @param array
+     * @param array $result
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      *
      * @return array
