@@ -8,6 +8,8 @@ namespace Magento\Sales\Model\ResourceModel\Order\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
 class Authorization
 {
@@ -26,19 +28,19 @@ class Authorization
     }
 
     /**
-     * @param \Magento\Sales\Model\ResourceModel\Order $subject
-     * @param \Magento\Sales\Model\ResourceModel\Order $result
+     * @param ResourceOrder $subject
+     * @param ResourceOrder $result
      * @param \Magento\Framework\Model\AbstractModel $order
-     * @return \Magento\Sales\Model\ResourceModel\Order
+     * @return ResourceOrder
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLoad(
-        \Magento\Sales\Model\ResourceModel\Order $subject,
-        \Magento\Sales\Model\ResourceModel\Order $result,
+        ResourceOrder $subject,
+        ResourceOrder $result,
         \Magento\Framework\Model\AbstractModel $order
     ) {
-        if ($order instanceof \Magento\Sales\Model\Order) {
+        if ($order instanceof Order) {
             if (!$this->isAllowed($order)) {
                 throw NoSuchEntityException::singleField('orderId', $order->getId());
             }
@@ -52,7 +54,7 @@ class Authorization
      * @param \Magento\Sales\Model\Order $order
      * @return bool
      */
-    protected function isAllowed(\Magento\Sales\Model\Order $order)
+    protected function isAllowed(Order $order)
     {
         return $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER
             ? $order->getCustomerId() == $this->userContext->getUserId()

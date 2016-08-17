@@ -9,7 +9,6 @@ namespace Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
-use Magento\Catalog\Model\ProductLink\Link as ProductLink;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link as GroupedLink;
 
 class RelationPersister
@@ -23,11 +22,6 @@ class RelationPersister
      * @var LinkFactory
      */
     private $linkFactory;
-
-    /**
-     * @var ProductLink
-     */
-    private $link;
 
     /**
      * RelationPersister constructor.
@@ -64,29 +58,23 @@ class RelationPersister
     }
 
     /**
+     * Remove grouped products from product relation table
+     *
      * @param Link $subject
+     * @param \Closure $proceed
      * @param int $linkId
-     * @return array
+     * @return Link
      */
-    public function beforeDeleteProductLink(Link $subject, $linkId)
+    public function aroundDeleteProductLink(Link $subject, \Closure $proceed, $linkId)
     {
-        $this->link = $this->linkFactory->create();
-        $subject->load($this->link, $linkId, $subject->getIdFieldName());
-        return [$linkId];
-    }
-
-    /**
-     * @param Link $subject
-     * @param int $result
-     * @return int
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterDeleteProductLink(Link $subject, $result)
-    {
-        if ($this->link->getLinkTypeId() == GroupedLink::LINK_TYPE_GROUPED) {
+        /** @var \Magento\Catalog\Model\ProductLink\Link $link */
+        $link = $this->linkFactory->create();
+        $subject->load($link, $linkId, $subject->getIdFieldName());
+        $result = $proceed($linkId);
+        if ($link->getLinkTypeId() == GroupedLink::LINK_TYPE_GROUPED) {
             $this->relationProcessor->removeRelations(
-                $this->link->getProductId(),
-                $this->link->getLinkedProductId()
+                $link->getProductId(),
+                $link->getLinkedProductId()
             );
         }
         return $result;

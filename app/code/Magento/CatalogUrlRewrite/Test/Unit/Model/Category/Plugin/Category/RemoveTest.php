@@ -11,6 +11,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 class RemoveTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,9 +55,12 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function testBeforeDelete()
+    public function testAroundDelete()
     {
-        $expectedResult = [$this->objectMock];
+        $closureSubject = $this->subjectMock;
+        $proceed  = function (CategoryInterface $category) use ($closureSubject) {
+            return $closureSubject;
+        };
         $plugin =  $this->objectManager->getObject(
             Remove::class,
             [
@@ -71,28 +75,11 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $this->objectMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->assertEquals(
-            $expectedResult,
-            $plugin->beforeDelete($this->subjectMock, $this->objectMock)
-        );
-    }
-
-    public function testAfterDelete()
-    {
-        $categoryIds = [1];
         $this->urlPersistMock->expects($this->exactly(2))
             ->method('deleteByData');
-        $plugin =  $this->objectManager->getObject(
-            Remove::class,
-            [
-                'urlPersist' => $this->urlPersistMock,
-                'childrenCategoriesProvider' => $this->childrenCategoriesProviderMock,
-                'categoryIds' => $categoryIds
-            ]
-        );
         $this->assertEquals(
             $this->subjectMock,
-            $plugin->afterDelete($this->subjectMock, $this->subjectMock, $this->objectMock)
+            $plugin->aroundDelete($this->subjectMock, $proceed, $this->objectMock)
         );
     }
 }

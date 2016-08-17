@@ -84,29 +84,14 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testBeforeDeleteProductLink()
+    public function testAroundDeleteProductLink()
     {
-        $this->subject->expects($this->any())->method('getIdFieldName')->willReturn('id');
-        $this->subject->expects($this->once())->method('load')->with($this->link, 155, 'id');
-        $this->assertEquals(
-            [155],
-            $this->object->beforeDeleteProductLink(
-                $this->subject,
-                155
-            )
-        );
-    }
+        $subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $subject->expects($this->any())->method('getIdFieldName')->willReturn('id');
+        $subject->expects($this->once())->method('load')->with($this->link, 155, 'id');
 
-    public function testAfterDeleteProductLink()
-    {
-        $object = $this->objectManager->getObject(
-            RelationPersister::class,
-            [
-                'relationProcessor' => $this->relationProcessor,
-                'linkFactory' => $this->linkFactory,
-                'link' => $this->link
-            ]
-        );
         $this->link->expects($this->any())
             ->method('getLinkTypeId')
             ->willReturn(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
@@ -119,9 +104,10 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->relationProcessor->expects($this->once())->method('removeRelations')->with(12, 13);
         $this->assertEquals(
-            155,
-            $object->afterDeleteProductLink(
-                $this->subject,
+            $subject,
+            $this->object->aroundDeleteProductLink(
+                $subject,
+                function() use ($subject) { return $subject; },
                 155
             )
         );
