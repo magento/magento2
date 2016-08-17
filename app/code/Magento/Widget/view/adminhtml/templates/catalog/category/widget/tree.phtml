@@ -6,6 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser $block */
 ?>
 
 <?php $_divId = 'tree' . $block->getId() ?>
@@ -43,7 +44,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
         if (firstLoad) {
             <?php if ($block->getNodeClickListener()): ?>
-                this.addListener('click', <?php echo $block->escapeJs($block->getNodeClickListener()) ?>.createDelegate(this));
+                this.addListener('click', <?php echo $block->escapeHtml($block->getNodeClickListener()) ?>.createDelegate(this));
             <?php endif; ?>
         }
 
@@ -158,7 +159,7 @@ jQuery(function()
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
-        rootVisible:      '<?php echo $block->escapeJs($block->getRoot()->getIsVisible()) ?>',
+        rootVisible:      '<?php echo (bool) $block->getRoot()->getIsVisible() ?>',
         useAjax:          true,
         currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
         addNodeTo:        false
