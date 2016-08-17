@@ -16,9 +16,9 @@ define([
                 message: true
             },
             statusMap: {
-                0: 'info',
+                0: 'success',
                 1: 'progress',
-                2: 'success',
+                2: 'info',
                 3: 'error'
             }
         },
