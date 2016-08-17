@@ -158,13 +158,13 @@ class ShipOrder implements ShipOrderInterface
             $arguments
         );
         $errorMessages = array_merge(
-            $this->shipmentValidator->validate(
-                $shipment,
-                [ShipmentQuantityValidator::class]
-            ),
             $this->orderValidator->validate(
                 $order,
                 [CanShip::class]
+            ),
+            $this->shipmentValidator->validate(
+                $shipment,
+                [ShipmentQuantityValidator::class]
             )
         );
         if (!empty($errorMessages)) {

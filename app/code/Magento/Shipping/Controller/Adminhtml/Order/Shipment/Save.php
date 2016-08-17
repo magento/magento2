@@ -7,7 +7,10 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -32,6 +35,11 @@ class Save extends \Magento\Backend\App\Action
      * @var ShipmentSender
      */
     protected $shipmentSender;
+
+    /**
+     * @var ShipmentValidatorInterface
+     */
+    private $shipmentValidator;
 
     /**
      * @param Action\Context $context
@@ -119,7 +127,12 @@ class Save extends \Magento\Backend\App\Action
                 $shipment->setCustomerNote($data['comment_text']);
                 $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
-
+            $errorMessages = $this->getShipmentValidator()->validate($shipment, [ShipmentQuantityValidator::class]);
+            if (!empty($errorMessages)) {
+                throw new \Magento\Sales\Exception\DocumentValidationException(
+                    __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
+                );
+            }
             $shipment->register();
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
@@ -167,5 +180,18 @@ class Save extends \Magento\Backend\App\Action
         } else {
             $this->_redirect('sales/order/view', ['order_id' => $shipment->getOrderId()]);
         }
+    }
+
+    /**
+     * @return ShipmentValidatorInterface
+     * @deprecated
+     */
+    private function getShipmentValidator()
+    {
+        if ($this->shipmentValidator === null) {
+            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
+        }
+
+        return $this->shipmentValidator;
     }
 }
