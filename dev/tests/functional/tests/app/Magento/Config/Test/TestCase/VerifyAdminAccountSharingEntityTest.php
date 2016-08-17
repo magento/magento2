@@ -12,15 +12,11 @@ use Magento\Config\Test\Page\Adminhtml\AdminAccountSharing;
 /**
  * Steps:
  * 1. Log in to Admin.
- * 2. Open the Email Templates page.
- * 3. Click the "Add New Template" button.
- * 4. Select Email Template.
- * 5. Click the "Load Template" button.
- * 6. Enter Email Template name.
- * 7. Verify the email template saved successfully.
+ * 2. Go to Stores>Configuration>Advanced>admin>Security.
+ * 3. * 7. Verify admin Acoount Sharing option availability.
  *
- * @group Email_(PS)
- * @ZephyrId MAGETWO-17155
+ * @group Config_(PS)
+ * @ZephyrId MAGETWO-47822
  */
 class VerifyAdminAccountSharingEntityTest extends Injectable
 {
@@ -31,22 +27,19 @@ class VerifyAdminAccountSharingEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Email Template Index page.
+     * Admin account settings page.
      *
-     * @var AdminAccountSharing
+     * @var adminAccountSharing
      */
     private $adminAccountSharing;
 
     /**
-     * Inject synonym pages.
-     *
-     * @param $AdminAccountSharing $AdminAccountSharing
-     * @return void
+     * @param AdminAccountSharing $adminAccountSharing
      */
     public function __inject(
-        AdminAccountSharing $AdminAccountSharing
+        AdminAccountSharing $adminAccountSharing
     ) {
-        $this->adminAccountSharing = $AdminAccountSharing;
+        $this->adminAccountSharing = $adminAccountSharing;
     }
 
     /**
@@ -57,6 +50,6 @@ class VerifyAdminAccountSharingEntityTest extends Injectable
     public function test()
     {
         $this->adminAccountSharing->open();
-
+        sleep(10);
     }
 }
