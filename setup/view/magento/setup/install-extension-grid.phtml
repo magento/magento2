@@ -100,10 +100,10 @@
                     </label>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.name}}</span>
+                    <span class="data-grid-data">{{extension.package_title}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.type}}</span>
+                    <span class="data-grid-data">{{extension.package_type}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{extension.vendor}}</span>
@@ -114,6 +114,11 @@
                             <option ng-repeat="version in extension.versions"
                                     value="{{version}}">Version {{version}}</option>
                         </select>
+                    </span>
+                    <span class="component-indicator _tooltip"
+                          ng-show="extension.package_link"
+                          data-label="View info on Marketplace"
+                    ><a href="{{extension.package_link}}" target="_blank"></a>
                     </span>
                 </td>
                 <td class="data-grid-data">

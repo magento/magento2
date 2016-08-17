@@ -48,7 +48,7 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                         version: extension.updateVersion
                     }
                 ];
-                titleService.setTitle('update', extension.name);
+                titleService.setTitle('update', extension);
                 $scope.nextState();
             };
             $scope.isHiddenSpinner = true;

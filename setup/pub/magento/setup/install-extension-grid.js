@@ -74,6 +74,7 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
                                 }
                             ];
                             $localStorage.moduleName = extension.name;
+                            $localStorage.packageTitle = extension.package_title;
                             $scope.error = false;
                             $scope.errorMessage = '';
                         }
