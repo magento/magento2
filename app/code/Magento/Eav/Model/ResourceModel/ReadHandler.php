@@ -6,7 +6,6 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection as AppResource;
