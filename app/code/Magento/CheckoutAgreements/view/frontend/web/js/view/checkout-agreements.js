@@ -7,9 +7,10 @@ define(
         'ko',
         'jquery',
         'uiComponent',
-        'Magento_CheckoutAgreements/js/model/agreements-modal'
+        'Magento_CheckoutAgreements/js/model/agreements-modal',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (ko, $, Component, agreementsModal) {
+    function (ko, $, Component, agreementsModal, quote) {
         'use strict';
         var checkoutConfig = window.checkoutConfig,
             agreementManualMode = 1,
@@ -24,6 +25,10 @@ define(
             modalTitle: ko.observable(null),
             modalContent: ko.observable(null),
             modalWindow: null,
+
+            selectedPaymentMethod: function() {
+              return quote.paymentMethod() ? quote.paymentMethod().method : "";
+            },
 
             /**
              * Checks if agreement required

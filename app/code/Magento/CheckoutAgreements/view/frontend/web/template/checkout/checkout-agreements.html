@@ -11,7 +11,7 @@
             <div class="checkout-agreement">
                 <input type="checkbox"
                        data-bind="attr: {
-                                    'id': 'agreement_' + agreementId,
+                                    'id': 'agreement_' + $parent.selectedPaymentMethod() + '_' + agreementId,
                                     'name': 'agreement[' + agreementId + ']',
                                     'value': agreementId
                                     }"
