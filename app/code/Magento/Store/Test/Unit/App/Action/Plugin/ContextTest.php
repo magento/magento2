@@ -9,6 +9,7 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPluginTest
@@ -72,6 +73,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
+     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -120,6 +126,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->requestMock = $this->getMock(RequestInterface::class);
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -185,7 +192,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_SESSION, self::CURRENCY_DEFAULT);
 
-        $this->plugin->beforeDispatch($this->subjectMock);
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
     public function testDispatchCurrentStoreCurrency()
@@ -218,7 +225,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
 
-        $this->plugin->beforeDispatch($this->subjectMock);
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
     public function testDispatchStoreParameterIsArray()
@@ -258,7 +265,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with(Context::CONTEXT_CURRENCY, self::CURRENCY_CURRENT_STORE, self::CURRENCY_DEFAULT);
 
-        $this->plugin->beforeDispatch($this->subjectMock);
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
     /**
@@ -288,6 +295,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue($store));
-        $this->plugin->beforeDispatch($this->subjectMock);
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }

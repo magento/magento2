@@ -12,6 +12,7 @@ use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPlugin
@@ -66,10 +67,11 @@ class Context
 
     /**
      * @param AbstractAction $subject
+     * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(AbstractAction $subject)
+    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {
         /** @var \Magento\Store\Model\Store $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
