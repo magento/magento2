@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Entity\Product\Attribute\Group\AttributeMapper;
 
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PluginTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +26,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     private $attributeFactory;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $attribute;
 
@@ -35,11 +34,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     private $magentoObject;
-
-    /**
-     * @var AttributeMapperInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $attributeMapper;
 
     protected function setUp()
     {
@@ -57,56 +51,62 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->attribute = $this->getMockBuilder(
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
+        )
+            ->setMethods(['getUsedAttributes', 'getAttributeId', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->magentoObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeMapper = $this->getMockBuilder(AttributeMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getUsedAttributes', 'getAttributeId', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->model = $helper->getObject(
             \Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin::class,
-            [
-                'registry' => $this->registry,
-                'attributeFactory' => $this->attributeFactory,
-                'setId' => '10',
-            ]
+            ['registry' => $this->registry, 'attributeFactory' => $this->attributeFactory]
         );
     }
 
-    public function testBeforeMap()
+    public function testAroundMap()
     {
-        $this->registry->expects(static::once())->method('registry')
-            ->with('current_attribute_set')
-            ->willReturn($this->magentoObject);
-        $this->magentoObject->expects(static::once())->method('getId')->willReturn('10');
-
-        $this->model->beforeMap($this->attributeMapper);
-    }
-
-    public function testAfterMap()
-    {
-        $attrSetId = '10';
+        $attrSetId = 333;
         $expected = ['is_configurable' => 1];
 
-        $this->attributeFactory->expects(static::once())->method('create')
-            ->willReturn($this->attribute);
+        /** @var \PHPUnit_Framework_MockObject_MockObject $attributeMapper */
+        $attributeMapper = $this->getMockBuilder(
+            \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->attribute->expects(static::once())->method('getUsedAttributes')
-            ->with($attrSetId)
-            ->willReturn([$attrSetId]);
+        /** @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->attribute->expects(static::once())->method('getAttributeId')
-            ->willReturn($attrSetId);
+        $proceed = function (Attribute $attribute) {
+            return [];
+        };
 
-        $result = $this->model->afterMap($this->attributeMapper, [], $this->attribute);
+        $this->attributeFactory->expects($this->once())->method('create')
+            ->will($this->returnValue($this->attribute));
+
+        $this->attribute->expects($this->once())->method('getUsedAttributes')
+            ->with($this->equalTo($attrSetId))
+            ->will($this->returnValue([$attrSetId]));
+
+        $attribute->expects($this->once())->method('getAttributeId')
+            ->will($this->returnValue($attrSetId));
+
+        $this->registry->expects($this->once())->method('registry')
+            ->with($this->equalTo('current_attribute_set'))
+            ->will($this->returnValue($this->magentoObject));
+
+        $this->magentoObject->expects($this->once())->method('getId')->will($this->returnValue($attrSetId));
+
+        $result = $this->model->aroundMap($attributeMapper, $proceed, $attribute);
         $this->assertEquals($expected, $result);
     }
 }

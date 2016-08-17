@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Action\AbstractAction;
 
 /**
  * Class ContextPlugin
@@ -64,17 +65,12 @@ class Context
     }
 
     /**
-     * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * @param AbstractAction $subject
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeDispatch(AbstractAction $subject)
+    {
         /** @var \Magento\Store\Model\Store $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
 
@@ -103,6 +99,5 @@ class Context
             $this->session->getCurrencyCode() ?: $currentStore->getDefaultCurrencyCode(),
             $defaultStore->getDefaultCurrencyCode()
         );
-        return $proceed($request);
     }
 }

@@ -3,9 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
 class StoreCheckTest extends \PHPUnit_Framework_TestCase
@@ -26,19 +23,9 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
     protected $_storeMock;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $requestMock;
 
     protected function setUp()
     {
@@ -51,11 +38,9 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_storeMock)
         );
-        $this->subjectMock = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
-        $this->closureMock = function () {
-            return 'Expected';
-        };
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->subjectMock = $this->getMockBuilder(\Magento\Framework\App\Action\AbstractAction::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->_plugin = new \Magento\Store\App\Action\Plugin\StoreCheck($this->_storeManagerMock);
     }
@@ -67,19 +52,13 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
     public function testAroundDispatchWhenStoreNotActive()
     {
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(false));
-        $this->assertEquals(
-            'Expected',
-            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->_plugin->beforeDispatch($this->subjectMock);
     }
 
     public function testAroundDispatchWhenStoreIsActive()
     {
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(true));
-        $this->assertEquals(
-            'Expected',
-            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->_plugin->beforeDispatch($this->subjectMock);
     }
 
 }

@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\Attri
 
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory;
 use Magento\Framework\Registry;
-use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 class Plugin
 {
@@ -29,11 +28,6 @@ class Plugin
     protected $configurableAttributes;
 
     /**
-     * @var int|string
-     */
-    private $setId;
-
-    /**
      * @param AttributeFactory $attributeFactory
      * @param Registry $registry
      */
@@ -44,38 +38,28 @@ class Plugin
     }
 
     /**
-     * @param AttributeMapperInterface $subject
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function beforeMap(AttributeMapperInterface $subject)
-    {
-        $this->setId = $this->registry->registry('current_attribute_set')->getId();
-    }
-
-    /**
      * Add is_configurable field to attribute presentation
      *
-     * @param AttributeMapperInterface $subject
-     * @param array $result
+     * @param \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject
+     * @param callable $proceed
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterMap(
-        AttributeMapperInterface $subject,
-        array $result,
+    public function aroundMap(
+        \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject,
+        \Closure $proceed,
         \Magento\Eav\Model\Entity\Attribute $attribute
     ) {
-        if (!isset($this->configurableAttributes[$this->setId])) {
-            $this->configurableAttributes[$this->setId] = $this->attributeFactory->create()->getUsedAttributes(
-                $this->setId
-            );
+        $setId = $this->registry->registry('current_attribute_set')->getId();
+        $result = $proceed($attribute);
+        if (!isset($this->configurableAttributes[$setId])) {
+            $this->configurableAttributes[$setId] = $this->attributeFactory->create()->getUsedAttributes($setId);
         }
         $result['is_configurable'] = (int)in_array(
             $attribute->getAttributeId(),
-            $this->configurableAttributes[$this->setId]
+            $this->configurableAttributes[$setId]
         );
         return $result;
     }
