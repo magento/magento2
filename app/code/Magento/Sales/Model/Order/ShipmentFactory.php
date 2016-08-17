@@ -108,7 +108,7 @@ class ShipmentFactory
                             $qty = $bundleSelectionAttributes['qty'] * $items[$orderItem->getParentItemId()];
                             $qty = min($qty, $orderItem->getSimpleQtyToShip());
 
-                            $item->setQty($qty);
+                            $item->setQty($this->castQty($orderItem, $qty));
                             $shipment->addItem($item);
 
                             continue;
@@ -131,7 +131,7 @@ class ShipmentFactory
 
             $totalQty += $qty;
 
-            $item->setQty($qty);
+            $item->setQty($this->castQty($orderItem, $qty));
             $shipment->addItem($item);
         }
         return $shipment->setTotalQty($totalQty);
@@ -214,5 +214,21 @@ class ShipmentFactory
         } else {
             return $item->getQtyToShip() > 0;
         }
+    }
+
+    /**
+     * @param Item $item
+     * @param string|int|float $qty
+     * @return float|int
+     */
+    private function castQty(\Magento\Sales\Model\Order\Item $item, $qty)
+    {
+        if ($item->getIsQtyDecimal()) {
+            $qty = (double)$qty;
+        } else {
+            $qty = (int)$qty;
+        }
+
+        return $qty > 0 ? $qty : 0;
     }
 }

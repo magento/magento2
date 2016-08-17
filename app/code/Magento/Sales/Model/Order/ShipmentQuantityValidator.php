@@ -70,14 +70,8 @@ class ShipmentQuantityValidator implements ValidatorInterface
         if ($orderItem === null) {
             return [__('We can not found item "%1" in order.', $item->getOrderItemId())];
         }
-        if ($orderItem->getIsQtyDecimal()) {
-            $qty = (double)$item->getQty();
-        } else {
-            $qty = (int)$item->getQty();
-        }
-        $qty = $qty > 0 ? $qty : 0;
 
-        if (!$this->isQtyAvailable($orderItem, $qty)) {
+        if (!$this->isQtyAvailable($orderItem, $item->getQty())) {
             $messages[] =__('We found an invalid quantity to ship for item "%1".', $item->getName());
         }
 
@@ -107,6 +101,6 @@ class ShipmentQuantityValidator implements ValidatorInterface
      */
     private function isQtyAvailable(Item $orderItem, $qty)
     {
-        return $qty !== 0 && ($qty <= $orderItem->getQtyToShip() || $orderItem->isDummy(true));
+        return $qty <= $orderItem->getQtyToShip() || $orderItem->isDummy(true);
     }
 }
