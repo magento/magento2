@@ -5,12 +5,17 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
+use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
  * Class InvoiceDocumentFactoryTest
@@ -47,6 +52,26 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $invoiceDocumentFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|HydratorPool
+     */
+    private $hydratorPoolMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|TrackFactory
+     */
+    private $trackFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|TrackFactory
+     */
+    private $hydratorMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|HydratorInterface
+     */
+    private $trackMock;
+
     protected function setUp()
     {
         $this->shipmentFactoryMock = $this->getMockBuilder(ShipmentFactory::class)
@@ -67,15 +92,39 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addComment'])
+            ->setMethods(['addComment', 'addTrack'])
             ->getMockForAbstractClass();
 
-        $this->invoiceDocumentFactory = new ShipmentDocumentFactory($this->shipmentFactoryMock);
+        $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->trackFactoryMock = $this->getMockBuilder(TrackFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->trackMock = $this->getMockBuilder(Track::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['extract'])
+            ->getMockForAbstractClass();
+
+        $this->invoiceDocumentFactory = new ShipmentDocumentFactory(
+            $this->shipmentFactoryMock,
+            $this->hydratorPoolMock,
+            $this->trackFactoryMock
+        );
     }
 
     public function testCreate()
     {
-        $tracks = ["1234567890"];
+        $trackNum = "123456789";
+        $trackData = [$trackNum];
+        $tracks = [$this->trackMock];
         $appendComment = true;
         $packages = [];
         $items = [1 => 10];
@@ -92,10 +141,32 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 $this->orderMock,
-                $items,
-                $tracks
+                $items
             )
             ->willReturn($this->shipmentMock);
+
+        $this->trackMock->expects($this->once())
+            ->method('getTrackNumber')
+            ->willReturn($trackNum);
+
+        $this->shipmentMock->expects($this->once())
+            ->method('addTrack')
+            ->willReturnSelf();
+
+        $this->hydratorPoolMock->expects($this->once())
+            ->method('getHydrator')
+            ->with(ShipmentTrackCreationInterface::class)
+            ->willReturn($this->hydratorMock);
+
+        $this->hydratorMock->expects($this->once())
+            ->method('extract')
+            ->with($this->trackMock)
+            ->willReturn($trackData);
+
+        $this->trackFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => $trackData])
+            ->willReturn($this->trackMock);
 
         if ($appendComment) {
             $comment = "New comment!";
