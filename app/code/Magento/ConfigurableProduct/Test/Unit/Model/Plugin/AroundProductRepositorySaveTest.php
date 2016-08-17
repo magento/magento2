@@ -113,7 +113,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->result,
-            $this->plugin->afterSave($this->productRepository, $this->product, $this->product)
+            $this->plugin->afterSave($this->productRepository, $this->result, $this->product)
         );
     }
 
@@ -139,7 +139,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->result,
-            $this->plugin->afterSave($this->productRepository, $this->product, $this->product)
+            $this->plugin->afterSave($this->productRepository, $this->result, $this->product)
         );
     }
 
@@ -182,7 +182,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('getData');
 
-        $this->plugin->afterSave($this->productRepository, $this->product, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->result, $this->product);
     }
 
     /**
@@ -239,7 +239,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willReturn(false);
 
-        $this->plugin->afterSave($this->productRepository, $this->product, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->result, $this->product);
     }
 
     /**
@@ -294,6 +294,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willReturn($attributeId);
 
-        $this->plugin->afterSave($this->productRepository, $this->product, $this->product);
+        $this->plugin->afterSave($this->productRepository, $this->result, $this->product);
     }
 }
