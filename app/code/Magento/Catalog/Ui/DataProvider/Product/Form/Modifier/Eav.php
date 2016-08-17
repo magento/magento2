@@ -540,8 +540,9 @@ class Eav extends AbstractModifier
      */
     private function isProductHasValueForAttribute(ProductAttributeInterface $attribute)
     {
-        return (bool)($this->locator->getProduct()->getCustomAttribute($attribute->getAttributeCode()) !== null)
-            && $this->locator->getProduct()->getCustomAttribute($attribute->getAttributeCode())->getValue();
+        /** @var \Magento\Framework\Api\AttributeInterface $attributeCode */
+        $attributeCode = $this->locator->getProduct()->getCustomAttribute($attribute->getAttributeCode());
+        return (bool)($attributeCode !== null) && $attributeCode->getValue();
     }
 
     /**
