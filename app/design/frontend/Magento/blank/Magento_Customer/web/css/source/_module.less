@@ -87,6 +87,25 @@
         }
     }
 
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            &.field {
+                > .label {
+                    &:extend(.abs-visually-hidden all);
+
+                    + .control {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .field {
+                &:extend(.abs-add-clearfix all);
+            }
+        }
+    }
+
     //
     //  My account
     //  ---------------------------------------------
@@ -400,18 +419,23 @@
         }
     }
 
-    .form-create-account {
-        .fieldset-fullname {
-            .fields {
-                .field {
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            .field {
+                .label {
+                    .lib-css(margin, @form-field-type-label-inline__margin);
+                    .lib-css(padding, @form-field-type-label-inline__padding);
+                    .lib-css(text-align, @form-field-type-label-inline__align);
+                    .lib-css(width, @form-field-type-label-inline__width);
+                    box-sizing: border-box;
                     float: left;
-                    margin: 0 @indent__s @indent__s 0;
                 }
-            }
 
-            .field-name-prefix,
-            .field-name-suffix {
-                width: 50px;
+                .control {
+                    .lib-css(width, @form-field-type-control-inline__width);
+                    float: left;
+                }
             }
         }
     }
