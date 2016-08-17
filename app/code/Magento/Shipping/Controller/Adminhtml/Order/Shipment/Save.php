@@ -129,17 +129,19 @@ class Save extends \Magento\Backend\App\Action
                 $shipment->setCustomerNote($data['comment_text']);
                 $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
-            $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
             $errorMessages = $this->getShipmentValidator()->validate($shipment, [ShipmentQuantityValidator::class]);
             if (!empty($errorMessages)) {
-                throw new \Magento\Sales\Exception\DocumentValidationException(
+                $this->messageManager->addError(
                     __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
                 );
+                $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
+                return;
             }
             $shipment->register();
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $responseAjax = new \Magento\Framework\DataObject();
+            $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
 
             if ($isNeedCreateLabel) {
                 $this->labelGenerator->create($shipment, $this->_request);
@@ -197,5 +199,21 @@ class Save extends \Magento\Backend\App\Action
         }
 
         return $this->shipmentValidator;
+    }
+
+    /**
+     * @param $isNeedCreateLabel
+     * @param $responseAjax
+     * @param $message
+     */
+    private function handleError($isNeedCreateLabel, $responseAjax, $message)
+    {
+        if ($isNeedCreateLabel) {
+            $responseAjax->setError(true);
+            $responseAjax->setMessage($message);
+        } else {
+            $this->messageManager->addError($message);
+            $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
+        }
     }
 }
