@@ -20,33 +20,28 @@ class Authorization
      * @param UserContextInterface $userContext
      */
     public function __construct(
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        UserContextInterface $userContext
     ) {
         $this->userContext = $userContext;
     }
 
     /**
-     * Checks if order is allowed
-     *
      * @param \Magento\Sales\Model\ResourceModel\Order $subject
-     * @param callable $proceed
+     * @param \Magento\Sales\Model\ResourceModel\Order $result
      * @param \Magento\Framework\Model\AbstractModel $order
-     * @param mixed $value
-     * @param null|string $field
-     * @return \Magento\Sales\Model\Order
+     * @return \Magento\Sales\Model\ResourceModel\Order
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundLoad(
+    public function afterLoad(
         \Magento\Sales\Model\ResourceModel\Order $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $order,
-        $value,
-        $field = null
+        \Magento\Sales\Model\ResourceModel\Order $result,
+        \Magento\Framework\Model\AbstractModel $order
     ) {
-        $result = $proceed($order, $value, $field);
-        if (!$this->isAllowed($order)) {
-            throw NoSuchEntityException::singleField('orderId', $order->getId());
+        if ($order instanceof \Magento\Sales\Model\Order) {
+            if (!$this->isAllowed($order)) {
+                throw NoSuchEntityException::singleField('orderId', $order->getId());
+            }
         }
         return $result;
     }
