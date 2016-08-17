@@ -5,19 +5,24 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
+/**
+ * Abstract plugin for indexers
+ */
 abstract class AbstractPlugin
 {
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
-     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
-    ) {
+    public function __construct(IndexerRegistry $indexerRegistry)
+    {
         $this->indexerRegistry = $indexerRegistry;
     }
 
@@ -29,7 +34,8 @@ abstract class AbstractPlugin
      */
     protected function reindexRow($productId)
     {
-        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
+
         if (!$indexer->isScheduled()) {
             $indexer->reindexRow($productId);
         }
@@ -43,7 +49,8 @@ abstract class AbstractPlugin
      */
     protected function reindexList(array $productIds)
     {
-        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
+
         if (!$indexer->isScheduled()) {
             $indexer->reindexList($productIds);
         }
