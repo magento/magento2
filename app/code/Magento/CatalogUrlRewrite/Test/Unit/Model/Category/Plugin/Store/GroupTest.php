@@ -17,14 +17,9 @@ use Magento\Catalog\Model\Product as Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Model\ProductFactory;
 
-use Magento\Store\Model\ResourceModel\Store;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-
-
-
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
