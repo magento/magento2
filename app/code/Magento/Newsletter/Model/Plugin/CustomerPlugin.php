@@ -34,17 +34,16 @@ class CustomerPlugin
      *
      * @param CustomerRepository $subject
      * @param CustomerInterface $result
-     * @param CustomerInterface $customer
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(CustomerRepository $subject, CustomerInterface $result, CustomerInterface $customer)
+    public function afterSave(CustomerRepository $subject, CustomerInterface $result)
     {
         $this->subscriberFactory->create()->updateSubscription($result->getId());
-        if ($result->getId() && $customer->getExtensionAttributes()) {
-            if ($customer->getExtensionAttributes()->getIsSubscribed() === true) {
+        if ($result->getId() && $result->getExtensionAttributes()) {
+            if ($result->getExtensionAttributes()->getIsSubscribed() === true) {
                 $this->subscriberFactory->create()->subscribeCustomerById($result->getId());
-            } elseif ($customer->getExtensionAttributes()->getIsSubscribed() === false) {
+            } elseif ($result->getExtensionAttributes()->getIsSubscribed() === false) {
                 $this->subscriberFactory->create()->unsubscribeCustomerById($result->getId());
             }
         }
@@ -52,16 +51,21 @@ class CustomerPlugin
     }
 
     /**
-     * Plugin after delete customer that updates any newsletter subscription that may have existed.
+     * Plugin around delete customer that updates any newsletter subscription that may have existed.
      *
      * @param CustomerRepository $subject
-     * @param bool $result
-     * @param int $customerId
+     * @param callable $deleteCustomerById Function we are wrapping around
+     * @param int $customerId Input to the function
      * @return bool
      */
-    public function afterDeleteById(CustomerRepository $subject, $result, $customerId)
-    {
+    public function aroundDeleteById(
+        CustomerRepository $subject,
+        callable $deleteCustomerById,
+        $customerId
+    ) {
         $customer = $subject->getById($customerId);
+        $result = $deleteCustomerById($customerId);
+        /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
         $subscriber->loadByEmail($customer->getEmail());
         if ($subscriber->getId()) {

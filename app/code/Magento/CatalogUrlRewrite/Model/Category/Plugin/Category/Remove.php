@@ -23,9 +23,6 @@ class Remove
     /** @var ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
-    /** @var array */
-    private $categoryIds;
-
     /**
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
@@ -42,40 +39,24 @@ class Remove
     }
 
     /**
-     * Save category ids before delete
-     *
-     * @param \Magento\Catalog\Model\ResourceModel\Category $subject
-     * @param \Magento\Framework\DataObject|int|string $object
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function beforeDelete(\Magento\Catalog\Model\ResourceModel\Category $subject, $object)
-    {
-        if ($object instanceof CategoryInterface) {
-            $this->categoryIds = $this->childrenCategoriesProvider->getChildrenIds($object, true);
-            $this->categoryIds[] = $object->getId();
-        }
-        return [$object];
-    }
-
-    /**
      * Remove product urls from storage
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
-     * @param \Magento\Catalog\Model\ResourceModel\Category $result
-     * @param \Magento\Framework\DataObject|int|string $object
-     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @param callable $proceed
+     * @param CategoryInterface $category
+     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(
+    public function aroundDelete(
         \Magento\Catalog\Model\ResourceModel\Category $subject,
-        \Magento\Catalog\Model\ResourceModel\Category $result,
-        $object
+        \Closure $proceed,
+        CategoryInterface $category
     ) {
-        if ($object instanceof CategoryInterface) {
-            foreach ($this->categoryIds as $categoryId) {
-                $this->deleteRewritesForCategory($categoryId);
-            }
+        $categoryIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
+        $categoryIds[] = $category->getId();
+        $result = $proceed($category);
+        foreach ($categoryIds as $categoryId) {
+            $this->deleteRewritesForCategory($categoryId);
         }
         return $result;
     }

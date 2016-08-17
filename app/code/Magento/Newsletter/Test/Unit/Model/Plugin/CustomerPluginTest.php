@@ -72,7 +72,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
             ->method("getId")
             ->willReturn($customerId);
 
-        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer, $customer));
+        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer));
     }
 
     /**
@@ -125,7 +125,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
             ->method("getId")
             ->willReturn($customerId);
 
-        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer, $customer));
+        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer));
     }
 
     public function testAfterDelete()
@@ -140,9 +140,12 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->plugin->afterDelete($subject, true, $customer));
     }
 
-    public function testAfterDeleteById()
+    public function testAroundDeleteById()
     {
         $customerId = 1;
+        $deleteCustomerById = function () {
+            return true;
+        };
         $subject = $this->getMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $subject->expects($this->once())->method('getById')->willReturn($customer);
@@ -151,6 +154,6 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->afterDeleteById($subject, true, $customerId));
+        $this->assertEquals(true, $this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
     }
 }
