@@ -107,7 +107,9 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
             $subject,
             $this->object->aroundDeleteProductLink(
                 $subject,
-                function() use ($subject) { return $subject; },
+                function () use ($subject) {
+                    return $subject;
+                },
                 155
             )
         );
