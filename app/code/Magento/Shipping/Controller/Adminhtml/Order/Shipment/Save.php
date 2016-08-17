@@ -127,11 +127,17 @@ class Save extends \Magento\Backend\App\Action
                 $shipment->setCustomerNote($data['comment_text']);
                 $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
+            $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
+            $errorMessages = $this->getShipmentValidator()->validate($shipment, [ShipmentQuantityValidator::class]);
+            if (!empty($errorMessages)) {
+                throw new \Magento\Sales\Exception\DocumentValidationException(
+                    __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
+                );
+            }
             $shipment->register();
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $responseAjax = new \Magento\Framework\DataObject();
-            $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
 
             if ($isNeedCreateLabel) {
                 $this->labelGenerator->create($shipment, $this->_request);

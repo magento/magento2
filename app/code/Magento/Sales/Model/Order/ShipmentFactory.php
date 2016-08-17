@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 
@@ -89,7 +90,6 @@ class ShipmentFactory
         array $items = []
     ) {
         $totalQty = 0;
-
         foreach ($order->getAllItems() as $orderItem) {
             if (!$this->canShipItem($orderItem, $items)) {
                 continue;

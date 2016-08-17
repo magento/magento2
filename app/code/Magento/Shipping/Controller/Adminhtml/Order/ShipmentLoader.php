@@ -143,31 +143,9 @@ class ShipmentLoader extends DataObject
                 $this->getItemQtys(),
                 $this->getTracking()
             );
-            $errorMessages = $this->getShipmentValidator()->validate(
-                $shipment,
-                [ShipmentQuantityValidator::class]
-            );
-            if (!empty($errorMessages)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
-                );
-            }
         }
 
         $this->registry->register('current_shipment', $shipment);
         return $shipment;
-    }
-
-    /**
-     * @return ShipmentValidatorInterface
-     * @deprecated
-     */
-    private function getShipmentValidator()
-    {
-        if ($this->shipmentValidator === null) {
-            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
-        }
-
-        return $this->shipmentValidator;
     }
 }

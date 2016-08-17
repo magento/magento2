@@ -107,6 +107,6 @@ class ShipmentQuantityValidator implements ValidatorInterface
      */
     private function isQtyAvailable(Item $orderItem, $qty)
     {
-        return $qty <= $orderItem->getQtyToShip() || $orderItem->isDummy(true);
+        return $qty !== 0 && ($qty <= $orderItem->getQtyToShip() || $orderItem->isDummy(true));
     }
 }
