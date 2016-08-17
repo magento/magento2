@@ -40,6 +40,8 @@ class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function create($connectionName, array $data = [])
     {
