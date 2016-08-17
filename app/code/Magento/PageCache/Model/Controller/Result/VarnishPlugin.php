@@ -52,6 +52,8 @@ class VarnishPlugin
     }
 
     /**
+     * Perform result postprocessing
+     *
      * @param ResultInterface $subject
      * @param ResultInterface $result
      * @param ResponseHttp $response
