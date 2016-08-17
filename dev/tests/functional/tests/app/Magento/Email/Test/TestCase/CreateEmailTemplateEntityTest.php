@@ -50,16 +50,16 @@ class CreateEmailTemplateEntityTest extends Injectable
     /**
      * Inject Email template pages.
      *
-     * @param EmailTemplateIndex $EmailTemplateIndex
-     * @param EmailTemplateNew $EmailTemplateNew
+     * @param EmailTemplateIndex $emailTemplateIndex
+     * @param EmailTemplateNew $emailTemplateNew
      * @return void
      */
     public function __inject(
-        EmailTemplateIndex $EmailTemplateIndex,
-        EmailTemplateNew $EmailTemplateNew
+        EmailTemplateIndex $emailTemplateIndex,
+        EmailTemplateNew $emailTemplateNew
     ) {
-        $this->emailTemplateIndex = $EmailTemplateIndex;
-        $this->emailTemplateNew = $EmailTemplateNew;
+        $this->emailTemplateIndex = $emailTemplateIndex;
+        $this->emailTemplateNew = $emailTemplateNew;
     }
 
     /**
