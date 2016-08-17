@@ -114,7 +114,6 @@ class ShipmentDocumentFactory
         return $shipment;
     }
 
-
     /**
      * Convert Items To Array
      *

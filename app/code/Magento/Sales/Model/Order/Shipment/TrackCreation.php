@@ -48,6 +48,7 @@ class TrackCreation implements ShipmentTrackCreationInterface
         $this->trackNumber = $trackNumber;
         return $this;
     }
+
     /**
      * {@inheritdoc}
      */
