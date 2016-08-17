@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 
@@ -139,6 +140,15 @@ class ShipmentFactory
             $item->setQty($qty);
             $shipment->addItem($item);
         }
+        $errorMessages = $this->getShipmentValidator()->validate(
+            $shipment,
+            [ShipmentQuantityValidator::class]
+        );
+        if (!empty($errorMessages)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
+            );
+        }
         return $shipment->setTotalQty($totalQty);
     }
 
@@ -219,5 +229,18 @@ class ShipmentFactory
         } else {
             return $item->getQtyToShip() > 0;
         }
+    }
+
+    /**
+     * @return ShipmentValidatorInterface
+     * @deprecated
+     */
+    private function getShipmentValidator()
+    {
+        if ($this->shipmentValidator === null) {
+            $this->shipmentValidator = ObjectManager::getInstance()->get(ShipmentValidatorInterface::class);
+        }
+
+        return $this->shipmentValidator;
     }
 }
