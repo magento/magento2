@@ -9,6 +9,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class LockerProcess
@@ -41,6 +43,11 @@ class LockerProcess implements LockerProcessInterface
     private $tmpDirectory;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
@@ -56,15 +63,18 @@ class LockerProcess implements LockerProcessInterface
      */
     public function lockProcess($lockName)
     {
+        if ($this->getState()->getMode() == State::MODE_PRODUCTION) {
+            return;
+        }
+
         $this->tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->lockFilePath = $this->getFilePath($lockName);
 
         while ($this->isProcessLocked()) {
-            sleep(1);
+            usleep(1000);
         }
 
         $this->tmpDirectory->writeFile($this->lockFilePath, time());
-
     }
 
     /**
@@ -73,6 +83,10 @@ class LockerProcess implements LockerProcessInterface
      */
     public function unlockProcess()
     {
+        if ($this->getState()->getMode() == State::MODE_PRODUCTION) {
+            return ;
+        }
+
         $this->tmpDirectory->delete($this->lockFilePath);
     }
 
@@ -107,5 +121,17 @@ class LockerProcess implements LockerProcessInterface
     private function getFilePath($name)
     {
         return DirectoryList::TMP . DIRECTORY_SEPARATOR . $name . self::LOCK_EXTENSION;
+    }
+
+    /**
+     * @return State
+     * @deprecated
+     */
+    private function getState()
+    {
+        if (null === $this->state) {
+            $this->state = ObjectManager::getInstance()->get(State::class);
+        }
+        return $this->state;
     }
 }
