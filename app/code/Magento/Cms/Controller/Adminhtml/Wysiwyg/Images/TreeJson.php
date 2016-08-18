@@ -50,7 +50,7 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
             $layout = $this->layoutFactory->create();
             $resultJson->setJsonData(
                 $layout->createBlock(
-                    'Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree'
+                    \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree::class
                 )->getTreeJson()
             );
         } catch (\Exception $e) {

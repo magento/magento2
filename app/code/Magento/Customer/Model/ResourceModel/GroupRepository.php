@@ -114,7 +114,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             $groupModel = $this->groupRegistry->retrieve($group->getId());
             $groupDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
                 $group,
-                '\Magento\Customer\Api\Data\GroupInterface'
+                \Magento\Customer\Api\Data\GroupInterface::class
             );
             foreach ($groupDataAttributes as $attributeCode => $attributeData) {
                 $groupModel->setDataUsingMethod($attributeCode, $attributeData);
@@ -175,7 +175,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         /** @var \Magento\Customer\Model\ResourceModel\Group\Collection $collection */
         $collection = $this->groupFactory->create()->getCollection();
-        $groupInterfaceName = 'Magento\Customer\Api\Data\GroupInterface';
+        $groupInterfaceName = \Magento\Customer\Api\Data\GroupInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $groupInterfaceName);
         $collection->addTaxClass();
 

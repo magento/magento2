@@ -16,8 +16,8 @@ class CustomersMostTest extends AbstractTestCase
     public function testExecute()
     {
         $this->assertExecute(
-            'Magento\Backend\Controller\Adminhtml\Dashboard\CustomersMost',
-            'Magento\Backend\Block\Dashboard\Tab\Customers\Most'
+            \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersMost::class,
+            \Magento\Backend\Block\Dashboard\Tab\Customers\Most::class
         );
     }
 }

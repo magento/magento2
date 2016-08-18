@@ -38,7 +38,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      */
     protected function _construct()
     {
-        $this->_init('Magento\AdminNotification\Model\ResourceModel\Inbox');
+        $this->_init(\Magento\AdminNotification\Model\ResourceModel\Inbox::class);
     }
 
     /**

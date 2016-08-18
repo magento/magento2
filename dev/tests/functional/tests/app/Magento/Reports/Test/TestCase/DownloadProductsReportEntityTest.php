@@ -85,7 +85,10 @@ class DownloadProductsReportEntityTest extends Injectable
     {
         // Preconditions
         $order->persist();
-        $invoice = $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order]);
+        $invoice = $this->objectManager->create(
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
+            ['order' => $order]
+        );
         $invoice->run();
         $this->openDownloadableLink($order, (int)$downloads);
     }
@@ -100,7 +103,7 @@ class DownloadProductsReportEntityTest extends Injectable
     protected function openDownloadableLink(OrderInjectable $order, $downloads)
     {
         $customerLogin = $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $order->getDataFieldConfig('customer_id')['source']->getCustomer()]
         );
         $customerLogin->run();

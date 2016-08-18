@@ -82,7 +82,7 @@ class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest
     protected function addToCart(FixtureInterface $product)
     {
         $addProductsToTheCartStep = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => [$product]]
         );
         $addProductsToTheCartStep->run();

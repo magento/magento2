@@ -27,7 +27,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $category = $this->objectManager->create('Magento\Catalog\Model\Category');
+        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->load(3);
         $category->delete();
     }
@@ -40,7 +40,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateUrlRewritesWithoutSaveHistory()
     {
         /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->objectManager->create('Magento\Catalog\Model\Category');
+        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->load(3);
         $category->setData('save_rewrites_history', false);
         $category->setUrlKey('new-url');
@@ -68,7 +68,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateUrlRewritesWithSaveHistory()
     {
         /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->objectManager->create('Magento\Catalog\Model\Category');
+        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->load(3);
         $category->setData('save_rewrites_history', true);
         $category->setUrlKey('new-url');
@@ -103,7 +103,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function getActualResults(array $filter)
     {
         /** @var \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder */
-        $urlFinder = $this->objectManager->get('\Magento\UrlRewrite\Model\UrlFinderInterface');
+        $urlFinder = $this->objectManager->get(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
         $actualResults = [];
         foreach ($urlFinder->findAllByData($filter) as $url) {
             $actualResults[] = [

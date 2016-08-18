@@ -60,7 +60,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function getCacheHelperMock($methods = null)
     {
-        return $this->getMock('Magento\Marketplace\Helper\Cache', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Helper\Cache::class, $methods, [], '', false);
     }
 
     /**
@@ -70,6 +70,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     public function getCacheMock()
     {
-        return $this->getMockForAbstractClass('Magento\Framework\Config\CacheInterface');
+        return $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
     }
 }

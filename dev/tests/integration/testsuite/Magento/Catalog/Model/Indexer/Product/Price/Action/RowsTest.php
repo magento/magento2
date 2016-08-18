@@ -23,10 +23,10 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
         );
     }
 
@@ -38,20 +38,22 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     public function testProductsUpdate()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\Product::class
+        );
         /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagment */
         $linkManagment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Api\CategoryLinkManagementInterface'
+            \Magento\Catalog\Api\CategoryLinkManagementInterface::class
         );
         $this->_product = $product->load(1);
         $linkManagment->assignProductToCategories($this->_product->getSku(), [9]);
         $this->_processor->reindexList([$this->_product->getId()]);
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\CategoryFactory'
+            \Magento\Catalog\Model\CategoryFactory::class
         );
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Block\Product\ListProduct'
+            \Magento\Catalog\Block\Product\ListProduct::class
         );
 
         $category = $categoryFactory->create()->load(9);

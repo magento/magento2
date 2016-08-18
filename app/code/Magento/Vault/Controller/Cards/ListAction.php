@@ -41,7 +41,7 @@ class ListAction extends CardsManagement
     public function execute()
     {
         $resultPage = $this->pageFactory->create();
-        $resultPage->getConfig()->getTitle()->set(__('My Credit Cards'));
+        $resultPage->getConfig()->getTitle()->set(__('Stored Payment Methods'));
 
         return $resultPage;
     }

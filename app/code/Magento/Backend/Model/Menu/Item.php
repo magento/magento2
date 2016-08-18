@@ -474,13 +474,13 @@ class Item
     public function __wakeup()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_moduleManager = $objectManager->get('Magento\Framework\Module\Manager');
-        $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
-        $this->_acl = $objectManager->get('Magento\Framework\AuthorizationInterface');
-        $this->_scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
-        $this->_urlModel = $objectManager->get('Magento\Backend\Model\UrlInterface');
-        $this->_moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
+        $this->_moduleManager = $objectManager->get(\Magento\Framework\Module\Manager::class);
+        $this->_validator = $objectManager->get(\Magento\Backend\Model\Menu\Item\Validator::class);
+        $this->_acl = $objectManager->get(\Magento\Framework\AuthorizationInterface::class);
+        $this->_scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_menuFactory = $objectManager->get(\Magento\Backend\Model\MenuFactory::class);
+        $this->_urlModel = $objectManager->get(\Magento\Backend\Model\UrlInterface::class);
+        $this->_moduleList = $objectManager->get(\Magento\Framework\Module\ModuleListInterface::class);
         if ($this->_serializedSubmenu) {
             $this->_submenu = $this->_menuFactory->create();
             $this->_submenu->unserialize($this->_serializedSubmenu);

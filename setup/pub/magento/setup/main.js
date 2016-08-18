@@ -4,7 +4,7 @@
  */
 
 'use strict';
-var main = angular.module('main', ['ngStorage']);
+var main = angular.module('main', ['ngStorage', 'ngDialog']);
 main.controller('navigationController',
         ['$scope', '$state', '$rootScope', '$window', 'navigationService', '$localStorage',
             function ($scope, $state, $rootScope, $window, navigationService, $localStorage) {
@@ -63,7 +63,7 @@ main.controller('navigationController',
 
         $scope.goToState = function (stateId) {
             $state.go(stateId)
-        }
+        };
 
         $scope.state = $state;
 
@@ -91,21 +91,25 @@ main.controller('navigationController',
 
         $scope.endsWith = function(str, suffix) {
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
-        }
+        };
 
         $scope.goToStart = function() {
-            if ($state.current.type === 'install') {
-                $state.go('root.landing-install');
-            } else if ($state.current.type === 'upgrade') {
-                $state.go('root.upgrade');
-            } else {
-                $state.go('root.update');
-            }
-        }
+            $scope.goToAction($state.current.type);
+        };
 
         $scope.goToBackup = function() {
             $state.go('root.create-backup-uninstall');
-        }
+        };
+
+        $scope.goToAction = function(action) {
+            if (['install', 'upgrade', 'update'].indexOf(action) !== -1) {
+                $state.go('root.' + action);
+            } else if (action === 'uninstall') {
+                $state.go('root.extension');
+            } else {
+                $state.go('root.module');
+            }
+        };
     }
 ])
 .service('navigationService', ['$location', '$state', '$http', '$localStorage',
@@ -114,6 +118,7 @@ main.controller('navigationController',
         mainState: {},
         states: [],
         titlesWithModuleName: ['enable', 'disable', 'update', 'uninstall'],
+        isLoadedStates: false,
         load: function () {
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
@@ -125,19 +130,22 @@ main.controller('navigationController',
                     data.titles[value] = data.titles[value] + $localStorage.moduleName;
                 });
                 $localStorage.titles = data.titles;
-                data.nav.forEach(function (item) {
-                    app.stateProvider.state(item.id, item);
-                    if (item.default) {
-                        self.mainState = item;
-                    }
+                if (self.isLoadedStates == false) {
+                    data.nav.forEach(function (item) {
+                        app.stateProvider.state(item.id, item);
+                        if (item.default) {
+                            self.mainState = item;
+                        }
 
-                    if (currentState == item.url) {
-                        $state.go(item.id);
-                        isCurrentStateFound = true;
+                        if (currentState == item.url) {
+                            $state.go(item.id);
+                            isCurrentStateFound = true;
+                        }
+                    });
+                    if (!isCurrentStateFound) {
+                        $state.go(self.mainState.id);
                     }
-                });
-                if (!isCurrentStateFound) {
-                    $state.go(self.mainState.id);
+                    self.isLoadedStates = true;
                 }
             });
         },
@@ -159,5 +167,122 @@ main.controller('navigationController',
             });
             return nItem;
         }
+    };
+}])
+.service('authService', ['$localStorage', '$rootScope', '$state', '$http', 'ngDialog',
+    function ($localStorage, $rootScope, $state, $http, ngDialog) {
+        return {
+            checkMarketplaceAuthorized: function() {
+                $rootScope.isMarketplaceAuthorized = typeof $rootScope.isMarketplaceAuthorized !== 'undefined'
+                    ? $rootScope.isMarketplaceAuthorized : false;
+                if ($rootScope.isMarketplaceAuthorized == false) {
+                    this.goToAuthPage();
+                }
+            },
+            goToAuthPage: function() {
+                if ($state.current.type === 'upgrade') {
+                    $state.go('root.upgrade');
+                } else {
+                    $state.go('root.extension-auth');
+                }
+            },
+            reset: function (context) {
+                return $http.post('index.php/marketplace/remove-credentials', [])
+                    .success(function (response) {
+                        if (response.success) {
+                            $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
+                            context.success();
+                        }
+                    })
+                    .error(function (data) {
+                    });
+            },
+            checkAuth: function(context) {
+                return $http.post('index.php/marketplace/check-auth', [])
+                    .success(function (response) {
+                        if (response.success) {
+                            $rootScope.isMarketplaceAuthorized  = $localStorage.isMarketplaceAuthorized = true;
+                            $localStorage.marketplaceUsername = response.data.username;
+                            context.success(response);
+                        } else {
+                            $rootScope.isMarketplaceAuthorized  = $localStorage.isMarketplaceAuthorized = false;
+                            context.fail(response);
+                        }
+                    })
+                    .error(function() {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = false;
+                        context.error();
+                    });
+            },
+            openAuthDialog: function(scope) {
+                return $http.get('index.php/marketplace/popup-auth').success(function (data) {
+                    scope.isHiddenSpinner = true;
+                    ngDialog.open({
+                        scope: scope,
+                        template: data,
+                        plain: true,
+                        showClose: false,
+                        controller: 'authDialogController'
+                    });
+                });
+            },
+            closeAuthDialog: function() {
+                return ngDialog.close();
+            },
+            saveAuthJson: function (context) {
+                return $http.post('index.php/marketplace/save-auth-json', context.user)
+                    .success(function (response) {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = response.success;
+                        $localStorage.marketplaceUsername = context.user.username;
+                        if (response.success) {
+                            context.success(response);
+                        } else {
+                            context.fail(response);
+                        }
+                    })
+                    .error(function (data) {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = false;
+                        context.error(data);
+                    });
+            }
+    };
+    }]
+)
+.service('titleService', ['$localStorage', '$rootScope',
+    function ($localStorage, $rootScope) {
+        return {
+            setTitle: function(type, moduleName) {
+                $localStorage.moduleName = moduleName;
+                if (typeof $localStorage.titles === 'undefined') {
+                    $localStorage.titles = [];
+                }
+                $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                    + $localStorage.moduleName;
+                $rootScope.titles = $localStorage.titles;
+            }
+        };
+    }]
+)
+.service('paginationService', [
+    function () {
+        return {
+            initWatchers: function ($scope) {
+                $scope.$watch('currentPage + rowLimit', function () {
+                    $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
+                    if ($scope.currentPage > $scope.numberOfPages) {
+                        $scope.currentPage = $scope.numberOfPages;
+                    }
+                });
+            }
+        };
     }
-}]);
+])
+.filter('startFrom', function () {
+    return function (input, start) {
+        if (input !== undefined && start !== 'NaN') {
+            start = parseInt(start, 10);
+            return input.slice(start);
+        }
+        return 0;
+    };
+});

@@ -32,7 +32,7 @@ class Items extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
     public function getItemProduct(InjectableFixture $product)
     {
         return $this->blockFactory->create(
-            'Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items\ItemProduct',
+            \Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items\ItemProduct::class,
             [
                 'element' => $this->browser->find(
                     sprintf($this->itemProduct, $product->getName()),

@@ -19,16 +19,16 @@ class MultistoreTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
 
         $arguments = [
             'storeManager' => $this->_storeManagerMock,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
+            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            'Magento\Backend\Block\Widget\Grid\Column\Multistore',
+            \Magento\Backend\Block\Widget\Grid\Column\Multistore::class,
             $arguments
         );
     }

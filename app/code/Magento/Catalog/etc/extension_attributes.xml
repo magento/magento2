@@ -10,6 +10,9 @@
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
         <attribute code="custom_options" type="Magento\Catalog\Api\Data\CustomOptionInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="website_ids" type="int[]"/>
+    </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
         <attribute code="custom_options" type="Magento\Catalog\Api\Data\CustomOptionInterface[]" />
     </extension_attributes>
@@ -18,5 +21,8 @@
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface">
         <attribute code="video_content" type="Magento\Framework\Api\Data\VideoContentInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="category_links" type="Magento\Catalog\Api\Data\CategoryLinkInterface[]" />
     </extension_attributes>
 </config>
