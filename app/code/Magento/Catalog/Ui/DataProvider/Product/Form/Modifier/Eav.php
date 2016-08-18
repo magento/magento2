@@ -527,39 +527,9 @@ class Eav extends AbstractModifier
      *
      * @return bool
      */
-    private function isProductNew()
+    private function isProductExists()
     {
         return (bool) $this->locator->getProduct()->getId();
-    }
-
-    /**
-     * Check is product has some value for attribute
-     *
-     * @param ProductAttributeInterface $attribute
-     * @return bool
-     */
-    private function isProductHasValueForAttribute(ProductAttributeInterface $attribute)
-    {
-        /** @var \Magento\Framework\Api\AttributeInterface $attributeCode */
-        $attributeCode = $this->locator->getProduct()->getCustomAttribute($attribute->getAttributeCode());
-        return (bool)($attributeCode !== null) && $attributeCode->getValue();
-    }
-
-    /**
-     * Check should we display default values for attribute or not
-     *
-     * @param ProductAttributeInterface $attribute
-     * @return bool
-     */
-    private function isShowDefaultValue(ProductAttributeInterface $attribute)
-    {
-        if (!$this->isProductNew()) {
-            return true;
-        } elseif ($attribute->getIsRequired() && !$this->isProductHasValueForAttribute($attribute)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -584,7 +554,7 @@ class Eav extends AbstractModifier
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote(),
-            'default' => $this->isShowDefaultValue($attribute) ? $attribute->getDefaultValue() : null,
+            'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,

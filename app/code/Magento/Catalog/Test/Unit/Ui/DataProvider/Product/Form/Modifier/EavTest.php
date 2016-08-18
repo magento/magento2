@@ -182,7 +182,6 @@ class EavTest extends AbstractModifierTest
      */
     protected $eventManagerMock;
 
-
     /**
      * @var ObjectManager
      */
@@ -193,6 +192,9 @@ class EavTest extends AbstractModifierTest
      */
     protected $eav;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -466,13 +468,14 @@ class EavTest extends AbstractModifierTest
         $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn($productId);
+
         $this->productAttributeMock->expects($this->any())
             ->method('getIsRequired')
             ->willReturn($productRequired);
 
         $this->productAttributeMock->expects($this->any())
             ->method('getDefaultValue')
-            ->willReturn($productRequired? 'required_value' : null);
+            ->willReturn('required_value');
 
         $this->productAttributeMock->expects($this->any())
             ->method('getAttributeCode')
@@ -529,25 +532,6 @@ class EavTest extends AbstractModifierTest
             'default_null_prod_not_new_and_required' => [
                 'productId' => 1,
                 'productRequired' => true,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => true,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
-                    ],
-                ],
-            'default_null_prod_not_new_and_required_with_value' => [
-                'productId' => 1,
-                'productRequired' => true,
                 'attrValue' => 'val',
                 'expected' => [
                     'dataType' => null,
@@ -562,12 +546,12 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0
+                    ],
                 ],
-            ],
-            'default_null_prod_not_new_and_not_required_no_value' => [
+            'default_null_prod_not_new_and_not_required' => [
                 'productId' => 1,
                 'productRequired' => false,
-                'attrValue' => null,
+                'attrValue' => 'val',
                 'expected' => [
                     'dataType' => null,
                     'formElement' => null,
@@ -581,17 +565,17 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0
+                    ],
                 ],
-            ],
-            'default_null_prod_NEW_no_value' => [
+            'default_null_prod_new_and_not_required' => [
                 'productId' => null,
-                'productRequired' => true,
+                'productRequired' => false,
                 'attrValue' => null,
                 'expected' => [
                     'dataType' => null,
                     'formElement' => null,
                     'visible' => null,
-                    'required' => true,
+                    'required' => false,
                     'notice' => null,
                     'default' => 'required_value',
                     'label' => null,
@@ -602,6 +586,25 @@ class EavTest extends AbstractModifierTest
                     'sortOrder' => 0
                 ],
             ],
+            'default_null_prod_new_and_required' => [
+                'productId' => null,
+                'productRequired' => false,
+                'attrValue' => null,
+                'expected' => [
+                    'dataType' => null,
+                    'formElement' => null,
+                    'visible' => null,
+                    'required' => false,
+                    'notice' => null,
+                    'default' => 'required_value',
+                    'label' => null,
+                    'code' => 'code',
+                    'source' => 'product-details',
+                    'scopeLabel' => '',
+                    'globalScope' => false,
+                    'sortOrder' => 0
+                ],
+            ]
         ];
     }
 }
