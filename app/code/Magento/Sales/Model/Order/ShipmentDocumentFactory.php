@@ -118,10 +118,10 @@ class ShipmentDocumentFactory
      */
     private function itemsToArray(array $items = [])
     {
-        $invoiceItems = [];
+        $shipmentItems = [];
         foreach ($items as $item) {
-            $invoiceItems[$item->getOrderItemId()] = $item->getQty();
+            $shipmentItems[$item->getOrderItemId()] = $item->getQty();
         }
-        return $invoiceItems;
+        return $shipmentItems;
     }
 }
