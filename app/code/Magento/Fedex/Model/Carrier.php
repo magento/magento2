@@ -1089,9 +1089,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \stdClass $response
      * @return void
      */
-    protected function _parseTrackingResponse($trackingValue, \stdClass $response)
+    protected function _parseTrackingResponse($trackingValue, $response)
     {
-        if (in_array($response->HighestSeverity, self::$trackingErrors)) {
+        if (!is_object($response) || empty($response->HighestSeverity)) {
+            $this->appendTrackingError($trackingValue, __('Invalid response from carrier'));
+            return;
+        } else if (in_array($response->HighestSeverity, self::$trackingErrors)) {
             $this->appendTrackingError($trackingValue, (string) $response->Notifications->Message);
             return;
         } else if (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
