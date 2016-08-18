@@ -6,8 +6,10 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Config\Source;
 
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Source\Group;
 use Magento\Customer\Model\Customer\Source\GroupSourceForLoggedInCustomersInterface;
+use Magento\Framework\Convert\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
