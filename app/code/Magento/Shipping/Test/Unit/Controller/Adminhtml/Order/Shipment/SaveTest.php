@@ -12,7 +12,7 @@ use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
-use Magento\Sales\Model\Order\ShipmentQuantityValidator;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 
 /**
  * Class SaveTest
@@ -361,7 +361,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
             $this->shipmentValidatorMock->expects($this->once())
                 ->method('validate')
-                ->with($shipment, [ShipmentQuantityValidator::class])
+                ->with($shipment, [QuantityValidator::class])
                 ->willReturn([]);
 
             $this->saveAction->execute();
