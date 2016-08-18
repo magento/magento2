@@ -45,7 +45,6 @@ class InvoiceQuantityValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus'])
             ->getMockForAbstractClass();
 
         $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)

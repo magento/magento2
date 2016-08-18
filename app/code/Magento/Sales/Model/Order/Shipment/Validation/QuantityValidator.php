@@ -3,21 +3,20 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order;
+namespace Magento\Sales\Model\Order\Shipment\Validation;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\ValidatorInterface;
 
 /**
- * Class ShipmentQuantityValidator
+ * Class QuantityValidator
  */
-class ShipmentQuantityValidator implements ValidatorInterface
+class QuantityValidator implements ValidatorInterface
 {
     /**
      * @var OrderRepositoryInterface

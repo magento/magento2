@@ -63,12 +63,12 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     private $trackFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TrackFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|HydratorInterface
      */
     private $hydratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|HydratorInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|Track
      */
     private $trackMock;
 
@@ -110,7 +110,6 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['extract'])
             ->getMockForAbstractClass();
 
         $this->invoiceDocumentFactory = new ShipmentDocumentFactory(
@@ -144,10 +143,6 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
                 $items
             )
             ->willReturn($this->shipmentMock);
-
-        $this->trackMock->expects($this->once())
-            ->method('getTrackNumber')
-            ->willReturn($trackNum);
 
         $this->shipmentMock->expects($this->once())
             ->method('addTrack')
