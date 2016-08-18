@@ -131,7 +131,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->plugin = (new ObjectManager($this))->getObject(\Magento\Store\App\Action\Plugin\Context::class,
+        $this->plugin = (new ObjectManager($this))->getObject(
+            \Magento\Store\App\Action\Plugin\Context::class,
             [
                 'session' => $this->sessionMock,
                 'httpContext' => $this->httpContextMock,

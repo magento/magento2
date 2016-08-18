@@ -16,6 +16,8 @@ use Magento\PageCache\Model\Cache\Type as CacheType;
 
 /**
  * Plugin for processing builtin cache
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BuiltinPlugin
 {
