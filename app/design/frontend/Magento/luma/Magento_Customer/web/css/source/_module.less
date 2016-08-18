@@ -95,6 +95,15 @@
         }
     }
 
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            > .label {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
+    }
+
     .box-billing-address,
     .box-shipping-address,
     .box-information,
@@ -349,9 +358,15 @@
     .form-create-account {
         .fieldset-fullname {
             .fields {
+                display: table;
+                width: 100%;
+
                 .field {
-                    float: left;
-                    margin: 0 @indent__s @indent__s 0;
+                    display: table-cell;
+
+                    + .field {
+                        padding-left: @indent__s;
+                    }
                 }
             }
 
@@ -441,7 +456,7 @@
     }
 
     .form-address-edit {
-        .fieldset {
+        > .fieldset {
             &:extend(.abs-blocks-2columns all);
         }
     }
