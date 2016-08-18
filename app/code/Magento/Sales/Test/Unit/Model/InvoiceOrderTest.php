@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class InvoiceOrderTest
+ * 
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -24,7 +24,7 @@ use Magento\Sales\Model\Order\Validation\CanInvoice;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class InvoiceService
+ * Class InvoiceOrder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceOrder implements InvoiceOrderInterface
