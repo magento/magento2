@@ -21,15 +21,15 @@ use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\OrderInvoice;
+use Magento\Sales\Model\InvoiceOrder;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class OrderInvoiceTest
+ * Class InvoiceOrderTest
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -82,9 +82,9 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     private $notifierInterfaceMock;
 
     /**
-     * @var OrderInvoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceOrder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $orderInvoice;
+    private $invoiceOrder;
 
     /**
      * @var InvoiceCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -182,7 +182,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderInvoice = new OrderInvoice(
+        $this->invoiceOrder = new InvoiceOrder(
             $this->resourceConnectionMock,
             $this->orderRepositoryMock,
             $this->invoiceDocumentFactoryMock,
@@ -286,7 +286,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             2,
-            $this->orderInvoice->execute(
+            $this->invoiceOrder->execute(
                 $orderId,
                 $capture,
                 $items,
@@ -333,7 +333,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->orderMock)
             ->willReturn([]);
 
-        $this->orderInvoice->execute(
+        $this->invoiceOrder->execute(
             $orderId,
             $capture,
             $items,
@@ -395,7 +395,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->adapterInterface->expects($this->once())
             ->method('rollBack');
 
-        $this->orderInvoice->execute(
+        $this->invoiceOrder->execute(
             $orderId,
             $capture,
             $items,

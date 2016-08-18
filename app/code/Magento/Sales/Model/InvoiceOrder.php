@@ -9,7 +9,7 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
-use Magento\Sales\Api\OrderInvoiceInterface;
+use Magento\Sales\Api\InvoiceOrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
  * Class InvoiceService
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderInvoice implements OrderInvoiceInterface
+class InvoiceOrder implements InvoiceOrderInterface
 {
     /**
      * @var ResourceConnection
