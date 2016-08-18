@@ -20,6 +20,9 @@ class TrackValidator implements ValidatorInterface
     public function validate($entity)
     {
         $messages = [];
+        if ($entity->getTracks()) {
+            return $messages;
+        }
         foreach ($entity->getTracks() as $track) {
             if (!$track->getTrackNumber()) {
                 $messages[] = __('Please enter a tracking number.');
