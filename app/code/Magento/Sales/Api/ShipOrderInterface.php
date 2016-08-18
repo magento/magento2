@@ -21,7 +21,7 @@ interface ShipOrderInterface
      * @param bool $appendComment
      * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
-     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
+     * @param \Magento\Sales\Api\Data\ShipmentPackageCreationInterface[] $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return int Id of created Shipment.
      */

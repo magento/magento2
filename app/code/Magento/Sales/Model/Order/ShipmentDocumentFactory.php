@@ -6,6 +6,15 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
+use Magento\Sales\Api\Data\ShipmentPackageCreationInterface;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
+use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 /**
  * Class InvoiceDocumentFactory
  *
@@ -14,31 +23,31 @@ namespace Magento\Sales\Model\Order;
 class ShipmentDocumentFactory
 {
     /**
-     * @var \Magento\Framework\EntityManager\HydratorPool
+     * @var ShipmentFactory
      */
     private $shipmentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
+     * @var TrackFactory
      */
     private $trackFactory;
 
     /**
-     * @var \Magento\Framework\EntityManager\HydratorPool
+     * @var HydratorPool
      */
     private $hydratorPool;
 
     /**
      * ShipmentDocumentFactory constructor.
      *
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
-     * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+     * @param ShipmentFactory $shipmentFactory
+     * @param HydratorPool $hydratorPool
+     * @param TrackFactory $trackFactory
      */
     public function __construct(
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Framework\EntityManager\HydratorPool $hydratorPool,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+        ShipmentFactory $shipmentFactory,
+        HydratorPool $hydratorPool,
+        TrackFactory $trackFactory
     ) {
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
@@ -46,24 +55,25 @@ class ShipmentDocumentFactory
     }
 
     /**
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @param \Magento\Sales\Api\Data\ShipmentItemCreationInterface[] $items
-     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
-     * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
-     * @param bool $appendComment
-     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
-     * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
-     * @return Shipment
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @param OrderInterface $order
+     * @param ShipmentItemCreationInterface[] $items
+     * @param ShipmentTrackCreationInterface[] $tracks
+     * @param ShipmentCommentCreationInterface|null $comment
+     * @param bool $appendComment
+     * @param ShipmentPackageCreationInterface[] $packages
+     * @param ShipmentCreationArgumentsInterface|null $arguments
+     * @return ShipmentInterface
      */
     public function create(
-        \Magento\Sales\Api\Data\OrderInterface $order,
+        OrderInterface $order,
         array $items = [],
         array $tracks = [],
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ShipmentCommentCreationInterface $comment = null,
         $appendComment = false,
         array $packages = [],
-        \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
+        ShipmentCreationArgumentsInterface $arguments = null
     ) {
 
         $shipmentItems = $this->itemsToArray($items);
@@ -87,19 +97,13 @@ class ShipmentDocumentFactory
     /**
      * Adds tracks to the shipment.
      *
-     * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
-     * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Sales\Api\Data\ShipmentInterface
+     * @param ShipmentInterface $shipment
+     * @param ShipmentTrackCreationInterface[] $tracks
+     * @return ShipmentInterface
      */
     private function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
     {
         foreach ($tracks as $track) {
-            if (!$track->getTrackNumber()) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please enter a tracking number.')
-                );
-            }
             $hydrator = $this->hydratorPool->getHydrator(
                 \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class
             );
@@ -111,7 +115,7 @@ class ShipmentDocumentFactory
     /**
      * Convert Items To Array
      *
-     * @param \Magento\Sales\Api\Data\ShipmentItemCreationInterface[] $items
+     * @param ShipmentItemCreationInterface[] $items
      * @return array
      */
     private function itemsToArray($items = [])

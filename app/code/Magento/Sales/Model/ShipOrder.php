@@ -15,7 +15,8 @@ use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order\Shipment\NotifierInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
-use Magento\Sales\Model\Order\ShipmentQuantityValidator;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
+use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
 use Magento\Sales\Model\Order\Validation\CanShip;
 use Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface;
 use Psr\Log\LoggerInterface;
@@ -128,7 +129,7 @@ class ShipOrder implements ShipOrderInterface
      * @param bool $appendComment
      * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\ShipmentTrackCreationInterface[] $tracks
-     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
+     * @param \Magento\Sales\Api\Data\ShipmentPackageCreationInterface[] $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return int
      * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
@@ -158,19 +159,23 @@ class ShipOrder implements ShipOrderInterface
             $packages,
             $arguments
         );
-        $errorMessages = array_merge(
-            $this->orderValidator->validate(
-                $order,
-                [CanShip::class]
-            ),
-            $this->shipmentValidator->validate(
-                $shipment,
-                [ShipmentQuantityValidator::class]
-            )
+        $orderValidationResult = $this->orderValidator->validate(
+            $order,
+            [
+                CanShip::class
+            ]
         );
-        if (!empty($errorMessages)) {
+        $invoiceValidationResult = $this->shipmentValidator->validate(
+            $shipment,
+            [
+                QuantityValidator::class,
+                TrackValidator::class
+            ]
+        );
+        $validationMessages = array_merge($orderValidationResult, $invoiceValidationResult);
+        if (!empty($validationMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
+                __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages))
             );
         }
         $connection->beginTransaction();
