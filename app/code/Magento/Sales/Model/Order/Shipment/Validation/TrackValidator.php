@@ -20,7 +20,7 @@ class TrackValidator implements ValidatorInterface
     public function validate($entity)
     {
         $messages = [];
-        if ($entity->getTracks()) {
+        if (!$entity->getTracks()) {
             return $messages;
         }
         foreach ($entity->getTracks() as $track) {
