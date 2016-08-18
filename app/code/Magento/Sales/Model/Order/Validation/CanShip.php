@@ -16,7 +16,7 @@ class CanShip implements ValidatorInterface
 {
     /**
      * @param OrderInterface $entity
-     * @return string[]
+     * @return array
      */
     public function validate($entity)
     {

@@ -15,7 +15,7 @@ class TrackValidator implements ValidatorInterface
 {
     /**
      * @param object|ShipmentInterface $entity
-     * @return string[]
+     * @return array
      */
     public function validate($entity)
     {
