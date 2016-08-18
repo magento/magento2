@@ -581,7 +581,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [['section1/group1/field1' => 'some_value'], false, null, false, 'some_value', 1],
-            [[], 'Config Value', 'some/config/path', true, 'Config Value', 0]
+            [[], 'Config Value', 'some/config/path', true, 'Config Value', 1]
         ];
     }
 }
