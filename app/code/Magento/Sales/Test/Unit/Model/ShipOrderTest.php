@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class ShipOrderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ShipOrderTest extends \PHPUnit_Framework_TestCase
 {
