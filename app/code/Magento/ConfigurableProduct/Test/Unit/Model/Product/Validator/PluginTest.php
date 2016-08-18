@@ -111,7 +111,12 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects(static::once())->method('has')->with('attributes')->willReturn(true);
         $this->productMock->expects(static::once())->method('setTypeId')->willReturnSelf();
 
-        $this->plugin->beforeValidate($this->subjectMock, $this->productMock, $this->requestMock);
+        $this->plugin->beforeValidate(
+            $this->subjectMock,
+            $this->productMock,
+            $this->requestMock,
+            $this->responseMock
+        );
     }
 
     public function testAroundValidateWithVariationsValid()
