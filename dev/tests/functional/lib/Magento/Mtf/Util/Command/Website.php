@@ -58,6 +58,6 @@ class Website
      */
     private function prepareUrl($websiteCode)
     {
-        return $_ENV['app_frontend_url'] . Website::URL . '?website_code=' . urldecode($websiteCode);
+        return $_ENV['app_frontend_url'] . Website::URL . '?website_code=' . urlencode($websiteCode);
     }
 }

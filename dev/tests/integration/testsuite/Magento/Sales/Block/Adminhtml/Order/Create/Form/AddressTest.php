@@ -21,6 +21,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AddressRepositoryInterface */
     protected $addressRepository;
 
+    /**
+     * @return int
+     */
+    private function getNumberOfCountryOptions()
+    {
+        /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection */
+        $countryCollection = $this->_objectManager->create(
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class
+        );
+        return count($countryCollection->toOptionArray());
+    }
+
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -182,7 +194,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Data\Form\Element\Select $countryIdField */
         $countryIdField = $fieldset->getElements()->searchById('country_id');
-        $this->assertSelectCount('option', 246, $countryIdField->getElementHtml());
+        $this->assertSelectCount('option', $this->getNumberOfCountryOptions(), $countryIdField->getElementHtml());
     }
 
     /**
