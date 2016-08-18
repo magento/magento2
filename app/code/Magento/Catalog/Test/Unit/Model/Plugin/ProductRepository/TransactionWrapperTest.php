@@ -46,9 +46,9 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
-        $this->subjectMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Api\Data\ProductInterface', [], [], '', false);
+        $this->resourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class, [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class, [], [], '', false);
         $productMock = $this->productMock;
         $this->closureMock = function () use ($productMock) {
             return $productMock;

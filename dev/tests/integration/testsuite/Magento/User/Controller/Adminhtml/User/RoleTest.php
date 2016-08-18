@@ -15,7 +15,7 @@ class RoleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testEditRoleAction()
     {
         $roleAdmin = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Authorization\Model\Role');
+            ->create(\Magento\Authorization\Model\Role::class);
         $roleAdmin->load(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, 'role_name');
 
         $this->getRequest()->setParam('rid', $roleAdmin->getId());

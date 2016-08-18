@@ -50,20 +50,20 @@ class BackendTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->context->expects(static::once())
             ->method('getRequest')
             ->willReturn($this->request);
-        $this->directoryHelperMock = $this->getMockBuilder('Magento\Directory\Helper\Data')
+        $this->directoryHelperMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendConfig = $this->getMockBuilder('Magento\Config\Model\Config')
+        $this->backendConfig = $this->getMockBuilder(\Magento\Config\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeDefiner = $this->getMockBuilder('Magento\Config\Model\Config\ScopeDefiner')
+        $this->scopeDefiner = $this->getMockBuilder(\Magento\Config\Model\Config\ScopeDefiner::class)
             ->disableOriginalConstructor()
             ->getMock();
 

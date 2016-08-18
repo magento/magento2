@@ -27,10 +27,10 @@ class ModularSwitchTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ruleNonModular = $this->getMockForAbstractClass(
-            '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface'
+            \Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class
         );
         $this->ruleModular = $this->getMockForAbstractClass(
-            '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface'
+            \Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class
         );
         $this->object = new ModularSwitch($this->ruleNonModular, $this->ruleModular);
     }

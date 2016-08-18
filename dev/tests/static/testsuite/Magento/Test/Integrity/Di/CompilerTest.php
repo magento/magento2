@@ -301,15 +301,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generator = new \Magento\Framework\Code\Generator(
             $generatorIo,
             [
-                Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
-                Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
-                Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-                Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+                Factory::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
+                Repository::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Repository::class,
+                Converter::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Converter::class,
+                Mapper::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\Mapper::class,
+                SearchResults::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\SearchResults::class,
                 ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
+                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
                 ExtensionAttributesGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
+                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator::class
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

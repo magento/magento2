@@ -398,7 +398,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'data' => $this->data
             ]
         );
-        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product');
+        $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->importProduct, $metadataPoolMock);
@@ -410,7 +410,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected function _objectConstructor()
     {
         $this->optionFactory = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\OptionFactory',
+            \Magento\CatalogImportExport\Model\Import\Product\OptionFactory::class,
             ['create'],
             [],
             '',

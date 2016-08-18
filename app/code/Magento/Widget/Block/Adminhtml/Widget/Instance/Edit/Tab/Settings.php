@@ -146,7 +146,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
             ]
         );
         $continueButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'label' => __('Continue'),

@@ -66,7 +66,7 @@ class CreateCreditMemoEntityTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
 
         $setupConfigurationStep = $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'checkmo, flatrate']
         );
         $setupConfigurationStep->run();
@@ -83,11 +83,11 @@ class CreateCreditMemoEntityTest extends Injectable
     {
         // Preconditions
         $order->persist();
-        $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order])->run();
+        $this->objectManager->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
 
         // Steps
         $createCreditMemoStep = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateCreditMemoStep',
+            \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
             ['order' => $order, 'data' => $data]
         );
         $result = $createCreditMemoStep->run();

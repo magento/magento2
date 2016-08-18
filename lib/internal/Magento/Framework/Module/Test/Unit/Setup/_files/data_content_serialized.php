@@ -28,7 +28,7 @@ return [
         ],
         'aliases_map' => [
             \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL => [
-                'catalogrule/rule_condition_combine' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
+                'catalogrule/rule_condition_combine' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             ],
         ],
     ]

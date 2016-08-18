@@ -10,6 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\PackagesData;
+use \Magento\Setup\Model\Grid\TypeMapper;
 
 /**
  * Controller for extensions grid tasks
@@ -22,11 +23,20 @@ class InstallExtensionGrid extends AbstractActionController
     private $packagesData;
 
     /**
-     * @param PackagesData $packagesData
+     * @var TypeMapper
      */
-    public function __construct(PackagesData $packagesData)
-    {
+    private $typeMapper;
+
+    /**
+     * @param PackagesData $packagesData
+     * @param TypeMapper $typeMapper
+     */
+    public function __construct(
+        PackagesData $packagesData,
+        TypeMapper $typeMapper
+    ) {
         $this->packagesData = $packagesData;
+        $this->typeMapper = $typeMapper;
     }
 
     /**
@@ -50,6 +60,11 @@ class InstallExtensionGrid extends AbstractActionController
     {
         $extensions = $this->packagesData->getPackagesForInstall();
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
+        array_walk($packages, function (&$package) {
+            $package['vendor'] = ucfirst($package['vendor']);
+            $package['type'] =  $this->typeMapper->map($package['name'], $package['type']);
+        });
+
         return new JsonModel(
             [
                 'success' => true,

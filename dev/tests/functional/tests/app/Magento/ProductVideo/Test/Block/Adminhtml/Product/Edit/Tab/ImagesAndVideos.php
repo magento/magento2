@@ -51,7 +51,7 @@ class ImagesAndVideos extends Tab
     {
         $this->waitForElementVisible($this->newVideoDialog);
         return $this->blockFactory->create(
-            'Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\Images\VideoDialog',
+            \Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\Images\VideoDialog::class,
             ['element' => $this->browser->find($this->newVideoDialog)]
         );
     }

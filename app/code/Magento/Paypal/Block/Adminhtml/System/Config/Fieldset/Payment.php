@@ -87,6 +87,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
         if ($element->getComment()) {
             $html .= '<span class="heading-intro">' . $element->getComment() . '</span>';
         }
+        $html .= '<div class="config-alt"></div>';
         $html .= '</div>';
 
         $disabledAttributeString = $this->_isPaymentEnabled($element) ? '' : ' disabled="disabled"';
@@ -148,5 +149,34 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     protected function _isCollapseState($element)
     {
         return false;
+    }
+
+    /**
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _getExtraJs($element)
+    {
+        $script = "require(['jquery', 'prototype'], function(jQuery){
+            window.paypalToggleSolution = function (id, url) {
+                var doScroll = false;
+                Fieldset.toggleCollapse(id, url);
+                if ($(this).hasClassName(\"open\")) {
+                    $$(\".with-button button.button\").each(function(anotherButton) {
+                        if (anotherButton != this && $(anotherButton).hasClassName(\"open\")) {
+                            $(anotherButton).click();
+                            doScroll = true;
+                        }
+                    }.bind(this));
+                }
+                if (doScroll) {
+                    var pos = Element.cumulativeOffset($(this));
+                    window.scrollTo(pos[0], pos[1] - 45);
+                }
+            }
+        });";
+
+        return $this->_jsHelper->getScript($script);
     }
 }

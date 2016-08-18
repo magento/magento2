@@ -31,7 +31,7 @@ use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Currency;
 use Magento\Framework\Locale\Currency as CurrencyLocale;
-Use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class EavTest
@@ -349,7 +349,7 @@ class EavTest extends AbstractModifierTest
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('setAscendingDirection')
             ->willReturnSelf();
-        $dataObjectMock = $this->getMock('\Magento\Framework\Api\AbstractSimpleObject', [], [], '', false);
+        $dataObjectMock = $this->getMock(\Magento\Framework\Api\AbstractSimpleObject::class, [], [], '', false);
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($dataObjectMock);

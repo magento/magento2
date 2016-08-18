@@ -56,7 +56,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionMock = $this->getMockBuilder('\Magento\Setup\Module\Di\Definition\Collection')
+        $this->collectionMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Definition\Collection::class)
             ->setMethods([])->getMock();
         $this->model = new \Magento\Setup\Module\Di\Definition\Collection();
     }

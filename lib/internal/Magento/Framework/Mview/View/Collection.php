@@ -12,7 +12,7 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\Mview\ViewInterface';
+    protected $_itemObjectClass = \Magento\Framework\Mview\ViewInterface::class;
 
     /**
      * @var \Magento\Framework\Mview\ConfigInterface
