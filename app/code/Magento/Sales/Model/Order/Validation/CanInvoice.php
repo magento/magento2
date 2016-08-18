@@ -31,6 +31,10 @@ class CanInvoice implements ValidatorInterface
         return $messages;
     }
 
+    /**
+     * @param OrderInterface $order
+     * @return bool
+     */
     private function isStateReadyForInvoice(OrderInterface $order)
     {
         if ($order->getState() === Order::STATE_PAYMENT_REVIEW ||
