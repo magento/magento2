@@ -7,10 +7,9 @@ define(
         'ko',
         'jquery',
         'uiComponent',
-        'Magento_CheckoutAgreements/js/model/agreements-modal',
-        'Magento_Checkout/js/model/quote'
+        'Magento_CheckoutAgreements/js/model/agreements-modal'
     ],
-    function (ko, $, Component, agreementsModal, quote) {
+    function (ko, $, Component, agreementsModal) {
         'use strict';
         var checkoutConfig = window.checkoutConfig,
             agreementManualMode = 1,
