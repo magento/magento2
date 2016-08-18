@@ -72,7 +72,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
             ->method("getId")
             ->willReturn($customerId);
 
-        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer));
+        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer, $customer));
     }
 
     /**
@@ -125,7 +125,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
             ->method("getId")
             ->willReturn($customerId);
 
-        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer));
+        $this->assertEquals($customer, $this->plugin->afterSave($subject, $customer, $customer));
     }
 
     public function testAfterDelete()

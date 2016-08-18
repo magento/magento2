@@ -34,16 +34,17 @@ class CustomerPlugin
      *
      * @param CustomerRepository $subject
      * @param CustomerInterface $result
+     * @param CustomerInterface $customer
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(CustomerRepository $subject, CustomerInterface $result)
+    public function afterSave(CustomerRepository $subject, CustomerInterface $result, CustomerInterface $customer)
     {
         $this->subscriberFactory->create()->updateSubscription($result->getId());
-        if ($result->getId() && $result->getExtensionAttributes()) {
-            if ($result->getExtensionAttributes()->getIsSubscribed() === true) {
+        if ($result->getId() && $customer->getExtensionAttributes()) {
+            if ($customer->getExtensionAttributes()->getIsSubscribed() === true) {
                 $this->subscriberFactory->create()->subscribeCustomerById($result->getId());
-            } elseif ($result->getExtensionAttributes()->getIsSubscribed() === false) {
+            } elseif ($customer->getExtensionAttributes()->getIsSubscribed() === false) {
                 $this->subscriberFactory->create()->unsubscribeCustomerById($result->getId());
             }
         }
