@@ -11,7 +11,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 
 /**
- * Class QuantityValidatorTest
+ * Class TrackValidatorTest
  */
 class TrackValidatorTest extends \PHPUnit_Framework_TestCase
 {
