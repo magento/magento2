@@ -1091,7 +1091,7 @@ class Installer
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->get(\Magento\Framework\App\Cache\Manager::class);
         $cacheManager->clean([\Magento\Framework\DB\Adapter\DdlCache::TYPE_IDENTIFIER]);
-        $this->log->log('DDL cache was cleared successfully');
+        $this->log->log('DDL cache cleared successfully');
     }
 
     /**

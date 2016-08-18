@@ -304,7 +304,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(15))->method('log')->with('Schema post-updates:');
         $this->logger->expects($this->at(16))->method('log')->with("Module 'Foo_One':");
         $this->logger->expects($this->at(18))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(20))->method('log')->with('DDL cache was cleared successfully');
+        $this->logger->expects($this->at(20))->method('log')->with('DDL cache cleared successfully');
         $this->logger->expects($this->at(22))->method('log')->with('Installing user configuration...');
         $this->logger->expects($this->at(24))->method('log')->with('Enabling caches:');
         $this->logger->expects($this->at(28))->method('log')->with('Installing data...');
