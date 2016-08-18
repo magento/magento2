@@ -92,7 +92,6 @@
     <preference for="Magento\Sales\Model\Spi\ShipmentTrackResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Model\Spi\TransactionResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction"/>
     <preference for="Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface" type="Magento\Sales\Model\ResourceModel\Order\CollectionFactory"/>
-    <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
     <preference for="Magento\Sales\Api\InvoiceOrderInterface" type="Magento\Sales\Model\InvoiceOrder"/>
     <preference for="Magento\Sales\Model\Order\OrderStateResolverInterface" type="Magento\Sales\Model\Order\StateResolver"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackCreationInterface" type="Magento\Sales\Model\Order\Shipment\TrackCreation"/>
