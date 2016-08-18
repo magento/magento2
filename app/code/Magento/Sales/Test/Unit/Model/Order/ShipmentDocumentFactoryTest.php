@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
- * Class InvoiceDocumentFactoryTest
+ * Class ShipmentDocumentFactoryTest
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +50,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ShipmentDocumentFactory
      */
-    private $invoiceDocumentFactory;
+    private $shipmentDocumentFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|HydratorPool
@@ -112,7 +112,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->invoiceDocumentFactory = new ShipmentDocumentFactory(
+        $this->shipmentDocumentFactory = new ShipmentDocumentFactory(
             $this->shipmentFactoryMock,
             $this->hydratorPoolMock,
             $this->trackFactoryMock
@@ -181,7 +181,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals(
-            $this->invoiceDocumentFactory->create(
+            $this->shipmentDocumentFactory->create(
                 $this->orderMock,
                 [$this->itemMock],
                 $tracks,

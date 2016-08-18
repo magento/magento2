@@ -18,7 +18,7 @@ class ShipmentValidator implements ShipmentValidatorInterface
     private $validator;
 
     /**
-     * InvoiceValidatorRunner constructor.
+     * ShipmentValidator constructor.
      * @param \Magento\Sales\Model\Validator $validator
      */
     public function __construct(\Magento\Sales\Model\Validator $validator)
