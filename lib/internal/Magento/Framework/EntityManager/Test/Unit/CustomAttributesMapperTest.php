@@ -51,6 +51,9 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getMetadata', 'hasConfiguration'])
             ->getMock();
         $metadataPool->expects($this->any())
+            ->method('hasConfiguration')
+            ->willReturn(true);
+        $metadataPool->expects($this->any())
             ->method('getMetadata')
             ->with($this->equalTo(\Magento\Customer\Api\Data\AddressInterface::class))
             ->will($this->returnValue($metadata));

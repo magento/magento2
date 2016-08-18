@@ -20,7 +20,8 @@ class TypeResolver
      */
     private $typeMapping = [
         \Magento\SalesRule\Model\Rule::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
-        \Magento\SalesRule\Model\Rule\Interceptor::class => \Magento\SalesRule\Api\Data\RuleInterface::class
+        \Magento\SalesRule\Model\Rule\Interceptor::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
+        \Magento\SalesRule\Model\Rule\Proxy::class => \Magento\SalesRule\Api\Data\RuleInterface::class
     ];
 
     /**
@@ -50,8 +51,7 @@ class TypeResolver
         $dataInterfaces = [];
         foreach ($interfaceNames as $interfaceName) {
             if (strpos($interfaceName, '\Api\Data\\')) {
-                $dataInterfaces[] = isset($this->config[$interfaceName])
-                    ? $this->config[$interfaceName] : $interfaceName;
+                $dataInterfaces[] = $interfaceName;
             }
         }
 
