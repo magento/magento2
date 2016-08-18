@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -45,22 +46,31 @@ class ShipmentQuantityValidator implements ValidatorInterface
             return [__('Order Id is required for shipment document')];
         }
 
-        if ($entity->getItems() === null) {
+        if (empty($entity->getItems())) {
             return [__('You can\'t create a shipment without products.')];
         }
         $messages = [];
 
         $order = $this->orderRepository->get($entity->getOrderId());
+        $orderItemsById = $this->getOrderItems($order);
+
         $totalQuantity = 0;
         foreach ($entity->getItems() as $item) {
-            $orderItem = $this->getOrderItemById($order, $item->getOrderItemId());
-            if ($orderItem === null) {
-                $messages[] = __('We can not found item "%1" in order.', $item->getOrderItemId());
+            if (!isset($orderItemsById[$item->getOrderItemId()])) {
+                $messages[] = __(
+                    'The shipment contains product SKU "%1" that is not part of the original order.',
+                    $item->getSku()
+                );
                 continue;
             }
+            $orderItem = $orderItemsById[$item->getOrderItemId()];
 
             if (!$this->isQtyAvailable($orderItem, $item->getQty())) {
-                $messages[] =__('We found an invalid quantity to ship for item "%1".', $item->getName());
+                $messages[] =__(
+                    'The quantity to ship must not be greater than the unshipped quantity'
+                    . ' for product SKU "%1".',
+                    $orderItem->getSku()
+                );
             } else {
                 $totalQuantity += $item->getQty();
             }
@@ -68,23 +78,22 @@ class ShipmentQuantityValidator implements ValidatorInterface
         if ($totalQuantity <= 0) {
             $messages[] = __('You can\'t create a shipment without products.');
         }
+
         return $messages;
     }
 
     /**
      * @param OrderInterface $order
-     * @param int $id
-     * @return \Magento\Sales\Api\Data\OrderItemInterface|null
+     * @return OrderItemInterface[]
      */
-    private function getOrderItemById(OrderInterface $order, $id)
+    private function getOrderItems(OrderInterface $order)
     {
+        $orderItemsById = [];
         foreach ($order->getItems() as $item) {
-            if ($item->getItemId() === $id) {
-                return $item;
-            }
+            $orderItemsById[$item->getItemId()] = $item;
         }
 
-        return null;
+        return $orderItemsById;
     }
 
     /**

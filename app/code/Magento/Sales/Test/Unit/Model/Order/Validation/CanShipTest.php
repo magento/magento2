@@ -60,9 +60,13 @@ class CanShipTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('getState')
             ->willReturn($state);
+        $this->orderMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn('status');
         $this->orderMock->expects($this->never())
             ->method('getItems');
-        $this->assertNotEmpty(
+        $this->assertEquals(
+            [__('A shipment cannot be created when an order has a status of %1', 'status')],
             $this->model->validate($this->orderMock)
         );
     }
