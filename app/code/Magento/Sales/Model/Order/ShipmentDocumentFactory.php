@@ -14,8 +14,9 @@ use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
+
 /**
- * Class InvoiceDocumentFactory
+ * Class ShipmentDocumentFactory
  *
  * @api
  */
