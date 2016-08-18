@@ -205,10 +205,31 @@ class DiCompileCommand extends Command
      */
     private function getExcludedModulePaths($modulePaths)
     {
-        $excludedModulePaths = [];
-        foreach ($modulePaths as $appCodePath) {
-            $excludedModulePaths[] = '#^' . $appCodePath . '/Test#';
+        $modulesByBasePath = [];
+        foreach ($modulePaths as $modulePath) {
+            $moduleDir = basename($modulePath);
+            $vendorPath = dirname($modulePath);
+            $vendorDir = basename($vendorPath);
+            $basePath = dirname($vendorPath);
+            $modulesByBasePath[$basePath][$vendorDir][] = $moduleDir;
         }
+
+        $basePathsRegExps = [];
+        foreach ($modulesByBasePath as $basePath => $vendorPaths) {
+            $vendorPathsRegExps = [];
+            foreach ($vendorPaths as $vendorDir => $vendorModules) {
+                $vendorPathsRegExps[] = $vendorDir
+                    . DIRECTORY_SEPARATOR
+                    . '(?:' . join('|', $vendorModules) . ')';
+            }
+            $basePathsRegExps[] = $basePath
+                . DIRECTORY_SEPARATOR
+                . '(?:' . join('|', $vendorPathsRegExps) . ')';
+        }
+
+        $excludedModulePaths = [
+            '#^(?:' . join('|', $basePathsRegExps) . ')/Test#',
+        ];
         return $excludedModulePaths;
     }
 
@@ -220,10 +241,9 @@ class DiCompileCommand extends Command
      */
     private function getExcludedLibraryPaths($libraryPaths)
     {
-        $excludedLibraryPaths = [];
-        foreach ($libraryPaths as $libraryPath) {
-            $excludedLibraryPaths[] = '#^' . $libraryPath . '/([\\w]+/)?Test#';
-        }
+        $excludedLibraryPaths = [
+            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
+        ];
         return $excludedLibraryPaths;
     }
 
