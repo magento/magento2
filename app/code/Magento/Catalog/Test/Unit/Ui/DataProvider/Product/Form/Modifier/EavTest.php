@@ -453,8 +453,8 @@ class EavTest extends AbstractModifierTest
      * @param bool $productRequired
      * @param string $attrValue
      * @param array $expected
-     * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier::isProductExists
-     * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier::setupAttributeMeta
+     * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
+     * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
     public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $expected)
