@@ -219,12 +219,10 @@ class DiCompileCommand extends Command
             $vendorPathsRegExps = [];
             foreach ($vendorPaths as $vendorDir => $vendorModules) {
                 $vendorPathsRegExps[] = $vendorDir
-                    . DIRECTORY_SEPARATOR
-                    . '(?:' . join('|', $vendorModules) . ')';
+                    . '/(?:' . join('|', $vendorModules) . ')';
             }
             $basePathsRegExps[] = $basePath
-                . DIRECTORY_SEPARATOR
-                . '(?:' . join('|', $vendorPathsRegExps) . ')';
+                . '/(?:' . join('|', $vendorPathsRegExps) . ')';
         }
 
         $excludedModulePaths = [
