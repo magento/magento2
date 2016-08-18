@@ -145,10 +145,6 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($this->shipmentMock);
 
-        $this->trackMock->expects($this->once())
-            ->method('getTrackNumber')
-            ->willReturn($trackNum);
-
         $this->shipmentMock->expects($this->once())
             ->method('addTrack')
             ->willReturnSelf();
