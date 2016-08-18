@@ -127,7 +127,7 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['store', 0, 0],
-                    ['configurable-matrix', [], $configurableMatrix]
+                    ['configurable-matrix-serialized', '[]', json_encode($configurableMatrix)]
                 ]
             );
         $this->variationHandlerMock->expects(static::once())
