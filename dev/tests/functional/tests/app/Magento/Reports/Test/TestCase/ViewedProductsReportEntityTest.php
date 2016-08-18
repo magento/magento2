@@ -26,14 +26,13 @@ use Magento\Cms\Test\Page\CmsIndex;
  * 4. Click "Show report"
  * 5. Perform all assertions
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-27954
  */
 class ViewedProductsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

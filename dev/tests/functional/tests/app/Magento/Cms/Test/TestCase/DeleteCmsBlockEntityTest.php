@@ -24,14 +24,13 @@ use Magento\Catalog\Test\Fixture\Category;
  * 4. Click "Delete Block".
  * 5. Perform all assertions.
  *
- * @group CMS_Content_(PS)
+ * @group CMS_Content
  * @ZephyrId MAGETWO-25698
  */
 class DeleteCmsBlockEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
