@@ -66,5 +66,4 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(true));
         $this->_plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
-
 }
