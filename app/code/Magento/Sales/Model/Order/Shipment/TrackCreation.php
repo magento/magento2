@@ -32,6 +32,8 @@ class TrackCreation implements ShipmentTrackCreationInterface
      */
     private $extensionAttributes;
 
+    //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
@@ -100,4 +102,6 @@ class TrackCreation implements ShipmentTrackCreationInterface
         $this->extensionAttributes = $extensionAttributes;
         return $this;
     }
+
+    //@codeCoverageIgnoreEnd
 }

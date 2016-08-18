@@ -93,5 +93,6 @@ class CommentCreation implements InvoiceCommentCreationInterface
         \Magento\Sales\Api\Data\InvoiceCommentCreationExtensionInterface $extensionAttributes
     ) {
         $this->extensionAttributes = $extensionAttributes;
+        return $this;
     }
 }

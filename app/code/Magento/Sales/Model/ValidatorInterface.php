@@ -15,7 +15,7 @@ interface ValidatorInterface
 {
     /**
      * @param object $entity
-     * @return string[]
+     * @return array
      * @throws DocumentValidationException
      * @throws NoSuchEntityException
      */

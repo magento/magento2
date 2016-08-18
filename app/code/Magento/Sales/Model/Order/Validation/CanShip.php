@@ -5,9 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Validation;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ValidatorInterface;
 
@@ -18,12 +16,14 @@ class CanShip implements ValidatorInterface
 {
     /**
      * @param OrderInterface $entity
-     * @return string[]
+     * @return array
      */
     public function validate($entity)
     {
         $messages = [];
-        if (!$this->canShip($entity)) {
+        if (!$this->isStateReadyForShipment($entity)) {
+            $messages[] = __('A shipment cannot be created when an order has a status of %1', $entity->getStatus());
+        } elseif (!$this->canShip($entity)) {
             $messages[] = __('The order does not allow a shipment to be created.');
         }
 
@@ -34,7 +34,7 @@ class CanShip implements ValidatorInterface
      * @param OrderInterface $order
      * @return bool
      */
-    private function canShip(OrderInterface $order)
+    private function isStateReadyForShipment(OrderInterface $order)
     {
         if ($order->getState() === Order::STATE_PAYMENT_REVIEW ||
             $order->getState() === Order::STATE_HOLDED ||
@@ -44,6 +44,15 @@ class CanShip implements ValidatorInterface
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * @param OrderInterface $order
+     * @return bool
+     */
+    private function canShip(OrderInterface $order)
+    {
         /** @var \Magento\Sales\Model\Order\Item $item */
         foreach ($order->getItems() as $item) {
             if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {

@@ -11,7 +11,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 
 /**
- * Class QuantityValidatorTest
+ * Class TrackValidatorTest
  */
 class TrackValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,9 +34,9 @@ class TrackValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->shipmentTrackMock = $this->getMockBuilder(ShipmentTrackInterface::class)
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->shipmentMock->expects($this->once())
             ->method('getTracks')
             ->willReturn([$this->shipmentTrackMock]);

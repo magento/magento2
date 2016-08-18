@@ -165,14 +165,14 @@ class ShipOrder implements ShipOrderInterface
                 CanShip::class
             ]
         );
-        $invoiceValidationResult = $this->shipmentValidator->validate(
+        $shipmentValidationResult = $this->shipmentValidator->validate(
             $shipment,
             [
                 QuantityValidator::class,
                 TrackValidator::class
             ]
         );
-        $validationMessages = array_merge($orderValidationResult, $invoiceValidationResult);
+        $validationMessages = array_merge($orderValidationResult, $shipmentValidationResult);
         if (!empty($validationMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages))
