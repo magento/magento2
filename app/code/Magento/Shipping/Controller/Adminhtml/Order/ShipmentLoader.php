@@ -1,15 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
-use Magento\Sales\Model\Order\ShipmentQuantityValidator;
 
 /**
  * Class ShipmentLoader
