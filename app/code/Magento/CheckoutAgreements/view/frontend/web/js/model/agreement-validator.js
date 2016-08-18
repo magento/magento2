@@ -36,11 +36,9 @@ define(
                     errorElement: 'div',
                     meta: 'validate',
                     errorPlacement: function (error, element) {
-                        var errorPlacement = element;
-                        if (element.is(':checkbox') || element.is(':radio')) {
-                            errorPlacement = element.siblings('label').last();
-                        }
-                        errorPlacement.after(error);
+                        $("input[name='"+element.attr('name')+"'").each(function() {
+                            $(this).next('label').after(error.clone());
+                        });
                     }
                 }).element(agreementsInputPath);
             }
