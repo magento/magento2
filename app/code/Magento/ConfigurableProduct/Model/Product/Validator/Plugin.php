@@ -82,7 +82,7 @@ class Plugin
         $result,
         \Magento\Catalog\Model\Product $product,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\DataObject $response
+        DataObject $response
     ) {
         $variationProducts = (array)$request->getPost('variations-matrix');
         if ($variationProducts) {
