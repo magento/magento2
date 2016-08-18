@@ -91,6 +91,6 @@ class CommentCreation implements ShipmentCommentCreationInterface
     public function setIsVisibleOnFront($isVisibleOnFront)
     {
         $this->isVisibleOnFront = $isVisibleOnFront;
-        return $isVisibleOnFront;
+        return $this;
     }
 }
