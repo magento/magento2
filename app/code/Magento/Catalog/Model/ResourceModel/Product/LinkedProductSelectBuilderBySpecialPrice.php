@@ -86,15 +86,16 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
         $specialPriceToDate = $this->eavConfig->getAttribute(Product::ENTITY, 'special_to_date');
         $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);
+        $productTable = $this->resource->getTableName('catalog_product_entity');
 
         $specialPrice = $this->resource->getConnection()->select()
-            ->from(['parent' => 'catalog_product_entity'], '')
+            ->from(['parent' => $productTable], '')
             ->joinInner(
                 ['link' => $this->resource->getTableName('catalog_product_relation')],
                 "link.parent_id = parent.$linkField",
                 []
             )->joinInner(
-                ['child' => 'catalog_product_entity'],
+                ['child' => $productTable],
                 "child.entity_id = link.child_id",
                 ['entity_id']
             )->joinInner(
