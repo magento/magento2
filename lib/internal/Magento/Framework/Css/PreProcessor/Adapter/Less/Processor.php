@@ -16,6 +16,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 
 /**
  * Class Processor
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Processor implements ContentProcessorInterface
 {
@@ -81,9 +82,11 @@ class Processor implements ContentProcessorInterface
             }
 
             $tmpFilePath = $this->temporaryFile->createFile($path, $content);
-            $parser->parseFile($tmpFilePath, '');
 
+            gc_disable();
+            $parser->parseFile($tmpFilePath, '');
             $content = $parser->getCss();
+            gc_enable();
 
             if (trim($content) === '') {
                 $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;
