@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Sales\Model\ResourceModel\Order as Resource;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
