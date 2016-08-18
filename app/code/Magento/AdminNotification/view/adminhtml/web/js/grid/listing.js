@@ -38,7 +38,7 @@ define([
         },
 
         /**
-         * Calculate loader height
+         * Calculates loader height
          *
          * @param {Boolean} [closed]
          */
