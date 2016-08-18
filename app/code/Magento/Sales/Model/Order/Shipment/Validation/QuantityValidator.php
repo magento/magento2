@@ -11,6 +11,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ValidatorInterface;
 
 /**
