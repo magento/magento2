@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\ShipmentInterface;
@@ -75,7 +74,6 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-
         $shipmentItems = $this->itemsToArray($items);
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
@@ -113,12 +111,12 @@ class ShipmentDocumentFactory
     }
 
     /**
-     * Convert Items To Array
+     * Convert items to array
      *
      * @param ShipmentItemCreationInterface[] $items
      * @return array
      */
-    private function itemsToArray($items = [])
+    private function itemsToArray(array $items = [])
     {
         $invoiceItems = [];
         foreach ($items as $item) {
