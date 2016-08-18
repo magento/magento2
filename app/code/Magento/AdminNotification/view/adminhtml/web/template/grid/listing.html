@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<div id="system_messages" class="message-system">
-    <div class="message-system-inner" data-bind="collapsible">
+<div id="system_messages" class="message-system" collapsible>
+    <div class="message-system-inner" outerClick="fixLoaderHeight.bind($data, true)">
         <div class="message-system-short">
-            <button data-bind="toggleCollapsible" class="message-system-action-dropdown">
+            <button class="message-system-action-dropdown" toggleCollapsible>
                 <span>
                     <translate args="'System Messages'"/>:
-                    <text args="rows.length"/>
+                    <text args="totalRecords"/>
                 </span>
             </button>
             <div class="message-system-short-wrapper" if="rows[0]" repeat="foreach: [rows[0]], item: '$row'" visible="!$collapsible.opened()">

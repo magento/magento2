@@ -9,8 +9,10 @@
 
 @message-system__background-color: @color-lazy-sun;
 @message-system__border-color: @color-gray82;
+@message-system__border-width: .1rem;
 @message-system__color: @color-gray20;
 @message-system-short-message__padding-vertical: 1.5rem;
+@message-system-short-wrapper__height: 5rem;
 
 //  Triangle marker
 @message-system-triangle__height: .5rem;
@@ -25,7 +27,7 @@
     &:extend(.abs-clearfix all);
     background: @message-system__background-color;
     border: solid @message-system__border-color;
-    border-width: 0 1px 1px;
+    border-width: 0 @message-system__border-width @message-system__border-width;
     position: relative;
 
     .message-error {
@@ -67,6 +69,10 @@
     }
 }
 
+.message-system-short {
+    height: @message-system-short-wrapper__height;
+}
+
 .message-system-short-wrapper {
     overflow: hidden;
     padding: 0 1.5rem 0 @indent__l;
@@ -74,7 +80,7 @@
 
 .message-system-collapsible {
     background: @message-system__background-color;
-    border: 1px solid @message-system__border-color;
+    border: @message-system__border-width solid @message-system__border-color;
     border-top: 0;
     display: none;
     left: -1px;
@@ -82,7 +88,7 @@
     position: absolute;
     right: -1px;
     top: 100%;
-    z-index: @z-index-8;
+    z-index: @z-index-5 - 2;
 
     ._active & {
         display: block;
@@ -119,5 +125,15 @@
             margin: 0;
             padding: 0;
         }
+    }
+}
+
+.notices-wrapper {
+    .admin__data-grid-loading-mask {
+        z-index: @z-index-5 - 1;
+    }
+
+    .admin__data-grid-outer-wrap {
+        min-height: @message-system-short-wrapper__height + @message-system__border-width;
     }
 }
