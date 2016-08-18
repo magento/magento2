@@ -24,12 +24,15 @@ class StoreCheck
 
     /**
      * @param \Magento\Framework\App\Action\AbstractAction $subject
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\State\InitException
      */
-    public function beforeDispatch(\Magento\Framework\App\Action\AbstractAction $subject)
-    {
+    public function beforeDispatch(
+        \Magento\Framework\App\Action\AbstractAction $subject,
+        \Magento\Framework\App\RequestInterface $request
+    ) {
         if (!$this->_storeManager->getStore()->isActive()) {
             throw new \Magento\Framework\Exception\State\InitException(
                 __('Current store is not active.')

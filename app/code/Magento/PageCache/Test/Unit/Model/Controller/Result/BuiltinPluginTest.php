@@ -16,6 +16,9 @@ use Magento\Framework\App\Response\Http as ResponseHttp;
 use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
 use Magento\PageCache\Model\Cache\Type as CacheType;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**

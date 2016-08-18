@@ -5,12 +5,12 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Validator;
 
-use Closure;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\DataObject;
 
 /**
  * Configurable product validation
@@ -51,13 +51,15 @@ class Plugin
      * @param Product\Validator $subject
      * @param Product $product
      * @param RequestInterface $request
+     * @param DataObject $response
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeValidate(
         \Magento\Catalog\Model\Product\Validator $subject,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request,
+        DataObject $response
     ) {
         if ($request->has('attributes')) {
             $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);

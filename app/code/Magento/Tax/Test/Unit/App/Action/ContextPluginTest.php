@@ -160,11 +160,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
             $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
             $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-            $expectedResult = 'expectedResult';
-            $proceed = function ($request) use ($expectedResult) {
-                return $expectedResult;
-            };
-            $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+            $this->contextPlugin->beforeDispatch($action, $request);
         }
     }
 

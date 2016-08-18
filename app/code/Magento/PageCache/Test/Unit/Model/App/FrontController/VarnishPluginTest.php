@@ -14,6 +14,9 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class VarnishPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -50,7 +50,7 @@ class VarnishPlugin
      *
      * @param FrontControllerInterface $subject
      * @param ResponseInterface|ResultInterface $result
-     * @return ResponseHttp|ResultInterface|false
+     * @return ResponseHttp|ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

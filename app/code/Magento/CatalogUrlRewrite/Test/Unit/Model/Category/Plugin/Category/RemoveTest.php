@@ -61,7 +61,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $proceed  = function () use ($closureSubject) {
             return $closureSubject;
         };
-        $plugin =  $this->objectManager->getObject(
+        $plugin = $this->objectManager->getObject(
             Remove::class,
             [
                 'urlPersist' => $this->urlPersistMock,
