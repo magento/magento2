@@ -37,9 +37,6 @@ class TrackValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->shipmentTrackMock = $this->getMockBuilder(ShipmentTrackInterface::class)
             ->getMockForAbstractClass();
-        $this->shipmentMock->expects($this->once())
-            ->method('getTracks')
-            ->willReturn([$this->shipmentTrackMock]);
         $this->validator = $objectManagerHelper->getObject(TrackValidator::class);
     }
 
@@ -48,6 +45,9 @@ class TrackValidatorTest extends \PHPUnit_Framework_TestCase
         $this->shipmentTrackMock->expects($this->once())
             ->method('getTrackNumber')
             ->willReturn('12345');
+        $this->shipmentMock->expects($this->exactly(2))
+            ->method('getTracks')
+            ->willReturn([$this->shipmentTrackMock]);
         $this->assertEquals([], $this->validator->validate($this->shipmentMock));
     }
 
@@ -56,6 +56,19 @@ class TrackValidatorTest extends \PHPUnit_Framework_TestCase
         $this->shipmentTrackMock->expects($this->once())
             ->method('getTrackNumber')
             ->willReturn(null);
+        $this->shipmentMock->expects($this->exactly(2))
+            ->method('getTracks')
+            ->willReturn([$this->shipmentTrackMock]);
         $this->assertEquals([__('Please enter a tracking number.')], $this->validator->validate($this->shipmentMock));
+    }
+
+    public function testValidateTrackWithEmptyTracks()
+    {
+        $this->shipmentTrackMock->expects($this->never())
+            ->method('getTrackNumber');
+        $this->shipmentMock->expects($this->once())
+            ->method('getTracks')
+            ->willReturn([]);
+        $this->assertEquals([], $this->validator->validate($this->shipmentMock));
     }
 }
