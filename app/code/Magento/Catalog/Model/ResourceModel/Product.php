@@ -567,7 +567,7 @@ class Product extends AbstractResource
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->loadAttributesMetadata($attributes);
+        $this->loadAttributesMetadata($attributes, $object);
         $this->getEntityManager()->load($object, $entityId);
         return $this;
     }

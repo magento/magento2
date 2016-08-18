@@ -975,12 +975,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Loads attributes metadata.
      *
      * @param array|null $attributes
+     * @param null|\Magento\Framework\DataObject $object
      * @return $this
      */
-    protected function loadAttributesMetadata($attributes)
+    protected function loadAttributesMetadata($attributes, $object = null)
     {
         if (empty($attributes)) {
-            $this->loadAllAttributes();
+            $this->loadAllAttributes($object);
         } else {
             if (!is_array($attributes)) {
                 $attributes = [$attributes];
