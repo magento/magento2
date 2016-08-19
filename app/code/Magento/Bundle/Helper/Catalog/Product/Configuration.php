@@ -142,6 +142,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                                     . $this->pricingHelper->currency(
                                         $this->getSelectionFinalPrice($item, $bundleSelection)
                                     );
+                                $option['has_html'] = true;
                             }
                         }
 
