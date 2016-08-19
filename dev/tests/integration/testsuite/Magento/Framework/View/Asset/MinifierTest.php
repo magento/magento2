@@ -140,27 +140,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store dev/css/minify_files 1
-     */
-    public function testCssMinification()
-    {
-        $this->_testCssMinification(
-            '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css',
-            function ($path) {
-                $this->assertEquals(
-                    file_get_contents(
-                        dirname(__DIR__)
-                        . '/_files/static/expected/styles.magento.min.css'
-                    ),
-                    file_get_contents($path),
-                    'Minified files are not equal or minification did not work for requested CSS'
-                );
-            }
-        );
-    }
-
-    /**
      * @magentoConfigFixture current_store dev/css/minify_files 0
+     * @magentoAppIsolation enabled
      */
     public function testCssMinificationOff()
     {
@@ -177,6 +158,26 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                     ),
                     $content,
                     'CSS is minified when minification turned off'
+                );
+            }
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 1
+     */
+    public function testCssMinification()
+    {
+        $this->_testCssMinification(
+            '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css',
+            function ($path) {
+                $this->assertEquals(
+                    file_get_contents(
+                        dirname(__DIR__)
+                        . '/_files/static/expected/styles.magento.min.css'
+                    ),
+                    file_get_contents($path),
+                    'Minified files are not equal or minification did not work for requested CSS'
                 );
             }
         );
