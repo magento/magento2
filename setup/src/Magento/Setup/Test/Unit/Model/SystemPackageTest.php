@@ -321,35 +321,106 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $eeCurrentVersion
+     * @param array $expectedResult
+     *
+     * @dataProvider getAllowedB2bVersionsDataProvider
+     */
+    public function testGetAllowedB2bVersions($eeCurrentVersion, $expectedResult)
+    {
+        $this->composerAppFactory->expects($this->once())
+            ->method('createInfoCommand')
+            ->willReturn($this->infoCommand);
+        $this->systemPackage = new SystemPackage($this->composerAppFactory, $this->composerInformation);
+        $this->infoCommand->expects($this->once())
+            ->method('run')
+            ->with('magento/product-b2b-edition')
+            ->willReturn(['available_versions' => ['1.0.0', '1.0.1', '1.0.2']]);
+        $require = $this->getMock(\Composer\Package\Link::class, [], [], '', false);
+        $constraintMock = $this->getMock(\Composer\Semver\Constraint\Constraint::class, [], [], '', false);
+        $constraintMock->expects($this->any())->method('getPrettyString')
+            ->willReturn('1.0.1');
+        $require->expects($this->any())
+            ->method('getConstraint')
+            ->willReturn($constraintMock);
+
+        $this->composerInformation->expects($this->any())
+            ->method('getPackageRequirements')
+            ->willReturn(['magento/product-enterprise-edition' => $require]);
+        $this->assertEquals(
+            $expectedResult,
+            $this->systemPackage->getAllowedB2BVersions($eeCurrentVersion)
+        );
+    }
+
+    /**
      * @return array
      */
     public function getAllowedEnterpriseVersionsDataProvider()
     {
         return [
             ['2.0.0', []],
-            ['1.0.0', [
+            [
+                '1.0.0',
                 [
-                    'package' => 'magento/product-enterprise-edition',
-                    'versions' => [
-                        [
-                            'id' => '1.0.2',
-                            'name' => 'Version 1.0.2 EE (latest)',
-                            'current' => false,
-                        ],
-                        [
-                            'id' => '1.0.1',
-                            'name' => 'Version 1.0.1 EE',
-                            'current' => false,
-                        ],
-                        [
+                    [
+                        'package' => 'magento/product-enterprise-edition',
+                        'versions' => [
+                            [
+                                'id' => '1.0.2',
+                                'name' => 'Version 1.0.2 EE (latest)',
+                                'current' => false,
+                            ],
+                            [
+                                'id' => '1.0.1',
+                                'name' => 'Version 1.0.1 EE',
+                                'current' => false,
+                            ],
+                            [
 
-                            'id' => '1.0.0',
-                            'name' => 'Version 1.0.0 EE',
-                            'current' => false,
+                                'id' => '1.0.0',
+                                'name' => 'Version 1.0.0 EE',
+                                'current' => false,
+                            ],
                         ],
                     ],
                 ],
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedB2bVersionsDataProvider()
+    {
+        return [
+            ['2.0.0', []],
+            [
+                '1.0.0',
+                [
+                    [
+                        'package' => 'magento/product-b2b-edition',
+                        'versions' => [
+                            [
+                                'id' => '1.0.2',
+                                'name' => 'Version 1.0.2 B2B (latest)',
+                                'current' => false,
+                            ],
+                            [
+                                'id' => '1.0.1',
+                                'name' => 'Version 1.0.1 B2B',
+                                'current' => false,
+                            ],
+                            [
+
+                                'id' => '1.0.0',
+                                'name' => 'Version 1.0.0 B2B',
+                                'current' => false,
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
     }
