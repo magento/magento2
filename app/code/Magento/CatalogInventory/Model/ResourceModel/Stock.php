@@ -140,7 +140,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     public function correctItemsQty(array $items, $websiteId, $operator)
     {
         if (empty($items)) {
-            return $this;
+            return;
         }
 
         $connection = $this->getConnection();
