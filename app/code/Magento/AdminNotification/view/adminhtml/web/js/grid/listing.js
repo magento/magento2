@@ -33,8 +33,10 @@ define([
 
         /** @inheritdoc */
         showLoader: function () {
-            this.fixLoaderHeight();
-            this._super();
+            if (!this.source.firstLoad) {
+                this.fixLoaderHeight();
+                this._super();
+            }
         },
 
         /**

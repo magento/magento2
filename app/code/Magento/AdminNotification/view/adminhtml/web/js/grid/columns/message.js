@@ -13,7 +13,11 @@ define([
             bodyTmpl: 'Magento_AdminNotification/grid/cells/message',
             messageIndex: 'text',
             fieldClass: {
-                message: true
+                message: true,
+                'message-warning': false,
+                'message-progress': false,
+                'message-success': false,
+                'message-error': false
             },
             statusMap: {
                 0: 'success',
