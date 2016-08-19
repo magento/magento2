@@ -22,10 +22,10 @@
                 </p>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getUrl('customer/account/edit') ?>">
+                <a class="action edit" href="<?php echo $block->escapeUrl($block->getUrl('customer/account/edit')) ?>">
                     <span><?php /* @escapeNotVerified */ echo __('Edit') ?></span>
                 </a>
-                <a href="<?php /* @escapeNotVerified */ echo $block->getChangePasswordUrl() ?>" class="action change-password">
+                <a href="<?php echo $block->escapeUrl($block->getChangePasswordUrl()) ?>" class="action change-password">
                     <?php /* @escapeNotVerified */ echo __('Change Password') ?>
                 </a>
             </div>
@@ -47,7 +47,7 @@
                     <?php echo $block->getChildHtml('customer.account.dashboard.info.extra')?>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getUrl('newsletter/manage') ?>"><span><?php /* @escapeNotVerified */ echo __('Edit') ?></span></a>
+                    <a class="action edit" href="<?php echo $block->escapeUrl($block->getUrl('newsletter/manage')) ?>"><span><?php /* @escapeNotVerified */ echo __('Edit') ?></span></a>
                 </div>
             </div>
         <?php endif; ?>
