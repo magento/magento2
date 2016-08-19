@@ -413,12 +413,12 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         if (!empty($this->fields['product']['website_ids'])) {
             foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
-                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
+                $this->fields['product']['extension_attributes']['website_ids'][$key] = $website->getWebsiteId();
             }
         } else {
             $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
                 ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
-            $this->fields['product']['website_ids'][] = $website->getWebsiteId();
+            $this->fields['product']['extension_attributes']['website_ids'][] = $website->getWebsiteId();
         }
     }
 
