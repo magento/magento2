@@ -186,6 +186,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $extensionAttributesFactory;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystemMock;
+
+    /**
+     * @var \Magento\Framework\Data\CollectionFactory
+     */
+    private $collectionFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -374,6 +384,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->collectionFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaConfig = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -402,6 +418,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
                 'linkRepository' => $this->productLinkRepositoryMock,
                 'catalogProductMediaConfig' => $this->mediaConfig,
+                '_filesystem' => $this->filesystemMock,
+                '_collectionFactory' => $this->collectionFactoryMock,
                 'data' => ['id' => 1]
             ]
         );
@@ -1228,6 +1246,71 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->model->setMediaGalleryEntries([$entryMock]);
         $this->assertEquals($expectedResult, $this->model->getMediaGallery());
+    }
+
+    public function testGetMediaGalleryImagesMerging()
+    {
+        $mediaEntries = [
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'media_type' => 'image',
+                ],
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                ],
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                    'media_type' => 'image',
+                ],
+            ]
+        ];
+        $expectedImageDataObject = new \Magento\Framework\DataObject([
+            'value_id' => 1,
+            'file' => 'imageFile.jpg',
+            'media_type' => 'image',
+            'url' => 'http://magento.dev/pub/imageFile.jpg',
+            'id' => 1,
+            'path' => '/var/www/html/pub/imageFile.jpg',
+        ]);
+        $expectedSmallImageDataObject = new \Magento\Framework\DataObject([
+            'value_id' => 2,
+            'file' => 'smallImageFile.jpg',
+            'media_type' => 'image',
+            'url' => 'http://magento.dev/pub/smallImageFile.jpg',
+            'id' => 2,
+            'path' => '/var/www/html/pub/smallImageFile.jpg',
+        ]);
+
+        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystemMock->expects($this->once())->method('getDirectoryRead')->willReturn($directoryMock);
+        $this->model->setData('media_gallery', $mediaEntries);
+        $imagesCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($imagesCollectionMock);
+        $imagesCollectionMock->expects($this->at(2))->method('getItemById')->with(1)->willReturn($expectedImageDataObject);
+        $this->mediaConfig->expects($this->at(0))
+            ->method('getMediaUrl')
+            ->willReturn('http://magento.dev/pub/imageFile.jpg');
+        $directoryMock->expects($this->at(0))
+            ->method('getAbsolutePath')
+            ->willReturn('/var/www/html/pub/imageFile.jpg');
+        $this->mediaConfig->expects($this->at(2))
+            ->method('getMediaUrl')
+            ->willReturn('http://magento.dev/pub/smallImageFile.jpg');
+        $directoryMock->expects($this->at(1))
+            ->method('getAbsolutePath')
+            ->willReturn('/var/www/html/pub/smallImageFile.jpg');
+        $imagesCollectionMock->expects($this->at(1))->method('addItem')->with($expectedImageDataObject);
+        $imagesCollectionMock->expects($this->at(4))->method('addItem')->with($expectedSmallImageDataObject);
+
+        $this->model->getMediaGalleryImages();
     }
 
     public function testGetCustomAttributes()
