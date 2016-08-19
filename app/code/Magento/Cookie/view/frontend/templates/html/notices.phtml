@@ -6,9 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Cookie\Block\Html\Notices $block */
 ?>
-<?php /** @var \Magento\Cookie\Block\Html\Notices $block */ ?>
-<?php if ($this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php if ($this->helper(\Magento\Cookie\Helper\Cookie::class)->isUserNotAllowSaveCookie()): ?>
     <div class="message global cookie" id="notice-cookie-block" style="display: none">
         <div class="content">
             <p>
@@ -27,10 +27,10 @@
             "#notice-cookie-block": {
                 "cookieNotices": {
                     "cookieAllowButtonSelector": "#btn-cookie-allow",
-                    "cookieName": "<?php /* @escapeNotVerified */ echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
-                    "cookieValue": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>,
-                    "cookieLifetime": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-                    "noCookiesUrl": "<?php /* @escapeNotVerified */ echo $block->getUrl('cookie/index/noCookies') ?>"
+                    "cookieName": "<?php /* @noEscape */ echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
+                    "cookieValue": <?php /* @noEscape */ echo $this->helper(\Magento\Cookie\Helper\Cookie::class)->getAcceptedSaveCookiesWebsiteIds() ?>,
+                    "cookieLifetime": <?php /* @noEscape */ echo $this->helper(\Magento\Cookie\Helper\Cookie::class)->getCookieRestrictionLifetime()?>,
+                    "noCookiesUrl": "<?php echo $block->escapeUrl($block->getUrl('cookie/index/noCookies')) ?>"
                 }
             }
         }
