@@ -6,13 +6,15 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Newsletter\Block\Subscribe $block */
+
 ?>
 <div class="block newsletter">
     <div class="title"><strong>Newsletter</strong></div>
     <div class="content">
         <form class="form subscribe"
             novalidate
-            action="<?php /* @escapeNotVerified */ echo $block->getFormActionUrl() ?>"
+            action="<?php echo $block->escapeUrl($block->getFormActionUrl()) ?>"
             method="post"
             data-mage-init='{"validation": {"errorClass": "mage-error"}}'
             id="newsletter-validate-detail">

@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
+<?php /** @var $block \Magento\Rss\Block\Feeds */ ?>
 <table class="data table rss">
     <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Feed'); ?></caption>
     <tbody>
@@ -16,16 +17,16 @@
         <tr>
             <td class="col feed"><?php echo $block->escapeHtml($feed['label']) ?></td>
             <td class="col action">
-                <a href="<?php /* @escapeNotVerified */ echo $feed['link'] ?>" class="action get"><span><?php /* @escapeNotVerified */ echo __('Get Feed'); ?></span></a>
+                <a href="<?php echo $block->escapeUrl($feed['link']) ?>" class="action get"><span><?php /* @escapeNotVerified */ echo __('Get Feed'); ?></span></a>
             </td>
         </tr>
         <?php else: ?>
-            <th colspan="2" scope="col"><?php /* @escapeNotVerified */ echo $feed['group'] ?></th>
+            <th colspan="2" scope="col"><?php echo $block->escapeHtml($feed['group']) ?></th>
             <?php foreach ($feed['feeds'] as $item) :?>
                 <tr>
                     <td class="col feed"><?php echo $block->escapeHtml($item['label']) ?></td>
                     <td class="col action">
-                        <a href="<?php /* @escapeNotVerified */ echo $item['link'] ?>" class="action get"><span><?php /* @escapeNotVerified */ echo __('Get Feed'); ?></span></a>
+                        <a href="<?php echo $block->escapeUrl($item['link']) ?>" class="action get"><span><?php /* @escapeNotVerified */ echo __('Get Feed'); ?></span></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

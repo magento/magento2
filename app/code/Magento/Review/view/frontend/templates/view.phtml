@@ -14,7 +14,7 @@
         <h1><?php /* @escapeNotVerified */ echo __('Review Details') ?></h1>
     </div>
     <div class="product-img-box">
-        <a href="<?php /* @escapeNotVerified */ echo $block->getProductData()->getProductUrl() ?>">
+        <a href="<?php echo $block->escapeUrl($block->getProductData()->getProductUrl()) ?>">
             <?php echo $block->getImage($block->getProductData(), 'product_base_image', ['class' => 'product-image'])->toHtml(); ?>
         </a>
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
@@ -35,7 +35,7 @@
                                 <td class="label"><?php echo __($block->escapeHtml($_rating->getRatingCode())) ?></td>
                                 <td class="value">
                                     <div class="rating-box">
-                                        <div class="rating" style="width:<?php /* @escapeNotVerified */ echo ceil($_rating->getPercent()) ?>%;"></div>
+                                        <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getPercent()) ?>%;"></div>
                                     </div></td>
                             </tr>
                         <?php endif; ?>
@@ -48,7 +48,7 @@
     </div>
     <div class="actions">
         <div class="secondary">
-            <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>">
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>">
                 <span><?php /* @escapeNotVerified */ echo __('Back to Product Reviews') ?></a></span>
             </a>
         </div>
