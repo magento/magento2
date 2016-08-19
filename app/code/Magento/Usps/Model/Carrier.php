@@ -21,17 +21,19 @@ use Magento\Framework\Xml\Security;
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-    /**
-     * USPS containers
-     */
+    /** @deprecated */
     const CONTAINER_VARIABLE = 'VARIABLE';
 
+    /** @deprecated */
     const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
 
+    /** @deprecated */
     const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
 
+    /** @deprecated */
     const CONTAINER_RECTANGULAR = 'RECTANGULAR';
 
+    /** @deprecated */
     const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
 
     /**
