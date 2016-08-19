@@ -164,6 +164,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->helper->getBundleOptions($this->item));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetOptions()
     {
         $optionIds = 'a:1:{i:0;i:1;}';
@@ -254,8 +257,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                0 => ['label' => 'title', 'value' => [0 => '1 x name <span class="price">$15.00</span>']],
-                1 => ['label' => 'title', 'value' => 'value'],
+                [
+                    'label' => 'title',
+                    'value' => ['1 x name <span class="price">$15.00</span>'],
+                    'has_html' => true,
+                ],
+                ['label' => 'title', 'value' => 'value'],
             ],
             $this->helper->getOptions($this->item)
         );

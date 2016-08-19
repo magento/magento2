@@ -6,9 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var \Magento\Wishlist\Model\Item $item */
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart $block */
 ?>
 
 <?php foreach ($block->getChildNames() as $childName): ?>
-    <?php /* @escapeNotVerified */ echo $block->getLayout()->renderElement($childName, false); ?>
+    <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false); ?>
 <?php endforeach;?>
