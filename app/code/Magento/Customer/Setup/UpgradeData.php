@@ -7,11 +7,18 @@
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
+use Magento\Directory\Model\CountryHandler;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @codeCoverageIgnore
@@ -106,10 +113,109 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.9', '<')) {
+            $setup->getConnection()->beginTransaction();
+
+            try {
+                $this->migrateStoresAllowedCountriesToWebsite($setup);
+                $setup->getConnection()->commit();
+            } catch (\Exception $e) {
+                $setup->getConnection()->rollBack();
+                throw $e;
+            }
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
         $setup->endSetup();
+    }
+
+    /**
+     * @deprecated
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+    }
+
+    /**
+     * @deprecated
+     * @return CountryHandler
+     */
+    private function getCountryHandler()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()->get(CountryHandler::class);
+    }
+
+    /**
+     * @param array $countries
+     * @param array $newCountries
+     * @param $identifier
+     * @return array
+     */
+    private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)
+    {
+        if (!isset($countries[$identifier])) {
+            $countries[$identifier] = $newCountries;
+        } else {
+            $countries[$identifier] =
+                array_replace($countries[$identifier], $newCountries);
+        }
+
+        return $countries;
+    }
+
+    /**
+     * @param SetupInterface $setup
+     * @return void
+     */
+    private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
+    {
+        $allowedCountries = [];
+        //Process Websites
+        foreach ($this->getStoreManager()->getStores() as $store) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getCountryHandler()->getAllowedCountries($store->getId(), ScopeInterface::SCOPE_STORE),
+                $store->getWebsiteId()
+            );
+        }
+        //Process stores
+        foreach ($this->getStoreManager()->getWebsites() as $website) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getCountryHandler()->getAllowedCountries($website->getId(), ScopeInterface::SCOPE_WEBSITE),
+                $website->getId()
+            );
+        }
+
+        $connection = $setup->getConnection();
+
+        //Remove everything from stores scope
+        $connection->delete(
+            $connection->getTableName('core_config_data'),
+            [
+                'path = ?' => CountryHandler::ALLOWED_COUNTRIES_PATH,
+                'scope = ?' => ScopeInterface::SCOPE_STORES
+            ]
+        );
+
+        //Update websites
+        foreach ($allowedCountries as $scopeId => $countries) {
+            $connection->update(
+                $connection->getTableName('core_config_data'), 
+                [
+                    'value' => implode(',', $countries)
+                ],
+                [
+                    'path = ?' => CountryHandler::ALLOWED_COUNTRIES_PATH,
+                    'scope_id = ?' => $scopeId,
+                    'scope = ?' => ScopeInterface::SCOPE_WEBSITES
+                ]
+            );
+        }
     }
 
     /**

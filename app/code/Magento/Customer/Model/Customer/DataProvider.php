@@ -7,9 +7,12 @@ namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryByWebsite;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -292,6 +295,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $this->processFrontendInput($attribute, $meta);
 
             $code = $attribute->getAttributeCode();
+
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
@@ -304,7 +308,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
 
             if ($attribute->usesSource()) {
-                $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                if ($code == AddressInterface::COUNTRY_ID) {
+                    $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryByWebsiteSource()
+                        ->getAllOptions();
+                } else {
+                    $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                }
             }
 
             $rules = $this->eavValidationRules->build($attribute, $meta[$code]['arguments']['data']['config']);
@@ -315,7 +324,41 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
+
+        $this->processWebsiteMeta($meta);
         return $meta;
+    }
+
+    /**
+     * @deprecated
+     * @return CountryByWebsite
+     */
+    private function getCountryByWebsiteSource()
+    {
+        return ObjectManager::getInstance()->get(CountryByWebsite::class);
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Customer\Model\Config\Share
+     */
+    private function getShareConfig()
+    {
+        return ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+    }
+
+    private function processWebsiteMeta(&$meta)
+    {
+        if (isset($meta[CustomerInterface::WEBSITE_ID]) && $this->getShareConfig()->isGlobalScope()) {
+            $meta[CustomerInterface::WEBSITE_ID]['arguments']['data']['config']['isGlobalScope'] = 1;
+        }
+
+        if (isset($meta[AddressInterface::COUNTRY_ID]) && !$this->getShareConfig()->isGlobalScope()) {
+            $meta[AddressInterface::COUNTRY_ID]['arguments']['data']['config']['filterBy'] = [
+                'target' => '${ $.provider }:data.customer.website_id',
+                'field' => 'website_ids'
+            ];
+        }
     }
 
     /**

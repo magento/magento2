@@ -10,6 +10,9 @@
  * Directory Country Resource Collection
  */
 namespace Magento\Directory\Model\ResourceModel\Country;
+use Magento\Directory\Model\CountryHandler;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Collection
@@ -119,6 +122,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * @deprecated
+     * @return CountryHandler
+     */
+    private function getCountryHandler()
+    {
+        return ObjectManager::getInstance()->get(CountryHandler::class);
+    }
+
+    /**
      * Load allowed countries for current store
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
@@ -126,16 +138,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        $allowCountries = explode(',',
-            (string)$this->_scopeConfig->getValue(
-                'general/country/allow',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
-        );
-        if (!empty($allowCountries)) {
-            $this->addFieldToFilter("country_id", ['in' => $allowCountries]);
-        }
+        $this->getCountryHandler()->loadByScope($store, ScopeInterface::SCOPE_STORE, $this);
         return $this;
     }
 
