@@ -45,7 +45,10 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->shipmentMock->expects($this->once())
             ->method('getOrderId')
             ->willReturn(null);
-        $this->assertEquals([__('Order Id is required for shipment document')], $this->validator->validate($this->shipmentMock));
+        $this->assertEquals(
+            [__('Order Id is required for shipment document')],
+            $this->validator->validate($this->shipmentMock)
+        );
     }
 
     public function testValidateTrackWithoutItems()
@@ -56,6 +59,9 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->shipmentMock->expects($this->once())
             ->method('getItems')
             ->willReturn(null);
-        $this->assertEquals([__('You can\'t create a shipment without products.')], $this->validator->validate($this->shipmentMock));
+        $this->assertEquals(
+            [__('You can\'t create a shipment without products.')],
+            $this->validator->validate($this->shipmentMock)
+        );
     }
 }

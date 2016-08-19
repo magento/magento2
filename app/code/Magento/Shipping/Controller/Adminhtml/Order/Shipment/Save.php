@@ -7,7 +7,6 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 
 /**
@@ -193,7 +192,7 @@ class Save extends \Magento\Backend\App\Action
     private function getShipmentValidator()
     {
         if ($this->shipmentValidator === null) {
-            $this->shipmentValidator = ObjectManager::getInstance()->get(
+            $this->shipmentValidator = $this->_objectManager->get(
                 \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface::class
             );
         }
