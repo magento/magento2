@@ -29,8 +29,15 @@ angular.module('select-version', ['ngStorage'])
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
                 if (data.responseType != 'error') {
-                    if (data.packages.length == 1) {
-                        $scope.upgradeProcessError = true;
+                    $scope.upgradeProcessError = true;
+
+                    angular.forEach(data.packages, function (value, key) {
+                        if (!value.current) {
+                            return $scope.upgradeProcessError = false;
+                        }
+                    });
+
+                    if ($scope.upgradeProcessError) {
                         $scope.upgradeProcessErrorMessage = "You're already using the latest version, there's nothing for us to do.";
                     } else {
                         $scope.selectedOption = [];

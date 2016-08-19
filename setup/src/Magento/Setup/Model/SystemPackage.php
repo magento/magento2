@@ -61,13 +61,12 @@ class SystemPackage
         $systemPackages = [];
         $systemPackages = $this->getInstalledSystemPackages($systemPackages);
         foreach ($systemPackages as $systemPackage) {
-            $versions = [];
             $systemPackageInfo = $this->infoCommand->run($systemPackage);
             if (!$systemPackageInfo) {
                 throw new \RuntimeException("We cannot retrieve information on $systemPackage.");
             }
 
-            $versions = $this->getSystemPackageVersions($systemPackageInfo, $versions);
+            $versions = $this->getSystemPackageVersions($systemPackageInfo);
 
             if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
                 $currentCE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
@@ -91,7 +90,10 @@ class SystemPackage
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
 
-        if (!in_array('magento/product-b2b-edition', $systemPackages)) {
+        if (
+            in_array('magento/product-enterprise-edition', $systemPackages)
+            && !in_array('magento/product-b2b-edition', $systemPackages)
+        ) {
             $result = array_merge($this->getAllowedB2BVersions($currentEE), $result);
         }
 
@@ -101,6 +103,8 @@ class SystemPackage
     }
 
     /**
+     * Retrieve allowed EE versions
+     *
      * @param string $currentCE
      * @return array
      */
@@ -127,49 +131,66 @@ class SystemPackage
         return $result;
     }
 
+    /**
+     * Retrieve allowed B2B versions
+     *
+     * @param $currentEE
+     * @return array
+     */
     public function getAllowedB2BVersions($currentEE)
     {
         $result = [];
-        $b2bVersions = $this->infoCommand->run('magento/product-b2b-edition');
-        $b2bVersionsPrepared = [];
+        $versions = $this->infoCommand->run('magento/product-b2b-edition');
+        $versionsPrepared = [];
         $maxVersion = '';
 
-        if (!is_array($b2bVersions) ) {
+        if (!is_array($versions) ) {
             return $result;
         }
 
-        $b2bVersions['available_versions'] = array_unique(
+        $versions[InfoCommand::CURRENT_VERSION] = isset($versions[InfoCommand::CURRENT_VERSION])
+            ? $versions[InfoCommand::CURRENT_VERSION]
+            : null;
+        $versions[InfoCommand::AVAILABLE_VERSIONS] = isset($versions[InfoCommand::AVAILABLE_VERSIONS])
+            ? $versions[InfoCommand::AVAILABLE_VERSIONS]
+            : [];
+
+        $versions[InfoCommand::AVAILABLE_VERSIONS] = array_unique(
             array_merge(
-                (array)$b2bVersions['current_version'],
-                (array)$b2bVersions['available_versions']
+                (array)$versions[InfoCommand::CURRENT_VERSION],
+                (array)$versions[InfoCommand::AVAILABLE_VERSIONS]
             )
         );
 
-        if ($b2bVersions['available_versions']) {
-            $b2bVersions = $this->sortVersions($b2bVersions);
-            if (isset($b2bVersions['available_versions'][0])) {
-                $maxVersion = $b2bVersions['available_versions'][0];
+        if ($versions[InfoCommand::AVAILABLE_VERSIONS]) {
+            $versions = $this->sortVersions($versions);
+            if (isset($versions[InfoCommand::AVAILABLE_VERSIONS][0])) {
+                $maxVersion = $versions[InfoCommand::AVAILABLE_VERSIONS][0];
             }
-            $b2bVersionsPrepared = $this->filterB2bVersions($currentEE, $b2bVersions, $maxVersion);
+            $versionsPrepared = $this->filterB2bVersions($currentEE, $versions, $maxVersion);
         }
 
-        if (!empty($b2bVersionsPrepared)) {
+        if ($versionsPrepared) {
             $result[] = [
                 'package' => 'magento/product-b2b-edition',
-                'versions' => $b2bVersionsPrepared,
+                'versions' => $versionsPrepared,
             ];
         }
+
         return $result;
     }
 
     /**
+     * Retrieve package versions
+     *
      * @param array $systemPackageInfo
-     * @param array $versions
      * @return array
      */
-    public function getSystemPackageVersions($systemPackageInfo, $versions)
+    public function getSystemPackageVersions($systemPackageInfo)
     {
         $editionType = '';
+        $versions = [];
+
         if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
             $editionType .= 'CE';
         } elseif ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
