@@ -55,6 +55,8 @@ class SystemPackage
     public function getPackageVersions()
     {
         $currentCE = '0';
+        $currentEE = $currentCE;
+
         $result = [];
         $systemPackages = [];
         $systemPackages = $this->getInstalledSystemPackages($systemPackages);
@@ -70,6 +72,11 @@ class SystemPackage
             if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
                 $currentCE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
             }
+
+            if ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
+                $currentEE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
+            }
+
             if (count($versions) > 1) {
                 $versions[0]['name'] .= ' (latest)';
             }
@@ -82,6 +89,10 @@ class SystemPackage
 
         if (!in_array('magento/product-enterprise-edition', $systemPackages)) {
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
+        }
+
+        if (!in_array('magento/product-b2b-edition', $systemPackages)) {
+            $result = array_merge($this->getAllowedB2BVersions($currentEE), $result);
         }
 
         $result = $this->formatPackages($result);
@@ -116,6 +127,41 @@ class SystemPackage
         return $result;
     }
 
+    public function getAllowedB2BVersions($currentEE)
+    {
+        $result = [];
+        $b2bVersions = $this->infoCommand->run('magento/product-b2b-edition');
+        $b2bVersionsPrepared = [];
+        $maxVersion = '';
+
+        if (!is_array($b2bVersions) ) {
+            return $result;
+        }
+
+        $b2bVersions['available_versions'] = array_unique(
+            array_merge(
+                (array)$b2bVersions['current_version'],
+                (array)$b2bVersions['available_versions']
+            )
+        );
+
+        if ($b2bVersions['available_versions']) {
+            $b2bVersions = $this->sortVersions($b2bVersions);
+            if (isset($b2bVersions['available_versions'][0])) {
+                $maxVersion = $b2bVersions['available_versions'][0];
+            }
+            $b2bVersionsPrepared = $this->filterB2bVersions($currentEE, $b2bVersions, $maxVersion);
+        }
+
+        if (!empty($b2bVersionsPrepared)) {
+            $result[] = [
+                'package' => 'magento/product-b2b-edition',
+                'versions' => $b2bVersionsPrepared,
+            ];
+        }
+        return $result;
+    }
+
     /**
      * @param array $systemPackageInfo
      * @param array $versions
@@ -128,7 +174,10 @@ class SystemPackage
             $editionType .= 'CE';
         } elseif ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
             $editionType .= 'EE';
+        } elseif ($systemPackageInfo['name'] == 'magento/product-b2b-edition') {
+            $editionType .= 'B2B';
         }
+
         foreach ($systemPackageInfo[InfoCommand::NEW_VERSIONS] as $version) {
             $versions[] = ['id' => $version, 'name' => 'Version ' . $version . ' ' . $editionType, 'current' => false];
         }
@@ -259,5 +308,29 @@ class SystemPackage
             }
         }
         return $eeVersions;
+    }
+
+    public function filterB2bVersions($currentEE, $b2bVersions, $maxVersion)
+    {
+        $b2bVersionsPrepared = [];
+        foreach ($b2bVersions['available_versions'] as $version) {
+            $requires = $this->composerInfo->getPackageRequirements('magento/product-b2b-edition', $version);
+            if (array_key_exists('magento/product-enterprise-edition', $requires)) {
+                /** @var \Composer\Package\Link $eeRequire */
+                $eeRequire = $requires['magento/product-enterprise-edition'];
+                if (version_compare(
+                    $eeRequire->getConstraint()->getPrettyString(),
+                    $currentEE,
+                    '>='
+                )) {
+                    $name = 'Version ' . $version . ' B2B';
+                    if ($maxVersion == $version) {
+                        $name .= ' (latest)';
+                    }
+                    $b2bVersionsPrepared[] = ['id' => $version, 'name' => $name, 'current' => false];
+                }
+            }
+        }
+        return $b2bVersionsPrepared;
     }
 }

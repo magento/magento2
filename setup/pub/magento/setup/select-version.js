@@ -49,8 +49,11 @@ angular.module('select-version', ['ngStorage'])
                                 $scope.currentVersion = value.name;
                             }
                         });
-                        $scope.selectedOption = $scope.versions[0].versionInfo;
-                        $scope.upgradeReadyForNext = true;
+
+                        if ($scope.versions.length > 0) {
+                            $scope.selectedOption = $scope.versions[0].versionInfo;
+                            $scope.upgradeReadyForNext = true;
+                        }
                     }
 
                 } else {
@@ -170,9 +173,12 @@ angular.module('select-version', ['ngStorage'])
                     });
                 }
             });
-            $scope.selectedOption = $scope.versions[0].versionInfo;
-            $scope.upgradeReadyForNext = true;
-        }
+
+            if ($scope.versions.length > 0) {
+                $scope.selectedOption = $scope.versions[0].versionInfo;
+                $scope.upgradeReadyForNext = true;
+            }
+        };
 
         $scope.update = function() {
             var selectedVersionInfo = angular.fromJson($scope.selectedOption);
