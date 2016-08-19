@@ -10,7 +10,7 @@ namespace Magento\Sales\Service\V1;
  */
 class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    const SERVICE_READ_NAME = 'salesOrderInvoiceV1';
+    const SERVICE_READ_NAME = 'salesInvoiceOrderV1';
     const SERVICE_VERSION = 'V1';
 
     /**

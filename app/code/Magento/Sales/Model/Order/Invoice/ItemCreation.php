@@ -24,6 +24,11 @@ class ItemCreation implements InvoiceItemCreationInterface
     private $qty;
 
     /**
+     * @var \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface
+     */
+    private $extensionAttributes;
+
+    /**
      * {@inheritdoc}
      */
     public function getOrderItemId()
@@ -53,5 +58,28 @@ class ItemCreation implements InvoiceItemCreationInterface
     public function setQty($qty)
     {
         $this->qty = $qty;
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->extensionAttributes;
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+    ) {
+        $this->extensionAttributes = $extensionAttributes;
+        return $this;
     }
 }
