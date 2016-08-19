@@ -389,6 +389,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\CollectionFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->mediaConfig = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
