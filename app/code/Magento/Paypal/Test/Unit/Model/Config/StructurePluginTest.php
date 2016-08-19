@@ -85,26 +85,25 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
      * @param array $pathParts
      * @param bool $returnResult
      *
-     * @dataProvider beforeAndAfterGetElementByPathPartsNonPaymentDataProvider
+     * @dataProvider aroundGetElementByPathPartsNonPaymentDataProvider
      */
-    public function testBeforeAndAfterGetElementByPathPartsNonPayment($pathParts, $returnResult)
+    public function testAroundGetElementByPathPartsNonPayment($pathParts, $returnResult)
     {
         $result = $returnResult ? $this->elementConfigStructureMock : null;
+        $proceed = function () use ($result) {
+            return $result;
+        };
 
-        $this->assertEquals(
-            [$pathParts],
-            $this->plugin->beforeGetElementByPathParts($this->configStructureMock, $pathParts)
-        );
         $this->assertSame(
             $result,
-            $this->plugin->afterGetElementByPathParts($this->configStructureMock, $result)
+            $this->plugin->aroundGetElementByPathParts($this->configStructureMock, $proceed, $pathParts)
         );
     }
 
     /**
      * @return array
      */
-    public function beforeAndAfterGetElementByPathPartsNonPaymentDataProvider()
+    public function aroundGetElementByPathPartsNonPaymentDataProvider()
     {
         return [
             [['non-payment', 'group1', 'group2', 'field'], true],
@@ -119,21 +118,21 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
      * @param string $countryCode
      * @param array $expectedPathParts
      *
-     * @dataProvider beforeAndAfterGetElementByPathPartsDataProvider
+     * @dataProvider aroundGetElementByPathPartsDataProvider
      */
-    public function testBeforeAndAfterGetElementByPathPartsNoResult($pathParts, $countryCode, $expectedPathParts)
+    public function testAroundGetElementByPathPartsNoResult($pathParts, $countryCode, $expectedPathParts)
     {
+        $proceed = function () {
+            return null;
+        };
+
         $this->backendHelperMock->expects(static::once())
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
         $this->assertEquals(
-            [$expectedPathParts],
-            $this->plugin->beforeGetElementByPathParts($this->configStructureMock, $pathParts)
-        );
-        $this->assertEquals(
             null,
-            $this->plugin->afterGetElementByPathParts($this->configStructureMock, null)
+            $this->plugin->aroundGetElementByPathParts($this->configStructureMock, $proceed, $pathParts)
         );
     }
 
@@ -142,28 +141,29 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
      * @param string $countryCode
      * @param array $expectedPathParts
      *
-     * @dataProvider beforeAndAfterGetElementByPathPartsDataProvider
+     * @dataProvider aroundGetElementByPathPartsDataProvider
      */
-    public function testBeforeAndAfterGetElementByPathParts($pathParts, $countryCode, $expectedPathParts)
+    public function testAroundGetElementByPathParts($pathParts, $countryCode, $expectedPathParts)
     {
+        $result = $this->elementConfigStructureMock;
+        $proceed = function () use ($result) {
+            return $result;
+        };
+
         $this->backendHelperMock->expects(static::once())
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
-        $this->assertEquals(
-            [$expectedPathParts],
-            $this->plugin->beforeGetElementByPathParts($this->configStructureMock, $pathParts)
-        );
         $this->assertSame(
             $this->elementConfigStructureMock,
-            $this->plugin->afterGetElementByPathParts($this->configStructureMock, $this->elementConfigStructureMock)
+            $this->plugin->aroundGetElementByPathParts($this->configStructureMock, $proceed, $pathParts)
         );
     }
 
     /**
      * @return array
      */
-    public function beforeAndAfterGetElementByPathPartsDataProvider()
+    public function aroundGetElementByPathPartsDataProvider()
     {
         return [
             [
@@ -175,7 +175,7 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
                 ['payment', 'group1', 'group2', 'field'],
                 'DE',
                 ['payment_de', 'group1', 'group2', 'field']
-            ],
+            ]
         ];
     }
 }

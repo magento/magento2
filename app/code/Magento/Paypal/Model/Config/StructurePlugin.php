@@ -24,22 +24,17 @@ class StructurePlugin
     /**
      * @var BackendHelper
      */
-    protected $_helper;
+    private $backendHelper;
 
     /**
      * @var ScopeDefiner
      */
-    protected $_scopeDefiner;
-
-    /**
-     * @var bool
-     */
-    private $isSectionChanged;
+    private $scopeDefiner;
 
     /**
      * @var string[]
      */
-    private static $_paypalConfigCountries = [
+    private static $paypalConfigCountries = [
         'payment_us',
         'payment_ca',
         'payment_au',
@@ -57,12 +52,10 @@ class StructurePlugin
      * @param ScopeDefiner $scopeDefiner
      * @param BackendHelper $helper
      */
-    public function __construct(
-        ScopeDefiner $scopeDefiner,
-        BackendHelper $helper
-    ) {
-        $this->_scopeDefiner = $scopeDefiner;
-        $this->_helper = $helper;
+    public function __construct(ScopeDefiner $scopeDefiner, BackendHelper $helper)
+    {
+        $this->scopeDefiner = $scopeDefiner;
+        $this->backendHelper = $helper;
     }
 
     /**
@@ -73,10 +66,12 @@ class StructurePlugin
      */
     public static function getPaypalConfigCountries($addOther = false)
     {
-        $countries = self::$_paypalConfigCountries;
+        $countries = self::$paypalConfigCountries;
+
         if ($addOther) {
             $countries[] = 'payment_other';
         }
+
         return $countries;
     }
 
@@ -84,17 +79,18 @@ class StructurePlugin
      * Substitute payment section with PayPal configs
      *
      * @param Structure $subject
+     * @param \Closure $proceed
      * @param array $pathParts
-     * @return array
+     * @return ElementInterface|null
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeGetElementByPathParts(Structure $subject, array $pathParts)
+    public function aroundGetElementByPathParts(Structure $subject, \Closure $proceed, array $pathParts)
     {
-        $this->isSectionChanged = $pathParts[0] == 'payment';
+        $isSectionChanged = $pathParts[0] == 'payment';
 
-        if ($this->isSectionChanged) {
-            $requestedCountrySection = 'payment_' . strtolower($this->_helper->getConfigurationCountryCode());
+        if ($isSectionChanged) {
+            $requestedCountrySection = 'payment_' . strtolower($this->backendHelper->getConfigurationCountryCode());
 
             if (in_array($requestedCountrySection, self::getPaypalConfigCountries())) {
                 $pathParts[0] = $requestedCountrySection;
@@ -103,21 +99,9 @@ class StructurePlugin
             }
         }
 
-        return [$pathParts];
-    }
+        $result = $proceed($pathParts);
 
-    /**
-     * Substitute payment section with PayPal configs
-     *
-     * @param Structure $subject
-     * @param ElementInterface|null $result
-     * @return ElementInterface|null
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterGetElementByPathParts(Structure $subject, ElementInterface $result = null)
-    {
-        if ($this->isSectionChanged && $result) {
+        if ($isSectionChanged && $result) {
             if ($result instanceof Section) {
                 $this->restructurePayments($result);
                 $result->setData(
@@ -125,7 +109,7 @@ class StructurePlugin
                         $result->getData(),
                         ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
                     ),
-                    $this->_scopeDefiner->getScope()
+                    $this->scopeDefiner->getScope()
                 );
             }
         }
@@ -134,7 +118,8 @@ class StructurePlugin
     }
 
     /**
-     * Changes payment config structure.
+     * Change payment config structure
+     *
      * Groups which have `displayIn` element, transfer to appropriate group.
      * Groups without `displayIn` transfer to other payment methods group.
      *
@@ -163,7 +148,7 @@ class StructurePlugin
         }
 
         $configuration['children'] = $sectionMap;
-        $result->setData($configuration, $this->_scopeDefiner->getScope());
+        $result->setData($configuration, $this->scopeDefiner->getScope());
     }
 
     /**
