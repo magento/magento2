@@ -36,7 +36,7 @@ abstract class AbstractResource
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    abstract protected function getConnection();
+    abstract public function getConnection();
 
     /**
      * Start resource transaction
