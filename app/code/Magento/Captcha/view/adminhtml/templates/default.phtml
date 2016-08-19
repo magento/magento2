@@ -19,7 +19,7 @@
             id="captcha"
             class="admin__control-text"
             type="text"
-            name="<?php /* @escapeNotVerified */ echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php /* @escapeNotVerified */ echo $block->getFormId()?>]"
+            name="<?php echo $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?php echo $block->escapeHtml($block->getFormId())?>]"
             data-validate="{required:true}"/>
         <?php if ($captcha->isCaseSensitive()) :?>
             <div class="admin__field-note">
@@ -32,19 +32,19 @@
     <img
         id="captcha-reload"
         class="captcha-reload"
-        src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('Magento_Captcha::reload.png') ?>"
+        src="<?php echo $block->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
         alt="<?php /* @escapeNotVerified */ echo __('Reload captcha') ?>"/>
     <img
-        id="<?php /* @escapeNotVerified */ echo $block->getFormId() ?>"
-        width="<?php /* @escapeNotVerified */ echo $block->getImgWidth() ?>"
-        height="<?php /* @escapeNotVerified */ echo $block->getImgHeight() ?>"
-        src="<?php /* @escapeNotVerified */ echo $captcha->getImgSrc() ?>" />
+        id="<?php echo $block->escapeHtmlAttr($block->getFormId()) ?>"
+        width="<?php /* @noEscape */ echo (float) $block->getImgWidth() ?>"
+        height="<?php /* @noEscape */ echo (float) $block->getImgHeight() ?>"
+        src="<?php echo $block->escapeUrl($captcha->getImgSrc()) ?>" />
 </div>
 <script>
     require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?php /* @escapeNotVerified */ echo $block->getRefreshUrl() ?>', '<?php /* @escapeNotVerified */ echo $block->getFormId() ?>');
+        var captcha = new Captcha('<?php echo $block->escapeUrl($block->getRefreshUrl()) ?>', '<?php echo $block->escapeJs($block->getFormId()) ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);
