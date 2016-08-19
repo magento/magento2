@@ -16,6 +16,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Minification;
@@ -76,6 +77,11 @@ class Deployer
      * @var AlternativeSourceInterface[]
      */
     private $alternativeSources;
+
+    /**
+     * @var ThemeProviderInterface
+     */
+    private $themeProvider;
 
     /**
      * @var array
@@ -185,7 +191,7 @@ class Deployer
     private function checkSkip($filePath)
     {
         if ($filePath != '.') {
-            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+            $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             $option = isset(self::$fileExtensionOptionMap[$ext]) ? self::$fileExtensionOptionMap[$ext] : null;
 
             return $option ? $this->getOption($option) : false;
@@ -465,15 +471,26 @@ class Deployer
      */
     private function findAncestors($themeFullPath)
     {
-        /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
-        $themeCollection = $this->objectManager->get(\Magento\Framework\View\Design\Theme\ListInterface::class);
-        $theme = $themeCollection->getThemeByFullPath($themeFullPath);
+        $theme = $this->getThemeProvider()->getThemeByFullPath($themeFullPath);
         $ancestors = $theme->getInheritedThemes();
         $ancestorThemeFullPath = [];
         foreach ($ancestors as $ancestor) {
             $ancestorThemeFullPath[] = $ancestor->getFullPath();
         }
         return $ancestorThemeFullPath;
+    }
+
+
+    /**
+     * @return ThemeProviderInterface
+     */
+    private function getThemeProvider()
+    {
+        if (null === $this->themeProvider) {
+            $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);
+        }
+
+        return $this->themeProvider;
     }
 
     /**
