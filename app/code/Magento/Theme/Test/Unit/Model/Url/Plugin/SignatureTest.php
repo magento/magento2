@@ -29,7 +29,11 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
     {
         $this->config = $this->getMock(\Magento\Framework\View\Url\ConfigInterface::class);
         $this->deploymentVersion = $this->getMock(
-            \Magento\Framework\App\View\Deployment\Version::class, [], [], '', false
+            \Magento\Framework\App\View\Deployment\Version::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->object = new Signature($this->config, $this->deploymentVersion);
     }
@@ -72,7 +76,9 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
 
         $url = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
         $actualResult = $this->object->afterGetBaseUrl(
-            $url, 'http://127.0.0.1/magento/pub/static/', \Magento\Framework\UrlInterface::URL_TYPE_STATIC
+            $url,
+            'http://127.0.0.1/magento/pub/static/',
+            \Magento\Framework\UrlInterface::URL_TYPE_STATIC
         );
         $this->assertEquals('http://127.0.0.1/magento/pub/static/version123/', $actualResult);
     }

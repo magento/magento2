@@ -53,16 +53,11 @@ class DbStatusValidator
             $errors = $this->dbVersionInfo->getDbVersionErrors();
 
             if ($errors) {
-                $formattedErrors = $this->formatErrors($errors);
+                $message = 'Please upgrade your database: '
+                    . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
+                    . "The following modules are outdated:\n%1";
 
-                throw new LocalizedException(
-                    new Phrase(
-                        'Please upgrade your database: '
-                            . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
-                            . "The following modules are outdated:\n%1",
-                        [implode("\n", $formattedErrors)]
-                    )
-                );
+                throw new LocalizedException(new Phrase($message, [implode("\n", $this->formatErrors($errors))]));
             } else {
                 $this->cache->save('true', 'db_is_up_to_date');
             }
