@@ -67,6 +67,7 @@ class FieldPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $subjectPath
      * @param string $expectedConfigPath
+     *
      * @dataProvider afterGetConfigPathDataProvider
      */
     public function testAroundGetConfigPath($subjectPath, $expectedConfigPath)

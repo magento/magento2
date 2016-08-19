@@ -130,6 +130,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $count
+     *
      * @dataProvider afterIsApplicableDataProvider
      */
     public function testAfterIsApplicable($count)
