@@ -185,7 +185,7 @@ class Deployer
     private function checkSkip($filePath)
     {
         if ($filePath != '.') {
-            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+            $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             $option = isset(self::$fileExtensionOptionMap[$ext]) ? self::$fileExtensionOptionMap[$ext] : null;
 
             return $option ? $this->getOption($option) : false;
