@@ -137,6 +137,7 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * @return ThemeProviderInterface
+     * @deprecated
      */
     private function getThemeProvider()
     {

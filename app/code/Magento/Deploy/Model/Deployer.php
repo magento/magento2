@@ -483,6 +483,7 @@ class Deployer
 
     /**
      * @return ThemeProviderInterface
+     * @deprecated
      */
     private function getThemeProvider()
     {

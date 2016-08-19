@@ -231,6 +231,7 @@ class Source
 
     /**
      * @return ThemeProviderInterface
+     * @deprecated
      */
     private function getThemeProvider()
     {

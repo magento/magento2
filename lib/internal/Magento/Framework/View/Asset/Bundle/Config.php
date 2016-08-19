@@ -106,6 +106,7 @@ class Config implements Bundle\ConfigInterface
 
     /**
      * @return ThemeProviderInterface
+     * @deprecated
      */
     private function getThemeProvider()
     {

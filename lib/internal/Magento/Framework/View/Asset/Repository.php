@@ -168,6 +168,7 @@ class Repository
 
     /**
      * @return ThemeProviderInterface
+     * @deprecated
      */
     private function getThemeProvider()
     {
