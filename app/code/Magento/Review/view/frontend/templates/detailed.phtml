@@ -6,6 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Review\Block\Rating\Entity\Detailed $block */
 ?>
 <?php if (!empty($collection) && $collection->getSize()): ?>
     <div class="table-wrapper">
@@ -18,7 +19,7 @@
                         <th class="label" scope="row"><?php echo __($block->escapeHtml($_rating->getRatingCode())) ?></th>
                         <td class="value">
                             <div class="rating box">
-                                <div class="rating" style="width:<?php /* @escapeNotVerified */ echo ceil($_rating->getSummary()) ?>%;"></div>
+                                <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getSummary()) ?>%;"></div>
                             </div>
                         </td>
                     </tr>

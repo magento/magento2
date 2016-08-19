@@ -5,6 +5,7 @@
  */
 
 // @codingStandardsIgnoreFile
+
 /** @var \Magento\Review\Block\Customer\ListCustomer $block */
 ?>
 <?php if ($block->getReviews() && count($block->getReviews())): ?>
@@ -23,10 +24,10 @@
             <tbody>
                 <?php foreach ($block->getReviews() as $_review): ?>
                 <tr>
-                    <td data-th="<?php echo $block->escapeHtml(__('Created')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->dateFormat($_review->getReviewCreatedAt()); ?></td>
+                    <td data-th="<?php echo $block->escapeHtml(__('Created')) ?>" class="col date"><?php echo $block->escapeHtml($block->dateFormat($_review->getReviewCreatedAt())); ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Product Name')) ?>" class="col item">
                         <strong class="product-name">
-                            <a href="<?php /* @escapeNotVerified */ echo $block->getProductLink() ?>id/<?php /* @escapeNotVerified */ echo $_review->getEntityPkValue() ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a>
+                            <a href="<?php echo $block->escapeUrl($block->getProductUrl($_review)) ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a>
                         </strong>
                     </td>
                     <td data-th="<?php echo $block->escapeHtml(__('Rating')) ?>" class="col summary">
@@ -43,7 +44,7 @@
                         <?php echo $this->helper('Magento\Review\Helper\Data')->getDetailHtml($_review->getDetail()) ?>
                     </td>
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getReviewLink() ?>id/<?php /* @escapeNotVerified */ echo $_review->getReviewId() ?>" class="action more">
+                        <a href="<?php echo $block->escapeUrl($block->getReviewUrl($_review)) ?>" class="action more">
                             <span><?php /* @escapeNotVerified */ echo __('See Details') ?></span>
                         </a>
                     </td>
