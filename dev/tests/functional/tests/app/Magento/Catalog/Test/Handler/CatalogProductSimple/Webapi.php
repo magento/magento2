@@ -141,7 +141,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     protected function convertData()
     {
         $fields = [];
-        $this->websiteIds = $this->fields['product']['website_ids'];
 
         unset($this->fields['product']['website_ids']);
         unset($this->fields['product']['checkout_data']);
