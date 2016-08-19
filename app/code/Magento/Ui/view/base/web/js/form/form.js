@@ -248,15 +248,16 @@ define([
          * @param {Object} data
          */
         save: function (redirect, data) {
-            var scrollTop;
+            var scrollTop,
+                $errorElem = $(this.errorClass);
 
             this.validate();
 
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
-            } else {
-                scrollTop = $(this.errorClass).offset().top - window.innerHeight / 2;
+            } else if ($errorElem.length) {
+                scrollTop = $errorElem.offset().top - window.innerHeight / 2;
                 window.scrollTo(0, scrollTop);
             }
         },
