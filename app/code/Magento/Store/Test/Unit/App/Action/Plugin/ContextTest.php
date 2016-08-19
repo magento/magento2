@@ -38,11 +38,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $httpContextMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $httpRequestMock;
-
-    /**
      * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
@@ -96,13 +91,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->httpRequestMock = $this->getMock(
-            \Magento\Framework\App\Request\Http::class,
-            ['getParam'],
-            [],
-            '',
-            false
-        );
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeCookieManager = $this->getMock(\Magento\Store\Api\StoreCookieManagerInterface::class);
         $this->storeMock = $this->getMock(
@@ -136,7 +124,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             [
                 'session' => $this->sessionMock,
                 'httpContext' => $this->httpContextMock,
-                'httpRequest' => $this->httpRequestMock,
                 'storeManager' => $this->storeManager,
                 'storeCookieManager' => $this->storeCookieManager,
             ]
@@ -172,7 +159,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->willReturn('custom_store');
 
-        $this->httpRequestMock->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue('default'));
@@ -209,7 +196,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->willReturn('custom_store');
 
-        $this->httpRequestMock->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue('default'));
@@ -248,7 +235,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->httpRequestMock->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue($store));
@@ -292,7 +279,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->httpRequestMock->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue($store));

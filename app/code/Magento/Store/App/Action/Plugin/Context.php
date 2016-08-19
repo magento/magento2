@@ -30,11 +30,6 @@ class Context
     protected $httpContext;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $httpRequest;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -47,20 +42,17 @@ class Context
     /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Framework\App\Request\Http $httpRequest
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Framework\App\Request\Http $httpRequest,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         StoreCookieManagerInterface $storeCookieManager
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
-        $this->httpRequest  = $httpRequest;
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
     }
@@ -76,7 +68,7 @@ class Context
         /** @var \Magento\Store\Model\Store $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
 
-        $storeCode = $this->httpRequest->getParam(
+        $storeCode = $request->getParam(
             StoreResolverInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
