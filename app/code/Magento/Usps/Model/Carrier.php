@@ -8,11 +8,13 @@
 
 namespace Magento\Usps\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\Xml\Security;
+use Magento\Usps\Helper\Data as DataHelper;
 
 /**
  * USPS shipping
@@ -127,6 +129,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
     ];
+
+    /**
+     * @var DataHelper
+     */
+    private $dataHelper;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -1982,11 +1989,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Check whether girth is allowed for the USPS
      *
      * @param null|string $countyDest
+     * @param null|string $carrierMethodCode
      * @return bool
      */
-    public function isGirthAllowed($countyDest = null)
+    public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
-        return $this->_isUSCountry($countyDest) ? false : true;
+        return $this->_isUSCountry($countyDest)
+            && $this->getDataHelper()->displayGirthValue($carrierMethodCode) ? false : true;
     }
 
     /**
@@ -2090,5 +2099,20 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } catch (\Exception $e) {}
 
         return $data;
+    }
+
+    /**
+     * Gets Data helper object
+     *
+     * @return DataHelper
+     * @deprecated
+     */
+    private function getDataHelper()
+    {
+        if (!$this->dataHelper) {
+            $this->dataHelper = ObjectManager::getInstance()->get(DataHelper::class);
+        }
+
+        return $this->dataHelper;
     }
 }
