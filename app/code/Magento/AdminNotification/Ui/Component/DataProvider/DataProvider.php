@@ -14,10 +14,6 @@ use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Sync
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
-     * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
-     */
-    protected $collection;
-    /**
      * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
