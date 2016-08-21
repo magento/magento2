@@ -112,7 +112,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             $field = $sortOrder->getField();
             $searchResult->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
+                $sortOrder->getDirection()
             );
         }
 
