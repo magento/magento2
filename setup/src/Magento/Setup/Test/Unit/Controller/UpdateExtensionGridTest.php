@@ -50,6 +50,7 @@ class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
         $extensionData = [
             [
                 'name' => 'magento-package-1',
+                'product_name' => 'magento/package-1',
                 'type' => 'magento2-module',
                 'version' => '1.0.0',
                 'latestVersion' => '2.0.5',
