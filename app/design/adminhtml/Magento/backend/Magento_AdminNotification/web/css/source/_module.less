@@ -35,7 +35,7 @@
     }
 
     .message {
-        display: inline-block;
+        background: none;
         margin: 0 0 -3px;
         overflow: hidden;
         padding: @message-system-short-message__padding-vertical 0 @message-system-short-message__padding-vertical 3.3rem;
@@ -46,13 +46,17 @@
     }
 
     .action-menu-item {
-        &.action-close {
+        &.action-close-wrapper {
+            width: 3.5rem;
+        }
+
+        .action-close {
             float: right;
         }
 
-        display: inline-block;
-        vertical-align: top;
+        float: right;
         padding: @message-system-short-message__padding-vertical 0 0;
+        vertical-align: top;
     }
 }
 
@@ -72,7 +76,7 @@
 .message-system-short {
     min-height: @message-system-short-wrapper__height;
 
-    .action-close {
+    .action-close-wrapper {
         display: none;
     }
 }
