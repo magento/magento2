@@ -137,7 +137,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterLoad($product);
         $price = $product->getTierPrice();
         $this->assertNotEmpty($price);
-        $this->assertEquals(3, count($price));
+        $this->assertEquals(4, count($price));
     }
 
     /**

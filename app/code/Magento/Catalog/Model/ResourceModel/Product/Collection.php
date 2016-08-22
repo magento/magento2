@@ -2090,12 +2090,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($this->getFlag('tier_price_added')) {
             return $this;
         }
+        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
 
         $tierPrices = [];
         $productIds = [];
         foreach ($this->getItems() as $item) {
-            $productIds[] = $item->getId();
-            $tierPrices[$item->getId()] = [];
+            $productIds[] = $item->getData($linkField);
+            $tierPrices[$item->getData($linkField)] = [];
         }
         if (!$productIds) {
             return $this;
@@ -2110,8 +2111,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
 
-        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
-
         $select = $backend->getResource()->getSelect($websiteId);
         $select->columns(['product_id' => $linkField])->where(
             $linkField .' IN(?)',
@@ -2125,7 +2124,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         foreach ($this->getItems() as $item) {
-            $backend->setPriceData($item, $tierPrices[$item->getId()]);
+            $backend->setPriceData($item, $tierPrices[$item->getData($linkField)]);
         }
 
         $this->setFlag('tier_price_added', true);
