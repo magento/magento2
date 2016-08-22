@@ -66,15 +66,23 @@ class ExternalVideoEntryProcessor
     public function afterAfterLoad(MediaBackendModel $mediaBackendModel, Product $product)
     {
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $mediaBackendModel->getAttribute());
-        if (!empty($mediaCollection)) {
-            $ids = $this->collectVideoEntriesIds($mediaCollection);
-            $videoDataCollection = $this->loadVideoDataById($ids, $product->getStoreId());
-            $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
-            $product->setData($mediaBackendModel->getAttribute()->getAttributeCode(), $mediaEntriesDataCollection);
+        if (empty($mediaCollection)) {
+            return $product;
         }
+
+        $ids = $this->collectVideoEntriesIds($mediaCollection);
+        if (empty($ids)) {
+            return $product;
+        }
+
+        $videoDataCollection = $this->loadVideoDataById($ids, $product->getStoreId());
+        $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
+        $product->setData($mediaBackendModel->getAttribute()->getAttributeCode(), $mediaEntriesDataCollection);
 
         return $product;
     }
+    
+    
 
     /**
      * @param MediaBackendModel $mediaBackendModel
@@ -263,7 +271,9 @@ class ExternalVideoEntryProcessor
     {
         $ids = [];
         foreach ($mediaCollection as $item) {
-            if ($item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE) {
+            if ($item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
+                && !array_key_exists('video_url', $item)
+            ) {
                 $ids[] = $item['value_id'];
             }
         }

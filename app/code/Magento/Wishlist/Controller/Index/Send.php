@@ -185,6 +185,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             $sharingCode = $wishlist->getSharingCode();
 
             try {
+                $storeId = $this->storeManager->getStore()->getStoreId();
+                
                 foreach ($emails as $email) {
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $this->scopeConfig->getValue(
@@ -194,7 +196,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                     )->setTemplateOptions(
                         [
                             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                            'store' => $this->storeManager->getStore()->getStoreId(),
+                            'store' => $storeId,
                         ]
                     )->setTemplateVars(
                         [
@@ -206,6 +208,8 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                             'message' => $message,
                             'store' => $this->storeManager->getStore(),
                         ]
+                    )->setScopeId(
+                        $storeId
                     )->setFrom(
                         $this->scopeConfig->getValue(
                             'wishlist/email/email_identity',

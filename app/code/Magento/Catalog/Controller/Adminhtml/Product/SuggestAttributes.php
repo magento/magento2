@@ -50,4 +50,12 @@ class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
         );
         return $resultJson;
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Catalog::products');
+    }
 }

@@ -187,7 +187,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             '\Magento\ConfigurableProduct\Model\Product\Type\Configurable'
         )->disableOriginalConstructor()->getMock();
 
-        $this->productMock->expects($this->once())
+        $this->productMock->expects($this->atLeastOnce())
             ->method('getTypeInstance')
             ->willReturn($configurableProductTypeMock);
 

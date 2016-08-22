@@ -7,13 +7,17 @@ namespace Magento\Eav\Model\ResourceModel\Entity;
 
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV attribute resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -33,6 +37,16 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var Type
      */
     protected $_eavEntityType;
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
 
     /**
      * Class constructor
@@ -196,8 +210,47 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->_saveOption(
             $object
         );
-
+        $this->getConfig()->clear();
+        $this->getAttributeCache()->clear();
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Perform actions after object delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getConfig()->clear();
+        $this->getAttributeCache()->clear();
+        return $this;
+    }
+
+    /**
+     * @return AttributeCache
+     * @deprecated
+     */
+    private function getAttributeCache()
+    {
+        if (!$this->attributeCache) {
+            $this->attributeCache = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->attributeCache;
+    }
+
+    /**
+     * @return Config
+     * @deprecated
+     */
+    private function getConfig()
+    {
+        if (!$this->config) {
+            $this->config = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->config;
     }
 
     /**
@@ -650,5 +703,29 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $connection->fetchCol($select);
+    }
+
+    /**
+     * Provide variables to serialize
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $properties = parent::__sleep();
+        $properties = array_diff($properties, ['_storeManager']);
+        return $properties;
+    }
+
+    /**
+     * Restore global dependencies
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 }

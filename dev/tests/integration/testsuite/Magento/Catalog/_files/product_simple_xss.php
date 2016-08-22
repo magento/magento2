@@ -16,7 +16,7 @@ $product->setTypeId(
 )->setName(
     '<script>alert("xss");</script>'
 )->setSku(
-    '<script>alert("xss");</script>'
+    'product-with-xss'
 )->setPrice(
     10
 )->setDescription(

@@ -4,14 +4,14 @@
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-configurable-product": "100.0.*",
+        "magento/module-catalog-rule": "100.0.*",
+        "magento/module-store": "100.0.*",
+        "magento/module-customer": "100.0.*",
         "magento/framework": "100.0.*",
         "magento/magento-composer-installer": "*"
     },
-    "suggest": {
-        "magento/module-catalog-rule": "100.0.*"
-    },
     "type": "magento2-module",
-    "version": "100.0.5",
+    "version": "100.0.6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

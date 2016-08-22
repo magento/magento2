@@ -9,6 +9,7 @@ namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
@@ -268,7 +269,7 @@ class File implements DriverInterface
     {
         clearstatcache();
         $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
-        $result = @glob($globPattern, GLOB_BRACE);
+        $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
     }
 

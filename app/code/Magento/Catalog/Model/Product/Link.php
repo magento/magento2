@@ -136,7 +136,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function getProductCollection()
     {
         $collection = $this->_productCollectionFactory->create()->setLinkModel($this);
-        $this->stockHelper->addInStockFilterToCollection($collection);
+        $this->stockHelper->addIsInStockFilterToCollection($collection);
         return $collection;
     }
 

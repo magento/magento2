@@ -374,6 +374,8 @@ class Email extends \Magento\Framework\Model\AbstractModel
                 'customerName' => $this->_customerHelper->getCustomerName($this->_customer),
                 'alertGrid' => $alertGrid,
             ]
+        )->setScopeId(
+            $storeId
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,

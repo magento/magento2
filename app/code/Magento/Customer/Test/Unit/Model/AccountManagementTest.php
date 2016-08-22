@@ -651,6 +651,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setTemplateVars')
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
+            ->method('setScopeId')
+            ->with($defaultStoreId)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($sender)
             ->willReturnSelf();
@@ -800,6 +804,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setTemplateVars')
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
+            ->method('setScopeId')
+            ->with($defaultStoreId)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($sender)
             ->willReturnSelf();
@@ -900,6 +908,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilder->expects($this->once())
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecure, 'store' => $this->store])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setScopeId')
+            ->with($customerStoreId)
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
             ->method('setFrom')
@@ -1030,6 +1042,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilder->expects($this->any())
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecure, 'store' => $this->store])
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->any())
+            ->method('setScopeId')
+            ->with($storeId)
             ->willReturnSelf();
         $this->transportBuilder->expects($this->any())
             ->method('setFrom')

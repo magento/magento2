@@ -46,4 +46,12 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
         );
         return $resultJson;
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Catalog::products');
+    }
 }

@@ -304,6 +304,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     'items' => nl2br($items),
                     'total' => $total,
                 ]
+            )->setScopeId(
+                $checkout->getStoreId()
             )->setFrom(
                 $this->scopeConfig->getValue(
                     'checkout/payment_failed/identity',
