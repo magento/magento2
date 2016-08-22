@@ -14,7 +14,7 @@ use Magento\Mtf\Client\Locator;
  */
 class TemplateForm extends Form
 {
-    private $loadButton = "#load";
+    private $loadButton = '#load';
 
     /**
      * @return void

@@ -15,7 +15,7 @@ use Magento\Mtf\Client\Locator;
  */
 class AdminForm extends Form
 {
-    protected $adminAccountSharingField = "#admin_security_admin_account_sharing";
+    private $adminAccountSharingField = '#admin_security_admin_account_sharing';
 
     public function adminAccountSharingAvailability()
     {
