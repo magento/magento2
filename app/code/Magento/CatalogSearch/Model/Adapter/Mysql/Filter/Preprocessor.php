@@ -179,14 +179,14 @@ class Preprocessor implements PreprocessorInterface
         $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
-        $linkIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $entityField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
 
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
         $select->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['entity_id'])
             ->join(
                 ['main_table' => $table],
-                "main_table.{$linkIdField} = e.{$linkIdField}",
+                "main_table.{$entityField} = e.{$entityField}",
                 []
             )
             ->columns([$filter->getField() => 'main_table.value'])
