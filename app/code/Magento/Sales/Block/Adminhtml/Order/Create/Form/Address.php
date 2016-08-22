@@ -254,7 +254,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         $this->_form->setValues($this->getFormValues());
 
         if ($this->_form->getElement('country_id')->getValue()) {
-            $this->processCountryOptions($this->_form->getElement('country_id'));
             $countryId = $this->_form->getElement('country_id')->getValue();
             $this->_form->getElement('country_id')->setValue(null);
             foreach ($this->_form->getElement('country_id')->getValues() as $country) {
@@ -268,7 +267,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
                 $this->directoryHelper->getDefaultCountry($this->getStore())
             );
         }
-
+        $this->processCountryOptions($this->_form->getElement('country_id'));
         // Set custom renderer for VAT field if needed
         $vatIdElement = $this->_form->getElement('vat_id');
         if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
