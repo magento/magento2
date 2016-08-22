@@ -360,7 +360,8 @@ class Price
         $tierPrices = $this->getExistingPrices($product, 'tier_price');
         foreach ($tierPrices as $price) {
             /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
-            $tierPrice = $this->tierPriceFactory->create();
+            $tierPrice = $this->tierPriceFactory->create()
+                ->setExtensionAttributes($this->getTierPriceExtensionAttributes());
             $tierPrice->setCustomerGroupId($price['cust_group']);
             if (array_key_exists('website_price', $price)) {
                 $value = $price['website_price'];
@@ -369,12 +370,10 @@ class Price
             }
             $tierPrice->setValue($value);
             $tierPrice->setQty($price['price_qty']);
-            if (!$tierPrice->getExtensionAttributes()) {
-                $tierPrice->setExtensionAttributes($this->getTierPriceExtensionAttributes());
+            if (isset($price['percentage_value'])) {
+                $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
             }
-            $percentageValue = isset($price['percentage_value']) ? $price['percentage_value'] : 0;
             $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
-            $tierPrice->getExtensionAttributes()->setPercentageValue($percentageValue);
             $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
             $prices[] = $tierPrice;
         }

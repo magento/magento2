@@ -179,14 +179,18 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             }));
 
         // create sample TierPrice objects that would be coming from a REST call
-        $tp1 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
+        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)->getMock();
+        $tierPriceExtensionMock->expects($this->any())->method('getWebsiteId')->willReturn($expectedWebsiteId);
+        $tp1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\TierPrice');
         $tp1->setValue(10);
         $tp1->setCustomerGroupId(1);
         $tp1->setQty(11);
-        $tp2 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
+        $tp1->setExtensionAttributes($tierPriceExtensionMock);
+        $tp2 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\TierPrice');
         $tp2->setValue(20);
         $tp2->setCustomerGroupId(2);
         $tp2->setQty(22);
+        $tp2->setExtensionAttributes($tierPriceExtensionMock);
         $tps = [$tp1, $tp2];
 
         // force the product to have null tier prices
@@ -215,9 +219,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
         }
 
-        $tierPriceExtention = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
-            ->setMethods(['setWebsiteId', 'setPercentageValue', 'getPercentageValue'])
-            ->disableOriginalConstructor()->getMock();
+        $tierPriceExtention = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)->getMock();
         $tierPriceExtention->expects($this->any())->method('getPercentageValue')->willReturn(50);
         $factoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();

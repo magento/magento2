@@ -76,6 +76,18 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function getAdditionalFields($objectArray)
+    {
+        $percentageValue = $this->getPercentage($objectArray);
+        return [
+            'value' => $percentageValue ? null : $objectArray['price'],
+            'percentage_value' => $percentageValue ?: null,
+        ];
+    }
+
+    /**
      * Error message when duplicates
      *
      * @return \Magento\Framework\Phrase
@@ -116,12 +128,8 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
         $priceRows = array_filter((array)$priceRows);
 
         foreach ($priceRows as $priceRow) {
-            $percentage = isset($priceRow['percentage_value']) ? $priceRow['percentage_value'] : 0;
-            if ($percentage == '') {
-                // TODO: MAGETWO-55839
-                continue;
-            }
-            if (!is_numeric($percentage) || $percentage < 0 || $percentage > 100) {
+            $percentage = $this->getPercentage($priceRow);
+            if ($percentage !== null && (!$this->isPositiveOrZero($percentage) || $percentage > 100)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Percentage value must be a number between 0 and 100.')
                 );
@@ -134,14 +142,64 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     /**
      * @inheritdoc
      */
+    protected function validatePrice(array $priceRow)
+    {
+        if (!$this->getPercentage($priceRow)) {
+            parent::validatePrice($priceRow);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function modifyPriceData($object, $data)
     {
         $data = parent::modifyPriceData($object, $data);
         foreach ($data as $key => $tierPrice) {
-            if ($tierPrice['percentage_value'] > 0) {
-                $data[$key]['website_price'] = $object->getPrice() * (1 - $tierPrice['percentage_value'] / 100);
+            if ($this->getPercentage($tierPrice)) {
+                $data[$key]['website_price'] = $object->getPrice() * (1 - $this->getPercentage($tierPrice) / 100);
             }
         }
         return $data;
+    }
+
+    /**
+     * @param array $valuesToUpdate
+     * @param array $oldValues
+     * @return boolean
+     */
+    protected function updateValues(array $valuesToUpdate, array $oldValues)
+    {
+        $isChanged = false;
+        foreach ($valuesToUpdate as $key => $value) {
+            if ($oldValues[$key]['price'] != $value['value']
+                || $this->getPercentage($oldValues[$key]) != $this->getPercentage($value)
+            ) {
+                $price = new \Magento\Framework\DataObject(
+                    [
+                        'value_id' => $oldValues[$key]['price_id'],
+                        'value' => $value['value'],
+                        'percentage_value' => $this->getPercentage($value)
+                    ]
+                );
+                $this->_getResource()->savePriceData($price);
+
+                $isChanged = true;
+            }
+        }
+        return $isChanged;
+    }
+
+    /**
+     * Check whether price has percentage value.
+     *
+     * @param $priceRow
+     * @return null
+     */
+    private function getPercentage($priceRow)
+    {
+        return isset($priceRow['percentage_value']) && is_numeric($priceRow['percentage_value'])
+            ? $priceRow['percentage_value']
+            : null;
     }
 }
