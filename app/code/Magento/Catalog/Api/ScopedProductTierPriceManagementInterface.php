@@ -6,9 +6,6 @@
  */
 namespace Magento\Catalog\Api;
 
-/**
- * @api
- */
 interface ScopedProductTierPriceManagementInterface
 {
     /**
