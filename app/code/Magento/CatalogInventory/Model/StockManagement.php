@@ -180,7 +180,7 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @return ResourceStock
+     * @return Stock
      */
     protected function getResource()
     {
