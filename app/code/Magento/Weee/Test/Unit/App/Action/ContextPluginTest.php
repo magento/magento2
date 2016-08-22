@@ -123,7 +123,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchBasedOnDefault()
+    public function testBeforeDispatchBasedOnDefault()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -191,7 +191,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnOrigin()
+    public function testBeforeDispatchBasedOnOrigin()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -220,7 +220,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnBilling()
+    public function testBeforeDispatchBasedOnBilling()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -292,7 +292,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnShipping()
+    public function testBeforeDispatchBasedOnShipping()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')

@@ -119,7 +119,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundValidateWithVariationsValid()
+    public function testAfterValidateWithVariationsValid()
     {
         $matrix = ['products'];
 
@@ -165,7 +165,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundValidateWithVariationsInvalid()
+    public function testAfterValidateWithVariationsInvalid()
     {
         $matrix = ['products'];
 
@@ -212,7 +212,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundValidateIfVariationsNotExist()
+    public function testAfterValidateIfVariationsNotExist()
     {
         $this->requestMock->expects(
             $this->once()
@@ -233,7 +233,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundValidateWithVariationsAndRequiredAttributes()
+    public function testAfterValidateWithVariationsAndRequiredAttributes()
     {
         $matrix = [
             ['data1', 'data2', 'configurable_attribute' => ['data1']],

@@ -3,18 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
 class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param array $data
-     * @dataProvider aroundGetStockItemDataProvider
+     * @dataProvider afterGetStockItemDataProvider
      */
-    public function testAroundGetStockItem(array $data)
+    public function testAfterGetStockItem(array $data)
     {
         $subjectMock = $this->getMock(
             \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class,
@@ -49,7 +46,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function aroundGetStockItemDataProvider()
+    public function afterGetStockItemDataProvider()
     {
         return [
             [

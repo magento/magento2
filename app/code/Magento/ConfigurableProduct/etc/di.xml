@@ -59,7 +59,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="configurableProductSaveOptions" sortOrder="10" type="Magento\ConfigurableProduct\Model\Plugin\AroundProductRepositorySave"/>
+        <plugin name="configurableProductSaveOptions" sortOrder="1" type="\Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave"/>
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="configurable_identity" type="Magento\ConfigurableProduct\Plugin\Model\Product" />

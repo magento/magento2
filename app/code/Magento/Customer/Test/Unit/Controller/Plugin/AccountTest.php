@@ -12,6 +12,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -76,7 +77,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->resultInterface = $this->getMockBuilder(ResultInterface::class)
-            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->actionFlag = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
@@ -90,7 +90,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      * @param boolean $isActionAllowed
      * @param boolean $isAuthenticated
      *
-     * @dataProvider dataProviderBeforeDispatch
+     * @dataProvider beforeDispatchDataProvider
      */
     public function testBeforeDispatch(
         $action,
@@ -127,7 +127,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $plugin->beforeDispatch($this->subject, $this->request);
     }
 
-    public function dataProviderBeforeDispatch()
+    /**
+     * @return array
+     */
+    public function beforeDispatchDataProvider()
     {
         return [
             [
@@ -170,8 +173,14 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->with(false)
             ->willReturnSelf();
 
-        $plugin = new Account($this->session, ['testaction']);
-        $this->assertEquals(
+        $plugin = (new ObjectManager($this))->getObject(
+            Account::class,
+            [
+                'session' => $this->session,
+                ['testaction']
+            ]
+        );
+        $this->assertSame(
             $this->resultInterface,
             $plugin->afterDispatch($this->subject, $this->resultInterface, $this->request)
         );

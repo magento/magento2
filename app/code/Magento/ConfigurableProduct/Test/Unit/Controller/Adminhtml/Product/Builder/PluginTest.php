@@ -52,11 +52,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $subjectMock;
 
-    /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
     protected function setUp()
     {
         $this->productFactoryMock = $this->getMock(
@@ -124,9 +119,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->closureMock = function () use ($product) {
-            return $product;
-        };
         $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin(
             $this->productFactoryMock,
             $this->configurableTypeMock
@@ -137,7 +129,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testAroundBuild()
+    public function testAfterBuild()
     {
         $this->requestMock->expects($this->once())->method('has')->with('attributes')->will($this->returnValue(true));
         $valueMap = [
@@ -260,7 +252,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundBuildWhenProductNotHaveAttributeAndRequiredParameters()
+    public function testAfterBuildWhenProductNotHaveAttributeAndRequiredParameters()
     {
         $valueMap = [
             ['attributes', null, null],
@@ -287,7 +279,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundBuildWhenAttributesAreEmpty()
+    public function testAfterBuildWhenAttributesAreEmpty()
     {
         $valueMap = [['popup', null, false], ['product', null, 'product'], ['id', false, false]];
         $this->requestMock->expects($this->once())->method('has')->with('attributes')->will($this->returnValue(false));

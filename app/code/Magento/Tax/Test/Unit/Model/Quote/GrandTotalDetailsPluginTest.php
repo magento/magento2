@@ -148,7 +148,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
         return $taxDetailsMock;
     }
 
-    public function testAroundProcess()
+    public function testAfterProcess()
     {
         $taxRate = [
             'percent' => 8.25,

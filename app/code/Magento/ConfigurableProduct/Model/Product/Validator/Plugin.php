@@ -48,6 +48,8 @@ class Plugin
     }
 
     /**
+     * Set configurable type to product
+     *
      * @param Product\Validator $subject
      * @param Product $product
      * @param RequestInterface $request
@@ -58,7 +60,7 @@ class Plugin
     public function beforeValidate(
         \Magento\Catalog\Model\Product\Validator $subject,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Framework\App\RequestInterface $request,
+        RequestInterface $request,
         DataObject $response
     ) {
         if ($request->has('attributes')) {
@@ -81,7 +83,7 @@ class Plugin
         \Magento\Catalog\Model\Product\Validator $subject,
         $result,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Framework\App\RequestInterface $request,
+        RequestInterface $request,
         DataObject $response
     ) {
         $variationProducts = (array)$request->getPost('variations-matrix');
