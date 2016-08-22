@@ -171,6 +171,22 @@ string',
     }
 
     /**
+     * Test documenting current behaviour of getDataUsingMethod
+     * _underscore assumes an underscore before any digit
+     */
+    public function testGetDataUsingMethodWithoutUnderscore()
+    {
+        $this->_object->setData('key_1', 'value1');
+        $this->assertTrue($this->_object->hasData('key_1'));
+        $this->assertEquals('value1', $this->_object->getDataUsingMethod('key_1'));
+
+        $this->_object->setData('key2', 'value2');
+        $this->assertEquals('value2', $this->_object->getData('key2'));
+        $this->assertEquals(null, $this->_object->getKey2());
+        $this->assertEquals(null, $this->_object->getDataUsingMethod('key2'));
+    }
+
+    /**
      * Tests \Magento\Framework\DataObject->hasData()
      */
     public function testHasData()
