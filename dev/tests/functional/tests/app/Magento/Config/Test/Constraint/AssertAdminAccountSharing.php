@@ -33,6 +33,6 @@ class AssertAdminAccountSharing extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Admin account sharing is available is present in in Stores>Configuration>advanced>admin grid.';
+        return 'Admin Account Sharing option is available and present in Stores>Configuration>Advanced>Admin Grid.';
     }
 }
