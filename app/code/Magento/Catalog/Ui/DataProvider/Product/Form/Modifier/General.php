@@ -13,6 +13,8 @@ use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for main panel of product page
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class General extends AbstractModifier
 {
