@@ -36,6 +36,8 @@ class RelationPersister
     }
 
     /**
+     * Save grouped products to product relation table
+     *
      * @param Link $subject
      * @param Link $result
      * @param int $parentId
@@ -44,7 +46,7 @@ class RelationPersister
      * @return Link
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSaveProductLinks(Link $subject, Link $result, $parentId, array $data, $typeId)
+    public function afterSaveProductLinks(Link $subject, Link $result, $parentId, $data, $typeId)
     {
         if ($typeId == GroupedLink::LINK_TYPE_GROUPED) {
             foreach ($data as $linkData) {

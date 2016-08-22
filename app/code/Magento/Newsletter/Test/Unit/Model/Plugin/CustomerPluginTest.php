@@ -78,7 +78,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function provideExtensionAttributeDataForAfterSave()
+    public function afterSaveExtensionAttributeDataProvider()
     {
         return [
             [true, true],
@@ -87,7 +87,9 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideExtensionAttributeDataForAfterSave
+     * @param boolean $isSubscribed
+     * @param boolean $subscribeIsCreated
+     * @dataProvider afterSaveExtensionAttributeDataProvider
      */
     public function testAfterSaveWithIsSubscribed($isSubscribed, $subscribeIsCreated)
     {

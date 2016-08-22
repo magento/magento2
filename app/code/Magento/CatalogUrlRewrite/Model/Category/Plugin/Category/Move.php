@@ -32,6 +32,8 @@ class Move
     }
 
     /**
+     * Perform url updating for children categories
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
      * @param \Magento\Catalog\Model\ResourceModel\Category $result
      * @param Category $category

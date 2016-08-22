@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Store;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View;
+use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View as StoreViewPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ResourceModel\Store;
@@ -16,7 +16,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Catalog\Model\Product as Product;
+use Magento\Catalog\Model\Product;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -29,7 +29,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var View
+     * @var StoreViewPlugin
      */
     private $plugin;
 
@@ -124,7 +124,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCollection'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
-            View::class,
+            StoreViewPlugin::class,
             [
                 'urlPersist' => $this->urlPersistMock,
                 'categoryFactory' => $this->categoryFactoryMock,
@@ -170,7 +170,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock)
             ->willReturn([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->plugin->afterSave($this->subjectMock, $this->subjectMock, $this->abstractModelMock)
         );
@@ -180,7 +180,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->urlPersistMock->expects($this->once())
             ->method('deleteByData');
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->plugin->afterDelete($this->subjectMock, $this->subjectMock, $this->abstractModelMock)
         );

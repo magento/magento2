@@ -30,6 +30,7 @@ class CustomerPlugin
 
     /**
      * Plugin after create customer that updates any newsletter subscription that may have existed.
+     *
      * If we have extension attribute (is_subscribed) we need to subscribe that customer
      *
      * @param CustomerRepository $subject

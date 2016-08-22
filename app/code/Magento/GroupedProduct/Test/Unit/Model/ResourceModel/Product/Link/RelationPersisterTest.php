@@ -10,7 +10,7 @@ use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Link as ResourceLink;
+use Magento\Catalog\Model\ResourceModel\Product\Link as LinkResourceModel;
 
 class RelationPersisterTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,9 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
     /** @var  Relation */
     private $relationProcessor;
 
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     private $objectManager;
 
     /**
@@ -32,7 +34,7 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
     private $linkFactory;
 
     /**
-     * @var ResourceLink|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkResourceModel|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subject;
 
@@ -59,7 +61,7 @@ class RelationPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->linkFactory->expects($this->any())->method('create')->willReturn($this->link);
 
-        $this->subject = $this->getMockBuilder(ResourceLink::class)
+        $this->subject = $this->getMockBuilder(LinkResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 

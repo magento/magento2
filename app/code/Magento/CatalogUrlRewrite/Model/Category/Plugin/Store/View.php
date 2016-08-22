@@ -52,6 +52,8 @@ class View
     }
 
     /**
+     * Perform updating url for categories and products assigned to the store view
+     *
      * @param \Magento\Store\Model\ResourceModel\Store $subject
      * @param \Magento\Store\Model\ResourceModel\Store $result
      * @param AbstractModel $store
@@ -76,6 +78,7 @@ class View
                 $this->generateProductUrls($store->getWebsiteId(), $store->getOrigData('website_id'), $store->getId())
             );
         }
+
         return $result;
     }
 
@@ -98,6 +101,7 @@ class View
             ->addCategoryIds()
             ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addWebsiteFilter($websiteIds);
+
         foreach ($collection as $product) {
             $product->setStoreId($storeId);
             /** @var \Magento\Catalog\Model\Product $product */
@@ -106,6 +110,7 @@ class View
                 $this->productUrlRewriteGenerator->generate($product)
             );
         }
+
         return $urls;
     }
 
@@ -126,10 +131,13 @@ class View
                 $this->categoryUrlRewriteGenerator->generate($category)
             );
         }
+
         return $urls;
     }
 
     /**
+     * Delete unused url rewrites
+     *
      * @param \Magento\Store\Model\ResourceModel\Store $subject
      * @param \Magento\Store\Model\ResourceModel\Store $result
      * @param AbstractModel $store
@@ -142,6 +150,7 @@ class View
         AbstractModel $store
     ) {
         $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $store->getId()]);
+
         return $result;
     }
 }

@@ -170,7 +170,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock)
             ->willReturn([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->plugin->afterSave($this->subjectMock, $this->subjectMock, $this->abstractModelMock)
         );

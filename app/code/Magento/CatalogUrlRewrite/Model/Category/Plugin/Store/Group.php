@@ -63,6 +63,8 @@ class Group
     }
 
     /**
+     * Perform updating url for categories and products assigned to the group
+     *
      * @param \Magento\Store\Model\ResourceModel\Group $subject
      * @param \Magento\Store\Model\ResourceModel\Group $result
      * @param AbstractModel $group

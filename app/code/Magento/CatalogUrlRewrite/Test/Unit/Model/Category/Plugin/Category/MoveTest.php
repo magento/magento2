@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move;
+use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move as CategoryMovePlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\Category;
 
 class MoveTest extends \PHPUnit_Framework_TestCase
@@ -30,7 +30,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
     private $categoryUrlPathGeneratorMock;
 
     /**
-     * @var ResourceCategory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryResourceModel|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectMock;
 
@@ -40,7 +40,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
     private $categoryMock;
 
     /**
-     * @var Move
+     * @var CategoryMovePlugin
      */
     private $plugin;
 
@@ -55,7 +55,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getChildren'])
             ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ResourceCategory::class)
+        $this->subjectMock = $this->getMockBuilder(CategoryResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryMock = $this->getMockBuilder(Category::class)
@@ -63,7 +63,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getResource', 'setUrlPath'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
-            Move::class,
+            CategoryMovePlugin::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGeneratorMock,
                 'childrenCategoriesProvider' => $this->childrenCategoriesProviderMock
@@ -91,7 +91,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
         $this->categoryMock->expects($this->once())
             ->method('setUrlPath')
             ->with($urlPath);
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $this->plugin->afterChangeParent(
                 $this->subjectMock,

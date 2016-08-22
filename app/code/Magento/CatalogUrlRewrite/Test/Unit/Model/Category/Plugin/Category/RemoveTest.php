@@ -5,13 +5,12 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove;
+use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove as CategoryRemovePlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Api\Data\CategoryInterface;
 
 class RemoveTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +30,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     private $childrenCategoriesProviderMock;
 
     /**
-     * @var ResourceCategory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryResourceModel|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectMock;
 
@@ -47,7 +46,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->childrenCategoriesProviderMock = $this->getMockBuilder(ChildrenCategoriesProvider::class)
             ->getMock();
-        $this->subjectMock = $this->getMockBuilder(ResourceCategory::class)
+        $this->subjectMock = $this->getMockBuilder(CategoryResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectMock = $this->getMockBuilder(Category::class)
@@ -62,7 +61,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             return $closureSubject;
         };
         $plugin = $this->objectManager->getObject(
-            Remove::class,
+            CategoryRemovePlugin::class,
             [
                 'urlPersist' => $this->urlPersistMock,
                 'childrenCategoriesProvider' => $this->childrenCategoriesProviderMock
@@ -77,7 +76,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
         $this->urlPersistMock->expects($this->exactly(2))
             ->method('deleteByData');
-        $this->assertEquals(
+        $this->assertSame(
             $this->subjectMock,
             $plugin->aroundDelete($this->subjectMock, $proceed, $this->objectMock)
         );
