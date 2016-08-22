@@ -177,7 +177,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             Account::class,
             [
                 'session' => $this->session,
-                ['testaction']
+                'allowedActions' => ['testaction']
             ]
         );
         $this->assertSame(
