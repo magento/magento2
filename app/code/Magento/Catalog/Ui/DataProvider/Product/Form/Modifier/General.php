@@ -82,7 +82,7 @@ class General extends AbstractModifier
             $data = $this->arrayManager->replace(
                 $path,
                 $data,
-                $this->formatNumber($this->arrayManager->get($path, $data))
+                $this->formatWeight($this->arrayManager->get($path, $data))
             );
         }
 
@@ -105,7 +105,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    $this->formatNumber((int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
+                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -379,23 +379,6 @@ class General extends AbstractModifier
     }
 
     /**
-     * The getter function to get the store manager for real application code
-     *
-     * @return \Magento\Store\Model\StoreManagerInterface
-     *
-     * @deprecated
-     */
-    private function getStoreManager()
-    {
-        if ($this->storeManager === null) {
-            $this->storeManager =
-                \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        }
-        return $this->storeManager;
-    }
-
-
-    /**
      * Format price according to the locale of the currency
      *
      * @param mixed $value
@@ -407,7 +390,7 @@ class General extends AbstractModifier
             return null;
         }
 
-        $store = $this->getStoreManager()->getStore();
+        $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
@@ -428,7 +411,7 @@ class General extends AbstractModifier
 
         $value = (float)$value;
         $precision = strlen(substr(strrchr($value, "."), 1));
-        $store = $this->getStoreManager()->getStore();
+        $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
                                                 'precision' => $precision]);
