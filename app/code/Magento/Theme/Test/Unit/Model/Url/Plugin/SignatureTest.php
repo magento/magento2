@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Theme\Test\Unit\Model\Url\Plugin;
 
 use \Magento\Theme\Model\Url\Plugin\Signature;
@@ -41,9 +40,9 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool|int $fixtureConfigFlag
      * @param string $inputUrlType
-     * @dataProvider aroundGetBaseUrlInactiveDataProvider
+     * @dataProvider afterGetBaseUrlInactiveDataProvider
      */
-    public function testAroundGetBaseUrlInactive($fixtureConfigFlag, $inputUrlType)
+    public function testAfterGetBaseUrlInactive($fixtureConfigFlag, $inputUrlType)
     {
         $this->config
             ->expects($this->any())
@@ -57,7 +56,10 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://127.0.0.1/magento/pub/static/', $actualResult);
     }
 
-    public function aroundGetBaseUrlInactiveDataProvider()
+    /**
+     * @return array
+     */
+    public function afterGetBaseUrlInactiveDataProvider()
     {
         return [
             'disabled in config, relevant URL type'  => [0, \Magento\Framework\UrlInterface::URL_TYPE_STATIC],

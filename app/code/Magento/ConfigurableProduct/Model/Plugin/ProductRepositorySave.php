@@ -14,10 +14,7 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-/**
- * Class AroundProductRepositorySave
- */
-class AroundProductRepositorySave
+class ProductRepositorySave
 {
     /**
      * @var ProductAttributeRepositoryInterface
@@ -42,6 +39,8 @@ class AroundProductRepositorySave
     }
 
     /**
+     * Validate product links and reset configurable attributes to configurable product
+     *
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface $result
      * @param ProductInterface $product

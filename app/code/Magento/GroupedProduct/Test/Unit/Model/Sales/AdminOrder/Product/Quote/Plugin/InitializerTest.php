@@ -5,11 +5,11 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
-use Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer as Model;
-use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer;
+use Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer as QuoteInitializerPlugin;
+use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer as QuoteInitializer;
 use Magento\Quote\Model\Quote;
 use Magento\Catalog\Model\Product;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -21,12 +21,12 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Model|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteInitializerPlugin|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $model;
+    private $plugin;
 
     /**
-     * @var Initializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteInitializer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $initializer;
 
@@ -36,7 +36,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     private $quote;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteItem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteItem;
 
@@ -54,7 +54,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->initializer = $this->getMockBuilder(Initializer::class)
+        $this->initializer = $this->getMockBuilder(QuoteInitializer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->quote = $this->getMockBuilder(Quote::class)
@@ -65,23 +65,23 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId'])
             ->getMock();
-        $this->quoteItem = $this->getMockBuilder(Item::class)
+        $this->quoteItem = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->config = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $this->objectManagerHelper->getObject(
-            Model::class
+        $this->plugin = $this->objectManagerHelper->getObject(
+            QuoteInitializerPlugin::class
         );
     }
 
     public function testAfterInit()
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->quoteItem,
-            $this->model->afterInit($this->initializer, $this->quoteItem, $this->quote, $this->product, $this->config)
+            $this->plugin->afterInit($this->initializer, $this->quoteItem, $this->quote, $this->product, $this->config)
         );
     }
 }

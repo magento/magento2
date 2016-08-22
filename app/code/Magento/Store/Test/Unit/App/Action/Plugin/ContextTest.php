@@ -114,7 +114,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->requestMock = $this->getMock(RequestInterface::class);
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -146,7 +146,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::CURRENCY_CURRENT_STORE));
     }
 
-    public function testAroundDispatchCurrencyFromSession()
+    public function testBeforeDispatchCurrencyFromSession()
     {
         $this->storeMock->expects($this->once())
             ->method('getDefaultCurrencyCode')

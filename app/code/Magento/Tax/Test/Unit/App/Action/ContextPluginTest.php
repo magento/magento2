@@ -111,9 +111,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $cache
      * @param bool $taxEnabled
      * @param bool $loggedIn
-     * @dataProvider dataProviderAroundDispatch
+     * @dataProvider beforeDispatchDataProvider
      */
-    public function testAroundDispatch($cache, $taxEnabled, $loggedIn)
+    public function testBeforeDispatch($cache, $taxEnabled, $loggedIn)
     {
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
@@ -167,7 +167,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProviderAroundDispatch()
+    public function beforeDispatchDataProvider()
     {
         return [
             [false, false, false],

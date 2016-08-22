@@ -58,6 +58,8 @@ class Context
     }
 
     /**
+     * Set store and currency to http context
+     *
      * @param AbstractAction $subject
      * @param RequestInterface $request
      * @return void

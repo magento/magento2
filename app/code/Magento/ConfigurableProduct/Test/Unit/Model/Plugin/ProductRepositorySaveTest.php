@@ -11,16 +11,17 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\ConfigurableProduct\Model\Plugin\AroundProductRepositorySave;
+use Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class AroundProductRepositorySaveTest
+ * Class ProductRepositorySaveTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
+class ProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductAttributeRepositoryInterface|MockObject
@@ -63,7 +64,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     private $option;
 
     /**
-     * @var AroundProductRepositorySave
+     * @var ProductRepositorySave
      */
     private $plugin;
 
@@ -97,13 +98,16 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->option = $this->getMockForAbstractClass(OptionInterface::class);
 
-        $this->plugin = new AroundProductRepositorySave(
-            $this->productAttributeRepository,
-            $this->productFactory
+        $this->plugin = (new ObjectManager($this))->getObject(
+            ProductRepositorySave::class,
+            [
+                'productAttributeRepository' => $this->productAttributeRepository,
+                'productFactory' => $this->productFactory
+            ]
         );
     }
 
-    public function testAroundSaveWhenProductIsSimple()
+    public function testAfterSaveWhenProductIsSimple()
     {
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -117,7 +121,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundSaveWithoutOptions()
+    public function testAfterSaveWithoutOptions()
     {
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -147,7 +151,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
-    public function testAroundSaveWithLinks()
+    public function testAfterSaveWithLinks()
     {
         $links = [4, 5];
         $this->product->expects(static::once())
@@ -189,7 +193,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Product with id "4" does not contain required attribute "color".
      */
-    public function testAroundSaveWithLinksWithMissingAttribute()
+    public function testAfterSaveWithLinksWithMissingAttribute()
     {
         $simpleProductId = 4;
         $links = [$simpleProductId, 5];
@@ -246,7 +250,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
-    public function testAroundSaveWithLinksWithDuplicateAttributes()
+    public function testAfterSaveWithLinksWithDuplicateAttributes()
     {
         $links = [4, 5];
         $attributeCode = 'color';

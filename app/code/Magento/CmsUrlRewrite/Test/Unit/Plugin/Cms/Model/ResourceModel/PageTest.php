@@ -30,18 +30,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $cmsPageResourceMock;
 
-    /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->closureMock = function () {
-            return 'URL Rewrite Result';
-        };
 
         $this->urlPersistMock = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlPersistInterface::class)
             ->getMockForAbstractClass();
@@ -62,7 +53,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDeletePositive()
+    public function testAfterDeletePositive()
     {
         $productId = 100;
 
@@ -93,7 +84,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDeleteNegative()
+    public function testAfterDeleteNegative()
     {
         $this->cmsPageMock->expects($this->once())
             ->method('isDeleted')

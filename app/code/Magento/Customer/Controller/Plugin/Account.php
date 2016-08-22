@@ -37,14 +37,14 @@ class Account
     }
 
     /**
+     * Dispatch actions allowed for not authorized users
+     *
      * @param AbstractAction $subject
      * @param RequestInterface $request
      * @return void
      */
-    public function beforeDispatch(
-        AbstractAction $subject,
-        RequestInterface $request
-    ) {
+    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    {
         $action = strtolower($request->getActionName());
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
@@ -58,7 +58,7 @@ class Account
     }
 
     /**
-     * Dispatch actions allowed for not authorized users
+     * Remove No-referer flag from customer session
      *
      * @param AbstractAction $subject
      * @param ResponseInterface|ResultInterface $result
@@ -66,11 +66,8 @@ class Account
      * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDispatch(
-        AbstractAction $subject,
-        $result,
-        RequestInterface $request
-    ) {
+    public function afterDispatch(AbstractAction $subject, $result, RequestInterface $request)
+    {
         $this->session->unsNoReferer(false);
         return $result;
     }

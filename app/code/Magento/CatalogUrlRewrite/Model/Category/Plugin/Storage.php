@@ -33,7 +33,7 @@ class Storage
 
     /**
      * @param \Magento\UrlRewrite\Model\StorageInterface $object
-     * @param void $result
+     * @param null $result
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
