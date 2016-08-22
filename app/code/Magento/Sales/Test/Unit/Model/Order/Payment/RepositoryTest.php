@@ -48,6 +48,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $paymentResource;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @var \Magento\Sales\Model\Order\Payment\Repository
      */
     protected $repository;
@@ -104,11 +109,19 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->repository = $objectManager->getObject(
             \Magento\Sales\Model\Order\Payment\Repository::class,
             [
                 'searchResultFactory' => $this->searchResultFactory,
                 'metaData' => $this->metaData,
+                'collectionProcessor' => $this->collectionProcessor,
             ]
         );
     }
@@ -173,9 +186,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $field = 'order_id';
-        $value = 45;
-        $this->getListMock($field, $value);
+        $this->searchResultFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->collection);
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($this->searchCriteria, $this->collection);
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
@@ -194,26 +208,5 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         }
 
         return $payment;
-    }
-
-    /**
-     * @param $field
-     * @param $value
-     */
-    protected function getListMock($field, $value)
-    {
-        $currentPage = 1;
-        $pageSize = 10;
-        $this->searchResultFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->collection);
-        $this->searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$this->filterGroup]);
-        $this->filterGroup->expects($this->once())->method('getFilters')->willReturn([$this->filter]);
-        $this->filter->expects($this->once())->method('getConditionType')->willReturn(null);
-        $this->filter->expects($this->once())->method('getField')->willReturn($field);
-        $this->filter->expects($this->once())->method('getValue')->willReturn($value);
-        $this->collection->expects($this->once())->method('addFieldToFilter')->with($field, ['eq' => $value]);
-        $this->searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $this->searchCriteria->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $this->collection->expects($this->once())->method('setCurPage')->with();
-        $this->collection->expects($this->once())->method('setPageSize')->with();
     }
 }
