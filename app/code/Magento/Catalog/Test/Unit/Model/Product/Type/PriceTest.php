@@ -15,6 +15,8 @@ use Magento\Customer\Model\GroupManagement;
 
 /**
  * Price Test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
@@ -175,7 +177,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         // create sample TierPrice objects that would be coming from a REST call
         $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
-            ->setMethods(['getWebsiteId', 'getPercentageValue'])
+            ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
             ->getMock();
         $tierPriceExtensionMock->expects($this->any())->method('getWebsiteId')->willReturn($expectedWebsiteId);
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(null);
@@ -218,7 +220,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         }
 
         $tierPriceExtention = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
-            ->setMethods(['getWebsiteId', 'getPercentageValue', 'setWebsiteId'])
+            ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
             ->getMock();
         $tierPriceExtention->expects($this->any())->method('getPercentageValue')->willReturn(50);
         $tierPriceExtention->expects($this->any())->method('setWebsiteId');

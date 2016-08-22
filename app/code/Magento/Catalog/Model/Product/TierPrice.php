@@ -87,8 +87,8 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         if (empty($this->_getExtensionAttributes())) {
             $this->setExtensionAttributes(
-                ObjectManager::getInstance()->get('\Magento\Framework\Api\ExtensionAttributesFactory')
-                    ->create('Magento\Catalog\Api\Data\ProductTierPriceInterface')
+                ObjectManager::getInstance()->get(\Magento\Framework\Api\ExtensionAttributesFactory::class)
+                    ->create(\Magento\Catalog\Api\Data\ProductTierPriceInterface::class)
             );
         }
         return $this->_getExtensionAttributes();
