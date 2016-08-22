@@ -82,6 +82,7 @@ class Filter
     {
         $component = $this->getComponent();
         $this->prepareComponent($component);
+        $this->applySelectionOnTargetProvider();
         $dataProvider = $component->getContext()->getDataProvider();
         $dataProvider->setLimit(0, false);
         $ids = [];
