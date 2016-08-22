@@ -78,7 +78,7 @@
             <field name="cart_price" xsi:type="string">756.00</field>
         </dataset>
 
-        <dataset name="fixed-785-custom-options">
+        <dataset name="fixed-756-custom-options">
             <field name="price_from" xsi:type="string">785.00</field>
             <field name="price_to" xsi:type="string">786.00</field>
             <field name="cart_price" xsi:type="string">786.00</field>
