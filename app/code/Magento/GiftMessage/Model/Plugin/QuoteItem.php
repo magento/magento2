@@ -6,21 +6,21 @@
 namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\GiftMessage\Helper\Message as HelperMessage;
+use Magento\GiftMessage\Helper\Message as MessageHelper;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 class QuoteItem
 {
     /**
-     * @var HelperMessage
+     * @var MessageHelper
      */
     protected $_helper;
 
     /**
-     * @param HelperMessage $helper
+     * @param MessageHelper $helper
      */
-    public function __construct(HelperMessage $helper)
+    public function __construct(MessageHelper $helper)
     {
         $this->_helper = $helper;
     }
