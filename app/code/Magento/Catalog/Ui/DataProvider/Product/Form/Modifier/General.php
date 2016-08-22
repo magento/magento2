@@ -9,7 +9,6 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Locale\CurrencyInterface;
 
 /**
@@ -26,11 +25,6 @@ class General extends AbstractModifier
      * @var ArrayManager
      */
     protected $arrayManager;
-    
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @var CurrencyInterface
