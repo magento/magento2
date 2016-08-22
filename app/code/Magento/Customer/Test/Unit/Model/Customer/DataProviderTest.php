@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Config\Share;
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryByWebsite;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -401,7 +401,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     private function getCountryAttrMock()
     {
-        $countryByWebsiteMock = $this->getMockBuilder(CountryByWebsite::class)
+        $countryByWebsiteMock = $this->getMockBuilder(CountryWithWebsites::class)
             ->disableOriginalConstructor()
             ->getMock();
         $countryByWebsiteMock->expects($this->any())
@@ -414,7 +414,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
-                [CountryByWebsite::class, $countryByWebsiteMock],
+                [CountryWithWebsites::class, $countryByWebsiteMock],
                 [Share::class, $shareMock],
             ]);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);

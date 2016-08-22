@@ -18,7 +18,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class CountryByWebsite extends \Magento\Eav\Model\Entity\Attribute\Source\Table
+class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory

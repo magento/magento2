@@ -12,7 +12,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryByWebsite;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -331,11 +331,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @deprecated
-     * @return CountryByWebsite
+     * @return CountryWithWebsites
      */
     private function getCountryByWebsiteSource()
     {
-        return ObjectManager::getInstance()->get(CountryByWebsite::class);
+        return ObjectManager::getInstance()->get(CountryWithWebsites::class);
     }
 
     /**

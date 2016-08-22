@@ -15,6 +15,10 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class Country.
+ * @package Magento\Customer\Model\ResourceModel\Address\Attribute\Source
+ */
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
@@ -45,33 +49,10 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     {
         if (!$this->_options) {
             $this->_options = $this->_createCountriesCollection()->loadByStore(
-                $this->resolveStoreId()
+                $this->getStoreManager()->getStore()->getId()
             )->toOptionArray();
         }
         return $this->_options;
-    }
-
-    /**
-     * @deprecated
-     * @return \Magento\Backend\Model\Session\Quote
-     */
-    private function getBackendSession()
-    {
-        return ObjectManager::getInstance()->get(\Magento\Backend\Model\Session\Quote::class);
-    }
-
-    /**
-     * Retrieve store id in view of backend quote.
-     * @return int
-     */
-    private function resolveStoreId()
-    {
-        $backendSession = $this->getBackendSession();
-        if ($backendSession->getQuoteId() && $backendSession->getQuote()->hasStoreId()) {
-            return $backendSession->getQuote()->getStoreId();
-        }
-
-        return $this->getStoreManager()->getStore()->getId();
     }
 
     /**

@@ -6,13 +6,13 @@
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address\Attribute\Source;
 
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryByWebsite;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Customer\Model\CountryHandler;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class CountryByWebsiteTest extends \PHPUnit_Framework_TestCase
+class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class CountryByWebsiteTest extends \PHPUnit_Framework_TestCase
     private $storeManagerMock;
 
     /**
-     * @var CountryByWebsite
+     * @var CountryWithWebsites
      */
     private $countryByWebsite;
 
@@ -53,7 +53,7 @@ class CountryByWebsiteTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
-        $this->countryByWebsite = new CountryByWebsite(
+        $this->countryByWebsite = new CountryWithWebsites(
             $eavCollectionFactoryMock,
             $optionsFactoryMock,
             $this->countriesFactoryMock,

@@ -5,8 +5,12 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
+use Magento\Backend\Model\Session\Quote;
+use Magento\Customer\Model\CountryHandler;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Order create address form
@@ -250,6 +254,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         $this->_form->setValues($this->getFormValues());
 
         if ($this->_form->getElement('country_id')->getValue()) {
+            $this->processCountryOptions($this->_form->getElement('country_id'));
             $countryId = $this->_form->getElement('country_id')->getValue();
             $this->_form->getElement('country_id')->setValue(null);
             foreach ($this->_form->getElement('country_id')->getValues() as $country) {
@@ -277,6 +282,47 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         }
 
         return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
+     * @return void
+     */
+    private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
+    {
+        $storeId = $this->getBackendQuoteSession()->getStoreId();
+        $options = $this->getCountryHandler()
+            ->loadByScope($storeId, ScopeInterface::SCOPE_STORE, $this->getCountriesCollection())
+            ->toOptionArray();
+
+        $countryElement->setValues($options);
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     */
+    private function getCountriesCollection()
+    {
+        return ObjectManager::getInstance()->get(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+    }
+
+    /**
+     * @deprecated
+     * @return CountryHandler
+     */
+    private function getCountryHandler()
+    {
+        return ObjectManager::getInstance()->get(CountryHandler::class);
+    }
+
+    /**
+     * @deprecated
+     * @return Quote
+     */
+    private function getBackendQuoteSession()
+    {
+        return ObjectManager::getInstance()->get(Quote::class);
     }
 
     /**

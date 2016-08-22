@@ -117,7 +117,7 @@ class CountryHandler
     /**
      * @param $filter
      * @param string $scope
-     * @return $this
+     * @return AbstractDb
      */
     public function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE, AbstractDb $collection)
     {
