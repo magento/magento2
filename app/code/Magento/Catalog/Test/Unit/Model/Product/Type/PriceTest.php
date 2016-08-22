@@ -179,12 +179,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $tierPriceExtensionMock->expects($this->any())->method('getWebsiteId')->willReturn($expectedWebsiteId);
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(null);
-        $tp1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\TierPrice');
+        $tp1 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
         $tp1->setValue(10);
         $tp1->setCustomerGroupId(1);
         $tp1->setQty(11);
         $tp1->setExtensionAttributes($tierPriceExtensionMock);
-        $tp2 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\TierPrice');
+        $tp2 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
         $tp2->setValue(20);
         $tp2->setCustomerGroupId(2);
         $tp2->setQty(22);

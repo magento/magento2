@@ -37,7 +37,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
     }
 
