@@ -116,11 +116,10 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $pathParts
      * @param string $countryCode
-     * @param array $expectedPathParts
      *
      * @dataProvider aroundGetElementByPathPartsDataProvider
      */
-    public function testAroundGetElementByPathPartsNoResult($pathParts, $countryCode, $expectedPathParts)
+    public function testAroundGetElementByPathPartsNoResult($pathParts, $countryCode)
     {
         $proceed = function () {
             return null;
@@ -139,11 +138,10 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $pathParts
      * @param string $countryCode
-     * @param array $expectedPathParts
      *
      * @dataProvider aroundGetElementByPathPartsDataProvider
      */
-    public function testAroundGetElementByPathParts($pathParts, $countryCode, $expectedPathParts)
+    public function testAroundGetElementByPathParts($pathParts, $countryCode)
     {
         $result = $this->elementConfigStructureMock;
         $proceed = function () use ($result) {
@@ -169,12 +167,10 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
             [
                 ['payment', 'group1', 'group2', 'field'],
                 'any',
-                ['payment_other', 'group1', 'group2', 'field'],
             ],
             [
                 ['payment', 'group1', 'group2', 'field'],
                 'DE',
-                ['payment_de', 'group1', 'group2', 'field']
             ]
         ];
     }
