@@ -270,37 +270,64 @@ abstract class AbstractGroupPrice extends Price
      */
     public function afterLoad($object)
     {
-        $storeId = $object->getStoreId();
+        $data = $this->_getResource()->loadPriceData(
+            $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()),
+            $this->getWebsiteId($object->getStoreId())
+        );
+        $this->setPriceData($object, $data);
+
+        return $this;
+    }
+
+    /**
+     * @param int $storeId
+     * @return int|null
+     */
+    private function getWebsiteId($storeId)
+    {
         $websiteId = null;
         if ($this->getAttribute()->isScopeGlobal()) {
             $websiteId = 0;
         } elseif ($storeId) {
             $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
         }
+        return $websiteId;
+    }
 
-        $data = $this->_getResource()->loadPriceData(
-            $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()),
-            $websiteId
-        );
+    /**
+     * @param \Magento\Catalog\Model\Product $object
+     * @param array $priceData
+     */
+    public function setPriceData($object, $priceData)
+    {
+        $priceData = $this->modifyPriceData($object, $priceData);
+        $websiteId = $this->getWebsiteId($object->getStoreId());
+        if (!$object->getData('_edit_mode') && $websiteId) {
+            $priceData = $this->preparePriceData($priceData, $object->getTypeId(), $websiteId);
+        }
+
+        $object->setData($this->getAttribute()->getName(), $priceData);
+        $object->setOrigData($this->getAttribute()->getName(), $priceData);
+
+        $valueChangedKey = $this->getAttribute()->getName() . '_changed';
+        $object->setOrigData($valueChangedKey, 0);
+        $object->setData($valueChangedKey, 0);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $object
+     * @param array $data
+     * @return array
+     */
+    protected function modifyPriceData($object, $data)
+    {
         foreach ($data as $k => $v) {
             $data[$k]['website_price'] = $v['price'];
             if ($v['all_groups']) {
                 $data[$k]['cust_group'] = $this->_groupManagement->getAllCustomersGroup()->getId();
             }
         }
-
-        if (!$object->getData('_edit_mode') && $websiteId) {
-            $data = $this->preparePriceData($data, $object->getTypeId(), $websiteId);
-        }
-
-        $object->setData($this->getAttribute()->getName(), $data);
-        $object->setOrigData($this->getAttribute()->getName(), $data);
-
-        $valueChangedKey = $this->getAttribute()->getName() . '_changed';
-        $object->setOrigData($valueChangedKey, 0);
-        $object->setData($valueChangedKey, 0);
-
-        return $this;
+        return $data;
     }
 
     /**
@@ -372,13 +399,14 @@ abstract class AbstractGroupPrice extends Price
 
             $useForAllGroups = $data['cust_group'] == $this->_groupManagement->getAllCustomersGroup()->getId();
             $customerGroupId = !$useForAllGroups ? $data['cust_group'] : 0;
-
+            $isPercentageValue = isset($data['percentage_value']) && $data['percentage_value'] > 0;
             $new[$key] = array_merge(
                 [
                     'website_id' => $data['website_id'],
                     'all_groups' => $useForAllGroups ? 1 : 0,
                     'customer_group_id' => $customerGroupId,
-                    'value' => $data['price'],
+                    'value' => $isPercentageValue ? 0 : $data['price'],
+                    'percentage_value' => $isPercentageValue ? $data['percentage_value'] : 0,
                 ],
                 $this->_getAdditionalUniqueFields($data)
             );
@@ -413,8 +441,14 @@ abstract class AbstractGroupPrice extends Price
 
         if (!empty($update)) {
             foreach ($update as $k => $v) {
-                if ($old[$k]['price'] != $v['value']) {
-                    $price = new \Magento\Framework\DataObject(['value_id' => $old[$k]['price_id'], 'value' => $v['value']]);
+                if ($old[$k]['price'] != $v['value'] || $old[$k]['percentage_value'] != $v['percentage_value']) {
+                    $price = new \Magento\Framework\DataObject(
+                        [
+                            'value_id' => $old[$k]['price_id'],
+                            'value' => $v['value'],
+                            'percentage_value' => $v['percentage_value']
+                        ]
+                    );
                     $this->_getResource()->savePriceData($price);
 
                     $isChanged = true;

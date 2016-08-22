@@ -888,15 +888,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'customer_group_id' => $custGroup1,
                 'value' => 3.14,
                 'qty' => 5,
-                'percentageValue' => 0,
-                'websiteId' => 1,
             ],
             [
                 'customer_group_id' => $custGroup2,
                 'value' => 3.45,
                 'qty' => 10,
-                'percentageValue' => 0,
-                'websiteId' => 1,
             ]
         ];
         $this->saveProduct($productData);
@@ -921,8 +917,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'customer_group_id' => $custGroup3,
             'value' => 2.10,
             'qty' => 12,
-            'percentageValue' => 0,
-            'websiteId' => 1,
         ];
         $response[self::KEY_TIER_PRICES] = $tierPrices;
         $response = $this->updateProduct($response);

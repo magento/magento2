@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * Product type price model
@@ -79,6 +80,11 @@ class Price
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $config;
+
+    /**
+     * @var ProductTierPriceExtensionFactory
+     */
+    private $tierPriceExtensionFactory;
 
     /**
      * Price constructor.
@@ -363,9 +369,27 @@ class Price
             }
             $tierPrice->setValue($value);
             $tierPrice->setQty($price['price_qty']);
+            if (!$tierPrice->getExtensionAttributes()) {
+                $tierPrice->setExtensionAttributes($this->getTierPriceExtensionAttributes());
+            }
+            $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
+            $tierPrice->getExtensionAttributes()->setWebsiteId($price['website_id']);
             $prices[] = $tierPrice;
         }
         return $prices;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface
+     */
+    private function getTierPriceExtensionAttributes()
+    {
+        if (!$this->tierPriceExtensionFactory) {
+            $this->tierPriceExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ProductTierPriceExtensionFactory::class);
+        }
+        return $this->tierPriceExtensionFactory->create();
     }
 
     /**
@@ -382,19 +406,19 @@ class Price
             return $this;
         }
 
-        $websiteId = $this->getWebsiteForPriceScope();
         $allGroupsId = $this->getAllCustomerGroupsId();
 
         // build the new array of tier prices
         $prices = [];
         foreach ($tierPrices as $price) {
             $prices[] = [
-                'website_id' => $websiteId,
+                'website_id' => $price->getExtensionAttributes()->getWebsiteId(),
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),
                 'all_groups' => ($price->getCustomerGroupId() == $allGroupsId),
-                'price_qty' => $price->getQty()
+                'price_qty' => $price->getQty(),
+                'percentage_value' => $price->getExtensionAttributes()->getPercentageValue()
             ];
         }
         $product->setData('tier_price', $prices);

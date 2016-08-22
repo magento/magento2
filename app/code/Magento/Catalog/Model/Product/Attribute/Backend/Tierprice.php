@@ -105,4 +105,18 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     {
         return false;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function modifyPriceData($object, $data)
+    {
+        foreach ($data as $key => $tierPrice) {
+            if ($tierPrice['percentage_value'] > 0) {
+                $data[$key]['price'] = $object->getPrice() * (1 - $tierPrice['percentage_value'] / 100);
+            }
+        }
+
+        return parent::modifyPriceData($object, $data);
+    }
 }
