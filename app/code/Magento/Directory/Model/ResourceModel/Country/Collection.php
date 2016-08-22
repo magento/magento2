@@ -10,7 +10,7 @@
  * Directory Country Resource Collection
  */
 namespace Magento\Directory\Model\ResourceModel\Country;
-use Magento\Directory\Model\CountryHandler;
+use Magento\Customer\Model\CountryHandler;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 

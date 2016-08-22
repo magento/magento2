@@ -16,14 +16,14 @@ define([
             isGlobalScope: 0
         },
 
+        /**
+         * Website component constructor.
+         * @returns {exports}
+         */
         initialize: function () {
             this._super();
-           
-            if (this.isGlobalScope) {
-                this.setVisible(false);
-            }
-
-            if (this.customerId) { //disable element if customer exists
+            
+            if (this.customerId || this.isGlobalScope) { //disable element if customer exists
                 this.disable(true);
             }
 

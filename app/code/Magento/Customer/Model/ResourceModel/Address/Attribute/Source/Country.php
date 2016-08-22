@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
@@ -41,10 +45,33 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     {
         if (!$this->_options) {
             $this->_options = $this->_createCountriesCollection()->loadByStore(
-                $this->getAttribute()->getStoreId()
+                $this->resolveStoreId()
             )->toOptionArray();
         }
         return $this->_options;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Backend\Model\Session\Quote
+     */
+    private function getBackendSession()
+    {
+        return ObjectManager::getInstance()->get(\Magento\Backend\Model\Session\Quote::class);
+    }
+
+    /**
+     * Retrieve store id in view of backend quote.
+     * @return int
+     */
+    private function resolveStoreId()
+    {
+        $backendSession = $this->getBackendSession();
+        if ($backendSession->getQuoteId() && $backendSession->getQuote()->hasStoreId()) {
+            return $backendSession->getQuote()->getStoreId();
+        }
+
+        return $this->getStoreManager()->getStore()->getId();
     }
 
     /**
@@ -53,5 +80,14 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected function _createCountriesCollection()
     {
         return $this->_countriesFactory->create();
+    }
+
+    /**
+     * @deprecated
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        return ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 }

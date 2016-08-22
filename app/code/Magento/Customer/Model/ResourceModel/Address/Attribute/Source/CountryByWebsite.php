@@ -26,7 +26,7 @@ class CountryByWebsite extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     private $countriesFactory;
 
     /**
-     * @var \Magento\Directory\Model\CountryHandler
+     * @var \Magento\Customer\Model\CountryHandler
      */
     private $countryHandler;
 
@@ -49,7 +49,7 @@ class CountryByWebsite extends \Magento\Eav\Model\Entity\Attribute\Source\Table
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory,
-        \Magento\Directory\Model\CountryHandler $countryHandler,
+        \Magento\Customer\Model\CountryHandler $countryHandler,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {

@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address\Attribute\Backend;
+namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address\Attribute\Source;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryByWebsite;
-use Magento\Directory\Model\CountryHandler;
+use Magento\Customer\Model\CountryHandler;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -20,7 +20,7 @@ class CountryByWebsiteTest extends \PHPUnit_Framework_TestCase
     private $countriesFactoryMock;
 
     /**
-     * @var \Magento\Directory\Model\CountryHandler | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CountryHandler | \PHPUnit_Framework_MockObject_MockObject
      */
     private $countryHandlerMock;
 

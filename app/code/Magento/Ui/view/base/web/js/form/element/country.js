@@ -25,20 +25,21 @@ define([
          * @param {String} field
          */
         filter: function (value, field) {
+            var result;
             if (!field) { //validate field, if we are on update
                 field = this.filterBy.field;
             }
 
             this._super(value, field);
 
-            var result = _.filter(this.initialOptions, function (item) {
+             result = _.filter(this.initialOptions, function (item) {
                 if (item[field]) {
                     return ~item[field].indexOf(value);
                 }
 
                 return false;
             });
-      
+
             this.setOptions(result);
         }
     });

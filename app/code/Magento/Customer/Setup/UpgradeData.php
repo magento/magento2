@@ -7,7 +7,7 @@
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
-use Magento\Directory\Model\CountryHandler;
+use Magento\Customer\Model\CountryHandler;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;

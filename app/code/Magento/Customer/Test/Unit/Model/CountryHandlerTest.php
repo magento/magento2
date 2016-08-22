@@ -7,7 +7,7 @@
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Customer\Model\Config\Share;
-use Magento\Directory\Model\CountryHandler;
+use Magento\Customer\Model\CountryHandler;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;

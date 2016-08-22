@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Model;
+namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\Config\Share;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -15,6 +15,10 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 
+/**
+ * Class CountryHandler.
+ * @package Magento\Customer\Model
+ */
 class CountryHandler
 {
     const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
