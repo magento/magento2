@@ -134,33 +134,15 @@ class SystemPackage
     /**
      * Retrieve allowed B2B versions
      *
-     * @param $currentEE
+     * @param string $currentEE
      * @return array
      */
     public function getAllowedB2BVersions($currentEE)
     {
         $result = [];
-        $versions = $this->infoCommand->run('magento/product-b2b-edition');
+        $versions = $this->fetchInfoVersions('magento/product-b2b-edition');
         $versionsPrepared = [];
         $maxVersion = '';
-
-        if (!is_array($versions) ) {
-            return $result;
-        }
-
-        $versions[InfoCommand::CURRENT_VERSION] = isset($versions[InfoCommand::CURRENT_VERSION])
-            ? $versions[InfoCommand::CURRENT_VERSION]
-            : null;
-        $versions[InfoCommand::AVAILABLE_VERSIONS] = isset($versions[InfoCommand::AVAILABLE_VERSIONS])
-            ? $versions[InfoCommand::AVAILABLE_VERSIONS]
-            : [];
-
-        $versions[InfoCommand::AVAILABLE_VERSIONS] = array_unique(
-            array_merge(
-                (array)$versions[InfoCommand::CURRENT_VERSION],
-                (array)$versions[InfoCommand::AVAILABLE_VERSIONS]
-            )
-        );
 
         if ($versions[InfoCommand::AVAILABLE_VERSIONS]) {
             $versions = $this->sortVersions($versions);
@@ -178,6 +160,30 @@ class SystemPackage
         }
 
         return $result;
+    }
+
+    /**
+     * Fetching info command response to
+     * display all correct versions
+     *
+     * @param string $command
+     * @return array
+     */
+    private function fetchInfoVersions($command)
+    {
+        $versions = (array)$this->infoCommand->run($command);
+
+        $versions[InfoCommand::CURRENT_VERSION] = isset($versions[InfoCommand::CURRENT_VERSION])
+            ? $versions[InfoCommand::CURRENT_VERSION]
+            : null;
+        $versions[InfoCommand::AVAILABLE_VERSIONS] = array_unique(
+            array_merge(
+                (array)$versions[InfoCommand::CURRENT_VERSION],
+                (array)$versions[InfoCommand::AVAILABLE_VERSIONS]
+            )
+        );
+
+        return $versions;
     }
 
     /**
@@ -331,6 +337,14 @@ class SystemPackage
         return $eeVersions;
     }
 
+    /**
+     * Filtering B2B versions
+     *
+     * @param string $currentEE
+     * @param array $b2bVersions
+     * @param string $maxVersion
+     * @return array
+     */
     public function filterB2bVersions($currentEE, $b2bVersions, $maxVersion)
     {
         $b2bVersionsPrepared = [];

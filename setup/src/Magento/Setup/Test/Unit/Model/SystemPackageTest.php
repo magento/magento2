@@ -176,43 +176,62 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
         $this->systemPackage = new SystemPackage($this->composerAppFactory, $this->composerInformation);
 
-        $this->infoCommand->expects($this->at(0))
+        $this->infoCommand->expects($this->any())
             ->method('run')
-            ->with('magento/product-community-edition')
-            ->willReturn(
+            ->willReturnMap([
                 [
-                    'name' => 'magento/product-community-edition',
-                    'description' => 'eCommerce Platform for Growth (Enterprise Edition)',
-                    'keywords' => '',
-                    'versions' => '1.2.0, 1.1.0, 1.1.0-RC1, * 1.0.0',
-                    'type' => 'metapackage',
-                    'license' => 'OSL-3.0, AFL-3.0',
-                    'source' => '[]',
-                    'names' => 'magento/product-community-edition',
-                    'current_version' => '1.0.0',
-                    'available_versions' => [1 => '1.2.0', 2 => '1.1.0', 3 => '1.1.0-RC1', 4 => '1.0.0'],
-                    'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
-                ]
-            );
+                    'magento/product-community-edition',
+                    false,
+                    [
+                        'name' => 'magento/product-community-edition',
+                        'description' => 'eCommerce Platform for Growth (Enterprise Edition)',
+                        'keywords' => '',
+                        'versions' => '1.2.0, 1.1.0, 1.1.0-RC1, * 1.0.0',
+                        'type' => 'metapackage',
+                        'license' => 'OSL-3.0, AFL-3.0',
+                        'source' => '[]',
+                        'names' => 'magento/product-community-edition',
+                        'current_version' => '1.0.0',
+                        'available_versions' => [1 => '1.2.0', 2 => '1.1.0', 3 => '1.1.0-RC1', 4 => '1.0.0'],
+                        'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
+                    ],
+                ],
+                [
+                    'magento/product-enterprise-edition',
+                    false,
+                    [
+                        'name' => 'magento/product-enterprise-edition',
+                        'description' => 'eCommerce Platform for Growth (Enterprise Edition)',
+                        'keywords' => '',
+                        'versions' => '1.2.0, 1.1.0, 1.1.0-RC1, * 1.0.0',
+                        'type' => 'metapackage',
+                        'license' => 'OSL-3.0, AFL-3.0',
+                        'source' => '[]',
+                        'names' => 'magento/product-enterprise-edition',
+                        'current_version' => '1.0.0',
+                        'available_versions' => [1 => '1.2.0', 2 => '1.1.0', 3 => '1.1.0-RC1', 4 => '1.0.0'],
+                        'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
+                    ],
 
-        $this->infoCommand->expects($this->at(1))
-            ->method('run')
-            ->with('magento/product-enterprise-edition')
-            ->willReturn(
+                ],
                 [
-                    'name' => 'magento/product-enterprise-edition',
-                    'description' => 'eCommerce Platform for Growth (Enterprise Edition)',
-                    'keywords' => '',
-                    'versions' => '1.2.0, 1.1.0, 1.1.0-RC1, * 1.0.0',
-                    'type' => 'metapackage',
-                    'license' => 'OSL-3.0, AFL-3.0',
-                    'source' => '[]',
-                    'names' => 'magento/product-enterprise-edition',
-                    'current_version' => '1.0.0',
-                    'available_versions' => [1 => '1.2.0', 2 => '1.1.0', 3 => '1.1.0-RC1', 4 => '1.0.0'],
-                    'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
-                ]
-            );
+
+                    'magento/product-b2b-edition',
+                    false,
+                    [
+                        'name' => 'magento/product-b2b-edition',
+                        'description' => 'eCommerce Platform for Growth (B2B Edition)',
+                        'keywords' => '',
+                        'versions' => '1.2.0, 1.1.0, 1.1.0-RC1, * 1.0.0',
+                        'type' => 'metapackage',
+                        'license' => 'OSL-3.0, AFL-3.0',
+                        'source' => '[]',
+                        'names' => 'magento/product-b2b-edition',
+                        'available_versions' => [],
+                        'new_versions' => ['1.2.0', '1.1.0', '1.1.0-RC1'],
+                    ],
+                ],
+            ]);
         $this->assertEquals($this->expectedPackages, $this->systemPackage->getPackageVersions());
     }
 
