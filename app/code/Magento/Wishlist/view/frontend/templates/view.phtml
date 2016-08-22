@@ -6,17 +6,17 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Customer\Wishlist */
+/** @var \Magento\Wishlist\Block\Customer\Wishlist $block */
 ?>
 
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
     <?php echo($block->getChildHtml('wishlist.rss.link'));?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
-          "addToCartUrl":<?php /* @escapeNotVerified */ echo $block->getItemAddToCartParams("%item%");?>,
-          "addAllToCartUrl":<?php /* @escapeNotVerified */ echo $block->getAddAllToCartParams(); ?>,
+          "addToCartUrl":<?php /* @noEscape */ echo $block->getItemAddToCartParams("%item%");?>,
+          "addAllToCartUrl":<?php /* @noEscape */ echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
-          "validation": {}}' action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
+          "validation": {}}' action="<?php echo $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
         <?php echo $block->getChildHtml('top'); ?>
         <?php if ($block->hasWishlistItems()): ?>
             <?php echo $block->getBlockHtml('formkey');?>

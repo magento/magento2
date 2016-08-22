@@ -6,9 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Cookie\Block\Html\Notices $block */
 ?>
-<?php /** @var \Magento\Cookie\Block\Html\Notices $block */ ?>
-<?php if ($this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php if ($this->helper(\Magento\Cookie\Helper\Cookie::class)->isUserNotAllowSaveCookie()): ?>
     <div role="alertdialog"
          tabindex="-1"
          class="message global cookie"
