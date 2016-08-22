@@ -14,9 +14,6 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-/**
- * Class ProductRepositorySave
- */
 class ProductRepositorySave
 {
     /**

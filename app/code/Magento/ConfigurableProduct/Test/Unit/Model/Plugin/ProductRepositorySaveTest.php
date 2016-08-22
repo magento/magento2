@@ -14,6 +14,7 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -97,9 +98,12 @@ class ProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->option = $this->getMockForAbstractClass(OptionInterface::class);
 
-        $this->plugin = new ProductRepositorySave(
-            $this->productAttributeRepository,
-            $this->productFactory
+        $this->plugin = (new ObjectManager($this))->getObject(
+            ProductRepositorySave::class,
+            [
+                'productAttributeRepository' => $this->productAttributeRepository,
+                'productFactory' => $this->productFactory
+            ]
         );
     }
 
