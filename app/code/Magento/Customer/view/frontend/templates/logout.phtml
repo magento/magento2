@@ -6,7 +6,7 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<p><?php /* @escapeNotVerified */ echo __('You have signed out and will go to our homepage in 5 seconds.') ?></p>
+<p><?php echo $block->escapeHtml(__('You have signed out and will go to our homepage in 5 seconds.')) ?></p>
 <script>
 require([
     "jquery",
