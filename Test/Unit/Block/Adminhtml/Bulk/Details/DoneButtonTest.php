@@ -5,6 +5,8 @@
  */
 namespace Magento\AsynchronousOperations\Test\Unit\Block\Adminhtml\Bulk\Details;
 
+use Magento\Framework\Bulk\OperationInterface;
+
 class DoneButtonTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,7 +17,7 @@ class DoneButtonTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $detailsMock;
+    protected $bulkStatusMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,13 +26,11 @@ class DoneButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->detailsMock = $this->getMockBuilder(\Magento\AsynchronousOperations\Model\Operation\Details::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->bulkStatusMock = $this->getMock(\Magento\Framework\Bulk\BulkStatusInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
         $this->block = new \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\DoneButton(
-            $this->detailsMock,
+            $this->bulkStatusMock,
             $this->requestMock
         );
     }
@@ -43,16 +43,15 @@ class DoneButtonTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetButtonData($failedCount, $buttonsParam, $expectedResult)
     {
-        $details = ['failed_retriable' => $failedCount];
         $uuid = 'some standard uuid string';
         $this->requestMock->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(['uuid'], ['buttons'])
             ->willReturnOnConsecutiveCalls($uuid, $buttonsParam);
-        $this->detailsMock->expects($this->once())
-            ->method('getDetails')
-            ->with($uuid)
-            ->willReturn($details);
+        $this->bulkStatusMock->expects($this->once())
+            ->method('getOperationsCountByBulkIdAndStatus')
+            ->with($uuid, OperationInterface::STATUS_TYPE_RETRIABLY_FAILED)
+            ->willReturn($failedCount);
 
         $this->assertEquals($expectedResult, $this->block->getButtonData());
     }

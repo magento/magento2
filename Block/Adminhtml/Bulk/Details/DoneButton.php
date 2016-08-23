@@ -6,6 +6,7 @@
 namespace Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Framework\Bulk\OperationInterface;
 
 /**
  * Back button configuration provider
@@ -13,9 +14,9 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 class DoneButton implements ButtonProviderInterface
 {
     /**
-     * @var \Magento\AsynchronousOperations\Model\Operation\Details
+     * @var \Magento\Framework\Bulk\BulkStatusInterface
      */
-    private $details;
+    private $bulkStatus;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -23,14 +24,14 @@ class DoneButton implements ButtonProviderInterface
     private $request;
 
     /**
-     * @param \Magento\AsynchronousOperations\Model\Operation\Details $details
+     * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
      * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
-        \Magento\AsynchronousOperations\Model\Operation\Details $details,
+        \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $this->details = $details;
+        $this->bulkStatus = $bulkStatus;
         $this->request = $request;
     }
 
@@ -42,10 +43,13 @@ class DoneButton implements ButtonProviderInterface
     public function getButtonData()
     {
         $uuid = $this->request->getParam('uuid');
-        $details = $this->details->getDetails($uuid);
+        $operationsCount = $this->bulkStatus->getOperationsCountByBulkIdAndStatus(
+            $uuid,
+            OperationInterface::STATUS_TYPE_RETRIABLY_FAILED
+        );
         $button = [];
 
-        if ($this->request->getParam('buttons') && $details['failed_retriable'] === 0) {
+        if ($this->request->getParam('buttons') && $operationsCount === 0) {
             $button = [
                 'label' => __('Done'),
                 'class' => 'primary',
