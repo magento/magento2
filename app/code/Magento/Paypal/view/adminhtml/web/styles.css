@@ -30,4 +30,6 @@
 .paypal-other-header > .admin__collapsible-block > a.open::before {content: "\25B2" !important;}
 .paypal-other-header > .admin__collapsible-block > a::before {color: #000; content: "\25BC" !important; font-size: 1rem; top: 2.2rem;}
 .paypal-other-header > .admin__collapsible-block > a {color: #007bdb !important; text-align: right;}
-.payments-other-header > .admin__collapsible-block > a::before {content: "" !important;}
+.payments-other-header > .admin__collapsible-block > a {display: inline-block;}
+.payments-other-header > .admin__collapsible-block > a::before {content: "\25BC" !important; font-size: 1rem;}
+.payments-other-header > .admin__collapsible-block > a.open::before {content: "\25B2" !important;}
