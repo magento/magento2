@@ -64,7 +64,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product::class);
 
-        $this->tpFactory = $this->getMockForAbstractClass(
+        $this->tpFactory = $this->getMock(
             \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
             ['create'],
             '',
