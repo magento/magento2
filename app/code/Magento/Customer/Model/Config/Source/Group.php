@@ -6,6 +6,8 @@
 namespace Magento\Customer\Model\Config\Source;
 
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceForLoggedInCustomersInterface;
+use Magento\Framework\App\ObjectManager;
 
 class Group implements \Magento\Framework\Option\ArrayInterface
 {
@@ -15,25 +17,36 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
+     * @deprecated
      * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
+     * @deprecated
      * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;
 
     /**
+     * @var GroupSourceForLoggedInCustomersInterface
+     */
+    private $groupSourceForLoggedInCustomers;
+
+    /**
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\DataObject $converter
+     * @param GroupSourceForLoggedInCustomersInterface $groupSourceForLoggedInCustomers
      */
     public function __construct(
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\Convert\DataObject $converter
+        \Magento\Framework\Convert\DataObject $converter,
+        GroupSourceForLoggedInCustomersInterface $groupSourceForLoggedInCustomers = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;
+        $this->groupSourceForLoggedInCustomers = $groupSourceForLoggedInCustomers
+            ?: ObjectManager::getInstance()->get(GroupSourceForLoggedInCustomersInterface::class);
     }
 
     /**
@@ -42,10 +55,10 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $groups = $this->_groupManagement->getLoggedInGroups();
-            $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
+            $this->_options = $this->groupSourceForLoggedInCustomers->toOptionArray();
             array_unshift($this->_options, ['value' => '', 'label' => __('-- Please Select --')]);
         }
+
         return $this->_options;
     }
 }

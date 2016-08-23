@@ -7,7 +7,9 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
 use Magento\Directory\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
@@ -80,6 +82,10 @@ class AdvancedPricing extends AbstractModifier
      * @var array
      */
     protected $meta = [];
+    /**
+     * @var GroupSourceInterface
+     */
+    private $customerGroupSource;
 
     /**
      * @param LocatorInterface $locator
@@ -91,6 +97,7 @@ class AdvancedPricing extends AbstractModifier
      * @param Data $directoryHelper
      * @param ArrayManager $arrayManager
      * @param string $scopeName
+     * @param GroupSourceInterface $customerGroupSource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -102,7 +109,8 @@ class AdvancedPricing extends AbstractModifier
         ModuleManager $moduleManager,
         Data $directoryHelper,
         ArrayManager $arrayManager,
-        $scopeName = ''
+        $scopeName = '',
+        GroupSourceInterface $customerGroupSource = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -113,6 +121,8 @@ class AdvancedPricing extends AbstractModifier
         $this->directoryHelper = $directoryHelper;
         $this->arrayManager = $arrayManager;
         $this->scopeName = $scopeName;
+        $this->customerGroupSource = $customerGroupSource
+            ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
     }
 
     /**
@@ -186,6 +196,9 @@ class AdvancedPricing extends AbstractModifier
         if (!$this->moduleManager->isEnabled('Magento_Customer')) {
             return [];
         }
+
+        return $this->customerGroupSource->toOptionArray();
+
         $customerGroups = [
             [
                 'label' => __('ALL GROUPS'),

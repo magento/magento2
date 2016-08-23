@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Customer\Source;
 
-use Magento\Customer\Model\Customer\Source\Group;
+use Magento\Customer\Model\Customer\Source\GroupSource;
 use Magento\Framework\Module\Manager;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -15,7 +15,7 @@ use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 class GroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Group
+     * @var GroupSource
      */
     private $model;
 
@@ -61,7 +61,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->searchResultMock = $this->getMockBuilder(GroupSearchResultsInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new Group(
+        $this->model = new GroupSource(
             $this->moduleManagerMock,
             $this->groupRepositoryMock,
             $this->searchCriteriaBuilderMock
