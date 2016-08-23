@@ -23,7 +23,7 @@ define([
 
             m = dataAttrRange.exec(value);
 
-            return m && m.length === 3 && m[1] > 0 && m[2] > 0;
+            return !!(m &&  m[1] > 0 && m[2] > 0);
         },
         $.mage.__('The value is not within the specified format eg: 200x300')
     );
@@ -33,11 +33,10 @@ define([
         /**
          * Checks for relevant value
          *
-         * @param {*} value
          * @returns {Boolean}
          */
-        isRangeCorrect: function (value) {
-            return validator('validate-image-size-range', value);
+        isRangeCorrect: function () {
+            return validator('validate-image-size-range', this.value()).passed;
         }
     });
 });
