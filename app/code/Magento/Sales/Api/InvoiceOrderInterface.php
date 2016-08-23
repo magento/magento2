@@ -7,11 +7,11 @@
 namespace Magento\Sales\Api;
 
 /**
- * Class OrderInvoiceInterface
+ * Class InvoiceOrderInterface
  *
  * @api
  */
-interface OrderInvoiceInterface
+interface InvoiceOrderInterface
 {
     /**
      * @param int $orderId
