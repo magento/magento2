@@ -52,11 +52,11 @@ class Stock extends AddController
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productRepository->getById($productId);
             /** @var \Magento\ProductAlert\Model\Stock $model */
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
+            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Stock::class)
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                         ->getStore()
                         ->getWebsiteId()
                 );

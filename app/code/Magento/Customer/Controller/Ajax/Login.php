@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Login controller
@@ -178,6 +179,11 @@ class Login extends \Magento\Framework\App\Action\Action
                 'message' => $e->getMessage()
             ];
         } catch (InvalidEmailOrPasswordException $e) {
+            $response = [
+                'errors' => true,
+                'message' => $e->getMessage()
+            ];
+        } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage()

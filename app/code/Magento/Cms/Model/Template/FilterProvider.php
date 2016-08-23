@@ -39,8 +39,8 @@ class FilterProvider
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $pageFilter = 'Magento\Cms\Model\Template\Filter',
-        $blockFilter = 'Magento\Cms\Model\Template\Filter'
+        $pageFilter = \Magento\Cms\Model\Template\Filter::class,
+        $blockFilter = \Magento\Cms\Model\Template\Filter::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_pageFilter = $pageFilter;

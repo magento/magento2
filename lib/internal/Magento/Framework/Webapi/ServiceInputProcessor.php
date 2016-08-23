@@ -26,7 +26,7 @@ use Magento\Framework\Reflection\MethodsMap;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
+    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
@@ -82,7 +82,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     {
         if ($this->nameFinder === null) {
             $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\Reflection\NameFinder');
+                ->get(\Magento\Framework\Reflection\NameFinder::class);
         }
         return $this->nameFinder;
     }

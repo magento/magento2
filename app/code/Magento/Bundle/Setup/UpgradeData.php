@@ -40,7 +40,13 @@ class UpgradeData implements UpgradeDataInterface
             /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
             $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
-            $eavSetup->addAttributeGroup(ProductAttributeInterface::ENTITY_TYPE_CODE, 'Default', 'Bundle Items', 16);
+            $attributeSetId = $eavSetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
+            $eavSetup->addAttributeGroup(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeSetId,
+                'Bundle Items',
+                16
+            );
 
             $this->upgradePriceType($eavSetup);
             $this->upgradeSkuType($eavSetup);
@@ -133,9 +139,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function upgradeShipmentType(EavSetup $eavSetup)
     {
+        $attributeSetId = $eavSetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $eavSetup->addAttributeToGroup(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
-            'Default',
+            $attributeSetId,
             'Bundle Items',
             'shipment_type',
             1
@@ -156,7 +163,7 @@ class UpgradeData implements UpgradeDataInterface
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             'shipment_type',
             'source_model',
-            'Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type'
+            \Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type::class
         );
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'shipment_type', 'default_value', 0);
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'shipment_type', 'is_visible', 1);

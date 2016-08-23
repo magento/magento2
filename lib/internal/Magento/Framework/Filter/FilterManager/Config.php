@@ -13,7 +13,7 @@ class Config implements ConfigInterface
     /**
      * @var string[]
      */
-    protected $factories = ['Magento\Framework\Filter\Factory', 'Magento\Framework\Filter\ZendFactory'];
+    protected $factories = [\Magento\Framework\Filter\Factory::class, \Magento\Framework\Filter\ZendFactory::class];
 
     /**
      * @param string[] $factories

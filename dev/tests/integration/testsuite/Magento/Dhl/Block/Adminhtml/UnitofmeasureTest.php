@@ -17,10 +17,10 @@ class UnitofmeasureTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Dhl\Block\Adminhtml\Unitofmeasure */
-        $block = $layout->createBlock('Magento\Dhl\Block\Adminhtml\Unitofmeasure');
+        $block = $layout->createBlock(\Magento\Dhl\Block\Adminhtml\Unitofmeasure::class);
         $this->assertNotEmpty($block->toHtml());
     }
 }

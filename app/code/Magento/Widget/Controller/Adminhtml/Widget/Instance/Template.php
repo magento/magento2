@@ -20,7 +20,7 @@ class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         $block = $this->getRequest()->getParam('block');
         $selected = $this->getRequest()->getParam('selected', null);
         $templateChooser = $this->_view->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template::class
         )->setSelected(
             $selected
         )->setWidgetTemplates(

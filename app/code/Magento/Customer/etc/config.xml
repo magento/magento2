@@ -40,6 +40,7 @@
                 <minimum_password_length>8</minimum_password_length>
                 <lockout_failures>10</lockout_failures>
                 <lockout_threshold>10</lockout_threshold>
+                <autocomplete_on_storefront>0</autocomplete_on_storefront>
             </password>
             <address>
                 <street_lines>2</street_lines>
@@ -76,7 +77,7 @@ T: {{var telephone}}
 {{depend street4}}{{var street4}}<br />{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br/>
 {{var country}}<br/>
-{{depend telephone}}T: {{var telephone}}{{/depend}}
+{{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
 {{depend fax}}<br/>F: {{var fax}}{{/depend}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}]]></html>
                 <pdf><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}|
@@ -94,10 +95,5 @@ T: {{var telephone}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
         </customer>
-        <general>
-            <restriction>
-                <autocomplete_on_storefront>0</autocomplete_on_storefront>
-            </restriction>
-        </general>
     </default>
 </config>

@@ -22,7 +22,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
         if ($id) {
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('Magento\Cms\Model\Block');
+                $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class);
                 $model->load($id);
                 $model->delete();
                 // display success message

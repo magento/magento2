@@ -45,6 +45,7 @@ class AttributeMerger
         'alphanumeric' => 'validate-alphanum',
         'url' => 'validate-url',
         'email' => 'email2',
+        'length' => 'validate-length',
     ];
 
     /**
@@ -272,7 +273,7 @@ class AttributeMerger
                         $attributeConfig['validation']
                     )
                     : $attributeConfig['validation'],
-                'additionalClasses' => $isFirstLine ? : 'additional'
+                'additionalClasses' => $isFirstLine ? 'field' : 'additional'
 
             ];
             if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {

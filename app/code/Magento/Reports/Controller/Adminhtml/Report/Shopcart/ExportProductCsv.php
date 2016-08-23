@@ -20,7 +20,7 @@ class ExportProductCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shop
     {
         $fileName = 'shopcart_product.csv';
         $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
+            \Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid::class
         )->getCsvFile();
 
         return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);

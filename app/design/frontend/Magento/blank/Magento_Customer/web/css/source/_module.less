@@ -41,7 +41,7 @@
                 .lib-font-size(18);
             }
         }
-    
+
         .fieldset {
             .lib-form-hasrequired(bottom);
             &:after {
@@ -49,41 +49,60 @@
             }
         }
     }
-    
+
     .block-addresses-list {
         .items.addresses {
             > .item {
                 margin-bottom: @indent__base;
-    
+
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
         }
     }
-    
+
     .form-address-edit {
         #region_id {
             display: none;
         }
-    
+
         .actions-toolbar .action.primary {
             &:extend(.abs-button-l all);
         }
     }
-    
+
     .form-edit-account {
         .fieldset.password {
             display: none;
         }
     }
-    
+
     .box-billing-address,
     .box-shipping-address,
     .box-information,
     .box-newsletter {
         .box-content {
             line-height: 26px;
+        }
+    }
+
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            &.field {
+                > .label {
+                    &:extend(.abs-visually-hidden all);
+
+                    + .control {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .field {
+                &:extend(.abs-add-clearfix all);
+            }
         }
     }
 
@@ -96,43 +115,43 @@
             h2 {
                 margin-top: 0;
             }
-    
+
             .toolbar {
                 text-align: center;
                 .limiter-options {
                     width: auto;
                 }
             }
-    
+
             .limiter {
                 >.label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
-    
+
             .block:not(.widget) {
                 &:extend(.abs-account-blocks all);
             }
         }
-    
+
         .sidebar-additional {
             margin-top: 40px;
         }
-    
+
         .table-wrapper {
             &:last-child {
                 margin-bottom: 0;
             }
-    
+
             .action {
                 margin-right: 15px;
-    
+
                 &:last-child {
                     margin-right: 0;
                 }
             }
         }
-    
+
         .table-return-items {
             .qty {
                 .input-text {
@@ -141,7 +160,7 @@
             }
         }
     }
-    
+
     //  Checkout address (create shipping address)
     .field.street {
         .field.additional {
@@ -214,10 +233,10 @@
                 margin-bottom: 0;
             }
         }
-    
+
         .title {
             margin-bottom: @indent__s;
-    
+
             strong {
                 .lib-heading(h4);
                 .column.main & {
@@ -250,6 +269,7 @@
 
             .input-text {
                 .lib-vendor-prefix-order(0);
+                z-index: 2;
             }
         }
     }
@@ -271,42 +291,42 @@
             z-index: -1;
         }
 
-        .password-strength-meter-0 & {
+        .password-none & {
             &:before {
                 background-color: @_password-default;
                 width: 100%;
             }
         }
 
-        .password-strength-meter-1 & {
+        .password-weak & {
             &:before {
                 background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
                 background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
                 background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
                 background-color: @_password-very-strong;
                 width: 100%;
             }
         }
     }
-    
+
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
 
@@ -399,18 +419,23 @@
         }
     }
 
-    .form-create-account {
-        .fieldset-fullname {
-            .fields {
-                .field {
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            .field {
+                .label {
+                    .lib-css(margin, @form-field-type-label-inline__margin);
+                    .lib-css(padding, @form-field-type-label-inline__padding);
+                    .lib-css(text-align, @form-field-type-label-inline__align);
+                    .lib-css(width, @form-field-type-label-inline__width);
+                    box-sizing: border-box;
                     float: left;
-                    margin: 0 @indent__s @indent__s 0;
                 }
-            }
 
-            .field-name-prefix,
-            .field-name-suffix {
-                width: 50px;
+                .control {
+                    .lib-css(width, @form-field-type-control-inline__width);
+                    float: left;
+                }
             }
         }
     }

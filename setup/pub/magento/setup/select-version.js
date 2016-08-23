@@ -37,7 +37,7 @@ angular.module('select-version', ['ngStorage'])
                         $scope.versions = [];
                         $scope.data = data;
                         angular.forEach(data.packages, function (value, key) {
-                            if (value.stable) {
+                            if (value.stable && !value.current) {
                                 $scope.versions.push({
                                     'versionInfo': angular.toJson({
                                         'package': value.package,
@@ -45,6 +45,8 @@ angular.module('select-version', ['ngStorage'])
                                     }),
                                     'version': value
                                 });
+                            } else if (value.stable && value.current) {
+                                $scope.currentVersion = value.name;
                             }
                         });
                         $scope.selectedOption = $scope.versions[0].versionInfo;
@@ -158,7 +160,7 @@ angular.module('select-version', ['ngStorage'])
             $scope.selectedOption = [];
             $scope.versions = [];
             angular.forEach($scope.data.packages, function (value, key) {
-                if (value.stable || $scope.showUnstable) {
+                if ((value.stable || $scope.showUnstable) && !value.current) {
                     $scope.versions.push({
                         'versionInfo': angular.toJson({
                             'package': value.package,
@@ -181,6 +183,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.packages.splice(1, $scope.totalForGrid);
                 }
             }
+            $localStorage.moduleName = '';
             $localStorage.packages = $scope.packages;
             $scope.nextState();
         };

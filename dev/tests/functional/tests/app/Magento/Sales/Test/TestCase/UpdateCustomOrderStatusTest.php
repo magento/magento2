@@ -160,7 +160,7 @@ class UpdateCustomOrderStatusTest extends Injectable
             $filter = ['label' => $this->orderStatus->getLabel(), 'status' => $this->orderStatusInitial->getStatus()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
             $this->objectManager->create(
-                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
                 ['configData' => 'checkmo_custom_new_order_status_rollback']
             )->run();
         }

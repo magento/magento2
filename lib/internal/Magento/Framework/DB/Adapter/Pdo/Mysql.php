@@ -12,6 +12,9 @@ namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\ExpressionConverter;
 use Magento\Framework\DB\LoggerInterface;
@@ -62,7 +65,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @var string
      */
-    protected $_defaultStmtClass = 'Magento\Framework\DB\Statement\Pdo\Mysql';
+    protected $_defaultStmtClass = \Magento\Framework\DB\Statement\Pdo\Mysql::class;
 
     /**
      * Current Transaction Level
@@ -190,6 +193,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected $logger;
 
     /**
+     * Map that links database error code to corresponding Magento exception
+     *
+     * @var \Zend_Db_Adapter_Exception[]
+     */
+    private $exceptionMap;
+
+    /**
      * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
@@ -207,6 +217,16 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $this->dateTime = $dateTime;
         $this->logger = $logger;
         $this->selectFactory = $selectFactory;
+        $this->exceptionMap = [
+            // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+            2006 => ConnectionException::class,
+            // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
+            2013 => ConnectionException::class,
+            // SQLSTATE[HY000]: General error: 1205 Lock wait timeout exceeded
+            1205 => LockWaitException::class,
+            // SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock
+            1213 => DeadlockException::class,
+        ];
         try {
             parent::__construct($config);
         } catch (\Zend_Db_Adapter_Exception $e) {
@@ -328,6 +348,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (!isset($this->_config['host'])) {
             throw new \Zend_Db_Adapter_Exception('No host configured to connect');
         }
+
+        if (isset($this->_config['port'])) {
+            throw new \Zend_Db_Adapter_Exception('Port must be configured within host parameter (like localhost:3306');
+        }
+
+        unset($this->_config['port']);
 
         if (strpos($this->_config['host'], '/') !== false) {
             $this->_config['unix_socket'] = $this->_config['host'];
@@ -481,6 +507,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (!$retry) {
                     $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind);
                     $this->logger->critical($e);
+                    // rethrow custom exception if needed
+                    if ($pdoException && isset($this->exceptionMap[$pdoException->errorInfo[1]])) {
+                        $customExceptionClass = $this->exceptionMap[$pdoException->errorInfo[1]];
+                        /** @var \Zend_Db_Adapter_Exception $customException */
+                        $customException = new $customExceptionClass($e->getMessage(), $pdoException->errorInfo[1], $e);
+                        throw $customException;
+                    }
                     throw $e;
                 }
             }

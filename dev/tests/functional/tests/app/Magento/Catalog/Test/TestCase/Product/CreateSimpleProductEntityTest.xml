@@ -447,5 +447,19 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
+        <variation name="CreateSimpleProductEntityTestVariation27" summary="Create Simple Product with custom Country of manufacture" ticketId="MAGETWO-55336">
+            <data name="configData" xsi:type="string">custom_allowed_country</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10000</data>
+            <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+            <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
+            <data name="product/data/country_of_manufacture" xsi:type="string">Antarctica</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+        </variation>
     </testCase>
 </config>

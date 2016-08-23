@@ -80,7 +80,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         if ($this->imageUploader === null) {
             $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Catalog\CategoryImageUpload'
+                \Magento\Catalog\CategoryImageUpload::class
             );
         }
         return $this->imageUploader;

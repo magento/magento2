@@ -21,7 +21,9 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_interpreter = $this->getMockForAbstractClass('Magento\Framework\Data\Argument\InterpreterInterface');
+        $this->_interpreter = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Argument\InterpreterInterface::class
+        );
         $this->_model = new NamedParams($this->_interpreter);
     }
 

@@ -12,21 +12,43 @@ use Magento\Email\Model\Template;
  */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    const TEMPLATE_CODE = 'fixture';
+
     /**
      * @var \Magento\Theme\Model\Design\Config\Validator
      */
     private $model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $templateFactoryMock;
+
+    /**
+     * @var \Magento\Email\Model\Template
+     */
+    private $templateModel;
+
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\AreaList')
+        $objectManager->get(\Magento\Framework\App\AreaList::class)
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
-        $objectManager->get('Magento\Framework\App\State')
+        $objectManager->get(\Magento\Framework\App\State::class)
             ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $this->model = $objectManager->get('Magento\Theme\Model\Design\Config\Validator');
+        $this->templateFactoryMock = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->templateModel = $objectManager->create(\Magento\Email\Model\Template::class);
+        $this->templateModel->load(self::TEMPLATE_CODE, 'template_code');
+
+        $this->model = $objectManager->create(
+            \Magento\Theme\Model\Design\Config\Validator::class,
+            [ 'templateFactory' => $this->templateFactoryMock ]
+        );
     }
 
     /**
@@ -36,21 +58,26 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateHasRecursiveReference()
     {
+        $this->templateFactoryMock->expects($this->once())
+            ->method("create")
+            ->willReturn($this->templateModel);
+
         $fieldConfig = [
             'path' => 'design/email/header_template',
             'fieldset' => 'other_settings/email',
             'field' => 'email_header_template'
         ];
 
-        $designConfigMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designConfigExtensionMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+        $designConfigExtensionMock =
+            $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designElementMock = $this->getMockBuilder('Magento\Theme\Model\Data\Design\Config\Data')
+        $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -73,21 +100,26 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateNoRecursiveReference()
     {
+        $this->templateFactoryMock->expects($this->once())
+            ->method("create")
+            ->willReturn($this->templateModel);
+
         $fieldConfig = [
             'path' => 'design/email/footer_template',
             'fieldset' => 'other_settings/email',
             'field' => 'email_footer_template'
         ];
 
-        $designConfigMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designConfigExtensionMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+        $designConfigExtensionMock =
+            $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designElementMock = $this->getMockBuilder('Magento\Theme\Model\Data\Design\Config\Data')
+        $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

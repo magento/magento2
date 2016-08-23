@@ -16,6 +16,13 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 class MassDelete extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::page_delete';
+
+    /**
      * @var Filter
      */
     protected $filter;

@@ -8,6 +8,9 @@ namespace Magento\Usps\Test\Unit\Model;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Usps\Model\Carrier;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,7 +51,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scope = $this->getMockBuilder(
-            '\Magento\Framework\App\Config\ScopeConfigInterface'
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $this->scope->expects(
@@ -61,7 +64,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         // xml element factory
         $xmlElFactory = $this->getMockBuilder(
-            '\Magento\Shipping\Model\Simplexml\ElementFactory'
+            \Magento\Shipping\Model\Simplexml\ElementFactory::class
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
@@ -70,7 +73,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 function ($data) {
                     $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
                     return $helper->getObject(
-                        '\Magento\Shipping\Model\Simplexml\Element',
+                        \Magento\Shipping\Model\Simplexml\Element::class,
                         ['data' => $data['data']]
                     );
                 }
@@ -79,12 +82,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         // rate factory
         $rateFactory = $this->getMockBuilder(
-            '\Magento\Shipping\Model\Rate\ResultFactory'
+            \Magento\Shipping\Model\Rate\ResultFactory::class
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
         $rateResult = $this->getMockBuilder(
-            '\Magento\Shipping\Model\Rate\Result'
+            \Magento\Shipping\Model\Rate\Result::class
         )->disableOriginalConstructor()->setMethods(
             null
         )->getMock();
@@ -92,12 +95,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         // rate method factory
         $rateMethodFactory = $this->getMockBuilder(
-            '\Magento\Quote\Model\Quote\Address\RateResult\MethodFactory'
+            \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory::class
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
         $rateMethod = $this->getMockBuilder(
-            'Magento\Quote\Model\Quote\Address\RateResult\Method'
+            \Magento\Quote\Model\Quote\Address\RateResult\Method::class
         )->disableOriginalConstructor()->setMethods(
             ['setPrice']
         )->getMock();
@@ -107,20 +110,20 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         // http client
         $this->httpResponse = $this->getMockBuilder(
-            '\Zend_Http_Response'
+            \Zend_Http_Response::class
         )->disableOriginalConstructor()->setMethods(
             ['getBody']
         )->getMock();
 
         $httpClient = $this->getMockBuilder(
-            '\Magento\Framework\HTTP\ZendClient'
+            \Magento\Framework\HTTP\ZendClient::class
         )->disableOriginalConstructor()->setMethods(
             ['request']
         )->getMock();
         $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->httpResponse));
 
         $httpClientFactory = $this->getMockBuilder(
-            '\Magento\Framework\HTTP\ZendClientFactory'
+            \Magento\Framework\HTTP\ZendClientFactory::class
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
@@ -128,11 +131,11 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $data = ['id' => 'usps', 'store' => '1'];
 
-        $this->error = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\RateResult\Error')
+        $this->error = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
 
-        $this->errorFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory')
+        $this->errorFactory = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -151,7 +154,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         ];
 
-        $this->carrier = $this->helper->getObject('Magento\Usps\Model\Carrier', $arguments);
+        $this->carrier = $this->helper->getObject(\Magento\Usps\Model\Carrier::class, $arguments);
     }
 
     /**
@@ -181,7 +184,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         // for setRequest
         $data = require __DIR__ . '/_files/rates_request_data.php';
         $request = $this->helper->getObject(
-            'Magento\Quote\Model\Quote\Address\RateRequest',
+            \Magento\Quote\Model\Quote\Address\RateRequest::class,
             ['data' => $data[0]]
         );
 
@@ -216,7 +219,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_return_shipment.xml'))
         );
         $request = $this->helper->getObject(
-            'Magento\Shipping\Model\Shipment\ReturnShipment',
+            \Magento\Shipping\Model\Shipment\ReturnShipment::class,
             require __DIR__ . '/_files/return_shipment_request_data.php'
         );
         $this->assertNotEmpty($this->carrier->returnOfShipment($request)->getInfo()[0]['tracking_number']);

@@ -21,7 +21,7 @@ class DeveloperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->interceptionConfig = $this->getMock('\Magento\Framework\Interception\ConfigInterface');
+        $this->interceptionConfig = $this->getMock(\Magento\Framework\Interception\ConfigInterface::class);
         $this->model = new Developer();
     }
 

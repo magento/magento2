@@ -44,8 +44,8 @@ class TransactionType implements OptionSourceInterface
     private function getAvailableTransactionTypes()
     {
         return [
-            Transaction::SALE => __('Sale'),
-            Transaction::CREDIT => __('Credit')
+            Transaction::SALE => __(Transaction::SALE),
+            Transaction::CREDIT => __(Transaction::CREDIT)
         ];
     }
 }

@@ -47,7 +47,7 @@ class RendererProxy extends SelectRenderer
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\DB\\Select\\SelectRenderer',
+        $instanceName = \Magento\Framework\DB\Select\SelectRenderer::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

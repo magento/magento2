@@ -49,13 +49,13 @@ define([
     return _.mapObject({
         "min_text_length": [
             function (value, params) {
-                return value.length == 0 || value.length >= +params;
+                return _.isUndefined(value) || value.length == 0 || value.length >= +params;
             },
             $.mage.__('Please enter more or equal than {0} symbols.')
         ],
         "max_text_length": [
             function (value, params) {
-                return value.length <= +params;
+                return !_.isUndefined(value) && value.length <= +params;
             },
             $.mage.__('Please enter less or equal than {0} symbols.')
         ],
@@ -571,6 +571,15 @@ define([
                 return utils.isEmptyNoTrim(value) || (!isNaN(utils.parseNumber(value)) && /^\s*-?\d*(\.\d*)?\s*$/.test(value));
             },
             $.mage.__('Please enter a valid number in this field.')
+        ],
+        'validate-integer': [
+            function(value) {
+                return (
+                    utils.isEmptyNoTrim(value)
+                    || (!isNaN(utils.parseNumber(value)) && /^\s*-?\d*\s*$/.test(value))
+                );
+            },
+            $.mage.__('Please enter a valid integer in this field.')
         ],
         "validate-number-range": [
             function(value, param) {
