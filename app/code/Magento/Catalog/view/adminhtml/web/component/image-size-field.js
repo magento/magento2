@@ -25,7 +25,7 @@ define([
 
             return !!(m &&  m[1] > 0 && m[2] > 0);
         },
-        $.mage.__('The value is not within the specified format eg: 200x300')
+        $.mage.__('This value does not follow the specified format (for example, 200X300).')
     );
 
     return Abstract.extend({

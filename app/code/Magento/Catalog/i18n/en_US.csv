@@ -700,7 +700,7 @@ Image,Image
 "Allowed file types: jpeg, gif, png.","Allowed file types: jpeg, gif, png."
 "Image Opacity","Image Opacity"
 "Example format: 200x300.","Example format: 200x300."
-"The value is not within the specified format eg: 200x300","The value is not within the specified format eg: 200x300"
+"This value does not follow the specified format (for example, 200X300).","This value does not follow the specified format (for example, 200X300)."
 "Image Position","Image Position"
 Small,Small
 "Attribute Label","Attribute Label"
