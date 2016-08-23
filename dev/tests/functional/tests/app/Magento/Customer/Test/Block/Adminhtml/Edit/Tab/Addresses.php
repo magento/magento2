@@ -37,6 +37,8 @@ class Addresses extends Tab
      */
     protected $addressSelector = "//li[address[contains(.,'%s')]]";
 
+    protected $countriesSelector = "//*/select[@name='address[new_%d][country_id]']/option";
+
     /**
      * Delete Address button.
      *
@@ -238,6 +240,34 @@ class Addresses extends Tab
         );
 
         return $addressTab->isVisible();
+    }
+
+    /**
+     * Retrieve list of all countries
+     * @param int $addressNumber
+     * @return array
+     */
+    public function getCountriesList($addressNumber)
+    {
+        $this->openCustomerAddress($addressNumber);
+        /** @var SimpleElement $element */
+        $options = $this->_rootElement->getElements(
+            sprintf($this->countriesSelector, $addressNumber - 1),
+            Locator::SELECTOR_XPATH
+        );
+        $data = [];
+        /** @var SimpleElement $option */
+        foreach ($options as $option) {
+            if ($option->isVisible()) {
+                $value = $option->getValue();
+
+                if ($value != "") {
+                    $data[] = $value;
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**
