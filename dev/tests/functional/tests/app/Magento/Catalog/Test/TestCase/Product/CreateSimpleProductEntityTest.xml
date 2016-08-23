@@ -461,7 +461,7 @@
             <data name="product/data/country_of_manufacture" xsi:type="string">Antarctica</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation28" summary="Create product with tier price for not logged in customer" ticketId="MAGETWO-35054">
+        <variation name="CreateSimpleProductEntityTestVariation28" summary="Create product with tier price for not logged in customer">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
