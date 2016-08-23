@@ -168,7 +168,7 @@
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">10008</data>
+            <data name="product/data/price/value" xsi:type="string">10008.88</data>
             <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">58</data>
@@ -425,7 +425,7 @@
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
-            <data name="product/data/price/value" xsi:type="string">10.02</data>
+            <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/weight" xsi:type="string">1</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1000</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
