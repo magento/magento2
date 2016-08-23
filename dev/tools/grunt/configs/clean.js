@@ -5,7 +5,7 @@
 
 'use strict';
 
-var themes = require('./themes'),
+var themes = require('../tools/files-router').getThemes(),
     _      = require('underscore');
 
 var themeOptions = {};

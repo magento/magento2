@@ -5,12 +5,13 @@
 
 // For performance use one level down: 'name/{,*/}*.js'
 // If you want to recursively match all subfolders, use: 'name/**/*.js'
+
 module.exports = function (grunt) {
     'use strict';
 
     var _ = require('underscore'),
         path = require('path'),
-        themes = require('./dev/tools/grunt/configs/themes'),
+        themes = require('./dev/tools/grunt/tools/files-router').getThemes(),
         configDir = './dev/tools/grunt/configs',
         tasks = grunt.file.expand('./dev/tools/grunt/tasks/*');
 
