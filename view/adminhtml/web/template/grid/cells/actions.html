@@ -5,7 +5,7 @@
  */
 -->
 <div class="action-menu-item action-close-wrapper">
-    <span class="action-close"
+    <button class="action-close"
           repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
           click="$col.getActionHandler($action())"
     />
