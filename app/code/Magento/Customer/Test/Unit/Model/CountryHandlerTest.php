@@ -8,13 +8,14 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CountryHandler;
+use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class CountryHandlerTest extends \PHPUnit_Framework_TestCase
+class CountryHandlerInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
@@ -32,7 +33,7 @@ class CountryHandlerTest extends \PHPUnit_Framework_TestCase
     private $configShareMock;
 
     /**
-     * @var CountryHandler
+     * @var CountryHandlerInterface
      */
     private $countryHandler;
 
@@ -75,12 +76,12 @@ class CountryHandlerTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->withConsecutive(
-                [CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 1],
-                [CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 2]
+                [CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 1],
+                [CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 2]
             )
             ->willReturnMap([
-                [CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 1, 'AZ,AM'],
-                [CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 2, 'AF,AM']
+                [CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 1, 'AZ,AM'],
+                [CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 2, 'AF,AM']
             ]);
 
         $expected = [
@@ -103,7 +104,7 @@ class CountryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($website1);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 1)
+            ->with(CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 1)
             ->willReturn('AM');
 
         $this->assertEquals(['AM' => 'AM'], $this->countryHandler->getAllowedCountries());
@@ -113,7 +114,7 @@ class CountryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 1)
+            ->with(CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 1)
             ->willReturn('AM');
 
         $this->configShareMock->expects($this->atLeastOnce())
@@ -129,7 +130,7 @@ class CountryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(CountryHandler::ALLOWED_COUNTRIES_PATH, 'website', 1)
+            ->with(CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 1)
             ->willReturn('AM');
 
         $collectionMock = $this->getMockBuilder(AbstractDb::class)

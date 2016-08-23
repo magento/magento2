@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Backend\Model\Session\Quote;
 use Magento\Customer\Model\CountryHandler;
+use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -308,11 +309,11 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * @deprecated
-     * @return CountryHandler
+     * @return CountryHandlerInterface
      */
     private function getCountryHandler()
     {
-        return ObjectManager::getInstance()->get(CountryHandler::class);
+        return ObjectManager::getInstance()->get(CountryHandlerInterface::class);
     }
 
     /**

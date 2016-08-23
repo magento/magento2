@@ -7,16 +7,13 @@
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\CountryHandler;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -142,11 +139,11 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @deprecated
-     * @return CountryHandler
+     * @return CountryHandlerInterface
      */
     private function getCountryHandler()
     {
-        return \Magento\Framework\App\ObjectManager::getInstance()->get(CountryHandler::class);
+        return \Magento\Framework\App\ObjectManager::getInstance()->get(CountryHandlerInterface::class);
     }
 
     /**
@@ -197,7 +194,7 @@ class UpgradeData implements UpgradeDataInterface
         $connection->delete(
             $setup->getTable('core_config_data'),
             [
-                'path = ?' => CountryHandler::ALLOWED_COUNTRIES_PATH,
+                'path = ?' => CountryHandlerInterface::ALLOWED_COUNTRIES_PATH,
                 'scope = ?' => ScopeInterface::SCOPE_STORES
             ]
         );
@@ -210,7 +207,7 @@ class UpgradeData implements UpgradeDataInterface
                     'value' => implode(',', $countries)
                 ],
                 [
-                    'path = ?' => CountryHandler::ALLOWED_COUNTRIES_PATH,
+                    'path = ?' => CountryHandlerInterface::ALLOWED_COUNTRIES_PATH,
                     'scope_id = ?' => $scopeId,
                     'scope = ?' => ScopeInterface::SCOPE_WEBSITES
                 ]

@@ -7,22 +7,19 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\Config\Share;
+use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Website;
 
 /**
  * Class CountryHandler.
  * @package Magento\Customer\Model
  */
-class CountryHandler
+class CountryHandler implements CountryHandlerInterface
 {
-    const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
-
     /**
      * @var ScopeConfigInterface
      */

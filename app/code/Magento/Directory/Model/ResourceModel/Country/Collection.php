@@ -10,7 +10,7 @@
  * Directory Country Resource Collection
  */
 namespace Magento\Directory\Model\ResourceModel\Country;
-use Magento\Customer\Model\CountryHandler;
+use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
@@ -123,11 +123,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @deprecated
-     * @return CountryHandler
+     * @return \Magento\Directory\Model\CountryHandlerInterface
      */
     private function getCountryHandler()
     {
-        return ObjectManager::getInstance()->get(CountryHandler::class);
+        return ObjectManager::getInstance()->get(CountryHandlerInterface::class);
     }
 
     /**

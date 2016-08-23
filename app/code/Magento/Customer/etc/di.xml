@@ -51,6 +51,8 @@
                 type="Magento\Customer\Helper\View" />
     <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
                 type="Magento\Customer\Model\Address\CustomAttributeList" />
+    <preference for="\Magento\Directory\Model\CountryHandlerInterface"
+                type="Magento\Customer\Model\CountryHandler" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
