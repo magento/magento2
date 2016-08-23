@@ -56,7 +56,7 @@ class InstallTest extends Injectable
      */
     public function __prepare()
     {
-        $config = $this->objectManager->get('Magento\Mtf\Config\DataInterface');
+        $config = $this->objectManager->get(\Magento\Mtf\Config\DataInterface::class);
         // Prepare config data
         $configData['dbHost'] = $config->get('install/0/host/0');
         $configData['dbUser'] = $config->get('install/0/user/0');
@@ -108,7 +108,7 @@ class InstallTest extends Injectable
             $dataConfig['https'] = str_replace('http', 'https', $dataConfig['baseUrl']);
         }
         /** @var InstallConfig $installConfig */
-        $installConfig = $fixtureFactory->create('Magento\Install\Test\Fixture\Install', ['data' => $dataConfig]);
+        $installConfig = $fixtureFactory->create(\Magento\Install\Test\Fixture\Install::class, ['data' => $dataConfig]);
         // Steps
         $this->installPage->open();
         // Verify license agreement.

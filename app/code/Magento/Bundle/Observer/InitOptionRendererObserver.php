@@ -18,7 +18,7 @@ class InitOptionRendererObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getBlock();
-        $block->addOptionsRenderCfg('bundle', 'Magento\Bundle\Helper\Catalog\Product\Configuration');
+        $block->addOptionsRenderCfg('bundle', \Magento\Bundle\Helper\Catalog\Product\Configuration::class);
         return $this;
     }
 }

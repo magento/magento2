@@ -32,7 +32,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
      */
     public function execute()
     {
-        $model = $this->_objectManager->create('Magento\Newsletter\Model\Template');
+        $model = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class);
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             $model->load($id);

@@ -12,7 +12,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionWhenOptionsAreSet()
     {
         $model = $this->getMockForAbstractClass(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [],
             '',
             false,
@@ -39,7 +39,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionWhenOptionsAreEmptyWithoutSource()
     {
         $model = $this->getMockForAbstractClass(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [],
             '',
             false,
@@ -67,7 +67,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionWhenOptionsAreEmptyWithSource()
     {
         $model = $this->getMockForAbstractClass(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [],
             '',
             false,
@@ -95,20 +95,20 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToObjects()
     {
-        $attributeOptionMock = $this->getMock('\Magento\Eav\Api\Data\AttributeOptionInterface');
+        $attributeOptionMock = $this->getMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
         $dataFactoryMock = $this->getMock(
-            'Magento\Eav\Api\Data\AttributeOptionInterfaceFactory',
+            \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+        $dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
-            '\Magento\Catalog\Model\Entity\Attribute',
+            \Magento\Catalog\Model\Entity\Attribute::class,
             [
                 'optionDataFactory' => $dataFactoryMock,
                 'dataObjectHelper' => $dataObjectHelperMock,
@@ -119,7 +119,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $dataObjectHelperMock->expects($this->once())->method('populateWithArray')
-            ->with($attributeOptionMock, ['some value'], '\Magento\Eav\Api\Data\AttributeOptionInterface')
+            ->with($attributeOptionMock, ['some value'], \Magento\Eav\Api\Data\AttributeOptionInterface::class)
             ->willReturnSelf();
         $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 
@@ -130,7 +130,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
-            '\Magento\Catalog\Model\Entity\Attribute',
+            \Magento\Catalog\Model\Entity\Attribute::class,
             [
                 'data' => [
                     \Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES => ['some value']
@@ -147,7 +147,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $rule = 'some value';
         $model = $objectManagerHelper->getObject(
-            '\Magento\Catalog\Model\Entity\Attribute',
+            \Magento\Catalog\Model\Entity\Attribute::class,
             [
                 'data' => [
                     \Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES => serialize($rule)
@@ -163,7 +163,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
-            '\Magento\Catalog\Model\Entity\Attribute',
+            \Magento\Catalog\Model\Entity\Attribute::class,
             [
                 'data' => [
                     \Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES => null
@@ -185,7 +185,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $model */
         $model = $this->getMockForAbstractClass(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [],
             '',
             false,
@@ -196,7 +196,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $backendModelMock = $this->getMockForAbstractClass(
-            '\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
+            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
             [],
             '',
             false,

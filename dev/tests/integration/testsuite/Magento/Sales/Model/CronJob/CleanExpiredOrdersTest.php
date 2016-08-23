@@ -18,11 +18,11 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         /** @var CleanExpiredOrders $job */
-        $job = Bootstrap::getObjectManager()->create('Magento\Sales\Model\CronJob\CleanExpiredOrders');
+        $job = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\CronJob\CleanExpiredOrders::class);
         $job->execute();
 
         /** @var Order $order */
-        $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->load('100000001', 'increment_id');
         $this->assertEquals(Order::STATE_CANCELED, $order->getStatus());
     }

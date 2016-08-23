@@ -19,7 +19,7 @@ class UpdateElementTypesObserver implements ObserverInterface
     {
         $response = $observer->getEvent()->getResponse();
         $types = $response->getTypes();
-        $types['weee'] = 'Magento\Weee\Block\Element\Weee\Tax';
+        $types['weee'] = \Magento\Weee\Block\Element\Weee\Tax::class;
         $response->setTypes($types);
         return $this;
     }

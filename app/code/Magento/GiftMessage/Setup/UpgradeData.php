@@ -38,15 +38,15 @@ class UpgradeData implements UpgradeDataInterface
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
         $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
-        $attributeSetId = $categorySetup->getAttributeSetId($entityTypeId, 'Default');
+        $attributeSetId = $categorySetup->getDefaultAttributeSetId(Product::ENTITY);
         $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
 
             $groupName = 'Gift Options';
 
-            if (!$categorySetup->getAttributeGroup(Product::ENTITY, 'Default', $groupName)) {
-                $categorySetup->addAttributeGroup(Product::ENTITY, 'Default', $groupName, 60);
+            if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
+                $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
             }
 
             $categorySetup->addAttributeToGroup(
@@ -64,7 +64,7 @@ class UpgradeData implements UpgradeDataInterface
                 $entityTypeId,
                 $attribute['attribute_id'],
                 'source_model',
-                'Magento\Catalog\Model\Product\Attribute\Source\Boolean'
+                \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class
             );
         }
 

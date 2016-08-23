@@ -351,6 +351,7 @@
             <rule type="payflowExpressEnable" event="activate-rule"/>
             <rule type="payflowBmlEnable" event="activate-rule"/>
             <rule type="payflowShowSortOrder" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-express"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="payflowExpressEnableConditional" event="deactivate-rule">
                 <argument name="payflow_advanced">payflow_advanced</argument>
@@ -363,6 +364,7 @@
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
             </rule>
             <rule type="payflowHideSortOrder" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-express"/>
             <rule type="payflowBmlDisableConditionalExpress" event="deactivate-express"/>
             <rule type="payflowBmlDisableConditionalExpress" event=":load"/>
             <rule type="payflowBmlEnable" event="activate-express"/>

@@ -138,7 +138,7 @@ class Classes
             )
         );
 
-        $classes = array_map(['Magento\Framework\App\Utility\Classes', 'getCallbackClass'], $classes);
+        $classes = array_map([\Magento\Framework\App\Utility\Classes::class, 'getCallbackClass'], $classes);
         $classes = array_map('trim', $classes);
         $classes = array_unique($classes);
         $classes = array_filter(
@@ -273,10 +273,11 @@ class Classes
     {
         if (
             preg_match(
-                '/.*\\\\[a-zA-Z0-9]{1,}(Factory|Proxy|SearchResults|DataBuilder|Extension|ExtensionInterface)$/',
+                '/.*\\\\[a-zA-Z0-9]{1,}(Factory|SearchResults|DataBuilder|Extension|ExtensionInterface)$/',
                 $className
             )
             || preg_match('/Magento\\\\[\w]+\\\\(Test\\\\(Page|Fixture))\\\\/', $className)
+            || preg_match('/.*\\\\[a-zA-Z0-9]{1,}\\\\Proxy$/', $className)
         ) {
             return true;
         }

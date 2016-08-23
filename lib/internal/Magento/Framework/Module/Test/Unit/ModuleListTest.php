@@ -40,8 +40,8 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $this->config = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->loader = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
         $this->model = new ModuleList($this->config, $this->loader);
     }
 

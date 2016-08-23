@@ -277,7 +277,11 @@ class EavAttribute
                     //option was deleted by button with basket
                     continue;
                 }
+                $defaultSwatchValue = reset($storeValues);
                 foreach ($storeValues as $storeId => $value) {
+                    if (!$value) {
+                        $value = $defaultSwatchValue;
+                    }
                     $swatch = $this->loadSwatchIfExists($optionId, $storeId);
                     $swatch->isDeleted($isOptionForDelete);
                     $this->saveSwatchData(

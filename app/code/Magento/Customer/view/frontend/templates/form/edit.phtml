@@ -8,7 +8,7 @@
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
 ?>
-<form class="form form-edit-account" action="<?php /* @escapeNotVerified */ echo $block->getUrl('customer/account/editPost') ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>" autocomplete="off">
+<form class="form form-edit-account" action="<?php echo $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>" autocomplete="off">
     <fieldset class="fieldset info">
         <?php echo $block->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Account Information') ?></span></legend><br>
@@ -41,7 +41,7 @@
         <div class="field email required" data-container="change-email">
             <label class="label" for="email"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
             <div class="control">
-                <input type="email" name="email" id="email" autocomplete="email" data-input="change-email" value="<?php echo $block->escapeHtml($block->getCustomer()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
+                <input type="email" name="email" id="email" autocomplete="email" data-input="change-email" value="<?php echo $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
             </div>
         </div>
         <div class="field password current required">
@@ -59,10 +59,10 @@
                     data-input="new-password"
                     data-validate="{required:true, 'validate-customer-password':true}"
                     autocomplete="off" />
-                <div id="password-strength-meter-container" data-role="password-strength-meter" >
+                <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
                     <div id="password-strength-meter" class="password-strength-meter">
                         <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
-                        <span id="password-strength-meter-label" data-role="password-strength-meter-label" >
+                        <span id="password-strength-meter-label" data-role="password-strength-meter-label">
                             <?php /* @escapeNotVerified */ echo __('No Password'); ?>
                         </span>
                     </div>
@@ -94,7 +94,7 @@
         "mage/mage"
     ], function($){
         var dataForm = $('#form-validate');
-        var ignore = <?php /* @escapeNotVerified */ echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
+        var ignore = <?php /* @noEscape */ echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
         
         dataForm.mage('validation', {
         <?php if ($_dob->isEnabled()): ?>

@@ -46,7 +46,7 @@ class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->messageManager->addSuccess(__('You duplicated the product.'));
             $resultRedirect->setPath('catalog/*/edit', ['_current' => true, 'id' => $newProduct->getId()]);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->messageManager->addError($e->getMessage());
             $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
         }

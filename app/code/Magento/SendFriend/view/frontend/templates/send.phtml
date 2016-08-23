@@ -16,8 +16,8 @@
     <div class="actions-toolbar">
         <div class="secondary">
             <button type="button" id="btn-remove<%- data._index_ %>" class="action remove"
-               title="<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Remove Recipent')) ?>">
-               <span><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Remove')) ?></span>
+               title="<?php echo $block->escapeHtmlAttr(__('Remove Recipent')) ?>">
+               <span><?php echo $block->escapeHtml(__('Remove')) ?></span>
             </button>
         </div>
     </div>
@@ -41,7 +41,7 @@
     </fieldset>
 </script>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getSendUrl() ?>" method="post" id="product-sendtofriend-form"
+<form action="<?php echo $block->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
       data-mage-init='{
         "rowBuilder":{
             "rowTemplate":"#add-recipient-tmpl",
@@ -49,7 +49,7 @@
             "rowParentElem":"<div></div>",
             "remEventSelector":"button",
             "btnRemoveSelector":".action.remove",
-            "maxRows":"<?php /* @escapeNotVerified */ echo $block->getMaxRecipients() ?>",
+            "maxRows":"<?php /* @noEscape */ echo (int)$block->getMaxRecipients() ?>",
             "maxRowsMsg":"#max-recipient-message",
             "addRowBtn":"#add-recipient-button",
             "additionalRowClass":"additional"},
@@ -62,7 +62,7 @@
         <div class="field sender required">
             <label for="sender-name" class="label"><span><?php /* @escapeNotVerified */ echo __('Name') ?></span></label>
             <div class="control">
-                <input name="sender[name]" value="<?php echo $block->escapeHtml($block->getUserName()) ?>"
+                <input name="sender[name]" value="<?php echo $block->escapeHtmlAttr($block->getUserName()) ?>"
                        title="<?php /* @escapeNotVerified */ echo __('Name') ?>" id="sender-name" type="text" class="input-text"
                        data-validate="{required:true}"/>
             </div>
@@ -71,7 +71,7 @@
         <div class="field email required">
             <label for="sender-email" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
             <div class="control">
-                <input name="sender[email]" value="<?php echo $block->escapeHtml($block->getEmail()) ?>"
+                <input name="sender[email]" value="<?php echo $block->escapeHtmlAttr($block->getEmail()) ?>"
                        title="<?php /* @escapeNotVerified */ echo __('Email') ?>" id="sender-email" type="text" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>

@@ -18,7 +18,7 @@ define([
         options: {
             continueSelector: '#payment-continue',
             methodsContainer: '#payment-methods',
-            minBalance: 0.0001,
+            minBalance: 0,
             tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">'
         },
 
@@ -36,7 +36,7 @@ define([
                         data.totalPrice = this.options.checkoutPrice;
                     }
 
-                    if (this.options.checkoutPrice < this.options.minBalance) {
+                    if (this.options.checkoutPrice <= this.options.minBalance) {
                         // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
                         this._disablePaymentMethods();
                     } else {
@@ -80,7 +80,7 @@ define([
                 alert({
                     content: $.mage.__('We can\'t complete your order because you don\'t have a payment method set up.')
                 });
-            } else if (this.options.checkoutPrice < this.options.minBalance) {
+            } else if (this.options.checkoutPrice <= this.options.minBalance) {
                 isValid = true;
             } else if (methods.filter('input:radio:checked').length) {
                 isValid = true;
@@ -116,7 +116,6 @@ define([
          */
         _enablePaymentMethods: function () {
             this.element.find('input[name="payment[method]"]').prop('disabled', false).end()
-                .find('input[name="payment[method]"][value="free"]').remove().end()
                 .find('dt input:radio:checked').trigger('click').end()
                 .find('input[id^="use"][name^="payment[use"]:not(:checked)').prop('disabled', false).parent().show();
             this.element.find(this.options.methodsContainer).show();

@@ -120,6 +120,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
             $option->setOptionId($optionId);
             if (is_array($optionValue)) {
                 $optionValue = $this->processFileOptionValue($optionValue);
+                $optionValue = $this->processDateOptionValue($optionValue);
                 $optionValue = implode(',', $optionValue);
             }
             $option->setOptionValue($optionValue);
@@ -148,6 +149,24 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     }
 
     /**
+     * Returns date option value only with 'date_internal data
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processDateOptionValue(array $optionValue)
+    {
+        if (array_key_exists('date_internal', $optionValue)
+        ) {
+            $closure = function ($key) {
+                return $key === 'date_internal';
+            };
+            $optionValue = array_filter($optionValue, $closure, ARRAY_FILTER_USE_KEY);
+        }
+        return $optionValue;
+    }
+
+    /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
      * @deprecated
@@ -156,7 +175,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     {
         if ($this->urlBuilder === null) {
             $this->urlBuilder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Catalog\Model\Product\Option\UrlBuilder');
+                ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
         }
         return $this->urlBuilder;
     }

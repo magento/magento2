@@ -24,7 +24,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      *
      * @var string
      */
-    protected $_defaultToolbarBlock = 'Magento\Catalog\Block\Product\ProductList\Toolbar';
+    protected $_defaultToolbarBlock = \Magento\Catalog\Block\Product\ProductList\Toolbar::class;
 
     /**
      * Product Collection
@@ -363,7 +363,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 [
                     'include_container' => true,
                     'display_minimal_price' => true,
-                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                    'list_category_page' => true
                 ]
             );
         }

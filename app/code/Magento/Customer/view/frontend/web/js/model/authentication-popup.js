@@ -21,6 +21,7 @@ define(
                 var options = {
                     'type': 'popup',
                     'modalClass': 'popup-authentication',
+                    'focus': '[name=username]',
                     'responsive': true,
                     'innerScroll': true,
                     'trigger': '.proceed-to-checkout',

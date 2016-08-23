@@ -145,7 +145,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment::class);
     }
 
     /**
@@ -405,7 +405,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * Adds comment to shipment with additional possibility to send it to customer via email
      * and show it in customer account
      *
-     * @param \Magento\Sales\Model\Order\Shipment\Comment $comment
+     * @param \Magento\Sales\Model\Order\Shipment\Comment|string $comment
      * @param bool $notify
      * @param bool $visibleOnFront
      * @return $this

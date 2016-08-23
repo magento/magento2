@@ -37,7 +37,7 @@ CountryModel.prototype = {
             var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
             //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
             if (specifCountryElement) {
-                if (applyCountryElement.value == 1) {
+                if (applyCountryElement.value == 1 && !specifCountryElement.hasAttribute('disabled')) {
                    //if specific country element selected
                    specifCountryElement.enable();
                    if (showMethodElement) {
