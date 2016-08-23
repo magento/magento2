@@ -1,0 +1,140 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\AsynchronousOperations\Model;
+
+use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
+use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class BulkManagementTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $publisherMock;
+
+    /**
+     * @var BulkManagement
+     */
+    private $model;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->publisherMock = $this->getMock(PublisherInterface::class);
+
+        $this->model = $this->objectManager->create(
+            BulkManagement::class,
+            [
+                'publisher' => $this->publisherMock
+            ]
+        );
+    }
+    
+    public function testScheduleBulk()
+    {
+        // general bulk information
+        $bulkUuid = '5a12c1bd-a8b5-41d4-8c00-3f5bcaa6d3c7';
+        $bulkDescription = 'Bulk General Information';
+        $topicName = 'example.topic.name';
+        $userId = 1;
+
+        // generate bulk operations that must be saved
+        $operationCount = 100;
+        $operations = [];
+        $operationFactory = $this->objectManager->get(OperationInterfaceFactory::class);
+        for ($index = 0; $index < $operationCount; $index++) {
+            /** @var OperationInterface $operation */
+            $operation = $operationFactory->create();
+            $operation->setBulkUuid($bulkUuid);
+            $operation->setTopicName($topicName);
+            $operation->setSerializedData(serialize(['entity_id' => $index]));
+            $operations[] = $operation;
+        }
+
+        $this->publisherMock->expects($this->exactly($operationCount))
+            ->method('publish')
+            ->with($topicName, $this->isInstanceOf(OperationInterface::class));
+
+        // schedule bulk
+        $this->assertTrue($this->model->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId));
+        $storedData = $this->getStoredOperationData();
+        $this->assertCount($operationCount, $storedData);
+    }
+
+    /**
+     * @magentoDataFixture Magento/AsynchronousOperations/_files/bulk.php
+     */
+    public function testRetryBulk()
+    {
+        $bulkUuid = 'bulk-uuid-5';
+        $errorCodes = [1111, 2222];
+
+        $this->assertEquals(2, $this->model->retryBulk($bulkUuid, $errorCodes));
+
+        $operations = $this->objectManager->get(CollectionFactory::class)
+            ->create()
+            ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
+            ->getItems();
+        $this->assertCount(2, $operations);
+        /** @var OperationInterface $operation */
+        foreach ($operations as $operation) {
+            $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $operation->getStatus());
+            $this->assertNull($operation->getErrorCode());
+            $this->assertNull($operation->getResultMessage());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/AsynchronousOperations/_files/bulk.php
+     */
+    public function testDeleteBulk()
+    {
+        $this->model->deleteBulk('bulk-uuid-1');
+
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->objectManager->get(EntityManager::class);
+        $bulkSummaryFactory = $this->objectManager->get(BulkSummaryInterfaceFactory::class);
+        /** @var BulkSummaryInterface $bulkSummary */
+        $bulkSummary = $entityManager->load($bulkSummaryFactory->create(), 'bulk-uuid-1');
+        $this->assertNull($bulkSummary->getBulkId());
+
+    }
+
+    /**
+     * Retrieve stored operation data
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function getStoredOperationData()
+    {
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get(MetadataPool::class);
+        $operationMetadata = $metadataPool->getMetadata(OperationInterface::class);
+        /** @var ResourceConnection $resourceConnection */
+        $resourceConnection = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resourceConnection->getConnectionByName($operationMetadata->getEntityConnectionName());
+
+        return $connection->fetchAll($connection->select()->from($operationMetadata->getEntityTable()));
+    }
+}
