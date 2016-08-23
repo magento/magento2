@@ -58,6 +58,38 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getPercentageValue()
+    {
+        return $this->getData(self::PERCENTAGE_VALUE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPercentageValue($value)
+    {
+        return $this->setData(self::PERCENTAGE_VALUE, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setWebsiteId($websiteId)
+    {
+        return $this->setData(self::WEBSITE_ID, $websiteId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWebsiteId()
+    {
+        return $this->getData(self::WEBSITE_ID);
+    }
+
+    /**
      * Retrieve customer group id
      *
      * @return int
