@@ -23,7 +23,7 @@ module.exports = {
     })(),
 
     /**
-     * Loads "themes" file.
+     * Loads file.
      * Load priority:
      *      From user config;
      *      From default config with ".loc" suffix ;
@@ -31,15 +31,15 @@ module.exports = {
      *
      * @returns themes file or error
      */
-    getThemes: function () {
-        if (this.userConfig && this.userConfig.themes) {
-            return require(this.getFullPath(this.userConfig.themes));
+    get: function (file) {
+        if (this.userConfig && this.userConfig[file]) {
+            return require(this.getFullPath(this.userConfig[file]));
         } else {
             try {
-                return require(this.getFullPath(this.defaultConfig.themes + '.loc'));
+                return require(this.getFullPath(this.defaultConfig[file] + '.loc'));
             } catch (error) {
                 try {
-                    return require(this.getFullPath(this.defaultConfig.themes));
+                    return require(this.getFullPath(this.defaultConfig[file]));
                 } catch (error) {
                     throw  error;
                 }

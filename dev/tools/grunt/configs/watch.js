@@ -6,7 +6,7 @@
 'use strict';
 
 var combo  = require('./combo'),
-    themes = require('../tools/files-router').getThemes(),
+    themes = require('../tools/files-router').get('themes'),
     _      = require('underscore');
 
 var themeOptions = {};

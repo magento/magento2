@@ -5,7 +5,7 @@
 
 'use strict';
 
-var theme = require('../tools/files-router').getThemes(),
+var theme = require('../tools/files-router').get('themes'),
     path = require('./path');
 
 /**
