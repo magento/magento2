@@ -195,7 +195,7 @@ class UpgradeData implements UpgradeDataInterface
 
         //Remove everything from stores scope
         $connection->delete(
-            $connection->getTableName('core_config_data'),
+            $setup->getTable('core_config_data'),
             [
                 'path = ?' => CountryHandler::ALLOWED_COUNTRIES_PATH,
                 'scope = ?' => ScopeInterface::SCOPE_STORES
@@ -205,7 +205,7 @@ class UpgradeData implements UpgradeDataInterface
         //Update websites
         foreach ($allowedCountries as $scopeId => $countries) {
             $connection->update(
-                $connection->getTableName('core_config_data'), 
+                $setup->getTable('core_config_data'),
                 [
                     'value' => implode(',', $countries)
                 ],
