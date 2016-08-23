@@ -1137,6 +1137,20 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $result[$this->columnMaxCharacters] = $optionRow['max_characters'];
         }
 
+        $result = $this->addFileOptions($result, $optionRow);
+
+        return $result;
+    }
+
+    /**
+     * Add file options
+     *
+     * @param array $result
+     * @param array $optionRow
+     * @return array
+     */
+    private function addFileOptions($result, $optionRow)
+    {
         foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
             if (!isset($optionRow[$fileOptionKey])) {
                 continue;
