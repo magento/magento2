@@ -26,7 +26,9 @@ class SearchResultTest extends \PHPUnit_Framework_TestCase
         $request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $request->setParams($requestData);
 
-        /** @var \Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult $searchResult */
+        /**
+         * @var \Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult $searchResult
+         */
         $searchResult = $objectManager->create(
             \Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult::class
         );
