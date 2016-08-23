@@ -15,7 +15,7 @@ interface BulkStatusInterface
      * 
      * @param string $bulkUuid
      * @param int|null $failureType
-     * @return \Magento\BulkOperations\Api\Data\OperationInterface[]
+     * @return \Magento\AsynchronousOperations\Api\Data\OperationInterface[]
      */
     public function getFailedOperationsByBulkId($bulkUuid, $failureType = null);
 
