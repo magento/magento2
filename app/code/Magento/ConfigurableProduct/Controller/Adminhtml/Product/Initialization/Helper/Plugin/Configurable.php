@@ -128,7 +128,7 @@ class Configurable
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
         $associatedProductIds = $this->request->getPost('associated_product_ids_serialized', '[]');
-        if ($associatedProductIds != null && !empty($associatedProductIds)) {
+        if (!empty($associatedProductIds)) {
             $associatedProductIds = json_decode($associatedProductIds, true);
         }
         $variationsMatrix = $this->getVariationMatrix();
@@ -153,7 +153,7 @@ class Configurable
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+        if (!empty($configurableMatrix)) {
             $configurableMatrix = json_decode($configurableMatrix, true);
         }
 

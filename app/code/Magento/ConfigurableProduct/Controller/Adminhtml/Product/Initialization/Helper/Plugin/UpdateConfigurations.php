@@ -86,7 +86,7 @@ class UpdateConfigurations
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+        if (!empty($configurableMatrix)) {
             $configurableMatrix = json_decode($configurableMatrix, true);
         }
         foreach ($configurableMatrix as $item) {

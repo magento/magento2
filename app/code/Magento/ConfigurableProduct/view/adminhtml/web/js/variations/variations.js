@@ -301,10 +301,10 @@ define([
          * Chose action for the form save button
          */
         saveFormHandler: function() {
-            this.source.data["configurable-matrix-serialized"] =
+            this.source.data["product"]["configurable-matrix-serialized"] =
                 JSON.stringify(this.source.data["configurable-matrix"]);
             delete this.source.data["configurable-matrix"];
-            this.source.data["associated_product_ids_serialized"] =
+            this.source.data["product"]["associated_product_ids_serialized"] =
                 JSON.stringify(this.source.data["associated_product_ids"]);
             delete this.source.data["associated_product_ids"];
             if (this.checkForNewAttributes()) {
