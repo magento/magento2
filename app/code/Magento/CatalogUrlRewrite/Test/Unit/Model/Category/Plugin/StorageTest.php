@@ -14,6 +14,9 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\CatalogUrlRewrite\Model\Category\Product;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ProductResourceModel;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
