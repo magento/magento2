@@ -25,6 +25,10 @@ define([
             isMultipleCountriesAllowed: true
         },
 
+        /**
+         *
+         * @private
+         */
         _create: function () {
             this._initCountryElement();
 
@@ -43,12 +47,18 @@ define([
             }, this));
         },
 
-        _initCountryElement: function() {
+        /**
+         *
+         * @private
+         */
+        _initCountryElement: function () {
+
             if (this.options.isMultipleCountriesAllowed) {
                 this.element.parents('div.field').show();
                 this.element.on('change', $.proxy(function (e) {
                     this._updateRegion($(e.target).val());
                 }, this));
+
                 if (this.options.isCountryRequired) {
                     this.element.addClass('required-entry');
                     this.element.parents('div.field').addClass('required');
@@ -60,6 +70,7 @@ define([
 
         /**
          * Remove options from dropdown list
+         *
          * @param {Object} selectElement - jQuery object for dropdown list
          * @private
          */
@@ -113,7 +124,7 @@ define([
          * @private
          */
         _clearError: function () {
-            if (this.options.clearError && typeof (this.options.clearError) === 'function') {
+            if (this.options.clearError && typeof this.options.clearError === 'function') {
                 this.options.clearError.call(this);
             } else {
                 if (!this.options.form) {
@@ -131,8 +142,10 @@ define([
                 $(this.options.postcodeId).removeClass('mage-error').parent().find('[generated]').remove();
             }
         },
+
         /**
          * Update dropdown list based on the country selected
+         *
          * @param {String} country - 2 uppercase letter for country code
          * @private
          */
@@ -188,7 +201,7 @@ define([
                         regionInput.attr('disabled', 'disabled');
                     }
                     requiredLabel.removeClass('required');
-                    regionInput.removeClass('required-entry')
+                    regionInput.removeClass('required-entry');
                 }
 
                 regionList.removeClass('required-entry').hide();
@@ -214,10 +227,11 @@ define([
          * @private
          */
         _checkRegionRequired: function (country) {
-            this.options.isRegionRequired = false;
             var self = this;
+
+            this.options.isRegionRequired = false;
             $.each(this.options.regionJson.config.regions_required, function (index, elem) {
-                if (elem == country) {
+                if (elem === country) {
                     self.options.isRegionRequired = true;
                 }
             });
