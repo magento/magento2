@@ -62,7 +62,22 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
                 'data' => '<span><b>some text in tags</b></span>',
                 'expected' => '<span><b>some text in tags</b></span>',
                 'allowedTags' => ['span', 'b'],
-            ]
+            ],
+            'string data with allowed tags with attributes 1' => [
+                'data' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'string data with allowed tags with attributes 2' => [
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
+                'allowedTags' => ['a'],
+            ],
+            'string data with allowed tags with attributes and not allowed tags' => [
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<two>three</two></a> or <a href="%2"><span id="action">create an account</span></a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in&lt;two&gt;three&lt;/two&gt;</a> or <a href="%2">&lt;span id=&quot;action&quot;&gt;create an account&lt;/span&gt;</a>',
+                'allowedTags' => ['a'],
+            ],
         ];
     }
 
