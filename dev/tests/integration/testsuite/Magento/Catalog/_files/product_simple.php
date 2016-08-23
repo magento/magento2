@@ -57,6 +57,38 @@ $tierPrices[] = $tierPriceFactory->create(
     ]
 )->setExtensionAttributes($tpExtensionAttributes);
 
+$tierPrices = [];
+/** @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory */
+$tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+            'qty' => 2,
+            'value' => 8
+        ]
+    ]
+);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+            'qty' => 5,
+            'value' => 5
+        ]
+    ]
+);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 3,
+            'value' => 0,
+            'percentage_value' => 50
+        ]
+    ]
+);
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);

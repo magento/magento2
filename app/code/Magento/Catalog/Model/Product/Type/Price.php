@@ -418,7 +418,7 @@ class Price
                 ? $extensionAttributes->getWebsiteId()
                 : $websiteId;
             $prices[] = [
-                'website_id' => $price->getExtensionAttributes()->getWebsiteId(),
+                'website_id' => $extensionAttributes ? $extensionAttributes->getWebsiteId() : $websiteId,
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),
