@@ -18,11 +18,7 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
 
     const VALUE = 'value';
 
-    const PERCENTAGE_VALUE = 'percentage_value';
-
     const CUSTOMER_GROUP_ID = 'customer_group_id';
-
-    const WEBSITE_ID = 'website_id';
 
     /**
      * Retrieve customer group id
@@ -68,33 +64,6 @@ interface ProductTierPriceInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setValue($value);
-
-    /**
-     * Retrieve percentage value
-     * @return float
-     */
-    public function getPercentageValue();
-
-    /**
-     * Set percentage value
-     *
-     * @param $value
-     * @return $this
-     */
-    public function setPercentageValue($value);
-
-    /**
-     * Retrieve website id
-     * @return int
-     */
-    public function getWebsiteId();
-
-    /**
-     * Set website id
-     * @param int $websiteId
-     * @return $this
-     */
-    public function setWebsiteId($websiteId);
 
     /**
      * Retrieve existing extension attributes object.
