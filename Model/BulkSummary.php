@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\BulkAsynchronousOperationsOperations\Model;
+namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\Framework\DataObject;
