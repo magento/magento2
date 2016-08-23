@@ -48,12 +48,18 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
 
         $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
+            ->setMethods(['getMetadata', 'hasConfiguration'])
             ->getMock();
+        $metadataPool->expects($this->any())
+            ->method('hasConfiguration')
+            ->willReturn(true);
         $metadataPool->expects($this->any())
             ->method('getMetadata')
             ->with($this->equalTo(\Magento\Customer\Api\Data\AddressInterface::class))
             ->will($this->returnValue($metadata));
+        $metadataPool->expects($this->once())
+            ->method('hasConfiguration')
+            ->willReturn(true);
 
         $searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
@@ -76,6 +82,7 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
                 'metadataPool' => $metadataPool,
                 'searchCriteriaBuilder' => $searchCriteriaBuilder
             ]);
+
         $actual = $customAttributesMapper->entityToDatabase(
             \Magento\Customer\Api\Data\AddressInterface::class,
             [
