@@ -1,0 +1,12 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="action-menu-item action-close-wrapper">
+    <span class="action-close"
+          repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
+          click="$col.getActionHandler($action())"
+    />
+</div>
