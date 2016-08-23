@@ -41,6 +41,11 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $calculatedStatusSqlMock;
+
     protected function setUp()
     {
         $this->bulkCollectionFactory = $this->getMock(
@@ -66,10 +71,18 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->calculatedStatusSqlMock = $this->getMock(
+            \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\AsynchronousOperations\Model\BulkStatus(
             $this->bulkCollectionFactory,
             $this->operationCollectionFactory,
-            $this->resourceConnectionMock
+            $this->resourceConnectionMock,
+            $this->calculatedStatusSqlMock
         );
     }
 

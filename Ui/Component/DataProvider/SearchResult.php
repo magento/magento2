@@ -13,6 +13,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\OperationInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Model\StatusMapper;
+use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
 
 /**
  * Class SearchResult
@@ -35,6 +36,11 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private $operationStatus;
 
     /**
+     * @var CalculatedStatusSql
+     */
+    private $calculatedStatusSql;
+
+    /**
      * SearchResult constructor.
      * @param EntityFactory $entityFactory
      * @param Logger $logger
@@ -53,12 +59,15 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
         EventManager $eventManager,
         UserContextInterface $userContextInterface,
         StatusMapper $statusMapper,
+        CalculatedStatusSql $calculatedStatusSql,
         $mainTable = 'magento_bulk',
         $resourceModel = null,
         $identifierName = 'uuid'
-    ) {
+    )
+    {
         $this->userContext = $userContextInterface;
         $this->statusMapper = $statusMapper;
+        $this->calculatedStatusSql = $calculatedStatusSql;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -79,7 +88,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
             ['main_table' => $this->getMainTable()],
             [
                 '*',
-                'status' => $this->getCalculatedStatusSql()
+                'status' => $this->calculatedStatusSql->execute($this->getTable('magento_operation'))
             ]
         )->where(
             'user_id=?',
@@ -130,30 +139,11 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();
-        $select->columns(['status' => $this->getCalculatedStatusSql()]);
+        $select->columns(['status' => $this->calculatedStatusSql->execute($this->getTable('magento_operation'))]);
         //add grouping by status if filtering by status was executed
         if (isset($this->operationStatus)) {
             $select->group('status');
         }
         return $select;
-    }
-
-    /**
-     * @return \Zend_Db_Expr
-     */
-    private function getCalculatedStatusSql()
-    {
-        $operationTableName = $this->getTable('magento_operation');
-        return new \Zend_Db_Expr(
-            '(IF(
-                (SELECT count(*)
-                    FROM ' . $operationTableName . '
-                    WHERE bulk_uuid = main_table.uuid
-                    AND status != ' . OperationInterface::STATUS_TYPE_OPEN . '
-                ) = 0,
-                ' . BulkSummaryInterface::NOT_STARTED . ',
-                (SELECT MAX(status) FROM ' . $operationTableName . ' WHERE bulk_uuid = main_table.uuid)
-            ))'
-        );
     }
 }
