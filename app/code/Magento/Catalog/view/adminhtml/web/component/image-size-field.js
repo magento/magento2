@@ -5,39 +5,25 @@
 
 define([
     'jquery',
-    'underscore',
     'Magento_Ui/js/lib/validation/utils',
     'Magento_Ui/js/form/element/abstract',
     'Magento_Ui/js/lib/validation/validator'
-], function ($, _, utils, Abstract, validator) {
+], function ($, utils, Abstract, validator) {
     'use strict';
 
     validator.addRule(
         'validate-image-size-range',
         function (value) {
-            var numValue,
-                dataAttrRange = /^(\d+)x(\d+)?$/,
-                result = false,
+            var dataAttrRange = /^(\d+)x(\d+)$/,
                 m;
 
             if (utils.isEmptyNoTrim(value)) {
                 return true;
             }
-            numValue = utils.parseNumber(value);
-
-            if (isNaN(numValue)) {
-                return false;
-            }
 
             m = dataAttrRange.exec(value);
 
-            if (m) {
-                if (m.length === 3) {
-                    result = m[1] && m[2];
-                }
-            }
-
-            return result;
+            return m && m.length === 3 && m[1] > 0 && m[2] > 0;
         },
         $.mage.__('The value is not within the specified format eg: 200x300')
     );
