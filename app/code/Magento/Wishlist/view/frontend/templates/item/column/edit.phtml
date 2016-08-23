@@ -15,6 +15,6 @@ $product = $item->getProduct();
 
 <?php if ($product->isVisibleInSiteVisibility()): ?>
     <a class="action edit" href="<?php echo $block->escapeUrl($block->getItemConfigureUrl($item)) ?>">
-        <span><?php /* @escapeNotVerified */ echo __('Edit') ?></span>
+        <span><?php echo $block->escapeHtml(__('Edit')) ?></span>
     </a>
 <?php endif ?>

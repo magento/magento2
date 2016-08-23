@@ -50,7 +50,7 @@
         var self = this;
 
         confirm({
-            content: '<?php /* @escapeNotVerified */ echo __('Are you sure you want to remove this item?') ?>',
+            content: '<?php echo $block->escapeJs($block->escapeHtml(__('Are you sure you want to remove this item?'))) ?>',
             actions: {
                 confirm: function () {
                     self.reload('&delete=' + itemId);
