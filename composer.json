@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-bulk-operations",
+    "name": "magento/module-asynchronous-operations",
     "description": "N/A",
     "require": {
         "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
