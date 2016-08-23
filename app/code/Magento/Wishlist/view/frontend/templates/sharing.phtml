@@ -6,10 +6,10 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\Customer\Sharing */
+/** @var \Magento\Wishlist\Block\Customer\Sharing $block */
 ?>
 <form class="form wishlist share"
-      action="<?php /* @escapeNotVerified */ echo $block->getSendUrl() ?>"
+      action="<?php echo $block->escapeUrl($block->getSendUrl()) ?>"
       id="form-validate"
       method="post"
       data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>"
@@ -20,13 +20,13 @@
         <div class="field emails required">
             <label class="label" for="email_address"><span><?php /* @escapeNotVerified */ echo __('Email addresses, separated by commas') ?></span></label>
             <div class="control">
-                <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php /* @escapeNotVerified */ echo $block->getEnteredData('emails') ?></textarea>
+                <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php /* @noEscape */ echo $block->getEnteredData('emails') ?></textarea>
             </div>
         </div>
         <div class="field text">
             <label class="label" for="message"><span><?php /* @escapeNotVerified */ echo __('Message') ?></span></label>
             <div class="control">
-                <textarea id="message" name="message" cols="60" rows="5"><?php /* @escapeNotVerified */ echo $block->getEnteredData('message') ?></textarea>
+                <textarea id="message" name="message" cols="60" rows="5"><?php /* @noEscape */ echo $block->getEnteredData('message') ?></textarea>
             </div>
         </div>
         <?php if ($this->helper('Magento\Wishlist\Helper\Rss')->isRssAllow()): ?>
@@ -47,7 +47,7 @@
             </button>
         </div>
         <div class="secondary">
-            <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl(); ?>"><span><?php /* @escapeNotVerified */ echo __('Back')?></span></a>
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()); ?>"><span><?php /* @escapeNotVerified */ echo __('Back')?></span></a>
         </div>
     </div>
 </form>

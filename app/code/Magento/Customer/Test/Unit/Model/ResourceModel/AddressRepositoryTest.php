@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -64,6 +66,11 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\ResourceModel\AddressRepository
      */
     protected $repository;
+
+    /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
 
     protected function setUp()
     {
@@ -130,6 +137,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMockForAbstractClass();
+
         $this->repository = new \Magento\Customer\Model\ResourceModel\AddressRepository(
             $this->addressFactory,
             $this->addressRegistry,
@@ -138,7 +148,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->directoryData,
             $this->addressSearchResultsFactory,
             $this->addressCollectionFactory,
-            $this->extensionAttributesJoinProcessor
+            $this->extensionAttributesJoinProcessor,
+            $this->collectionProcessor
         );
     }
 
@@ -490,8 +501,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $collection = $this->getMock(
             \Magento\Customer\Model\ResourceModel\Address\Collection::class,
             [],
@@ -516,43 +525,16 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('process')
             ->with($collection, \Magento\Customer\Api\Data\AddressInterface::class);
-        $searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
-        $filterGroup->expects($this->once())->method('getFilters')->willReturn([$filter]);
-        $filter->expects($this->once())->method('getConditionType')->willReturn(false);
-        $filter->expects($this->once())->method('getField')->willReturn('Field');
-        $filter->expects($this->atLeastOnce())->method('getValue')->willReturn('Value');
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with([['attribute' => 'Field', 'eq' => 'Value']], [['eq' => 'Value']]);
+
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection)
+            ->willReturnSelf();
+
         $collection->expects($this->once())->method('getSize')->willReturn(23);
         $searchResults->expects($this->once())
             ->method('setTotalCount')
             ->with(23);
-        $sortOrder = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
-        $searchCriteria->expects($this->once())
-            ->method('getSortOrders')
-            ->willReturn([$sortOrder]);
-        $sortOrder->expects($this->once())
-            ->method('getField')
-            ->willReturn('Field');
-        $sortOrder->expects($this->once())
-            ->method('getDirection')
-            ->willReturn(\Magento\Framework\Api\SortOrder::SORT_ASC);
-        $collection->expects($this->once())
-            ->method('addOrder')
-            ->with('Field', 'ASC');
-        $searchCriteria->expects($this->once())
-            ->method('getCurrentPage')
-            ->willReturn(1);
-        $collection->expects($this->once())
-            ->method('setCurPage')
-            ->with(1);
-        $searchCriteria->expects($this->once())
-            ->method('getPageSize')
-            ->willReturn(10);
-        $collection->expects($this->once())
-            ->method('setPageSize')
-            ->with(10);
         $collection->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->address]);

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="EmailTemplateNew" area="Adminhtml" mca="admin/email_template/new/" module="Magento_Email">
+        <block name="templateForm" class="Magento\Email\Test\Block\Adminhtml\Template\Edit\TemplateForm" locator="[id='page:main-container']" strategy="css selector" />
+        <block name="formPageActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector" />
+    </page>
+</config>
