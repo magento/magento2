@@ -67,6 +67,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->tpFactory = $this->getMock(
             \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
             ['create'],
+            [],
             '',
             false,
             false,
