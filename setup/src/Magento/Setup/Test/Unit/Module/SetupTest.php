@@ -30,6 +30,10 @@ class SetupTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)
             ->will($this->returnValue($this->connection));
+        $resourceModel->expects($this->any())
+            ->method('getConnectionByName')
+            ->with(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION)
+            ->willReturn($this->connection);
         $this->setup = new Setup($resourceModel, self::CONNECTION_NAME);
     }
 

@@ -4,13 +4,14 @@
  */
 
 'use strict';
-angular.module('readiness-check', [])
+angular.module('readiness-check', ['remove-dialog'])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', 'ngDialog', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER, ngDialog) {
         $scope.Object = Object;
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
+        $rootScope.needReCheck = false;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
         };
@@ -352,7 +353,7 @@ angular.module('readiness-check', [])
         $scope.wordingOfReadinessCheckAction = function() {
             var $actionString = 'We\'re making sure your server environment is ready for ';
             if ($localStorage.moduleName) {
-                $actionString += $localStorage.moduleName;
+                $actionString += $localStorage.packageTitle ? $localStorage.packageTitle : $localStorage.moduleName;
             } else {
                 if($state.current.type === 'install' || $state.current.type === 'upgrade') {
                     $actionString += 'Magento';
@@ -361,6 +362,9 @@ angular.module('readiness-check', [])
                     }
                 } else {
                     $actionString += 'package';
+                    if ($scope.getObjectSize($localStorage.packages) > 1) {
+                        $actionString += 's';
+                    }
                 }
             }
             $actionString += " to be " + $state.current.type;
@@ -369,6 +373,58 @@ angular.module('readiness-check', [])
             } else {
                 $actionString +='ed';
             }
+
+            if ($localStorage.moduleName
+                && $localStorage.packageTitle
+                && $localStorage.moduleName != $localStorage.packageTitle
+            ) {
+                $actionString += ', which consists of the following packages:<br/>- ' + $localStorage.moduleName;
+            }
+
             return $actionString;
-        }
+        };
+
+        $scope.getExtensionsList = function () {
+            return $scope.componentDependency.packages ? $scope.componentDependency.packages : {};
+        };
+
+        $scope.openDialog = function (name) {
+            $scope.extensionToRemove = name;
+            ngDialog.open({scope: $scope, template: 'removeDialog', controller: 'removeDialogController'});
+        };
+
+        $scope.getCurrentVersion = function (name) {
+            if ($scope.getExtensionInfo(name).hasOwnProperty('currentVersion')) {
+                return $scope.getExtensionInfo(name)['currentVersion'];
+            }
+            
+            return '';
+        };
+
+        $scope.getVersionsList = function (name) {
+            if ($scope.getExtensionInfo(name).hasOwnProperty('versions')) {
+                return $scope.getExtensionInfo(name)['versions'];
+            }
+
+            return {};
+        };
+
+        $scope.getExtensionInfo = function (name) {
+            var extensionsVersions = $localStorage.extensionsVersions;
+            return extensionsVersions.hasOwnProperty(name) ? extensionsVersions[name] : {};
+        };
+
+        $scope.versionChanged = function () {
+            $rootScope.needReCheck = true;
+        };
+
+        $scope.getObjectSize = function (obj) {
+            var size = 0, key;
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    ++size;
+                }
+            }
+            return size;
+        };
     }]);
