@@ -31,10 +31,21 @@ class Escaper
             }
         } elseif (strlen($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
+                $result = $this->filterHtmlTagsAndAttributes($data, $allowedTags);
+                /*
                 $allowed = implode('|', $allowedTags);
-                $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
+                $result = preg_replace(
+                    '/<([\/\s\r\n]*)(' . $allowed . '[^>]*)([\/\s\r\n]*)>/si',
+                    '##$1$2$3##',
+                    $data
+                );
                 $result = htmlspecialchars($result, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
-                $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
+                $result = preg_replace(
+                    '/##([\/\s\r\n]*)(' . $allowed . '[^##]*)([\/\s\r\n]*)##/si',
+                    '<$1$2$3>',
+                    $result
+                );
+                */
             } else {
                 $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
@@ -42,6 +53,57 @@ class Escaper
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Removes not allowed HTML tags and attributes from string
+     *
+     * @param string $string
+     * @param string[] $allowedTags
+     * @return string
+     */
+    private function filterHtmlTagsAndAttributes($string, $allowedTags)
+    {
+        $wrapperElementId = uniqid();
+
+        $dom = new \DOMDocument();
+        $dom->loadHTML('<span id="' . $wrapperElementId . '">' . $string . '</span>');
+        $xpath = new \DOMXPath($dom);
+
+        $nodes = $xpath->query('//node()[text() and name() != \'html\' and name() != \'body\' and name() != \''
+            . implode('\' and name() != \'', $allowedTags) . '\']');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
+        }
+
+        $nodes = $xpath->query('//@*[name() != \'' . implode('\' and name() != \'', ['id', 'class', 'href']) . '\']');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeAttribute($node->nodeName);
+        }
+
+        $nodes = $xpath->query('//text()');
+        foreach ($nodes as $node) {
+            $node->textContent = $this->escapeHtml($node->textContent);
+        }
+
+        $nodes = $xpath->query('//@*');
+        foreach ($nodes as $node) {
+            $value = $node->parentNode->getAttribute($node->nodeName);
+            if ($node->nodeName == 'href') {
+                $value = $this->escapeUrl($value);
+            } else {
+                $value = $this->escapeHtmlAttr($value);
+            }
+            $node->parentNode->setAttribute($node->nodeName, $value);
+        }
+
+        $result = mb_convert_encoding(
+            $dom->saveHTML($dom->getElementById($wrapperElementId)),
+            'UTF-8',
+            'HTML-ENTITIES'
+        );
+
+        return substr($result, 25, strlen($result)-32);
     }
 
     /**
