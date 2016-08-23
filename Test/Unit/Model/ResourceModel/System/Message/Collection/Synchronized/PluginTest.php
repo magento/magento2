@@ -61,6 +61,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     private $collectionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $statusMapper;
+
+    /**
      * @var string
      */
     private $resourceName = 'Magento_Logging::system_magento_logging_bulk_operations';
@@ -82,13 +87,21 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->messageMock = $this->getMock(\Magento\AdminNotification\Model\System\Message::class, [], [], '', false);
         $this->collectionMock = $this->getMock(Synchronized::class, [], [], '', false);
         $this->bulkNotificationMock = $this->getMock(BulkNotificationManagement::class, [], [], '', false);
+        $this->statusMapper = $this->getMock(
+            \Magento\AsynchronousOperations\Model\StatusMapper::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->plugin = new Plugin(
             $this->messagefactoryMock,
             $this->bulkStatusMock,
             $this->bulkNotificationMock,
             $this->userContextMock,
             $this->operationsDetailsMock,
-            $this->authorizationMock
+            $this->authorizationMock,
+            $this->statusMapper
         );
     }
 
@@ -138,10 +151,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($userId);
         $this->bulkNotificationMock
             ->expects($this->once())
-            ->method('getIgnoredBulksByUser')
+            ->method('getAcknowledgedBulksByUser')
             ->with($userId)
-            ->willReturn($userBulks);
-
+            ->willReturn([]);
+        $this->statusMapper->expects($this->once())->method('operationStatusToBulkSummaryStatus');
+        $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
         $this->assertEquals(2, $result2['totalRecords']);
     }

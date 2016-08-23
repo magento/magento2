@@ -11,6 +11,7 @@ use Magento\Framework\Notification\MessageInterface;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\Framework\AuthorizationInterface;
+use Magento\AsynchronousOperations\Model\StatusMapper;
 
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
@@ -48,6 +49,11 @@ class Plugin
     private $authorization;
 
     /**
+     * @var StatusMapper
+     */
+    private $statusMapper;
+
+    /**
      * Plugin constructor.
      *
      * @param \Magento\AdminNotification\Model\System\MessageFactory $messageFactory
@@ -56,6 +62,7 @@ class Plugin
      * @param UserContextInterface $userContext
      * @param Details $operationDetails
      * @param AuthorizationInterface $authorization
+     * @param StatusMapper $statusMapper
      */
     public function __construct(
         \Magento\AdminNotification\Model\System\MessageFactory $messageFactory,
@@ -63,7 +70,8 @@ class Plugin
         BulkNotificationManagement $bulkNotificationManagement,
         UserContextInterface $userContext,
         Details $operationDetails,
-        AuthorizationInterface $authorization
+        AuthorizationInterface $authorization,
+        StatusMapper $statusMapper
     ) {
         $this->messageFactory = $messageFactory;
         $this->bulkStatus = $bulkStatus;
@@ -71,6 +79,7 @@ class Plugin
         $this->operationDetails = $operationDetails;
         $this->bulkNotificationManagement = $bulkNotificationManagement;
         $this->authorization = $authorization;
+        $this->statusMapper = $statusMapper;
     }
 
     /**
@@ -88,37 +97,32 @@ class Plugin
         if (!$this->authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')) {
             return $result;
         }
-        $userBulks = $this->bulkNotificationManagement->getIgnoredBulksByUser($this->userContext->getUserId());
+        $userId = $this->userContext->getUserId();
+        $userBulks = $this->bulkStatus->getBulksByUser($userId);
+        $acknowledgedBulks = $this->getAcknowledgedBulksUuid(
+            $this->bulkNotificationManagement->getAcknowledgedBulksByUser($userId)
+        );
         $bulkMessages = [];
         foreach ($userBulks as $bulk) {
             $bulkUuid = $bulk->getBulkId();
-            $text = $this->getText($this->operationDetails->getDetails($bulkUuid));
-            $data = [
-                'data' => [
-                    'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
-                    'severity' => MessageInterface::SEVERITY_MAJOR,
-                    'identity' => md5('bulk' . $bulkUuid),
-                    'uuid' => $bulkUuid,
-                    'status' => $this->bulkStatus->getBulkStatus($bulkUuid),
-                    'created_at' => $bulk->getStartTime()
-                ]
-            ];
-            $bulkMessages[] = $this->messageFactory->create($data)->toArray();
+            if (!in_array($bulkUuid, $acknowledgedBulks)) {
+                $text = $this->getText($this->operationDetails->getDetails($bulkUuid));
+                $data = [
+                    'data' => [
+                        'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
+                        'severity' => MessageInterface::SEVERITY_MAJOR,
+                        'identity' => md5('bulk' . $bulkUuid),
+                        'uuid' => $bulkUuid,
+                        'status' => $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus()),
+                        'created_at' => $bulk->getStartTime()
+                    ]
+                ];
+                $bulkMessages[] = $this->messageFactory->create($data)->toArray();
+            }
         }
 
         if (!empty($bulkMessages)) {
             $result['totalRecords'] += count($bulkMessages);
-
-            //sort messages by status
-            usort(
-                $bulkMessages,
-                function ($firstBulks, $secondBulk) {
-                    if ($firstBulks['status'] === $secondBulk['status']) {
-                        return strtotime($firstBulks['created_at']) > strtotime($secondBulk['created_at']) ? -1 : 1;
-                    }
-                    return $firstBulks['status'] > $secondBulk['status'] ? -1 : 1;
-                }
-            );
             $bulkMessages = array_slice($bulkMessages, 0, 5);
             $result['items'] = array_merge($bulkMessages, $result['items']);
         }
@@ -151,5 +155,20 @@ class Plugin
                 . '</strong>';
         }
         return $summaryReport;
+    }
+
+    /**
+     * Get array with acknowledgedBulksUuid
+     *
+     * @param array $acknowledgedBulks
+     * @return array
+     */
+    private function getAcknowledgedBulksUuid($acknowledgedBulks)
+    {
+        $acknowledgedBulksArray = [];
+        foreach ($acknowledgedBulks as $bulk) {
+            $acknowledgedBulksArray[] = $bulk->getBulkId();
+        }
+        return $acknowledgedBulksArray;
     }
 }

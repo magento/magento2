@@ -151,7 +151,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
                     WHERE bulk_uuid = main_table.uuid
                     AND status != ' . OperationInterface::STATUS_TYPE_OPEN . '
                 ) = 0,
-                ' . 0 . ',
+                ' . BulkSummaryInterface::NOT_STARTED . ',
                 (SELECT MAX(status) FROM ' . $operationTableName . ' WHERE bulk_uuid = main_table.uuid)
             ))'
         );

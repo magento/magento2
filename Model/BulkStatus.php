@@ -8,6 +8,7 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class BulkStatus
@@ -25,16 +26,24 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
     private $operationCollectionFactory;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * BulkStatus constructor.
      * @param ResourceModel\Bulk\CollectionFactory $bulkCollection
      * @param ResourceModel\Operation\CollectionFactory $operationCollection
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory $bulkCollection,
-        \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory $operationCollection
+        \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory $operationCollection,
+        ResourceConnection $resourceConnection
     ) {
         $this->operationCollectionFactory = $operationCollection;
         $this->bulkCollectionFactory = $bulkCollection;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -72,7 +81,23 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      */
     public function getBulksByUser($userId)
     {
-        $bulks = $this->bulkCollectionFactory->create()->addFieldToFilter('user_id', $userId)->getItems();
+        /** @var ResourceModel\Bulk\Collection $collection */
+        $collection = $this->bulkCollectionFactory->create();
+        $operationTableName = $this->resourceConnection->getTableName('magento_operation');
+        $statusesArray = [
+            OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
+            OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
+            BulkSummaryInterface::NOT_STARTED,
+            OperationInterface::STATUS_TYPE_OPEN,
+            OperationInterface::STATUS_TYPE_COMPLETE
+        ];
+        $select = $collection->getSelect();
+        $select->columns(['status' => $this->getCalculatedStatusSql($operationTableName)])
+            ->order(new \Zend_Db_Expr('FIELD(status, ' . implode(',', $statusesArray) . ')'));
+        $collection->addFieldToFilter('user_id', $userId)
+            ->addOrder('start_time');
+        $bulks = $collection->getItems();
+
         return $bulks;
     }
 
@@ -103,5 +128,25 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
             return BulkSummaryInterface::IN_PROGRESS;
         }
         return BulkSummaryInterface::FINISHED_WITH_FAILURE;
+    }
+
+    /**
+     * Get calculated status
+     *
+     * @return \Zend_Db_Expr
+     */
+    private function getCalculatedStatusSql($operationTableName)
+    {
+        return new \Zend_Db_Expr(
+            '(IF(
+                (SELECT count(*)
+                    FROM ' . $operationTableName . '
+                    WHERE bulk_uuid = main_table.uuid
+                    AND status != ' . OperationInterface::STATUS_TYPE_OPEN . '
+                ) = 0,
+                ' . BulkSummaryInterface::NOT_STARTED . ',
+                (SELECT MAX(status) FROM ' . $operationTableName . ' WHERE bulk_uuid = main_table.uuid)
+            ))'
+        );
     }
 }

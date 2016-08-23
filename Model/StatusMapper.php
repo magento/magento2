@@ -27,7 +27,7 @@ class StatusMapper
             OperationInterface::STATUS_TYPE_RETRIABLY_FAILED => BulkSummaryInterface::FINISHED_WITH_FAILURE,
             OperationInterface::STATUS_TYPE_COMPLETE => BulkSummaryInterface::FINISHED_SUCCESSFULLY,
             OperationInterface::STATUS_TYPE_OPEN => BulkSummaryInterface::IN_PROGRESS,
-            0 => BulkSummaryInterface::NOT_STARTED
+            BulkSummaryInterface::NOT_STARTED => BulkSummaryInterface::NOT_STARTED
         ];
 
         if (isset($statusMapping[$operationStatus])) {
@@ -51,7 +51,7 @@ class StatusMapper
             ],
             BulkSummaryInterface::FINISHED_SUCCESSFULLY => OperationInterface::STATUS_TYPE_COMPLETE,
             BulkSummaryInterface::IN_PROGRESS => OperationInterface::STATUS_TYPE_OPEN,
-            BulkSummaryInterface::NOT_STARTED => 0
+            BulkSummaryInterface::NOT_STARTED => BulkSummaryInterface::NOT_STARTED
         ];
 
         if (isset($statusMapping[$bulkStatus])) {

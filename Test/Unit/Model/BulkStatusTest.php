@@ -36,6 +36,11 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
      */
     private $bulkMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnectionMock;
+
     protected function setUp()
     {
         $this->bulkCollectionFactory = $this->getMock(
@@ -54,9 +59,17 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
         );
         $this->operationMock = $this->getMock(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
         $this->bulkMock = $this->getMock(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class);
+        $this->resourceConnectionMock = $this->getMock(
+            \Magento\Framework\App\ResourceConnection::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\AsynchronousOperations\Model\BulkStatus(
             $this->bulkCollectionFactory,
-            $this->operationCollectionFactory
+            $this->operationCollectionFactory,
+            $this->resourceConnectionMock
         );
     }
 
@@ -137,6 +150,7 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetBulksByUser()
     {
         $userId = 1;
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $bulkCollection = $this->getMock(
             \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection::class,
             [],
@@ -144,6 +158,9 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $bulkCollection->expects($this->once())->method('getSelect')->willReturn($selectMock);
+        $selectMock->expects($this->once())->method('columns')->willReturnSelf();
+        $selectMock->expects($this->once())->method('order')->willReturnSelf();
         $this->bulkCollectionFactory->expects($this->once())->method('create')->willReturn($bulkCollection);
         $bulkCollection->expects($this->once())->method('addFieldToFilter')->with('user_id', $userId)->willReturnSelf();
         $bulkCollection->expects($this->once())->method('getItems')->willReturn([$this->bulkMock]);
