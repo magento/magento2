@@ -61,7 +61,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->once())->method('from')->with('table', ['description'])->willReturnSelf();
         $selectMock->expects($this->once())->method('where')->with('user_id = ?', $userId)->willReturnSelf();
 
-        $itemMock = $this->getMock(\Magento\AsynchronousOperations\Model\BulkSummary::class, ['getDescription'], [], '', false);
+        $itemMock = $this->getMock(
+            \Magento\AsynchronousOperations\Model\BulkSummary::class,
+            ['getDescription'],
+            [],
+            '',
+            false
+        );
         $itemMock->expects($this->exactly(2))->method('getDescription')->willReturn('description');
 
         $collectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
