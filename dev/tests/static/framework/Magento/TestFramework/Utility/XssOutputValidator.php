@@ -365,10 +365,10 @@ class XssOutputValidator
      * Add replacements for expressions in single and double quotes
      *
      * @param string $phpBlock
-     * @param string[] $patterns
+     * @param array $patterns
      * @return void
      */
-    private function addQuoteOriginsReplacements($phpBlock, $patterns)
+    private function addQuoteOriginsReplacements($phpBlock, array $patterns)
     {
         foreach ($patterns as $pattern) {
             if (preg_match_all($pattern, $phpBlock, $quoteMatches, PREG_SET_ORDER)) {
