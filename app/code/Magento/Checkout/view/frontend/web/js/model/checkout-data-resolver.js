@@ -167,6 +167,8 @@ define(
                 if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
                     availableRate = true;
                     selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
+
+                    return;
                 }
 
                 //Unset selected shipping method if not available
