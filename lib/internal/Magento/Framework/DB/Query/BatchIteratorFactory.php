@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\DB\Query;
 
 /**
@@ -40,7 +44,7 @@ class BatchIteratorFactory
      * @param array $data
      * @return \Magento\Framework\DB\Query\BatchIterator
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->objectManager->create($this->instanceName, $data);
     }

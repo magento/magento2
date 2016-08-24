@@ -46,8 +46,8 @@ class Generator
         }
 
         $fieldCorrelationName = '';
-        foreach ($fromSelect as $correlationName => $formPart) {
-            if ($formPart['joinType'] == \Magento\Framework\DB\Select::FROM) {
+        foreach ($fromSelect as $correlationName => $fromPart) {
+            if ($fromPart['joinType'] == \Magento\Framework\DB\Select::FROM) {
                 $fieldCorrelationName = $correlationName;
                 break;
             }
@@ -60,9 +60,7 @@ class Generator
         $rangeFieldAlias = null;
         foreach ($columns as $column) {
             list($table, $columnName, $alias) = $column;
-            if (is_string($table) && is_string($columnName)
-                && $table == $fieldCorrelationName && $columnName == $rangeField
-            ) {
+            if (is_string($columnName) && $table == $fieldCorrelationName && $columnName == $rangeField) {
                 $rangeFieldAlias = $alias;
                 break;
             }
@@ -71,7 +69,7 @@ class Generator
         if (!$rangeFieldAlias) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase(
-                    'Select object must have correct range field name %field',
+                    'Select object must have correct range field name "%field"',
                     ['field' => $rangeField]
                 )
             );

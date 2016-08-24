@@ -65,6 +65,7 @@ class BatchIterator implements \Iterator
      * @param int $batchSize
      * @param string $correlationName
      * @param string $rangeField
+     * @param string $rangeFieldAlias
      */
     public function __construct(
         Select $select,
