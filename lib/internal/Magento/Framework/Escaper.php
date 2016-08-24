@@ -16,6 +16,11 @@ class Escaper
     private $escaper;
 
     /**
+     * @var string[]
+     */
+    private $allowedAttributes = ['id', 'class', 'href', 'target'];
+
+    /**
      * Escape HTML entities
      *
      * @param string|array $data
@@ -50,10 +55,8 @@ class Escaper
      */
     private function escapeHtmlTagsAndAttributes($string, $allowedTags)
     {
-        $allowedAttributes = ['id', 'class', 'href'];
-
         $allowedTags = implode('|', $allowedTags);
-        $allowedAttributes = implode('|', $allowedAttributes);
+        $allowedAttributes = implode('|', $this->allowedAttributes);
 
         $attributeReplacements = [];
 
