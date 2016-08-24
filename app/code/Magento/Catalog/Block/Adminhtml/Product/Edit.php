@@ -251,19 +251,6 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * @return string
      */
-    public function getHeader()
-    {
-        if ($this->getProduct()->getId()) {
-            $header = $this->escapeHtml($this->getProduct()->getName());
-        } else {
-            $header = __('New Product');
-        }
-        return $header;
-    }
-
-    /**
-     * @return string
-     */
     public function getAttributeSetName()
     {
         if ($setId = $this->getProduct()->getAttributeSetId()) {
