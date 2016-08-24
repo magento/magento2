@@ -92,7 +92,7 @@
 <?php else: ?>
     <div class="message info notlogged" id="review-form">
         <div>
-            <?php echo $block->escapeHtml(__('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl(), ['a'])) ?>
+            <?php echo $block->escapeHtml(__('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()), ['a']) ?>
         </div>
     </div>
 <?php endif ?>
