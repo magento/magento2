@@ -309,7 +309,18 @@ class XssOutputValidator
                     $phpBlock
                 );
 
-                $this->addQuoteOriginsReplacements($phpBlockQuoteReplaced);
+                $this->addQuoteOriginsReplacements(
+                    $phpBlockQuoteReplaced,
+                    [
+                        '/([^\\\\])([\'])(.*?)([^\\\\])([\'])/sim'
+                    ]
+                );
+                $this->addQuoteOriginsReplacements(
+                    $phpBlockQuoteReplaced,
+                    [
+                        '/([^\\\\])(["])(.*?)([^\\\\])(["])/sim',
+                    ]
+                );
 
                 $origins[] = $phpBlock;
                 $replacements[]  = str_replace(
@@ -354,15 +365,11 @@ class XssOutputValidator
      * Add replacements for expressions in single and double quotes
      *
      * @param string $phpBlock
+     * @param string[] $patterns
      * @return void
      */
-    private function addQuoteOriginsReplacements($phpBlock)
+    private function addQuoteOriginsReplacements($phpBlock, $patterns)
     {
-        $patterns = [
-            '/([^\\\\])(["])(.*?)([^\\\\])(["])/sim',
-            '/([^\\\\])([\'])(.*?)([^\\\\])([\'])/sim'
-        ];
-
         foreach ($patterns as $pattern) {
             if (preg_match_all($pattern, $phpBlock, $quoteMatches, PREG_SET_ORDER)) {
                 foreach ($quoteMatches as $quoteMatch) {
