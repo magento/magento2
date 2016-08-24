@@ -1713,6 +1713,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $attributes
             );
 
+            $this->_initSkus();
+
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
                 ['adapter' => $this, 'bunch' => $bunch]
