@@ -58,7 +58,7 @@ class Escaper
         $attributeReplacements = [];
 
         $string = preg_replace_callback(
-            '/(' . $allowedAttributes . ')="(.*?)"/si',
+            '/(' . $allowedAttributes . ')=[\'"](.*?)[\'"]/si',
             function ($matches) use (&$attributeReplacements) {
                 $result = $matches[1] . '=-=quote=--=attribute-value-' . count($attributeReplacements) . '=--=quote=-';
                 $attributeReplacements[] = [

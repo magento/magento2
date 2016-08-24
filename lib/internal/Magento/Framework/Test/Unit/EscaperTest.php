@@ -69,14 +69,24 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
                 'allowedTags' => ['span', 'b'],
             ],
             'string data with allowed tags with attributes 2' => [
+                'data' => 'Only <span id=\'sku_max_allowed\'><b>2</b></span> in stock',
+                'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'string data with allowed tags with attributes 3' => [
                 'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
                 'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
                 'allowedTags' => ['a'],
             ],
             'string data with allowed tags with attributes and not allowed tags' => [
-                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<two>three</two></a> or <a href="%2"><span id="action">create an account</span></a>',
-                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in&lt;two&gt;three&lt;/two&gt;</a> or <a href="%2">&lt;span id=&quot;action&quot;&gt;create an account&lt;/span&gt;</a>',
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<span>three</span></a> or <a href="%2"><span id="action">create an account</span></a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in&lt;span&gt;three&lt;/span&gt;</a> or <a href="%2">&lt;span id="action"&gt;create an account&lt;/span&gt;</a>',
                 'allowedTags' => ['a'],
+            ],
+            'string data with allowed tags with attributes and not allowed tags 2' => [
+                'data' => 'Some test <span>text in span tag</span> <strong>text in strong tag</strong> <a class="some-class" href="http://domain.com/" onclick="alert(1)">Click here</a><script>alert(1)</script>',
+                'expected' => 'Some test <span>text in span tag</span> &lt;strong&gt;text in strong tag&lt;/strong&gt; <a class="some-class" href="http://domain.com/" onclick=&quot;alert(1)&quot;>Click here</a>&lt;script&gt;alert(1)&lt;/script&gt;',
+                'allowedTags' => ['a', 'span'],
             ],
         ];
     }
