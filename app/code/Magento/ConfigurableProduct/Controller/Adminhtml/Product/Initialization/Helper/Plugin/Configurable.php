@@ -127,11 +127,9 @@ class Configurable
      */
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
-        $associatedProductIds = $this->request->getPost('associated_product_ids_serialized', '[]');
-        if (!empty($associatedProductIds)) {
-            $associatedProductIds = json_decode($associatedProductIds, true);
-        }
-        $variationsMatrix = $this->getVariationMatrix();
+        $associatedProductIds = $product->hasData('associated_product_ids') ?
+            $product->getData('associated_product_ids') : [];
+        $variationsMatrix = $this->getVariationMatrix($product);
 
         if ($associatedProductIds || $variationsMatrix) {
             $this->variationHandler->prepareAttributeSet($product);
@@ -147,16 +145,14 @@ class Configurable
     /**
      * Get variation-matrix from request
      *
+     * @param ProductInterface $product
      * @return array
      */
-    protected function getVariationMatrix()
+    protected function getVariationMatrix(ProductInterface $product)
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if (!empty($configurableMatrix)) {
-            $configurableMatrix = json_decode($configurableMatrix, true);
-        }
 
+        $configurableMatrix = $product->hasData('configurable-matrix') ? $product->getData('configurable-matrix') : [];
         foreach ($configurableMatrix as $item) {
             if ($item['newProduct']) {
                 $result[$item['variationKey']] = $this->mapData($item);

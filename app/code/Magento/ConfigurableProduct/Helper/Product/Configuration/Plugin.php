@@ -37,7 +37,9 @@ class Plugin
      *
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param \Magento\Catalog\Model\Product $product
-     * @oaram array $productData
+     * @param array $productData
+     *
+     * @return array
      */
     public function beforeInitializeFromData(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
@@ -58,5 +60,7 @@ class Plugin
                 unset($productData["associated_product_ids_serialized"]);
             }
         }
+
+        return [$product, $productData];
     }
 }

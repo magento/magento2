@@ -63,7 +63,7 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        $configurations = $this->getConfigurations();
+        $configurations = $this->getConfigurations($configurableProduct);
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -80,15 +80,15 @@ class UpdateConfigurations
     /**
      * Get configurations from request
      *
+     * @param \Magento\Catalog\Model\Product $configurableProduct
      * @return array
      */
-    protected function getConfigurations()
+    protected function getConfigurations($configurableProduct)
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if (!empty($configurableMatrix)) {
-            $configurableMatrix = json_decode($configurableMatrix, true);
-        }
+
+        $configurableMatrix = $configurableProduct->hasData('configurable-matrix') ?
+            $configurableProduct->getData('configurable-matrix') : [];
         foreach ($configurableMatrix as $item) {
             if (!$item['newProduct']) {
                 $result[$item['id']] = $this->mapData($item);

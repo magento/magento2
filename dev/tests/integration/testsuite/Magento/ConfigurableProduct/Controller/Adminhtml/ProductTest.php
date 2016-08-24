@@ -24,7 +24,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue(
             [
                 'attributes' => [$this->_getConfigurableAttribute()->getId()],
-                'associated_product_ids_serialized' => $associatedProductIdsJSON,
+                'product' => ['associated_product_ids_serialized' => $associatedProductIdsJSON]
             ]
         );
 
