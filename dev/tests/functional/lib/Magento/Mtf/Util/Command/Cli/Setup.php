@@ -9,24 +9,24 @@ namespace Magento\Mtf\Util\Command\Cli;
 use Magento\Mtf\Util\Command\Cli;
 
 /**
- * Setup magento for tests executions.
+ * Setup Magento for tests executions.
  */
 class Setup extends Cli
 {
     /**
-     * Parameter for uninstall magento command.
+     * Parameter for uninstall Magento command.
      */
     const PARAM_SETUP_UNINSTALL = 'setup:uninstall';
 
     /**
-     * Options for uninstall magento command.
+     * Options for uninstall Magento command.
      *
      * @var array
      */
     private $options = ['-n'];
 
     /**
-     * Uninstall magento.
+     * Uninstall Magento.
      *
      * @return void
      */

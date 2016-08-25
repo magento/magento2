@@ -136,7 +136,7 @@ class InstallTest extends Injectable
         // Steps
         $this->installPage->open();
         // Verify Developer Documentation link.
-        $this->installPage->getLandingBlock()->clickDevdocsLink(self::DEVDOCS_LINK_TEXT);
+        $this->installPage->getLandingBlock()->clickLink(self::DEVDOCS_LINK_TEXT);
         $browser->selectWindow();
         $assertDevdocsLink->processAssert($this->devdocsInstallPage);
         $browser->closeWindow();
