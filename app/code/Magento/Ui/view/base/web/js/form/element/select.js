@@ -44,9 +44,9 @@ define([
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
-            } else {
-                return node;
             }
+
+            return node;
         });
 
         return {
@@ -194,7 +194,7 @@ define([
         },
 
         /**
-         * Matches specfied value with existing options
+         * Matches specified value with existing options
          * or, if value is not specified, returns value of the first option.
          *
          * @returns {*}
@@ -286,6 +286,11 @@ define([
             return preview;
         },
 
+        /**
+         *
+         * @param {Number} value
+         * @returns {Object} Chainable
+         */
         getOption: function (value) {
             return this.indexedOptions[value];
         },
@@ -301,6 +306,19 @@ define([
             this.value(value);
 
             return this;
+        },
+
+        /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialValue: function () {
+            if (_.isUndefined(this.value()) && !this.default) {
+                this.clear();
+            }
+
+            return this._super();
         }
     });
 });

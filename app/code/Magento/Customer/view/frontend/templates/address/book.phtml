@@ -6,12 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
-/**
- * Temlate for \Magento\Customer\Block\Address\Book block
- * @var $block \Magento\Customer\Block\Address\Book
- */
+/** @var \Magento\Customer\Block\Address\Book $block */
 ?>
 <div class="block block-addresses-default">
     <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Default Addresses') ?></strong></div>
@@ -27,7 +22,7 @@
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getAddressEditUrl($_pAddsses) ?>">
+                    <a class="action edit" href="<?php echo $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
                         <span><?php /* @escapeNotVerified */ echo __('Change Billing Address') ?></span>
                     </a>
                 </div>
@@ -52,7 +47,7 @@
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getAddressEditUrl($_pAddsses) ?>">
+                    <a class="action edit" href="<?php echo $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
                         <span><?php /* @escapeNotVerified */ echo __('Change Shipping Address') ?></span>
                     </a>
                 </div>
@@ -79,8 +74,8 @@
                             <?php echo $block->getAddressHtml($_address) ?><br />
                         </address>
                         <div class="item actions">
-                            <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getUrl('customer/address/edit', ['id' => $_address->getId()]) ?>"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
-                            <a class="action delete" href="#" role="delete-address" data-address="<?php /* @escapeNotVerified */ echo $_address->getId() ?>"><span><?php /* @escapeNotVerified */ echo __('Delete Address') ?></span></a>
+                            <a class="action edit" href="<?php echo $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $_address->getId()])) ?>"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
+                            <a class="action delete" href="#" role="delete-address" data-address="<?php echo $block->escapeHtmlAttr($_address->getId()) ?>"><span><?php /* @escapeNotVerified */ echo __('Delete Address') ?></span></a>
                         </div>
                     </li>
                 <?php endforeach; ?>
@@ -104,9 +99,9 @@
         ".page-main": {
             "address": {
                 "deleteAddress": "li.item a[role='delete-address']",
-                "deleteUrlPrefix": "<?php /* @escapeNotVerified */ echo $block->getDeleteUrl() ?>id/",
+                "deleteUrlPrefix": "<?php echo $block->escapeUrl($block->getDeleteUrl()) ?>id/",
                 "addAddress": "button[role='add-address']",
-                "addAddressLocation": "<?php /* @escapeNotVerified */ echo $block->getAddAddressUrl() ?>"
+                "addAddressLocation": "<?php echo $block->escapeUrl($block->getAddAddressUrl()) ?>"
             }
         }
     }
