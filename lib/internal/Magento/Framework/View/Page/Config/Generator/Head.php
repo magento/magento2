@@ -149,7 +149,7 @@ class Head implements Layout\GeneratorInterface
     protected function processTitle(Structure $pageStructure)
     {
         if ($pageStructure->getTitle()) {
-            $this->pageConfig->getTitle()->set($pageStructure->getTitle());
+            $this->pageConfig->getTitle()->set(__($pageStructure->getTitle()));
         }
         return $this;
     }
