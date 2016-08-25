@@ -77,7 +77,8 @@ class StaticProperties
     {
         // do not process blacklisted classes from integration framework
         foreach (self::$_classesToSkip as $notCleanableClass) {
-            if ($reflectionClass->getName() == $notCleanableClass || is_subclass_of(
+            if ($reflectionClass->getName() == $notCleanableClass ||
+                is_subclass_of(
                     $reflectionClass->getName(),
                     $notCleanableClass
                 )
