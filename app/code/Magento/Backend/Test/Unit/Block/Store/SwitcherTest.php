@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\Unit\Block\Cache;
+namespace Magento\Backend\Test\Unit\Block\Store;
 
 class SwitcherTest extends \PHPUnit_Framework_TestCase
 {
