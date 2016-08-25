@@ -160,7 +160,7 @@ class XssOutputValidator
     private function prepareEchoCommand($command)
     {
         $command = preg_replace('/<[?]=(.*?)[?]>/sim', '\1', $command);
-        return ltrim(explode(';', $command)[0], 'echo');
+        return trim(ltrim(explode(';', $command)[0], 'echo'));
     }
 
     /**
