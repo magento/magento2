@@ -13,6 +13,9 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="website_ids" type="int[]"/>
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="custom_options" type="Magento\Catalog\Api\Data\CustomOptionInterface[]" />
+    </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\CustomOptionInterface">
         <attribute code="file_info" type="Magento\Framework\Api\Data\ImageContentInterface"/>
     </extension_attributes>
