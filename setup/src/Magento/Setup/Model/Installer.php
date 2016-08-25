@@ -777,6 +777,7 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
+        $this->cleanDdlCache();
     }
 
     /**
@@ -1070,8 +1071,6 @@ class Installer
      * Clean caches after installing application
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function cleanCaches()
     {
@@ -1080,6 +1079,19 @@ class Installer
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
         $this->log->log('Cache cleared successfully');
+    }
+
+    /**
+     * Clean DDL cache
+     *
+     * @return void
+     */
+    private function cleanDdlCache()
+    {
+        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get(\Magento\Framework\App\Cache\Manager::class);
+        $cacheManager->clean([\Magento\Framework\DB\Adapter\DdlCache::TYPE_IDENTIFIER]);
+        $this->log->log('DDL cache cleared successfully');
     }
 
     /**
