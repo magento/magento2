@@ -13,6 +13,11 @@ use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\Framework\AuthorizationInterface;
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
 
+/**
+ * Class PluginTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
