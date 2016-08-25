@@ -129,7 +129,7 @@ class Configurable
     {
         $associatedProductIds = $product->hasData('associated_product_ids') ?
             $product->getData('associated_product_ids') : [];
-        $variationsMatrix = $this->getVariationMatrix($product);
+        $variationsMatrix = $this->getVariationMatrixFromProduct($product);
 
         if ($associatedProductIds || $variationsMatrix) {
             $this->variationHandler->prepareAttributeSet($product);
@@ -148,11 +148,35 @@ class Configurable
      * @param ProductInterface $product
      * @return array
      */
-    protected function getVariationMatrix(ProductInterface $product)
+    private function getVariationMatrixFromProduct(ProductInterface $product)
     {
         $result = [];
 
         $configurableMatrix = $product->hasData('configurable-matrix') ? $product->getData('configurable-matrix') : [];
+        foreach ($configurableMatrix as $item) {
+            if ($item['newProduct']) {
+                $result[$item['variationKey']] = $this->mapData($item);
+
+                if (isset($item['qty'])) {
+                    $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get variation-matrix from request
+     *
+     * @return array
+     * @deprecated
+     */
+    protected function getVariationMatrix()
+    {
+        $result = [];
+        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+
         foreach ($configurableMatrix as $item) {
             if ($item['newProduct']) {
                 $result[$item['variationKey']] = $this->mapData($item);
