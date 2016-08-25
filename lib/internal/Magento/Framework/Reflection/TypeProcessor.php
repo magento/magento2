@@ -309,7 +309,7 @@ class TypeProcessor
         }
         /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
         $returnAnnotation = current($returnAnnotations);
-        $returnType = $returnAnnotation->getType();
+        // $returnType = $returnAnnotation->getType();
         /*
          * Adding this code as a workaround since \Zend\Code\Reflection\DocBlock\Tag\ReturnTag::initialize does not
          * detect and return correct type for array of objects in annotation.
