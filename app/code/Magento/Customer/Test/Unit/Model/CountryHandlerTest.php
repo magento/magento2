@@ -15,7 +15,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class CountryHandlerInterfaceTest extends \PHPUnit_Framework_TestCase
+class CountryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
