@@ -45,7 +45,7 @@ $captcha = $block->getCaptchaModel();
     require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?php echo $block->escapeUrl($block->getRefreshUrl()) ?>', '<?php echo $block->escapeJs($block->getFormId()) ?>');
+        var captcha = new Captcha('<?php echo $block->escapeJs($block->escapeUrl($block->getRefreshUrl())) ?>', '<?php echo $block->escapeJs($block->escapeHtml($block->getFormId())) ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);
