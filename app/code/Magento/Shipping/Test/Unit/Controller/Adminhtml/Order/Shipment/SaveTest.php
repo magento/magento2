@@ -11,6 +11,9 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
+
 /**
  * Class SaveTest
  *
@@ -87,6 +90,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save
      */
     protected $saveAction;
+
+    /**
+     * @var ShipmentValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shipmentValidatorMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -210,6 +218,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getFormKeyValidator')
             ->will($this->returnValue($this->formKeyValidator));
 
+        $this->shipmentValidatorMock = $this->getMockBuilder(ShipmentValidatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->saveAction = $objectManagerHelper->getObject(
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save::class,
             [
@@ -218,7 +230,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoader,
                 'request' => $this->request,
-                'response' => $this->response
+                'response' => $this->response,
+                'shipmentValidator' => $this->shipmentValidatorMock
             ]
         );
     }
@@ -345,6 +358,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ->method('getOrderId')
                 ->will($this->returnValue($orderId));
             $this->prepareRedirect($path, $arguments);
+
+            $this->shipmentValidatorMock->expects($this->once())
+                ->method('validate')
+                ->with($shipment, [QuantityValidator::class])
+                ->willReturn([]);
 
             $this->saveAction->execute();
             $this->assertEquals($this->response, $this->saveAction->getResponse());
