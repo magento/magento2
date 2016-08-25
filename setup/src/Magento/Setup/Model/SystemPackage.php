@@ -31,6 +31,10 @@ class SystemPackage
      */
     private $composerInfo;
 
+    const EDITION_COMMUNITY = 'magento/product-community-edition';
+    const EDITION_ENTERPRISE = 'magento/product-enterprise-edition';
+    const EDITION_B2B = 'magento/product-b2b-edition';
+
     /**
      * Constructor
      *
@@ -58,8 +62,7 @@ class SystemPackage
         $currentEE = $currentCE;
 
         $result = [];
-        $systemPackages = [];
-        $systemPackages = $this->getInstalledSystemPackages($systemPackages);
+        $systemPackages = $this->getInstalledSystemPackages();
         foreach ($systemPackages as $systemPackage) {
             $systemPackageInfo = $this->infoCommand->run($systemPackage);
             if (!$systemPackageInfo) {
@@ -68,11 +71,11 @@ class SystemPackage
 
             $versions = $this->getSystemPackageVersions($systemPackageInfo);
 
-            if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
+            if ($systemPackageInfo['name'] == static::EDITION_COMMUNITY) {
                 $currentCE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
             }
 
-            if ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
+            if ($systemPackageInfo['name'] == static::EDITION_ENTERPRISE) {
                 $currentEE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
             }
 
@@ -86,13 +89,13 @@ class SystemPackage
             ];
         }
 
-        if (!in_array('magento/product-enterprise-edition', $systemPackages)) {
+        if (!in_array(static::EDITION_ENTERPRISE, $systemPackages)) {
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
 
         if (
-            in_array('magento/product-enterprise-edition', $systemPackages)
-            && !in_array('magento/product-b2b-edition', $systemPackages)
+            in_array(static::EDITION_ENTERPRISE, $systemPackages)
+            && !in_array(static::EDITION_B2B, $systemPackages)
         ) {
             $result = array_merge($this->getAllowedB2BVersions($currentEE), $result);
         }
@@ -111,20 +114,20 @@ class SystemPackage
     public function getAllowedEnterpriseVersions($currentCE)
     {
         $result = [];
-        $enterpriseVersions = $this->infoCommand->run('magento/product-enterprise-edition');
+        $enterpriseVersions = $this->infoCommand->run(static::EDITION_ENTERPRISE);
         $eeVersions = [];
         $maxVersion = '';
-        if (is_array($enterpriseVersions) && array_key_exists('available_versions', $enterpriseVersions)) {
+        if (is_array($enterpriseVersions) && array_key_exists(InfoCommand::AVAILABLE_VERSIONS, $enterpriseVersions)) {
             $enterpriseVersions = $this->sortVersions($enterpriseVersions);
-            if (isset($enterpriseVersions['available_versions'][0])) {
-                $maxVersion = $enterpriseVersions['available_versions'][0];
+            if (isset($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS][0])) {
+                $maxVersion = $enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS][0];
             }
             $eeVersions = $this->filterEeVersions($currentCE, $enterpriseVersions, $maxVersion);
         }
 
         if (!empty($eeVersions)) {
             $result[] = [
-                'package' => 'magento/product-enterprise-edition',
+                'package' => static::EDITION_ENTERPRISE,
                 'versions' => $eeVersions,
             ];
         }
@@ -140,7 +143,7 @@ class SystemPackage
     public function getAllowedB2BVersions($currentEE)
     {
         $result = [];
-        $versions = $this->fetchInfoVersions('magento/product-b2b-edition');
+        $versions = $this->fetchInfoVersions(static::EDITION_B2B);
         $versionsPrepared = [];
         $maxVersion = '';
 
@@ -154,7 +157,7 @@ class SystemPackage
 
         if ($versionsPrepared) {
             $result[] = [
-                'package' => 'magento/product-b2b-edition',
+                'package' => static::EDITION_B2B,
                 'versions' => $versionsPrepared,
             ];
         }
@@ -163,8 +166,7 @@ class SystemPackage
     }
 
     /**
-     * Fetching info command response to
-     * display all correct versions
+     * Fetching of info command response to display all correct versions
      *
      * @param string $command
      * @return array
@@ -175,6 +177,9 @@ class SystemPackage
 
         $versions[InfoCommand::CURRENT_VERSION] = isset($versions[InfoCommand::CURRENT_VERSION])
             ? $versions[InfoCommand::CURRENT_VERSION]
+            : null;
+        $versions[InfoCommand::AVAILABLE_VERSIONS] = isset($versions[InfoCommand::AVAILABLE_VERSIONS])
+            ? $versions[InfoCommand::AVAILABLE_VERSIONS]
             : null;
         $versions[InfoCommand::AVAILABLE_VERSIONS] = array_unique(
             array_merge(
@@ -197,11 +202,11 @@ class SystemPackage
         $editionType = '';
         $versions = [];
 
-        if ($systemPackageInfo['name'] == 'magento/product-community-edition') {
+        if ($systemPackageInfo['name'] == static::EDITION_COMMUNITY) {
             $editionType .= 'CE';
-        } elseif ($systemPackageInfo['name'] == 'magento/product-enterprise-edition') {
+        } elseif ($systemPackageInfo['name'] == static::EDITION_ENTERPRISE) {
             $editionType .= 'EE';
-        } elseif ($systemPackageInfo['name'] == 'magento/product-b2b-edition') {
+        } elseif ($systemPackageInfo['name'] == static::EDITION_B2B) {
             $editionType .= 'B2B';
         }
 
@@ -220,20 +225,18 @@ class SystemPackage
     }
 
     /**
-     * @param array $systemPackages
      * @return array
      * @throws \RuntimeException
      */
-    public function getInstalledSystemPackages($systemPackages)
+    public function getInstalledSystemPackages()
     {
-        $systemPackages = [];
         $locker = $this->magentoComposerApplication->createComposer()->getLocker();
 
         /** @var \Composer\Package\CompletePackage $package */
         foreach ($locker->getLockedRepository()->getPackages() as $package) {
             $packageName = $package->getName();
             if ($this->composerInfo->isSystemPackage($packageName)) {
-                if ($packageName == 'magento/product-community-edition') {
+                if ($packageName == static::EDITION_COMMUNITY) {
                     if ($this->composerInfo->isPackageInComposerJson($packageName)) {
                         $systemPackages[] = $packageName;
                     }
@@ -259,7 +262,7 @@ class SystemPackage
      */
     public function sortVersions($enterpriseVersions)
     {
-        usort($enterpriseVersions['available_versions'], function ($versionOne, $versionTwo) {
+        usort($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS], function ($versionOne, $versionTwo) {
             if (version_compare($versionOne, $versionTwo, '==')) {
                 return 0;
             }
@@ -296,7 +299,7 @@ class SystemPackage
 
         usort($versions, function ($versionOne, $versionTwo) {
             if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
-                if ($versionOne['package'] === 'magento/product-community-edition') {
+                if ($versionOne['package'] === static::EDITION_COMMUNITY) {
                     return 1;
                 }
                 return 0;
@@ -316,11 +319,11 @@ class SystemPackage
     public function filterEeVersions($currentCE, $enterpriseVersions, $maxVersion)
     {
         $eeVersions = [];
-        foreach ($enterpriseVersions['available_versions'] as $version) {
-            $requires = $this->composerInfo->getPackageRequirements('magento/product-enterprise-edition', $version);
-            if (array_key_exists('magento/product-community-edition', $requires)) {
+        foreach ($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS] as $version) {
+            $requires = $this->composerInfo->getPackageRequirements(static::EDITION_ENTERPRISE, $version);
+            if (array_key_exists(static::EDITION_COMMUNITY, $requires)) {
                 /** @var \Composer\Package\Link $ceRequire */
-                $ceRequire = $requires['magento/product-community-edition'];
+                $ceRequire = $requires[static::EDITION_COMMUNITY];
                 if (version_compare(
                     $ceRequire->getConstraint()->getPrettyString(),
                     $currentCE,
@@ -348,11 +351,11 @@ class SystemPackage
     public function filterB2bVersions($currentEE, $b2bVersions, $maxVersion)
     {
         $b2bVersionsPrepared = [];
-        foreach ($b2bVersions['available_versions'] as $version) {
-            $requires = $this->composerInfo->getPackageRequirements('magento/product-b2b-edition', $version);
-            if (array_key_exists('magento/product-enterprise-edition', $requires)) {
+        foreach ($b2bVersions[InfoCommand::AVAILABLE_VERSIONS] as $version) {
+            $requires = $this->composerInfo->getPackageRequirements(static::EDITION_B2B, $version);
+            if (array_key_exists(static::EDITION_ENTERPRISE, $requires)) {
                 /** @var \Composer\Package\Link $eeRequire */
-                $eeRequire = $requires['magento/product-enterprise-edition'];
+                $eeRequire = $requires[static::EDITION_ENTERPRISE];
                 if (version_compare(
                     $eeRequire->getConstraint()->getPrettyString(),
                     $currentEE,
