@@ -22,7 +22,7 @@ use Magento\Sales\Model\EntityInterface;
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
-    /**
+    /**#@+
      * Invoice states
      */
     const STATE_OPEN = 1;
@@ -30,6 +30,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     const STATE_PAID = 2;
 
     const STATE_CANCELED = 3;
+    /**#@-*/
 
     const CAPTURE_ONLINE = 'online';
 
