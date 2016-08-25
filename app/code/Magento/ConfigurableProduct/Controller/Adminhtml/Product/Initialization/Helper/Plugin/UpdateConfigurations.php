@@ -63,7 +63,7 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        $configurations = $this->getConfigurationsFromRequest($configurableProduct);
+        $configurations = $this->getConfigurationsFromProduct($configurableProduct);
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -78,12 +78,12 @@ class UpdateConfigurations
     }
 
     /**
-     * Get configurations from request
+     * Get configurations from product
      *
      * @param \Magento\Catalog\Model\Product $configurableProduct
      * @return array
      */
-    private function getConfigurationsFromRequest($configurableProduct)
+    private function getConfigurationsFromProduct(\Magento\Catalog\Model\Product $configurableProduct)
     {
         $result = [];
 

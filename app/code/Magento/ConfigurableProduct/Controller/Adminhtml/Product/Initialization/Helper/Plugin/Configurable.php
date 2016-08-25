@@ -143,7 +143,7 @@ class Configurable
     }
 
     /**
-     * Get variation-matrix from request
+     * Get variation-matrix from product
      *
      * @param ProductInterface $product
      * @return array
