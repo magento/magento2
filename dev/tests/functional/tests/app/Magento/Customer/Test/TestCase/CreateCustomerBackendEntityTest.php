@@ -48,7 +48,6 @@ class CreateCustomerBackendEntityTest extends Injectable
      */
     private $address;
 
-
     /** @var array  */
     private $allowedCountriesData = [];
 
@@ -100,7 +99,7 @@ class CreateCustomerBackendEntityTest extends Injectable
         Address $address = null,
         array $steps = [],
         array $beforeActionCallback = []
-        ) {
+    ) {
         ///Process initialize steps
         foreach ($steps as $methodName => $stepData) {
             if (method_exists($this, $methodName)) {
@@ -127,7 +126,7 @@ class CreateCustomerBackendEntityTest extends Injectable
      * Assert that allowed countries renders in correct way.
      * @return void
      */
-    private function assertAllowedCountries()
+    protected function assertAllowedCountries()
     {
         /** @var \Magento\Customer\Test\Constraint\AssertChangingWebsiteChangeCountries $assert */
         $assert = $this->objectManager->get(
@@ -146,7 +145,6 @@ class CreateCustomerBackendEntityTest extends Injectable
             $assert->processAssert(
                 $this->pageCustomerIndexNew,
                 $customerWithWebsite,
-                $this->address,
                 $dataPerWebsite['countries']
             );
         }
@@ -200,11 +198,10 @@ class CreateCustomerBackendEntityTest extends Injectable
         return $websiteFixture;
     }
 
-
     /**
      * @param array $countryList
      */
-    private function configureAllowedCountries(array $countryList = [])
+    protected function configureAllowedCountries(array $countryList = [])
     {
         foreach ($countryList as $countries) {
             $websiteFixture = $this->createWebsiteFixture();

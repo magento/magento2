@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Test\Unit\Model;
+namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CountryHandler;
@@ -141,7 +141,9 @@ class CountryHandlerInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('addFieldToFilter')
             ->with('country_id', ['in' => ['AM' => 'AM']]);
 
-        $this->assertEquals($collectionMock,
-            $this->countryHandler->loadByScope($collectionMock, 1, ScopeInterface::SCOPE_WEBSITE));
+        $this->assertEquals(
+            $collectionMock,
+            $this->countryHandler->loadByScope($collectionMock, 1, ScopeInterface::SCOPE_WEBSITE)
+        );
     }
 }

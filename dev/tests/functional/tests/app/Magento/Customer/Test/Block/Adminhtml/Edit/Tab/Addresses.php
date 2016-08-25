@@ -20,6 +20,7 @@ use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Customer addresses edit block.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Addresses extends Tab
 {

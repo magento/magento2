@@ -23,7 +23,7 @@ define([
         initialize: function () {
             this._super();
             
-            if (this.customerId || this.isGlobalScope) { //disable element if customer exists
+            if (this.customerId || this.isGlobalScope) {//disable element if customer exists
                 this.disable(true);
             }
 

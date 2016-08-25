@@ -33,7 +33,7 @@ define([
 
             this._super(value, field);
 
-             result = _.filter(this.initialOptions, function (item) {
+                result = _.filter(this.initialOptions, function (item) {
                  
                 if (item[field]) {
                     return ~item[field].indexOf(value);

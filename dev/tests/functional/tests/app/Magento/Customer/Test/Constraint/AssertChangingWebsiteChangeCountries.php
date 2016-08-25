@@ -22,8 +22,11 @@ class AssertChangingWebsiteChangeCountries extends AbstractConstraint
      * @param array $expectedRequiredFields
      * @return void
      */
-    public function processAssert(CustomerIndexNew $customerIndexNew, Customer $customer, \Magento\Customer\Test\Fixture\Address $address, $expectedList)
-    {
+    public function processAssert(
+        CustomerIndexNew $customerIndexNew,
+        Customer $customer,
+        $expectedList
+    ) {
         $customerIndexNew->getCustomerForm()
             ->openTab('account_information');
         $customerIndexNew->getCustomerForm()->fillCustomer($customer);

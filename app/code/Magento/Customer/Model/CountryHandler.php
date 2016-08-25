@@ -65,7 +65,7 @@ class CountryHandler implements CountryHandlerInterface
 
         if ($this->customerConfigShare->isGlobalScope() && !$ignoreGlobalScope) {
             //Check if we have shared accounts - than merge all website allowed countries
-            $filter = array_map(function(WebsiteInterface $website) {
+            $filter = array_map(function (WebsiteInterface $website) {
                 return $website->getId();
             }, $this->storeManager->getWebsites());
             $scope = ScopeInterface::SCOPE_WEBSITES;

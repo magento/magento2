@@ -55,8 +55,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory,
         \Magento\Directory\Model\CountryHandlerInterface $countryHandler,
         \Magento\Store\Model\StoreManagerInterface $storeManager
-    )
-    {
+    ) {
         $this->countriesFactory = $countriesFactory;
         $this->countryHandler = $countryHandler;
         $this->storeManager = $storeManager;

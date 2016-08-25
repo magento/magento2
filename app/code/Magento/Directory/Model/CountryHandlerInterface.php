@@ -19,7 +19,7 @@ interface CountryHandlerInterface
 
     /**
      * Retrieve allowed countries list by filter and scope.
-     * @param null $filter
+     * @param int | null $filter
      * @param string $scope
      * @param bool $ignoreGlobalScope
      * @return array
@@ -33,7 +33,7 @@ interface CountryHandlerInterface
     /**
      * Filter directory collection by allowed in website countries.
      * @param \Magento\Framework\Data\Collection\AbstractDb $collection
-     * @param $filter
+     * @param int $filter
      * @param string $scope
      * @return AbstractDb
      */
