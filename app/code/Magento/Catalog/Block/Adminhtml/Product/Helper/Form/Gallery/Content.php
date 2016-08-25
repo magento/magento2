@@ -41,11 +41,6 @@ class Content extends \Magento\Backend\Block\Widget
     private $imageHelper;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
-     */
-    private $assetRepo;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -256,19 +251,5 @@ class Content extends \Magento\Backend\Block\Widget
                 ->get('Magento\Catalog\Helper\Image');
         }
         return $this->imageHelper;
-    }
-
-    /**
-     * @return \Magento\Framework\View\Asset\Repository
-     * @deprecated
-     */
-    private function getAssetRepo()
-    {
-        if ($this->assetRepo === null) {
-            $this->assetRepo = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\View\Asset\Repository');
-        }
-
-        return $this->assetRepo;
     }
 }
