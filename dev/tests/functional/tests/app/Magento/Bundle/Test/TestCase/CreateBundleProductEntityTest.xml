@@ -363,7 +363,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
-        <variation name="CreateBundleProductEntityTestVariation24" summary="Create Bundle (dynamic) Product with One of the bundle options has special price" ticketId="MAGETWO-31173">
+        <variation name="CreateBundleProductEntityTestVariation24" summary="Create Bundle (dynamic) Product with One of the bundle options has special price">
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">Yes</data>
