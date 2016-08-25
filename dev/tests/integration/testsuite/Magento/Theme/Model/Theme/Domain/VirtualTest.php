@@ -87,10 +87,4 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             )->getPhysicalTheme()->getId()
         );
     }
-
-    protected function tearDown()
-    {
-        unset($this->_physicalThemeId);
-        unset($this->_virtualThemeId);
-    }
 }
