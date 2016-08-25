@@ -121,9 +121,10 @@ class CountryHandlerInterfaceTest extends \PHPUnit_Framework_TestCase
             ->method('isGlobalScope')
             ->willReturn(true);
 
-
-        $this->assertEquals(['AM' => 'AM'],
-            $this->countryHandler->getAllowedCountries(1, ScopeInterface::SCOPE_WEBSITE, true));
+        $this->assertEquals(
+            ['AM' => 'AM'],
+            $this->countryHandler->getAllowedCountries(1, ScopeInterface::SCOPE_WEBSITE, true)
+        );
     }
 
     public function testLoadByScope()
@@ -141,6 +142,6 @@ class CountryHandlerInterfaceTest extends \PHPUnit_Framework_TestCase
             ->with('country_id', ['in' => ['AM' => 'AM']]);
 
         $this->assertEquals($collectionMock,
-            $this->countryHandler->loadByScope(1, ScopeInterface::SCOPE_WEBSITE, $collectionMock));
+            $this->countryHandler->loadByScope($collectionMock, 1, ScopeInterface::SCOPE_WEBSITE));
     }
 }

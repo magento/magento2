@@ -35,6 +35,12 @@ class CountryHandler implements CountryHandlerInterface
      */
     private $customerConfigShare;
 
+    /**
+     * CountryHandler constructor.
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Config\Share $configShare
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -46,10 +52,7 @@ class CountryHandler implements CountryHandlerInterface
     }
 
     /**
-     * Retrieve allowed countries list by filter and scope
-     * @param null | int | array $filter
-     * @param string $scope
-     * @return array
+     * @inheritdoc
      */
     public function getAllowedCountries(
         $filter = null,
@@ -96,13 +99,14 @@ class CountryHandler implements CountryHandlerInterface
     }
 
     /**
-     * @param $scope
-     * @param $filter
+     * @param string $scope
+     * @param int $filter
      * @return array
      */
     private function getCountriesFromConfig($scope, $filter)
     {
-        return explode(',',
+        return explode(
+            ',',
             (string) $this->scopeConfig->getValue(
                 self::ALLOWED_COUNTRIES_PATH,
                 $scope,
@@ -112,11 +116,9 @@ class CountryHandler implements CountryHandlerInterface
     }
 
     /**
-     * @param $filter
-     * @param string $scope
-     * @return AbstractDb
+     * @inheritdoc
      */
-    public function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE, AbstractDb $collection)
+    public function loadByScope(AbstractDb $collection, $filter, $scope = ScopeInterface::SCOPE_STORE)
     {
         $allowCountries = $this->getAllowedCountries($filter, $scope);
 
@@ -128,7 +130,7 @@ class CountryHandler implements CountryHandlerInterface
     }
 
     /**
-     * @param $scope
+     * @param string $scope
      * @return string
      */
     private function getSingleScope($scope)

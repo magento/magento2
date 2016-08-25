@@ -120,6 +120,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -237,6 +238,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Attribute $attribute
      * @param array $customerData
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getFileUploaderData(
         Type $entityType,
@@ -347,6 +349,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         return ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
     }
 
+    /**
+     * @param array $meta
+     * @return void
+     */
     private function processWebsiteMeta(&$meta)
     {
         if (isset($meta[CustomerInterface::WEBSITE_ID]) && $this->getShareConfig()->isGlobalScope()) {

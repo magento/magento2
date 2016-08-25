@@ -149,7 +149,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param array $countries
      * @param array $newCountries
-     * @param $identifier
+     * @param string $identifier
      * @return array
      */
     private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)

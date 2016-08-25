@@ -13,6 +13,7 @@ namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
+use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
@@ -41,15 +42,18 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     private $storeManager;
 
     /**
+     * CountryWithWebsites constructor.
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
+     * @param \Magento\Directory\Model\CountryHandlerInterface $countryHandler
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory,
-        \Magento\Customer\Model\CountryHandler $countryHandler,
+        \Magento\Directory\Model\CountryHandlerInterface $countryHandler,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {

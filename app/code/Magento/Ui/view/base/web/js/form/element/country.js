@@ -26,6 +26,7 @@ define([
          */
         filter: function (value, field) {
             var result;
+
             if (!field) { //validate field, if we are on update
                 field = this.filterBy.field;
             }
@@ -33,6 +34,7 @@ define([
             this._super(value, field);
 
              result = _.filter(this.initialOptions, function (item) {
+                 
                 if (item[field]) {
                     return ~item[field].indexOf(value);
                 }

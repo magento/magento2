@@ -18,7 +18,7 @@ interface CountryHandlerInterface
     const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
 
     /**
-     * Retrieve all allowed in current scope countries.
+     * Retrieve allowed countries list by filter and scope.
      * @param null $filter
      * @param string $scope
      * @param bool $ignoreGlobalScope
@@ -32,10 +32,10 @@ interface CountryHandlerInterface
 
     /**
      * Filter directory collection by allowed in website countries.
+     * @param \Magento\Framework\Data\Collection\AbstractDb $collection
      * @param $filter
      * @param string $scope
-     * @param \Magento\Framework\Data\Collection\AbstractDb $collection
      * @return AbstractDb
      */
-    public function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE, AbstractDb $collection);
+    public function loadByScope(AbstractDb $collection, $filter, $scope = ScopeInterface::SCOPE_STORE);
 }

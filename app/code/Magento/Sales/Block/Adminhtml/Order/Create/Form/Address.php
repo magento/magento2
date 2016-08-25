@@ -292,7 +292,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     {
         $storeId = $this->getBackendQuoteSession()->getStoreId();
         $options = $this->getCountryHandler()
-            ->loadByScope($storeId, ScopeInterface::SCOPE_STORE, $this->getCountriesCollection())
+            ->loadByScope($this->getCountriesCollection(), $storeId, ScopeInterface::SCOPE_STORE)
             ->toOptionArray();
 
         $countryElement->setValues($options);

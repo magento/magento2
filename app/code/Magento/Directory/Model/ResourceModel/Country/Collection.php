@@ -138,7 +138,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        $this->getCountryHandler()->loadByScope($store, ScopeInterface::SCOPE_STORE, $this);
+        $this->getCountryHandler()->loadByScope($this, $store, ScopeInterface::SCOPE_STORE);
         return $this;
     }
 
