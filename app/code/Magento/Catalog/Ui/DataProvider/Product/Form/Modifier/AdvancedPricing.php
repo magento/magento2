@@ -153,6 +153,34 @@ class AdvancedPricing extends AbstractModifier
     }
 
     /**
+     * Prepare price fields
+     *
+     * Add currency symbol and validation
+     *
+     * @param string $fieldCode
+     * @return $this
+     */
+    protected function preparePriceFields($fieldCode)
+    {
+        $pricePath = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
+
+        if ($pricePath) {
+            $this->meta = $this->arrayManager->set(
+                $pricePath . '/arguments/data/config/addbefore',
+                $this->meta,
+                $this->getStore()->getBaseCurrency()->getCurrencySymbol()
+            );
+            $this->meta = $this->arrayManager->merge(
+                $pricePath . '/arguments/data/config',
+                $this->meta,
+                ['validation' => ['validate-zero-or-greater' => true]]
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * Customize tier price field
      *
      * @return $this
