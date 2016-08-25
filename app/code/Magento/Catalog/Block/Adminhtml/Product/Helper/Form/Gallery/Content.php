@@ -134,7 +134,7 @@ class Content extends \Magento\Backend\Block\Widget
             is_array($value['images']) &&
             count($value['images'])
         ) {
-            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);            
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
