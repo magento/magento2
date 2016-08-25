@@ -81,6 +81,7 @@
         <dataset name="fixed-51">
             <field name="price_from" xsi:type="string">51.00</field>
             <field name="price_to" xsi:type="string">52.00</field>
+            <field name="regular_from" xsi:type="string">135.00</field>
         </dataset>
 
         <dataset name="bundle_fixed_with_category">
@@ -99,6 +100,7 @@
             <field name="price_from" xsi:type="string">8.00</field>
             <field name="price_to" xsi:type="string">20.00</field>
             <field name="cart_price" xsi:type="string">80.00</field>
+            <field name="regular_from" xsi:type="string">40.00</field>
         </dataset>
 
         <dataset name="dynamic-18">

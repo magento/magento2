@@ -68,6 +68,13 @@ class AssertBundleProductPage extends AssertProductPage
             return 'Bundle special price is not set.';
         }
 
+        $regularPrice = $priceBlock->getOldPrice();
+        $expectedRegularPrice = $this->product->getDataFieldConfig('price')['source']->getPriceData()['regular_from'];
+
+        if ($expectedRegularPrice != $regularPrice) {
+            return 'Bundle regular price on product view page is not correct.';
+        }
+
         return null;
     }
 }
