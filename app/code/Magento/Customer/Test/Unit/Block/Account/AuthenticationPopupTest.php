@@ -14,6 +14,9 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
 {
     /** @var AuthenticationPopup */
@@ -53,6 +56,24 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
+        $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaperMock->method('escapeHtml')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeHtml' . $string;
+                }
+            );
+        $escaperMock->method('escapeUrl')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeUrl' . $string;
+                }
+            );
+        $this->contextMock->expects($this->once())
+            ->method('getEscaper')
+            ->willReturn($escaperMock);
 
         $this->model = new AuthenticationPopup(
             $this->contextMock
@@ -110,10 +131,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 'reg',
                 'forgot',
                 [
-                    'autocomplete' => 'off',
-                    'customerRegisterUrl' => 'reg',
-                    'customerForgotPasswordUrl' => 'forgot',
-                    'baseUrl' => 'base',
+                    'autocomplete' => 'escapeHtmloff',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrlbase',
                 ],
             ],
             [
@@ -122,10 +143,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 'reg',
                 'forgot',
                 [
-                    'autocomplete' => 'on',
-                    'customerRegisterUrl' => 'reg',
-                    'customerForgotPasswordUrl' => 'forgot',
-                    'baseUrl' => '',
+                    'autocomplete' => 'escapeHtmlon',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrl',
                 ],
             ],
             [
@@ -134,10 +155,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 '',
                 'forgot',
                 [
-                    'autocomplete' => 'off',
-                    'customerRegisterUrl' => '',
-                    'customerForgotPasswordUrl' => 'forgot',
-                    'baseUrl' => 'base',
+                    'autocomplete' => 'escapeHtmloff',
+                    'customerRegisterUrl' => 'escapeUrl',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrlbase',
                 ],
             ],
             [
@@ -146,10 +167,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 'reg',
                 '',
                 [
-                    'autocomplete' => 'on',
-                    'customerRegisterUrl' => 'reg',
-                    'customerForgotPasswordUrl' => '',
-                    'baseUrl' => 'base',
+                    'autocomplete' => 'escapeHtmlon',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrl',
+                    'baseUrl' => 'escapeUrlbase',
                 ],
             ],
         ];
