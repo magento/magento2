@@ -37,7 +37,7 @@ class Flag extends Model\AbstractModel
         if ($this->hasData('flag_code')) {
             $this->_flagCode = $this->getData('flag_code');
         }
-        $this->_init('Magento\Framework\Flag\FlagResource');
+        $this->_init(\Magento\Framework\Flag\FlagResource::class);
     }
 
     /**

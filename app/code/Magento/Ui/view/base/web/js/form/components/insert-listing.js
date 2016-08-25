@@ -186,12 +186,6 @@ define([
             itemsType = selections && selections.excludeMode ? 'excluded' : 'selected';
             rows = provider && provider.rows();
 
-            if (_.isEmpty(selections.selected)) {
-                this.suppressDataLinks = false;
-
-                return result;
-            }
-
             if (this.canUpdateFromClientData(totalSelected, selections.selected, rows)) {
                 this.updateFromClientData(selections.selected, rows);
                 this.updateExternalValueByEditableData();

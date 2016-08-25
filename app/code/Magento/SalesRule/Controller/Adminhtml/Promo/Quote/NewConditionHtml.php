@@ -27,7 +27,7 @@ class NewConditionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
         )->setType(
             $type
         )->setRule(
-            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         )->setPrefix(
             'conditions'
         );

@@ -17,15 +17,24 @@ class XssOutputValidator
 
     /**
      * Store origin for replacements
+     *
      * @var array
      */
     private $origins = [];
 
     /**
      * Store replacements
+     *
      * @var array
      */
     private $replacements = [];
+
+    /**
+     * Array of escape functions
+     *
+     * @var string[]
+     */
+    private $escapeFunctions = ['escapeHtml', 'escapeHtmlAttr', 'escapeUrl', 'escapeJs', 'escapeCss'];
 
     /**
      *
@@ -122,8 +131,13 @@ class XssOutputValidator
         foreach ($echoCommands as $echoCommand) {
             if ($this->isNotEscapeMarkedCommand($echoCommand)) {
                 $echoCommand = preg_replace('/^(.*?)echo/sim', 'echo', $echoCommand);
+                $preparedEchoCommand = $this->prepareEchoCommand($echoCommand);
+                $isEscapeFunctionArgument = preg_match(
+                    '/->(' . implode('|', $this->escapeFunctions) . ')\(.*?\)$/sim',
+                    $preparedEchoCommand
+                );
                 $xssUnsafeCommands = array_filter(
-                    explode('.', $this->prepareEchoCommand($echoCommand)),
+                    $isEscapeFunctionArgument ? [$preparedEchoCommand] : explode('.', $preparedEchoCommand),
                     [$this, 'isXssUnsafeCommand']
                 );
                 if (count($xssUnsafeCommands)) {
@@ -202,7 +216,7 @@ class XssOutputValidator
         switch (true)
         {
             case preg_match(
-                '/->(escapeUrl|escapeQuote|escapeXssInUrl|.*html.*)\(/simU',
+                '/->(' . implode('|', $this->escapeFunctions) . '|.*html.*)\(/simU',
                 $this->getLastMethod($command)
             ):
                 return false;

@@ -17,14 +17,18 @@ use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 
 /**
  * A service for deploying Magento static view files for production mode
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Deployer
 {
@@ -48,9 +52,6 @@ class Deployer
 
     /** @var \Magento\Framework\View\Asset\Bundle\Manager */
     private $bundleManager;
-
-    /** @var bool */
-    private $isDryRun;
 
     /** @var int */
     private $count;
@@ -77,9 +78,53 @@ class Deployer
     private $alternativeSources;
 
     /**
+     * @var array
+     */
+    private static $fileExtensionOptionMap = [
+        'js' => Options::NO_JAVASCRIPT,
+        'map' => Options::NO_JAVASCRIPT,
+        'css' => Options::NO_CSS,
+        'less' => Options::NO_LESS,
+        'html' => Options::NO_HTML,
+        'htm' => Options::NO_HTML,
+        'jpg' => Options::NO_IMAGES,
+        'jpeg' => Options::NO_IMAGES,
+        'gif' => Options::NO_IMAGES,
+        'png' => Options::NO_IMAGES,
+        'ico' => Options::NO_IMAGES,
+        'svg' => Options::NO_IMAGES,
+        'eot' => Options::NO_FONTS,
+        'ttf' => Options::NO_FONTS,
+        'woff' => Options::NO_FONTS,
+        'woff2' => Options::NO_FONTS,
+        'md' => Options::NO_MISC,
+        'jbf' => Options::NO_MISC,
+        'csv' => Options::NO_MISC,
+        'json' => Options::NO_MISC,
+        'txt' => Options::NO_MISC,
+        'htc' => Options::NO_MISC,
+        'swf' => Options::NO_MISC,
+        'LICENSE' => Options::NO_MISC,
+        '' => Options::NO_MISC,
+    ];
+
+    /**
      * @var Minification
      */
     private $minification;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /** @var ConfigInterface */
+    private $assetConfig;
+
+    /**
+     * @var array
+     */
+    private $options;
 
     /**
      * Constructor
@@ -89,7 +134,7 @@ class Deployer
      * @param Version\StorageInterface $versionStorage
      * @param JsTranslationConfig $jsTranslationConfig
      * @param AlternativeSourceInterface[] $alternativeSources
-     * @param bool $isDryRun
+     * @param array $options
      */
     public function __construct(
         Files $filesUtil,
@@ -97,13 +142,18 @@ class Deployer
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
-        $isDryRun = false
+        $options = []
     ) {
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
-        $this->isDryRun = $isDryRun;
         $this->jsTranslationConfig = $jsTranslationConfig;
+        if (is_array($options)) {
+            $this->options = $options;
+        } else {
+            // backward compatibility support
+            $this->options = [Options::DRY_RUN => (bool)$options];
+        }
         $this->parentTheme = [];
 
         array_map(
@@ -112,6 +162,36 @@ class Deployer
             $alternativeSources
         );
         $this->alternativeSources = $alternativeSources;
+
+    }
+
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    private function getOption($name)
+    {
+        return isset($this->options[$name]) ? $this->options[$name] : null;
+    }
+
+    /**
+     * Check if skip flag is affecting file by extension
+     *
+     * @param string $filePath
+     * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function checkSkip($filePath)
+    {
+        if ($filePath != '.') {
+            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+            $option = isset(self::$fileExtensionOptionMap[$ext]) ? self::$fileExtensionOptionMap[$ext] : null;
+
+            return $option ? $this->getOption($option) : false;
+        }
+
+        return false;
     }
 
     /**
@@ -119,43 +199,48 @@ class Deployer
      *
      * @param ObjectManagerFactory $omFactory
      * @param array $locales
+     * @param array $deployableAreaThemeMap
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales)
+    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $deployableAreaThemeMap = [])
     {
         $this->omFactory = $omFactory;
-        if ($this->isDryRun) {
+
+        if ($this->getOption(Options::DRY_RUN)) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
-        $langList = implode(', ', $locales);
-        $this->output->writeln("Requested languages: {$langList}");
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
-        list($areas, $appFiles) = $this->collectAppFiles($locales);
-        foreach ($areas as $area => $themes) {
+        $appFiles = $this->filesUtil->getStaticPreProcessingFiles();
+
+        foreach ($deployableAreaThemeMap as $area => $themes) {
             $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
                 $this->emulateApplicationLocale($locale, $area);
                 foreach ($themes as $themePath) {
+
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
+
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->get('Magento\Theme\Model\View\Design');
+                    $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
                     $design->setDesignTheme($themePath, $area);
+
                     $assetRepo = $this->objectManager->create(
-                        'Magento\Framework\View\Asset\Repository',
+                        \Magento\Framework\View\Asset\Repository::class,
                         [
                             'design' => $design,
                         ]
                     );
                     /** @var \Magento\RequireJs\Model\FileManager $fileManager */
                     $fileManager = $this->objectManager->create(
-                        'Magento\RequireJs\Model\FileManager',
+                        \Magento\RequireJs\Model\FileManager::class,
                         [
                             'config' => $this->objectManager->create(
-                                'Magento\Framework\RequireJs\Config',
+                                \Magento\Framework\RequireJs\Config::class,
                                 [
                                     'assetRepo' => $assetRepo,
                                     'design' => $design,
@@ -165,8 +250,14 @@ class Deployer
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
+
                     foreach ($appFiles as $info) {
-                        list($fileArea, $fileTheme, , $module, $filePath) = $info;
+                        list($fileArea, $fileTheme, , $module, $filePath, $fullPath) = $info;
+
+                        if ($this->checkSkip($filePath)) {
+                            continue;
+                        }
+
                         if (($fileArea == $area || $fileArea == 'base') &&
                             ($fileTheme == '' || $fileTheme == $themePath ||
                                 in_array(
@@ -174,48 +265,66 @@ class Deployer
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
                         ) {
-                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                            $compiledFile = $this->deployFile(
+                                $filePath,
+                                $area,
+                                $themePath,
+                                $locale,
+                                $module,
+                                $fullPath
+                            );
                             if ($compiledFile !== '') {
-                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module);
+                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
                             }
                         }
                     }
                     foreach ($libFiles as $filePath) {
+
+                        if ($this->checkSkip($filePath)) {
+                            continue;
+                        }
+
                         $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
+
                         if ($compiledFile !== '') {
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
-                    if ($this->jsTranslationConfig->dictionaryEnabled()) {
-                        $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
-                        $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+                    if (!$this->getOption(Options::NO_JAVASCRIPT)) {
+                        if ($this->jsTranslationConfig->dictionaryEnabled()) {
+                            $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
+                            $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+                        }
+                        if ($this->getMinification()->isEnabled('js')) {
+                            $fileManager->createMinResolverAsset();
+                        }
                     }
-                    if ($this->getMinification()->isEnabled('js')) {
-                        $fileManager->createMinResolverAsset();
-                    }
-                    $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
         }
-        $this->output->writeln('=== Minify templates ===');
-        $this->count = 0;
-        foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
-            $this->htmlMinifier->minify($template);
-            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $this->output->writeln($template . " minified\n");
-            } else {
-                $this->output->write('.');
+        if (!($this->getOption(Options::NO_HTML_MINIFY) ?: !$this->getAssetConfig()->isMinifyHtml())) {
+            $this->output->writeln('=== Minify templates ===');
+            $this->count = 0;
+            foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
+                $this->htmlMinifier->minify($template);
+                if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                    $this->output->writeln($template . " minified\n");
+                } else {
+                    $this->output->write('.');
+                }
+                $this->count++;
             }
-            $this->count++;
+            $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
         }
-        $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
+
         $version = (new \DateTime())->getTimestamp();
         $this->output->writeln("New version of deployed files: {$version}");
-        if (!$this->isDryRun) {
+        if (!$this->getOption(Options::DRY_RUN)) {
             $this->versionStorage->save($version);
         }
+
         if ($this->errorCount > 0) {
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
@@ -239,42 +348,6 @@ class Deployer
     }
 
     /**
-     * Accumulate all static view files in the application and record all found areas, themes and languages
-     *
-     * Returns an array of areas and files with meta information
-     *
-     * @param array $requestedLocales
-     * @return array
-     */
-    private function collectAppFiles($requestedLocales)
-    {
-        $areas = [];
-        $locales = [];
-        $files = $this->filesUtil->getStaticPreProcessingFiles();
-        foreach ($files as $info) {
-            list($area, $themePath, $locale) = $info;
-            if ($themePath) {
-                $areas[$area][$themePath] = $themePath;
-            }
-            if ($locale) {
-                $locales[$locale] = $locale;
-            }
-        }
-        foreach ($requestedLocales as $locale) {
-            unset($locales[$locale]);
-        }
-        if (!empty($locales)) {
-            $langList = implode(', ', $locales);
-            $this->output->writeln(
-                "WARNING: there were files for the following languages detected in the file system: {$langList}."
-                . ' These languages were not requested, so the files will not be populated.'
-            );
-        }
-
-        return [$areas, $files];
-    }
-
-    /**
      * Emulate application area and various services that are necessary for populating files
      *
      * @param string $areaCode
@@ -283,16 +356,15 @@ class Deployer
     private function emulateApplicationArea($areaCode)
     {
         $this->objectManager = $this->omFactory->create(
-            [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
+            [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_PRODUCTION]
         );
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode($areaCode);
-        $this->assetRepo = $this->objectManager->get('Magento\Framework\View\Asset\Repository');
-        $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
-        $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
-        $this->bundleManager = $this->objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
-
+        $this->assetRepo = $this->objectManager->get(\Magento\Framework\View\Asset\Repository::class);
+        $this->assetPublisher = $this->objectManager->create(\Magento\Framework\App\View\Asset\Publisher::class);
+        $this->htmlMinifier = $this->objectManager->get(\Magento\Framework\View\Template\Html\MinifierInterface::class);
+        $this->bundleManager = $this->objectManager->get(\Magento\Framework\View\Asset\Bundle\Manager::class);
     }
 
     /**
@@ -305,11 +377,11 @@ class Deployer
     protected function emulateApplicationLocale($locale, $area)
     {
         /** @var \Magento\Framework\TranslateInterface $translator */
-        $translator = $this->objectManager->get('Magento\Framework\TranslateInterface');
+        $translator = $this->objectManager->get(\Magento\Framework\TranslateInterface::class);
         $translator->setLocale($locale);
         $translator->loadData($area, true);
         /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
-        $localeResolver = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
+        $localeResolver = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         $localeResolver->setLocale($locale);
     }
 
@@ -321,6 +393,7 @@ class Deployer
      * @param string $themePath
      * @param string $locale
      * @param string $module
+     * @param string|null $fullPath
      * @return string
      * @throws \InvalidArgumentException
      * @throws LocalizedException
@@ -328,7 +401,7 @@ class Deployer
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function deployFile($filePath, $area, $themePath, $locale, $module)
+    private function deployFile($filePath, $area, $themePath, $locale, $module, $fullPath = null)
     {
         $compiledFile = '';
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
@@ -360,7 +433,7 @@ class Deployer
             } else {
                 $this->output->write('.');
             }
-            if ($this->isDryRun) {
+            if ($this->getOption(Options::DRY_RUN)) {
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
@@ -368,7 +441,13 @@ class Deployer
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
-            throw $exception;
+            $pathInfo = $fullPath ?: $filePath;
+            $errorMessage =  __('Compilation from source: ') . $pathInfo
+                . PHP_EOL . $exception->getMessage();
+            $this->errorCount++;
+            $this->output->write(PHP_EOL . PHP_EOL . $errorMessage . PHP_EOL, true);
+
+            $this->getLogger()->critical($errorMessage);
         } catch (\Exception $exception) {
             $this->output->write('.');
             $this->verboseLog($exception->getTraceAsString());
@@ -387,7 +466,7 @@ class Deployer
     private function findAncestors($themeFullPath)
     {
         /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
-        $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
+        $themeCollection = $this->objectManager->get(\Magento\Framework\View\Design\Theme\ListInterface::class);
         $theme = $themeCollection->getThemeByFullPath($themeFullPath);
         $ancestors = $theme->getInheritedThemes();
         $ancestorThemeFullPath = [];
@@ -395,6 +474,18 @@ class Deployer
             $ancestorThemeFullPath[] = $ancestor->getFullPath();
         }
         return $ancestorThemeFullPath;
+    }
+
+    /**
+     * @return \Magento\Framework\View\Asset\ConfigInterface
+     * @deprecated
+     */
+    private function getAssetConfig()
+    {
+        if (null === $this->assetConfig) {
+            $this->assetConfig = ObjectManager::getInstance()->get(ConfigInterface::class);
+        }
+        return $this->assetConfig;
     }
 
     /**
@@ -408,5 +499,20 @@ class Deployer
         if ($this->output->isVerbose()) {
             $this->output->writeln($message);
         }
+    }
+
+    /**
+     * Retrieves LoggerInterface instance
+     *
+     * @return LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if (!$this->logger) {
+            $this->logger = $this->objectManager->get(LoggerInterface::class);
+        }
+
+        return $this->logger;
     }
 }

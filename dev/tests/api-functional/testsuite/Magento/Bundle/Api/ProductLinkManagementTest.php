@@ -167,10 +167,10 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
     protected function getProductOptions($productId)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+        $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
         /** @var  \Magento\Bundle\Model\Product\Type $type */
-        $type = Bootstrap::getObjectManager()->get('Magento\Bundle\Model\Product\Type');
+        $type = Bootstrap::getObjectManager()->get(\Magento\Bundle\Model\Product\Type::class);
         return $type->getOptionsIds($product);
     }
 

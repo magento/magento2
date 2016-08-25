@@ -19,7 +19,7 @@ class ExportCouponsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sa
     public function execute()
     {
         $fileName = 'coupons.xml';
-        $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid');
+        $grid = $this->_view->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid::class);
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName), DirectoryList::VAR_DIR);
     }

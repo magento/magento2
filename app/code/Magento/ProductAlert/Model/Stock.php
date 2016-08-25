@@ -61,7 +61,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\ResourceModel\Stock');
+        $this->_init(\Magento\ProductAlert\Model\ResourceModel\Stock::class);
     }
 
     /**

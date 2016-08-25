@@ -35,8 +35,8 @@ return [
         ],
         'aliases_map' => [
             \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_BLOCK => [
-                'productalert/product_view' => 'Magento\ProductAlert\Block\Product\View',
-                'catalogSearch/result' => 'Magento\CatalogSearch\Block\Result',
+                'productalert/product_view' => \Magento\ProductAlert\Block\Product\View::class,
+                'catalogSearch/result' => \Magento\CatalogSearch\Block\Result::class,
             ],
         ],
     ]

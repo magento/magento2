@@ -24,10 +24,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configDataMock = $this->getMockBuilder('Magento\Sales\Model\Config\Data')
+        $this->configDataMock = $this->getMockBuilder(\Magento\Sales\Model\Config\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stateMock = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->stateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new \Magento\Sales\Model\Config($this->configDataMock, $this->stateMock);
@@ -36,7 +36,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf()
     {
         $model = new \Magento\Sales\Model\Config($this->configDataMock, $this->stateMock);
-        $this->assertInstanceOf('Magento\Sales\Model\Config', $model);
+        $this->assertInstanceOf(\Magento\Sales\Model\Config::class, $model);
     }
 
     public function testGetTotalsRenderer()

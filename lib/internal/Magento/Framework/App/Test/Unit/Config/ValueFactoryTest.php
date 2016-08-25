@@ -9,8 +9,8 @@ class ValueFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFac
 {
     protected function setUp()
     {
-        $this->instanceClassName = 'Magento\Framework\App\Config\ValueInterface';
-        $this->factoryClassName = 'Magento\Framework\App\Config\ValueFactory';
+        $this->instanceClassName = \Magento\Framework\App\Config\ValueInterface::class;
+        $this->factoryClassName = \Magento\Framework\App\Config\ValueFactory::class;
         parent::setUp();
     }
 

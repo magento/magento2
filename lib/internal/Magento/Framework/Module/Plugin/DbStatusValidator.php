@@ -1,22 +1,24 @@
 <?php
 /**
- * Validation of DB up to date state
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Module\Plugin;
 
-use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\FrontendInterface as FrontendCacheInterface;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\App\FrontController;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
+/**
+ * Validation of DB up to date state
+ */
 class DbStatusValidator
 {
     /**
-     * @var FrontendInterface
+     * @var FrontendCacheInterface
      */
     private $cache;
 
@@ -26,47 +28,40 @@ class DbStatusValidator
     private $dbVersionInfo;
 
     /**
-     * @param FrontendInterface $cache
+     * @param FrontendCacheInterface $cache
      * @param DbVersionInfo $dbVersionInfo
      */
-    public function __construct(
-        FrontendInterface $cache,
-        DbVersionInfo $dbVersionInfo
-    ) {
+    public function __construct(FrontendCacheInterface $cache, DbVersionInfo $dbVersionInfo)
+    {
         $this->cache = $cache;
         $this->dbVersionInfo = $dbVersionInfo;
     }
 
     /**
-     * @param \Magento\Framework\App\FrontController $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
+     * Perform check if DB is up to date
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\App\ResponseInterface
+     * @param FrontController $subject
+     * @param RequestInterface $request
+     * @return void
+     * @throws LocalizedException
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\FrontController $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeDispatch(FrontController $subject, RequestInterface $request)
+    {
         if (!$this->cache->load('db_is_up_to_date')) {
             $errors = $this->dbVersionInfo->getDbVersionErrors();
+
             if ($errors) {
-                $formattedErrors = $this->formatErrors($errors);
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase(
-                        'Please upgrade your database: Run "bin/magento setup:upgrade" from the Magento root directory.'
-                        . ' %1The following modules are outdated:%2%3',
-                        [PHP_EOL, PHP_EOL, implode(PHP_EOL, $formattedErrors)]
-                    )
-                );
+                $message = 'Please upgrade your database: '
+                    . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
+                    . "The following modules are outdated:\n%1";
+
+                throw new LocalizedException(new Phrase($message, [implode("\n", $this->formatErrors($errors))]));
             } else {
                 $this->cache->save('true', 'db_is_up_to_date');
             }
         }
-        return $proceed($request);
     }
 
     /**
@@ -78,12 +73,13 @@ class DbStatusValidator
     private function formatErrors($errorsData)
     {
         $formattedErrors = [];
+
         foreach ($errorsData as $error) {
-            $formattedErrors[] = $error[DbVersionInfo::KEY_MODULE] .
-                ' ' . $error[DbVersionInfo::KEY_TYPE] .
-                ': current version - ' . $error[DbVersionInfo::KEY_CURRENT ] .
-                ', required version - ' . $error[DbVersionInfo::KEY_REQUIRED];
+            $formattedErrors[] = $error[DbVersionInfo::KEY_MODULE] . ' ' . $error[DbVersionInfo::KEY_TYPE]
+                . ': current version - ' . $error[DbVersionInfo::KEY_CURRENT]
+                . ', required version - ' . $error[DbVersionInfo::KEY_REQUIRED];
         }
+
         return $formattedErrors;
     }
 }

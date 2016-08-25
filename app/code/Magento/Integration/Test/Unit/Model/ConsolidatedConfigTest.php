@@ -32,15 +32,15 @@ class ConsolidatedConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configCacheTypeMock = $this->getMockBuilder('Magento\Integration\Model\Cache\TypeConsolidated')
+        $this->configCacheTypeMock = $this->getMockBuilder(\Magento\Integration\Model\Cache\TypeConsolidated::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder('Magento\Integration\Model\Config\Consolidated\Reader')
+        $this->configReaderMock = $this->getMockBuilder(\Magento\Integration\Model\Config\Consolidated\Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configModel = $objectManagerHelper->getObject(
-            'Magento\Integration\Model\ConsolidatedConfig',
+            \Magento\Integration\Model\ConsolidatedConfig::class,
             [
                 'configCacheType' => $this->configCacheTypeMock,
                 'configReader' => $this->configReaderMock

@@ -29,7 +29,7 @@ class FieldFactory
     public function create(array $arguments = [])
     {
         return $this->_objectManager->create(
-            'Magento\Config\Model\Config\Structure\Element\Dependency\Field',
+            \Magento\Config\Model\Config\Structure\Element\Dependency\Field::class,
             $arguments
         );
     }

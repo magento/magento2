@@ -6,7 +6,7 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -23,18 +23,16 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param Widget $widget
-     * @param AdminCache $adminCache
+     * @param Cache $cache
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
         Widget $widget,
-        AdminCache $adminCache
+        Cache $cache
     ) {
         // Flush cache
-        $adminCache->open();
-        $adminCache->getActionsBlock()->flushMagentoCache();
-        $adminCache->getMessagesBlock()->waitSuccessMessage();
+        $cache->flush();
 
         $cmsIndex->open();
         $widgetText = $widget->getParameters()['anchor_text'];
