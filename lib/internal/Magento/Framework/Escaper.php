@@ -67,56 +67,59 @@ class Escaper
             $string
         );
 
-        $newTagReplacements = [];
         foreach ($tagReplacements as $tagReplacementKey => $tagReplacement) {
             $isClosing = substr($tagReplacement, 0, 2) == '</';
             $isSelfClosing = substr($tagReplacement, -2) == '/>';
 
-            if (!$isClosing) {
-                $tagReplacement = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $tagReplacement);
-                $length = strlen($tagReplacement);
-                $end = substr($tagReplacement, -2);
+            preg_match('/<\/?(\w+)(\s|>)/', $tagReplacement, $matches);
+            $tagName = $matches[1];
 
+            if (!in_array($tagName, $allowedTags)) {
+                $tagReplacements[$tagReplacementKey] = '';
+                continue;
+            }
+
+            if (!$isClosing) {
+                $length = strlen($tagReplacement);
                 set_error_handler(
                     function($errorNumber, $errorString, $errorFile, $errorLine) {
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
                 try {
-                    $tag = new \SimpleXMLElement(
-                        $end == '/>' ? $tagReplacement : (substr($tagReplacement, 0, $length-1) . ' />')
+                    $tagReplacement = substr($tagReplacement, 1, $length - 2);
+                    $tagReplacement = str_replace(
+                        ['&', '<', '>'],
+                        ['&amp;', '&lt;', '&gt;'],
+                        $tagReplacement
                     );
+
+                    $dom = new \DOMDocument();
+                    $dom->loadHTML('<' . $tagReplacement . '>');
                 } catch (\Exception $e) {
-                    $newTagReplacements[$tagReplacementKey] = '';
+                    $tagReplacements[$tagReplacementKey] = '';
                     restore_error_handler();
                     continue;
                 }
                 restore_error_handler();
-                $tagName = $tag->getName();
-            } else {
-                $tagName = trim($tagReplacement, '<>/');
-            }
-
-            if (!in_array($tagName, $allowedTags)) {
-                $newTagReplacements[$tagReplacementKey] = '';
-                continue;
-            }
-
-            $attributes = [];
-            if (!$isClosing && $tag->attributes()) {
-                foreach ($tag->attributes() as $attributeName => $attributeValue) {
-                    if (in_array($attributeName, $this->allowedAttributes)) {
-                        $attributes[] = $attributeName . '="'
-                            . $this->escapeAttributeValue(
-                                $attributeName,
-                                str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $attributeValue)
-                            )
-                            . '"';
+                $element = $dom->getElementsByTagName($tagName)[0];
+                $attributes = [];
+                if ($element->attributes) {
+                    foreach($element->attributes as $attribute) {
+                        if (in_array($attribute->name, $this->allowedAttributes)) {
+                            $attributes[] = $attribute->name . '="'
+                                . $this->escapeAttributeValue(
+                                    $attribute->name,
+                                    $attribute->value
+                                )
+                                . '"';
+                        }
                     }
+                    $tagReplacements[$tagReplacementKey] = '<' . $tagName . ' ' . implode(' ', $attributes)
+                        . ($isSelfClosing ? '/>' : '>');
                 }
-                $newTagReplacements[$tagReplacementKey] = '<' . $tagName . ' ' . implode(' ', $attributes) . '>';
             } else {
-                $newTagReplacements[$tagReplacementKey] = $isSelfClosing
+                $tagReplacements[$tagReplacementKey] = $isSelfClosing
                     ? '<' . $tagName . ' />' : '</' . $tagName . '>';
             }
         }
@@ -125,8 +128,8 @@ class Escaper
 
         $string = preg_replace_callback(
             '/-=replacement-(\d)=-/si',
-            function($matches) use ($newTagReplacements) {
-                return $newTagReplacements[$matches[1]];
+            function($matches) use ($tagReplacements) {
+                return $tagReplacements[$matches[1]];
             },
             $string
         );
