@@ -10,7 +10,6 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Bulk\OperationInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
@@ -89,7 +88,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
             ['main_table' => $this->getMainTable()],
             [
                 '*',
-                'status' => $this->calculatedStatusSql->execute($this->getTable('magento_operation'))
+                'status' => $this->calculatedStatusSql->get($this->getTable('magento_operation'))
             ]
         )->where(
             'user_id=?',

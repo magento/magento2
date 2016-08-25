@@ -17,7 +17,7 @@ class CalculatedStatusSql
      * @param string $operationTableName
      * @return \Zend_Db_Expr
      */
-    public function execute($operationTableName)
+    public function get($operationTableName)
     {
         return new \Zend_Db_Expr(
             '(IF(
