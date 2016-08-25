@@ -16,11 +16,11 @@ require(['prototype'], function(){
         var validationMessage = $('validation_result');
 
         params = {
-            country: $('<?php echo $block->escapeJs($block->getMerchantCountryField()); ?>').value,
-            vat: $('<?php echo $block->escapeJs($block->getMerchantVatNumberField()); ?>').value
+            country: $('<?php echo $block->escapeJs($block->escapeHtml($block->getMerchantCountryField())); ?>').value,
+            vat: $('<?php echo $block->escapeJs($block->escapeHtml($block->getMerchantVatNumberField())); ?>').value
         };
 
-        new Ajax.Request('<?php echo $block->escapeUrl($block->getAjaxUrl()) ?>', {
+        new Ajax.Request('<?php echo $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
             parameters: params,
             onSuccess: function(response) {
                 var result = '<?php echo $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.'))) ?>';

@@ -209,9 +209,9 @@ require([
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?php /* @noEscape */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                "defaultRegion": "<?php echo $block->escapeJs($block->getFormData()->getRegionId()) ?>",
-                "countriesWithOptionalZip": <?php /* @noEscape */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+                "regionJson": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson() ?>,
+                "defaultRegion": "<?php echo $block->escapeJs($block->escapeHtml($block->getFormData()->getRegionId())) ?>",
+                "countriesWithOptionalZip": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getCountriesWithOptionalZip(true) ?>
             }
         }
     }
