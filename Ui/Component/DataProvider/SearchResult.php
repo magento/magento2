@@ -48,9 +48,11 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param EventManager $eventManager
      * @param UserContextInterface $userContextInterface
      * @param StatusMapper $statusMapper
+     * @param CalculatedStatusSql $calculatedStatusSql
      * @param string $mainTable
      * @param null $resourceModel
      * @param string $identifierName
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -63,8 +65,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
         $mainTable = 'magento_bulk',
         $resourceModel = null,
         $identifierName = 'uuid'
-    )
-    {
+    ) {
         $this->userContext = $userContextInterface;
         $this->statusMapper = $statusMapper;
         $this->calculatedStatusSql = $calculatedStatusSql;

@@ -122,7 +122,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterTo($operationDetails)
     {
-        $bulkMock = $this->getMock(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class);
+        $methods = ['getBulkId', 'getDescription', 'getStatus', 'getStartTime'];
+        $bulkMock = $this->getMock(\Magento\AsynchronousOperations\Model\BulkSummary::class, $methods, [], '', false);
         $result = ['items' =>[], 'totalRecords' => 1];
         $userBulks = [$bulkMock];
         $userId = 1;
@@ -137,10 +138,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->with($bulkUuid)
             ->willReturn($operationDetails);
         $bulkMock->expects($this->once())->method('getDescription')->willReturn('Bulk Description');
-        $this->bulkStatusMock
-            ->expects($this->once())
-            ->method('getBulkStatus')
-            ->willReturn(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::NOT_STARTED);
         $this->messagefactoryMock->expects($this->once())->method('create')->willReturn($this->messageMock);
         $this->messageMock->expects($this->once())->method('toArray')->willReturn($bulkArray);
         $this->authorizationMock
