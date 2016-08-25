@@ -14,10 +14,7 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-/**
- * Class AroundProductRepositorySave
- */
-class AroundProductRepositorySave
+class ProductRepositorySave
 {
     /**
      * @var ProductAttributeRepositoryInterface
@@ -42,8 +39,10 @@ class AroundProductRepositorySave
     }
 
     /**
+     * Validate product links and reset configurable attributes to configurable product
+     *
      * @param ProductRepositoryInterface $subject
-     * @param callable $proceed
+     * @param ProductInterface $result
      * @param ProductInterface $product
      * @param bool $saveOptions
      * @return ProductInterface
@@ -52,14 +51,12 @@ class AroundProductRepositorySave
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         ProductRepositoryInterface $subject,
-        \Closure $proceed,
+        ProductInterface $result,
         ProductInterface $product,
         $saveOptions = false
     ) {
-        /** @var ProductInterface $result */
-        $result = $proceed($product, $saveOptions);
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
             return $result;
         }

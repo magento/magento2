@@ -9,42 +9,38 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Interface InvoiceValidatorInterface
  */
-class InvoiceValidator implements InvoiceValidatorInterface
+class InvoiceQuantityValidator implements ValidatorInterface
 {
     /**
-     * @var OrderValidatorInterface
+     * @var OrderRepositoryInterface
      */
-    private $orderValidator;
+    private $orderRepository;
 
     /**
      * InvoiceValidator constructor.
-     * @param OrderValidatorInterface $orderValidator
+     * @param OrderRepositoryInterface $orderRepository
      */
-    public function __construct(OrderValidatorInterface $orderValidator)
+    public function __construct(OrderRepositoryInterface $orderRepository)
     {
-        $this->orderValidator = $orderValidator;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
-     * @param InvoiceInterface $invoice
-     * @param OrderInterface $order
-     * @return array
+     * @inheritdoc
      */
-    public function validate(InvoiceInterface $invoice, OrderInterface $order)
+    public function validate($invoice)
     {
-        $messages = $this->checkQtyAvailability($invoice, $order);
-
-        if (!$this->orderValidator->canInvoice($order)) {
-            $messages[] = __(
-                'An invoice cannot be created when an order has a status of %1.',
-                $order->getStatus()
-            );
+        if ($invoice->getOrderId() === null) {
+            return [__('Order Id is required for invoice document')];
         }
-        return $messages;
+        $order = $this->orderRepository->get($invoice->getOrderId());
+        return $this->checkQtyAvailability($invoice, $order);
     }
 
     /**
