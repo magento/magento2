@@ -8,8 +8,6 @@ namespace Magento\Backend\Block\Store;
 
 /**
  * Store switcher block
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Switcher extends \Magento\Backend\Block\Template
 {
