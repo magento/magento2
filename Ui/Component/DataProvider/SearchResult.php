@@ -139,7 +139,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();
-        $select->columns(['status' => $this->calculatedStatusSql->execute($this->getTable('magento_operation'))]);
+        $select->columns(['status' => $this->calculatedStatusSql->get($this->getTable('magento_operation'))]);
         //add grouping by status if filtering by status was executed
         if (isset($this->operationStatus)) {
             $select->group('status');
