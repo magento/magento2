@@ -55,42 +55,78 @@ class Escaper
      */
     private function escapeHtmlTagsAndAttributes($string, $allowedTags)
     {
-        $allowedTags = implode('|', $allowedTags);
-        $allowedAttributes = implode('|', $this->allowedAttributes);
-
-        $attributeReplacements = [];
+        $tagReplacements = [];
 
         $string = preg_replace_callback(
-            '/(' . $allowedAttributes . ')=[\'"](.*?)[\'"]/si',
-            function ($matches) use (&$attributeReplacements) {
-                $result = $matches[1] . '=-=quote=--=attribute-value-' . count($attributeReplacements) . '=--=quote=-';
-                $attributeReplacements[] = [
-                    'name' => $matches[1],
-                    'value' => $matches[2]
-                ];
+            '/<.+?>/si',
+            function ($matches) use (&$tagReplacements) {
+                $result = '-=replacement-' . count($tagReplacements) . '=-';
+                $tagReplacements[] = $matches[0];
                 return $result;
             },
             $string
         );
 
-        $string = preg_replace(
-            '/<([\/\s\r\n]*)(' . $allowedTags . ')([^>]*)([\/\s\r\n]*)>/si',
-            '##$1$2$3$4##',
-            $string
-        );
-        $string = $this->escapeHtml($string);
-        $string = preg_replace(
-            '/##([\/\s\r\n]*)(' . $allowedTags . ')([^##]*)([\/\s\r\n]*)##/si',
-            '<$1$2$3$4>',
-            $string
-        );
+        $newTagReplacements = [];
+        foreach ($tagReplacements as $tagReplacementKey => $tagReplacement) {
+            $isClosing = substr($tagReplacement, 0, 2) == '</';
+            $isSelfClosing = substr($tagReplacement, -2) == '/>';
 
-        $attributeReplacements = $this->escapeAttributeValues($attributeReplacements);
+            if (!$isClosing) {
+                $tagReplacement = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $tagReplacement);
+                $length = strlen($tagReplacement);
+                $end = substr($tagReplacement, -2);
+
+                set_error_handler(
+                    function($errorNumber, $errorString, $errorFile, $errorLine) {
+                        throw new \Exception($errorString, $errorNumber);
+                    }
+                );
+                try {
+                    $tag = new \SimpleXMLElement(
+                        $end == '/>' ? $tagReplacement : (substr($tagReplacement, 0, $length-1) . ' />')
+                    );
+                } catch (\Exception $e) {
+                    $newTagReplacements[$tagReplacementKey] = '';
+                    restore_error_handler();
+                    continue;
+                }
+                restore_error_handler();
+                $tagName = $tag->getName();
+            } else {
+                $tagName = trim($tagReplacement, '<>/');
+            }
+
+            if (!in_array($tagName, $allowedTags)) {
+                $newTagReplacements[$tagReplacementKey] = '';
+                continue;
+            }
+
+            $attributes = [];
+            if (!$isClosing && $tag->attributes()) {
+                foreach ($tag->attributes() as $attributeName => $attributeValue) {
+                    if (in_array($attributeName, $this->allowedAttributes)) {
+                        $attributes[] = $attributeName . '="'
+                            . $this->escapeAttributeValue(
+                                $attributeName,
+                                str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $attributeValue)
+                            )
+                            . '"';
+                    }
+                }
+                $newTagReplacements[$tagReplacementKey] = '<' . $tagName . ' ' . implode(' ', $attributes) . '>';
+            } else {
+                $newTagReplacements[$tagReplacementKey] = $isSelfClosing
+                    ? '<' . $tagName . ' />' : '</' . $tagName . '>';
+            }
+        }
+
+        $string = $this->escapeHtml($string);
 
         $string = preg_replace_callback(
-            '/-=quote=--=attribute-value-(\d)=--=quote=-/si',
-            function($matches) use (&$attributeReplacements) {
-                return '"' . $attributeReplacements[$matches[1]]['value'] . '"';
+            '/-=replacement-(\d)=-/si',
+            function($matches) use ($newTagReplacements) {
+                return $newTagReplacements[$matches[1]];
             },
             $string
         );
@@ -99,22 +135,15 @@ class Escaper
     }
 
     /**
-     * Escape attribute values using escapeHtmlAttr and escapeUrl depending on the attribute. $attributes has the
-     * following structure [['name' => 'id', 'value' => 'identifier'], ['name' => 'href', 'value' => 'http://abc.com/']]
+     * Escape attribute values using escapeHtmlAttr or escapeUrl depending on the attribute
      *
-     * @param array $attributes
-     * @return array
+     * @param string $name
+     * @param string $value
+     * @return string
      */
-    private function escapeAttributeValues($attributes)
+    private function escapeAttributeValue($name, $value)
     {
-        foreach ($attributes as $key => $attribute) {
-            if ($attribute['name'] == 'href') {
-                $attributes[$key]['value'] = $this->escapeHtml($attribute['value']);
-            } else {
-                $attributes[$key]['value'] = $this->escapeHtmlAttr($attribute['value']);
-            }
-        }
-        return $attributes;
+        return $name == 'href' ? $this->escapeUrl($value) : $this->escapeHtml($value);
     }
 
     /**
