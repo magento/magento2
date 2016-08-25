@@ -46,4 +46,28 @@ class AssertBundleProductPage extends AssertProductPage
 
         return empty($errors) ? null : implode("\n", $errors);
     }
+
+    /**
+     * Verify product special price is displayed on product page(front-end).
+     *
+     * @return string|null
+     */
+    protected function verifySpecialPrice()
+    {
+        if (!$this->product->hasData('special_price')) {
+            return null;
+        }
+
+        $priceBlock = $this->productView->getPriceBlock();
+
+        if (!$priceBlock->isVisible()) {
+            return "Price block for '{$this->product->getName()}' product' is not visible.";
+        }
+
+        if (!$priceBlock->isOldPriceVisible()) {
+            return 'Bundle special price is not set.';
+        }
+
+        return null;
+    }
 }
