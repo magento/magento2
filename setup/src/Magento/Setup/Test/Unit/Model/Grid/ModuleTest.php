@@ -13,7 +13,6 @@ use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Grid\Module;
-use Magento\Setup\Model\Grid\TypeMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\PackagesData;
 
@@ -54,11 +53,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerProvider;
-
-    /**
-     * @var TypeMapper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $typeMapperMock;
 
     /**
      * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
@@ -119,10 +113,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->typeMapperMock = $this->getMockBuilder(TypeMapper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->packagesDataMock = $this->getMockBuilder(PackagesData::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -132,7 +122,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             $this->fullModuleListMock,
             $this->moduleListMock,
             $this->objectManagerProvider,
-            $this->typeMapperMock,
             $this->packagesDataMock
         );
     }
@@ -155,14 +144,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $this->packageInfoMock->expects(static::never())
             ->method('getModuleName');
 
-        $this->typeMapperMock->expects(static::exactly(2))
-            ->method('map')
-            ->willReturnMap([
-                ['magento/sample-module-one', 'magento2-module', 'Module'],
-                ['Sample_ModuleTwo', 'magento2-module', 'Module'],
-            ]);
-
-        $this->packageInfoMock->expects(static::exactly(2))
+        $this->packageInfoMock->expects(static::once())
             ->method('getRequiredBy')
             ->willReturn([]);
         $this->packageInfoMock->expects(static::exactly(2))
@@ -177,6 +159,17 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 ['Sample_ModuleOne', '1.0.0'],
                 ['Sample_ModuleTwo', ''],
             ]);
+
+        $this->packagesDataMock->expects(static::exactly(2))
+            ->method('addPackageExtraInfo')
+            ->will(
+                $this->returnCallback(function ($package) {
+                    $package['package_title'] = 'packageTitle';
+                    $package['package_type'] = 'packageType';
+                    return $package;
+                })
+            );
+
         $this->moduleListMock->expects(static::exactly(2))
             ->method('has')
             ->willReturn(true);
@@ -187,20 +180,24 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $expected = [
             [
                 'name' => 'magento/sample-module-one',
-                'type' => 'Module',
+                'type' => 'magento2-module',
                 'version' => '1.0.0',
                 'vendor' => 'Magento',
                 'moduleName' => 'Sample_ModuleOne',
                 'enable' => true,
+                'package_title' => 'packageTitle',
+                'package_type' => 'packageType',
                 'requiredBy' => [],
             ],
             [
                 'name' => Module::UNKNOWN_PACKAGE_NAME,
-                'type' => 'Module',
+                'type' => 'magento2-module',
                 'version' => Module::UNKNOWN_VERSION,
                 'vendor' => 'Sample',
                 'moduleName' => 'Sample_ModuleTwo',
                 'enable' => true,
+                'package_title' => 'packageTitle',
+                'package_type' => 'packageType',
                 'requiredBy' => [],
             ],
         ];

@@ -139,7 +139,7 @@ class Template extends AbstractBlock
     }
 
     /**
-     * Set template context. Sets the object that should represent $this in template
+     * Set template context. Sets the object that should represent $block in template
      *
      * @param \Magento\Framework\View\Element\BlockInterface $templateContext
      * @return void
