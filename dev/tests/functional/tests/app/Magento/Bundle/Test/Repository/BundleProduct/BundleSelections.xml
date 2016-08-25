@@ -150,7 +150,7 @@
             <field name="products" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="0" xsi:type="string">catalogProductSimple::default</item>
-                    <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+                    <item name="1" xsi:type="string">catalogProductSimple::product_10_dollar</item>
                 </item>
             </field>
         </dataset>
