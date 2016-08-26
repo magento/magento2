@@ -16,25 +16,27 @@ class Escaper
     private $escaper;
 
     /**
+     * @var string[]
+     */
+    private $allowedAttributes = ['id', 'class', 'href', 'target'];
+
+    /**
      * Escape HTML entities
      *
      * @param string|array $data
      * @param array $allowedTags
      * @return string|array
      */
-    public function escapeHtml($data, $allowedTags = null)
+    public function escapeHtml($data, $allowedTags = [])
     {
         if (is_array($data)) {
             $result = [];
             foreach ($data as $item) {
-                $result[] = $this->escapeHtml($item);
+                $result[] = $this->escapeHtml($item, $allowedTags);
             }
         } elseif (strlen($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
-                $allowed = implode('|', $allowedTags);
-                $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
-                $result = htmlspecialchars($result, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
-                $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
+                $result = $this->filterHtmlTagsAndAttributes($data, $allowedTags);
             } else {
                 $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
@@ -42,6 +44,77 @@ class Escaper
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Filter not allowed tags and attribtues
+     *
+     * @param string $string
+     * @param string[] $allowedTags
+     * @return string
+     */
+    private function filterHtmlTagsAndAttributes($string, $allowedTags)
+    {
+        $wrapperElementId = uniqid();
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        set_error_handler(
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             */
+            function ($errorNumber, $errorString, $errorFile, $errorLine) {
+                throw new \Exception($errorString, $errorNumber);
+            }
+        );
+        try {
+            $dom->loadHTML('<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>');
+        } catch (\Exception $e) {
+            restore_error_handler();
+            return '';
+        }
+        restore_error_handler();
+
+        $xpath = new \DOMXPath($dom);
+        $nodes = $xpath->query('//node()[name() != \''
+            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']');
+        foreach ($nodes as $node) {
+            if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
+                $node->parentNode->replaceChild($dom->createTextNode($node->textContent), $node);
+            }
+        }
+        $nodes = $xpath->query('//@*[name() != \'' . implode('\' and name() != \'', $this->allowedAttributes) . '\']');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeAttribute($node->nodeName);
+        }
+        $nodes = $xpath->query('//text()');
+        foreach ($nodes as $node) {
+            $node->textContent = $this->escapeHtml($node->textContent);
+        }
+        $nodes = $xpath->query('//@*');
+        foreach ($nodes as $node) {
+            $value = $this->escapeAttributeValue(
+                $node->nodeName,
+                $node->parentNode->getAttribute($node->nodeName)
+            );
+            $node->parentNode->setAttribute($node->nodeName, $value);
+        }
+        $result = mb_convert_encoding(
+            str_replace("\n", '', $dom->saveHTML($dom->getElementById($wrapperElementId))),
+            'UTF-8',
+            'HTML-ENTITIES'
+        );
+        return mb_substr($result, 25, strlen($result) - 32);
+    }
+
+    /**
+     * Escape attribute values using escapeHtmlAttr or escapeUrl depending on the attribute
+     *
+     * @param string $name
+     * @param string $value
+     * @return string
+     */
+    private function escapeAttributeValue($name, $value)
+    {
+        return $name == 'href' ? $this->escapeUrl($value) : $this->escapeHtml($value);
     }
 
     /**
