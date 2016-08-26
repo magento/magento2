@@ -59,6 +59,11 @@ class BatchIterator implements \Iterator
     private $rangeFieldAlias;
 
     /**
+     * @var bool
+     */
+    private $isValid = true;
+
+    /**
      * Initialize dependencies.
      *
      * @param Select $select
@@ -87,6 +92,11 @@ class BatchIterator implements \Iterator
      */
     public function current()
     {
+        if (null == $this->currentSelect) {
+            $this->currentSelect = $this->initSelectObject();
+            $itemsCount = $this->calculateBatchSize($this->currentSelect);
+            $this->isValid = $itemsCount > 0;
+        }
         return $this->currentSelect;
     }
 
@@ -95,7 +105,18 @@ class BatchIterator implements \Iterator
      */
     public function next()
     {
-        $this->iteration++;
+        if (null == $this->currentSelect) {
+            $this->current();
+        }
+        $select = $this->initSelectObject();
+        $itemsCountInSelect = $this->calculateBatchSize($select);
+        $this->isValid = $itemsCountInSelect > 0;
+        if ($this->isValid) {
+            $this->iteration++;
+            $this->currentSelect = $select;
+        } else {
+            $this->currentSelect = null;
+        }
         return $this->currentSelect;
     }
 
@@ -112,9 +133,7 @@ class BatchIterator implements \Iterator
      */
     public function valid()
     {
-        $this->currentSelect = $this->initSelectObject();
-        $batchSize = $this->calculateBatchSize($this->currentSelect);
-        return $batchSize > 0;
+        return $this->isValid;
     }
 
     /**
@@ -123,7 +142,9 @@ class BatchIterator implements \Iterator
     public function rewind()
     {
         $this->minValue = 0;
+        $this->currentSelect = null;
         $this->iteration = 0;
+        $this->isValid = true;
     }
 
     /**
@@ -165,7 +186,7 @@ class BatchIterator implements \Iterator
         /**
          * Reset sort order section from origin select object
          */
-        $object->order($this->correlationName . '.' . $this->rangeField . ' asc');
+        $object->order($this->correlationName . '.' . $this->rangeField . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
         return $object;
     }
 }
