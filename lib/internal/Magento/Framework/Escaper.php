@@ -74,7 +74,7 @@ class Escaper
         $nodes = $xpath->query('//node()[name() != \''
             . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']');
         foreach ($nodes as $node) {
-            if ($node->nodeName != '#text') {
+            if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
                 $node->parentNode->replaceChild($dom->createTextNode($node->textContent), $node);
             }
         }
