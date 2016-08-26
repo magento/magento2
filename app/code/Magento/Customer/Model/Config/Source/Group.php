@@ -6,7 +6,7 @@
 namespace Magento\Customer\Model\Config\Source;
 
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceForLoggedInCustomersInterface;
+use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\App\ObjectManager;
 
 class Group implements \Magento\Framework\Option\ArrayInterface
@@ -29,33 +29,33 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     protected $_converter;
 
     /**
-     * @var GroupSourceForLoggedInCustomersInterface
+     * @var GroupSourceLoggedInOnlyInterface
      */
-    private $groupSourceForLoggedInCustomers;
+    private $groupSourceLoggedInOnly;
 
     /**
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\DataObject $converter
-     * @param GroupSourceForLoggedInCustomersInterface $groupSourceForLoggedInCustomers
+     * @param GroupSourceLoggedInOnlyInterface $groupSourceForLoggedInCustomers
      */
     public function __construct(
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Convert\DataObject $converter,
-        GroupSourceForLoggedInCustomersInterface $groupSourceForLoggedInCustomers = null
+        GroupSourceLoggedInOnlyInterface $groupSourceForLoggedInCustomers = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;
-        $this->groupSourceForLoggedInCustomers = $groupSourceForLoggedInCustomers
-            ?: ObjectManager::getInstance()->get(GroupSourceForLoggedInCustomersInterface::class);
+        $this->groupSourceLoggedInOnly = $groupSourceForLoggedInCustomers
+            ?: ObjectManager::getInstance()->get(GroupSourceLoggedInOnlyInterface::class);
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $this->_options = $this->groupSourceForLoggedInCustomers->toOptionArray();
+            $this->_options = $this->groupSourceLoggedInOnly->toOptionArray();
             array_unshift($this->_options, ['value' => '', 'label' => __('-- Please Select --')]);
         }
 

@@ -7,11 +7,10 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceWithAllGroupsInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -84,7 +83,7 @@ class AdvancedPricing extends AbstractModifier
     protected $meta = [];
 
     /**
-     * @var GroupSourceWithAllGroupsInterface
+     * @var GroupSourceInterface
      */
     private $customerGroupSource;
 
@@ -98,7 +97,7 @@ class AdvancedPricing extends AbstractModifier
      * @param Data $directoryHelper
      * @param ArrayManager $arrayManager
      * @param string $scopeName
-     * @param GroupSourceWithAllGroupsInterface $customerGroupSource
+     * @param GroupSourceInterface $customerGroupSource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -111,7 +110,7 @@ class AdvancedPricing extends AbstractModifier
         Data $directoryHelper,
         ArrayManager $arrayManager,
         $scopeName = '',
-        GroupSourceWithAllGroupsInterface $customerGroupSource = null
+        GroupSourceInterface $customerGroupSource = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -123,7 +122,7 @@ class AdvancedPricing extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->scopeName = $scopeName;
         $this->customerGroupSource = $customerGroupSource
-            ?: ObjectManager::getInstance()->get(GroupSourceWithAllGroupsInterface::class);
+            ?: ObjectManager::getInstance()->get(GroupSourceInterface::class);
     }
 
     /**

@@ -11,7 +11,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
-class Group implements GroupSourceWithAllGroupsInterface
+class Group implements GroupSourceInterface
 {
     /**
      * @var ModuleManager
@@ -27,12 +27,6 @@ class Group implements GroupSourceWithAllGroupsInterface
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
-
-    /**
-     * Defines is 'ALL GROUPS' value should be added to options
-     * @var bool
-     */
-    protected $isShowAllGroupsValue = true;
 
     /**
      * @param ModuleManager $moduleManager
@@ -60,13 +54,10 @@ class Group implements GroupSourceWithAllGroupsInterface
             return [];
         }
         $customerGroups = [];
-
-        if ($this->isShowAllGroupsValue) {
-            $customerGroups[] = [
-                'label' => __('ALL GROUPS'),
-                'value' => GroupInterface::CUST_GROUP_ALL,
-            ];
-        }
+        $customerGroups[] = [
+            'label' => __('ALL GROUPS'),
+            'value' => GroupInterface::CUST_GROUP_ALL,
+        ];
 
         /** @var GroupSearchResultsInterface $groups */
         $groups = $this->groupRepository->getList($this->searchCriteriaBuilder->create());

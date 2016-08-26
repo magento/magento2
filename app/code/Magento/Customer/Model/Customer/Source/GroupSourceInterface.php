@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Model\Customer\Source;
 
-
 use Magento\Framework\Option\ArrayInterface as OptionArrayInterface;
 
 interface GroupSourceInterface extends OptionArrayInterface
