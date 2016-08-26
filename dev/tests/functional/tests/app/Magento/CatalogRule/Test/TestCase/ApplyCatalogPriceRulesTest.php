@@ -23,7 +23,7 @@ use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleEdit;
  * 2. Create simple product.
  * 3. Perform all assertions.
  *
- * @group Catalog_Price_Rules_(MX)
+ * @group Catalog_Price_Rules
  * @ZephyrId MAGETWO-24780
  */
 class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
@@ -31,7 +31,6 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
