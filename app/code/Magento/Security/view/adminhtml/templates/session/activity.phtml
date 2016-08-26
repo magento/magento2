@@ -56,7 +56,8 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
                     data-mage-init='{"confirmRedirect":{
                         "message": "<?php
                     echo $block->escapeJs(__('Are you sure that you want to log out all other sessions?')) ?>",
-                        "url":"<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll'))) ?>"
+                        "url":"<?php
+                    echo $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll'))) ?>"
                     }}'
                 <?php
                 else: ?>disabled<?php
