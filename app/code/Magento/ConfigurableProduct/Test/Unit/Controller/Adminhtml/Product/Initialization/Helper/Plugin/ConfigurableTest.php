@@ -74,7 +74,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'getTypeId', 'setAttributeSetId', 'getExtensionAttributes', 'setNewVariationsAttributeSetId',
-                'setCanSaveConfigurableAttributes', 'setExtensionAttributes'
+                'setCanSaveConfigurableAttributes', 'setExtensionAttributes', 'hasData', 'getData'
             ])
             ->getMock();
 
@@ -99,11 +99,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ['value_index' => 12], ['value_index' => 13]
             ]]
         ];
-        $valueMap = [
-            ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids', [], []],
-            ['product', [], ['configurable_attributes_data' => $attributes]],
-        ];
+
         $simpleProductsIds = [1, 2, 3];
         $simpleProducts = [
             [
@@ -149,14 +145,38 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'quantity_and_stock_status' => ['qty' => '3']
             ]
         ];
+
+        $productData = [
+            'configurable_attributes_data' => $attributes,
+            'associated_product_ids' => [],
+            'configurable-matrix' => $simpleProducts
+        ];
+        $valueMap = [
+            ['new-variations-attribute-set-id', null, 24],
+            ['product', [], $productData]
+        ];
+
         $paramValueMap = [
-            ['configurable-matrix', [], $simpleProducts],
-            ['attributes', null, $attributes],
+            ['attributes', null, $attributes]
         ];
 
         $this->product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableProduct::TYPE_CODE);
+
+        $this->product->expects(static::at(4))
+            ->method('hasData')
+            ->with('associated_product_ids')
+            ->willReturn(false);
+        $this->product->expects(static::at(5))
+            ->method('hasData')
+            ->with('configurable-matrix')
+            ->willReturn(true);
+
+        $this->product->expects(static::at(6))
+            ->method('getData')
+            ->with('configurable-matrix')
+            ->willReturn($simpleProducts);
 
         $this->request->expects(static::any())
             ->method('getPost')
@@ -210,18 +230,29 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ['value_index' => 12], ['value_index' => 13]
             ]]
         ];
+
+        $productData = [
+            'configurable_attributes_data' => $attributes,
+            'associated_product_ids' => [],
+            'configurable-matrix' => []
+        ];
+
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids', [], []],
-            ['product', [], ['configurable_attributes_data' => $attributes]],
+            ['product', [], $productData],
         ];
         $paramValueMap = [
-            ['configurable-matrix', [], []],
             ['attributes', null, $attributes],
         ];
 
         $this->product->expects(static::once())
             ->method('getTypeId')
+            ->willReturn(ConfigurableProduct::TYPE_CODE);
+        $this->product->expects(static::any())
+            ->method('hasData')
+            ->willReturn(false);
+        $this->product->expects(static::at(0))
+            ->method('getData')
             ->willReturn(ConfigurableProduct::TYPE_CODE);
 
         $this->request->expects(static::any())

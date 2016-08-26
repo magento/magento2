@@ -122,12 +122,18 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
             'product3' => $this->getProductMock($configurations['product3'])
         ];
 
+        $productMock->expects(static::any())
+            ->method('hasData')
+            ->willReturn(true);
+        $productMock->expects(static::any())
+            ->method('getData')
+            ->with('configurable-matrix')
+            ->willReturn($configurableMatrix);
         $this->requestMock->expects(static::any())
             ->method('getParam')
             ->willReturnMap(
                 [
-                    ['store', 0, 0],
-                    ['configurable-matrix', [], $configurableMatrix]
+                    ['store', 0, 0]
                 ]
             );
         $this->variationHandlerMock->expects(static::once())
