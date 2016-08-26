@@ -55,86 +55,51 @@ class Escaper
      */
     private function escapeHtmlTagsAndAttributes($string, $allowedTags)
     {
-        $tagReplacements = [];
-
-        $string = preg_replace_callback(
-            '/<.+?>/si',
-            function ($matches) use (&$tagReplacements) {
-                $result = '-=replacement-' . count($tagReplacements) . '=-';
-                $tagReplacements[] = $matches[0];
-                return $result;
-            },
-            $string
-        );
-
-        foreach ($tagReplacements as $tagReplacementKey => $tagReplacement) {
-            $isClosing = substr($tagReplacement, 0, 2) == '</';
-            $isSelfClosing = substr($tagReplacement, -2) == '/>';
-
-            preg_match('/<\/?(\w+)(\s|>)/', $tagReplacement, $matches);
-            $tagName = $matches[1];
-
-            if (!in_array($tagName, $allowedTags)) {
-                $tagReplacements[$tagReplacementKey] = '';
-                continue;
+        $wrapperElementId = uniqid();
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        set_error_handler(
+            function($errorNumber, $errorString, $errorFile, $errorLine) {
+                throw new \Exception($errorString, $errorNumber);
             }
+        );
+        try {
+            $dom->loadHTML('<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>');
+        } catch (\Exception $e) {
+            restore_error_handler();
+            return '';
+        }
+        restore_error_handler();
 
-            if (!$isClosing) {
-                $length = strlen($tagReplacement);
-                set_error_handler(
-                    function($errorNumber, $errorString, $errorFile, $errorLine) {
-                        throw new \Exception($errorString, $errorNumber);
-                    }
-                );
-                try {
-                    $tagReplacement = substr($tagReplacement, 1, $length - 2);
-                    $tagReplacement = str_replace(
-                        ['&', '<', '>'],
-                        ['&amp;', '&lt;', '&gt;'],
-                        $tagReplacement
-                    );
-
-                    $dom = new \DOMDocument();
-                    $dom->loadHTML('<' . $tagReplacement . '>');
-                } catch (\Exception $e) {
-                    $tagReplacements[$tagReplacementKey] = '';
-                    restore_error_handler();
-                    continue;
-                }
-                restore_error_handler();
-                $element = $dom->getElementsByTagName($tagName)[0];
-                $attributes = [];
-                if ($element->attributes) {
-                    foreach($element->attributes as $attribute) {
-                        if (in_array($attribute->name, $this->allowedAttributes)) {
-                            $attributes[] = $attribute->name . '="'
-                                . $this->escapeAttributeValue(
-                                    $attribute->name,
-                                    $attribute->value
-                                )
-                                . '"';
-                        }
-                    }
-                    $tagReplacements[$tagReplacementKey] = '<' . $tagName . ' ' . implode(' ', $attributes)
-                        . ($isSelfClosing ? '/>' : '>');
-                }
-            } else {
-                $tagReplacements[$tagReplacementKey] = $isSelfClosing
-                    ? '<' . $tagName . ' />' : '</' . $tagName . '>';
+        $xpath = new \DOMXPath($dom);
+        $nodes = $xpath->query('//node()[name() != \''
+            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']');
+        foreach ($nodes as $node) {
+            if ($node->nodeName != '#text') {
+                $node->parentNode->replaceChild($dom->createTextNode($node->textContent), $node);
             }
         }
-
-        $string = $this->escapeHtml($string);
-
-        $string = preg_replace_callback(
-            '/-=replacement-(\d)=-/si',
-            function($matches) use ($tagReplacements) {
-                return $tagReplacements[$matches[1]];
-            },
-            $string
+        $nodes = $xpath->query('//@*[name() != \'' . implode('\' and name() != \'', $this->allowedAttributes) . '\']');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeAttribute($node->nodeName);
+        }
+        $nodes = $xpath->query('//text()');
+        foreach ($nodes as $node) {
+            $node->textContent = $this->escapeHtml($node->textContent);
+        }
+        $nodes = $xpath->query('//@*');
+        foreach ($nodes as $node) {
+            $value = $this->escapeAttributeValue(
+                $node->nodeName,
+                $node->parentNode->getAttribute($node->nodeName)
+            );
+            $node->parentNode->setAttribute($node->nodeName, $value);
+        }
+        $result = mb_convert_encoding(
+            str_replace("\n", '', $dom->saveHTML($dom->getElementById($wrapperElementId))),
+            'UTF-8',
+            'HTML-ENTITIES'
         );
-
-        return $string;
+        return mb_substr($result, 25, strlen($result) - 32);
     }
 
     /**
