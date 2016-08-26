@@ -441,7 +441,7 @@ define([
          * Filters out deleted items from array
          *
          * @param {Array} data
-         * 
+         *
          * @returns {Array} filtered array
          */
         arrayFilter: function (data) {
