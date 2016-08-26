@@ -288,6 +288,7 @@ class TypeProcessor
      *     'type' => <string>$type,
      *     'isRequired' => $isRequired,
      *     'description' => $description
+     *     'parameterCount' => $numberOfRequiredParameters
      * )</pre>
      * @throws \InvalidArgumentException
      */
