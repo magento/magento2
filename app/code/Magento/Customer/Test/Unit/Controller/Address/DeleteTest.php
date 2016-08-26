@@ -16,7 +16,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /** @var Delete */
     protected $model;
 
-    /** @var \Magento\Framework\App\Action\Context */
+    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
@@ -56,27 +56,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->addressRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $addressInterfaceFactoryMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $regionInterfaceFactoryMock = $this->getMockBuilder(\Magento\Customer\Api\Data\RegionInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $dataObjectProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $forwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $pageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMockForAbstractClass();
         $this->address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
@@ -92,28 +71,36 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
-        $this->context = $objectManager->getObject(
-            \Magento\Framework\App\Action\Context::class,
+        $this->prepareContext();
+        $this->model =  $objectManager->getObject(
+            Delete::class,
             [
-                'request' => $this->request,
-                'messageManager' => $this->messageManager,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
+                'context' => $this->context,
+                'customerSession' => $this->sessionMock,
+                'formKeyValidator' => $this->validatorMock,
+                'formFactory' => $formFactoryMock,
+                'addressRepository' => $this->addressRepositoryMock
             ]
         );
+    }
 
-        $this->model = new Delete(
-            $this->context,
-            $this->sessionMock,
-            $this->validatorMock,
-            $formFactoryMock,
-            $this->addressRepositoryMock,
-            $addressInterfaceFactoryMock,
-            $regionInterfaceFactoryMock,
-            $dataObjectProcessorMock,
-            $dataObjectHelperMock,
-            $forwardFactoryMock,
-            $pageFactoryMock
-        );
+    protected function prepareContext()
+    {
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->context->expects($this->any())
+            ->method('getRequest')
+            ->willReturn($this->request);
+        $this->context->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
+        $this->context->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManager);
     }
 
     public function testExecute()
