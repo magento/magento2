@@ -21,7 +21,6 @@ return [
     'Magento_ConfigurableProduct',
     'Magento_CurrencySymbol',
     'Magento_Downloadable',
-    'Magento_Email',
     'Magento_GiftMessage',
     'Magento_GoogleAdwords',
     'Magento_GoogleAnalytics',

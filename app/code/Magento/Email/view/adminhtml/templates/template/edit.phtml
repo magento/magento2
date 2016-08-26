@@ -24,7 +24,7 @@ use Magento\Framework\App\TemplateTypesInterface;
                             <optgroup label="<?php echo $block->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
                         <?php foreach ($options as $option): ?>
-                            <option value="<?php echo $block->escapeHtmlAttr($option['value']) ?>"<?php echo /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $block->escapeHtml($option['label']) ?></option>
+                            <option value="<?php echo $block->escapeHtmlAttr($option['value']) ?>"<?php /* @noEscape */ echo $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $block->escapeHtml($option['label']) ?></option>
                         <?php endforeach; ?>
                         <?php if ($group): ?>
                             </optgroup>
