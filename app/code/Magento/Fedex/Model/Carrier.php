@@ -338,6 +338,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
         }
 
+        if ($request->getDestCity()) {
+            $r->setDestCity($request->getDestCity());
+        }
+
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeight($weight);
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
@@ -431,6 +435,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 ],
             ],
         ];
+
+        if ($r->getDestCity()) {
+            $ratesRequest['RequestedShipment']['Recipient']['Address']['City'] = $r->getDestCity();
+        }
 
         if ($purpose == self::RATE_REQUEST_GENERAL) {
             $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][0]['InsuredValue'] = [
