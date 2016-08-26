@@ -21,14 +21,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 2. Apply all created rules.
  * 3. Perform all assertions.
  *
- * @group Sales_Rules_(CS)
+ * @group Sales_Rules
  * @ZephyrId MAGETWO-45883
  */
 class ApplySeveralSalesRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
