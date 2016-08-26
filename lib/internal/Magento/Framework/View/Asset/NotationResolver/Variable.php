@@ -49,7 +49,7 @@ class Variable
             $replacements = [];
             foreach ($matches as $match) {
                 if (!isset($replacements[$match[0]])) {
-                    $replacements[$match[0]] = $this->getPlaceholderValue($match[1]);
+                    $replacements[$match[0]] = $this->preProcessPlaceholder($match[1]);
                 }
             }
             $path = str_replace(array_keys($replacements), $replacements, $path);
@@ -58,18 +58,21 @@ class Variable
     }
 
     /**
-     * Retrieves the value of a given placeholder
+     * Process placeholder
      *
      * @param string $placeholder
      * @return string
      */
-    public function getPlaceholderValue($placeholder)
+    public function preProcessPlaceholder($placeholder)
     {
+        /** @var \Magento\Framework\View\Asset\File\FallbackContext $context */
         $context = $this->assetRepo->getStaticViewFileContext();
 
         switch ($placeholder) {
             case self::VAR_BASE_URL_PATH:
-                return $context->getBaseUrl() . $context->getPath();
+                return '{{' . self::VAR_BASE_URL_PATH . '}}/' . $context->getAreaCode() .
+                    ($context->getThemePath() ? '/' . $context->getThemePath() . '/' : '') .
+                    '{{locale}}';
             default:
                 return '';
         }

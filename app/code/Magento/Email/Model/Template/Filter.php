@@ -5,6 +5,7 @@
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
@@ -154,6 +155,11 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $configVariables;
 
     /**
+     * @var \Magento\Email\Model\Template\Css\Processor
+     */
+    private $cssProcessor;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -201,6 +207,18 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->emogrifier = $emogrifier;
         $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
+    }
+
+    /**
+     * @deprecated
+     * @return Css\Processor
+     */
+    private function getCssProcessor()
+    {
+        if (!$this->cssProcessor) {
+            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
+        }
+        return $this->cssProcessor;
     }
 
     /**
@@ -788,7 +806,9 @@ class Filter extends \Magento\Framework\Filter\Template
             return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        $css = $this->getCssFilesContent([$params['file']]);
+        $css = $this->getCssProcessor()->process(
+            $this->getCssFilesContent([$params['file']])
+        );
 
         if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
             // Return compilation error wrapped in CSS comment
@@ -914,6 +934,8 @@ class Filter extends \Magento\Framework\Filter\Template
         $cssToInline = $this->getCssFilesContent(
             $this->getInlineCssFiles()
         );
+        $cssToInline = $this->getCssProcessor()->process($cssToInline);
+
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
