@@ -59,9 +59,10 @@ class Escaper
         $dom = new \DOMDocument('1.0', 'UTF-8');
         set_error_handler(
             /**
-             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
              */
-            function ($errorNumber, $errorString, $errorFile, $errorLine) {
+            function ($errorNumber, $errorString, $errorFile, $errorLine)
+            {
                 throw new \Exception($errorString, $errorNumber);
             }
         );
