@@ -11,7 +11,9 @@
 $stores = $block->getStoresSortedBySortOrder();
 ?>
 <fieldset class="admin__fieldset fieldset">
-    <legend class="legend"><span><?php echo $block->escapeHtml( __('Manage Swatch (Values of Your Attribute)')); ?></span></legend>
+    <legend class="legend">
+        <span><?php echo $block->escapeHtml( __('Manage Swatch (Values of Your Attribute)')); ?></span>
+    </legend><br />
     <div class="admin__control-table-wrapper" id="swatch-visual-options-panel">
         <table class="data-table clearfix" cellspacing="0">
             <thead>
