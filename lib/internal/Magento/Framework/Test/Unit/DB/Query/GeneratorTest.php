@@ -32,6 +32,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $iteratorMock;
 
+    /**
+     * Setup test dependencies.
+     */
     protected function setUp()
     {
         $this->factoryMock = $this->getMock(BatchIteratorFactory::class, [], [], '', false, false);
@@ -40,6 +43,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->model = new Generator($this->factoryMock);
     }
 
+    /**
+     * Test success generate.
+     * @return void
+     */
     public function testGenerate()
     {
         $map = [
@@ -70,8 +77,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test batch generation with invalid select object.
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage  Select object must have correct "FROM" part
+     * @return void
      */
     public function testGenerateWithoutFromPart()
     {
@@ -89,7 +99,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->model->generate('entity_id', $this->selectMock, 100);
     }
 
-    public function testGenerateWithInvalidRangeField()
+    /**
+     * Test generate batches with rangeField without alias.
+     * @return void
+     */
+    public function testGenerateWithRangeFieldWithoutAlias()
     {
         $map = [
             [
@@ -118,7 +132,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
 
-    public function testGenerateWithInvalidRangeFieldValue()
+    /**
+     * Test generate batches with wild-card.
+     *
+     * @return void
+     */
+    public function testGenerateWithInvalidWithWildcard()
     {
         $map = [
             [

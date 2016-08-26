@@ -31,11 +31,31 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
      */
     private $connectionMock;
 
+    /**
+     * @var int
+     */
     private $batchSize;
+
+    /**
+     * @var string
+     */
     private $correlationName;
+
+    /**
+     * @var string
+     */
     private $rangeField;
+
+    /**
+     * @var string
+     */
     private $rangeFieldAlias;
 
+    /**
+     * Setup test dependencies.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->batchSize = 10;
@@ -64,6 +84,7 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
      * 1. $iterator->current();
      * 2. $iterator->current();
      * 3. $iterator->key();
+     * @return void
      */
     public function testCurrent()
     {
@@ -103,7 +124,7 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
      *
      * 1. $iterator->next()
      * 2. $iterator->valid();
-     *
+     * @return void
      */
     public function testIterations()
     {
@@ -147,6 +168,7 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
      * 3. $iterator->next();
      * 4. $iterator->current()
      * 5. $iterator->key()
+     * @return void
      */
     public function testNext()
     {
@@ -166,10 +188,7 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('fetchRow')
             ->with($this->wrapperSelectMock)
-            ->willReturn([
-                'max' => 25,
-                'cnt' => 10
-            ]
+            ->willReturn(['max' => 25, 'cnt' => 10]
         );
 
         $this->assertEquals($this->selectMock, $this->model->next());
