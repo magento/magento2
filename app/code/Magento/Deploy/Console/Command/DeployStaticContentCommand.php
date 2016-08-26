@@ -21,6 +21,7 @@ use Magento\Deploy\Model\Process;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\State;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+use Magento\Deploy\Model\DeployManager;
 
 /**
  * Deploy static content command
@@ -220,6 +221,12 @@ class DeployStaticContentCommand extends Command
                     'Amount of jobs to which script can be paralleled.',
                     self::DEFAULT_JOBS_AMOUNT
                 ),
+                new InputOption(
+                    Options::SYMLINK_LOCALE,
+                    null,
+                    InputOption::VALUE_NONE,
+                    'If specified, not customized locale will be symlink to base locale'
+                ),
                 new InputArgument(
                     self::LANGUAGES_ARGUMENT,
                     InputArgument::IS_ARRAY,
@@ -390,19 +397,21 @@ class DeployStaticContentCommand extends Command
         $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
         $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
 
-        $deployer = $this->objectManager->create(
-            \Magento\Deploy\Model\Deployer::class,
+        $deployManager = $this->objectManager->create(
+            DeployManager::class,
             [
-                'filesUtil' => $filesUtil,
                 'output' => $output,
                 'options' => $this->input->getOptions(),
             ]
         );
 
         if ($this->isCanBeParalleled()) {
-            return $this->runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages);
+            return $this->runProcessesInParallel($deployManager, $deployableAreaThemeMap, $deployableLanguages);
         } else {
-            return $this->deploy($deployer, $deployableLanguages, $deployableAreaThemeMap);
+            $result = $this->deploy($deployManager, $deployableLanguages, $deployableAreaThemeMap);
+            $deployManager->minifyTemplates();
+            $deployManager->saveDeployedVersion();
+            return $result;
         }
     }
 
@@ -466,46 +475,48 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * @param \Magento\Deploy\Model\Deployer $deployer
-     * @param array $deployableLanguages
+     * @param DeployManager $deployManager
+     * @param array $deployableLocales
      * @param array $deployableAreaThemeMap
      * @return int
      */
-    private function deploy($deployer, $deployableLanguages, $deployableAreaThemeMap)
+    private function deploy(DeployManager $deployManager, $deployableLocales, $deployableAreaThemeMap)
     {
-        return $deployer->deploy(
-            $this->objectManagerFactory,
-            $deployableLanguages,
-            $deployableAreaThemeMap
-        );
+        foreach ($deployableAreaThemeMap as $area => $themes) {
+            foreach ($deployableLocales as $locale) {
+                foreach ($themes as $themePath) {
+                    $deployManager->addPack($area, $themePath, $locale);
+                }
+            }
+        }
+
+        return $deployManager->deploy();
     }
 
     /**
-     * @param \Magento\Deploy\Model\Deployer $deployer
+     * @param DeployManager $deployManager
      * @param array $deployableAreaThemeMap
      * @param array $deployableLanguages
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages)
+    private function runProcessesInParallel(DeployManager $deployManager, $deployableAreaThemeMap, $deployableLanguages)
     {
         /** @var ProcessManager $processManager */
         $processManager = $this->objectManager->create(ProcessManager::class);
         $processNumber = 0;
         $processQueue = [];
-        foreach ($deployableAreaThemeMap as $area => &$themes) {
+        foreach ($deployableAreaThemeMap as $area => $themes) {
             foreach ($themes as $theme) {
-                foreach ($deployableLanguages as $lang) {
-                    $deployerFunc = function (Process $process) use ($area, $theme, $lang, $deployer) {
-                        return $this->deploy($deployer, [$lang], [$area => [$theme]]);
-                    };
-                    if ($processNumber >= $this->getProcessesAmount()) {
-                        $processQueue[] = $deployerFunc;
-                    } else {
-                        $processManager->fork($deployerFunc);
-                    }
-                    $processNumber++;
+                $deployerFunc = function (Process $process) use ($area, $theme, $deployableLanguages, $deployManager) {
+                    return $this->deploy($deployManager, $deployableLanguages, [$area => [$theme]]);
+                };
+                if ($processNumber >= $this->getProcessesAmount()) {
+                    $processQueue[] = $deployerFunc;
+                } else {
+                    $processManager->fork($deployerFunc);
                 }
+                $processNumber++;
             }
         }
         $returnStatus = null;
@@ -524,6 +535,9 @@ class DeployStaticContentCommand extends Command
             }
             usleep(5000);
         }
+
+        $deployManager->minifyTemplates();
+        $deployManager->saveDeployedVersion();
 
         return $returnStatus === Cli::RETURN_SUCCESS ?: Cli::RETURN_FAILURE;
     }

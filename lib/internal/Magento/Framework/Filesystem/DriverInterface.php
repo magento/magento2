@@ -66,6 +66,15 @@ interface DriverInterface
     public function isFile($path);
 
     /**
+     * Tells whether the filename is a symbolic link
+     *
+     * @param string $path
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function isLink($path);
+
+    /**
      * Tells whether the filename is a regular directory
      *
      * @param string $path

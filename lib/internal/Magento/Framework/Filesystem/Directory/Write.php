@@ -144,8 +144,6 @@ class Write extends Read implements WriteInterface
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
-        $this->assertIsFile($path);
-
         $targetDirectory = $targetDirectory ?: $this;
         $parentDirectory = $this->driver->getParentDirectory($destination);
         if (!$targetDirectory->isExist($parentDirectory)) {
@@ -170,7 +168,7 @@ class Write extends Read implements WriteInterface
             return true;
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
-        if ($this->driver->isFile($absolutePath)) {
+        if ($this->driver->isFile($absolutePath) || $this->driver->isLink($absolutePath)) {
             $this->driver->deleteFile($absolutePath);
         } else {
             $this->driver->deleteDirectory($absolutePath);
