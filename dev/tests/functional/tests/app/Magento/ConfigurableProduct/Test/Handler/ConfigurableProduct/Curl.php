@@ -50,10 +50,11 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
         $attributeSetId = $data['product']['attribute_set_id'];
 
         $data['product']['configurable_attributes_data'] = $this->prepareAttributesData($configurableAttributesData);
-        $data['configurable-matrix'] = $this->prepareConfigurableMatrix($fixture);
+        $data['product']['configurable-matrix-serialized'] = json_encode($this->prepareConfigurableMatrix($fixture));
         $data['attributes'] = $this->prepareAttributes($configurableAttributesData);
         $data['new-variations-attribute-set-id'] = $attributeSetId;
-        $data['associated_product_ids'] = $this->prepareAssociatedProductIds($configurableAttributesData);
+        $data['product']['associated_product_ids_serialized'] =
+            json_encode($this->prepareAssociatedProductIds($configurableAttributesData));
 
         return $this->replaceMappingData($data);
     }
