@@ -26,14 +26,13 @@ use Magento\Cms\Test\Page\CmsIndex;
  * 4. Click "Show report"
  * 5. Perform all assertions
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-27954
  */
 class ViewedProductsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -63,6 +62,7 @@ class ViewedProductsReportEntityTest extends Injectable
      * @var CatalogProductIndex
      */
     protected $catalogProductIndexPage;
+
     /**
      * Catalog product index page
      *
@@ -150,7 +150,11 @@ class ViewedProductsReportEntityTest extends Injectable
         foreach ($products as $key => $product) {
             for ($i = 0; $i < $total[$key]; $i++) {
                 $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-                $this->assertEquals($product->getName(), $this->cmsIndex->getTitleBlock()->getTitle(), 'Could not open product page');
+                $this->assertEquals(
+                    $product->getName(),
+                    $this->cmsIndex->getTitleBlock()->getTitle(),
+                    'Could not open product page.'
+                );
             }
         }
     }

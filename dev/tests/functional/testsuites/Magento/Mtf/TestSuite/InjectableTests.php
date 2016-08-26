@@ -98,8 +98,17 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
 
             /** @var \Magento\Mtf\Config\DataInterface $configData */
             $configData = $objectManagerFactory->getObjectManager()->create(\Magento\Mtf\Config\TestRunner::class);
-            $configData->setFileName($configFileName . '.xml')->load($configFilePath);
-
+            $filter = getopt('', ['filter:']);
+            if (!isset($filter['filter'])) {
+                $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+            } else {
+                $isValid = preg_match('`variation::(.*?)$`', $filter['filter'], $variation);
+                if ($isValid === 1) {
+                    $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+                    $data['rule']['variation']['allow'][0]['name'][0]['value'] = $variation[1];
+                    $configData->merge($data);
+                }
+            }
             $this->objectManager = $objectManagerFactory->create(
                 [\Magento\Mtf\Config\TestRunner::class => $configData]
             );

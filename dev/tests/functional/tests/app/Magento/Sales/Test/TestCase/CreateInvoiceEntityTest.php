@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Submit Invoice' button.
  * 6. Perform assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28209
  */
 class CreateInvoiceEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
