@@ -37,6 +37,7 @@ class SystemPackage
     const EDITION_COMMUNITY = 'magento/product-community-edition';
     const EDITION_ENTERPRISE = 'magento/product-enterprise-edition';
     const EDITION_B2B = 'magento/product-b2b-edition';
+    /**#@-*/
 
     /**
      * Constructor
