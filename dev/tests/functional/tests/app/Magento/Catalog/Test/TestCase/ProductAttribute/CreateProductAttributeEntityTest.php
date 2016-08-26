@@ -17,14 +17,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Save Product Attribute.
  * 6. Perform appropriate assertions.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-24767
  */
 class CreateProductAttributeEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
