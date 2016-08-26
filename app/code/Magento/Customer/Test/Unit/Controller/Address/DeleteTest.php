@@ -16,9 +16,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /** @var Delete */
     protected $model;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $context;
-
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $sessionMock;
 
@@ -51,9 +48,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $formFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\Metadata\FormFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->addressRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
@@ -81,7 +75,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
                 'messageManager' => $this->messageManager,
                 'customerSession' => $this->sessionMock,
                 'formKeyValidator' => $this->validatorMock,
-                'formFactory' => $formFactoryMock,
                 'addressRepository' => $this->addressRepositoryMock
             ]
         );
