@@ -188,8 +188,7 @@ class BatchIteratorTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('fetchRow')
             ->with($this->wrapperSelectMock)
-            ->willReturn(['max' => 25, 'cnt' => 10]
-        );
+            ->willReturn(['max' => 25, 'cnt' => 10]);
 
         $this->assertEquals($this->selectMock, $this->model->next());
         $this->assertEquals(1, $this->model->key());
