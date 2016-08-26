@@ -177,9 +177,15 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $placeholderUrl = 'url_to_the_placeholder/placeholder.jpg';
 
-        $sizePlaceholder = ['size' => 399659];
-
         $imagesResult = [
+            [
+                'value_id' => '2',
+                'file' => 'file_2.jpg',
+                'media_type' => 'image',
+                'position' => '0',
+                'url' => 'url_to_the_placeholder/placeholder.jpg',
+                'size' => 0
+            ],
             [
                 'value_id' => '1',
                 'file' => 'file_1.jpg',
@@ -197,6 +203,12 @@ class ContentTest extends \PHPUnit_Framework_TestCase
                     'file' => 'file_1.jpg',
                     'media_type' => 'image',
                     'position' => '1'
+                ],
+                [
+                    'value_id' => '2',
+                    'file' => 'file_2.jpg',
+                    'media_type' => 'image',
+                    'position' => '0'
                 ]
             ]
         ];
@@ -210,11 +222,9 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             $this->throwException(
                 new \Magento\Framework\Exception\FileSystemException(new Phrase('test'))
             ),
-            $sizePlaceholder,
             $this->throwException(
                 new \Magento\Framework\Exception\FileSystemException(new Phrase('test'))
-                        ),
-            $sizePlaceholder
+            )
         );
         $this->imageHelper->expects($this->any())->method('getDefaultPlaceholderUrl')->willReturn($placeholderUrl);
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturnCallback('json_encode');
