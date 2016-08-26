@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Save product.
  * 7. Verify created product.
  *
- * @group Downloadable_Product_(MX)
+ * @group Downloadable_Product
  * @ZephyrId MAGETWO-23425
  */
 class CreateDownloadableProductEntityTest extends Injectable
@@ -30,7 +30,6 @@ class CreateDownloadableProductEntityTest extends Injectable
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
