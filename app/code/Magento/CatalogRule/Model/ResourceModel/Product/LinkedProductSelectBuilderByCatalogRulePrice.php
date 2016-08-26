@@ -74,15 +74,16 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
         $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productTable = $this->resource->getTableName('catalog_product_entity');
 
         return [$this->resource->getConnection()->select()
-                ->from(['parent' => 'catalog_product_entity'], '')
+                ->from(['parent' => $productTable], '')
                 ->joinInner(
                     ['link' => $this->resource->getTableName('catalog_product_relation')],
                     "link.parent_id = parent.$linkField",
                     []
                 )->joinInner(
-                    ['child' => 'catalog_product_entity'],
+                    ['child' => $productTable],
                     "child.entity_id = link.child_id",
                     ['entity_id']
                 )->joinInner(

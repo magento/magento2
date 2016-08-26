@@ -6,18 +6,16 @@
 
 // @codingStandardsIgnoreFile
 
-/**
- * @var $block \Magento\Review\Block\Form
- */
+/** @var \Magento\Review\Block\Form $block */
 ?>
 <div class="block review-add">
     <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Write Your Own Review') ?></strong></div>
 <div class="block-content">
 <?php if ($block->getAllowWriteReviewFlag()): ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getAction() ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
+<form action="<?php echo $block->escapeUrl($block->getAction()) ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
     <?php echo $block->getBlockHtml('formkey'); ?>
     <?php echo $block->getChildHtml('form_fields_before')?>
-    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
+    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields'); ?>">
         <legend class="legend review-legend"><span><?php /* @escapeNotVerified */ echo __("You're reviewing:"); ?></span><strong><?php echo $block->escapeHtml($block->getProductInfo()->getName()) ?></strong></legend><br />
         <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
@@ -33,17 +31,17 @@
                             <?php $iterator = 1; foreach ($options as $_option): ?>
                                 <input
                                     type="radio"
-                                    name="ratings[<?php /* @escapeNotVerified */ echo $_rating->getId() ?>]"
-                                    id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
-                                    value="<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
+                                    name="ratings[<?php echo $block->escapeHtmlAttr($_rating->getId()) ?>]"
+                                    id="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>"
+                                    value="<?php echo $block->escapeHtmlAttr($_option->getId()) ?>"
                                     class="radio"
                                     data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}"
-                                    aria-labelledby="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label" />
+                                    aria-labelledby="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_rating_label <?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
                                 <label
-                                    class="rating-<?php /* @escapeNotVerified */ echo $iterator; ?>"
-                                    for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
+                                    class="rating-<?php echo $block->escapeHtmlAttr($iterator); ?>"
+                                    for="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     title="<?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>"
-                                    id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label">
+                                    id="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>_label">
                                     <span><?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?></span>
                                 </label>
                             <?php $iterator++; ?>
@@ -84,7 +82,7 @@
 <script type="text/x-magento-init">
 {
     "[data-role=product-review-form]": {
-        "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+        "Magento_Ui/js/core/app": <?php /* @noEscape */ echo $block->getJsLayout(); ?>
     },
     "#review-form": {
         "Magento_Review/js/error-placement": {}

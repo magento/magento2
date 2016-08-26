@@ -21,14 +21,13 @@ use Magento\Customer\Test\Page\CustomerAccountIndex;
  * 4. Click "Clear All" icon under the left menu tabs.
  * 5. Perform assertions.
  *
- * @group Compare_Products_(MX)
+ * @group Compare_Products
  * @ZephyrId MAGETWO-25961
  */
 class ClearAllCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
