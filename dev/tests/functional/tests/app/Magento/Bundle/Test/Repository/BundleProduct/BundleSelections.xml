@@ -605,7 +605,7 @@
             </field>
         </dataset>
 
-        <dataset name="dynamic-two-special">
+        <dataset name="dynamic_with_two_required_options_assigned_products_with_special_price">
             <field name="bundle_options" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="title" xsi:type="string">Drop-down Option</item>

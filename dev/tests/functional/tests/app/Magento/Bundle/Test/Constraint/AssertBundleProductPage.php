@@ -69,9 +69,13 @@ class AssertBundleProductPage extends AssertProductPage
         }
 
         $regularPrice = $priceBlock->getOldPrice();
-        $expectedRegularPrice = $this->product->getDataFieldConfig('price')['source']->getPriceData()['regular_from'];
+        $priceData = $this->product->getDataFieldConfig('price')['source']->getPriceData();
 
-        if ($expectedRegularPrice != $regularPrice) {
+        if (!isset($priceData['regular_from'])) {
+            return 'Regular from price not set.';
+        }
+
+        if ($priceData['regular_from'] != $regularPrice) {
             return 'Bundle regular price on product view page is not correct.';
         }
 

@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest" summary="Create Bundle Product" ticketId="MAGETWO-24118">
-        <!--<variation name="CreateBundleProductEntityTestVariation1">
+        <variation name="CreateBundleProductEntityTestVariation1">
             <data name="description" xsi:type="string">Create default bundle with dynamic options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -332,7 +332,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
-        </variation>-->
+        </variation>
         <variation name="CreateBundleProductEntityTestVariation22" summary="Create Bundle (fixed) Product with special price and Custom options with fixed price">
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
@@ -368,7 +368,7 @@
             <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
             <data name="product/data/price_type" xsi:type="string">Yes</data>
             <data name="product/data/price/dataset" xsi:type="string">dynamic-18</data>
-            <data name="product/data/bundle_selections/dataset" xsi:type="string">dynamic-two-special</data>
+            <data name="product/data/bundle_selections/dataset" xsi:type="string">dynamic_with_two_required_options_assigned_products_with_special_price</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
