@@ -69,38 +69,22 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
-        $this->prepareContext();
         $this->model =  $objectManager->getObject(
             Delete::class,
             [
-                'context' => $this->context,
+                'request' => $this->request,
+                'resultRedirectFactory' => $this->resultRedirectFactory,
+                'messageManager' => $this->messageManager,
                 'customerSession' => $this->sessionMock,
                 'formKeyValidator' => $this->validatorMock,
                 'formFactory' => $formFactoryMock,
                 'addressRepository' => $this->addressRepositoryMock
             ]
         );
-    }
-
-    protected function prepareContext()
-    {
-        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($this->resultRedirectFactory);
-        $this->context->expects($this->any())
-            ->method('getMessageManager')
-            ->willReturn($this->messageManager);
     }
 
     public function testExecute()
