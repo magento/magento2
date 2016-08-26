@@ -337,7 +337,7 @@
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">No</data>
-            <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%%</data>
+            <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
             <data name="product/data/price_type" xsi:type="string">No</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/price/dataset" xsi:type="string">fixed-100</data>
