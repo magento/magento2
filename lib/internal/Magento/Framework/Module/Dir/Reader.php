@@ -95,7 +95,7 @@ class Reader
     /**
      * Retrieve iterator for files with $filename from components located in component $subDir.
      *
-     * @param $filename
+     * @param string $filename
      * @param string $subDir
      *
      * @return FileIterator

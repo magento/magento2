@@ -203,7 +203,7 @@ class DiCompileCommand extends Command
      * @param string[] $modulePaths
      * @return string[]
      */
-    private function getExcludedModulePaths($modulePaths)
+    private function getExcludedModulePaths(array $modulePaths)
     {
         $modulesByBasePath = [];
         foreach ($modulePaths as $modulePath) {
@@ -237,7 +237,7 @@ class DiCompileCommand extends Command
      * @param string[] $libraryPaths
      * @return string[]
      */
-    private function getExcludedLibraryPaths($libraryPaths)
+    private function getExcludedLibraryPaths(array $libraryPaths)
     {
         $excludedLibraryPaths = [
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
