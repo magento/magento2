@@ -78,23 +78,12 @@ class AssertProductInCart extends AbstractConstraint
      */
     protected function countPrices(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
-        $this->setFormPrice($product, $checkoutCart);
-        $this->setFixturePrice($product);
+        /** @var CatalogProductSimple $product */
+        $this->fixturePrice = $product->getPrice();
+        $this->prepareFormPrice($product, $checkoutCart);
         $this->countSpecialPrice($product);
         $this->countCheckoutCartItemPrice($product);
         $this->countCustomOptionsPrice($product);
-    }
-
-    /**
-     * Get fixture price.
-     *
-     * @param FixtureInterface $product
-     * @return void
-     */
-    protected function setFixturePrice(FixtureInterface $product)
-    {
-        /** @var CatalogProductSimple $product */
-        $this->fixturePrice = $product->getPrice();
     }
 
     /**
@@ -113,13 +102,13 @@ class AssertProductInCart extends AbstractConstraint
     }
 
     /**
-     * Get form price.
+     * Prepare form price.
      *
      * @param FixtureInterface $product
      * @param CheckoutCart $checkoutCart
      * @return void
      */
-    protected function setFormPrice(FixtureInterface $product, CheckoutCart $checkoutCart)
+    protected function prepareFormPrice(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
         $checkoutCart->open();
         $cartItem = $checkoutCart->getCartBlock()->getCartItem($product);
