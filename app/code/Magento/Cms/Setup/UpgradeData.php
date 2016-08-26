@@ -235,8 +235,11 @@ class UpgradeData implements UpgradeDataInterface
 </div>
 EOD;
             $privacyAndCookiePolicyPage = $this->createPage()->load(self::PRIVACY_COOKIE_PAGE_ID);
-            $privacyAndCookiePolicyPage->setContent($newPageContent);
-            $privacyAndCookiePolicyPage->save();
+            $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
+            if ($privacyAndCookiePolicyPageId) {
+                $privacyAndCookiePolicyPage->setContent($newPageContent);
+                $privacyAndCookiePolicyPage->save();
+            }
         }
         $setup->endSetup();
     }
