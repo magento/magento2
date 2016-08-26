@@ -89,10 +89,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->model->generate('entity_id', $this->selectMock, 100);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage  Select object must have correct range field name "entity_id"
-     */
     public function testGenerateWithInvalidRangeField()
     {
         $map = [
@@ -105,19 +101,23 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 Select::COLUMNS,
                 [
-                    ['cp', 'row_id', 'product_id']
+                    ['cp', 'entity_id', null]
                 ]
             ]
         ];
         $this->selectMock->expects($this->exactly(2))->method('getPart')->willReturnMap($map);
-        $this->factoryMock->expects($this->never())->method('create');
-        $this->model->generate('entity_id', $this->selectMock, 100);
+        $this->factoryMock->expects($this->once())->method('create')->with(
+            [
+                'select' => $this->selectMock,
+                'batchSize' => 100,
+                'correlationName' => 'cp',
+                'rangeField' => 'entity_id',
+                'rangeFieldAlias' => 'entity_id'
+            ]
+        )->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage  Select object must have correct range field name "entity_id"
-     */
     public function testGenerateWithInvalidRangeFieldValue()
     {
         $map = [
@@ -130,12 +130,20 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 Select::COLUMNS,
                 [
-                    ['cp', new \Zend_Db_Expr('MAX(entity_id) as max'), 'product_id']
+                    ['cp', '*', null]
                 ]
             ]
         ];
         $this->selectMock->expects($this->exactly(2))->method('getPart')->willReturnMap($map);
-        $this->factoryMock->expects($this->never())->method('create');
-        $this->model->generate('entity_id', $this->selectMock, 100);
+        $this->factoryMock->expects($this->once())->method('create')->with(
+            [
+                'select' => $this->selectMock,
+                'batchSize' => 100,
+                'correlationName' => 'cp',
+                'rangeField' => 'entity_id',
+                'rangeFieldAlias' => 'entity_id'
+            ]
+        )->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
 }

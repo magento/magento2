@@ -57,22 +57,13 @@ class Generator
         /**
          * Calculate $rangeField alias
          */
-        $rangeFieldAlias = null;
+        $rangeFieldAlias = $rangeField;
         foreach ($columns as $column) {
             list($table, $columnName, $alias) = $column;
-            if (is_string($columnName) && $table == $fieldCorrelationName && $columnName == $rangeField) {
-                $rangeFieldAlias = $alias;
+            if ($table == $fieldCorrelationName && $columnName == $rangeField) {
+                $rangeFieldAlias = $alias ?: $rangeField;
                 break;
             }
-        }
-
-        if (!$rangeFieldAlias) {
-            throw new LocalizedException(
-                new \Magento\Framework\Phrase(
-                    'Select object must have correct range field name "%field"',
-                    ['field' => $rangeField]
-                )
-            );
         }
 
         return $this->iteratorFactory->create(
