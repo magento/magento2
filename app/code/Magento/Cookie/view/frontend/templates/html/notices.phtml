@@ -30,7 +30,7 @@
                     "cookieName": "<?php /* @noEscape */ echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
                     "cookieValue": <?php /* @noEscape */ echo $this->helper(\Magento\Cookie\Helper\Cookie::class)->getAcceptedSaveCookiesWebsiteIds() ?>,
                     "cookieLifetime": <?php /* @noEscape */ echo $this->helper(\Magento\Cookie\Helper\Cookie::class)->getCookieRestrictionLifetime()?>,
-                    "noCookiesUrl": "<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('cookie/index/noCookies'))) ?>"
+                    "noCookiesUrl": "<?php echo $block->escapeUrl($block->getUrl('cookie/index/noCookies')) ?>"
                 }
             }
         }
