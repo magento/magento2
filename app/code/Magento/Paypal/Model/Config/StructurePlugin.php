@@ -11,6 +11,9 @@ use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Config\Model\Config\Structure\ElementInterface;
 use Magento\Paypal\Helper\Backend as BackendHelper;
 
+/**
+ * Plugin for \Magento\Config\Model\Config\Structure
+ */
 class StructurePlugin
 {
     /**
@@ -21,17 +24,17 @@ class StructurePlugin
     /**
      * @var BackendHelper
      */
-    protected $_helper;
+    private $backendHelper;
 
     /**
      * @var ScopeDefiner
      */
-    protected $_scopeDefiner;
+    private $scopeDefiner;
 
     /**
      * @var string[]
      */
-    private static $_paypalConfigCountries = [
+    private static $paypalConfigCountries = [
         'payment_us',
         'payment_ca',
         'payment_au',
@@ -49,12 +52,10 @@ class StructurePlugin
      * @param ScopeDefiner $scopeDefiner
      * @param BackendHelper $helper
      */
-    public function __construct(
-        ScopeDefiner $scopeDefiner,
-        BackendHelper $helper
-    ) {
-        $this->_scopeDefiner = $scopeDefiner;
-        $this->_helper = $helper;
+    public function __construct(ScopeDefiner $scopeDefiner, BackendHelper $helper)
+    {
+        $this->scopeDefiner = $scopeDefiner;
+        $this->backendHelper = $helper;
     }
 
     /**
@@ -65,10 +66,12 @@ class StructurePlugin
      */
     public static function getPaypalConfigCountries($addOther = false)
     {
-        $countries = self::$_paypalConfigCountries;
+        $countries = self::$paypalConfigCountries;
+
         if ($addOther) {
             $countries[] = 'payment_other';
         }
+
         return $countries;
     }
 
@@ -78,39 +81,45 @@ class StructurePlugin
      * @param Structure $subject
      * @param \Closure $proceed
      * @param array $pathParts
-     * @return ElementInterface
+     * @return ElementInterface|null
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetElementByPathParts(
-        Structure $subject,
-        \Closure $proceed,
-        array $pathParts
-    ) {
+    public function aroundGetElementByPathParts(Structure $subject, \Closure $proceed, array $pathParts)
+    {
         $isSectionChanged = $pathParts[0] == 'payment';
+
         if ($isSectionChanged) {
-            $requestedCountrySection = 'payment_' . strtolower($this->_helper->getConfigurationCountryCode());
+            $requestedCountrySection = 'payment_' . strtolower($this->backendHelper->getConfigurationCountryCode());
+
             if (in_array($requestedCountrySection, self::getPaypalConfigCountries())) {
                 $pathParts[0] = $requestedCountrySection;
             } else {
                 $pathParts[0] = 'payment_other';
             }
         }
-        /** @var ElementInterface $result */
+
         $result = $proceed($pathParts);
-        if ($isSectionChanged && isset($result)) {
+
+        if ($isSectionChanged && $result) {
             if ($result instanceof Section) {
                 $this->restructurePayments($result);
-                $result->setData(array_merge(
-                    $result->getData(),
-                    ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
-                ), $this->_scopeDefiner->getScope());
+                $result->setData(
+                    array_merge(
+                        $result->getData(),
+                        ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
+                    ),
+                    $this->scopeDefiner->getScope()
+                );
             }
         }
+
         return $result;
     }
 
     /**
-     * Changes payment config structure.
+     * Change payment config structure
+     *
      * Groups which have `displayIn` element, transfer to appropriate group.
      * Groups without `displayIn` transfer to other payment methods group.
      *
@@ -139,7 +148,7 @@ class StructurePlugin
         }
 
         $configuration['children'] = $sectionMap;
-        $result->setData($configuration, $this->_scopeDefiner->getScope());
+        $result->setData($configuration, $this->scopeDefiner->getScope());
     }
 
     /**

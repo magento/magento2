@@ -8,7 +8,7 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -64,6 +64,11 @@ class BlockRepository implements BlockRepositoryInterface
     private $storeManager;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
@@ -72,6 +77,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         ResourceBlock $resource,
@@ -81,7 +87,8 @@ class BlockRepository implements BlockRepositoryInterface
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -91,6 +98,7 @@ class BlockRepository implements BlockRepositoryInterface
         $this->dataBlockFactory = $dataBlockFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -139,27 +147,11 @@ class BlockRepository implements BlockRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
-        $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);
-
         /** @var \Magento\Cms\Model\ResourceModel\Block\Collection $collection */
         $collection = $this->blockCollectionFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            $this->addFilterGroupToCollection($filterGroup, $collection);
-        }
 
-        $searchResults->setTotalCount($collection->getSize());
-        $sortOrders = $criteria->getSortOrders();
-        if ($sortOrders) {
-            foreach ($sortOrders as $sortOrder) {
-                $collection->addOrder(
-                    $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
-        }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+        $this->collectionProcessor->process($criteria, $collection);
+
         $blocks = [];
         /** @var Block $blockModel */
         foreach ($collection as $blockModel) {
@@ -174,7 +166,12 @@ class BlockRepository implements BlockRepositoryInterface
                 \Magento\Cms\Api\Data\BlockInterface::class
             );
         }
+
+        /** @var Data\BlockSearchResultsInterface $searchResults */
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($criteria);
         $searchResults->setItems($blocks);
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
@@ -209,31 +206,18 @@ class BlockRepository implements BlockRepositoryInterface
     }
 
     /**
-     * Helper function that adds a FilterGroup to the collection.
+     * Retrieve collection processor
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
-     * @param \Magento\Cms\Model\ResourceModel\Block\Collection $collection
-     * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @deprecated
+     * @return CollectionProcessorInterface
      */
-    private function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
-        \Magento\Cms\Model\ResourceModel\Block\Collection $collection
-    ) {
-        $fields = [];
-        $conditions = [];
-        foreach ($filterGroup->getFilters() as $filter) {
-            if ($filter->getField() === 'store_id') {
-                $collection->addStoreFilter($filter->getValue(), false);
-                continue;
-            }
-            $condition = $filter->getConditionType() ?: 'eq';
-            $fields[] = $filter->getField();
-            $conditions[] = [$condition => $filter->getValue()];
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'
+            );
         }
-
-        if ($fields) {
-            $collection->addFieldToFilter($fields, $conditions);
-        }
+        return $this->collectionProcessor;
     }
 }
