@@ -47,7 +47,7 @@ class Escaper
     }
 
     /**
-     * Filter not allowed HTML entities
+     * Filter not allowed tags and attribtues
      *
      * @param string $string
      * @param string[] $allowedTags
