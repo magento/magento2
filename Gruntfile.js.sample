@@ -16,8 +16,8 @@ module.exports = function (grunt) {
         tasks = grunt.file.expand('./dev/tools/grunt/tasks/*'),
         themes;
 
-        filesRouter.set('themes', 'dev/tools/grunt/configs/themes')ж
-        themes = filesRouter.get('themes')ж
+        filesRouter.set('themes', 'dev/tools/grunt/configs/themes');
+        themes = filesRouter.get('themes');
 
     tasks = _.map(tasks, function(task){ return task.replace('.js', '') });
     tasks.push('time-grunt');
