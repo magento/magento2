@@ -36,7 +36,7 @@ class Escaper
             }
         } elseif (strlen($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
-                $result = $this->escapeHtmlTagsAndAttributes($data, $allowedTags);
+                $result = $this->filterHtmlTagsAndAttributes($data, $allowedTags);
             } else {
                 $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
@@ -47,18 +47,21 @@ class Escaper
     }
 
     /**
-     * Escape not allowed HTML entities
+     * Filter not allowed HTML entities
      *
      * @param string $string
      * @param string[] $allowedTags
      * @return string
      */
-    private function escapeHtmlTagsAndAttributes($string, $allowedTags)
+    private function filterHtmlTagsAndAttributes($string, $allowedTags)
     {
         $wrapperElementId = uniqid();
         $dom = new \DOMDocument('1.0', 'UTF-8');
         set_error_handler(
-            function($errorNumber, $errorString, $errorFile, $errorLine) {
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             */
+            function ($errorNumber, $errorString, $errorFile, $errorLine) {
                 throw new \Exception($errorString, $errorNumber);
             }
         );
