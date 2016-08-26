@@ -11,9 +11,13 @@ module.exports = function (grunt) {
 
     var _ = require('underscore'),
         path = require('path'),
-        themes = require('./dev/tools/grunt/tools/files-router').get('themes'),
+        filesRouter = require('./dev/tools/grunt/tools/files-router'),
         configDir = './dev/tools/grunt/configs',
-        tasks = grunt.file.expand('./dev/tools/grunt/tasks/*');
+        tasks = grunt.file.expand('./dev/tools/grunt/tasks/*'),
+        themes;
+
+        filesRouter.set('themes', 'dev/tools/grunt/configs/themes')
+        themes = filesRouter.get('themes')
 
     tasks = _.map(tasks, function(task){ return task.replace('.js', '') });
     tasks.push('time-grunt');
