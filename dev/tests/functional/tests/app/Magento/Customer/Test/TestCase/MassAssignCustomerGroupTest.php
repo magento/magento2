@@ -29,14 +29,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Click "Submit" button
  * 7. Perform all assertions
  *
- * @group Customer_Groups_(CS), Customers_(CS)
+ * @group Customer_Groups, Customers
  * @ZephyrId MAGETWO-27892
  */
 class MassAssignCustomerGroupTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
