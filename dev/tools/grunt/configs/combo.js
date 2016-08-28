@@ -6,7 +6,8 @@
 'use strict';
 
 var theme = require('./themes'),
-    path = require('./path');
+    path  = require('./path'),
+    _     = require('underscore');
 
 /**
  * Define Combos for repetitive code.
@@ -33,28 +34,35 @@ module.exports = {
             theme[themeName].locale + '/';
     },
 
+    cssFiles: function (themeName) {
+        var t = theme[themeName],
+            files = [];
+
+        for (var i in t.files)
+            files.push( themeFile(path.pub, t, t.files[i], '.css') );
+
+        return files;
+    },
+
     lessFiles: function (themeName) {
-        var lessStringArray = [],
-            cssStringArray = [],
-            lessFiles = {},
-            i = 0;
+        var lessFiles = {},
+            t = theme[themeName],
+            css, lss;
 
-        for (i; i < theme[themeName].files.length; i++) {
-            cssStringArray[i] = path.pub +
-            theme[themeName].area + '/' +
-            theme[themeName].name + '/' +
-            theme[themeName].locale + '/' +
-            theme[themeName].files[i] + '.css';
-
-            lessStringArray[i] = path.pub +
-            theme[themeName].area + '/' +
-            theme[themeName].name + '/' +
-            theme[themeName].locale + '/' +
-            theme[themeName].files[i] + '.less';
-
-            lessFiles[cssStringArray[i]] = lessStringArray[i];
+        for (var i in t.files) {
+            css = themeFile(path.pub, t, t.files[i], '.css');
+            lss = themeFile(path.pub, t, t.files[i], '.less');
+            lessFiles[css] = lss;
         }
 
         return lessFiles;
     }
 };
+
+function themeFile(path, theme, file, ext) {
+    return path +
+        theme.area + '/' +
+        theme.name + '/' +
+        theme.locale + '/' +
+        file + ext;
+}

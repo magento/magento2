@@ -45,12 +45,11 @@ module.exports = function (grunt) {
         prod: function (component) {
             var tasks = [
                 'less',
-                'autoprefixer',
-                'cssmin',
-                'usebanner'
+                'postcss',
             ].map(function(task){
                 return task + ':' + component;
             });
+            tasks.push('usebanner');
 
             if (typeof component === 'undefined') {
                 grunt.log.subhead('Tip: Please make sure that u specify prod subtask. By default prod task do nothing');
