@@ -107,7 +107,7 @@ class Plugin
                 $data = [
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
-                        'severity' => MessageInterface::SEVERITY_MAJOR,
+                        'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
                         'identity' => md5('bulk' . $bulkUuid),
                         'uuid' => $bulkUuid,
                         'status' => $bulkStatus,
@@ -135,7 +135,7 @@ class Plugin
     private function getText($operationDetails)
     {
         if (0 == $operationDetails['operations_successful'] && 0 == $operationDetails['operations_failed']) {
-            return __('%1 item(s) are currently being updated.', $operationDetails['operations_total']);
+            return __('%1 item(s) have been scheduled for update.', $operationDetails['operations_total']);
         }
 
         $summaryReport = '';
