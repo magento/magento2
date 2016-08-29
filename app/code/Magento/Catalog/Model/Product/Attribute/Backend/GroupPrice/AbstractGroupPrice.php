@@ -339,6 +339,8 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
+     * Perform price modification
+     *
      * @param \Magento\Catalog\Model\Product $object
      * @param array $data
      * @return array
@@ -346,12 +348,13 @@ abstract class AbstractGroupPrice extends Price
      */
     protected function modifyPriceData($object, $data)
     {
-        foreach ($data as $k => $v) {
-            if (isset($v['price']) && $v['price'] > 0) {
-                $data[$k]['website_price'] = $v['price'];
+        /** @var array $priceItem */
+        foreach ($data as $key => $priceItem) {
+            if (isset($priceItem['price']) && $priceItem['price'] > 0) {
+                $data[$key]['website_price'] = $priceItem['price'];
             }
-            if ($v['all_groups']) {
-                $data[$k]['cust_group'] = $this->_groupManagement->getAllCustomersGroup()->getId();
+            if ($priceItem['all_groups']) {
+                $data[$key]['cust_group'] = $this->_groupManagement->getAllCustomersGroup()->getId();
             }
         }
         return $data;
