@@ -58,11 +58,7 @@ class Escaper
         $wrapperElementId = uniqid();
         $dom = new \DOMDocument('1.0', 'UTF-8');
         set_error_handler(
-            /**
-             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-             */
-            function ($errorNumber, $errorString, $errorFile, $errorLine)
-            {
+            function ($errorNumber, $errorString) {
                 throw new \Exception($errorString, $errorNumber);
             }
         );
@@ -75,8 +71,10 @@ class Escaper
         restore_error_handler();
 
         $xpath = new \DOMXPath($dom);
-        $nodes = $xpath->query('//node()[name() != \''
-            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']');
+        $nodes = $xpath->query(
+            '//node()[name() != \''
+            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']'
+        );
         foreach ($nodes as $node) {
             if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
                 $node->parentNode->replaceChild($dom->createTextNode($node->textContent), $node);
