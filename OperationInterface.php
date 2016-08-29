@@ -7,6 +7,7 @@ namespace Magento\Framework\Bulk;
 
 /**
  * Interface OperationInterface
+ * @api
  */
 interface OperationInterface
 {

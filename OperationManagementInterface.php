@@ -8,6 +8,7 @@ namespace Magento\Framework\Bulk;
 
 /**
  * Interface OperationManagementInterface
+ * @api
  */
 interface OperationManagementInterface
 {

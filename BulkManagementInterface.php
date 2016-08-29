@@ -7,6 +7,7 @@ namespace Magento\Framework\Bulk;
 
 /**
  * Interface BulkManagementInterface
+ * @api
  */
 interface BulkManagementInterface
 {
