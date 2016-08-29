@@ -8,7 +8,6 @@ namespace Magento\Deploy\Model\Deploy;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
@@ -221,6 +220,7 @@ class LocaleDeploy implements DeployInterface
      */
     public function deploy($area, $themePath, $locale, array $options)
     {
+        $this->options = $options;
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
         // emulate application locale needed for correct file path resolving
@@ -316,8 +316,6 @@ class LocaleDeploy implements DeployInterface
      * @param string $module
      * @param string|null $fullPath
      * @return string
-     * @throws \InvalidArgumentException
-     * @throws LocalizedException
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

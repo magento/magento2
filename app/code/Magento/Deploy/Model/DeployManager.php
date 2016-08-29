@@ -7,16 +7,13 @@
 namespace Magento\Deploy\Model;
 
 use Magento\Deploy\Model\Deploy\DeployInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\View\Template\Html\MinifierInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\ConfigInterface as AssetConfig;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Framework\App\Utility\Files;
@@ -26,16 +23,6 @@ use Magento\Framework\App\Utility\Files;
  */
 class DeployManager
 {
-    /**
-     * Standard deploy strategy
-     */
-    const DEPLOY_STRATEGY_STANDARD = 'standard';
-
-    /**
-     * Quick deploy strategy
-     */
-    const DEPLOY_STRATEGY_QUICK = 'quick';
-
     /**
      * Base locale without customizations
      */
@@ -65,16 +52,6 @@ class DeployManager
      * @var array
      */
     private $moduleDirectories;
-
-    /**
-     * @var ObjectManagerFactory
-     */
-    private $objectManagerFactory;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var DesignInterface
@@ -112,7 +89,11 @@ class DeployManager
     private $htmlMinifier;
 
     /**
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @var DeployStrategyFactory
+     */
+    private $deployStrategyFactory;
+
+    /**
      * @param OutputInterface $output
      * @param RulePool $rulePool
      * @param DesignInterface $design
@@ -120,10 +101,10 @@ class DeployManager
      * @param Files $filesUtils
      * @param StorageInterface $versionStorage
      * @param MinifierInterface $htmlMinifier
+     * @param DeployStrategyFactory $deployStrategyFactory
      * @param array $options
      */
     public function __construct(
-        ObjectManagerFactory $objectManagerFactory,
         OutputInterface $output,
         RulePool $rulePool,
         DesignInterface $design,
@@ -131,10 +112,10 @@ class DeployManager
         Files $filesUtils,
         StorageInterface $versionStorage,
         MinifierInterface $htmlMinifier,
+        DeployStrategyFactory $deployStrategyFactory,
         array $options
     ) {
         $this->rulePool = $rulePool;
-        $this->objectManagerFactory = $objectManagerFactory;
         $this->design = $design;
         $this->output = $output;
         $this->options = $options;
@@ -142,6 +123,7 @@ class DeployManager
         $this->filesUtils = $filesUtils;
         $this->versionStorage = $versionStorage;
         $this->htmlMinifier = $htmlMinifier;
+        $this->deployStrategyFactory = $deployStrategyFactory;
     }
 
     /**
@@ -171,10 +153,9 @@ class DeployManager
         foreach ($this->packages as $package) {
             $locales = array_keys($package);
             list($area, $themePath) = current($package);
-            $this->emulateApplicationArea($area);
 
             if (count($locales) == 1) {
-                $result |= $this->getDeployStrategy(self::DEPLOY_STRATEGY_STANDARD)
+                $result |= $this->getDeployStrategy($area, DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD)
                     ->deploy($area, $themePath, current($locales), $this->options);
                 continue;
             }
@@ -225,18 +206,6 @@ class DeployManager
         if (isset($this->options[Options::DRY_RUN]) && !$this->options[Options::DRY_RUN]) {
             $this->versionStorage->save($version);
         }
-    }
-
-    /**
-     * Emulate application area
-     *
-     * @param string $areaCode
-     * @return void
-     */
-    private function emulateApplicationArea($areaCode)
-    {
-        $this->objectManager = $this->objectManagerFactory->create([State::PARAM_MODE => State::MODE_PRODUCTION]);
-        $this->objectManager->get(State::class)->setAreaCode($areaCode);
     }
 
     /**
@@ -309,13 +278,16 @@ class DeployManager
                 $baseLocale = $locale;
             } else {
                 $deployStrategies[$locale] = $this->getDeployStrategy(
-                    $hasCustomization ? self::DEPLOY_STRATEGY_STANDARD : self::DEPLOY_STRATEGY_QUICK
+                    $area,
+                    $hasCustomization
+                    ? DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD
+                    : DeployStrategyFactory::DEPLOY_STRATEGY_QUICK
                 );
 
             }
         }
         $deployStrategies = array_merge(
-            [$baseLocale => $this->getDeployStrategy(self::DEPLOY_STRATEGY_STANDARD)],
+            [$baseLocale => $this->getDeployStrategy($area, DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD)],
             $deployStrategies
         );
 
@@ -335,26 +307,21 @@ class DeployManager
     }
 
     /**
+     * @param string $area
      * @param string $type
      * @return DeployInterface
      */
-    private function getDeployStrategy($type)
+    private function getDeployStrategy($area, $type)
     {
-        if (!isset($this->deployStrategies[$type])) {
-            $strategyMap = [
-                self::DEPLOY_STRATEGY_STANDARD => Deploy\LocaleDeploy::class,
-                self::DEPLOY_STRATEGY_QUICK => Deploy\LocaleQuickDeploy::class,
-            ];
-
-            if (!isset($strategyMap[$type])) {
-                throw new \InvalidArgumentException('Wrong deploy strategy type: ' . $type);
-            }
-            $this->deployStrategies[$type] = $this->objectManager->create(
-                $strategyMap[$type],
+        $key = $area . '-' . $type;
+        if (!isset($this->deployStrategies[$key])) {
+            $this->deployStrategies[$key] = $this->deployStrategyFactory->create(
+                $area,
+                $type,
                 ['output' => $this->output]
             );
         }
 
-        return $this->deployStrategies[$type];
+        return $this->deployStrategies[$key];
     }
 }
