@@ -244,6 +244,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Add filter by product type(s)
      *
      * @param array|string $typeFilter
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function filterByProductType($typeFilter)

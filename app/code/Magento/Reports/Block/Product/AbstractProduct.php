@@ -82,7 +82,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
 
     /**
      * Public method for retrieve Product Index model
-     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     public function getModel()
