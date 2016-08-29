@@ -63,7 +63,7 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        $configurations = $this->getConfigurations();
+        $configurations = $this->getConfigurationsFromProduct($configurableProduct);
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -78,9 +78,35 @@ class UpdateConfigurations
     }
 
     /**
+     * Get configurations from product
+     *
+     * @param \Magento\Catalog\Model\Product $configurableProduct
+     * @return array
+     */
+    private function getConfigurationsFromProduct(\Magento\Catalog\Model\Product $configurableProduct)
+    {
+        $result = [];
+
+        $configurableMatrix = $configurableProduct->hasData('configurable-matrix') ?
+            $configurableProduct->getData('configurable-matrix') : [];
+        foreach ($configurableMatrix as $item) {
+            if (!$item['newProduct']) {
+                $result[$item['id']] = $this->mapData($item);
+
+                if (isset($item['qty'])) {
+                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get configurations from request
      *
      * @return array
+     * @deprecated
      */
     protected function getConfigurations()
     {
