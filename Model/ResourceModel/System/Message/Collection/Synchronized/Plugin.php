@@ -5,14 +5,6 @@
  */
 namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Collection\Synchronized;
 
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Bulk\BulkStatusInterface;
-use Magento\Framework\Notification\MessageInterface;
-use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
-use Magento\AsynchronousOperations\Model\Operation\Details;
-use Magento\Framework\AuthorizationInterface;
-use Magento\AsynchronousOperations\Model\StatusMapper;
-
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
  */
@@ -24,32 +16,32 @@ class Plugin
     private $messageFactory;
 
     /**
-     * @var BulkStatusInterface
+     * @var \Magento\Framework\Bulk\BulkStatusInterface
      */
     private $bulkStatus;
 
     /**
-     * @var UserContextInterface
+     * @var \Magento\Authorization\Model\UserContextInterface
      */
     private $userContext;
 
     /**
-     * @var Details
+     * @var \Magento\AsynchronousOperations\Model\Operation\Details
      */
     private $operationDetails;
 
     /**
-     * @var BulkNotificationManagement
+     * @var \Magento\AsynchronousOperations\Model\BulkNotificationManagement
      */
     private $bulkNotificationManagement;
 
     /**
-     * @var AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     private $authorization;
 
     /**
-     * @var StatusMapper
+     * @var \Magento\AsynchronousOperations\Model\StatusMapper
      */
     private $statusMapper;
 
@@ -57,21 +49,21 @@ class Plugin
      * Plugin constructor.
      *
      * @param \Magento\AdminNotification\Model\System\MessageFactory $messageFactory
-     * @param BulkStatusInterface $bulkStatus
-     * @param BulkNotificationManagement $bulkNotificationManagement
-     * @param UserContextInterface $userContext
-     * @param Details $operationDetails
-     * @param AuthorizationInterface $authorization
-     * @param StatusMapper $statusMapper
+     * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
+     * @param \Magento\AsynchronousOperations\Model\BulkNotificationManagement $bulkNotificationManagement
+     * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @param \Magento\AsynchronousOperations\Model\Operation\Details $operationDetails
+     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param \Magento\AsynchronousOperations\Model\StatusMapper $statusMapper
      */
     public function __construct(
         \Magento\AdminNotification\Model\System\MessageFactory $messageFactory,
-        BulkStatusInterface $bulkStatus,
-        BulkNotificationManagement $bulkNotificationManagement,
-        UserContextInterface $userContext,
-        Details $operationDetails,
-        AuthorizationInterface $authorization,
-        StatusMapper $statusMapper
+        \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus,
+        \Magento\AsynchronousOperations\Model\BulkNotificationManagement $bulkNotificationManagement,
+        \Magento\Authorization\Model\UserContextInterface $userContext,
+        \Magento\AsynchronousOperations\Model\Operation\Details $operationDetails,
+        \Magento\Framework\AuthorizationInterface $authorization,
+        \Magento\AsynchronousOperations\Model\StatusMapper $statusMapper
     ) {
         $this->messageFactory = $messageFactory;
         $this->bulkStatus = $bulkStatus;
@@ -106,14 +98,11 @@ class Plugin
         foreach ($userBulks as $bulk) {
             $bulkUuid = $bulk->getBulkId();
             if (!in_array($bulkUuid, $acknowledgedBulks)) {
-                $operationDetails = $this->operationDetails->getDetails($bulkUuid);
-                $text = $this->getText($operationDetails);
+                $details = $this->operationDetails->getDetails($bulkUuid);
+                $text = $this->getText($details);
                 $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
                 if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
-                    $text = __(
-                            '%1 item(s) are currently being updated.',
-                            $operationDetails['operations_total']
-                        ) . $text;
+                    $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
                 }
                 $data = [
                     'data' => [
