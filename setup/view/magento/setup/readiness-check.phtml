@@ -11,7 +11,7 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="nextState()"
-                ng-disabled="checkingInProgress() || hasErrors"
+                ng-disabled="needReCheck || checkingInProgress() || hasErrors"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
