@@ -11,7 +11,7 @@
 @message-system__border-color: @color-gray82;
 @message-system__border-width: .1rem;
 @message-system__color: @color-gray20;
-@message-system-short-message__padding-vertical: 1.5rem;
+@message-system-short__padding-vertical: 1.5rem;
 @message-system-short-wrapper__height: 5rem;
 
 //  Triangle marker
@@ -38,7 +38,7 @@
         background: none;
         margin: 0 0 -3px;
         overflow: hidden;
-        padding: @message-system-short-message__padding-vertical 0 @message-system-short-message__padding-vertical 3.3rem;
+        padding: @message-system-short__padding-vertical 0 @message-system-short__padding-vertical 3.3rem;
 
         &:before {
             left: .3rem;
@@ -55,7 +55,7 @@
         }
 
         float: right;
-        padding: @message-system-short-message__padding-vertical 0 0;
+        padding: @message-system-short__padding-vertical 0 0;
         vertical-align: top;
     }
 }
@@ -92,7 +92,7 @@
     border-top: 0;
     display: none;
     left: -1px;
-    padding: 0 @indent__l @message-system-short-message__padding-vertical;
+    padding: 0 @indent__l @message-system-short__padding-vertical;
     position: absolute;
     right: -1px;
     top: 100%;
@@ -106,7 +106,7 @@
 .message-system-action-dropdown {
     .lib-button-reset();
     float: right;
-    margin: @message-system-short-message__padding-vertical 0;
+    margin: @message-system-short__padding-vertical 0;
     position: relative;
 
     .action-toggle-triangle (
