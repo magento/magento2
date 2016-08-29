@@ -315,4 +315,49 @@
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="code" xsi:type="string">customer_group_code</item>
+                <item name="id" xsi:type="string">customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">class_name</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="code" xsi:type="string">customer_group_code</item>
+                <item name="id" xsi:type="string">customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">class_name</item>
+            </argument>
+            <argument name="defaultOrders" xsi:type="array">
+                <item name="id" xsi:type="string">ASC</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Model\ResourceModel\GroupRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
 </config>

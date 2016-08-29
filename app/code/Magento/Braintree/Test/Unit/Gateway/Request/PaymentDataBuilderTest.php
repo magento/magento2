@@ -133,8 +133,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($additionalData);
 
         $this->configMock->expects(static::once())
-            ->method('getValue')
-            ->with(Config::KEY_MERCHANT_ACCOUNT_ID)
+            ->method('getMerchantAccountId')
             ->willReturn(self::MERCHANT_ACCOUNT_ID);
 
         $this->paymentDO->expects(static::once())
