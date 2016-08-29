@@ -113,24 +113,6 @@ angular.module('readiness-check', ['remove-dialog'])
             updaterNoticeMessage: ''
         };
         $scope.items = {
-            'php-version': {
-                url:'index.php/environment/php-version',
-                params: $scope.actionFrom,
-                useGet: true,
-                show: function() {
-                    $scope.startProgress();
-                    $scope.version.visible = true;
-                },
-                process: function(data) {
-                    $scope.version.processed = true;
-                    angular.extend($scope.version, data);
-                    $scope.updateOnProcessed($scope.version.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.version);
-                }
-            },
             'php-settings': {
                 url:'index.php/environment/php-settings',
                 params: $scope.actionFrom,
@@ -173,6 +155,24 @@ angular.module('readiness-check', ['remove-dialog'])
         };
 
         if ($scope.actionFrom === 'installer') {
+            $scope.items['php-version'] = {
+                url:'index.php/environment/php-version',
+                params: $scope.actionFrom,
+                useGet: true,
+                show: function() {
+                    $scope.startProgress();
+                    $scope.version.visible = true;
+                },
+                process: function(data) {
+                    $scope.version.processed = true;
+                    angular.extend($scope.version, data);
+                    $scope.updateOnProcessed($scope.version.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.version);
+                }
+            };
             $scope.items['file-permissions'] = {
                 url:'index.php/environment/file-permissions',
                 show: function() {
@@ -260,22 +260,20 @@ angular.module('readiness-check', ['remove-dialog'])
                     }
                 };
             }
-
         }
 
         $scope.isCompleted = function() {
-            return $scope.version.processed
-                && $scope.settings.processed
+            var cronProcessed = (
+                $scope.cronScript.processed
+                && ($scope.componentDependency.processed || !$scope.componentDependency.enabled)
+                && $scope.updater.processed
+            );
+
+            return $scope.settings.processed
                 && $scope.extensions.processed
                 && ($scope.permissions.processed || ($scope.actionFrom === 'updater'))
-                && (
-                    (
-                        $scope.cronScript.processed
-                        && ($scope.componentDependency.processed || !$scope.componentDependency.enabled)
-                        && $scope.updater.processed
-                    )
-                    || ($scope.actionFrom !== 'updater')
-                );
+                && ($scope.version.processed || ($scope.actionFrom === 'updater'))
+                && (cronProcessed || ($scope.actionFrom !== 'updater'));
         };
 
         $scope.updateOnProcessed = function(value) {
