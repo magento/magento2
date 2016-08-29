@@ -25,14 +25,13 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
  * 4. Open wish list tab.
  * 5. Perform assertions.
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-29616
  */
 class ViewProductInCustomerWishlistOnBackendTest extends AbstractWishlistTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
