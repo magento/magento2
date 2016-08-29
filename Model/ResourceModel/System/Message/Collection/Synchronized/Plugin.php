@@ -12,6 +12,7 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\Framework\AuthorizationInterface;
 use Magento\AsynchronousOperations\Model\StatusMapper;
+use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
@@ -106,14 +107,22 @@ class Plugin
         foreach ($userBulks as $bulk) {
             $bulkUuid = $bulk->getBulkId();
             if (!in_array($bulkUuid, $acknowledgedBulks)) {
-                $text = $this->getText($this->operationDetails->getDetails($bulkUuid));
+                $operationDetails = $this->operationDetails->getDetails($bulkUuid);
+                $text = $this->getText($operationDetails);
+                $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
+                if ($bulkStatus === BulkSummaryInterface::IN_PROGRESS) {
+                    $text = __(
+                        '%1 item(s) are currently being updated.',
+                            $operationDetails['operations_total']
+                        ) . $text;
+                }
                 $data = [
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
                         'severity' => MessageInterface::SEVERITY_MAJOR,
                         'identity' => md5('bulk' . $bulkUuid),
                         'uuid' => $bulkUuid,
-                        'status' => $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus()),
+                        'status' => $bulkStatus,
                         'created_at' => $bulk->getStartTime()
                     ]
                 ];
@@ -138,7 +147,7 @@ class Plugin
     private function getText($operationDetails)
     {
         if (0 == $operationDetails['operations_successful'] && 0 == $operationDetails['operations_failed']) {
-            return __('%1 item(s) have been scheduled for update.', $operationDetails['operations_total']);
+            return __('%1 item(s) are currently being updated.', $operationDetails['operations_total']);
         }
 
         $summaryReport = '';
