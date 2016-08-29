@@ -47,6 +47,9 @@ class UpdateConfigurations
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
         $configurations = $this->request->getParam('configurations', []);
+        if ($this->request->getParam('configurations_serialized')) {
+            $configurations = json_decode($this->request->getParam('configurations_serialized'), true);
+        }
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */

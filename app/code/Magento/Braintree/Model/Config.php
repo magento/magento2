@@ -169,7 +169,13 @@ class Config
     public function getClientToken()
     {
         if ($this->clientToken == null) {
-            $this->clientToken = $this->braintreeClientToken->generate();
+            $params = [];
+
+            if (!empty($this->getMerchantAccountId())) {
+                $params['merchantAccountId'] = $this->getMerchantAccountId();
+            }
+
+            $this->clientToken = $this->braintreeClientToken->generate($params);
         }
         return $this->clientToken;
     }
