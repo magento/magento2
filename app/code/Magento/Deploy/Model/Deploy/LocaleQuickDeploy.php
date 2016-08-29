@@ -34,6 +34,11 @@ class LocaleQuickDeploy implements DeployInterface
     private $output;
 
     /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
      * @param Filesystem $filesystem
      * @param OutputInterface $output
      */
@@ -58,17 +63,17 @@ class LocaleQuickDeploy implements DeployInterface
     /**
      * {@inheritdoc}
      */
-    public function deploy($area, $themePath, $locale, array $options)
+    public function deploy($area, $themePath, $locale)
     {
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
-        if (!isset($options[DeployManager::DEPLOY_BASE_LOCALE])) {
+        if (!isset($this->options[DeployManager::DEPLOY_BASE_LOCALE])) {
             throw new \InvalidArgumentException('Deploy base locale must be set for Quick Deploy');
         }
         $processedFiles = 0;
         $errorAmount = 0;
 
-        $baseLocale = $options[DeployManager::DEPLOY_BASE_LOCALE];
+        $baseLocale = $this->options[DeployManager::DEPLOY_BASE_LOCALE];
         $newLocalePath =$this->getLocalePath($area, $themePath, $locale);
         $baseLocalePath = $this->getLocalePath($area, $themePath, $baseLocale);
         $baseRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $baseLocalePath;
@@ -77,7 +82,7 @@ class LocaleQuickDeploy implements DeployInterface
         $this->deleteLocaleResource($newLocalePath);
         $this->deleteLocaleResource($newRequireJsPath);
 
-        if ($options[Options::SYMLINK_LOCALE]) {
+        if (isset($this->options[Options::SYMLINK_LOCALE]) && $this->options[Options::SYMLINK_LOCALE]) {
             $this->getStaticDirectory()->createSymlink($baseLocalePath, $newLocalePath);
             $this->getStaticDirectory()->createSymlink($baseRequireJsPath, $newRequireJsPath);
 
@@ -101,6 +106,14 @@ class LocaleQuickDeploy implements DeployInterface
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
     /**

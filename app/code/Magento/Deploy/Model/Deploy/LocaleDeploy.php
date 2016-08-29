@@ -58,7 +58,7 @@ class LocaleDeploy implements DeployInterface
     /**
      * @var array
      */
-    private $options;
+    private $options = [];
 
     /**
      * @var JsTranslationConfig
@@ -218,9 +218,8 @@ class LocaleDeploy implements DeployInterface
     /**
      * {@inheritdoc}
      */
-    public function deploy($area, $themePath, $locale, array $options)
+    public function deploy($area, $themePath, $locale)
     {
-        $this->options = $options;
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
         // emulate application locale needed for correct file path resolving
@@ -245,6 +244,14 @@ class LocaleDeploy implements DeployInterface
         $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
 
         return $this->errorCount ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
     /**

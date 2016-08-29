@@ -12,8 +12,13 @@ interface DeployInterface
      * @param string $area
      * @param string $themePath
      * @param string $locale
-     * @param array $options
      * @return int
      */
-    public function deploy($area, $themePath, $locale, array $options);
+    public function deploy($area, $themePath, $locale);
+
+    /**
+     * @param array $options
+     * @return void
+     */
+    public function setOptions(array $options);
 }
