@@ -11,12 +11,10 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Deploy\Model\DeployManagerFactory;
-use Magento\Framework\View\Template\Html\MinifierInterface;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -28,11 +26,6 @@ class Deployer
 {
     /** @var OutputInterface */
     private $output;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
 
     /**
      * @var JsTranslationConfig
@@ -57,6 +50,7 @@ class Deployer
      * @param Version\StorageInterface $versionStorage
      * @param JsTranslationConfig $jsTranslationConfig
      * @param AlternativeSourceInterface[] $alternativeSources
+     * @param DeployManagerFactory $deployManagerFactory
      * @param array $options
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -66,7 +60,6 @@ class Deployer
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
-        MinifierInterface $htmlMinifier,
         DeployManagerFactory $deployManagerFactory = null,
         $options = []
     ) {
@@ -120,16 +113,10 @@ class Deployer
      * @param string $locale
      * @param string $area
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated
      */
     protected function emulateApplicationLocale($locale, $area)
     {
-        /** @var \Magento\Framework\TranslateInterface $translator */
-        $translator = $this->objectManager->get(\Magento\Framework\TranslateInterface::class);
-        $translator->setLocale($locale);
-        $translator->loadData($area, true);
-        /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
-        $localeResolver = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
-        $localeResolver->setLocale($locale);
     }
 }

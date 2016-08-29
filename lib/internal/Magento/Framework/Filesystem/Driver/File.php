@@ -114,25 +114,6 @@ class File implements DriverInterface
     }
 
     /**
-     * Tells whether the filename is a symbolic link
-     *
-     * @param string $path
-     * @return bool
-     * @throws FileSystemException
-     */
-    public function isLink($path)
-    {
-        clearstatcache();
-        $result = @is_link($this->getScheme() . $path);
-        if ($result === null) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase('Error occurred during execution %1', [$this->getWarningMessage()])
-            );
-        }
-        return $result;
-    }
-
-    /**
      * Tells whether the filename is a regular directory
      *
      * @param string $path

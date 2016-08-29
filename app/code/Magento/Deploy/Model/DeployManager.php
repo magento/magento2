@@ -21,6 +21,9 @@ use Magento\Framework\View\Asset\ConfigInterface as AssetConfig;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Framework\App\Utility\Files;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployManager
 {
     /**
@@ -92,14 +95,17 @@ class DeployManager
      * @var AssetConfig
      */
     private $assetConfig;
+
     /**
      * @var Files
      */
     private $filesUtils;
+
     /**
      * @var StorageInterface
      */
     private $versionStorage;
+
     /**
      * @var MinifierInterface
      */
@@ -144,7 +150,7 @@ class DeployManager
      * @param string $area
      * @param string $themePath
      * @param string $locale
-     * @reutrn void
+     * @return void
      */
     public function addPack($area, $themePath, $locale)
     {
@@ -315,7 +321,6 @@ class DeployManager
 
         return $deployStrategies;
     }
-
 
     /**
      * @return \Magento\Framework\View\Design\Fallback\Rule\RuleInterface

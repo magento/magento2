@@ -16,6 +16,7 @@ use Magento\Framework\View\File\CollectorInterface;
 
 /**
  * @magento_import instruction preprocessor
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Must be deleted after moving themeProvider to construct
  */
 class MagentoImport implements PreProcessorInterface
 {
@@ -137,6 +138,7 @@ class MagentoImport implements PreProcessorInterface
 
     /**
      * @return ThemeProviderInterface
+     * @deprecated
      */
     private function getThemeProvider()
     {

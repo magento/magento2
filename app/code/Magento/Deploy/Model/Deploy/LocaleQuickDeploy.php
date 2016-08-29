@@ -74,8 +74,8 @@ class LocaleQuickDeploy implements DeployInterface
         $baseRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $baseLocalePath;
         $newRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $newLocalePath;
 
-        $this->getStaticDirectory()->delete($newLocalePath);
-        $this->getStaticDirectory()->delete($newRequireJsPath);
+        $this->deleteLocaleResource($newLocalePath);
+        $this->deleteLocaleResource($newRequireJsPath);
 
         if ($options[Options::SYMLINK_LOCALE]) {
             $this->getStaticDirectory()->createSymlink($baseLocalePath, $newLocalePath);
@@ -101,6 +101,22 @@ class LocaleQuickDeploy implements DeployInterface
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     */
+    private function deleteLocaleResource($path)
+    {
+        $absolutePath = $this->getStaticDirectory()->getAbsolutePath($path);
+        if ($this->getStaticDirectory()->isExist($path)) {
+            if (is_link($absolutePath)) {
+                $this->getStaticDirectory()->getDriver()->deleteFile($absolutePath);
+            } else {
+                $this->getStaticDirectory()->getDriver()->deleteDirectory($absolutePath);
+            }
+        }
     }
 
     /**

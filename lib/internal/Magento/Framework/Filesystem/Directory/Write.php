@@ -168,7 +168,7 @@ class Write extends Read implements WriteInterface
             return true;
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
-        if ($this->driver->isFile($absolutePath) || $this->driver->isLink($absolutePath)) {
+        if ($this->driver->isFile($absolutePath)) {
             $this->driver->deleteFile($absolutePath);
         } else {
             $this->driver->deleteDirectory($absolutePath);

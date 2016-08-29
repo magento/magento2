@@ -20,6 +20,10 @@ use Magento\Framework\View\Asset\Minification;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Console\Cli;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class LocaleDeploy implements DeployInterface
 {
     /** @var int */
@@ -41,14 +45,6 @@ class LocaleDeploy implements DeployInterface
 
     /** @var \Magento\Framework\View\Asset\Bundle\Manager */
     private $bundleManager;
-
-    /** @var \Magento\Framework\View\Template\Html\MinifierInterface */
-    private $htmlMinifier;
-
-    /**
-     * @var \Magento\RequireJs\Model\FileManager
-     */
-    private $fileManager;
 
     /**
      * @var Files
@@ -150,15 +146,14 @@ class LocaleDeploy implements DeployInterface
      * @param \Magento\RequireJs\Model\FileManagerFactory $fileManagerFactory
      * @param \Magento\Framework\RequireJs\ConfigFactory $requireJsConfigFactory
      * @param Publisher $assetPublisher
-     * @param \Magento\Framework\View\Template\Html\MinifierInterface $htmlMinifier
      * @param \Magento\Framework\View\Asset\Bundle\Manager $bundleManager
-     * @param \Magento\RequireJs\Model\FileManager $fileManager
      * @param ThemeProviderInterface $themeProvider
      * @param LoggerInterface $logger
      * @param Files $filesUtil
      * @param \Magento\Framework\View\DesignInterfaceFactory $designFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $alternativeSources
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         OutputInterface $output,
@@ -169,9 +164,7 @@ class LocaleDeploy implements DeployInterface
         \Magento\RequireJs\Model\FileManagerFactory $fileManagerFactory,
         \Magento\Framework\RequireJs\ConfigFactory $requireJsConfigFactory,
         \Magento\Framework\App\View\Asset\Publisher $assetPublisher,
-        \Magento\Framework\View\Template\Html\MinifierInterface $htmlMinifier,
         \Magento\Framework\View\Asset\Bundle\Manager $bundleManager,
-        \Magento\RequireJs\Model\FileManager $fileManager,
         \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider,
         LoggerInterface $logger,
         Files $filesUtil,
@@ -182,9 +175,7 @@ class LocaleDeploy implements DeployInterface
         $this->output = $output;
         $this->assetRepo = $assetRepo;
         $this->assetPublisher = $assetPublisher;
-        $this->htmlMinifier = $htmlMinifier;
         $this->bundleManager = $bundleManager;
-        $this->fileManager = $fileManager;
         $this->filesUtil = $filesUtil;
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->minification = $minification;
@@ -193,12 +184,12 @@ class LocaleDeploy implements DeployInterface
         $this->fileManagerFactory = $fileManagerFactory;
         $this->requireJsConfigFactory = $requireJsConfigFactory;
         $this->themeProvider = $themeProvider;
-        array_map(
-            function (AlternativeSourceInterface $alternative) {
+        $this->alternativeSources = array_map(
+            function (AlternativeSourceInterface $alternativeSource) {
+                return $alternativeSource;
             },
             $alternativeSources
         );
-        $this->alternativeSources = $alternativeSources;
         $this->designFactory = $designFactory;
         $this->localeResolver = $localeResolver;
     }
@@ -237,6 +228,33 @@ class LocaleDeploy implements DeployInterface
 
         $fileManager = $this->getRequireJsFileManager($area, $themePath);
         $fileManager->createRequireJsConfigAsset();
+
+        $this->deployAppFiles($area, $themePath, $locale);
+        $this->deployLibFiles($area, $themePath, $locale);
+
+        if (!$this->getOption(Options::NO_JAVASCRIPT)) {
+            if ($this->jsTranslationConfig->dictionaryEnabled()) {
+                $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
+                $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+            }
+            if ($this->minification->isEnabled('js')) {
+                $fileManager->createMinResolverAsset();
+            }
+        }
+        $this->bundleManager->flush();
+        $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
+
+        return $this->errorCount ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * @param string $area
+     * @param string $themePath
+     * @param string $locale
+     * @return void
+     */
+    private function deployAppFiles($area, $themePath, $locale)
+    {
         foreach ($this->filesUtil->getStaticPreProcessingFiles() as $info) {
             list($fileArea, $fileTheme, , $module, $filePath, $fullPath) = $info;
 
@@ -264,7 +282,16 @@ class LocaleDeploy implements DeployInterface
                 }
             }
         }
+    }
 
+    /**
+     * @param string $area
+     * @param string $themePath
+     * @param string $locale
+     * @return void
+     */
+    private function deployLibFiles($area, $themePath, $locale)
+    {
         foreach ($this->filesUtil->getStaticLibraryFiles() as $filePath) {
 
             if ($this->checkSkip($filePath)) {
@@ -277,19 +304,6 @@ class LocaleDeploy implements DeployInterface
                 $this->deployFile($compiledFile, $area, $themePath, $locale, null);
             }
         }
-        if (!$this->getOption(Options::NO_JAVASCRIPT)) {
-            if ($this->jsTranslationConfig->dictionaryEnabled()) {
-                $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
-                $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
-            }
-            if ($this->minification->isEnabled('js')) {
-                $fileManager->createMinResolverAsset();
-            }
-        }
-        $this->bundleManager->flush();
-        $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
-
-        return $this->errorCount ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
     }
 
     /**
