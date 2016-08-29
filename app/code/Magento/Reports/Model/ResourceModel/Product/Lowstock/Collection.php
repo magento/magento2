@@ -249,7 +249,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
     public function filterByProductType($typeFilter)
     {
         if (!is_string($typeFilter) && !is_array($typeFilter)) {
-            new \Magento\Framework\Exception\LocalizedException(__('The product type filter specified is incorrect.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The product type filter specified is incorrect.'));
         }
         $this->addAttributeToFilter('type_id', $typeFilter);
         return $this;
