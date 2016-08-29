@@ -328,7 +328,7 @@ class PhpReadinessCheck
         $requiredFunctions = [
             [
                 'name' => 'imagecreatefromjpeg',
-                'message' => 'You must have installed GD library wuth --with-jpeg-dir=DIR option.',
+                'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
                 'helpUrl' => 'http://php.net/manual/en/image.installation.php',
             ],
         ];

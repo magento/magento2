@@ -223,7 +223,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     'error' => false,
                 ],
                 'missed_function_imagecreatefromjpeg' => [
-                    'message' => 'You must have installed GD library wuth --with-jpeg-dir=DIR option.',
+                    'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
                     'helpUrl' => 'http://php.net/manual/en/image.installation.php',
                     'error' => false,
                 ],
@@ -268,7 +268,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     'error' => true,
                 ],
                 'missed_function_imagecreatefromjpeg' => [
-                    'message' => 'You must have installed GD library wuth --with-jpeg-dir=DIR option.',
+                    'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
                     'helpUrl' => 'http://php.net/manual/en/image.installation.php',
                     'error' => false,
                 ],
@@ -313,7 +313,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         }
 
         $expected['data']['missed_function_imagecreatefromjpeg'] = [
-            'message' => 'You must have installed GD library wuth --with-jpeg-dir=DIR option.',
+            'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
             'helpUrl' => 'http://php.net/manual/en/image.installation.php',
             'error' => false,
         ];
