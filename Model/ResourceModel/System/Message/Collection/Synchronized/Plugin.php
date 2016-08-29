@@ -12,7 +12,6 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\Framework\AuthorizationInterface;
 use Magento\AsynchronousOperations\Model\StatusMapper;
-use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
@@ -110,9 +109,9 @@ class Plugin
                 $operationDetails = $this->operationDetails->getDetails($bulkUuid);
                 $text = $this->getText($operationDetails);
                 $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
-                if ($bulkStatus === BulkSummaryInterface::IN_PROGRESS) {
+                if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
                     $text = __(
-                        '%1 item(s) are currently being updated.',
+                            '%1 item(s) are currently being updated.',
                             $operationDetails['operations_total']
                         ) . $text;
                 }
