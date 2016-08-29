@@ -102,6 +102,20 @@ class SkuProcessor
     }
 
     /**
+     * Update old skus by adding the data for $skus.
+     *
+     * @param array $skus
+     *
+     * @return $this
+     */
+    public function updateOldSkus($skus)
+    {
+        $this->oldSkus = array_merge($this->oldSkus, $this->_getSkus($skus));
+
+        return $this;
+    }
+
+    /**
      * @param string $sku
      * @param array $data
      * @return $this
@@ -141,16 +155,18 @@ class SkuProcessor
     /**
      * Get skus data.
      *
+     * @param array|null $skus
+     *
      * @return array
      */
-    protected function _getSkus()
+    protected function _getSkus($skus = null)
     {
         $oldSkus = [];
         $columns = ['entity_id', 'type_id', 'attribute_set_id', 'sku'];
         if ($this->getProductEntityLinkField() != $this->getProductIdentifierField()) {
             $columns[] = $this->getProductEntityLinkField();
         }
-        foreach ($this->productFactory->create()->getProductEntitiesInfo($columns) as $info) {
+        foreach ($this->productFactory->create()->getProductEntitiesInfo($columns, $skus) as $info) {
             $typeId = $info['type_id'];
             $sku = $info['sku'];
             $oldSkus[$sku] = [

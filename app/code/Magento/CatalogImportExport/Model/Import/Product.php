@@ -1323,13 +1323,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 array_keys($entityRowsIn)
             );
             $newProducts = $this->_connection->fetchAll($select);
+            $skusList = [];
             foreach ($newProducts as $data) {
                 $sku = $data['sku'];
+                $skusList[] = $sku;
                 unset($data['sku']);
                 foreach ($data as $key => $value) {
                     $this->skuProcessor->setNewSkuData($sku, $key, $value);
                 }
             }
+
+            $this->_oldSku = $this->skuProcessor->updateOldSkus($skusList)->getOldSkus();
         }
         return $this;
     }
