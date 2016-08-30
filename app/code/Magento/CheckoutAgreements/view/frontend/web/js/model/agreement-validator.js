@@ -23,26 +23,33 @@ define(
              * @returns {boolean}
              */
             validate: function() {
-                if (!agreementsConfig.isEnabled) {
-                    return true;
+                var noError = true;
+                if (!agreementsConfig.isEnabled || $(agreementsInputPath).length == 0) {
+                    return noError;
                 }
 
-                if ($(agreementsInputPath).length == 0) {
-                    return true;
-                }
+                $(agreementsInputPath).each(function() {
+                    var name = $(this).attr('name');
 
-                return $('#co-payment-form').validate({
-                    errorClass: 'mage-error',
-                    errorElement: 'div',
-                    meta: 'validate',
-                    errorPlacement: function (error, element) {
-                        var errorPlacement = element;
-                        if (element.is(':checkbox') || element.is(':radio')) {
-                            errorPlacement = element.siblings('label').last();
+                    var result = $('#co-payment-form').validate({
+                        errorClass: 'mage-error',
+                        errorElement: 'div',
+                        meta: 'validate',
+                        errorPlacement: function (error, element) {
+                            var errorPlacement = element;
+                            if (element.is(':checkbox') || element.is(':radio')) {
+                                errorPlacement = element.siblings('label').last();
+                            }
+                            errorPlacement.after(error);
                         }
-                        errorPlacement.after(error);
+                    }).element(agreementsInputPath + '[name="' + name + '"]');
+
+                    if (!result) {
+                        noError = false;
                     }
-                }).element(agreementsInputPath);
+                });
+
+                return noError;
             }
         }
     }
