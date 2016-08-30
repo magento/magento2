@@ -49,7 +49,7 @@ class Variable
             $replacements = [];
             foreach ($matches as $match) {
                 if (!isset($replacements[$match[0]])) {
-                    $replacements[$match[0]] = $this->preProcessPlaceholder($match[1]);
+                    $replacements[$match[0]] = $this->getPlaceholderValue($match[1]);
                 }
             }
             $path = str_replace(array_keys($replacements), $replacements, $path);
@@ -63,7 +63,7 @@ class Variable
      * @param string $placeholder
      * @return string
      */
-    public function preProcessPlaceholder($placeholder)
+    public function getPlaceholderValue($placeholder)
     {
         /** @var \Magento\Framework\View\Asset\File\FallbackContext $context */
         $context = $this->assetRepo->getStaticViewFileContext();
