@@ -320,11 +320,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setValue($filter, $pubDirectory);
         $pubDirectory->expects($this->once())
             ->method('isExist')
-            ->with($path . '/' . $file)
+            ->with($path . DIRECTORY_SEPARATOR . $file)
             ->willReturn(true);
         $pubDirectory->expects($this->once())
             ->method('readFile')
-            ->with($path . '/' . $file)
+            ->with($path . DIRECTORY_SEPARATOR . $file)
             ->willReturn($css);
 
         $filter->setDesignParams($designParams);

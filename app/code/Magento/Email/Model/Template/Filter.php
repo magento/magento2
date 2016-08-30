@@ -928,7 +928,7 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             foreach ($files as $file) {
                 $asset = $this->_assetRepo->createAsset($file, $designParams);
-                $filePath = $asset->getContext()->getPath() . '/' . $file;
+                $filePath = $asset->getContext()->getPath() . DIRECTORY_SEPARATOR . $file;
                 if ($this->getPubDirectory()->isExist($filePath)) {
                     $css .= $this->getPubDirectory()->readFile($filePath);
                 } else {
