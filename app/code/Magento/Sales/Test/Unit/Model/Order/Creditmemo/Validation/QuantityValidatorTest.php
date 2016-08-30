@@ -117,6 +117,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                     'The creditmemo contains product SKU "%1" that is not part of the original order.',
                     $creditmemoItemSku
                 ),
+                __('The credit memo\'s total must be positive.'),
                 __('You can\'t create a creditmemo without products.')
             ],
             $this->validator->validate($creditmemoMock)
@@ -132,13 +133,15 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      * @param array $expected
      * @dataProvider dataProviderForValidateQty
      */
-    public function testValidate($orderId, $orderItemId, $qtyToRequest, $qtyToRefund,  $sku, array $expected)
+    public function testValidate($orderId, $orderItemId, $qtyToRequest, $qtyToRefund,  $sku, $total, array $expected)
     {
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn($orderId);
+        $creditmemoMock->expects($this->once())->method('getGrandTotal')
+            ->willReturn($total);
         $creditmemoItemMock = $this->getMockBuilder(
             \Magento\Sales\Api\Data\CreditmemoItemInterface::class
         )->disableOriginalConstructor()
@@ -194,6 +197,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                 'qtyToRequest' => 1,
                 'qtyToRefund' => 1,
                 'sku',
+                'total' => 15,
                 'expected' => []
             ],
             [
@@ -202,12 +206,14 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                 'qtyToRequest' => 2,
                 'qtyToRefund' => 1,
                 'sku',
+                'total' => 0,
                 'expected' => [
                     __(
                         'The quantity to creditmemo must not be greater than the unrefunded quantity'
                         . ' for product SKU "%1".',
                         $sku
                     ),
+                    __('The credit memo\'s total must be positive.'),
                     __('You can\'t create a creditmemo without products.')
                 ]
             ],
