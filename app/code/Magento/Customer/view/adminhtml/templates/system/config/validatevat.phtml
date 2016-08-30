@@ -16,8 +16,8 @@ require(['prototype'], function(){
         var validationMessage = $('validation_result');
 
         params = {
-            country: $('<?php echo $block->escapeJs($block->escapeHtml($block->getMerchantCountryField())); ?>').value,
-            vat: $('<?php echo $block->escapeJs($block->escapeHtml($block->getMerchantVatNumberField())); ?>').value
+            country: $('<?php echo $block->escapeJs($block->getMerchantCountryField()); ?>').value,
+            vat: $('<?php echo $block->escapeJs($block->getMerchantVatNumberField()); ?>').value
         };
 
         new Ajax.Request('<?php echo $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
