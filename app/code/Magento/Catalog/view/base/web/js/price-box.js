@@ -199,10 +199,7 @@ define([
         _setDefaultsFromPriceConfig: function _setDefaultsFromPriceConfig() {
             var config = this.options.priceConfig;
 
-            if (config) {
-                if (+config.productId !== +this.options.productId) {
-                    return;
-                }
+            if (config && config.prices) {
                 this.options.prices = config.prices;
             }
         }
