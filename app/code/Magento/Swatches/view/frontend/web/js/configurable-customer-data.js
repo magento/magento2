@@ -5,29 +5,29 @@ require([
     'use strict';
 
     var selectors = {
-        configurableWidget: 'mageConfigurable',
+        swatchWidget: 'mageSwatchRenderer',
         formSelector: '#product_addtocart_form',
+        swatchSelector: '.swatch-opt',
         productIdSelector: '#product_addtocart_form [name="product"]'
     },
-    configurableWidget,
+    swatchWidget,
     productOptions,
     tempProductOptions,
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
-    updateConfigurableOptions,
+    updateSwatchOptions,
     setProductOptions;
 
     /**
-    * Sets all configurable attribute's selected values
+    * Sets all configurable swatch attribute's selected values
     */
-    updateConfigurableOptions = function () {
-        configurableWidget = $(selectors.formSelector).data(selectors.configurableWidget);
+    updateSwatchOptions = function () {
+        swatchWidget = $(selectors.swatchSelector).data(selectors.swatchWidget);
 
-        if (!configurableWidget) {
+        if (!swatchWidget || !swatchWidget._EmulateSelectedByAttributeId) {
             return;
         }
-        configurableWidget.options.values = productOptions || {};
-        configurableWidget._configureForValues();
+        swatchWidget._EmulateSelectedByAttributeId(productOptions);
     };
 
     /**
@@ -61,11 +61,11 @@ require([
 
     cartData.subscribe(function (updateCartData) {
         if (setProductOptions(updateCartData)) {
-            updateConfigurableOptions();
+            updateSwatchOptions();
         }
     });
-    $(selectors.formSelector).on('configurable.initialized', function () {
+    $(selectors.formSelector).on('swatch.initialized', function () {
         setProductOptions(cartData());
-        updateConfigurableOptions();
+        updateSwatchOptions();
     });
 });

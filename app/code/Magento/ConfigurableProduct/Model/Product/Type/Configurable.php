@@ -898,10 +898,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $value = $value->getSource()->getOptionText($attributeValue);
                     } else {
                         $value = '';
+                        $attributeValue = '';
                     }
 
-                    $attributes[] = ['label' => $label, 'value' => $value, 
-                    'option_id' => $attributeId, 'option_value' => $attributeValue];
+                    $attributes[] = [
+                        'label' => $label,
+                        'value' => $value,
+                        'option_id' => $attributeId,
+                        'option_value' => $attributeValue
+                        ];
                 }
             }
         }

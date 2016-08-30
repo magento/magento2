@@ -660,8 +660,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->_model->getSelectedAttributesInfo($productMock),
-            [['label' => 'attr_store_label', 'value' => '',
-             'option_id' => '1', 'option_value' => '']]
+            [
+                [
+                'label' => 'attr_store_label',
+                'value' => '',
+                'option_id' => 1,
+                'option_value' => []
+                ]
+            ]
         );
     }
 
