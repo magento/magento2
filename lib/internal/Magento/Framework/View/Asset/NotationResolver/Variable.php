@@ -70,7 +70,7 @@ class Variable
 
         switch ($placeholder) {
             case self::VAR_BASE_URL_PATH:
-                return '{{' . self::VAR_BASE_URL_PATH . '}}/' . $context->getAreaCode() .
+                return '{{' . self::VAR_BASE_URL_PATH . '}}' . $context->getAreaCode() .
                     ($context->getThemePath() ? '/' . $context->getThemePath() . '/' : '') .
                     '{{locale}}';
             default:

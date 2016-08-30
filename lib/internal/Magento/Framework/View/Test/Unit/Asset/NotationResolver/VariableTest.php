@@ -69,7 +69,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function convertVariableNotationDataProvider()
     {
         return [
-            ['{{base_url_path}}/file.ext', '{{base_url_path}}/frontend/Magento/blank/{{locale}}/file.ext'],
+            ['{{base_url_path}}/file.ext', '{{base_url_path}}frontend/Magento/blank/{{locale}}/file.ext'],
         ];
     }
 }

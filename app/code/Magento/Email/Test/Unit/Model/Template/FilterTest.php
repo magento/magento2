@@ -6,6 +6,8 @@
 namespace Magento\Email\Test\Unit\Model\Template;
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Email\Model\Template\Filter;
+use Magento\Framework\App\Area;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -269,7 +271,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($css));
 
         $designParams = [
-            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'area' => Area::AREA_FRONTEND,
             'theme' => 'themeId',
             'locale' => 'localeId',
         ];
@@ -278,6 +280,56 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedResults as $expectedResult) {
             $this->assertContains($expectedResult, $filter->applyInlineCss($html));
         }
+    }
+
+    public function testGetCssFilesContent()
+    {
+        $file = 'css/email.css';
+        $path = Area::AREA_FRONTEND . '/themeId/localeId';
+        $css = 'p{color:black}';
+        $designParams = [
+            'area' => Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+
+        $filter = $this->getModel();
+
+        $asset = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fallbackContext = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fallbackContext->expects($this->once())
+            ->method('getPath')
+            ->willReturn($path);
+        $asset->expects($this->atLeastOnce())
+            ->method('getContext')
+            ->willReturn($fallbackContext);
+        $this->assetRepo->expects($this->once())
+            ->method('createAsset')
+            ->with($file, $designParams)
+            ->willReturn($asset);
+
+        $pubDirectory = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+        $reflectionClass = new \ReflectionClass(Filter::class);
+        $reflectionProperty = $reflectionClass->getProperty('pubDirectory');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($filter, $pubDirectory);
+        $pubDirectory->expects($this->once())
+            ->method('isExist')
+            ->with($path . '/' . $file)
+            ->willReturn(true);
+        $pubDirectory->expects($this->once())
+            ->method('readFile')
+            ->with($path . '/' . $file)
+            ->willReturn($css);
+
+        $filter->setDesignParams($designParams);
+
+        $this->assertEquals($css, $filter->getCssFilesContent([$file]));
     }
 
     /**

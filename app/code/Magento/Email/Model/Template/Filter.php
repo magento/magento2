@@ -5,7 +5,9 @@
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
@@ -160,6 +162,11 @@ class Filter extends \Magento\Framework\Filter\Template
     private $cssProcessor;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    private $pubDirectory;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -219,6 +226,18 @@ class Filter extends \Magento\Framework\Filter\Template
             $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
         }
         return $this->cssProcessor;
+    }
+
+    /**
+     * @deprecated
+     * @return Filesystem\Directory\ReadInterface
+     */
+    private function getPubDirectory()
+    {
+        if (!$this->pubDirectory) {
+            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead(DirectoryList::STATIC_VIEW);
+        }
+        return $this->pubDirectory;
     }
 
     /**
@@ -909,7 +928,12 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             foreach ($files as $file) {
                 $asset = $this->_assetRepo->createAsset($file, $designParams);
-                $css .= $asset->getContent();
+                $filePath = $asset->getContext()->getPath() . '/' . $file;
+                if ($this->getPubDirectory()->isExist($filePath)) {
+                    $css .= $this->getPubDirectory()->readFile($filePath);
+                } else {
+                    $css .= $asset->getContent();
+                }
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
