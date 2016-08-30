@@ -51,7 +51,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Gets the comment for the invoice.
+     * Gets the comment for the creditmemo.
      *
      * @return string Comment.
      */
@@ -61,7 +61,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Sets the comment for the invoice.
+     * Sets the comment for the creditmemo.
      *
      * @param string $comment
      * @return $this
@@ -73,7 +73,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Gets the is-visible-on-storefront flag value for the invoice.
+     * Gets the is-visible-on-storefront flag value for the creditmemo.
      *
      * @return int Is-visible-on-storefront flag value.
      */
@@ -83,7 +83,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Sets the is-visible-on-storefront flag value for the invoice.
+     * Sets the is-visible-on-storefront flag value for the creditmemo.
      *
      * @param int $isVisibleOnFront
      * @return $this

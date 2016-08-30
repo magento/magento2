@@ -41,6 +41,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
     public function setOrderItemId($orderItemId)
     {
         $this->orderItemId = $orderItemId;
+        return $this;
     }
 
     /**
@@ -57,6 +58,7 @@ class ItemCreation implements CreditmemoItemCreationInterface
     public function setQty($qty)
     {
         $this->qty = $qty;
+        return $this;
     }
 
     /**
