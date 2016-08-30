@@ -58,7 +58,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
         $allowedTags = ['script', 'span'];
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with('The following tag(s) can not be used in the translation: script');
+            ->with('The following tag(s) are not allowed: script');
         $actual = $this->_escaper->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }
