@@ -23,20 +23,42 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
      */
     private $zendEscaper;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->_escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
+        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'logger', $this->loggerMock);
     }
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
      * @dataProvider escapeHtmlDataProvider
      */
-    public function testEscapeHtml($data, $expected, $allowedTags = null)
+    public function testEscapeHtml($data, $expected, $allowedTags = [])
     {
+        $actual = $this->_escaper->escapeHtml($data, $allowedTags);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::escapeHtml
+     */
+    public function testEscapeHtmlWithInvalidData()
+    {
+        $data = '<span><script>some text in tags</script></span>';
+        $expected = '';
+        $allowedTags = ['script', 'span'];
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with('The following tag(s) can not be used in the translation: script');
         $actual = $this->_escaper->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }
@@ -47,22 +69,64 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     public function escapeHtmlDataProvider()
     {
         return [
-            'array data' => [
+            'array -> [text with no tags, text with no allowed tags]' => [
                 'data' => ['one', '<two>three</two>'],
                 'expected' => ['one', '&lt;two&gt;three&lt;/two&gt;'],
-                null,
             ],
-            'string data conversion' => [
-                'data' => '<two>three</two>',
-                'expected' => '&lt;two&gt;three&lt;/two&gt;',
-                null,
+            'text with special characters' => [
+                'data' => '&<>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
+                'expected' => '&amp;&lt;&gt;&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;'
             ],
-            'string data no conversion' => ['data' => 'one', 'expected' => 'one'],
-            'string data with allowed tags' => [
-                'data' => '<span><b>some text in tags</b></span>',
-                'expected' => '<span><b>some text in tags</b></span>',
+            'text with multiple allowed tags, includes self closing tag' => [
+                'data' => '<span>some text in tags<br /></span>',
+                'expected' => '<span>some text in tags<br></span>',
+                'allowedTags' => ['span', 'br'],
+            ],
+            'text with multiple allowed tags and allowed attribute in double quotes' => [
+                'data' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
                 'allowedTags' => ['span', 'b'],
-            ]
+            ],
+            'text with multiple allowed tags and allowed attribute in single quotes' => [
+                'data' => 'Only <span id=\'sku_max_allowed\'><b>2</b></span> in stock',
+                'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with multiple allowed tags with allowed attribute' => [
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
+                'allowedTags' => ['a'],
+            ],
+            'text with not allowed attribute in single quotes' => [
+                'data' => 'Only <span type=\'1\'><b>2</b></span> in stock',
+                'expected' => 'Only <span><b>2</b></span> in stock',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with allowed and not allowed tags' => [
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<span>three</span></a> or <a href="%2"><span id="action">create an account</span></a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign inthree</a> or <a href="%2">create an account</a>',
+                'allowedTags' => ['a'],
+            ],
+            'text with allowed and not allowed tags, with allowed and not allowed attributes' => [
+                'data' => 'Some test <span>text in span tag</span> <strong>text in strong tag</strong> <a type="some-type" href="http://domain.com/" onclick="alert(1)">Click here</a><script>alert(1)</script>',
+                'expected' => 'Some test <span>text in span tag</span> text in strong tag <a href="http://domain.com/">Click here</a>alert(1)',
+                'allowedTags' => ['a', 'span'],
+            ],
+            'text with html comment' => [
+                'data' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
+                'expected' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with non ascii characters' => [
+                'data' => ['абвгд', 'مثال'],
+                'expected' => ['абвгд', 'مثال'],
+                'allowedTags' => [],
+            ],
+            'html and body tags' => [
+                'data' => '<html><body><span>String</span></body></html>',
+                'expected' => '',
+                'allowedTags' => ['span'],
+            ],
         ];
     }
 
