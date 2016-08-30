@@ -210,6 +210,10 @@
     padding: 0 !important;
 }
 
+.swatch-option-link-layered:focus > div {
+    box-shadow: 0 0 3px 1px #68a8e0;
+}
+
 .swatch-option-tooltip-layered {
     width: 140px;
     position: absolute;
@@ -275,4 +279,10 @@
 
 .swatch-option-loading {
     content: url("../images/loader-2.gif");
+}
+
+.swatch-input {
+    left: -1000px;
+    position: absolute;
+    visibility: hidden;
 }

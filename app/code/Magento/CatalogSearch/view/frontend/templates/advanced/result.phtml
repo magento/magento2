@@ -21,7 +21,7 @@
         <?php endif; ?>
     </div>
 <?php else: ?>
-    <div class="message error">
+    <div role="alert" class="message error">
         <div>
             <?php /* @escapeNotVerified */ echo __('We can\'t find any items matching these search criteria.');?> <a href="<?php /* @escapeNotVerified */ echo $block->getFormUrl(); ?>"><?php /* @escapeNotVerified */ echo __('Modify your search.'); ?></a>
         </div>
