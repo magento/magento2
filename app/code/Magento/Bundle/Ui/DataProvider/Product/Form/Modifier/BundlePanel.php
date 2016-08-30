@@ -642,7 +642,8 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'required-entry' => true,
-                                    'validate-zero-or-greater' => true
+                                    'validate-number' => true,
+                                    'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
                                     'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
