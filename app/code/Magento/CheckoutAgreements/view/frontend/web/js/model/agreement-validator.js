@@ -28,6 +28,11 @@ define(
                     return noError;
                 }
 
+                $('.payment-method:not(._active) div.checkout-agreements input')
+                    .prop('checked', false)
+                    .removeClass('mage-error')
+                    .siblings('.mage-error[generated="true"]').remove();
+
                 $(agreementsInputPath).each(function() {
                     var name = $(this).attr('name');
 
