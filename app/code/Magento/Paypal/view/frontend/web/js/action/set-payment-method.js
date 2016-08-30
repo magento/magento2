@@ -35,11 +35,12 @@ define(
                 };
                 method = 'post';
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/selected-payment-method', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
                 payload = {
                     cartId: quote.getQuoteId(),
-                    method: paymentData
+                    paymentMethod: paymentData
                 };
+                method = 'post';
             }
             fullScreenLoader.startLoader();
 
