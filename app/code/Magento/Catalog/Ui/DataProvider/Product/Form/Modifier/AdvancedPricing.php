@@ -650,7 +650,7 @@ class AdvancedPricing extends AbstractModifier
     /**
      * Retrieve store
      *
-     * @return \Magento\Store\Model\Store
+     * @return \Magento\Store\Api\Data\StoreInterface
      */
     private function getStore()
     {

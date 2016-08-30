@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Model\Customer\Source;
 
-use Magento\Framework\Option\ArrayInterface as OptionArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
-interface GroupSourceInterface extends OptionArrayInterface
+interface GroupSourceInterface extends OptionSourceInterface
 {
 
 }
