@@ -85,7 +85,8 @@ class DeployStrategyProvider
     public function getDeployStrategies($area, $themePath, array $locales)
     {
         if (count($locales) == 1) {
-            return [$this->getDeployStrategy($area, DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD)];
+            $locale = current($locales);
+            return [$locale => $this->getDeployStrategy($area, DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD)];
         }
 
         $baseLocale = null;

@@ -226,8 +226,9 @@ class LocaleDeploy implements DeployInterface
         $this->localeResolver->setLocale($locale);
 
         $fileManager = $this->getRequireJsFileManager($area, $themePath);
-        $fileManager->createRequireJsConfigAsset();
-
+        if (!$this->getOption(Options::DRY_RUN)) {
+            $fileManager->createRequireJsConfigAsset();
+        }
         $this->deployAppFiles($area, $themePath, $locale);
         $this->deployLibFiles($area, $themePath, $locale);
 
@@ -236,7 +237,7 @@ class LocaleDeploy implements DeployInterface
                 $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                 $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
             }
-            if ($this->minification->isEnabled('js')) {
+            if ($this->minification->isEnabled('js') && !$this->getOption(Options::DRY_RUN)) {
                 $fileManager->createMinResolverAsset();
             }
         }

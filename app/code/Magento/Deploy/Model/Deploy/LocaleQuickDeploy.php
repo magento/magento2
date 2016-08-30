@@ -65,6 +65,10 @@ class LocaleQuickDeploy implements DeployInterface
      */
     public function deploy($area, $themePath, $locale)
     {
+        if (isset($this->options[Options::DRY_RUN]) && $this->options[Options::DRY_RUN]) {
+            return Cli::RETURN_SUCCESS;
+        }
+
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
         if (!isset($this->options[DeployManager::DEPLOY_BASE_LOCALE])) {
@@ -120,8 +124,8 @@ class LocaleQuickDeploy implements DeployInterface
      */
     private function deleteLocaleResource($path)
     {
-        $absolutePath = $this->getStaticDirectory()->getAbsolutePath($path);
         if ($this->getStaticDirectory()->isExist($path)) {
+            $absolutePath = $this->getStaticDirectory()->getAbsolutePath($path);
             if (is_link($absolutePath)) {
                 $this->getStaticDirectory()->getDriver()->deleteFile($absolutePath);
             } else {

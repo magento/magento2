@@ -5,6 +5,9 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LocaleDeployTest extends \PHPUnit_Framework_TestCase
 {
     /**
