@@ -6,15 +6,15 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
+/** @var \Magento\Review\Block\Customer\View $block */
+
 $product = $block->getProductData();
 ?>
 <?php if ($product->getId()): ?>
 <div class="customer-review view">
     <div class="product-details">
         <div class="product-media">
-            <a class="product-photo" href="<?php /* @escapeNotVerified */ echo $product->getProductUrl() ?>">
+            <a class="product-photo" href="<?php echo $block->escapeUrl($product->getProductUrl()) ?>">
                 <?php /* customer_account_product_review_page */ ?>
                 <?php echo $block->getImage($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
             </a>
@@ -39,9 +39,9 @@ $product = $block->getProductData();
                     <?php $rating = ceil($_rating->getPercent()) ?>
                     <div class="rating-summary item">
                         <span class="rating-label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></span>
-                        <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $rating; ?>%">
-                            <span style="width:<?php /* @escapeNotVerified */ echo $rating; ?>%">
-                                <span><?php /* @escapeNotVerified */ echo $rating; ?>%</span>
+                        <div class="rating-result" title="<?php /* @noEscape */ echo $rating; ?>%">
+                            <span style="width:<?php /* @noEscape */ echo $rating; ?>%">
+                                <span><?php /* @noEscape */ echo $rating; ?>%</span>
                             </span>
                         </div>
                     </div>
@@ -59,7 +59,7 @@ $product = $block->getProductData();
 </div>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Back to My Reviews') ?></span></a>
+        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Back to My Reviews') ?></span></a>
     </div>
 </div>
 <?php endif; ?>

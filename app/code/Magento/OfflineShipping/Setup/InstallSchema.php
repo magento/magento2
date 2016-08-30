@@ -16,6 +16,16 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class InstallSchema implements InstallSchemaInterface
 {
     /**
+     * @var string
+     */
+    private static $quoteConnectionName = 'checkout';
+
+    /**
+     * @var string
+     */
+    private static $salesConnectionName = 'sales';
+
+    /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -105,32 +115,32 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Simple Free Shipping'
         );
-        $installer->getConnection()->addColumn(
-            $installer->getTable('sales_order_item'),
+        $installer->getConnection(self::$salesConnectionName)->addColumn(
+            $installer->getTable('sales_order_item', self::$salesConnectionName),
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Free Shipping'
         );
-        $installer->getConnection()->addColumn(
-            $installer->getTable('quote_address'),
+        $installer->getConnection(self::$quoteConnectionName)->addColumn(
+            $installer->getTable('quote_address', self::$quoteConnectionName),
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Free Shipping'
         );
-        $installer->getConnection()->addColumn(
-            $installer->getTable('quote_item'),
+        $installer->getConnection(self::$quoteConnectionName)->addColumn(
+            $installer->getTable('quote_item', self::$quoteConnectionName),
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Free Shipping'
         );
-        $installer->getConnection()->addColumn(
-            $installer->getTable('quote_address_item'),
+        $installer->getConnection(self::$quoteConnectionName)->addColumn(
+            $installer->getTable('quote_address_item', self::$quoteConnectionName),
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
