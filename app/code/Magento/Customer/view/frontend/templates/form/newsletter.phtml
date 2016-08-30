@@ -6,9 +6,10 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Customer\Block\Newsletter $block */
 ?>
 <?php echo $block->getChildHtml('form_before')?>
-    <form class="form form-newsletter-manage" action="<?php /* @escapeNotVerified */ echo $block->getAction() ?>" method="post" id="form-validate">
+    <form class="form form-newsletter-manage" action="<?php echo $block->escapeUrl($block->getAction()) ?>" method="post" id="form-validate">
         <fieldset class="fieldset">
             <?php echo $block->getBlockHtml('formkey')?>
             <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Subscription option') ?></span></legend><br>
