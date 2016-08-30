@@ -588,10 +588,7 @@ class BundlePanel extends AbstractModifier
                                 'prefer' => 'radio',
                                 'value' => '0',
                                 'sortOrder' => 50,
-                                'valueMap' => [
-                                    'false' => '0',
-                                    'true' => '1'
-                                ]
+                                'valueMap' => ['false' => '0', 'true' => '1']
                             ],
                         ],
                     ],
