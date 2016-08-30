@@ -99,9 +99,9 @@
         ".page-main": {
             "address": {
                 "deleteAddress": "li.item a[role='delete-address']",
-                "deleteUrlPrefix": "<?php echo $block->escapeUrl($block->getDeleteUrl()) ?>id/",
+                "deleteUrlPrefix": "<?php echo $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>id/",
                 "addAddress": "button[role='add-address']",
-                "addAddressLocation": "<?php echo $block->escapeUrl($block->getAddAddressUrl()) ?>"
+                "addAddressLocation": "<?php echo $block->escapeJs($block->escapeUrl($block->getAddAddressUrl())) ?>"
             }
         }
     }
