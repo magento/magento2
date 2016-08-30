@@ -161,7 +161,17 @@ class Escaper
      */
     public function escapeJs($string)
     {
-        return $this->getEscaper()->escapeJs($string);
+        if ($string === '' || ctype_digit($string)) {
+            return $string;
+        }
+
+        return preg_replace_callback(
+            '/[^a-z0-9,\._]/iSu',
+            function ($matches) {
+                return sprintf('\\u%04s', strtoupper(bin2hex($matches[0])));
+            },
+            $string
+        );
     }
 
     /**
