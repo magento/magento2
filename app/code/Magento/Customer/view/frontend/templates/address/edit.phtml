@@ -213,7 +213,7 @@
                 "postcodeId": "#zip",
                 "form": "#form-validate",
                 "regionJson": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson() ?>,
-                "defaultRegion": "<?php echo $block->escapeJs($block->escapeHtml($block->getRegionId())) ?>",
+                "defaultRegion": "<?php echo (int) $block->getRegionId() ?>",
                 "countriesWithOptionalZip": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getCountriesWithOptionalZip(true) ?>
             }
         }
