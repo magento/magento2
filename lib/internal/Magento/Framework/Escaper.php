@@ -58,11 +58,7 @@ class Escaper
         $wrapperElementId = uniqid();
         $dom = new \DOMDocument('1.0', 'UTF-8');
         set_error_handler(
-            /**
-             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-             */
-            function ($errorNumber, $errorString, $errorFile, $errorLine)
-            {
+            function ($errorNumber, $errorString) {
                 throw new \Exception($errorString, $errorNumber);
             }
         );
@@ -75,8 +71,10 @@ class Escaper
         restore_error_handler();
 
         $xpath = new \DOMXPath($dom);
-        $nodes = $xpath->query('//node()[name() != \''
-            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']');
+        $nodes = $xpath->query(
+            '//node()[name() != \''
+            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']'
+        );
         foreach ($nodes as $node) {
             if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
                 $node->parentNode->replaceChild($dom->createTextNode($node->textContent), $node);
@@ -163,7 +161,17 @@ class Escaper
      */
     public function escapeJs($string)
     {
-        return $this->getEscaper()->escapeJs($string);
+        if ($string === '' || ctype_digit($string)) {
+            return $string;
+        }
+
+        return preg_replace_callback(
+            '/[^a-z0-9,\._]/iSu',
+            function ($matches) {
+                return sprintf('\\u%04s', strtoupper(bin2hex($matches[0])));
+            },
+            $string
+        );
     }
 
     /**
