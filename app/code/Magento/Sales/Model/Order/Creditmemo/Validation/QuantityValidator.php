@@ -59,7 +59,7 @@ class QuantityValidator implements ValidatorInterface
         }
 
         if (empty($entity->getItems())) {
-            return [__('You can\'t create a shipment without products.')];
+            return [__('You can\'t create a creditmemo without products.')];
         }
         $messages = [];
 
@@ -100,10 +100,10 @@ class QuantityValidator implements ValidatorInterface
 
     /**
      * @param CreditmemoInterface $creditmemo
-     * @param Order $order
+     * @param OrderInterface $order
      * @return array
      */
-    private function getInvoiceQtysRefundLimits(CreditmemoInterface $creditmemo, Order $order)
+    private function getInvoiceQtysRefundLimits(CreditmemoInterface $creditmemo, OrderInterface $order)
     {
         $invoiceQtysRefundLimits = [];
         if ($creditmemo->getInvoiceId() !== null) {
