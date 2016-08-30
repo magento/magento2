@@ -17,8 +17,7 @@ class UpdateQuoteItems
      */
     public function __construct(
         \Magento\Quote\Model\ResourceModel\Quote $resource
-    )
-    {
+    ) {
         $this->resource = $resource;
     }
 
