@@ -210,6 +210,7 @@ define([
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 this._sortAttributes();
                 this._RenderControls();
+                $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
@@ -948,6 +949,22 @@ define([
             $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
                 this.element.find('.' + this.options.classes.attributeClass +
                     '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+            }, this));
+        },
+
+        /**
+         * Emulate mouse click on all swatches that should be selected
+         * @param {Object} [selectedAttributes]
+         * @private
+         */
+        _EmulateSelectedByAttributeId: function (selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function (attributeId, optionId) {
+                var elem = this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]');
+                    debugger;
+                    if (!elem.hasClass('selected')) {
+                        elem.trigger('click');
+                    }
             }, this));
         },
 

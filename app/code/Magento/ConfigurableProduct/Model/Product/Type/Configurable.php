@@ -900,7 +900,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $value = '';
                     }
 
-                    $attributes[] = ['label' => $label, 'value' => $value];
+                    $attributes[] = ['label' => $label, 'value' => $value, 'attributeId' => $attributeId, 'attributeValue' => $attributeValue];
                 }
             }
         }
