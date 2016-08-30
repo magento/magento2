@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\DateTime\DateTimeProvider;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
@@ -66,18 +67,20 @@ class UpdatePackagesCache
      * @param \Magento\Framework\Filesystem $filesystem
      * @param ComposerInformation $composerInformation
      * @param ObjectManagerProvider $objectManagerProvider
-     * @throws \Exception
+     * @param DateTime\DateTimeProvider $dateTimeProvider
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
         Filesystem $filesystem,
         ComposerInformation $composerInformation,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        DateTimeProvider $dateTimeProvider
     ) {
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->objectManager = $objectManagerProvider->get();
         $this->composerInformation = $composerInformation;
+        $this->dateTime = $dateTimeProvider->get();
     }
 
     /**
@@ -208,7 +211,7 @@ class UpdatePackagesCache
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSyncDate'] = $this->getDateTime()->gmtTimestamp();
+        $syncInfo['lastSyncDate'] = $this->dateTime->gmtTimestamp();
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {
