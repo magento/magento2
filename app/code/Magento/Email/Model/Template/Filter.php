@@ -930,8 +930,8 @@ class Filter extends \Magento\Framework\Filter\Template
             foreach ($files as $file) {
                 $asset = $this->_assetRepo->createAsset($file, $designParams);
                 $pubDirectory = $this->getPubDirectory($asset->getContext()->getBaseDirType());
-                if ($pubDirectory->isExist($asset->getRelativeSourceFilePath())) {
-                    $css .= $pubDirectory->readFile($asset->getRelativeSourceFilePath());
+                if ($pubDirectory->isExist($asset->getPath())) {
+                    $css .= $pubDirectory->readFile($asset->getPath());
                 } else {
                     $css .= $asset->getContent();
                 }

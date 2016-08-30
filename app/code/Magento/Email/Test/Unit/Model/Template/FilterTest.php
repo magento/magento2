@@ -7,7 +7,9 @@ namespace Magento\Email\Test\Unit\Model\Template;
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -292,21 +294,25 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'theme' => 'themeId',
             'locale' => 'localeId',
         ];
-
         $filter = $this->getModel();
 
         $asset = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $fallbackContext = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
+
+        $fallbackContext = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fallbackContext->expects($this->once())
-            ->method('getPath')
-            ->willReturn($path);
+            ->method('getBaseDirType')
+            ->willReturn(DirectoryList::STATIC_VIEW);
         $asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($fallbackContext);
+
+        $asset->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->willReturn($path . DIRECTORY_SEPARATOR . $file);
         $this->assetRepo->expects($this->once())
             ->method('createAsset')
             ->with($file, $designParams)
