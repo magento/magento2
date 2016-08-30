@@ -24,14 +24,13 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
  * 4. Click on 'Save Currency Rates' button.
  * 5. Perform assertions.
  *
- * @group Localization_(PS)
+ * @group Localization
  * @ZephyrId MAGETWO-36824
  */
 class CreateCurrencyRateTest extends Injectable
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
