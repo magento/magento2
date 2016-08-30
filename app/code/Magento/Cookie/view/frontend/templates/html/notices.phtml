@@ -9,12 +9,17 @@
 /** @var \Magento\Cookie\Block\Html\Notices $block */
 ?>
 <?php if ($this->helper(\Magento\Cookie\Helper\Cookie::class)->isUserNotAllowSaveCookie()): ?>
-    <div class="message global cookie" id="notice-cookie-block" style="display: none">
-        <div class="content">
+    <div role="alertdialog"
+         tabindex="-1"
+         class="message global cookie"
+         id="notice-cookie-block"
+         style="display: none;">
+        <div role="document" class="content" tabindex="0">
             <p>
                 <strong><?php echo $block->escapeHtml(__('We use cookies to make your experience better.')) ?></strong>
                 <span><?php echo $block->escapeHtml(__('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.')) ?></span>
-                <?php echo $block->escapeHtml(__('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()), ['a']) ?></p>
+                <?php echo $block->escapeHtml(__('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()), ['a']) ?>
+            </p>
             <div class="actions">
                 <button id="btn-cookie-allow" class="action allow primary">
                     <span><?php echo $block->escapeHtml(__('Allow Cookies')); ?></span>
