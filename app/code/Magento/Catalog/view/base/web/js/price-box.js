@@ -73,7 +73,7 @@ define([
             var prices = this.cache.displayPrices,
                 additionalPrice = {},
                 pricesCode = [],
-                priceValue, origin, final;
+                priceValue, origin, finalPrice;
 
             this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
 
@@ -114,15 +114,15 @@ define([
             } else {
                 _.each(additionalPrice, function (option, priceCode) {
                     origin = this.options.prices[priceCode] || {};
-                    final = prices[priceCode] || {};
+                    finalPrice = prices[priceCode] || {};
                     option.amount = option.amount || 0;
                     origin.amount = origin.amount || 0;
                     origin.adjustments = origin.adjustments || {};
-                    final.adjustments = final.adjustments || {};
+                    finalPrice.adjustments = finalPrice.adjustments || {};
 
-                    final.amount = 0 + origin.amount + option.amount;
+                    finalPrice.amount = 0 + origin.amount + option.amount;
                     _.each(option.adjustments, function (pa, paCode) {
-                        final.adjustments[paCode] = 0 + (origin.adjustments[paCode] || 0) + pa;
+                        finalPrice.adjustments[paCode] = 0 + (origin.adjustments[paCode] || 0) + pa;
                     });
                 }, this);
             }
