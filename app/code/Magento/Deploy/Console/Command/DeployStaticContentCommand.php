@@ -397,6 +397,7 @@ class DeployStaticContentCommand extends Command
         $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
         $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
 
+        /** @var $deployManager DeployManager */
         $deployManager = $this->objectManager->create(
             DeployManager::class,
             [
@@ -405,14 +406,15 @@ class DeployStaticContentCommand extends Command
             ]
         );
 
-        if ($this->isCanBeParalleled()) {
-            return $this->runProcessesInParallel($deployManager, $deployableAreaThemeMap, $deployableLanguages);
-        } else {
-            $result = $this->deploy($deployManager, $deployableLanguages, $deployableAreaThemeMap);
-            $deployManager->minifyTemplates();
-            $deployManager->saveDeployedVersion();
-            return $result;
+        foreach ($deployableAreaThemeMap as $area => $themes) {
+            foreach ($deployableLanguages as $locale) {
+                foreach ($themes as $themePath) {
+                    $deployManager->addPack($area, $themePath, $locale);
+                }
+            }
         }
+
+        return $deployManager->deploy();
     }
 
     /**
@@ -472,95 +474,5 @@ class DeployStaticContentCommand extends Command
         }
 
         return [$deployableLanguages, $deployableAreaThemeMap, $requestedThemes];
-    }
-
-    /**
-     * @param DeployManager $deployManager
-     * @param array $deployableLocales
-     * @param array $deployableAreaThemeMap
-     * @return int
-     */
-    private function deploy(DeployManager $deployManager, $deployableLocales, $deployableAreaThemeMap)
-    {
-        foreach ($deployableAreaThemeMap as $area => $themes) {
-            foreach ($deployableLocales as $locale) {
-                foreach ($themes as $themePath) {
-                    $deployManager->addPack($area, $themePath, $locale);
-                }
-            }
-        }
-
-        return $deployManager->deploy();
-    }
-
-    /**
-     * @param DeployManager $deployManager
-     * @param array $deployableAreaThemeMap
-     * @param array $deployableLanguages
-     * @return int
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function runProcessesInParallel(DeployManager $deployManager, $deployableAreaThemeMap, $deployableLanguages)
-    {
-        /** @var ProcessManager $processManager */
-        $processManager = $this->objectManager->create(ProcessManager::class);
-        $processNumber = 0;
-        $processQueue = [];
-        foreach ($deployableAreaThemeMap as $area => $themes) {
-            foreach ($themes as $theme) {
-                $deployerFunc = function (Process $process) use ($area, $theme, $deployableLanguages, $deployManager) {
-                    return $this->deploy($deployManager, $deployableLanguages, [$area => [$theme]]);
-                };
-                if ($processNumber >= $this->getProcessesAmount()) {
-                    $processQueue[] = $deployerFunc;
-                } else {
-                    $processManager->fork($deployerFunc);
-                }
-                $processNumber++;
-            }
-        }
-        $returnStatus = null;
-        while (count($processManager->getProcesses()) > 0) {
-            foreach ($processManager->getProcesses() as $process) {
-                if ($process->isCompleted()) {
-                    $processManager->delete($process);
-                    $returnStatus |= $process->getStatus();
-                    if ($queuedProcess = array_shift($processQueue)) {
-                        $processManager->fork($queuedProcess);
-                    }
-                    if (count($processManager->getProcesses()) >= $this->getProcessesAmount()) {
-                        break 1;
-                    }
-                }
-            }
-            usleep(5000);
-        }
-
-        $deployManager->minifyTemplates();
-        $deployManager->saveDeployedVersion();
-
-        return $returnStatus === Cli::RETURN_SUCCESS ?: Cli::RETURN_FAILURE;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isCanBeParalleled()
-    {
-        return function_exists('pcntl_fork') && $this->getProcessesAmount() > 1;
-    }
-
-    /**
-     * @return int
-     */
-    private function getProcessesAmount()
-    {
-        $jobs = (int)$this->input->getOption(Options::JOBS_AMOUNT);
-        if ($jobs < 1) {
-            throw new \InvalidArgumentException(
-                Options::JOBS_AMOUNT . ' argument has invalid value. It must be greater than 0'
-            );
-        }
-        return $jobs;
     }
 }

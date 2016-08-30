@@ -100,11 +100,7 @@ class Deployer
                 }
             }
         }
-        $result = $deployerManager->deploy();
-        $deployerManager->minifyTemplates();
-        $deployerManager->saveDeployedVersion();
-
-        return $result;
+        return $deployerManager->deploy();
     }
 
     /**
