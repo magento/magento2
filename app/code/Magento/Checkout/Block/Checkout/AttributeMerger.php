@@ -272,10 +272,11 @@ class AttributeMerger
                         ['required-entry' => (bool)$attributeConfig['required']],
                         $attributeConfig['validation']
                     )
-                    : $attributeConfig['validation'],
-                'additionalClasses' => $isFirstLine ? 'field' : 'additional'
-
+                    : $attributeConfig['validation']
             ];
+            if (!$isFirstLine) {
+                $line['additionalClasses'] = 'additional';
+            }
             if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
                 $line['value'] = $attributeConfig['default'];
             }
