@@ -7,6 +7,8 @@ namespace Magento\Sales\Api\Data;
 
 /**
  * Interface CreditmemoCreationArgumentsInterface
+ *
+ * @api
  */
 interface CreditmemoCreationArgumentsInterface
 {

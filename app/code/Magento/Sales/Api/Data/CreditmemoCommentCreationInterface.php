@@ -9,6 +9,8 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface CreditmemoCommentCreationInterface
+ *
+ * @api
  */
 interface CreditmemoCommentCreationInterface extends ExtensibleDataInterface, CommentInterface
 {
