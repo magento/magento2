@@ -28,7 +28,7 @@ class Wishlist extends \Magento\Catalog\Block\Product\View
      */
     public function getWishlistOptions()
     {
-        return ['productType' => $this->getProduct()->getTypeId()];
+        return ['productType' => $this->escapeHtml($this->getProduct()->getTypeId())];
     }
 
     /**
