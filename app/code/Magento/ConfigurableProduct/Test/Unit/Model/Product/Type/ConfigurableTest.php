@@ -665,7 +665,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'label' => 'attr_store_label',
                 'value' => '',
                 'option_id' => 1,
-                'option_value' => []
+                'option_value' => ''
                 ]
             ]
         );
