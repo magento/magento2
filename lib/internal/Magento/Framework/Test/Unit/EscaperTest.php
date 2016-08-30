@@ -93,8 +93,10 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
                 'allowedTags' => ['span', 'b'],
             ],
             'text with multiple allowed tags with allowed attribute' => [
-                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
-                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>',
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">'
+                    . 'create an account</a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or '
+                    . '<a href="%2">create an account</a>',
                 'allowedTags' => ['a'],
             ],
             'text with not allowed attribute in single quotes' => [

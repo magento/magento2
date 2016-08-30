@@ -39,10 +39,10 @@ class Escaper
      * Escape string for HTML context, allowedTags will not be escaped
      *
      * @param string|array $data
-     * @param array $allowedTags
+     * @param array|null $allowedTags
      * @return string|array
      */
-    public function escapeHtml($data, $allowedTags = [])
+    public function escapeHtml($data, $allowedTags = null)
     {
         if (is_array($data)) {
             $result = [];
