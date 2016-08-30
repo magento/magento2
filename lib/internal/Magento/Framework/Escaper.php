@@ -63,22 +63,11 @@ class Escaper
                 }
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
-                // @codingStandardsIgnoreStart
                 set_error_handler(
-                    /**
-                     * Handle warning and throw an exception
-                     *
-                     * @param string $errorNumber
-                     * @param string $errorString
-                     * @param string $errorFile
-                     * @param string $errorLine
-                     * @return void
-                     */
-                    function ($errorNumber, $errorString, $errorFile, $errorLine) {
+                    function ($errorNumber, $errorString) {
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
-                // @codingStandardsIgnoreEnd
                 $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
                 try {
                     $domDocument->loadHTML(
