@@ -14,102 +14,80 @@ require([
     configurableWidget,
     swatchWidget,
     productOptions,
+    tempProductOptions,
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
-    selectOption,
     updateConfigurableOptions,
     updateSwatchOptions,
     setProductOptions;
 
-    /*
-    if (!$(selectors.formSelector).data(selectors.configurableWidget)) {
-        return;
-    }*/
 
-    /**
-    * Sets specific configurable attribute's selected value
-    *
-    * @param {HTMLElement} elem - configurable attribute
-    * @param {String} value - configurable attribute's selected value
-    */
-    selectOption = function (elem, value) {
-        elem = $(elem);
-
-        if (value && elem.val() !== value) {
-            elem.val(value);
-        }
-    };
 
     /**
     * Sets all configurable attribute's selected values
     */
     updateConfigurableOptions = function () {
         configurableWidget = $(selectors.formSelector).data(selectors.configurableWidget);
+        
         if (!configurableWidget) {
             return;
         }
-        
         configurableWidget.options.values = productOptions || {};
         configurableWidget._configureForValues();
-
-/*
-        $(selectors.superSelector).each(function () {
-            currentAttributeId = (selectors.attributeIdRegex.exec((this.attributes[selectors.attributeIdSelector] || {}).value) || [])[1];
-
-            if (productOptions && currentAttributeId) {
-                selectOption(this, productOptions[currentAttributeId]);
-            }
-        });*/
     };
 
     /**
     * Sets all configurable swatch attribute's selected values
     */
     updateSwatchOptions = function () {
-        if (!productOptions) {
-            setProductOptions(cartData());
-        }
-        if (!productOptions) {
-            return;
-        }
+            swatchWidget = $(selectors.swatchSelector).data(selectors.swatchWidget);
 
-        swatchWidget = $(selectors.swatchSelector).data(selectors.swatchWidget);
-        if (!swatchWidget || !swatchWidget._EmulateSelectedByAttributeId) {
-            return;
-        }
-        swatchWidget._EmulateSelectedByAttributeId(productOptions);
+            if (!swatchWidget || !swatchWidget._EmulateSelectedByAttributeId) {
+                return;
+            }
+            swatchWidget._EmulateSelectedByAttributeId(productOptions);
     };
 
     /**
     * set productOptions according to cart data from customer-data
     *
     * @param {Object} data - cart data from customer-data
+    * @returns {Boolean} - whether the new options differ from previous
     */
     setProductOptions = function (data) {
         if (!(data && data.items && data.items.length && productId)) {
             return;
         }
-        productOptions = data.items.find(function (item) {
-                return item['product_id'] === productId;
+        tempProductOptions = data.items.find(function (item) {
+            return item['product_id'] === productId;
         });
-        productOptions = productOptions && productOptions.options &&
-            productOptions.options.reduce(function (obj, val) {
-                obj[val.attributeId] = val.attributeValue;
+        tempProductOptions = tempProductOptions && tempProductOptions.options &&
+            tempProductOptions.options.reduce(function (obj, val) {
+                obj[val['option_id']] = val['option_value'];
 
                 return obj;
         }, {});
-    }
+
+        if (JSON.stringify(productOptions || {}) === JSON.stringify(tempProductOptions || {}) ) {
+            return false;
+        }
+
+        productOptions = tempProductOptions;
+        return true;
+    };
 
     cartData.subscribe(function (updateCartData) {
-        setProductOptions(updateCartData);
-        updateConfigurableOptions();
-        updateSwatchOptions();
+        if (setProductOptions(updateCartData)) {
+            updateConfigurableOptions();
+            updateSwatchOptions();
+        }
     });
     $(selectors.formSelector).on('configurable.initialized', function () {
-        setProductOptions(cartData());
-        updateConfigurableOptions();
+            setProductOptions(cartData());
+            updateConfigurableOptions();
     });
     $(selectors.formSelector).on('swatch.initialized', function () {
-        updateSwatchOptions();
+            setProductOptions(cartData());
+            updateSwatchOptions();
     });
 });
