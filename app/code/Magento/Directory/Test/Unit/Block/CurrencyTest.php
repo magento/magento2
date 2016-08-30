@@ -34,15 +34,24 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         );
         $this->urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
 
-        /** @var \Magento\Framework\View\Element\Template\Context $context */
-        $context = $this->getMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            ['getUrlBuilder'],
-            [],
-            '',
-            false
-        );
+        /** @var $context \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+        $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
+
+        $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaperMock->method('escapeUrl')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeUrl' . $string;
+                }
+            );
+        $context->expects($this->once())
+            ->method('getEscaper')
+            ->willReturn($escaperMock);
 
         /** @var \Magento\Directory\Model\CurrencyFactory $currencyFactory */
         $currencyFactory = $this->getMock(\Magento\Directory\Model\CurrencyFactory::class, [], [], '', false);
@@ -63,7 +72,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = 'post_data';
         $expectedCurrencyCode = 'test';
-        $switchUrl = 'directory/currency/switch';
+        $switchUrl = 'escapeUrldirectory/currency/switch';
 
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
