@@ -20,9 +20,9 @@ define([
                 'message-error': false
             },
             statusMap: {
-                0: 'success',
+                0: 'info',
                 1: 'progress',
-                2: 'info',
+                2: 'success',
                 3: 'error'
             }
         },
