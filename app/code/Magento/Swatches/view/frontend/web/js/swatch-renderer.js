@@ -962,17 +962,17 @@ define([
                 var elem = this.element.find('.' + this.options.classes.attributeClass +
                     '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
                     parentInput = elem.parent();
-            
-                    if (elem.hasClass('selected')) {
-                        return;
-                    }
 
-                    if (parentInput.hasClass(this.options.classes.selectClass)) {
-                        parentInput.val(optionId);
-                        parentInput.trigger('change');
-                    } else {
-                        elem.trigger('click');
-                    }
+                if (elem.hasClass('selected')) {
+                    return;
+                }
+
+                if (parentInput.hasClass(this.options.classes.selectClass)) {
+                    parentInput.val(optionId);
+                    parentInput.trigger('change');
+                } else {
+                    elem.trigger('click');
+                }
             }, this));
         },
 

@@ -11,7 +11,7 @@ require([
     },
     configurableWidget,
     productOptions,
-    tempProductOptions,
+    changedProductOptions,
     cartData = customerData.get('cart'),
     productId = $(selectors.productIdSelector).val(),
     updateConfigurableOptions,
@@ -40,21 +40,21 @@ require([
         if (!(data && data.items && data.items.length && productId)) {
             return false;
         }
-        tempProductOptions = data.items.find(function (item) {
+        changedProductOptions = data.items.find(function (item) {
             return item['product_id'] === productId;
         });
-        tempProductOptions = tempProductOptions && tempProductOptions.options &&
-            tempProductOptions.options.reduce(function (obj, val) {
+        changedProductOptions = changedProductOptions && changedProductOptions.options &&
+            changedProductOptions.options.reduce(function (obj, val) {
                 obj[val['option_id']] = val['option_value'];
 
                 return obj;
             }, {});
 
-        if (JSON.stringify(productOptions || {}) === JSON.stringify(tempProductOptions || {})) {
+        if (JSON.stringify(productOptions || {}) === JSON.stringify(changedProductOptions || {})) {
             return false;
         }
 
-        productOptions = tempProductOptions;
+        productOptions = changedProductOptions;
 
         return true;
     };
