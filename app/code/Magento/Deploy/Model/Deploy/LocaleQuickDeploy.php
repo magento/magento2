@@ -74,7 +74,7 @@ class LocaleQuickDeploy implements DeployInterface
         $errorAmount = 0;
 
         $baseLocale = $this->options[DeployManager::DEPLOY_BASE_LOCALE];
-        $newLocalePath =$this->getLocalePath($area, $themePath, $locale);
+        $newLocalePath = $this->getLocalePath($area, $themePath, $locale);
         $baseLocalePath = $this->getLocalePath($area, $themePath, $baseLocale);
         $baseRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $baseLocalePath;
         $newRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $newLocalePath;
@@ -88,18 +88,16 @@ class LocaleQuickDeploy implements DeployInterface
 
             $this->output->writeln("\nSuccessful symlinked\n---\n");
         } else {
-            $localeFiles = Files::getFiles(
-                [
-                    $this->getStaticDirectory()->getAbsolutePath($baseLocalePath),
-                    $this->getStaticDirectory()->getAbsolutePath($baseRequireJsPath)
-                ],
-                '*'
+            $localeFiles = array_merge(
+                $this->getStaticDirectory()->readRecursively($baseLocalePath),
+                $this->getStaticDirectory()->readRecursively($baseRequireJsPath)
             );
-            foreach ($localeFiles as $file) {
-                $path = $this->getStaticDirectory()->getRelativePath($file);
-                $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
-                $this->getStaticDirectory()->copyFile($path, $destination);
-                $processedFiles++;
+            foreach ($localeFiles as $path) {
+                if ($this->getStaticDirectory()->isFile($path)) {
+                    $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
+                    $this->getStaticDirectory()->copyFile($path, $destination);
+                    $processedFiles++;
+                }
             }
 
             $this->output->writeln("\nSuccessful copied: {$processedFiles} files; errors: {$errorAmount}\n---\n");

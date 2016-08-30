@@ -26,10 +26,10 @@ use Magento\Framework\Console\Cli;
 class LocaleDeploy implements DeployInterface
 {
     /** @var int */
-    private $count;
+    private $count = 0;
 
     /** @var int */
-    private $errorCount;
+    private $errorCount = 0;
 
     /**
      * @var OutputInterface

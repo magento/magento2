@@ -5,6 +5,9 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
