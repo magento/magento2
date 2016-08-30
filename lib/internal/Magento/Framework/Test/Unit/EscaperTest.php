@@ -105,13 +105,18 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
                 'allowedTags' => ['span', 'b'],
             ],
             'text with allowed and not allowed tags' => [
-                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<span>three</span></a> or <a href="%2"><span id="action">create an account</span></a>',
-                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign inthree</a> or <a href="%2">create an account</a>',
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<span>three</span></a> '
+                    . 'or <a href="%2"><span id="action">create an account</span></a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign inthree</a> or '
+                    . '<a href="%2">create an account</a>',
                 'allowedTags' => ['a'],
             ],
             'text with allowed and not allowed tags, with allowed and not allowed attributes' => [
-                'data' => 'Some test <span>text in span tag</span> <strong>text in strong tag</strong> <a type="some-type" href="http://domain.com/" onclick="alert(1)">Click here</a><script>alert(1)</script>',
-                'expected' => 'Some test <span>text in span tag</span> text in strong tag <a href="http://domain.com/">Click here</a>alert(1)',
+                'data' => 'Some test <span>text in span tag</span> <strong>text in strong tag</strong> '
+                    . '<a type="some-type" href="http://domain.com/" onclick="alert(1)">Click here</a><script>alert(1)'
+                    . '</script>',
+                'expected' => 'Some test <span>text in span tag</span> text in strong tag <a href="http://domain.com/">'
+                    . 'Click here</a>alert(1)',
                 'allowedTags' => ['a', 'span'],
             ],
             'text with html comment' => [

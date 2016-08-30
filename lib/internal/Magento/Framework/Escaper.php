@@ -118,8 +118,11 @@ class Escaper
     private function removeNotAllowedTags(\DOMDocument $domDocument, array $allowedTags)
     {
         $xpath = new \DOMXPath($domDocument);
-        $nodes = $xpath->query('//node()[name() != \''
-            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']');
+        $nodes = $xpath->query(
+            '//node()[name() != \''
+            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body']))
+            . '\']'
+        );
         foreach ($nodes as $node) {
             if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
                 $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
