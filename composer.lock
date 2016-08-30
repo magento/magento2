@@ -922,16 +922,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "3d265f7c079f5b37d33475f996d7a383c5fc8aeb"
+                "reference": "41f85e9c2582b3f6d1b7d20395fb40c687ad5370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/3d265f7c079f5b37d33475f996d7a383c5fc8aeb",
-                "reference": "3d265f7c079f5b37d33475f996d7a383c5fc8aeb",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/41f85e9c2582b3f6d1b7d20395fb40c687ad5370",
+                "reference": "41f85e9c2582b3f6d1b7d20395fb40c687ad5370",
                 "shasum": ""
             },
             "require": {
@@ -1010,7 +1010,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2016-05-13 01:15:21"
+            "time": "2016-08-18 18:49:14"
         },
         {
             "name": "psr/log",
@@ -1381,16 +1381,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "b180b70439dca70049b6b9b7e21d75e6e5d7aca9"
+                "reference": "889983a79a043dfda68f38c38b6dba092dd49cd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/b180b70439dca70049b6b9b7e21d75e6e5d7aca9",
-                "reference": "b180b70439dca70049b6b9b7e21d75e6e5d7aca9",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/889983a79a043dfda68f38c38b6dba092dd49cd8",
+                "reference": "889983a79a043dfda68f38c38b6dba092dd49cd8",
                 "shasum": ""
             },
             "require": {
@@ -1437,20 +1437,20 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:29:29"
+            "time": "2016-07-28 16:56:28"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "7258ddd6f987053f21fa43d03430580ba54e6096"
+                "reference": "ab4c3f085c8f5a56536845bf985c4cef30bf75fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/7258ddd6f987053f21fa43d03430580ba54e6096",
-                "reference": "7258ddd6f987053f21fa43d03430580ba54e6096",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/ab4c3f085c8f5a56536845bf985c4cef30bf75fd",
+                "reference": "ab4c3f085c8f5a56536845bf985c4cef30bf75fd",
                 "shasum": ""
             },
             "require": {
@@ -1486,11 +1486,11 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:31:50"
+            "time": "2016-07-20 05:41:28"
         },
         {
             "name": "symfony/finder",
-            "version": "v3.1.2",
+            "version": "v3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -1539,16 +1539,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "89f33c16796415ccfd8bb3cf8d520cbb79899bfe"
+                "reference": "d20332e43e8774ff8870b394f3dd6020cc7f8e0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/89f33c16796415ccfd8bb3cf8d520cbb79899bfe",
-                "reference": "89f33c16796415ccfd8bb3cf8d520cbb79899bfe",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d20332e43e8774ff8870b394f3dd6020cc7f8e0c",
+                "reference": "d20332e43e8774ff8870b394f3dd6020cc7f8e0c",
                 "shasum": ""
             },
             "require": {
@@ -1584,7 +1584,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:29:29"
+            "time": "2016-07-28 11:13:19"
         },
         {
             "name": "tedivm/jshrink",
@@ -3233,35 +3233,35 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.11.5",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "d3d08b76753092a232a4d8c3b94095ac06898719"
+                "reference": "ddac737e1c06a310a0bb4b3da755a094a31a916a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d3d08b76753092a232a4d8c3b94095ac06898719",
-                "reference": "d3d08b76753092a232a4d8c3b94095ac06898719",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ddac737e1c06a310a0bb4b3da755a094a31a916a",
+                "reference": "ddac737e1c06a310a0bb4b3da755a094a31a916a",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
-                "php": ">=5.3.6",
-                "sebastian/diff": "~1.1",
-                "symfony/console": "~2.3|~3.0",
-                "symfony/event-dispatcher": "~2.1|~3.0",
-                "symfony/filesystem": "~2.1|~3.0",
-                "symfony/finder": "~2.1|~3.0",
-                "symfony/process": "~2.3|~3.0",
-                "symfony/stopwatch": "~2.5|~3.0"
+                "php": "^5.3.6 || >=7.0 <7.2",
+                "sebastian/diff": "^1.1",
+                "symfony/console": "^2.3 || ^3.0",
+                "symfony/event-dispatcher": "^2.1 || ^3.0",
+                "symfony/filesystem": "^2.1 || ^3.0",
+                "symfony/finder": "^2.1 || ^3.0",
+                "symfony/process": "^2.3 || ^3.0",
+                "symfony/stopwatch": "^2.5 || ^3.0"
             },
             "conflict": {
                 "hhvm": "<3.9"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.5|^5",
-                "satooshi/php-coveralls": "^0.7.1"
+                "satooshi/php-coveralls": "^1.0"
             },
             "bin": [
                 "php-cs-fixer"
@@ -3288,7 +3288,7 @@
             ],
             "description": "A tool to automatically fix PHP code style",
             "abandoned": "friendsofphp/php-cs-fixer",
-            "time": "2016-07-06 22:49:35"
+            "time": "2016-08-17 00:17:27"
         },
         {
             "name": "lusitanian/oauth",
@@ -3951,23 +3951,23 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "1.3.7",
+            "version": "1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716"
+                "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/4e8f0da10ac5802913afc151413bc8c53b6c2716",
-                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/be2c607e43ce4c89ecd60e75c6a85c126e754aea",
+                "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.4"
+                "phpunit/phpunit": "^4.8 || ^5.0"
             },
             "type": "library",
             "extra": {
@@ -3997,7 +3997,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-05-17 03:18:57"
+            "time": "2016-08-18 05:49:44"
         },
         {
             "name": "sebastian/exporter",
@@ -4321,16 +4321,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "0926e69411eba491803dbafb9f1f233e2ced58d0"
+                "reference": "4275ef5b59f18959df0eee3991e9ca0cc208ffd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/0926e69411eba491803dbafb9f1f233e2ced58d0",
-                "reference": "0926e69411eba491803dbafb9f1f233e2ced58d0",
+                "url": "https://api.github.com/repos/symfony/config/zipball/4275ef5b59f18959df0eee3991e9ca0cc208ffd4",
+                "reference": "4275ef5b59f18959df0eee3991e9ca0cc208ffd4",
                 "shasum": ""
             },
             "require": {
@@ -4370,20 +4370,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:31:50"
+            "time": "2016-07-26 08:02:44"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "2dd85de8216079d1360b2b14988cd5cdbbb49063"
+                "reference": "f2b5a00d176f6a201dc430375c0ef37706ea3d12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/2dd85de8216079d1360b2b14988cd5cdbbb49063",
-                "reference": "2dd85de8216079d1360b2b14988cd5cdbbb49063",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/f2b5a00d176f6a201dc430375c0ef37706ea3d12",
+                "reference": "f2b5a00d176f6a201dc430375c0ef37706ea3d12",
                 "shasum": ""
             },
             "require": {
@@ -4395,7 +4395,7 @@
             "require-dev": {
                 "symfony/config": "~2.2|~3.0.0",
                 "symfony/expression-language": "~2.6|~3.0.0",
-                "symfony/yaml": "~2.1|~3.0.0"
+                "symfony/yaml": "~2.3.42|~2.7.14|~2.8.7|~3.0.7"
             },
             "suggest": {
                 "symfony/config": "",
@@ -4433,11 +4433,11 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:31:50"
+            "time": "2016-07-30 07:20:35"
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.1.2",
+            "version": "v3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -4486,16 +4486,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "dba4bb5846798cd12f32e2d8f3f35d77045773c8"
+                "reference": "0ceab136f43ed9d3e97b3eea32a7855dc50c121d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/dba4bb5846798cd12f32e2d8f3f35d77045773c8",
-                "reference": "dba4bb5846798cd12f32e2d8f3f35d77045773c8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/0ceab136f43ed9d3e97b3eea32a7855dc50c121d",
+                "reference": "0ceab136f43ed9d3e97b3eea32a7855dc50c121d",
                 "shasum": ""
             },
             "require": {
@@ -4531,7 +4531,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:29:29"
+            "time": "2016-07-17 09:06:15"
         },
         {
             "name": "theseer/fdomdocument",

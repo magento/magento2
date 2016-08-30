@@ -202,7 +202,7 @@ class Chooser extends Extended
                 {jsObject}.categoryName = node.attributes.id != "none" ? node.text : false;
             }
         ';
-        $js = str_replace('{jsObject}', $this->getJsObjectName(), $js);
+        $js = str_replace('{jsObject}', $this->escapeJs($this->getJsObjectName()), $js);
         return $js;
     }
 

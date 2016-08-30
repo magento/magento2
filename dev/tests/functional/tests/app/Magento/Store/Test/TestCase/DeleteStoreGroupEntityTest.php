@@ -31,14 +31,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Click "Delete store"
  * 7. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27596
  */
 class DeleteStoreGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

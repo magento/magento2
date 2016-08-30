@@ -3,141 +3,195 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Model\Controller\Result;
 
+use Magento\PageCache\Model\Controller\Result\BuiltinPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\PageCache\Model\Config;
+use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Registry;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
+use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Magento\PageCache\Model\Cache\Type as CacheType;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\PageCache\Model\Controller\Result\BuiltinPlugin
+     * @var BuiltinPlugin
      */
-    protected $plugin;
+    private $plugin;
 
     /**
-     * @var \Magento\Framework\Controller\ResultInterface
+     * @var ObjectManagerHelper
      */
-    protected $subject;
+    private $objectManagerHelper;
 
     /**
-     * @var \Closure
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $closure;
+    private $configMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Kernel|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $response;
+    private $kernelMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $registry;
+    private $stateMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $state;
+    private $registryMock;
 
     /**
-     * @var \Zend\Http\Header\HeaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $header;
+    private $resultMock;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Kernel|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHttp|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $kernel;
+    private $responseMock;
+
+    /**
+     * @var HttpHeaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $httpHeaderMock;
 
     protected function setUp()
     {
-        $result = $this->getMock(\Magento\Framework\Controller\ResultInterface::class, [], [], '', false);
-        $this->closure = function() use ($result) {
-            return $result;
-        };
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->kernelMock = $this->getMockBuilder(Kernel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stateMock = $this->getMockBuilder(AppState::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registryMock = $this->getMockBuilder(Registry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
+            ->getMockForAbstractClass();
+        $this->responseMock = $this->getMockBuilder(ResponseHttp::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->httpHeaderMock = $this->getMockBuilder(HttpHeaderInterface::class)
+            ->getMockForAbstractClass();
 
-        $this->header = $this->getMock(\Zend\Http\Header\HeaderInterface::class, [], [], '', false);
-        $this->subject = $this->getMock(\Magento\Framework\Controller\ResultInterface::class, [], [], '', false);
-        $this->response = $this->getMock(
-            \Magento\Framework\App\Response\Http::class,
-            ['getHeader', 'clearHeader', 'setHeader'],
-            [],
-            '',
-            false
-        );
-        $this->response->expects($this->any())->method('getHeader')->willReturnMap(
+        $this->responseMock->expects(static::any())
+            ->method('getHeader')
+            ->willReturnMap(
+                [
+                    ['X-Magento-Tags', $this->httpHeaderMock],
+                    ['Cache-Control', $this->httpHeaderMock]
+                ]
+            );
+        $this->configMock->expects(static::any())
+            ->method('isEnabled')
+            ->willReturn(true);
+        $this->configMock->expects(static::any())
+            ->method('getType')
+            ->willReturn(Config::BUILT_IN);
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->plugin = $this->objectManagerHelper->getObject(
+            BuiltinPlugin::class,
             [
-                ['X-Magento-Tags', $this->header],
-                ['Cache-Control', $this->header]
-            ]
-        );
-
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-
-        $config = $this->getMock(\Magento\PageCache\Model\Config::class, ['isEnabled', 'getType'], [], '', false);
-        $config->expects($this->any())->method('isEnabled')->willReturn(true);
-        $config->expects($this->any())->method('getType')->willReturn(\Magento\PageCache\Model\Config::BUILT_IN);
-
-        $this->kernel = $this->getMock(\Magento\Framework\App\PageCache\Kernel::class, [], [], '', false);
-
-        $this->state = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\PageCache\Model\Controller\Result\BuiltinPlugin::class,
-            [
-                'registry' => $this->registry,
-                'config' => $config,
-                'kernel' => $this->kernel,
-                'state' => $this->state
+                'registry' => $this->registryMock,
+                'config' => $this->configMock,
+                'kernel' => $this->kernelMock,
+                'state' => $this->stateMock
             ]
         );
     }
 
-    public function testAroundResultWithoutPlugin()
+    public function testAfterResultWithoutPlugin()
     {
-        $this->registry->expects($this->once())->method('registry')->with('use_page_cache_plugin')->willReturn(false);
-        $this->kernel->expects($this->never())->method('process')->with($this->response);
+        $this->registryMock->expects(static::once())
+            ->method('registry')
+            ->with('use_page_cache_plugin')
+            ->willReturn(false);
+        $this->kernelMock->expects(static::never())
+            ->method('process')
+            ->with($this->responseMock);
+
         $this->assertSame(
-            call_user_func($this->closure),
-            $this->plugin->aroundRenderResult($this->subject, $this->closure, $this->response)
+            $this->resultMock,
+            $this->plugin->afterRenderResult($this->resultMock, $this->resultMock, $this->responseMock)
         );
     }
 
-    public function testAroundResultWithPlugin()
+    public function testAfterResultWithPlugin()
     {
-        $this->registry->expects($this->once())->method('registry')->with('use_page_cache_plugin')->willReturn(true);
-        $this->state->expects($this->once())->method('getMode')->willReturn(null);
-        $this->header->expects($this->any())->method('getFieldValue')->willReturn('tag,tag');
-        $this->response->expects($this->once())->method('clearHeader')->with('X-Magento-Tags');
-        $this->response->expects($this->once())->method('setHeader')->with(
-            'X-Magento-Tags',
-            'tag,' . \Magento\PageCache\Model\Cache\Type::CACHE_TAG
+        $this->registryMock->expects(static::once())
+            ->method('registry')
+            ->with('use_page_cache_plugin')
+            ->willReturn(true);
+        $this->stateMock->expects(static::once())
+            ->method('getMode')
+            ->willReturn(null);
+        $this->httpHeaderMock->expects(static::any())
+            ->method('getFieldValue')
+            ->willReturn('tag,tag');
+        $this->responseMock->expects(static::once())
+            ->method('clearHeader')
+            ->with('X-Magento-Tags');
+        $this->responseMock->expects(static::once())
+            ->method('setHeader')
+            ->with('X-Magento-Tags', 'tag,' . CacheType::CACHE_TAG);
+        $this->kernelMock->expects(static::once())
+            ->method('process')
+            ->with($this->responseMock);
+
+        $this->assertSame(
+            $this->resultMock,
+            $this->plugin->afterRenderResult($this->resultMock, $this->resultMock, $this->responseMock)
         );
-        $this->kernel->expects($this->once())->method('process')->with($this->response);
-        $result = call_user_func($this->closure);
-        $this->assertSame($result, $this->plugin->aroundRenderResult($this->subject, $this->closure, $this->response));
     }
 
-    public function testAroundResultWithPluginDeveloperMode()
+    public function testAfterResultWithPluginDeveloperMode()
     {
-        $this->registry->expects($this->once())->method('registry')->with('use_page_cache_plugin')->willReturn(true);
-        $this->state->expects($this->once())->method('getMode')
-            ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
+        $this->registryMock->expects(static::once())
+            ->method('registry')
+            ->with('use_page_cache_plugin')
+            ->willReturn(true);
+        $this->stateMock->expects(static::once())
+            ->method('getMode')
+            ->willReturn(AppState::MODE_DEVELOPER);
+        $this->httpHeaderMock->expects(static::any())
+            ->method('getFieldValue')
+            ->willReturnOnConsecutiveCalls('test', 'tag,tag2');
+        $this->responseMock->expects(static::any())
+            ->method('setHeader')
+            ->withConsecutive(
+                ['X-Magento-Cache-Control', 'test'],
+                ['X-Magento-Cache-Debug', 'MISS', true],
+                ['X-Magento-Tags', 'tag,tag2,' . CacheType::CACHE_TAG]
+            );
+        $this->responseMock->expects(static::once())
+            ->method('clearHeader')
+            ->with('X-Magento-Tags');
+        $this->registryMock->expects(static::once())
+            ->method('registry')
+            ->with('use_page_cache_plugin')
+            ->willReturn(true);
+        $this->kernelMock->expects(static::once())
+            ->method('process')
+            ->with($this->responseMock);
 
-        $this->header->expects($this->any())->method('getFieldValue')->willReturnOnConsecutiveCalls('test', 'tag,tag2');
-
-        $this->response->expects($this->any())->method('setHeader')->withConsecutive(
-            ['X-Magento-Cache-Control', 'test'],
-            ['X-Magento-Cache-Debug', 'MISS', true],
-            ['X-Magento-Tags', 'tag,tag2,' . \Magento\PageCache\Model\Cache\Type::CACHE_TAG]
+        $this->assertSame(
+            $this->resultMock,
+            $this->plugin->afterRenderResult($this->resultMock, $this->resultMock, $this->responseMock)
         );
-
-        $this->response->expects($this->once())->method('clearHeader')->with('X-Magento-Tags');
-        $this->registry->expects($this->once())->method('registry')->with('use_page_cache_plugin')
-            ->will($this->returnValue(true));
-        $this->kernel->expects($this->once())->method('process')->with($this->response);
-
-        $result = call_user_func($this->closure);
-        $this->assertSame($result, $this->plugin->aroundRenderResult($this->subject, $this->closure, $this->response));
     }
 }
