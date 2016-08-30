@@ -230,12 +230,13 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @deprecated
+     * @param string $dirType
      * @return Filesystem\Directory\ReadInterface
      */
-    private function getPubDirectory()
+    private function getPubDirectory($dirType)
     {
         if (!$this->pubDirectory) {
-            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead(DirectoryList::STATIC_VIEW);
+            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
         }
         return $this->pubDirectory;
     }
@@ -928,9 +929,9 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             foreach ($files as $file) {
                 $asset = $this->_assetRepo->createAsset($file, $designParams);
-                $filePath = $asset->getContext()->getPath() . DIRECTORY_SEPARATOR . $file;
-                if ($this->getPubDirectory()->isExist($filePath)) {
-                    $css .= $this->getPubDirectory()->readFile($filePath);
+                $pubDirectory = $this->getPubDirectory($asset->getContext()->getBaseDirType());
+                if ($pubDirectory->isExist($asset->getRelativeSourceFilePath())) {
+                    $css .= $pubDirectory->readFile($asset->getRelativeSourceFilePath());
                 } else {
                     $css .= $asset->getContent();
                 }
