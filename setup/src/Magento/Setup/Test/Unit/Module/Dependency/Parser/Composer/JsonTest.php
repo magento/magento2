@@ -17,7 +17,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->parser = $objectManagerHelper->getObject('Magento\Setup\Module\Dependency\Parser\Composer\Json');
+        $this->parser = $objectManagerHelper->getObject(\Magento\Setup\Module\Dependency\Parser\Composer\Json::class);
     }
 
     /**

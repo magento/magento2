@@ -37,8 +37,14 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePaths = ['/file1', '/file2'];
-        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
-        $this->fileRead = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $this->fileReadFactory = $this->getMock(
+            \Magento\Framework\Filesystem\File\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->fileRead = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
         $this->fileIterator = new FileIterator($this->fileReadFactory, $this->filePaths);
     }
 

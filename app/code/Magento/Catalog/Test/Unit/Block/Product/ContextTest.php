@@ -35,18 +35,18 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->stockRegistryMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockRegistryInterface',
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             [],
             '',
             false
         );
 
-        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+        $this->imageBuilder = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->context = $objectManager->getObject(
-            'Magento\Catalog\Block\Product\Context',
+            \Magento\Catalog\Block\Product\Context::class,
             [
                 'stockRegistry' => $this->stockRegistryMock,
                 'imageBuilder' => $this->imageBuilder,
@@ -66,6 +66,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetImageBuilder()
     {
-        $this->assertInstanceOf('Magento\Catalog\Block\Product\ImageBuilder', $this->context->getImageBuilder());
+        $this->assertInstanceOf(\Magento\Catalog\Block\Product\ImageBuilder::class, $this->context->getImageBuilder());
     }
 }

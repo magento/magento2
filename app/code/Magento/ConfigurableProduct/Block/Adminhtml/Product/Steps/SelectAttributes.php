@@ -38,7 +38,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
     {
         /** @var \Magento\Backend\Block\Widget\Button $attributeCreate */
         $attributeCreate = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         );
         $attributeCreate->setDataAttribute(
             [

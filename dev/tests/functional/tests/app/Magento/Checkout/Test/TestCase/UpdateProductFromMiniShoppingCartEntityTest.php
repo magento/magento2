@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Update.
  * 5. Perform all assertions.
  *
- * @group Mini_Shopping_Cart_(CS)
+ * @group Mini_Shopping_Cart
  * @ZephyrId MAGETWO-29812
  */
 class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
@@ -117,7 +116,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected function createProduct(array $product, array $data = [])
     {
         $createProductsStep = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $product, 'data' => $data]
         );
         return $createProductsStep->run()['products'][0];
@@ -132,7 +131,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected function addToCart(FixtureInterface $product)
     {
         $addToCartStep = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => [$product]]
         );
         $addToCartStep->run();

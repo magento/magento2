@@ -32,7 +32,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Show report".
  * 5. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28515
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -41,7 +41,6 @@ class SalesTaxReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -107,7 +106,7 @@ class SalesTaxReportEntityTest extends Injectable
      */
     public function __prepare()
     {
-        $deleteTaxRule = $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep');
+        $deleteTaxRule = $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class);
         $deleteTaxRule->run();
     }
 
@@ -204,7 +203,7 @@ class SalesTaxReportEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $deleteTaxRule = $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep');
+        $deleteTaxRule = $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class);
         $deleteTaxRule->run();
     }
 }

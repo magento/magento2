@@ -171,7 +171,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Subscriber');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Subscriber::class);
     }
 
     /**
@@ -442,6 +442,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatusChanged(true);
 
         try {
+            /* Save model before sending out email */
             $this->save();
             if ($isConfirmNeed === true
                 && $isOwnSubscribes === false

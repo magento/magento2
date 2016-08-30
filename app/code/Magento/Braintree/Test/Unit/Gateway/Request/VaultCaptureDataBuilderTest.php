@@ -80,7 +80,7 @@ class VaultCaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
         $paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
             ->setMethods(['getVaultPaymentToken'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $paymentToken = $this->getMockBuilder(PaymentToken::class)
             ->disableOriginalConstructor()

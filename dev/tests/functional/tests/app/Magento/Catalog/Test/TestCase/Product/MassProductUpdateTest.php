@@ -28,14 +28,13 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
  * 9. Click on the "Save" button.
  * 10. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-21128
  */
 class MassProductUpdateTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -90,7 +89,7 @@ class MassProductUpdateTest extends Injectable
         $initialProduct->persist();
 
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
 
@@ -101,7 +100,7 @@ class MassProductUpdateTest extends Injectable
         $this->attributeMassActionPage->getFormPageActions()->save();
         $data = array_merge($initialProduct->getData(), $product->getData());
         $product = $this->objectManager->create(
-            'Magento\Catalog\Test\Fixture\CatalogProductSimple',
+            \Magento\Catalog\Test\Fixture\CatalogProductSimple::class,
             ['data' => $data]
         );
 
@@ -119,7 +118,7 @@ class MassProductUpdateTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }

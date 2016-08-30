@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Email\Test\TestCase\CreateEmailTemplateEntityTest" summary="Create new email template" ticketId="MAGETWO-17155">
+        <variation name="CreateEmailTemplateEntityTestVariation1" summary="Create Change Email template">
+            <data name="EmailTemplate/data/template_select" xsi:type="string">Change Email</data>
+            <data name="EmailTemplate/data/template_code" xsi:type="string">Test code_%isolation%</data>
+            <constraint name="Magento\Email\Test\Constraint\AssertEmailTemplateSuccessSaveMessage" />
+        </variation>
+    </testCase>
+</config>

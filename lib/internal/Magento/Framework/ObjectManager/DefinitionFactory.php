@@ -63,8 +63,8 @@ class DefinitionFactory
      * @var array
      */
     protected static $definitionClasses = [
-        Binary::MODE_NAME => '\Magento\Framework\ObjectManager\Definition\Compiled\Binary',
-        Serialized::MODE_NAME => '\Magento\Framework\ObjectManager\Definition\Compiled\Serialized',
+        Binary::MODE_NAME => \Magento\Framework\ObjectManager\Definition\Compiled\Binary::class,
+        Serialized::MODE_NAME => \Magento\Framework\ObjectManager\Definition\Compiled\Serialized::class,
     ];
 
     /**

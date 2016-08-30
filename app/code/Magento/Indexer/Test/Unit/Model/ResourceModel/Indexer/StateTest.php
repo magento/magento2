@@ -15,7 +15,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $resourceMock = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -23,11 +23,11 @@ class StateTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
-            '\Magento\Indexer\Model\ResourceModel\Indexer\State',
+            \Magento\Indexer\Model\ResourceModel\Indexer\State::class,
             ['resource' => $resourceMock]
         );
         $this->model = $objectManager->getObject(
-            '\Magento\Indexer\Model\ResourceModel\Indexer\State',
+            \Magento\Indexer\Model\ResourceModel\Indexer\State::class,
             $arguments
         );
         $this->assertEquals(

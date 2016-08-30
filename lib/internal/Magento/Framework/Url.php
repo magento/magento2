@@ -1164,7 +1164,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         if ($this->urlModifier === null) {
             $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\Url\ModifierInterface'
+                \Magento\Framework\Url\ModifierInterface::class
             );
         }
 

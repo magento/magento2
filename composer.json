@@ -64,6 +64,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-zip": "*",
+        "ext-pdo_mysql": "*",
         "sjparkinson/static-review": "~4.1",
         "ramsey/uuid": "3.4"
     },

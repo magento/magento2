@@ -174,7 +174,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);
 
-        $date = $this->getMockBuilder('DateTime')
+        $date = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateTimeFactory->expects(static::once())
@@ -262,7 +262,6 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $token->expects(static::once())
             ->method('getEntityId')
             ->willReturn(self::ENTITY_ID);
-
 
         list($tokenUiComponent, $tokenUiComponentProvider) = $this->getTokenUiComponentProvider($token);
 
@@ -573,10 +572,16 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects(self::exactly(4))
             ->method('addFilters')
-            ->with([$customerFilter, $codeFilter, $expiresAtFilter, $isActiveFilter])
-            ->willReturnSelf();
+            ->willReturnMap(
+                [
+                    [$customerFilter, $this->searchCriteriaBuilder],
+                    [$codeFilter, $this->searchCriteriaBuilder],
+                    [$expiresAtFilter, $this->searchCriteriaBuilder],
+                    [$isActiveFilter, $this->searchCriteriaBuilder],
+                ]
+            );
 
         $this->searchCriteriaBuilder->expects(self::once())
             ->method('create')

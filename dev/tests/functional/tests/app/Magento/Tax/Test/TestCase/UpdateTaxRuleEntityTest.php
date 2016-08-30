@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Save' button.
  * 6. Perform all asserts.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-20996
  */
 class UpdateTaxRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -104,6 +103,6 @@ class UpdateTaxRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep', [])->run();
+        $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class, [])->run();
     }
 }

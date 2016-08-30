@@ -60,6 +60,6 @@ abstract class AbstractAdapter extends \Zend_Translate_Adapter implements Adapte
      */
     public function toString()
     {
-        return 'Magento\Framework\Translate\Adapter';
+        return \Magento\Framework\Translate\Adapter::class;
     }
 }

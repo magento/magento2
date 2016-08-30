@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. On order's page click 'Refund offline' button.
  * 5. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29116
  */
 class CreateCreditMemoEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -66,7 +65,7 @@ class CreateCreditMemoEntityTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
 
         $setupConfigurationStep = $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'checkmo, flatrate']
         );
         $setupConfigurationStep->run();
@@ -83,11 +82,11 @@ class CreateCreditMemoEntityTest extends Injectable
     {
         // Preconditions
         $order->persist();
-        $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order])->run();
+        $this->objectManager->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
 
         // Steps
         $createCreditMemoStep = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateCreditMemoStep',
+            \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
             ['order' => $order, 'data' => $data]
         );
         $result = $createCreditMemoStep->run();

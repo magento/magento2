@@ -25,7 +25,7 @@ class Main extends \Magento\Backend\Block\Template
     {
         $this->getToolbar()->addChild(
             'addButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Add Attribute Set'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/add') . '\')',

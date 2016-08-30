@@ -467,7 +467,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product::class);
     }
 
     /**
@@ -1468,7 +1468,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasData('media_gallery_images') && is_array($this->getMediaGallery('images'))) {
             $images = $this->_collectionFactory->create();
             foreach ($this->getMediaGallery('images') as $image) {
-                if ((isset($image['disabled']) && $image['disabled']) || empty($image['value_id'])) {
+                if ((isset($image['disabled']) && $image['disabled'])
+                    || empty($image['value_id'])
+                    || $images->getItemById($image['value_id']) != null
+                ) {
                     continue;
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
@@ -1798,7 +1801,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $this->dataObjectHelper->populateWithArray(
                     $stockItem,
                     $data['stock_item'],
-                    '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+                    \Magento\CatalogInventory\Api\Data\StockItemInterface::class
                 );
                 $stockItem->setProduct($this);
                 $this->setStockItem($stockItem);
@@ -2497,7 +2500,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (!$extensionAttributes) {
-            return $this->extensionAttributesFactory->create('Magento\Catalog\Api\Data\ProductInterface');
+            return $this->extensionAttributesFactory->create(\Magento\Catalog\Api\Data\ProductInterface::class);
         }
         return $extensionAttributes;
     }
@@ -2593,7 +2596,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if (null === $this->linkRepository) {
             $this->linkRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductLinkRepositoryInterface');
+                ->get(\Magento\Catalog\Api\ProductLinkRepositoryInterface::class);
         }
         return $this->linkRepository;
     }
@@ -2605,7 +2608,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if (null === $this->mediaGalleryProcessor) {
             $this->mediaGalleryProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Gallery\Processor');
+                ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
     }

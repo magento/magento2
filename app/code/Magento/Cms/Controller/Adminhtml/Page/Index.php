@@ -49,7 +49,7 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->addBreadcrumb(__('Manage Pages'), __('Manage Pages'));
         $resultPage->getConfig()->getTitle()->prepend(__('Pages'));
 
-        $dataPersistor = $this->_objectManager->get('Magento\Framework\App\Request\DataPersistorInterface');
+        $dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
         $dataPersistor->clear('cms_page');
 
         return $resultPage;

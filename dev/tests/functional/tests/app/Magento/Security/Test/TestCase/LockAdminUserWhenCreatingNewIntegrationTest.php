@@ -33,7 +33,6 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -99,7 +98,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
 
         // Preconditions
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
         $customAdmin->persist();
@@ -130,7 +129,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }

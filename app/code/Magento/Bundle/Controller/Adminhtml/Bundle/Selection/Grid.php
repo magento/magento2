@@ -20,7 +20,7 @@ class Grid extends \Magento\Backend\App\Action
 
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid',
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class,
                 'adminhtml.catalog.product.edit.tab.bundle.option.search.grid'
             )->setIndex($index)->toHtml()
         );

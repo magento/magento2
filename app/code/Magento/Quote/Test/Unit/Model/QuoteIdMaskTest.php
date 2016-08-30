@@ -22,7 +22,7 @@ class QuoteIdMaskTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteIdMask = $helper->getObject(
-            'Magento\Quote\Model\QuoteIdMask',
+            \Magento\Quote\Model\QuoteIdMask::class,
             ['randomDataGenerator' => new Random()]
         );
     }

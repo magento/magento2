@@ -24,23 +24,23 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_items['item1'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
+        $this->_items['item1'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
 
-        $this->_items['item2'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
+        $this->_items['item2'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_items['item2']->expects($this->any())->method('getId')->will($this->returnValue('item2'));
 
-        $this->_items['item3'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
+        $this->_items['item3'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
 
-        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->_model = new \Magento\Backend\Model\Menu($this->_logger);
     }
 
     public function testAdd()
     {
-        $item = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
+        $item = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_model->add($item);
         $this->assertCount(1, $this->_model);
         $this->assertEquals($item, $this->_model[0]);
@@ -53,7 +53,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMock('Magento\Backend\Model\Menu', [], [$this->_logger]);
+        $subMenu = $this->getMock(\Magento\Backend\Model\Menu::class, [], [$this->_logger]);
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -64,9 +64,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddWithSortIndexThatAlreadyExistsAddsItemOnNextAvailableIndex()
     {
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
+        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
+        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
+        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
 
         $this->_model->add($this->_items['item1'], null, 2);
         $this->assertCount(4, $this->_model);
@@ -95,8 +95,8 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->_items['item1'], $this->_model[0]);
         $this->assertEquals($this->_items['item2'], $this->_model[1]);
-        $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
-        $this->assertEquals($this->_items['item2'], $this->_model->get('item2'));
+        $this->assertEquals($this->_items['item1'], $this->_model->get(\item1::class));
+        $this->assertEquals($this->_items['item2'], $this->_model->get(\item2::class));
     }
 
     public function testGetRecursive()
@@ -127,9 +127,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_model->add($this->_items['item3']);
 
         $subMenu = $this->getMock(
-            'Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock('Psr\Log\LoggerInterface')]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)]
         );
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
@@ -180,9 +180,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     public function testRemoveRemovesMenuItemRecursively()
     {
         $menuMock = $this->getMock(
-            'Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock('Psr\Log\LoggerInterface')]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)]
         );
         $menuMock->expects($this->once())->method('remove')->with($this->equalTo('item2'));
 
@@ -243,7 +243,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFirstAvailableReturnsLeafNode()
     {
-        $item = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
+        $item = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
@@ -273,8 +273,8 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleIterationsWorkProperly()
     {
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
+        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
+        $this->_model->add($this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false));
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
