@@ -75,7 +75,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
      * @param float $regularPrice
      * @param float $finalPrice
      * @param bool $expected
-     * @dataProvider DataProviderHasSpecialPrice
+     * @dataProvider hasSpecialPriceDataProvider
      */
     public function testHasSpecialPrice(
         $regularPrice,
@@ -126,7 +126,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function DataProviderHasSpecialPrice()
+    public function hasSpecialPriceDataProvider()
     {
         return [
             [10., 20., false],
