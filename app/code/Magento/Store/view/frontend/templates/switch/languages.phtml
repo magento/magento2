@@ -6,13 +6,8 @@
 
 // @codingStandardsIgnoreFile
 
+/** \Magento\Store\Block\Switcher $block */
 ?>
-<?php
-/**
- * Language switcher template
- */
-?>
-
 <?php if (count($block->getStores())>1): ?>
 <?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : ''?>
 <div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?php /* @noEscape */ echo $id ?>">
