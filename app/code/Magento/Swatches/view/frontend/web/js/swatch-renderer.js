@@ -280,11 +280,6 @@ define([
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
 
-                if ($widget.productForm) {
-                    $widget.productForm.append(input);
-                    input = '';
-                }
-
                 // Create new control
                 container.append(
                     '<div class="' + classes.attributeClass + ' ' + item.code +
@@ -296,6 +291,9 @@ define([
                         '</div>' + input +
                     '</div>'
                 );
+
+                container.append(input);
+                input = '';
 
                 $widget.optionsMap[item.id] = {};
 
