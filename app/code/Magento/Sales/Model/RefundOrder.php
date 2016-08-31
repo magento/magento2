@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
+use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
@@ -115,7 +116,6 @@ class RefundOrder implements RefundOrderInterface
     public function execute(
         $orderId,
         array $items = [],
-        $isOnline = false,
         $notify = false,
         $appendComment = false,
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
@@ -139,19 +139,20 @@ class RefundOrder implements RefundOrderInterface
         $creditmemoValidationResult = $this->creditmemoValidator->validate(
             $creditmemo,
             [
-                QuantityValidator::class
+                QuantityValidator::class,
+                TotalsValidator::class
             ]
         );
         $validationMessages = array_merge($orderValidationResult, $creditmemoValidationResult);
         if (!empty($validationMessages )) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Credit Memo Document Validation Error(s):\n" . implode("\n", $validationMessages ))
+                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages ))
             );
         }
         $connection->beginTransaction();
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
-            $order = $this->paymentAdapter->refund($creditmemo, $order, $isOnline);
+            $order = $this->paymentAdapter->refund($creditmemo, $order);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [])
             );
@@ -164,7 +165,7 @@ class RefundOrder implements RefundOrderInterface
             $this->logger->critical($e);
             $connection->rollBack();
             throw new \Magento\Sales\Exception\CouldNotRefundException(
-                __('Could not save a Credit Memo, see error log for details')
+                __('Could not save a Creditmemo, see error log for details')
             );
         }
         if ($notify) {
