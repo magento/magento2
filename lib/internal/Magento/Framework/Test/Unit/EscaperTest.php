@@ -16,7 +16,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $escaper = null;
 
     /**
      * @var \Magento\Framework\ZendEscaper
@@ -30,12 +30,108 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_escaper = new Escaper();
+        $this->escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
         $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'escaper', $this->zendEscaper);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'logger', $this->loggerMock);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
+    }
+
+    /**
+     * Convert a Unicode Codepoint to a literal UTF-8 character.
+     *
+     * @param int $codepoint Unicode codepoint in hex notation
+     * @return string UTF-8 literal string
+     */
+    protected function codepointToUtf8($codepoint)
+    {
+        if ($codepoint < 0x80) {
+            return chr($codepoint);
+        }
+        if ($codepoint < 0x800) {
+            return chr($codepoint >> 6 & 0x3f | 0xc0)
+            . chr($codepoint & 0x3f | 0x80);
+        }
+        if ($codepoint < 0x10000) {
+            return chr($codepoint >> 12 & 0x0f | 0xe0)
+            . chr($codepoint >> 6 & 0x3f | 0x80)
+            . chr($codepoint & 0x3f | 0x80);
+        }
+        if ($codepoint < 0x110000) {
+            return chr($codepoint >> 18 & 0x07 | 0xf0)
+            . chr($codepoint >> 12 & 0x3f | 0x80)
+            . chr($codepoint >> 6 & 0x3f | 0x80)
+            . chr($codepoint & 0x3f | 0x80);
+        }
+        throw new \Exception('Codepoint requested outside of Unicode range');
+    }
+
+    public function testEscapeJsEscapesOwaspRecommendedRanges()
+    {
+        $immune = [',', '.', '_']; // Exceptions to escaping ranges
+        for ($chr=0; $chr < 0xFF; $chr++) {
+            if ($chr >= 0x30 && $chr <= 0x39
+                || $chr >= 0x41 && $chr <= 0x5A
+                || $chr >= 0x61 && $chr <= 0x7A
+            ) {
+                $literal = $this->codepointToUtf8($chr);
+                $this->assertEquals($literal, $this->escaper->escapeJs($literal));
+            } else {
+                $literal = $this->codepointToUtf8($chr);
+                if (in_array($literal, $immune)) {
+                    $this->assertEquals($literal, $this->escaper->escapeJs($literal));
+                } else {
+                    $this->assertNotEquals(
+                        $literal,
+                        $this->escaper->escapeJs($literal),
+                        $literal . ' should be escaped!'
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $data
+     * @param string $expected
+     * @dataProvider escapeJsDataProvider
+     */
+    public function testEscapeJs($data, $expected)
+    {
+        $this->assertEquals($expected, $this->escaper->escapeJs($data));
+    }
+
+    public function escapeJsDataProvider()
+    {
+        return [
+            'zero length string' => ['', ''],
+            'only digits' => ['123', '123'],
+            '<' => ['<', '\u003C'],
+            '>' => ['>', '\\u003E'],
+            '\'' => ['\'', '\\u0027'],
+            '"' => ['"', '\\u0022'],
+            '&' => ['&', '\\u0026'],
+            'Characters beyond ASCII value 255 to unicode escape' => ['Ā', '\\u0100'],
+            'Characters beyond Unicode BMP to unicode escape' => ["\xF0\x90\x80\x80", '\\uD800DC00'],
+            /* Immune chars excluded */
+            ',' => [',', ','],
+            '.' => ['.', '.'],
+            '_' => ['_', '_'],
+            /* Basic alnums exluded */
+            'a' => ['a', 'a'],
+            'A' => ['A', 'A'],
+            'z' => ['z', 'z'],
+            'Z' => ['Z', 'Z'],
+            '0' => ['0', '0'],
+            '9' => ['9', '9'],
+            /* Basic control characters and null */
+            "\r" => ["\r", '\\u000D'],
+            "\n" => ["\n", '\\u000A'],
+            "\t" => ["\t", '\\u0009'],
+            "\0" => ["\0", '\\u0000'],
+            'Encode spaces for quoteless attribute protection' => [' ', '\\u0020'],
+        ];
     }
 
     /**
@@ -44,7 +140,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
      */
     public function testEscapeHtml($data, $expected, $allowedTags = [])
     {
-        $actual = $this->_escaper->escapeHtml($data, $allowedTags);
+        $actual = $this->escaper->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }
 
@@ -56,7 +152,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     {
         $this->loggerMock->expects($this->once())
             ->method('critical');
-        $actual = $this->_escaper->escapeHtml($data, $allowedTags);
+        $actual = $this->escaper->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }
 
@@ -160,8 +256,8 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     {
         $data = 'http://example.com/search?term=this+%26+that&view=list';
         $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
-        $this->assertEquals($expected, $this->_escaper->escapeUrl($data));
-        $this->assertEquals($expected, $this->_escaper->escapeUrl($expected));
+        $this->assertEquals($expected, $this->escaper->escapeUrl($data));
+        $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
     }
 
     /**
@@ -171,8 +267,8 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     {
         $data = ["Don't do that.", 'lost_key' => "Can't do that."];
         $expected = ["Don\\'t do that.", "Can\\'t do that."];
-        $this->assertEquals($expected, $this->_escaper->escapeJsQuote($data));
-        $this->assertEquals($expected[0], $this->_escaper->escapeJsQuote($data[0]));
+        $this->assertEquals($expected, $this->escaper->escapeJsQuote($data));
+        $this->assertEquals($expected[0], $this->escaper->escapeJsQuote($data[0]));
     }
 
     /**
@@ -185,8 +281,8 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
             "Text with &#039;single&#039; and &quot;double&quot; quotes",
             "Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes",
         ];
-        $this->assertEquals($expected[0], $this->_escaper->escapeQuote($data));
-        $this->assertEquals($expected[1], $this->_escaper->escapeQuote($data, true));
+        $this->assertEquals($expected[0], $this->escaper->escapeQuote($data));
+        $this->assertEquals($expected[1], $this->escaper->escapeQuote($data, true));
     }
 
     /**
@@ -197,7 +293,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
      */
     public function testEscapeXssInUrl($input, $expected)
     {
-        $this->assertEquals($expected, $this->_escaper->escapeXssInUrl($input));
+        $this->assertEquals($expected, $this->escaper->escapeXssInUrl($input));
     }
 
     /**
