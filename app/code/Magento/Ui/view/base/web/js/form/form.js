@@ -248,18 +248,29 @@ define([
          * @param {Object} data
          */
         save: function (redirect, data) {
-            var scrollTop,
-                $errorElem = $(this.errorClass);
-
             this.validate();
 
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
-            } else if ($errorElem.length) {
-                scrollTop = $errorElem.offset().top - window.innerHeight / 2;
-                window.scrollTo(0, scrollTop);
+            } else {
+                this.focusInvalid();
             }
+        },
+
+        /**
+         * Tries to set focus on first invalid form field.
+         *
+         * @returns {Object}
+         */
+        focusInvalid: function () {
+            var invalidField = _.find(this.delegate('checkInvalid'));
+
+            if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
+                invalidField.focused(true);
+            }
+
+            return this;
         },
 
         /**

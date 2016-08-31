@@ -8,34 +8,30 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
- * @deprecated use ScopedProductTierPriceManagementInterface instead
  */
-interface ProductTierPriceManagementInterface
+interface ScopedProductTierPriceManagementInterface
 {
     /**
      * Create tier price for product
      *
      * @param string $sku
-     * @param string $customerGroupId 'all' can be used to specify 'ALL GROUPS'
-     * @param float $price
-     * @param float $qty
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function add($sku, $customerGroupId, $price, $qty);
+    public function add($sku, \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice);
 
     /**
      * Remove tier price from product
      *
      * @param string $sku
-     * @param string $customerGroupId 'all' can be used to specify 'ALL GROUPS'
-     * @param float $qty
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function remove($sku, $customerGroupId, $qty);
+    public function remove($sku, \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice);
 
     /**
      * Get tier price of product
