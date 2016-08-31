@@ -5,10 +5,8 @@
  */
 namespace Magento\Sales\Model\Order\Validation;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ValidatorInterface;
 
@@ -33,10 +31,7 @@ class CanRefund implements ValidatorInterface
     }
 
     /**
-     * @param OrderInterface $entity
-     * @return array
-     * @throws DocumentValidationException
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function validate($entity)
     {

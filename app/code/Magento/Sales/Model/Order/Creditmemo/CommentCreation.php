@@ -51,9 +51,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Gets the comment for the invoice.
-     *
-     * @return string Comment.
+     * @inheritdoc
      */
     public function getComment()
     {
@@ -61,10 +59,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Sets the comment for the invoice.
-     *
-     * @param string $comment
-     * @return $this
+     * @inheritdoc
      */
     public function setComment($comment)
     {
@@ -73,9 +68,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Gets the is-visible-on-storefront flag value for the invoice.
-     *
-     * @return int Is-visible-on-storefront flag value.
+     * @inheritdoc
      */
     public function getIsVisibleOnFront()
     {
@@ -83,10 +76,7 @@ class CommentCreation implements CreditmemoCommentCreationInterface
     }
 
     /**
-     * Sets the is-visible-on-storefront flag value for the invoice.
-     *
-     * @param int $isVisibleOnFront
-     * @return $this
+     * @inheritdoc
      */
     public function setIsVisibleOnFront($isVisibleOnFront)
     {

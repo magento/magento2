@@ -5,13 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Validation;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Item;
@@ -47,10 +45,7 @@ class QuantityValidator implements ValidatorInterface
     }
 
     /**
-     * @param CreditmemoInterface $entity
-     * @return array
-     * @throws DocumentValidationException
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function validate($entity)
     {
@@ -59,7 +54,7 @@ class QuantityValidator implements ValidatorInterface
         }
 
         if (empty($entity->getItems())) {
-            return [__('You can\'t create a shipment without products.')];
+            return [__('You can\'t create a creditmemo without products.')];
         }
         $messages = [];
 
@@ -91,6 +86,11 @@ class QuantityValidator implements ValidatorInterface
                 $totalQuantity += $item->getQty();
             }
         }
+
+        if ($entity->getGrandTotal() <= 0) {
+            $messages[] = __('The credit memo\'s total must be positive.');
+        }
+
         if ($totalQuantity <= 0) {
             $messages[] = __('You can\'t create a creditmemo without products.');
         }
@@ -100,17 +100,18 @@ class QuantityValidator implements ValidatorInterface
 
     /**
      * @param CreditmemoInterface $creditmemo
-     * @param Order $order
+     * @param OrderInterface $order
      * @return array
      */
-    private function getInvoiceQtysRefundLimits(CreditmemoInterface $creditmemo, Order $order)
+    private function getInvoiceQtysRefundLimits(CreditmemoInterface $creditmemo, OrderInterface $order)
     {
         $invoiceQtysRefundLimits = [];
         if ($creditmemo->getInvoiceId() !== null) {
             $invoiceQtysRefunded = [];
             $invoice = $this->invoiceRepository->get($creditmemo->getInvoiceId());
             foreach ($order->getCreditmemosCollection() as $createdCreditmemo) {
-                if ($createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
+                if (
+                    $createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
                     $createdCreditmemo->getInvoiceId() == $invoice->getId()
                 ) {
                     foreach ($createdCreditmemo->getAllItems() as $createdCreditmemoItem) {

@@ -181,6 +181,12 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/order/:orderId/refund" method="POST">
+        <service class="Magento\Sales\Api\RefundOrderInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/shipment/:id" method="GET">
         <service class="Magento\Sales\Api\ShipmentRepositoryInterface" method="get"/>
         <resources>

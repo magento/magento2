@@ -7,6 +7,8 @@ namespace Magento\Sales\Api;
 
 /**
  * Interface RefundOrderInterface
+ *
+ * @api
  */
 interface RefundOrderInterface
 {
@@ -15,6 +17,7 @@ interface RefundOrderInterface
      *
      * @param int $orderId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
+     * @param bool|null $isOnline
      * @param bool|null $notify
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
@@ -24,6 +27,7 @@ interface RefundOrderInterface
     public function execute(
         $orderId,
         array $items = [],
+        $isOnline = false,
         $notify = false,
         $appendComment = false,
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
