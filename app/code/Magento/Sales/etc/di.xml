@@ -931,6 +931,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\CreditMemo\Notifier">
+        <arguments>
+            <argument name="senders" xsi:type="array">
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\CreditMemo\Sender\EmailSender</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\EntityManager\HydratorPool">
         <arguments>
             <argument name="hydrators" xsi:type="array">
