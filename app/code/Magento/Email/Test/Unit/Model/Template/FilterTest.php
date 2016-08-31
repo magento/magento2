@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template;
+
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;

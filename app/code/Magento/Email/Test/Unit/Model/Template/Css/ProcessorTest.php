@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Emai\Test\Unit\Model\Template\Css;
+namespace Magento\Email\Test\Unit\Model\Template\Css;
 
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Framework\View\Asset\File\FallbackContext;

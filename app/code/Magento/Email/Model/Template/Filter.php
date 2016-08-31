@@ -5,9 +5,9 @@
  */
 namespace Magento\Email\Model\Template;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
@@ -162,7 +162,7 @@ class Filter extends \Magento\Framework\Filter\Template
     private $cssProcessor;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     private $pubDirectory;
 
@@ -231,7 +231,7 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * @deprecated
      * @param string $dirType
-     * @return Filesystem\Directory\ReadInterface
+     * @return ReadInterface
      */
     private function getPubDirectory($dirType)
     {

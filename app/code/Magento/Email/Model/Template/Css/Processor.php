@@ -11,16 +11,6 @@ use Magento\Framework\View\Asset\Repository;
 class Processor
 {
     /**
-     * List of css placeholders
-     *
-     * @var array
-     */
-    private $placeholders = [
-        'base_url_path',
-        'locale'
-    ];
-
-    /**
      * @var Repository
      */
     private $assetRepository;
@@ -28,9 +18,8 @@ class Processor
     /**
      * @param Repository $assetRepository
      */
-    public function __construct(
-       Repository $assetRepository
-    ) {
+    public function __construct(Repository $assetRepository)
+    {
         $this->assetRepository = $assetRepository;
     }
 
