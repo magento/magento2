@@ -50,15 +50,12 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
+     * @dataProvider escapeHtmlInvalidDataProvider
      */
-    public function testEscapeHtmlWithInvalidData()
+    public function testEscapeHtmlWithInvalidData($data, $expected, $allowedTags = [])
     {
-        $data = '<span><script>some text in tags</script></span>';
-        $expected = '';
-        $allowedTags = ['script', 'span'];
         $this->loggerMock->expects($this->once())
-            ->method('critical')
-            ->with('The following tag(s) are not allowed: script');
+            ->method('critical');
         $actual = $this->_escaper->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }
@@ -131,6 +128,25 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
             ],
             'html and body tags' => [
                 'data' => '<html><body><span>String</span></body></html>',
+                'expected' => '',
+                'allowedTags' => ['span'],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeHtmlInvalidDataProvider()
+    {
+        return [
+            'text with allowed script tag' => [
+                'data' => '<span><script>some text in tags</script></span>',
+                'expected' => '',
+                'allowedTags' => ['span', 'script'],
+            ],
+            'text with invalid html' => [
+                'data' => '<spa>n id="id1">Some string</span>',
                 'expected' => '',
                 'allowedTags' => ['span'],
             ],
