@@ -16,6 +16,9 @@ use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 
+/**
+ * Class CreditmemoDocumentFactory
+ */
 class CreditmemoDocumentFactory
 {
 
@@ -97,6 +100,7 @@ class CreditmemoDocumentFactory
      * @param OrderInterface $order
      * @param CreditmemoItemCreationInterface[] $items
      * @param CreditmemoCommentCreationInterface|null $comment
+     * @param bool|null $appendComment
      * @param CreditmemoCreationArgumentsInterface|null $arguments
      * @return CreditmemoInterface
      */
@@ -104,6 +108,7 @@ class CreditmemoDocumentFactory
         OrderInterface $order,
         array $items = [],
         CreditmemoCommentCreationInterface $comment = null,
+        $appendComment = false,
         CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
@@ -118,6 +123,7 @@ class CreditmemoDocumentFactory
      * @param InvoiceInterface $invoice
      * @param CreditmemoItemCreationInterface[] $items
      * @param CreditmemoCommentCreationInterface|null $comment
+     * @param bool|null $appendComment
      * @param CreditmemoCreationArgumentsInterface|null $arguments
      * @return CreditmemoInterface
      */
@@ -125,6 +131,7 @@ class CreditmemoDocumentFactory
         InvoiceInterface $invoice,
         array $items = [],
         CreditmemoCommentCreationInterface $comment = null,
+        $appendComment = false,
         CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);

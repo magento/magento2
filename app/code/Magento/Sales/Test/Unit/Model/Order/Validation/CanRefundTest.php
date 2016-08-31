@@ -32,7 +32,6 @@ class CanRefundTest extends \PHPUnit_Framework_TestCase
      */
     private $priceCurrencyMock;
 
-
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

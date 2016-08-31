@@ -17,7 +17,7 @@ interface NotifierInterface
      * Notifies customer.
      *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditMemo
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param bool $forceSyncMode
      *
@@ -25,7 +25,7 @@ interface NotifierInterface
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,
-        \Magento\Sales\Api\Data\CreditmemoInterface $invoice,
+        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         $forceSyncMode = false
     );
