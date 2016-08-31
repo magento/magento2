@@ -173,7 +173,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     /**
      * Check that area exists
      *
-     * @param $areaCode
+     * @param string $areaCode
      * @return bool
      */
     public static function doesAreaExist($areaCode)

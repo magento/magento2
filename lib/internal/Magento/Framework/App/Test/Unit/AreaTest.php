@@ -315,4 +315,10 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->with($exception);
         $this->object->detectDesign($requestMock);
     }
+    
+    public function testDoesAreaExist()
+    {
+        $this->assertTrue($this->object->doesAreaExist(Area::AREA_FRONTEND));
+        $this->assertFalse($this->object->doesAreaExist('any area'));
+    }
 }

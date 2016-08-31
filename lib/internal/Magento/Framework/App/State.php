@@ -188,7 +188,7 @@ class State
     /**
      * Check that area code exists
      *
-     * @param $areaCode
+     * @param string $areaCode
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
