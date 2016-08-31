@@ -150,15 +150,15 @@ class RefundOrder implements RefundOrderInterface
         }
         $connection->beginTransaction();
         try {
+            $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order = $this->paymentAdapter->refund($creditmemo, $order, $isOnline);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [])
             );
             $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
 
             $order = $this->orderRepository->save($order);
-            $creditmemo= $this->creditmemoRepository->save($creditmemo);
+            $creditmemo = $this->creditmemoRepository->save($creditmemo);
             $connection->commit();
         } catch (\Exception $e) {
             $this->logger->critical($e);
