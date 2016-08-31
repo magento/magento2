@@ -62,7 +62,10 @@ class CartsTest extends \PHPUnit_Framework_TestCase
             $html
         );
         $this->assertContains("customer_cart_grid1JsObject = new varienGrid(\"customer_cart_grid1\",", $html);
-        $this->assertContains('backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fwebsite_id\u002F1', $html);
+        $this->assertContains(
+            'backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fwebsite_id\u002F1',
+            $html
+        );
     }
 
     public function testGetHtmlNoCustomer()
