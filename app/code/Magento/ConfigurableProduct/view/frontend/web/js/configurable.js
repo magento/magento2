@@ -28,7 +28,7 @@ define([
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
-            regularPriceSelector: '.old-price',
+            slyOldPriceSelector: '.sly-old-price',
             onlyMainImg: false
         },
 
@@ -500,9 +500,9 @@ define([
                 && this.options.spConfig.optionPrices[optionId].oldPrice.amount
                 != this.options.spConfig.optionPrices[optionId].finalPrice.amount
             ) {
-                $(this.options.regularPriceSelector).show();
+                $(this.options.slyOldPriceSelector).show();
             } else {
-                $(this.options.regularPriceSelector).hide();
+                $(this.options.slyOldPriceSelector).hide();
             }
         }
 
