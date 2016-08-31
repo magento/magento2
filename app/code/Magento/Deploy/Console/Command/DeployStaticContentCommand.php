@@ -15,9 +15,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
-use Magento\Framework\Console\Cli;
-use Magento\Deploy\Model\ProcessManager;
-use Magento\Deploy\Model\Process;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\State;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
@@ -122,115 +119,116 @@ class DeployStaticContentCommand extends Command
                     Options::FORCE_RUN,
                     '-f',
                     InputOption::VALUE_NONE,
-                    'If specified, then run files will be deployed in any mode.'
+                    'Deploy files in any mode.'
                 ),
                 new InputOption(
                     Options::NO_JAVASCRIPT,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no JavaScript will be deployed.'
+                    'Do not deploy JavaScript files'
                 ),
                 new InputOption(
                     Options::NO_CSS,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no CSS will be deployed.'
+                    'Do not deploy CSS files.'
                 ),
                 new InputOption(
                     Options::NO_LESS,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no LESS will be deployed.'
+                    'Do not deploy LESS files.'
                 ),
                 new InputOption(
                     Options::NO_IMAGES,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no images will be deployed.'
+                    'Do not deploy images.'
                 ),
                 new InputOption(
                     Options::NO_FONTS,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no font files will be deployed.'
+                    'Do not deploy font files.'
                 ),
                 new InputOption(
                     Options::NO_HTML,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no html files will be deployed.'
+                    'Do not deploy HTML files.'
                 ),
                 new InputOption(
                     Options::NO_MISC,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, no miscellaneous files will be deployed.'
+                    'Do not deploy other types of files (.md, .jbf, .csv, etc...).'
                 ),
                 new InputOption(
                     Options::NO_HTML_MINIFY,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, html will not be minified.'
+                    'Do not minify HTML files.'
                 ),
                 new InputOption(
                     Options::THEME,
                     '-t',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'If specified, just specific theme(s) will be actually deployed.',
+                    'Generate static view files for only the specified themes.',
                     ['all']
                 ),
                 new InputOption(
                     Options::EXCLUDE_THEME,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'If specified, exclude specific theme(s) from deployment.',
+                    'Do not generate files for the specified themes.',
                     ['none']
                 ),
                 new InputOption(
                     Options::LANGUAGE,
                     '-l',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'List of languages you want the tool populate files for.',
+                    'Generate files only for the specified languages.',
                     ['all']
                 ),
                 new InputOption(
                     Options::EXCLUDE_LANGUAGE,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'List of langiages you do not want the tool populate files for.',
+                    'Do not generate files for the specified languages.',
                     ['none']
                 ),
                 new InputOption(
                     Options::AREA,
                     '-a',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'List of areas you want the tool populate files for.',
+                    'Generate files only for the specified areas.',
                     ['all']
                 ),
                 new InputOption(
                     Options::EXCLUDE_AREA,
                     null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'List of areas you do not want the tool populate files for.',
+                    'Do not generate files for the specified areas.',
                     ['none']
                 ),
                 new InputOption(
                     Options::JOBS_AMOUNT,
                     '-j',
                     InputOption::VALUE_OPTIONAL,
-                    'Amount of jobs to which script can be paralleled.',
+                    'Enable parallel processing using the specified number of jobs.',
                     self::DEFAULT_JOBS_AMOUNT
                 ),
                 new InputOption(
                     Options::SYMLINK_LOCALE,
                     null,
                     InputOption::VALUE_NONE,
-                    'If specified, not customized locale will be symlink to base locale'
+                    'Create symlinks for the files of those locales, which are passed for deployment, '
+                    . 'but have no customizations'
                 ),
                 new InputArgument(
                     self::LANGUAGES_ARGUMENT,
                     InputArgument::IS_ARRAY,
-                    'List of languages you want the tool populate files for.'
+                    'Space-separated list of ISO-636 language codes for which to output static view files.'
                 ),
             ]);
 
@@ -381,8 +379,11 @@ class DeployStaticContentCommand extends Command
         if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
             throw new LocalizedException(
                 __(
-                    "Deploy static content is applicable only for production mode.\n"
-                    . "Please use command 'bin/magento deploy:mode:set production' for set up production mode."
+                    'NOTE: Manual static content deployment is not required in "default" and "developer" modes.'
+                    . PHP_EOL . 'In "default" and "developer" modes static contents are being deployed '
+                    . 'automatically on demand.'
+                    . PHP_EOL . 'If you still want to deploy in these modes, use -f option: '
+                    . "'bin/magento setup:static-content:deploy -f'"
                 )
             );
         }

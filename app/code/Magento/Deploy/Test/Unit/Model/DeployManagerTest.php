@@ -5,16 +5,13 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
+use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Deploy\Model\DeployManager
-     */
-    private $model;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\DeployStrategyProviderFactory
      */
@@ -26,37 +23,25 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
     private $outputMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\ConfigInterface
-     */
-    private $assetConfigMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Utility\Files
-     */
-    private $filesUtilsMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\View\Deployment\Version\StorageInterface
      */
     private $versionStorageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Template\Html\MinifierInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\Deploy\TemplateMinifier
      */
-    private $minifierMock;
+    private $minifierTemplateMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\ProcessQueueManager
+     */
+    private $processQueueManager;
 
     protected function setUp()
     {
         $this->deployStrategyProviderFactoryMock = $this->getMock(
             \Magento\Deploy\Model\DeployStrategyProviderFactory::class,
             ['create'],
-            [],
-            '',
-            false
-        );
-        $this->assetConfigMock = $this->getMock(
-            \Magento\Framework\View\Asset\ConfigInterface::class,
-            [],
             [],
             '',
             false
@@ -68,74 +53,65 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->minifierMock = $this->getMock(
-            \Magento\Framework\View\Template\Html\MinifierInterface::class,
+        $this->minifierTemplateMock = $this->getMock(
+            \Magento\Deploy\Model\Deploy\TemplateMinifier::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->processQueueManager = $this->getMock(
+            \Magento\Deploy\Model\ProcessQueueManager::class,
             [],
             [],
             '',
             false
         );
         $this->outputMock = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
-        $this->filesUtilsMock = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
-
-        $this->model = new \Magento\Deploy\Model\DeployManager(
-            $this->outputMock,
-            $this->assetConfigMock,
-            $this->filesUtilsMock,
-            $this->versionStorageMock,
-            $this->minifierMock,
-            $this->deployStrategyProviderFactoryMock,
-            []
-        );
     }
 
     public function testSaveDeployedVersion()
     {
         $version = (new \DateTime())->getTimestamp();
-
         $this->outputMock->expects($this->once())->method('writeln')->with("New version of deployed files: {$version}");
-        $this->versionStorageMock->expects($this->never())->method('save');
+        $this->versionStorageMock->expects($this->once())->method('save')->with($version);
 
-        $this->model->saveDeployedVersion();
+        $this->assertEquals(
+            \Magento\Framework\Console\Cli::RETURN_SUCCESS,
+            $this->getModel([Options::NO_HTML_MINIFY => true])->deploy()
+        );
     }
 
     public function testSaveDeployedVersionDryRun()
     {
-        $options = [\Magento\Deploy\Console\Command\DeployStaticOptionsInterface::DRY_RUN => false];
-        $version = (new \DateTime())->getTimestamp();
+        $options = [Options::DRY_RUN => true, Options::NO_HTML_MINIFY => true];
 
-        $this->outputMock->expects($this->once())->method('writeln')->with("New version of deployed files: {$version}");
-        $this->versionStorageMock->expects($this->once())->method('save')->with($version);
+        $this->outputMock->expects(self::once())->method('writeln')->with(
+            'Dry run. Nothing will be recorded to the target directory.'
+        );
+        $this->versionStorageMock->expects($this->never())->method('save');
 
-        $this->getModel($options)->saveDeployedVersion();
+        $this->getModel($options)->deploy();
     }
 
     public function testMinifyTemplates()
     {
-        $templateMock = "template.phtml";
-        $templatesMock = [$templateMock];
-
-        $this->assetConfigMock->expects($this->once())->method('isMinifyHtml')->willReturn(true);
-        $this->filesUtilsMock->expects($this->once())->method('getPhtmlFiles')->with(false, false)
-            ->willReturn($templatesMock);
-        $this->minifierMock->expects($this->once())->method('minify')->with($templateMock);
-        $this->outputMock->expects($this->once())->method('getVerbosity')
-            ->willReturn(\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE);
+        $this->minifierTemplateMock->expects($this->once())->method('minifyTemplates')->willReturn(2);
         $this->outputMock->expects($this->atLeastOnce())->method('writeln')->withConsecutive(
             ["=== Minify templates ==="],
-            [$templateMock . " minified\n"],
-            ["\nSuccessful: " . count($templatesMock) . " files modified\n---\n"]
+            ["\nSuccessful: 2 files modified\n---\n"]
         );
 
-        $this->model->minifyTemplates();
+        $this->getModel([Options::NO_HTML_MINIFY => false])->deploy();
     }
 
     public function testMinifyTemplatesNoHtmlMinify()
     {
-        $options = [\Magento\Deploy\Console\Command\DeployStaticOptionsInterface::NO_HTML_MINIFY => true];
-        $this->outputMock->expects($this->never())->method('writeln');
+        $version = (new \DateTime())->getTimestamp();
+        $this->outputMock->expects($this->once())->method('writeln')->with("New version of deployed files: {$version}");
+        $this->versionStorageMock->expects($this->once())->method('save')->with($version);
 
-        $this->getModel($options)->minifyTemplates();
+        $this->getModel([Options::NO_HTML_MINIFY => true])->deploy();
     }
 
     public function testDeploy()
@@ -143,11 +119,12 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
         $area = 'frontend';
         $themePath = 'themepath';
         $locale = 'en_US';
-        $options = [];
+        $options = [Options::NO_HTML_MINIFY => true];
         $strategyProviderMock = $this->getMock(\Magento\Deploy\Model\DeployStrategyProvider::class, [], [], '', false);
         $deployStrategyMock = $this->getMock(\Magento\Deploy\Model\Deploy\DeployInterface::class, [], [], '', false);
 
-        $this->model->addPack($area, $themePath, $locale);
+        $model = $this->getModel($options);
+        $model->addPack($area, $themePath, $locale);
         $this->deployStrategyProviderFactoryMock->expects($this->once())->method('create')->with(
             ['output' => $this->outputMock, 'options' => $options]
         )->willReturn($strategyProviderMock);
@@ -156,7 +133,11 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
         $deployStrategyMock->expects($this->once())->method('deploy')
             ->willReturn(\Magento\Framework\Console\Cli::RETURN_SUCCESS);
 
-        $this->assertEquals(\Magento\Framework\Console\Cli::RETURN_SUCCESS, $this->model->deploy());
+        $version = (new \DateTime())->getTimestamp();
+        $this->outputMock->expects(self::once())->method('writeln')->with("New version of deployed files: {$version}");
+        $this->versionStorageMock->expects($this->once())->method('save')->with($version);
+
+        $this->assertEquals(\Magento\Framework\Console\Cli::RETURN_SUCCESS, $model->deploy());
     }
 
     /**
@@ -167,11 +148,10 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
     {
         return new \Magento\Deploy\Model\DeployManager(
             $this->outputMock,
-            $this->assetConfigMock,
-            $this->filesUtilsMock,
             $this->versionStorageMock,
-            $this->minifierMock,
             $this->deployStrategyProviderFactoryMock,
+            $this->processQueueManager,
+            $this->minifierTemplateMock,
             $options
         );
     }

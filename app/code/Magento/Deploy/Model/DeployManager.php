@@ -54,6 +54,11 @@ class DeployManager
     private $templateMinifier;
 
     /**
+     * @var bool
+     */
+    private $idDryRun;
+
+    /**
      * @param OutputInterface $output
      * @param StorageInterface $versionStorage
      * @param DeployStrategyProviderFactory $deployStrategyProviderFactory
@@ -96,7 +101,8 @@ class DeployManager
      */
     public function deploy()
     {
-        if (isset($this->options[Options::DRY_RUN]) && $this->options[Options::DRY_RUN]) {
+        $this->idDryRun = isset($this->options[Options::DRY_RUN]) && $this->options[Options::DRY_RUN];
+        if ($this->idDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
 
@@ -130,7 +136,7 @@ class DeployManager
     private function minifyTemplates()
     {
         $noHtmlMinify = isset($this->options[Options::NO_HTML_MINIFY]) ? $this->options[Options::NO_HTML_MINIFY] : null;
-        if (!$noHtmlMinify) {
+        if (!$noHtmlMinify && !$this->idDryRun) {
             $this->output->writeln('=== Minify templates ===');
             $minified = $this->templateMinifier->minifyTemplates();
             $this->output->writeln("\nSuccessful: {$minified} files modified\n---\n");
@@ -188,9 +194,9 @@ class DeployManager
      */
     private function saveDeployedVersion()
     {
-        $version = (new \DateTime())->getTimestamp();
-        $this->output->writeln("New version of deployed files: {$version}");
-        if (isset($this->options[Options::DRY_RUN]) && !$this->options[Options::DRY_RUN]) {
+        if (!$this->idDryRun) {
+            $version = (new \DateTime())->getTimestamp();
+            $this->output->writeln("New version of deployed files: {$version}");
             $this->versionStorage->save($version);
         }
     }
