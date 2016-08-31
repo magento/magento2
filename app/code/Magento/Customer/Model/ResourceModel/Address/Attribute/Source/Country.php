@@ -13,6 +13,7 @@ namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -49,7 +50,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     {
         if (!$this->_options) {
             $this->_options = $this->_createCountriesCollection()->loadByStore(
-                $this->getStoreManager()->getStore()->getId()
+                $this->getStoreResolver()->getCurrentStoreId()
             )->toOptionArray();
         }
         return $this->_options;
@@ -65,10 +66,10 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @deprecated
-     * @return StoreManagerInterface
+     * @return StoreResolverInterface
      */
-    private function getStoreManager()
+    private function getStoreResolver()
     {
-        return ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        return ObjectManager::getInstance()->get(StoreResolverInterface::class);
     }
 }
