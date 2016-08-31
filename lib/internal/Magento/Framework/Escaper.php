@@ -16,18 +16,33 @@ class Escaper
     private $escaper;
 
     /**
-     * @var string[]
+     * @var \Psr\Log\LoggerInterface
      */
-    private $allowedAttributes = ['id', 'class', 'href', 'target'];
+    private $logger;
 
     /**
-     * Escape HTML entities
+     * @var string[]
+     */
+    private $notAllowedTags = ['script', 'img'];
+
+    /**
+     * @var string[]
+     */
+    private $allowedAttributes = ['id', 'class', 'href', 'target', 'title'];
+
+    /**
+     * @var string[]
+     */
+    private $escapeAsUrlAttributes = ['href'];
+
+    /**
+     * Escape string for HTML context, allowedTags will not be escaped
      *
      * @param string|array $data
-     * @param array $allowedTags
+     * @param array|null $allowedTags
      * @return string|array
      */
-    public function escapeHtml($data, $allowedTags = [])
+    public function escapeHtml($data, $allowedTags = null)
     {
         if (is_array($data)) {
             $result = [];
@@ -36,7 +51,43 @@ class Escaper
             }
         } elseif (strlen($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
-                $result = $this->filterHtmlTagsAndAttributes($data, $allowedTags);
+                $notAllowedTags = array_intersect(
+                    array_map('strtolower', $allowedTags),
+                    $this->notAllowedTags
+                );
+                if (!empty($notAllowedTags)) {
+                    $this->getLogger()->critical(
+                        'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
+                    );
+                    return '';
+                }
+                $wrapperElementId = uniqid();
+                $domDocument = new \DOMDocument('1.0', 'UTF-8');
+                set_error_handler(
+                    function ($errorNumber, $errorString) {
+                        throw new \Exception($errorString, $errorNumber);
+                    }
+                );
+                $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                try {
+                    $domDocument->loadHTML(
+                        '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
+                    );
+                } catch (\Exception $e) {
+                    restore_error_handler();
+                    $this->getLogger()->critical($e);
+                    return '';
+                }
+                restore_error_handler();
+
+                $this->removeNotAllowedTags($domDocument, $allowedTags);
+                $this->removeNotAllowedAttributes($domDocument);
+                $this->escapeText($domDocument);
+                $this->escapeAttributeValues($domDocument);
+
+                $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+                preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
+                return $matches[1];
             } else {
                 $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
@@ -47,47 +98,68 @@ class Escaper
     }
 
     /**
-     * Filter not allowed tags and attribtues
+     * Remove not allowed tags
      *
-     * @param string $string
+     * @param \DOMDocument $domDocument
      * @param string[] $allowedTags
-     * @return string
+     * @return void
      */
-    private function filterHtmlTagsAndAttributes($string, $allowedTags)
+    private function removeNotAllowedTags(\DOMDocument $domDocument, array $allowedTags)
     {
-        $wrapperElementId = uniqid();
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        set_error_handler(
-            function ($errorNumber, $errorString) {
-                throw new \Exception($errorString, $errorNumber);
-            }
-        );
-        try {
-            $dom->loadHTML('<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>');
-        } catch (\Exception $e) {
-            restore_error_handler();
-            return '';
-        }
-        restore_error_handler();
-
-        $xpath = new \DOMXPath($dom);
+        $xpath = new \DOMXPath($domDocument);
         $nodes = $xpath->query(
             '//node()[name() != \''
-            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body'])) . '\']'
+            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body']))
+            . '\']'
         );
         foreach ($nodes as $node) {
             if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
-                $node->parentNode->replaceChild($dom->createTextNode($node->textContent), $node);
+                $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
             }
         }
-        $nodes = $xpath->query('//@*[name() != \'' . implode('\' and name() != \'', $this->allowedAttributes) . '\']');
+    }
+
+    /**
+     * Remove not allowed attributes
+     *
+     * @param \DOMDocument $domDocument
+     * @return void
+     */
+    private function removeNotAllowedAttributes(\DOMDocument $domDocument)
+    {
+        $xpath = new \DOMXPath($domDocument);
+        $nodes = $xpath->query(
+            '//@*[name() != \'' . implode('\' and name() != \'', $this->allowedAttributes) . '\']'
+        );
         foreach ($nodes as $node) {
             $node->parentNode->removeAttribute($node->nodeName);
         }
+    }
+
+    /**
+     * Escape text
+     *
+     * @param \DOMDocument $domDocument
+     * @return void
+     */
+    private function escapeText(\DOMDocument $domDocument)
+    {
+        $xpath = new \DOMXPath($domDocument);
         $nodes = $xpath->query('//text()');
         foreach ($nodes as $node) {
             $node->textContent = $this->escapeHtml($node->textContent);
         }
+    }
+
+    /**
+     * Escape attribute values
+     *
+     * @param \DOMDocument $domDocument
+     * @return void
+     */
+    private function escapeAttributeValues(\DOMDocument $domDocument)
+    {
+        $xpath = new \DOMXPath($domDocument);
         $nodes = $xpath->query('//@*');
         foreach ($nodes as $node) {
             $value = $this->escapeAttributeValue(
@@ -96,16 +168,10 @@ class Escaper
             );
             $node->parentNode->setAttribute($node->nodeName, $value);
         }
-        $result = mb_convert_encoding(
-            str_replace("\n", '', $dom->saveHTML($dom->getElementById($wrapperElementId))),
-            'UTF-8',
-            'HTML-ENTITIES'
-        );
-        return mb_substr($result, 25, strlen($result) - 32);
     }
 
     /**
-     * Escape attribute values using escapeHtmlAttr or escapeUrl depending on the attribute
+     * Escape attribute value using escapeHtml or escapeUrl
      *
      * @param string $name
      * @param string $value
@@ -113,7 +179,7 @@ class Escaper
      */
     private function escapeAttributeValue($name, $value)
     {
-        return $name == 'href' ? $this->escapeUrl($value) : $this->escapeHtml($value);
+        return in_array($name, $this->escapeAsUrlAttributes) ? $this->escapeUrl($value) : $this->escapeHtml($value);
     }
 
     /**
@@ -253,5 +319,20 @@ class Escaper
                 ->get(\Magento\Framework\ZendEscaper::class);
         }
         return $this->escaper;
+    }
+
+    /**
+     * Get logger
+     *
+     * @return \Psr\Log\LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if ($this->logger == null) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }
