@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">notification_area.notification_area_data_source</item>
+            <item name="deps" xsi:type="string">notification_area.notification_area_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">columns</item>
+    </argument>
+    <dataSource name="notification_area_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\AdminNotification\Ui\Component\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">notification_area_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">identity</argument>
+            <argument name="requestFieldName" xsi:type="string">identity</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">identity</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>
+    <columns name="columns">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_AdminNotification/js/grid/listing</item>
+                <item name="template" xsi:type="string">Magento_AdminNotification/grid/listing</item>
+            </item>
+        </argument>
+        <column name="created_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_AdminNotification/js/grid/columns/message</item>
+                    <item name="label" xsi:type="string" translate="true"/>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>
