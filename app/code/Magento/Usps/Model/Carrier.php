@@ -8,11 +8,13 @@
 
 namespace Magento\Usps\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\Xml\Security;
+use Magento\Usps\Helper\Data as DataHelper;
 
 /**
  * USPS shipping
@@ -21,17 +23,19 @@ use Magento\Framework\Xml\Security;
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-    /**
-     * USPS containers
-     */
+    /** @deprecated */
     const CONTAINER_VARIABLE = 'VARIABLE';
 
+    /** @deprecated */
     const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
 
+    /** @deprecated */
     const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
 
+    /** @deprecated */
     const CONTAINER_RECTANGULAR = 'RECTANGULAR';
 
+    /** @deprecated */
     const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
 
     /**
@@ -125,6 +129,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
     ];
+
+    /**
+     * @var DataHelper
+     */
+    private $dataHelper;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -404,6 +413,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($this->_isUSCountry($r->getDestCountryId())) {
             $xml = $this->_xmlElFactory->create(
+                
                 ['data' => '<?xml version="1.0" encoding="UTF-8"?><RateV4Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -446,6 +456,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $api = 'RateV4';
         } else {
             $xml = $this->_xmlElFactory->create(
+                
                 ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><IntlRateV2Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -1978,11 +1989,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Check whether girth is allowed for the USPS
      *
      * @param null|string $countyDest
+     * @param null|string $carrierMethodCode
      * @return bool
      */
-    public function isGirthAllowed($countyDest = null)
+    public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
-        return $this->_isUSCountry($countyDest) ? false : true;
+        return $this->_isUSCountry($countyDest)
+            && $this->getDataHelper()->displayGirthValue($carrierMethodCode) ? false : true;
     }
 
     /**
@@ -2086,5 +2099,20 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } catch (\Exception $e) {}
 
         return $data;
+    }
+
+    /**
+     * Gets Data helper object
+     *
+     * @return DataHelper
+     * @deprecated
+     */
+    private function getDataHelper()
+    {
+        if (!$this->dataHelper) {
+            $this->dataHelper = ObjectManager::getInstance()->get(DataHelper::class);
+        }
+
+        return $this->dataHelper;
     }
 }

@@ -102,7 +102,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $quote->expects(static::once())
             ->method('getId')
             ->willReturn($quoteId);
-        
+
         $this->model->setQuote($quote);
         $this->model->setMethodInstance($paymentMethod);
         $this->eventManager->expects(static::once())

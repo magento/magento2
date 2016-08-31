@@ -18,7 +18,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = (new ObjectManager($this))->getObject('Magento\Theme\Model\Theme\Data');
+        $this->model = (new ObjectManager($this))->getObject(\Magento\Theme\Model\Theme\Data::class);
     }
 
     /**

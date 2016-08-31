@@ -12,7 +12,7 @@ class PageLayoutFilterTest extends PageLayoutTest
      */
     protected function getSourceClassName()
     {
-        return 'Magento\Cms\Model\Page\Source\PageLayoutFilter';
+        return \Magento\Cms\Model\Page\Source\PageLayoutFilter::class;
     }
 
     /**

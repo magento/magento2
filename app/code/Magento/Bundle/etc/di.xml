@@ -118,7 +118,7 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
-                <item name="bundle" xsi:type="object">\Magento\Bundle\Model\CartItemProcessor</item>
+                <item name="bundle" xsi:type="object">\Magento\Bundle\Model\CartItemProcessor\Proxy</item>
             </argument>
         </arguments>
     </type>

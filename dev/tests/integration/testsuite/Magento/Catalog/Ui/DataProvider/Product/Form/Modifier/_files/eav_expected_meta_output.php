@@ -35,7 +35,6 @@ return [
                                     "visible" => "1",
                                     "required" => "0",
                                     "label" => "Enable Product",
-                                    "default" => "1",
                                     "source" => "product-details",
                                     "scopeLabel" => "[WEBSITE]",
                                     "globalScope" => false,

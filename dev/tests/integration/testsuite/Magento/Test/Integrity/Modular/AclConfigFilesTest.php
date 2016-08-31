@@ -35,7 +35,13 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testAclConfigFile($file)
     {
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);

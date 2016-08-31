@@ -88,7 +88,7 @@ class AttributeProvider implements FieldsetInterface
                 if ($attribute->getData('is_used_in_grid')) {
                     $fields[$attribute->getName()] = [
                         'name' => $attribute->getName(),
-                        'handler' => 'Magento\Framework\Indexer\Handler\AttributeHandler',
+                        'handler' => \Magento\Framework\Indexer\Handler\AttributeHandler::class,
                         'origin' => $attribute->getName(),
                         'type' => $this->getType($attribute),
                         'dataType' => $attribute->getBackendType(),

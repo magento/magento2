@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Submit Invoice' button.
  * 6. Perform assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28209
  */
 class CreateInvoiceEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -41,7 +40,7 @@ class CreateInvoiceEntityTest extends Injectable
     public function __prepare()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'checkmo, flatrate']
         )->run();
     }
@@ -60,7 +59,7 @@ class CreateInvoiceEntityTest extends Injectable
 
         // Steps
         $result = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateInvoiceStep',
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
             ['order' => $order, 'data' => $data]
         )->run();
 
@@ -74,6 +73,6 @@ class CreateInvoiceEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
     }
 }

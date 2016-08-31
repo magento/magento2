@@ -50,7 +50,10 @@ class Collection extends AbstractCollection implements InvoiceSearchResultInterf
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Invoice', 'Magento\Sales\Model\ResourceModel\Order\Invoice');
+        $this->_init(
+            \Magento\Sales\Model\Order\Invoice::class,
+            \Magento\Sales\Model\ResourceModel\Order\Invoice::class
+        );
     }
 
     /**

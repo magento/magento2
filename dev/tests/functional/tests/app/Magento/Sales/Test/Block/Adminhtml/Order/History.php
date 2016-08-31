@@ -22,6 +22,13 @@ class History extends Block
     protected $commentHistory = '.note-list-comment';
 
     /**
+     * Authorized Amount.
+     *
+     * @var string
+     */
+    protected $authorizedAmount = '//div[@class="note-list-comment"][contains(text(), "Authorized amount of")]';
+
+    /**
      * Captured Amount from IPN.
      *
      * @var string
@@ -51,6 +58,17 @@ class History extends Block
     {
         $this->waitCommentsHistory();
         return $this->_rootElement->find($this->commentHistory, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Get the authorized amount from the comments history.
+     *
+     * @return string
+     */
+    public function getAuthorizedAmount()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->authorizedAmount, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

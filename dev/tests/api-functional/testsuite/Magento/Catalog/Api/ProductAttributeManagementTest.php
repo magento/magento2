@@ -130,7 +130,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
         //Assign attribute to attribute set
         /** @var \Magento\Eav\Model\AttributeManagement $attributeManagement */
-        $attributeManagement = Bootstrap::getObjectManager()->get('Magento\Eav\Model\AttributeManagement');
+        $attributeManagement = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\AttributeManagement::class);
         $attributeManagement->assign(
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $payload['attributeSetId'],

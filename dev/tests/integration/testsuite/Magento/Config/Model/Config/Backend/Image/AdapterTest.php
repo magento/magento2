@@ -16,7 +16,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Config\Model\Config\Backend\Image\Adapter'
+            \Magento\Config\Model\Config\Backend\Image\Adapter::class
         );
         $this->_model->setPath('path');
     }

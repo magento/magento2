@@ -95,7 +95,6 @@
                         <item name="dataScope" xsi:type="string">quantity_and_stock_status.qty</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
-                            <item name="validate-digits" xsi:type="boolean">true</item>
                             <item name="less-than-equals-to" xsi:type="number">99999999</item>
                         </item>
                         <item name="sortOrder" xsi:type="number">200</item>
@@ -243,7 +242,7 @@
                         </argument>
                         <field name="customer_group_id">
                             <argument name="data" xsi:type="array">
-                                <item name="options" xsi:type="object">Magento\Customer\Model\Customer\Source\Group</item>
+                                <item name="options" xsi:type="object">Magento\Customer\Model\Customer\Source\GroupSourceInterface</item>
                                 <item name="config" xsi:type="array">
                                     <item name="dataType" xsi:type="string">text</item>
                                     <item name="formElement" xsi:type="string">select</item>

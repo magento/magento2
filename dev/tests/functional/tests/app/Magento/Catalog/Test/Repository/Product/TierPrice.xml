@@ -31,13 +31,17 @@
                 <item name="price" xsi:type="string">24</item>
                 <item name="website" xsi:type="string">All Websites [USD]</item>
                 <item name="price_qty" xsi:type="string">3</item>
-                <item name="customer_group" xsi:type="string">ALL GROUPS</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
             </field>
             <field name="1" xsi:type="array">
                 <item name="price" xsi:type="string">15</item>
                 <item name="website" xsi:type="string">All Websites [USD]</item>
                 <item name="price_qty" xsi:type="string">30</item>
-                <item name="customer_group" xsi:type="string">ALL GROUPS</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
             </field>
         </dataset>
 

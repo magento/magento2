@@ -28,7 +28,7 @@ class Reviews extends Section
     public function getReviewsGrid()
     {
         return $this->blockFactory->create(
-            'Magento\Review\Test\Block\Adminhtml\Product\Grid',
+            \Magento\Review\Test\Block\Adminhtml\Product\Grid::class,
             ['element' => $this->_rootElement->find($this->reviews)]
         );
     }

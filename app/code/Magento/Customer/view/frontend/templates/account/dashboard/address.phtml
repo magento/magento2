@@ -11,7 +11,7 @@
 <div class="block block-dashboard-addresses">
     <div class="block-title">
         <strong><?php /* @escapeNotVerified */ echo __('Address Book') ?></strong>
-        <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getAddressBookUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Manage Addresses') ?></span></a>
+        <a class="action edit" href="<?php echo $block->escapeUrl($block->getAddressBookUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Manage Addresses') ?></span></a>
     </div>
     <div class="block-content">
         <div class="box box-billing-address">
@@ -24,7 +24,7 @@
                 </address>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getPrimaryBillingAddressEditUrl() ?>" data-ui-id="default-billing-edit-link"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
+                <a class="action edit" href="<?php echo $block->escapeUrl($block->getPrimaryBillingAddressEditUrl()) ?>" data-ui-id="default-billing-edit-link"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
             </div>
         </div>
         <div class="box box-shipping-address">
@@ -37,7 +37,7 @@
                 </address>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getPrimaryShippingAddressEditUrl() ?>" data-ui-id="default-shipping-edit-link"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
+                <a class="action edit" href="<?php echo $block->escapeUrl($block->getPrimaryShippingAddressEditUrl()) ?>" data-ui-id="default-shipping-edit-link"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
             </div>
         </div>
     </div>

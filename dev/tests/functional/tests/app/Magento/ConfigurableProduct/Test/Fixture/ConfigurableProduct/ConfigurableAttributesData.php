@@ -276,6 +276,14 @@ class ConfigurableAttributesData extends DataSource
         foreach ($this->attributesData as $attributeKey => $attribute) {
             $variationsMatrix = $this->addVariationMatrix($variationsMatrix, $attribute, $attributeKey);
         }
+
+        foreach ($data['matrix'] as $key => $value) {
+            if (isset($value['sku']) && $value['sku'] === '') {
+                unset($variationsMatrix[$key]['sku']);
+                unset($data['matrix'][$key]['sku']);
+            }
+        }
+
         $this->variationsMatrix = isset($data['matrix'])
             ? array_replace_recursive($variationsMatrix, $data['matrix'])
             : $variationsMatrix;
@@ -305,7 +313,6 @@ class ConfigurableAttributesData extends DataSource
                     $row
                 );
             }
-
         }
     }
 

@@ -51,7 +51,7 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
 
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
-            $shipment = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment')->load($shipmentId);
+            $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
             $order = $shipment->getOrder();
         } else {
             $order = $this->_coreRegistry->registry('current_order');

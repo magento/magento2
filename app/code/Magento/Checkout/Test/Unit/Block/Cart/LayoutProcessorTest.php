@@ -29,16 +29,16 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->merger = $this->getMock('\Magento\Checkout\Block\Checkout\AttributeMerger', [], [], '', false);
+        $this->merger = $this->getMock(\Magento\Checkout\Block\Checkout\AttributeMerger::class, [], [], '', false);
         $this->countryCollection = $this->getMock(
-            '\Magento\Directory\Model\ResourceModel\Country\Collection',
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class,
             [],
             [],
             '',
             false
         );
         $this->regionCollection = $this->getMock(
-            '\Magento\Directory\Model\ResourceModel\Region\Collection',
+            \Magento\Directory\Model\ResourceModel\Region\Collection::class,
             [],
             [],
             '',

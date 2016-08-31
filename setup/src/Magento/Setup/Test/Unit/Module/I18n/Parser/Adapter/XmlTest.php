@@ -22,7 +22,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/default.xml';
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_adapter = $objectManagerHelper->getObject('Magento\Setup\Module\I18n\Parser\Adapter\Xml');
+        $this->_adapter = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Parser\Adapter\Xml::class);
     }
 
     public function testParse()

@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Update.
  * 5. Perform all assertions.
  *
- * @group Mini_Shopping_Cart_(CS)
+ * @group Mini_Shopping_Cart
  * @ZephyrId MAGETWO-29812
  */
 class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
@@ -78,11 +77,11 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     /**
      * Update product from mini shopping cart.
      *
-     * @param string $originalProduct
+     * @param array $originalProduct
      * @param array $checkoutData
      * @return array
      */
-    public function test($originalProduct, $checkoutData)
+    public function test(array $originalProduct, array $checkoutData)
     {
         // Preconditions:
         $product = $this->createProduct($originalProduct);
@@ -91,7 +90,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
         // Steps:
         $productData = $product->getData();
         $productData['checkout_data'] = $checkoutData;
-        $newProduct = $this->createProduct(explode('::', $originalProduct)[0], [$productData]);
+        $newProduct = $this->createProduct([explode('::', $originalProduct[0])[0]], [$productData]);
         $miniShoppingCart = $this->cmsIndex->getCartSidebarBlock();
         $miniShoppingCart->openMiniCart();
         $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
@@ -110,14 +109,14 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     /**
      * Create product.
      *
-     * @param string $product
+     * @param array $product
      * @param array $data [optional]
      * @return FixtureInterface
      */
-    protected function createProduct($product, array $data = [])
+    protected function createProduct(array $product, array $data = [])
     {
         $createProductsStep = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $product, 'data' => $data]
         );
         return $createProductsStep->run()['products'][0];
@@ -132,7 +131,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected function addToCart(FixtureInterface $product)
     {
         $addToCartStep = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => [$product]]
         );
         $addToCartStep->run();

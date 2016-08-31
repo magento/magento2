@@ -233,6 +233,6 @@ class ArgumentSequence implements ValidatorInterface
      */
     protected function _isContextType($type)
     {
-        return is_subclass_of($type, '\Magento\Framework\ObjectManager\ContextInterface');
+        return is_subclass_of($type, \Magento\Framework\ObjectManager\ContextInterface::class);
     }
 }

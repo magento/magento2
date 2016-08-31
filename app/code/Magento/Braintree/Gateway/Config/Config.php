@@ -31,6 +31,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const FRAUD_PROTECTION = 'fraudprotection';
 
     /**
+     * Get list of available dynamic descriptors keys
+     * @var array
+     */
+    private static $dynamicDescriptorKeys = [
+        'name', 'phone', 'url'
+    ];
+
+    /**
      * Return the country specific card type config
      *
      * @return array
@@ -168,5 +176,31 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isActive()
     {
         return (bool) $this->getValue(self::KEY_ACTIVE);
+    }
+
+    /**
+     * Get list of configured dynamic descriptors
+     * @return array
+     */
+    public function getDynamicDescriptors()
+    {
+        $values = [];
+        foreach (self::$dynamicDescriptorKeys as $key) {
+            $value = $this->getValue('descriptor_' . $key);
+            if (!empty($value)) {
+                $values[$key] = $value;
+            }
+        }
+        return $values;
+    }
+
+    /**
+     * Get Merchant account ID
+     *
+     * @return string
+     */
+    public function getMerchantAccountId()
+    {
+        return $this->getValue(self::KEY_MERCHANT_ACCOUNT_ID);
     }
 }

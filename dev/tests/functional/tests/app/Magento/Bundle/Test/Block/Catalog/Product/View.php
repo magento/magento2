@@ -54,7 +54,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     public function getBundleBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle',
+            \Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle::class,
             ['element' => $this->_rootElement->find($this->bundleBlock, Locator::SELECTOR_XPATH)]
         );
     }

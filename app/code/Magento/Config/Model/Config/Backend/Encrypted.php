@@ -62,7 +62,7 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
     {
         parent::__wakeup();
         $this->_encryptor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Framework\Encryption\EncryptorInterface'
+            \Magento\Framework\Encryption\EncryptorInterface::class
         );
     }
 
