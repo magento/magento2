@@ -1561,8 +1561,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        if (!empty($trackInfo->ShipTimestamp)) {
-            $datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $trackInfo->ShipTimestamp);
+        if (!empty($trackInfo->ShipTimestamp) &&
+            ($datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $trackInfo->ShipTimestamp)) !== false
+        ) {
             $result['shippeddate'] = $datetime->format('Y-m-d');
         }
 
