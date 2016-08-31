@@ -19,6 +19,7 @@ class FieldType
     const ES_DATA_TYPE_FLOAT = 'float';
     const ES_DATA_TYPE_INT = 'integer';
     const ES_DATA_TYPE_DATE = 'date';
+
     /** @deprecated */
     const ES_DATA_TYPE_ARRAY = 'array';
     /**#@-*/
