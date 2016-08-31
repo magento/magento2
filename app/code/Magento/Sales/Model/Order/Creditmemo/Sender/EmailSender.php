@@ -4,7 +4,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order\CreditMemo\Sender;
+namespace Magento\Sales\Model\Order\Creditmemo\Sender;
 
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
@@ -103,7 +103,7 @@ class EmailSender extends Sender
     public function send(
         OrderInterface $order,
         CreditmemoInterface $creditmemo,
-        CreditmemoCommentCreationInterface $comment,
+        CreditmemoCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         $creditmemo->setSendEmail(true);
