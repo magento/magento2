@@ -116,7 +116,6 @@ class RefundOrder implements RefundOrderInterface
     public function execute(
         $orderId,
         array $items = [],
-        $isOnline = false,
         $notify = false,
         $appendComment = false,
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
@@ -153,7 +152,7 @@ class RefundOrder implements RefundOrderInterface
         $connection->beginTransaction();
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
-            $order = $this->paymentAdapter->refund($creditmemo, $order, $isOnline);
+            $order = $this->paymentAdapter->refund($creditmemo, $order);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [])
             );

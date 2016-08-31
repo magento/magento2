@@ -198,7 +198,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testOrderCreditmemo($orderId, $isOnline, $items, $notify, $appendComment)
+    public function testOrderCreditmemo($orderId, $items, $notify, $appendComment)
     {
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
@@ -230,7 +230,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentAdapterMock->expects($this->once())
             ->method('refund')
-            ->with($this->creditmemoMock, $this->orderMock, $isOnline)
+            ->with($this->creditmemoMock, $this->orderMock)
             ->willReturn($this->orderMock);
 
         $this->orderStateResolverMock->expects($this->once())
@@ -287,7 +287,6 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
             $this->refundOrder->execute(
                 $orderId,
                 $items,
-                $isOnline,
                 $notify,
                 $appendComment,
                 $this->creditmemoCommentCreationMock,
@@ -302,7 +301,6 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
     public function testDocumentValidationException()
     {
         $orderId = 1;
-        $isOnline = true;
         $items = [1 => 2];
         $notify = true;
         $appendComment = true;
@@ -336,7 +334,6 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
             $this->refundOrder->execute(
                 $orderId,
                 $items,
-                $isOnline,
                 $notify,
                 $appendComment,
                 $this->creditmemoCommentCreationMock,
@@ -352,7 +349,6 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
     {
         $orderId = 1;
         $items = [1 => 2];
-        $isOnline = true;
         $notify = true;
         $appendComment = true;
         $this->resourceConnectionMock->expects($this->once())
@@ -386,7 +382,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentAdapterMock->expects($this->once())
             ->method('refund')
-            ->with($this->creditmemoMock, $this->orderMock, $isOnline)
+            ->with($this->creditmemoMock, $this->orderMock)
             ->willThrowException($e);
 
         $this->loggerMock->expects($this->once())
@@ -399,7 +395,6 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
         $this->refundOrder->execute(
             $orderId,
             $items,
-            $isOnline,
             $notify,
             $appendComment,
             $this->creditmemoCommentCreationMock,
@@ -410,8 +405,8 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
     public function dataProvider()
     {
         return [
-            'TestWithNotifyTrue' => [1, true, [1 => 2], true, true],
-            'TestWithNotifyFalse' => [1, true, [1 => 2], false, true],
+            'TestWithNotifyTrue' => [1, [1 => 2], true, true],
+            'TestWithNotifyFalse' => [1, [1 => 2], false, true],
         ];
     }
 }
