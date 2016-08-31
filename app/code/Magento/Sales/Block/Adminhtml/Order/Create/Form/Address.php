@@ -5,8 +5,12 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
+use Magento\Backend\Model\Session\Quote;
+use Magento\Directory\Model\CountryHandlerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Order create address form
@@ -264,6 +268,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
             );
         }
 
+        $this->processCountryOptions($this->_form->getElement('country_id'));
         // Set custom renderer for VAT field if needed
         $vatIdElement = $this->_form->getElement('vat_id');
         if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
@@ -277,6 +282,47 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         }
 
         return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
+     * @return void
+     */
+    private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
+    {
+        $storeId = $this->getBackendQuoteSession()->getStoreId();
+        $options = $this->getCountryHandler()
+            ->loadByScope($this->getCountriesCollection(), $storeId, ScopeInterface::SCOPE_STORE)
+            ->toOptionArray();
+
+        $countryElement->setValues($options);
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     */
+    private function getCountriesCollection()
+    {
+        return ObjectManager::getInstance()->get(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+    }
+
+    /**
+     * @deprecated
+     * @return CountryHandlerInterface
+     */
+    private function getCountryHandler()
+    {
+        return ObjectManager::getInstance()->get(CountryHandlerInterface::class);
+    }
+
+    /**
+     * @deprecated
+     * @return Quote
+     */
+    private function getBackendQuoteSession()
+    {
+        return ObjectManager::getInstance()->get(Quote::class);
     }
 
     /**

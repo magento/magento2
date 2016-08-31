@@ -11,6 +11,9 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
@@ -41,7 +44,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     {
         if (!$this->_options) {
             $this->_options = $this->_createCountriesCollection()->loadByStore(
-                $this->getAttribute()->getStoreId()
+                $this->getStoreManager()->getStore()->getId()
             )->toOptionArray();
         }
         return $this->_options;
@@ -53,5 +56,14 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected function _createCountriesCollection()
     {
         return $this->_countriesFactory->create();
+    }
+
+    /**
+     * @deprecated
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        return ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 }
