@@ -5,13 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Validation;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Item;
@@ -47,10 +45,7 @@ class QuantityValidator implements ValidatorInterface
     }
 
     /**
-     * @param CreditmemoInterface $entity
-     * @return array
-     * @throws DocumentValidationException
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function validate($entity)
     {
@@ -115,7 +110,8 @@ class QuantityValidator implements ValidatorInterface
             $invoiceQtysRefunded = [];
             $invoice = $this->invoiceRepository->get($creditmemo->getInvoiceId());
             foreach ($order->getCreditmemosCollection() as $createdCreditmemo) {
-                if ($createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
+                if (
+                    $createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
                     $createdCreditmemo->getInvoiceId() == $invoice->getId()
                 ) {
                     foreach ($createdCreditmemo->getAllItems() as $createdCreditmemoItem) {
