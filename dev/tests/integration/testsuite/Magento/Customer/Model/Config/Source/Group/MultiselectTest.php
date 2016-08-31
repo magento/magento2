@@ -18,13 +18,24 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
         $multiselect = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\Config\Source\Group\Multiselect::class
         );
+
+        $options = $multiselect->toOptionArray();
+        $optionsToCompare = [];
+        foreach ($options as $option) {
+            if (is_array($option['value'])) {
+                $optionsToCompare = array_merge($optionsToCompare, $option['value']);
+            } else {
+                $optionsToCompare[] = $option;
+            }
+        }
+        sort($optionsToCompare);
         $this->assertEquals(
             [
                 ['value' => 1, 'label' => 'General'],
                 ['value' => 2, 'label' => 'Wholesale'],
                 ['value' => 3, 'label' => 'Retailer'],
             ],
-            $multiselect->toOptionArray()
+            $optionsToCompare
         );
     }
 }
