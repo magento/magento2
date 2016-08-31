@@ -14,7 +14,7 @@ define([
     validator.addRule(
         'validate-image-size-range',
         function (value) {
-            var dataAttrRange = /^(\d+)x(\d+)$/,
+            var dataAttrRange = /^(\d+)[Xx](\d+)$/,
                 m;
 
             if (utils.isEmptyNoTrim(value)) {
