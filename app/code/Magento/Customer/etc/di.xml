@@ -51,6 +51,10 @@
                 type="Magento\Customer\Helper\View" />
     <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
                 type="Magento\Customer\Model\Address\CustomAttributeList" />
+    <preference for="Magento\Customer\Model\Customer\Source\GroupSourceInterface"
+                type="Magento\Customer\Model\Customer\Source\Group" />
+    <preference for="Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface"
+                type="Magento\Customer\Model\Customer\Attribute\Source\Group"/>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
