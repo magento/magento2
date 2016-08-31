@@ -87,9 +87,12 @@ class CreditmemoDocumentFactory
     {
         $commentData = $this->hydratorPool->getHydrator(CreditmemoCommentCreationInterface::class)
             ->extract($comment);
-        $comment = $this->commentFactory->create();
-        $comment = $this->hydratorPool->getHydrator(CreditmemoCommentInterface::class)
-            ->hydrate($comment, $commentData);
+        $comment = $this->commentFactory->create(['data' => $commentData]);
+//        $comment = $this->hydratorPool->getHydrator(CreditmemoCommentInterface::class)
+//            ->hydrate($comment, $commentData);
+        $comment->setParentId($creditmemo->getEntityId())
+            ->setStoreId($creditmemo->getStoreId())
+            ->setCreditmemo($creditmemo);
         $creditmemo->setComments([$comment]);
         return $creditmemo;
 
