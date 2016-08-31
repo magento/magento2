@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Area;
+
 class State
 {
     /**
@@ -118,6 +120,8 @@ class State
      */
     public function setAreaCode($code)
     {
+        $this->checkAreaCode($code);
+
         if (isset($this->_areaCode)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase('Area code is already set')
@@ -164,6 +168,8 @@ class State
      */
     public function emulateAreaCode($areaCode, $callback, $params = [])
     {
+        $this->checkAreaCode($areaCode);
+
         $currentArea = $this->_areaCode;
         $this->_areaCode = $areaCode;
         $this->_isAreaCodeEmulated = true;
@@ -177,5 +183,21 @@ class State
         $this->_areaCode = $currentArea;
         $this->_isAreaCodeEmulated = false;
         return $result;
+    }
+
+    /**
+     * Check that area code exists
+     *
+     * @param $areaCode
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    private function checkAreaCode($areaCode)
+    {
+        if (!Area::doesAreaExist($areaCode)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Area code "%1" does not exist', [$areaCode])
+            );
+        }
     }
 }

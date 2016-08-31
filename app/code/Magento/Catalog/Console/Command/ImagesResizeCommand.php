@@ -71,7 +71,7 @@ class ImagesResizeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->appState->setAreaCode('catalog');
+        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
 
         /** @var ProductCollection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
