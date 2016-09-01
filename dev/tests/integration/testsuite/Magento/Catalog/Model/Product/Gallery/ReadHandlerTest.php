@@ -70,8 +70,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             );
             $this->assertEquals(
                 $imageData['value_id'],
-                $valueId,
-                "Required by Magento/Catalog/view/adminhtml/templates/catalog/product/helper/gallery.phtml"
+                $valueId
             );
         }
     }
