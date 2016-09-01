@@ -19,13 +19,10 @@ class CanRefund implements ValidatorInterface
     public function validate($entity)
     {
         $messages = [];
-        if ($entity->getState() != Invoice::STATE_PAID) {
-            $messages[] = __(
-                'A creditmemo can not be created when an invoice has a status of %1',
-                $entity->getStatus()
-            );
-        }
-        if (abs($entity->getBaseGrandTotal() - $entity->getBaseTotalRefunded()) < .0001) {
+        if (
+            $entity->getState() != Invoice::STATE_PAID ||
+            abs($entity->getBaseGrandTotal() - $entity->getBaseTotalRefunded()) < .0001
+        ) {
             $messages[] = __('We can\'t create creditmemo for the invoice.');
         }
 
