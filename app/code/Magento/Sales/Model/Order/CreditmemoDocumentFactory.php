@@ -124,6 +124,7 @@ class CreditmemoDocumentFactory
 
     /**
      * @param InvoiceInterface $invoice
+     * @param OrderInterface $order
      * @param CreditmemoItemCreationInterface[] $items
      * @param CreditmemoCommentCreationInterface|null $comment
      * @param bool|null $appendComment
@@ -132,12 +133,14 @@ class CreditmemoDocumentFactory
      */
     public function createFromInvoice(
         InvoiceInterface $invoice,
+        OrderInterface $order,
         array $items = [],
         CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
         CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
+        $invoice->setOrder($order);
         $creditmemo = $this->creditmemoFactory->createByInvoice($invoice, $data);
         if ($comment) {
             $creditmemo = $this->attachComment($creditmemo, $comment);
