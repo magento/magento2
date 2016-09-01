@@ -71,18 +71,18 @@ class GrandTotalDetailsPlugin
 
     /**
      * @param \Magento\Quote\Model\Cart\TotalsConverter $subject
-     * @param \Closure $proceed
+     * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totalSegments
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
+     *
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundProcess(
+    public function afterProcess(
         \Magento\Quote\Model\Cart\TotalsConverter $subject,
-        \Closure $proceed,
+        array $totalSegments,
         array $addressTotals = []
     ) {
-        $totalSegments = $proceed($addressTotals);
 
         if (!array_key_exists($this->code, $addressTotals)) {
             return $totalSegments;

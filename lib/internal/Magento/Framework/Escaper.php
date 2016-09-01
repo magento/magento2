@@ -54,7 +54,7 @@ class Escaper
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
         if ($escapeSingleQuote) {
-            return $this->getEscaper()->escapeHtmlAttr($string);
+            return $this->getEscaper()->escapeHtmlAttr((string) $string);
         }
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
     }

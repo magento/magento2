@@ -5,7 +5,6 @@
  */
 
 // @codingStandardsIgnoreFile
-
 ?>
 <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
     <div class="ratings-container">
@@ -14,7 +13,7 @@
             <div class="ratings">
                <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>
                 <div class="rating-box">
-                    <div class="rating" style="width:<?php /* @escapeNotVerified */ echo ceil($_rating->getPercent()) ?>%;"></div>
+                    <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getPercent()) ?>%;"></div>
                 </div>
             </div>
         <?php endif; ?>

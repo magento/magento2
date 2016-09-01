@@ -4,19 +4,21 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="data-grid-info-panel" visible="isMultiEditing || (hasActive() && (hasMessages() || hasErrors() ))">
-    <div class="messages" visible="hasMessages() || hasErrors()">
-        <div class="message message-warning" visible="hasErrors()">
-            <strong>There are <text args="countErrors()"/> messages requires your attention.</strong>
-            Please make corrections to the errors in the table below and re-submit.
+<div if="isMultiEditing || (hasActive() && (hasMessages() || hasErrors() ))"
+     attr="role: (isMultiEditing && multiEditingButtons) ? 'alertdialog' : 'alert'"
+     class="data-grid-info-panel">
+    <div if="hasMessages() || hasErrors()" class="messages">
+        <div if="hasErrors()" class="message message-warning">
+            <strong><text args="countErrorsMessage()"/></strong>
+            <span translate="'Please make corrections to the errors in the table below and re-submit.'"/>
         </div>
         <div class="message" outereach="messages" text="message"
-            css="
-                'message-warning': type === 'warning',
-                'message-error': type === 'error',
-                'message-success': type === 'success'"/>
+             css="
+                 'message-warning': type === 'warning',
+                 'message-error': type === 'error',
+                 'message-success': type === 'success'"/>
     </div>
-    <div class="data-grid-info-panel-actions" visible="isMultiEditing && multiEditingButtons">
+    <div if="isMultiEditing && multiEditingButtons" class="data-grid-info-panel-actions">
         <button class="action-tertiary" type="button" click="cancel">
             <span translate="'Cancel'"/>
         </button>
