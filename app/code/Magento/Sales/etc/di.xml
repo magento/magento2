@@ -932,10 +932,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\CreditMemo\Notifier">
+    <type name="Magento\Sales\Model\Order\Creditmemo\Notifier">
         <arguments>
             <argument name="senders" xsi:type="array">
-                <item name="email" xsi:type="object">Magento\Sales\Model\Order\CreditMemo\Sender\EmailSender</item>
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Creditmemo\Sender\EmailSender</item>
             </argument>
         </arguments>
     </type>
