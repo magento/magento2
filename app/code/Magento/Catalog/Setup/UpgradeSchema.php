@@ -32,6 +32,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.6', '<')) {
             $this->addUniqueKeyToCategoryProductTable($setup);
         }
+
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+            $this->addPercentageValueColumn($setup);
+        }
         $setup->endSetup();
     }
 
@@ -277,5 +281,26 @@ class UpgradeSchema implements UpgradeSchemaInterface
         foreach ($fields as $filedInfo) {
             $connection->dropColumn($setup->getTable($filedInfo['table']), $filedInfo['column']);
         }
+    }
+
+    /**
+     * Add percentage value column
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addPercentageValueColumn(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+        $connection->addColumn(
+            $setup->getTable('catalog_product_entity_tier_price'),
+            'percentage_value',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                'nullable' => true,
+                'length' => '5,2',
+                'comment' => 'Percentage value',
+                'after' => 'value'
+            ]
+        );
     }
 }
