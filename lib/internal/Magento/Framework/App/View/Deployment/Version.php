@@ -59,23 +59,17 @@ class Version
      */
     protected function readValue($appMode)
     {
-        switch ($appMode) {
-            case \Magento\Framework\App\State::MODE_DEFAULT:
-                try {
-                    $result = $this->versionStorage->load();
-                } catch (\UnexpectedValueException $e) {
-                    $result = (new \DateTime())->getTimestamp();
-                    $this->versionStorage->save($result);
-                }
-                break;
-
-            case \Magento\Framework\App\State::MODE_DEVELOPER:
-                $result = (new \DateTime())->getTimestamp();
-                break;
-
-            default:
+        if ($appMode === \Magento\Framework\App\State::MODE_DEVELOPER) {
+            $result = (new \DateTime())->getTimestamp();
+        } else {
+            try {
                 $result = $this->versionStorage->load();
+            } catch (\UnexpectedValueException $e) {
+                $result = (new \DateTime())->getTimestamp();
+                $this->versionStorage->save($result);
+            }
         }
+        
         return $result;
     }
 }
