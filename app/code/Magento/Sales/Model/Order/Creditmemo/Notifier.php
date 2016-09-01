@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Order\Creditmemo;
  *
  * @api
  */
-class Notifier implements \Magento\Sales\Model\Order\CreditMemo\NotifierInterface
+class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterface
 {
     /**
      * @var \Magento\Sales\Model\Order\CreditMemo\SenderInterface[]
