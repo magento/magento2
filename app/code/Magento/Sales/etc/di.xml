@@ -106,6 +106,7 @@
     <preference for="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidator"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
+    <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
