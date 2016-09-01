@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection;
-
+namespace \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
