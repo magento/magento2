@@ -9,6 +9,8 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\Area;
+use \Magento\Framework\App\AreaList;
+use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,15 +24,32 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeMock;
 
+    /**
+     * @var AreaList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $areaListMock;
+
     protected function setUp()
     {
+        $objectManager = new ObjectManagerHelper($this);
         $this->scopeMock = $this->getMockForAbstractClass(
             \Magento\Framework\Config\ScopeInterface::class,
             ['setCurrentScope'],
             '',
             false
         );
-        $this->model = new \Magento\Framework\App\State($this->scopeMock);
+
+        $this->areaListMock = $this->getMock(AreaList::class, [], [], '', false, false);
+        $this->areaListMock->expects($this->any())
+            ->method('getCodes')
+            ->willReturn([Area::AREA_ADMINHTML, Area::AREA_FRONTEND]);
+
+        $this->model = $objectManager->getObject(
+            \Magento\Framework\App\State::class,
+            ['configScope' => $this->scopeMock]
+        );
+
+        $objectManager->setBackwardCompatibleProperty($this->model, 'areaList', $this->areaListMock);
     }
 
     public function testSetAreaCode()

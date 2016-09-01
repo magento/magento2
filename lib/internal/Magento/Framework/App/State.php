@@ -7,8 +7,6 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\Area;
-
 class State
 {
     /**
@@ -57,6 +55,11 @@ class State
      * @var bool
      */
     protected $_isAreaCodeEmulated = false;
+
+    /**
+     * @var AreaList
+     */
+    private $areaList;
 
     /**#@+
      * Application modes
@@ -194,10 +197,29 @@ class State
      */
     private function checkAreaCode($areaCode)
     {
-        if (!Area::doesAreaExist($areaCode)) {
+        $areaCodes = array_merge(
+            [Area::AREA_GLOBAL, Area::AREA_ADMIN],
+            $this->getAreaListInstance()->getCodes()
+        );
+
+        if (!in_array($areaCode, $areaCodes)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase('Area code "%1" does not exist', [$areaCode])
             );
         }
+    }
+
+    /**
+     * Get Instance of AreaList
+     *
+     * @return AreaList
+     */
+    private function getAreaListInstance()
+    {
+        if ($this->areaList === null) {
+            $this->areaList = ObjectManager::getInstance()->get(AreaList::class);
+        }
+
+        return $this->areaList;
     }
 }

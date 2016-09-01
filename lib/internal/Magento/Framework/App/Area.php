@@ -30,16 +30,6 @@ class Area implements \Magento\Framework\App\AreaInterface
     const PARAM_AREA = 'area';
 
     /**
-     * List of existing areas
-     *
-     * @var array
-     */
-    private static $existingAreas = [
-        self::AREA_GLOBAL, self::AREA_FRONTEND, self::AREA_ADMIN, self::AREA_ADMINHTML,
-        self::AREA_DOC, self::AREA_CRONTAB, self::AREA_WEBAPI_REST, self::AREA_WEBAPI_SOAP
-    ];
-
-    /**
      * Array of area loaded parts
      *
      * @var array
@@ -168,17 +158,6 @@ class Area implements \Magento\Framework\App\AreaInterface
                 );
             }
         }
-    }
-
-    /**
-     * Check that area exists
-     *
-     * @param string $areaCode
-     * @return bool
-     */
-    public static function doesAreaExist($areaCode)
-    {
-        return in_array($areaCode, self::$existingAreas);
     }
 
     /**
