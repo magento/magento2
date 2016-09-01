@@ -342,9 +342,7 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
                                                 ],
-                                                'links' => [
-                                                    'insertData' => '${ $.provider }:${ $.dataProvider }'
-                                                ],
+                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'source' => 'product',
                                                 'addButton' => false,
                                             ],
