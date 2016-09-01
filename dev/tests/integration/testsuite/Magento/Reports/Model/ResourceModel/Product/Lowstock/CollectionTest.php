@@ -39,7 +39,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * Assert that String argument passed to filterByProductType method is correctly passed to attribute adder
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testFilterByProductTypeString()
     {
@@ -51,7 +50,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * Assert that Array argument passed to filterByProductType method is correctly passed to attribute adder
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testFilterByProductTypeArray()
     {
