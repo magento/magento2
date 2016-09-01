@@ -29,18 +29,18 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundRead()
+    public function testAfterRead()
     {
+        $readerConfig = ['test' => 'b', 'd' => 'e'];
         $this->requestGenerator->expects($this->once())
             ->method('generate')
             ->will($this->returnValue(['test' => 'a']));
 
-        $result = $this->object->aroundRead(
+        $result = $this->object->afterRead(
             $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)
                 ->disableOriginalConstructor()->getMock(),
-            function () {
-                return ['test' => 'b', 'd' => 'e'];
-            }
+            $readerConfig,
+            null
         );
 
         $this->assertEquals(['test' => ['b', 'a'], 'd' => 'e'], $result);

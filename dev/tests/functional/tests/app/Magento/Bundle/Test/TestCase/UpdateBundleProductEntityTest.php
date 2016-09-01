@@ -26,14 +26,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts
  *
- * @group Bundle_Product_(MX)
+ * @group Bundle_Product
  * @ZephyrId MAGETWO-26195
  */
 class UpdateBundleProductEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

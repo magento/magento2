@@ -572,10 +572,16 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects(self::exactly(4))
             ->method('addFilters')
-            ->with([$customerFilter, $codeFilter, $expiresAtFilter, $isActiveFilter])
-            ->willReturnSelf();
+            ->willReturnMap(
+                [
+                    [$customerFilter, $this->searchCriteriaBuilder],
+                    [$codeFilter, $this->searchCriteriaBuilder],
+                    [$expiresAtFilter, $this->searchCriteriaBuilder],
+                    [$isActiveFilter, $this->searchCriteriaBuilder],
+                ]
+            );
 
         $this->searchCriteriaBuilder->expects(self::once())
             ->method('create')
