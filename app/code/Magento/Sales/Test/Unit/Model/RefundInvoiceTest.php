@@ -219,7 +219,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testOrderCreditmemo($orderId, $items, $notify, $appendComment)
+    public function testOrderCreditmemo($invoiceId, $items, $notify, $appendComment)
     {
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
@@ -309,7 +309,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             2,
             $this->refundInvoice->execute(
-                $orderId,
+                $invoiceId,
                 $items,
                 false,
                 $notify,
@@ -325,7 +325,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDocumentValidationException()
     {
-        $orderId = 1;
+        $invoiceId = 1;
         $items = [1 => 2];
         $notify = true;
         $appendComment = true;
@@ -360,7 +360,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $errorMessages,
             $this->refundInvoice->execute(
-                $orderId,
+                $invoiceId,
                 $items,
                 false,
                 $notify,
@@ -376,7 +376,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCouldNotCreditmemoException()
     {
-        $orderId = 1;
+        $invoiceId = 1;
         $items = [1 => 2];
         $notify = true;
         $appendComment = true;
@@ -425,7 +425,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('rollBack');
 
         $this->refundInvoice->execute(
-            $orderId,
+            $invoiceId,
             $items,
             false,
             $notify,
