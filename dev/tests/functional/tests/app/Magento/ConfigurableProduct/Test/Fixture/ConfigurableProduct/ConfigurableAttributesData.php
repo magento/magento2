@@ -305,7 +305,6 @@ class ConfigurableAttributesData extends DataSource
                     $row
                 );
             }
-
         }
     }
 
