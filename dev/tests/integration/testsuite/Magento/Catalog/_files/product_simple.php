@@ -45,8 +45,6 @@ $tierPrices[] = $tierPriceFactory->create(
     ]
 );
 /** @var  $tpExtensionAttributes */
-$tpExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
-$tpExtensionAttributes = $tpExtensionAttributesFactory->create()->setPercentageValue(50);
 
 $tierPrices[] = $tierPriceFactory->create(
     [
@@ -55,7 +53,7 @@ $tierPrices[] = $tierPriceFactory->create(
             'qty' => 10
         ]
     ]
-)->setExtensionAttributes($tpExtensionAttributes);
+);
 
 $tierPrices = [];
 /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory */
@@ -87,10 +85,6 @@ $tierPrices[] = $tierPriceFactory->create(
         ]
     ]
 );
-/** @var  $tpExtensionAttributes */
-$tpExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
-$tpExtensionAttributes = $tpExtensionAttributesFactory->create()->setPercentageValue(50);
-
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -98,7 +92,7 @@ $tierPrices[] = $tierPriceFactory->create(
             'qty' => 10
         ]
     ]
-)->setExtensionAttributes($tpExtensionAttributes);
+);
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
