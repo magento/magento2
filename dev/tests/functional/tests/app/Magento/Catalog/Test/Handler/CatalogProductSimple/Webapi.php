@@ -347,8 +347,16 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $priceInfo['customer_group_id'] = $priceInfo['cust_group'];
                 unset($priceInfo['cust_group']);
 
-                $priceInfo['value'] = $priceInfo['price'];
-                unset($priceInfo['price']);
+                if (isset($priceInfo['price'])) {
+                    $priceInfo['value'] = $priceInfo['price'];
+                    unset($priceInfo['price']);
+                }
+                unset($priceInfo['value_type']);
+
+                if (isset($priceInfo['percentage_value'])) {
+                    $priceInfo['extension_attributes']['percentage_value'] = $priceInfo['percentage_value'];
+                    unset($priceInfo['percentage_value']);
+                }
 
                 $priceInfo['qty'] = $priceInfo['price_qty'];
                 unset($priceInfo['price_qty']);

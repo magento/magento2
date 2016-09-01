@@ -260,11 +260,13 @@ define(
                         this.source.trigger('shippingAddress.custom_attributes.data.validate');
                     }
 
-                    if (this.source.get('params.invalid') ||
+                    if (emailValidationResult &&
+                        this.source.get('params.invalid') ||
                         !quote.shippingMethod().method_code ||
-                        !quote.shippingMethod().carrier_code ||
-                        !emailValidationResult
+                        !quote.shippingMethod().carrier_code
                     ) {
+                        this.focusInvalid();
+
                         return false;
                     }
 

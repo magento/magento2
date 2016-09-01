@@ -46,6 +46,7 @@
     <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
     <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList" />
     <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -470,6 +471,7 @@
     <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="\Magento\Catalog\Model\Product\Option\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface" type="Magento\Catalog\Model\Product\Option\Type" />
     <preference for="Magento\Catalog\Api\ProductTierPriceManagementInterface" type="\Magento\Catalog\Model\Product\TierPriceManagement" />
+    <preference for="Magento\Catalog\Api\ScopedProductTierPriceManagementInterface" type="\Magento\Catalog\Model\Product\ScopedTierPriceManagement" />
     <preference for="Magento\Catalog\Api\Data\ProductTierPriceInterface" type="Magento\Catalog\Model\Product\TierPrice" />
     <preference for="Magento\Catalog\Api\Data\CategoryProductLinkInterface" type="Magento\Catalog\Model\CategoryProductLink" />
     <preference for="Magento\Catalog\Api\ProductCustomOptionTypeListInterface" type="Magento\Catalog\Model\ProductOptions\TypeList" />
