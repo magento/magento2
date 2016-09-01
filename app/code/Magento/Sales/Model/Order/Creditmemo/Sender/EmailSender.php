@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,40 +17,41 @@ use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\Order\Creditmemo\SenderInterface;
 
 /**
- * Email notification sender for Invoice.
+ * Email notification sender for Creditmemo.
  */
-class EmailSender extends Sender
+class EmailSender extends Sender implements SenderInterface
 {
     /**
      * @var PaymentHelper
      */
-    protected $paymentHelper;
+    private $paymentHelper;
 
     /**
      * @var CreditmemoResource
      */
-    protected $creditmemoResource;
+    private $creditmemoResource;
 
     /**
      * Global configuration storage.
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $globalConfig;
+    private $globalConfig;
 
     /**
      * @var Renderer
      */
-    protected $addressRenderer;
+    private $addressRenderer;
 
     /**
      * Application Event Dispatcher
      *
      * @var ManagerInterface
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * @param Template $templateContainer
@@ -149,7 +149,7 @@ class EmailSender extends Sender
      * @param Order $order
      * @return string
      */
-    protected function getPaymentHtml(Order $order)
+    private function getPaymentHtml(Order $order)
     {
         return $this->paymentHelper->getInfoBlockHtml(
             $order->getPayment(),
