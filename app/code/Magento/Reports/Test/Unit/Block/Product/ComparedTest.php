@@ -27,10 +27,12 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $visibilityMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Visibility::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->factoryMock = $this->getMockBuilder(\Magento\Reports\Model\Product\Index\Factory::class)
+
+        $this->factoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -56,8 +58,8 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
     public function testGetModel()
     {
         $indexMock = $this->getMockBuilder(\Magento\Reports\Model\Product\Index\AbstractIndex::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->factoryMock->expects($this->once())->method('get')->willReturn($indexMock);
 

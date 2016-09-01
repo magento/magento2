@@ -43,7 +43,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterByProductTypeString()
     {
         $this->collection->filterByProductType('simple');
-        $whereParts = $this->collection->getSelect()->getPart(\Zend_Db_Select::WHERE);
+        $whereParts = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
         $this->assertContains('simple', $whereParts[0]);
     }
 
@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterByProductTypeArray()
     {
         $this->collection->filterByProductType(['simple', 'configurable']);
-        $whereParts = $this->collection->getSelect()->getPart(\Zend_Db_Select::WHERE);
+        $whereParts = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
 
         $this->assertThat(
             $whereParts[0],
