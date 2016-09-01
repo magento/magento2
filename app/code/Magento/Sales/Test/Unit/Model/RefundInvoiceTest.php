@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
+use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
@@ -60,6 +61,11 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
      * @var OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderValidatorMock;
+
+    /**
+     * @var InvoiceValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $invoiceValidatorMock;
 
     /**
      * @var PaymentAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -152,6 +158,10 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->invoiceValidatorMock = $this->getMockBuilder(InvoiceValidatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->paymentAdapterMock = $this->getMockBuilder(PaymentAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -206,6 +216,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             $this->orderRepositoryMock,
             $this->invoiceRepositoryMock,
             $this->orderValidatorMock,
+            $this->invoiceValidatorMock,
             $this->creditmemoValidatorMock,
             $this->creditmemoRepositoryMock,
             $this->paymentAdapterMock,
@@ -237,6 +248,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('createFromInvoice')
             ->with(
                 $this->invoiceMock,
+                $this->orderMock,
                 $items,
                 $this->creditmemoCommentCreationMock,
                 ($appendComment && $notify),
@@ -250,6 +262,10 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->orderValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->orderMock)
+            ->willReturn([]);
+        $this->invoiceValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->invoiceMock)
             ->willReturn([]);
 
         $this->paymentAdapterMock->expects($this->once())
@@ -342,6 +358,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('createFromInvoice')
             ->with(
                 $this->invoiceMock,
+                $this->orderMock,
                 $items,
                 $this->creditmemoCommentCreationMock,
                 ($appendComment && $notify),
@@ -355,6 +372,10 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->orderValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->orderMock)
+            ->willReturn([]);
+        $this->invoiceValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->invoiceMock)
             ->willReturn([]);
 
         $this->assertEquals(
@@ -396,6 +417,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('createFromInvoice')
             ->with(
                 $this->invoiceMock,
+                $this->orderMock,
                 $items,
                 $this->creditmemoCommentCreationMock,
                 ($appendComment && $notify),
@@ -409,6 +431,10 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->orderValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->orderMock)
+            ->willReturn([]);
+        $this->invoiceValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->invoiceMock)
             ->willReturn([]);
         $e = new \Exception();
 
