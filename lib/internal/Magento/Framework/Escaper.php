@@ -76,7 +76,7 @@ class Escaper
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
-                    return '';
+                    return $this->escapeHtml($data);
                 }
                 restore_error_handler();
 

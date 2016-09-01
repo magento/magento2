@@ -225,7 +225,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
             ],
             'html and body tags' => [
                 'data' => '<html><body><span>String</span></body></html>',
-                'expected' => '',
+                'expected' => '&lt;html&gt;&lt;body&gt;&lt;span&gt;String&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;',
                 'allowedTags' => ['span'],
             ],
         ];
@@ -244,7 +244,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
             ],
             'text with invalid html' => [
                 'data' => '<spa>n id="id1">Some string</span>',
-                'expected' => '',
+                'expected' => '&lt;spa&gt;n id=&quot;id1&quot;&gt;Some string&lt;/span&gt;',
                 'allowedTags' => ['span'],
             ],
         ];
