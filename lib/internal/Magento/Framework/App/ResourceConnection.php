@@ -101,8 +101,9 @@ class ResourceConnection
      */
     public function getConnectionByName($connectionName)
     {
-        if (isset($this->connections[$connectionName])) {
-            return $this->connections[$connectionName];
+        $processConnectionName = $connectionName . '_process_' . getmypid();
+        if (isset($this->connections[$processConnectionName])) {
+            return $this->connections[$processConnectionName];
         }
 
         $connectionConfig = $this->deploymentConfig->get(
@@ -115,7 +116,7 @@ class ResourceConnection
             throw new \DomainException('Connection "' . $connectionName . '" is not defined');
         }
 
-        $this->connections[$connectionName] = $connection;
+        $this->connections[$processConnectionName] = $connection;
         return $connection;
     }
 
