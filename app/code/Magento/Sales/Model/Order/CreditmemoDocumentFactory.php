@@ -77,13 +77,14 @@ class CreditmemoDocumentFactory
     }
 
     /**
-     * Attach comment to the Creditmemo document.
+     *  Attach comment to the Creditmemo document.
      *
      * @param CreditmemoInterface $creditmemo
      * @param CreditmemoCommentCreationInterface $comment
+     * @param bool $appendComment
      * @return CreditmemoInterface
      */
-    private function attachComment(CreditmemoInterface $creditmemo, CreditmemoCommentCreationInterface $comment)
+    private function attachComment(CreditmemoInterface $creditmemo, CreditmemoCommentCreationInterface $comment, $appendComment = false)
     {
         $commentData = $this->hydratorPool->getHydrator(CreditmemoCommentCreationInterface::class)
             ->extract($comment);
@@ -92,7 +93,8 @@ class CreditmemoDocumentFactory
 //            ->hydrate($comment, $commentData);
         $comment->setParentId($creditmemo->getEntityId())
             ->setStoreId($creditmemo->getStoreId())
-            ->setCreditmemo($creditmemo);
+            ->setCreditmemo($creditmemo)
+            ->setIsCustomerNotified($appendComment);
         $creditmemo->setComments([$comment]);
         return $creditmemo;
 
@@ -117,13 +119,14 @@ class CreditmemoDocumentFactory
         $data = $this->getCreditmemoCreationData($items, $arguments);
         $creditmemo = $this->creditmemoFactory->createByOrder($order, $data);
         if ($comment) {
-            $creditmemo = $this->attachComment($creditmemo, $comment);
+            $creditmemo = $this->attachComment($creditmemo, $comment, $appendComment);
         }
         return $creditmemo;
     }
 
     /**
      * @param InvoiceInterface $invoice
+     * @param OrderInterface $order
      * @param CreditmemoItemCreationInterface[] $items
      * @param CreditmemoCommentCreationInterface|null $comment
      * @param bool|null $appendComment
@@ -132,15 +135,17 @@ class CreditmemoDocumentFactory
      */
     public function createFromInvoice(
         InvoiceInterface $invoice,
+        OrderInterface $order,
         array $items = [],
         CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
         CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
+        $invoice->setOrder($order);
         $creditmemo = $this->creditmemoFactory->createByInvoice($invoice, $data);
         if ($comment) {
-            $creditmemo = $this->attachComment($creditmemo, $comment);
+            $creditmemo = $this->attachComment($creditmemo, $comment, $appendComment);
         }
         return $creditmemo;
     }

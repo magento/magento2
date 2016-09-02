@@ -44,7 +44,7 @@ class EmailSender extends Sender implements SenderInterface
     /**
      * @var Renderer
      */
-    private $addressRenderer;
+    protected $addressRenderer;
 
     /**
      * Application Event Dispatcher

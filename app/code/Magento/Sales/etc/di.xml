@@ -106,6 +106,7 @@
     <preference for="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidator"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
+    <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
@@ -932,10 +933,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\CreditMemo\Notifier">
+    <type name="Magento\Sales\Model\Order\Creditmemo\Notifier">
         <arguments>
             <argument name="senders" xsi:type="array">
-                <item name="email" xsi:type="object">Magento\Sales\Model\Order\CreditMemo\Sender\EmailSender</item>
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Creditmemo\Sender\EmailSender</item>
             </argument>
         </arguments>
     </type>
