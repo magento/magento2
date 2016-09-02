@@ -219,13 +219,18 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
                 'allowedTags' => ['span', 'b'],
             ],
             'text with non ascii characters' => [
-                'data' => ['абвгд', 'مثال'],
-                'expected' => ['абвгд', 'مثال'],
+                'data' => ['абвгд', 'مثال', '幸福'],
+                'expected' => ['абвгд', 'مثال', '幸福'],
                 'allowedTags' => [],
             ],
             'html and body tags' => [
                 'data' => '<html><body><span>String</span></body></html>',
-                'expected' => '&lt;html&gt;&lt;body&gt;&lt;span&gt;String&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;',
+                'expected' => '<span>String</span>',
+                'allowedTags' => ['span'],
+            ],
+            'invalid tag' => [
+                'data' => '<some tag> some text',
+                'expected' => ' some text',
                 'allowedTags' => ['span'],
             ],
         ];
@@ -239,12 +244,12 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
         return [
             'text with allowed script tag' => [
                 'data' => '<span><script>some text in tags</script></span>',
-                'expected' => '',
+                'expected' => '<span>some text in tags</span>',
                 'allowedTags' => ['span', 'script'],
             ],
             'text with invalid html' => [
                 'data' => '<spa>n id="id1">Some string</span>',
-                'expected' => '&lt;spa&gt;n id=&quot;id1&quot;&gt;Some string&lt;/span&gt;',
+                'expected' => 'n id=&quot;id1&quot;&gt;Some string',
                 'allowedTags' => ['span'],
             ],
         ];
