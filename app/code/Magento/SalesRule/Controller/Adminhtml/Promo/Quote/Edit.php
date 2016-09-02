@@ -64,7 +64,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $model->getActionsFieldSetId($model->getActions()->getFormName())
             );
 
-
             $resultPage->getLayout()->getBlock('promo_sales_rule_edit_tab_coupons')->setCanShow(true);
         }
 
