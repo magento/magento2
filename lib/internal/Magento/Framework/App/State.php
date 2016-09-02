@@ -198,7 +198,7 @@ class State
     private function checkAreaCode($areaCode)
     {
         $areaCodes = array_merge(
-            [Area::AREA_GLOBAL, Area::AREA_ADMIN],
+            [Area::AREA_GLOBAL],
             $this->getAreaListInstance()->getCodes()
         );
 

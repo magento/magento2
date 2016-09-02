@@ -58,7 +58,7 @@ class Session extends AbstractActionController
                 $objectManager = $this->objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get(\Magento\Framework\App\State::class);
-                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
                 $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
                 /** @var \Magento\Backend\Model\Url $backendUrl */
                 $backendUrl = $objectManager->get(\Magento\Backend\Model\Url::class);
