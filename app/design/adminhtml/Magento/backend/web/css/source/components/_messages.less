@@ -28,6 +28,9 @@
 @alert-icon__warning__content: @icon-warning__content;
 @alert-icon__warning__color: @color-phoenix;
 
+@alert-icon__progress__content: @icon-refresh__content;
+@alert-icon__progress__color: @color-blue-dodger;
+
 @alert-icon__success__content: @icon-check-mage__content;
 @alert-icon__success__color: @color-green-apple;
 
@@ -90,6 +93,13 @@
     &:before {
         color: @alert-icon__warning__color;
         content: @alert-icon__warning__content;
+    }
+}
+
+.message-progress {
+    &:before {
+        color: @alert-icon__progress__color;
+        content: @alert-icon__progress__content;
     }
 }
 
