@@ -49,13 +49,15 @@ class Login extends \Magento\Framework\App\Action\Action
 
     /**
      * @var AccountRedirect
+     * @deprecated
      */
-    protected $accountRedirect;
+    private $accountRedirect;
 
     /**
      * @var ScopeConfigInterface
+     * @deprecated
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Initialize Login controller
@@ -90,7 +92,7 @@ class Login extends \Magento\Framework\App\Action\Action
      * @deprecated
      * @return AccountRedirect
      */
-    protected function getAccountRedirect()
+    private function getAccountRedirect()
     {
         if (!is_object($this->accountRedirect)) {
             $this->accountRedirect = ObjectManager::getInstance()->get(AccountRedirect::class);
@@ -114,7 +116,7 @@ class Login extends \Magento\Framework\App\Action\Action
      * @deprecated
      * @return ScopeConfigInterface
      */
-    protected function getScopeConfig()
+    private function getScopeConfig()
     {
         if (!is_object($this->scopeConfig)) {
             $this->scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);

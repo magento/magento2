@@ -83,7 +83,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * @return ScopeConfigInterface
      * @deprecated
      */
-    public function getScopeConfig()
+    private function getScopeConfig()
     {
         if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(

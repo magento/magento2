@@ -63,8 +63,9 @@ class Redirect
 
     /**
      * @var CookieManagerInterface
+     * @deprecated
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @param RequestInterface $request
@@ -213,7 +214,7 @@ class Redirect
      * @deprecated
      * @return CookieManagerInterface
      */
-    protected function getCookieManager()
+    private function getCookieManager()
     {
         if (!is_object($this->cookieManager)) {
             $this->cookieManager = ObjectManager::getInstance()->get(CookieManagerInterface::class);
