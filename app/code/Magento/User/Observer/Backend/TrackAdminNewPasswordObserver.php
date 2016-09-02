@@ -66,7 +66,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
         $this->observerConfig = $observerConfig;
         $this->userResource = $userResource;
         $this->authSession = $authSession;
-        $this->encryptor = $encryptor;
+        $this->encryptor = $encryptor;              // no longer used
         $this->messageManager = $messageManager;
     }
 
@@ -81,10 +81,9 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
         /* @var $user \Magento\User\Model\User */
         $user = $observer->getEvent()->getObject();
         if ($user->getId()) {
-            $password = $user->getCurrentPassword();
+            $passwordHash = $user->getPassword();
             $passwordLifetime = $this->observerConfig->getAdminPasswordLifetime();
-            if ($passwordLifetime && $password && !$user->getForceNewPassword()) {
-                $passwordHash = $this->encryptor->getHash($password, false);
+            if ($passwordLifetime && $passwordHash && !$user->getForceNewPassword()) {
                 $this->userResource->trackPassword($user, $passwordHash, $passwordLifetime);
                 $this->messageManager->getMessages()->deleteMessageByIdentifier('magento_user_password_expired');
                 $this->authSession->unsPciAdminUserIsPasswordExpired();
