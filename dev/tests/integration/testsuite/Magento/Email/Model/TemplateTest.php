@@ -578,7 +578,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
         $this->model->setDesignConfig([
             'area' => 'frontend',
@@ -588,10 +587,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->setNotDefaultThemeForFixtureStore();
-        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+        $this->assertStringMatchesFormat(
+            '%s/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico',
+            $this->model->getProcessedTemplateSubject([])
+        );
 
         $this->setDefaultThemeForFixtureStore();
-        $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+        $this->assertStringMatchesFormat(
+            '%s/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico',
+            $this->model->getProcessedTemplateSubject([])
+        );
     }
 
     /**
