@@ -36,7 +36,8 @@ class Escaper
     private $escapeAsUrlAttributes = ['href'];
 
     /**
-     * Escape string for HTML context, allowedTags will not be escaped
+     * Escape string for HTML context. allowedTags will not be escaped, except the following: script, img, embed,
+     * iframe, video, source, object, audio
      *
      * @param string|array $data
      * @param array|null $allowedTags
