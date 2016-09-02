@@ -53,9 +53,6 @@ class QuantityValidator implements ValidatorInterface
             return [__('Order Id is required for shipment document')];
         }
 
-        if (empty($entity->getItems())) {
-            return [__('You can\'t create a creditmemo without products.')];
-        }
         $messages = [];
 
         $order = $this->orderRepository->get($entity->getOrderId());
@@ -89,9 +86,7 @@ class QuantityValidator implements ValidatorInterface
 
         if ($entity->getGrandTotal() <= 0) {
             $messages[] = __('The credit memo\'s total must be positive.');
-        }
-
-        if ($totalQuantity <= 0) {
+        } elseif ($totalQuantity <= 0) {
             $messages[] = __('You can\'t create a creditmemo without products.');
         }
 

@@ -49,15 +49,6 @@ class CanRefund implements ValidatorInterface
             $messages[] = __('The order does not allow a creditmemo to be created.');
         }
 
-        /**
-         * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
-         * for this we have additional diapason for 0
-         * TotalPaid - contains amount, that were not rounded.
-         */
-        if (abs($this->priceCurrency->round($entity->getTotalPaid()) - $entity->getTotalRefunded()) < .0001) {
-            $messages[] = __('We can\'t create creditmemo for the order.');
-        }
-
         return $messages;
     }
 
@@ -67,13 +58,25 @@ class CanRefund implements ValidatorInterface
      */
     private function canRefund(OrderInterface $order)
     {
+        $canRefund = false;
+
         /** @var \Magento\Sales\Model\Order\Item $item */
         foreach ($order->getItems() as $item) {
             if ($item->getQtyToRefund() || $item->isDummy()) {
-                return true;
+                $canRefund = true;
+                break;
             }
         }
 
-        return false;
+        /**
+         * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
+         * for this we have additional diapason for 0
+         * TotalPaid - contains amount, that were not rounded.
+         */
+        if (abs($this->priceCurrency->round($order->getTotalPaid()) - $order->getTotalRefunded()) < .0001) {
+            $canRefund = false;
+        }
+
+        return $canRefund;
     }
 }
