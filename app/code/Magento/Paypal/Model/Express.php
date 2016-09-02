@@ -676,28 +676,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             return $this;
         }
 
-        if (!empty($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_TOKEN])) {
-            $this->getInfoInstance()
-                ->setAdditionalInformation(
-                    ExpressCheckout::PAYMENT_INFO_TRANSPORT_TOKEN,
-                    $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_TOKEN]
-                );
-        }
-
-        if (!empty($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_PAYER_ID])) {
-            $this->getInfoInstance()
-                ->setAdditionalInformation(
-                    ExpressCheckout::PAYMENT_INFO_TRANSPORT_PAYER_ID,
-                    $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_PAYER_ID]
-                );
-        }
-
-        if (!empty($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])) {
-            $this->getInfoInstance()
-                ->setAdditionalInformation(
-                    ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
-                    $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT]
-                );
+        foreach ($additionalData as $key => $value) {
+            $this->getInfoInstance()->setAdditionalInformation($key, $value);
         }
         return $this;
     }
