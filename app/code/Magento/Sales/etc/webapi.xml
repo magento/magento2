@@ -235,6 +235,12 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/order/:orderId/ship" method="POST">
+        <service class="Magento\Sales\Api\ShipOrderInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/orders/" method="POST">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
@@ -249,6 +255,12 @@
     </route>
     <route url="/V1/transactions" method="GET">
         <service class="Magento\Sales\Api\TransactionRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:orderId/invoice" method="POST">
+        <service class="Magento\Sales\Api\InvoiceOrderInterface" method="execute"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
