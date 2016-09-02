@@ -19,7 +19,7 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
      */
     public function getIdxName($tableName, $fields, $indexType = '')
     {
-        return $this->getConnection()->getIndexName($tableName, $fields, $indexType);
+        return $this->getConnection()->getIndexName($this->getTable($tableName), $fields, $indexType);
     }
 
     /**
@@ -33,6 +33,11 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        return $this->getConnection()->getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName);
+        return $this->getConnection()->getForeignKeyName(
+            $this->getTable($priTableName),
+            $priColumnName,
+            $refTableName,
+            $refColumnName
+        );
     }
 }
