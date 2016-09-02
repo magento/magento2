@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Test\Unit\Model;
+namespace Magento\Deploy\Test\Unit\Model\Deploy;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

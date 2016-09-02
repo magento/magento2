@@ -5,6 +5,9 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,10 +20,22 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $processManagerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     */
+    private $resourceConnectionMock;
+
     protected function setUp()
     {
         $this->processManagerMock = $this->getMock(\Magento\Deploy\Model\ProcessManager::class, [], [], '', false);
-        $this->model = new \Magento\Deploy\Model\ProcessQueueManager($this->processManagerMock);
+        $this->resourceConnectionMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Deploy\Model\ProcessQueueManager::class,
+            [
+                'processManager' => $this->processManagerMock,
+                'resourceConnection' => $this->resourceConnectionMock,
+            ]
+        );
     }
 
     public function testProcess()
@@ -28,6 +43,11 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
         $callableMock = function () {
             return true;
         };
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
+            ->setMethods(['closeConnection'])
+            ->getMockForAbstractClass();
+        $adapterMock->expects(self::once())->method('closeConnection');
+        $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
 
         $processMock = $this->getMock(\Magento\Deploy\Model\Process::class, [], [], '', false);
 
