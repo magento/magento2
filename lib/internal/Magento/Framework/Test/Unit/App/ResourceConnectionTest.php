@@ -48,7 +48,6 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
         $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->getMock();
 
-
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMock();
 
         $this->objectManager = (new ObjectManager($this));
