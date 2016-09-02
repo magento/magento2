@@ -122,7 +122,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = '/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setDesignConfig([
             'area' => 'frontend',
             'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
@@ -610,7 +610,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->load();
 
         $this->assertStringEndsWith(
-            'static/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
+            '/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
             $this->model->getDefaultEmailLogo()
         );
     }
