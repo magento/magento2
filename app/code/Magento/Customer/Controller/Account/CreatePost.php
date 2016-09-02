@@ -29,6 +29,7 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
