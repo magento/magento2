@@ -26,6 +26,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Data\ConditionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -2752,10 +2753,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * If $condition integer or string - exact value will be filtered ('eq' condition)
      *
      * If $condition is array is - one of the following structures is expected:
-     * - array("from" => $fromValue, "to" => $toValue)
      * - array("eq" => $equalValue)
      * - array("neq" => $notEqualValue)
      * - array("like" => $likeValue)
+     * - array("nlike" => $notLikeValue)
      * - array("in" => array($inValues))
      * - array("nin" => array($notInValues))
      * - array("notnull" => $valueIsNotNull)
@@ -2766,8 +2767,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * - array("lteq" => $lessOrEqualValue)
      * - array("finset" => $valueInSet)
      * - array("regexp" => $regularExpression)
+     * - array("from" => $fromValue)
+     * - array("to" => $toValue)
      * - array("seq" => $stringValue)
      * - array("sneq" => $stringValue)
+     * - array("ntoa" => $stringValue)
      *
      * If non matched - sequential array is expected and OR conditions
      * will be built using above mentioned structure
@@ -2780,26 +2784,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function prepareSqlCondition($fieldName, $condition)
     {
         $conditionKeyMap = [
-            'eq'            => "{{fieldName}} = ?",
-            'neq'           => "{{fieldName}} != ?",
-            'like'          => "{{fieldName}} LIKE ?",
-            'nlike'         => "{{fieldName}} NOT LIKE ?",
-            'in'            => "{{fieldName}} IN(?)",
-            'nin'           => "{{fieldName}} NOT IN(?)",
-            'is'            => "{{fieldName}} IS ?",
-            'notnull'       => "{{fieldName}} IS NOT NULL",
-            'null'          => "{{fieldName}} IS NULL",
-            'gt'            => "{{fieldName}} > ?",
-            'lt'            => "{{fieldName}} < ?",
-            'gteq'          => "{{fieldName}} >= ?",
-            'lteq'          => "{{fieldName}} <= ?",
-            'finset'        => "FIND_IN_SET(?, {{fieldName}})",
-            'regexp'        => "{{fieldName}} REGEXP ?",
-            'from'          => "{{fieldName}} >= ?",
-            'to'            => "{{fieldName}} <= ?",
-            'seq'           => null,
-            'sneq'          => null,
-            'ntoa'          => "INET_NTOA({{fieldName}}) LIKE ?",
+            ConditionInterface::EQ            => "{{fieldName}} = ?",
+            ConditionInterface::NEQ           => "{{fieldName}} != ?",
+            ConditionInterface::LIKE          => "{{fieldName}} LIKE ?",
+            ConditionInterface::NOT_LIKE      => "{{fieldName}} NOT LIKE ?",
+            ConditionInterface::IN            => "{{fieldName}} IN(?)",
+            ConditionInterface::NOT_IN        => "{{fieldName}} NOT IN(?)",
+            ConditionInterface::IS            => "{{fieldName}} IS ?",
+            ConditionInterface::NOT_NULL      => "{{fieldName}} IS NOT NULL",
+            ConditionInterface::NULL          => "{{fieldName}} IS NULL",
+            ConditionInterface::GT            => "{{fieldName}} > ?",
+            ConditionInterface::LT            => "{{fieldName}} < ?",
+            ConditionInterface::GTEQ          => "{{fieldName}} >= ?",
+            ConditionInterface::LTEQ          => "{{fieldName}} <= ?",
+            ConditionInterface::FINSET        => "FIND_IN_SET(?, {{fieldName}})",
+            ConditionInterface::REGEXP        => "{{fieldName}} REGEXP ?",
+            ConditionInterface::FROM          => "{{fieldName}} >= ?",
+            ConditionInterface::TO            => "{{fieldName}} <= ?",
+            ConditionInterface::SEQ           => null,
+            ConditionInterface::SNEQ          => null,
+            ConditionInterface::NTOA          => "INET_NTOA({{fieldName}}) LIKE ?",
         ];
 
         $query = '';
