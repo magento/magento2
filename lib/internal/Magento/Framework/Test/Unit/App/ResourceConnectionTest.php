@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
 
 class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,6 +34,11 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
+
     protected function setUp()
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
@@ -42,12 +48,16 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
         $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->getMock();
 
+
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMock();
+
         $this->objectManager = (new ObjectManager($this));
         $this->unit = $this->objectManager->getObject(
             ResourceConnection::class,
             [
                 'deploymentConfig' => $this->deploymentConfigMock,
                 'connectionFactory' => $this->connectionFactoryMock,
+                'config' => $this->configMock,
             ]
         );
     }
@@ -76,5 +86,13 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects(self::never())->method('get');
 
         self::assertEquals('existing_connection', $unit->getConnectionByName('default'));
+    }
+
+    public function testCloseConnection()
+    {
+        $this->configMock->expects(self::once())->method('getConnectionName')->with('default');
+
+        $this->unit->closeConnection('default');
+
     }
 }
