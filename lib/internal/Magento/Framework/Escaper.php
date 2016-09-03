@@ -23,12 +23,12 @@ class Escaper
     /**
      * @var string[]
      */
-    private $notAllowedTags = ['script', 'img'];
+    private $notAllowedTags = ['script', 'img', 'embed', 'iframe', 'video', 'source', 'object', 'audio'];
 
     /**
      * @var string[]
      */
-    private $allowedAttributes = ['id', 'class', 'href', 'target', 'title'];
+    private $allowedAttributes = ['id', 'class', 'href', 'target', 'title', 'style'];
 
     /**
      * @var string[]
@@ -36,7 +36,8 @@ class Escaper
     private $escapeAsUrlAttributes = ['href'];
 
     /**
-     * Escape string for HTML context, allowedTags will not be escaped
+     * Escape string for HTML context. allowedTags will not be escaped, except the following: script, img, embed,
+     * iframe, video, source, object, audio
      *
      * @param string|array $data
      * @param array|null $allowedTags
@@ -59,7 +60,7 @@ class Escaper
                     $this->getLogger()->critical(
                         'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
                     );
-                    return '';
+                    $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
                 }
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
@@ -76,7 +77,6 @@ class Escaper
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
-                    return '';
                 }
                 restore_error_handler();
 
@@ -87,7 +87,7 @@ class Escaper
 
                 $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
-                return $matches[1];
+                return !empty($matches) ? $matches[1] : '';
             } else {
                 $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
