@@ -169,6 +169,9 @@ define([
             //selector of product images gallery wrapper
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
 
+            // selector of category product tile wrapper
+            selectorProductTile: '.product-item',
+
             // number of controls to show (false or zero = show all)
             numberToShow: false,
 
@@ -191,7 +194,10 @@ define([
             mediaGalleryInitial: [{}],
 
             //
-            onlyMainImg: false
+            onlyMainImg: false,
+
+            // whether swatches are rendered in product list or on product page
+            inProductList: false
         },
 
         /**
@@ -246,7 +252,9 @@ define([
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
-            this.productForm = this.element.parents(this.options.selectorProduct).find('form:first');
+
+            this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
+            this.inProductList = this.productForm.length > 0;
         },
 
         /**
@@ -280,7 +288,7 @@ define([
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
 
-                if ($widget.productForm) {
+                if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
                 }
@@ -498,13 +506,16 @@ define([
          * @private
          */
         _OnClick: function ($this, $widget) {
-
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
+                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.inProductList) {
                 $input = $widget.productForm.find(
                     '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
                 );
+            }
 
             if ($this.hasClass('disabled')) {
                 return;
@@ -543,9 +554,13 @@ define([
         _OnChange: function ($this, $widget) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 attributeId = $parent.attr('attribute-id'),
+                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.inProductList) {
                 $input = $widget.productForm.find(
                     '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
                 );
+            }
 
             if ($this.val() > 0) {
                 $parent.attr('option-selected', $this.val());
@@ -687,7 +702,6 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
-
         },
 
         /**
