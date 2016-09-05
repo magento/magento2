@@ -93,4 +93,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
 </config>
