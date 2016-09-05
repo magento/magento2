@@ -5,8 +5,6 @@
  */
 namespace Magento\Braintree\Helper;
 
-use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
-
 /**
  * Class Country
  */

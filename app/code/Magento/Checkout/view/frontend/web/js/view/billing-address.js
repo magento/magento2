@@ -17,6 +17,7 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/action/set-billing-address',
+        'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
@@ -32,6 +33,7 @@ define(
         checkoutDataResolver,
         customerData,
         setBillingAddressAction,
+        setShippingInformationAction,
         globalMessageList,
         $t
     ) {
@@ -39,9 +41,13 @@ define(
 
         var lastSelectedBillingAddress = null,
             newAddressOption = {
+                /**
+                 * Get new address label
+                 * @returns {String}
+                 */
                 getAddressInline: function () {
-                return $t('New Address');
-            },
+                    return $t('New Address');
+                },
                 customerAddressId: null
             },
             countryData = customerData.get('directory-data'),
@@ -121,6 +127,7 @@ define(
             useShippingAddress: function () {
                 if (this.isAddressSameAsShipping()) {
                     selectBillingAddress(quote.shippingAddress());
+
                     if (window.checkoutConfig.reloadOnBillingAddress) {
                         setBillingAddressAction(globalMessageList);
                     }
@@ -142,15 +149,18 @@ define(
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
                     checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
+
                     if (window.checkoutConfig.reloadOnBillingAddress) {
                         setBillingAddressAction(globalMessageList);
                     }
+                    this.updateAddresses();
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
+
                     if (this.source.get(this.dataScopePrefix + '.custom_attributes')) {
                         this.source.trigger(this.dataScopePrefix + '.custom_attributes.data.validate');
-                    };
+                    }
 
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get(this.dataScopePrefix),
@@ -159,7 +169,7 @@ define(
                         if (customer.isLoggedIn() && !this.customerHasAddresses) {
                             this.saveInAddressBook(1);
                         }
-                        addressData.save_in_address_book = this.saveInAddressBook() ? 1 : 0;
+                        addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
                         newBillingAddress = createBillingAddress(addressData);
 
                         // New address must be selected as a billing address
@@ -170,6 +180,7 @@ define(
                         if (window.checkoutConfig.reloadOnBillingAddress) {
                             setBillingAddressAction(globalMessageList);
                         }
+                        this.updateAddresses();
                     }
                 }
             },
@@ -222,6 +233,24 @@ define(
              */
             getCountryName: function (countryId) {
                 return countryData()[countryId] != undefined ? countryData()[countryId].name : '';
+            },
+
+            /**
+             * Trigger action to update shipping and billing addresses
+             */
+            updateAddresses: function () {
+                if (!window.checkoutConfig.displayBillingOnPaymentMethod) {
+                    setShippingInformationAction();
+                }
+            },
+
+            /**
+             * Get code
+             * @param {Object} $parent
+             * @returns {String}
+             */
+            getCode: function ($parent) {
+                return $parent.getCode === 'function' ? $parent.getCode() : 'shared';
             }
         });
     }

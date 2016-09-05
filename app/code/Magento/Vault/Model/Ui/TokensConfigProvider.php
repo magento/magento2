@@ -84,8 +84,10 @@ final class TokensConfigProvider implements ConfigProviderInterface
 
             $componentProvider = $providers[$paymentCode];
             $component = $componentProvider->getComponentForToken($token);
-            $vaultPayments[$paymentCode . '_item_' . $i] = [
-                'config' => $component->getConfig(),
+            $config = $component->getConfig();
+            $vaultPaymentCode = !empty($config['code']) ? $config['code'] : $paymentCode;
+            $vaultPayments[$vaultPaymentCode . '_' . $i] = [
+                'config' => $config,
                 'component' => $component->getName()
             ];
         }
