@@ -17,7 +17,6 @@ class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     private $registry;
 
-
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -58,7 +57,7 @@ class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
             AssociatedProducts::class,
             ['localeCurrency' => $localeCurrency]
         );
-        foreach($associatedProducts->getProductMatrix() as $productMatrixId => $productMatrixData) {
+        foreach ($associatedProducts->getProductMatrix() as $productMatrixId => $productMatrixData) {
             $this->assertEquals(
                 $associatedProductsData[$productMatrixId][$productMatrixData['id']],
                 $productMatrixData['price']
