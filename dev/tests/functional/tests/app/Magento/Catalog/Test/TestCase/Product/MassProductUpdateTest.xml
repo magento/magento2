@@ -9,11 +9,24 @@
     <testCase name="Magento\Catalog\Test\TestCase\Product\MassProductUpdateTest" summary="Edit Products Using Mass Actions" ticketId="MAGETWO-21128">
         <variation name="MassProductPriceUpdateTestVariation1">
             <data name="configData" xsi:type="string">product_flat</data>
-            <data name="initialProduct/dataset" xsi:type="string">simple_10_dollar</data>
+            <data name="initialProducts/0" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="initialProducts/1" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="productsCount" xsi:type="string">2</data>
+            <data name="checkbox/toggle_price" xsi:type="string">Yes</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
+        </variation>
+        <variation name="MassProductPriceUpdateTestVariation2">
+            <data name="configData" xsi:type="string">product_flat</data>
+            <data name="initialProducts/1" xsi:type="string">configurableProduct::out_of_stock</data>
+            <data name="initialProducts/0" xsi:type="string">catalogProductSimple::out_of_stock</data>
+            <data name="productsCount" xsi:type="string">3</data>
+            <data name="checkbox/stock_data_checkbox" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data" xsi:type="string">In Stock</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsInStock" />
         </variation>
     </testCase>
 </config>

@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
+namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action\Tab;
 
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Block\Form;
+use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Product attribute massaction edit page.
+ * Product update attributes Attributes tab.
  */
-class Attribute extends Form
+class Attributes extends Tab
 {
     /**
      * Fill the root form.
