@@ -44,15 +44,15 @@ class Container extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
-     * @param array $additionalChecks
      * @param array $data
+     * @param array $additionalChecks
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
-        array $additionalChecks = [],
-        array $data = []
+        array $data = [],
+        array $additionalChecks = []
     ) {
         $this->_paymentHelper = $paymentHelper;
         $this->methodSpecificationFactory = $methodSpecificationFactory;
