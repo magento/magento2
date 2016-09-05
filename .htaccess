@@ -54,6 +54,12 @@
 ## disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
+
+###########################################
+## Allow line endings to be automatically detected to allow imports to work as expected
+
+    php_value auto_detect_line_endings on
+
 </IfModule>
 <IfModule mod_php7.c>
 ############################################
@@ -77,6 +83,12 @@
 ## disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
+
+###########################################
+## Allow line endings to be automatically detected to allow imports to work as expected
+
+    php_value auto_detect_line_endings on
+
 </IfModule>
 <IfModule mod_security.c>
 ###########################################
