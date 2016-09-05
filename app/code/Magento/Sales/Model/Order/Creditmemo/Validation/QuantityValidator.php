@@ -31,17 +31,25 @@ class QuantityValidator implements ValidatorInterface
     private $invoiceRepository;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * InvoiceValidator constructor.
      *
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository
+        InvoiceRepositoryInterface $invoiceRepository,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
         $this->orderRepository = $orderRepository;
         $this->invoiceRepository = $invoiceRepository;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -49,13 +57,13 @@ class QuantityValidator implements ValidatorInterface
      */
     public function validate($entity)
     {
+        /**
+         * @var $entity CreditmemoInterface
+         */
         if ($entity->getOrderId() === null) {
             return [__('Order Id is required for shipment document')];
         }
 
-        if (empty($entity->getItems())) {
-            return [__('You can\'t create a creditmemo without products.')];
-        }
         $messages = [];
 
         $order = $this->orderRepository->get($entity->getOrderId());
@@ -89,13 +97,24 @@ class QuantityValidator implements ValidatorInterface
 
         if ($entity->getGrandTotal() <= 0) {
             $messages[] = __('The credit memo\'s total must be positive.');
-        }
-
-        if ($totalQuantity <= 0) {
+        } elseif ($totalQuantity <= 0 && !$this->canRefundShipping($order)) {
             $messages[] = __('You can\'t create a creditmemo without products.');
         }
 
         return $messages;
+    }
+
+    /**
+     * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
+     * for this we have additional diapason for 0
+     * TotalPaid - contains amount, that were not rounded.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    private function canRefundShipping(OrderInterface $order)
+    {
+        return !abs($this->priceCurrency->round($order->getShippingAmount()) - $order->getShippingRefunded()) < .0001;
     }
 
     /**

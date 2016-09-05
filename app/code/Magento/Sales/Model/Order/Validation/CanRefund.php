@@ -45,35 +45,23 @@ class CanRefund implements ValidatorInterface
                 'A creditmemo can not be created when an order has a status of %1',
                 $entity->getStatus()
             );
-        } elseif (!$this->canRefund($entity)) {
+        } elseif (!$this->isTotalPaidEnoughForRefund($entity)) {
             $messages[] = __('The order does not allow a creditmemo to be created.');
-        }
-
-        /**
-         * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
-         * for this we have additional diapason for 0
-         * TotalPaid - contains amount, that were not rounded.
-         */
-        if (abs($this->priceCurrency->round($entity->getTotalPaid()) - $entity->getTotalRefunded()) < .0001) {
-            $messages[] = __('We can\'t create creditmemo for the order.');
         }
 
         return $messages;
     }
 
     /**
+     * We can have problem with float in php (on some server $a=762.73;$b=762.73; $a-$b!=0)
+     * for this we have additional diapason for 0
+     * TotalPaid - contains amount, that were not rounded.
+     *
      * @param OrderInterface $order
      * @return bool
      */
-    private function canRefund(OrderInterface $order)
+    private function isTotalPaidEnoughForRefund(OrderInterface $order)
     {
-        /** @var \Magento\Sales\Model\Order\Item $item */
-        foreach ($order->getItems() as $item) {
-            if ($item->getQtyToRefund() || $item->isDummy()) {
-                return true;
-            }
-        }
-
-        return false;
+        return !abs($this->priceCurrency->round($order->getTotalPaid()) - $order->getTotalRefunded()) < .0001;
     }
 }

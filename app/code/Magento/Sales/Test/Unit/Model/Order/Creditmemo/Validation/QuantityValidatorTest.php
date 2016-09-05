@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Validation;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
@@ -20,7 +21,6 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderRepositoryMock;
-
     /**
      * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -30,6 +30,11 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      * @var QuantityValidator
      */
     private $validator;
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrencyMock;
 
     /**
      * @inheritDoc
@@ -44,9 +49,14 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->validator = new QuantityValidator(
             $this->orderRepositoryMock,
-            $this->invoiceRepositoryMock
+            $this->invoiceRepositoryMock,
+            $this->priceCurrencyMock
         );
     }
 
@@ -55,12 +65,26 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $creditmemoMock->expects($this->once())->method('getOrderId')
+        $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn(1);
         $creditmemoMock->expects($this->once())->method('getItems')
             ->willReturn([]);
+        $orderMock = $this->getMockBuilder(OrderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $orderMock->expects($this->once())->method('getItems')
+            ->willReturn([]);
+
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($orderMock);
+        $creditmemoMock->expects($this->once())->method('getGrandTotal')
+            ->willReturn(0);
         $this->assertEquals(
-            [__('You can\'t create a creditmemo without products.')],
+            [
+                __('The credit memo\'s total must be positive.')
+            ],
             $this->validator->validate($creditmemoMock)
         );
     }
@@ -97,7 +121,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $creditmemoItemSku = 'sku';
         $creditmemoItemMock->expects($this->once())->method('getSku')
             ->willReturn($creditmemoItemSku);
-        $creditmemoMock->expects($this->exactly(2))->method('getItems')
+        $creditmemoMock->expects($this->exactly(1))->method('getItems')
             ->willReturn([$creditmemoItemMock]);
 
         $orderMock = $this->getMockBuilder(OrderInterface::class)
@@ -110,6 +134,8 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($orderId)
             ->willReturn($orderMock);
+        $creditmemoMock->expects($this->once())->method('getGrandTotal')
+            ->willReturn(12);
 
         $this->assertEquals(
             [
@@ -117,7 +143,6 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                     'The creditmemo contains product SKU "%1" that is not part of the original order.',
                     $creditmemoItemSku
                 ),
-                __('The credit memo\'s total must be positive.'),
                 __('You can\'t create a creditmemo without products.')
             ],
             $this->validator->validate($creditmemoMock)
@@ -152,7 +177,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($sku);
         $creditmemoItemMock->expects($this->atLeastOnce())->method('getQty')
             ->willReturn($qtyToRequest);
-        $creditmemoMock->expects($this->exactly(2))->method('getItems')
+        $creditmemoMock->expects($this->exactly(1))->method('getItems')
             ->willReturn([$creditmemoItemMock]);
 
         $orderMock = $this->getMockBuilder(OrderInterface::class)
@@ -213,8 +238,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                         . ' for product SKU "%1".',
                         $sku
                     ),
-                    __('The credit memo\'s total must be positive.'),
-                    __('You can\'t create a creditmemo without products.')
+                    __('The credit memo\'s total must be positive.')
                 ]
             ],
         ];
