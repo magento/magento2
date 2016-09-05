@@ -86,8 +86,10 @@ class QuantityValidator implements ValidatorInterface
 
         if ($entity->getGrandTotal() <= 0) {
             $messages[] = __('The credit memo\'s total must be positive.');
-        } elseif ($totalQuantity <= 0) {
-            $messages[] = __('You can\'t create a creditmemo without products.');
+
+            if ($totalQuantity <= 0) {
+                $messages[] = __('You can\'t create a creditmemo without products.');
+            }
         }
 
         return $messages;
