@@ -10,6 +10,14 @@ define([
     return Abstract.extend({
         defaults: {
             elementTmpl: 'Magento_Catalog/form/element/price-input'
-        }
+        },
+
+        /**
+         * Callback that fires when 'input' event is performed
+         *
+         * @param {Object} data
+         * @param {Object} event
+         */
+        onInput: function (data, event) { }
     });
 });
