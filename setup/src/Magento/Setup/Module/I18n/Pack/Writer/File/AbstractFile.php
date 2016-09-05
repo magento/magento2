@@ -10,6 +10,7 @@ use Magento\Setup\Module\I18n\Dictionary;
 use Magento\Setup\Module\I18n\Factory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\WriterInterface;
+use Magento\Setup\Module\I18n\UnregisteredComponentException;
 
 /**
  * Abstract pack writer
@@ -120,6 +121,8 @@ abstract class AbstractFile implements WriterInterface
                     $path = $this->_context->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
                 } catch (\InvalidArgumentException $e) {
                     throw new \InvalidArgumentException($e->getMessage() . ' Row #' . ($key + 1) . '.');
+                } catch (UnregisteredComponentException $e) {
+                    continue;
                 }
                 $filename = $path . $this->_locale . '.' . $this->_getFileExtension();
                 $files[$filename][$phrase->getPhrase()] = $phrase;

@@ -41,7 +41,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->will($this->returnValueMap($pathValues));
+            ->willReturnMap($pathValues);
         $this->context = new Context($this->componentRegistrar);
         $this->assertEquals($context, $this->context->getContextByPath($path));
     }
@@ -108,10 +108,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             $paths[$module[1]] = $module[2];
         }
         $this->componentRegistrar->expects($this->any())
-            ->method('getPaths')
-            ->with(ComponentRegistrar::MODULE)
-            ->willReturn($paths);
-        $this->componentRegistrar->expects($this->any())->method('getPath')->will($this->returnValueMap($registrar));
+            ->method('getPath')
+            ->willReturnMap($registrar);
         $this->context = new Context($this->componentRegistrar);
         $this->assertEquals($path, $this->context->buildPathToLocaleDirectoryByContext($context[0], $context[1]));
     }
@@ -127,7 +125,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 [Context::CONTEXT_TYPE_MODULE, 'Magento_Module'],
                 [[ComponentRegistrar::MODULE, 'Magento_Module', BP . '/app/code/Magento/Module']]
             ],
-            ['/i18n/', [Context::CONTEXT_TYPE_THEME, 'theme/test.phtml'], []],
+            [
+                BP . '/app/design/frontend/Magento/luma/i18n/',
+                [Context::CONTEXT_TYPE_THEME, 'rontend/Magento/luma'],
+                [[ComponentRegistrar::THEME, 'rontend/Magento/luma', BP . '/app/design/frontend/Magento/luma']]
+            ],
             [BP . '/lib/web/i18n/', [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], []],
         ];
     }
@@ -138,11 +140,23 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPathToLocaleDirectoryByContextWithInvalidType()
     {
-        $this->componentRegistrar->expects($this->any())
-            ->method('getPaths')
-            ->with(ComponentRegistrar::MODULE)
-            ->willReturn(['module' => '/path/to/module']);
+        $this->componentRegistrar->expects($this->never())
+            ->method('getPath');
         $this->context = new Context($this->componentRegistrar);
         $this->context->buildPathToLocaleDirectoryByContext('invalid_type', 'Magento_Module');
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Module\I18n\UnregisteredComponentException
+     */
+    public function testBuildPathToLocaleDirectoryByContextWithUnregisteredComponent()
+    {
+        $moduleName = 'Magento_Module';
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::MODULE, $moduleName)
+            ->willReturn(null);
+        $this->context = new Context($this->componentRegistrar);
+        $this->context->buildPathToLocaleDirectoryByContext(ComponentRegistrar::MODULE, $moduleName);
     }
 }
