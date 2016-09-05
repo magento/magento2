@@ -34,6 +34,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
+     * @param array $additionalChecks
      * @param array $data
      */
     public function __construct(
@@ -43,12 +44,13 @@ class Billing extends \Magento\Payment\Block\Form\Container
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
+        array $additionalChecks = [],
         array $data = []
     ) {
         $this->_multishipping = $multishipping;
         $this->_checkoutSession = $checkoutSession;
         $this->paymentSpecification = $paymentSpecification;
-        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $additionalChecks, $data);
         $this->_isScopePrivate = true;
     }
 

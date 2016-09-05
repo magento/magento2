@@ -7,7 +7,7 @@ namespace Magento\Vault\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Payment\Helper\Data;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\VaultPaymentInterface;
@@ -39,9 +39,14 @@ final class TokensConfigProvider implements ConfigProviderInterface
     private $customerTokenManagement;
 
     /**
-     * @var Data
+     * @var \Magento\Payment\Api\PaymentMethodListInterface
      */
-    private $paymentDataHelper;
+    private $paymentMethodList;
+
+    /**
+     * @var \Magento\Payment\Model\Method\InstanceFactory
+     */
+    private $paymentMethodInstanceFactory;
 
     /**
      * Constructor
@@ -98,21 +103,16 @@ final class TokensConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get list of available vault ui token providers
+     * Get list of available vault ui token providers.
+     *
      * @return TokenUiComponentProviderInterface[]
      */
     private function getComponentProviders()
     {
         $providers = [];
-        $storeId = $this->storeManager->getStore()->getId();
-        $paymentMethods = $this->getPaymentDataHelper()->getStoreMethods($storeId);
+        $vaultPaymentMethods = $this->getVaultPaymentMethodList();
 
-        foreach ($paymentMethods as $method) {
-            /** VaultPaymentInterface $method */
-            if (!$method instanceof VaultPaymentInterface || !$method->isActive($storeId)) {
-                continue;
-            }
-            
+        foreach ($vaultPaymentMethods as $method) {
             $providerCode = $method->getProviderCode();
             $componentProvider = $this->getComponentProvider($providerCode);
             if ($componentProvider === null) {
@@ -139,15 +139,60 @@ final class TokensConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get payment data helper instance
-     * @return Data
+     * Get list of active Vault payment methods.
+     *
+     * @return \Magento\Payment\Model\MethodInterface[]
+     */
+    private function getVaultPaymentMethodList()
+    {
+        $storeId = $this->storeManager->getStore()->getId();
+
+        $paymentMethods = array_map(
+            function (PaymentMethodInterface $paymentMethod) {
+                return $this->getPaymentMethodInstanceFactory()->create($paymentMethod);
+            },
+            $this->getPaymentMethodList()->getActiveList($storeId)
+        );
+
+        $availableMethods = array_filter(
+            $paymentMethods,
+            function (\Magento\Payment\Model\MethodInterface $methodInstance) {
+                return $methodInstance instanceof VaultPaymentInterface;
+            }
+        );
+
+        return $availableMethods;
+    }
+
+    /**
+     * Get payment method list.
+     *
+     * @return \Magento\Payment\Api\PaymentMethodListInterface
      * @deprecated
      */
-    private function getPaymentDataHelper()
+    private function getPaymentMethodList()
     {
-        if ($this->paymentDataHelper === null) {
-            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        if ($this->paymentMethodList === null) {
+            $this->paymentMethodList = ObjectManager::getInstance()->get(
+                \Magento\Payment\Api\PaymentMethodListInterface::class
+            );
         }
-        return $this->paymentDataHelper;
+        return $this->paymentMethodList;
+    }
+
+    /**
+     * Get payment method instance factory.
+     *
+     * @return \Magento\Payment\Model\Method\InstanceFactory
+     * @deprecated
+     */
+    private function getPaymentMethodInstanceFactory()
+    {
+        if ($this->paymentMethodInstanceFactory === null) {
+            $this->paymentMethodInstanceFactory = ObjectManager::getInstance()->get(
+                \Magento\Payment\Model\Method\InstanceFactory::class
+            );
+        }
+        return $this->paymentMethodInstanceFactory;
     }
 }

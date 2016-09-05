@@ -24,6 +24,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
+     * @param array $additionalChecks
      * @param array $data
      */
     public function __construct(
@@ -31,10 +32,11 @@ class Form extends \Magento\Payment\Block\Form\Container
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
+        array $additionalChecks = [],
         array $data = []
     ) {
         $this->_sessionQuote = $sessionQuote;
-        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $additionalChecks, $data);
     }
 
     /**

@@ -8,7 +8,7 @@ namespace Magento\Vault\Model\Ui;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Payment\Helper\Data;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
@@ -32,9 +32,14 @@ class VaultConfigProvider implements ConfigProviderInterface
     private $session;
 
     /**
-     * @var Data
+     * @var \Magento\Payment\Api\PaymentMethodListInterface
      */
-    private $paymentDataHelper;
+    private $paymentMethodList;
+
+    /**
+     * @var \Magento\Payment\Model\Method\InstanceFactory
+     */
+    private $paymentMethodInstanceFactory;
 
     /**
      * VaultConfigProvider constructor.
@@ -73,36 +78,60 @@ class VaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get list of active Vault payment methods
-     * @return array
+     * Get list of active Vault payment methods.
+     *
+     * @return \Magento\Payment\Model\MethodInterface[]
      */
     private function getVaultPaymentMethodList()
     {
-        $availableMethods = [];
         $storeId = $this->storeManager->getStore()->getId();
 
-        $paymentMethods = $this->getPaymentDataHelper()->getStoreMethods($storeId);
-        foreach ($paymentMethods as $method) {
-            /** VaultPaymentInterface $method */
-            if (!$method instanceof VaultPaymentInterface) {
-                continue;
+        $paymentMethods = array_map(
+            function (PaymentMethodInterface $paymentMethod) {
+                return $this->getPaymentMethodInstanceFactory()->create($paymentMethod);
+            },
+            $this->getPaymentMethodList()->getActiveList($storeId)
+        );
+
+        $availableMethods = array_filter(
+            $paymentMethods,
+            function (\Magento\Payment\Model\MethodInterface $methodInstance) {
+                return $methodInstance instanceof VaultPaymentInterface;
             }
-            $availableMethods[] = $method;
-        }
+        );
 
         return $availableMethods;
     }
 
     /**
-     * Get payment data helper instance
-     * @return Data
+     * Get payment method list.
+     *
+     * @return \Magento\Payment\Api\PaymentMethodListInterface
      * @deprecated
      */
-    private function getPaymentDataHelper()
+    private function getPaymentMethodList()
     {
-        if ($this->paymentDataHelper === null) {
-            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        if ($this->paymentMethodList === null) {
+            $this->paymentMethodList = ObjectManager::getInstance()->get(
+                \Magento\Payment\Api\PaymentMethodListInterface::class
+            );
         }
-        return $this->paymentDataHelper;
+        return $this->paymentMethodList;
+    }
+
+    /**
+     * Get payment method instance factory.
+     *
+     * @return \Magento\Payment\Model\Method\InstanceFactory
+     * @deprecated
+     */
+    private function getPaymentMethodInstanceFactory()
+    {
+        if ($this->paymentMethodInstanceFactory === null) {
+            $this->paymentMethodInstanceFactory = ObjectManager::getInstance()->get(
+                \Magento\Payment\Model\Method\InstanceFactory::class
+            );
+        }
+        return $this->paymentMethodInstanceFactory;
     }
 }
