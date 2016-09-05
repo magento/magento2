@@ -14,15 +14,12 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var AuthenticationPopup */
+    /** @var \Magento\Customer\Block\Account\AuthenticationPopup */
     private $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     private $contextMock;
 
     /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
