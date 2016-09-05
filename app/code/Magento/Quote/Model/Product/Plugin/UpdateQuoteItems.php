@@ -24,14 +24,14 @@ class UpdateQuoteItems
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product $subject
      * @param \Closure $proceed
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param \Magento\Framework\Model\AbstractModel $product
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
         \Closure $proceed,
-        \Magento\Catalog\Api\Data\ProductInterface $product
+        \Magento\Framework\Model\AbstractModel $product
     ) {
         $result = $proceed($product);
         $originalPrice = $product->getOrigData('price');

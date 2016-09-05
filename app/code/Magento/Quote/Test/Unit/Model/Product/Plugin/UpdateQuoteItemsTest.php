@@ -34,9 +34,9 @@ class UpdateQuoteItemsTest extends \PHPUnit_Framework_TestCase
     public function testAroundUpdate($originalPrice, $newPrice, $callMethod)
     {
         $productResourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $productMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrigData'])
+            ->setMethods(['getOrigData', 'getPrice', 'getId'])
             ->getMockForAbstractClass();
         $closure = function () use ($productResourceMock) {
             return $productResourceMock;
