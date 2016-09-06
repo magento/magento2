@@ -119,7 +119,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->store);
         $this->attributeCollection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
