@@ -415,6 +415,7 @@ class AdvancedPricing extends AbstractModifier
                             'enabled' => false,
                         ],
                         'disabled' => false,
+                        'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
