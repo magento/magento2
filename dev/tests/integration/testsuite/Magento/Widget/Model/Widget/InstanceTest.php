@@ -130,9 +130,9 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<block class="' . $model->getType() . '"', $result);
         $this->assertEquals(count($params), substr_count($result, '<action method="setData">'));
         $this->assertContains('<argument name="name" xsi:type="string">display_mode</argument>', $result);
-        $this->assertContains('<argument name="value" xsi:type="string">fixed</argument>', $result);
+        $this->assertContains('<argument name="value" xsi:type="string"><![CDATA[fixed]]></argument>', $result);
         $this->assertContains('<argument name="name" xsi:type="string">types</argument>', $result);
-        $this->assertContains('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
+        $this->assertContains('<argument name="value" xsi:type="string"><![CDATA[type_1,type_2]]></argument>', $result);
         $this->assertContains('<argument name="name" xsi:type="string">conditions_encoded</argument>', $result);
         $this->assertContains('s:50:`Magento|CatalogWidget|Model|Rule|Condition|Combine`', $result);
         $this->assertContains('s:50:`Magento|CatalogWidget|Model|Rule|Condition|Product`', $result);

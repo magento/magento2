@@ -586,7 +586,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     $name .
                     '</argument>' .
                     '<argument name="value" xsi:type="string">' .
-                    $this->_escaper->escapeHtml(
+                    $this->_escaper->escapeXml(
                         $value
                     ) . '</argument>' . '</action>';
             }

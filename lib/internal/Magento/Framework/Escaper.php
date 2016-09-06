@@ -45,6 +45,35 @@ class Escaper
     }
 
     /**
+     * Escape XML entities
+     *
+     * @param  string|array $data
+     * @param  array $allowedTags
+     * @return string|array
+     */
+    public function escapeXml($data, $allowedTags = null)
+    {
+        if (is_array($data)) {
+            $result = [];
+            foreach ($data as $item) {
+                $result[] = $this->escapeXml($item);
+            }
+        } elseif (strlen($data)) {
+            if (is_array($allowedTags) and !empty($allowedTags)) {
+                $allowed = implode('|', $allowedTags);
+                $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
+                $result = '<![CDATA[' . htmlspecialchars($result, ENT_DISALLOWED, 'UTF-8', false) . ']]>';
+                $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
+            } else {
+                $result = '<![CDATA[' . htmlspecialchars($data, ENT_DISALLOWED, 'UTF-8', false) . ']]>';
+            }
+        } else {
+            $result = $data;
+        }
+        return $result;
+    }
+
+    /**
      * Escape a string for the HTML attribute context
      *
      * @param string $string
