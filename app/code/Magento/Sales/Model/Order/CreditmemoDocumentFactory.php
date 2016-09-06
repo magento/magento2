@@ -11,10 +11,10 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
-use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Class CreditmemoDocumentFactory
@@ -38,20 +38,28 @@ class CreditmemoDocumentFactory
     private $hydratorPool;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
      * CreditmemoDocumentFactory constructor.
      *
      * @param CreditmemoFactory $creditmemoFactory
      * @param CreditmemoCommentInterfaceFactory $commentFactory
      * @param HydratorPool $hydratorPool
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         CreditmemoFactory $creditmemoFactory,
         CreditmemoCommentInterfaceFactory $commentFactory,
-        HydratorPool $hydratorPool
+        HydratorPool $hydratorPool,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->creditmemoFactory = $creditmemoFactory;
         $this->commentFactory = $commentFactory;
         $this->hydratorPool = $hydratorPool;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -89,8 +97,6 @@ class CreditmemoDocumentFactory
         $commentData = $this->hydratorPool->getHydrator(CreditmemoCommentCreationInterface::class)
             ->extract($comment);
         $comment = $this->commentFactory->create(['data' => $commentData]);
-//        $comment = $this->hydratorPool->getHydrator(CreditmemoCommentInterface::class)
-//            ->hydrate($comment, $commentData);
         $comment->setParentId($creditmemo->getEntityId())
             ->setStoreId($creditmemo->getStoreId())
             ->setCreditmemo($creditmemo)
@@ -135,14 +141,14 @@ class CreditmemoDocumentFactory
      */
     public function createFromInvoice(
         InvoiceInterface $invoice,
-        OrderInterface $order,
         array $items = [],
         CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
         CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
-        $invoice->setOrder($order);
+        /** @var $invoice \Magento\Sales\Model\Order\Invoice */
+        $invoice->setOrder($this->orderRepository->get($invoice->getOrderId()));
         $creditmemo = $this->creditmemoFactory->createByInvoice($invoice, $data);
         if ($comment) {
             $creditmemo = $this->attachComment($creditmemo, $comment, $appendComment);
