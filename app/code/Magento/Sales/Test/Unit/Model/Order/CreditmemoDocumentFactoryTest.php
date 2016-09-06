@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -138,9 +137,11 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->commentMock = $this->getMockBuilder(CreditmemoCommentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge(
-                get_class_methods(CreditmemoCommentInterface::class),
-                ['setStoreId', 'setCreditmemo'])
+            ->setMethods(
+                array_merge(
+                    get_class_methods(CreditmemoCommentInterface::class),
+                    ['setStoreId', 'setCreditmemo']
+                )
             )
             ->getMock();
         $this->factory = $this->objectManager->getObject(

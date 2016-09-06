@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\OrderInterface;
@@ -21,7 +20,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
  */
 class CreditmemoDocumentFactory
 {
-
     /**
      * @var \Magento\Sales\Model\Order\CreditmemoFactory
      */
@@ -92,8 +90,11 @@ class CreditmemoDocumentFactory
      * @param bool $appendComment
      * @return CreditmemoInterface
      */
-    private function attachComment(CreditmemoInterface $creditmemo, CreditmemoCommentCreationInterface $comment, $appendComment = false)
-    {
+    private function attachComment(
+        CreditmemoInterface $creditmemo,
+        CreditmemoCommentCreationInterface $comment,
+        $appendComment = false
+    ) {
         $commentData = $this->hydratorPool->getHydrator(CreditmemoCommentCreationInterface::class)
             ->extract($comment);
         $comment = $this->commentFactory->create(['data' => $commentData]);

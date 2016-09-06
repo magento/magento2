@@ -157,7 +157,7 @@ class RefundOrder implements RefundOrderInterface
         $validationMessages = array_merge($orderValidationResult, $creditmemoValidationResult);
         if (!empty($validationMessages )) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages ))
+                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages))
             );
         }
         $connection->beginTransaction();

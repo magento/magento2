@@ -21,6 +21,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderRepositoryMock;
+
     /**
      * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -158,7 +159,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      * @param array $expected
      * @dataProvider dataProviderForValidateQty
      */
-    public function testValidate($orderId, $orderItemId, $qtyToRequest, $qtyToRefund,  $sku, $total, array $expected)
+    public function testValidate($orderId, $orderItemId, $qtyToRequest, $qtyToRefund, $sku, $total, array $expected)
     {
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
