@@ -1343,7 +1343,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function getOldSkuFieldsForSelect()
     {
-        return ['type_id', 'attribute_set_id', 'sku'];
+        return ['type_id', 'attribute_set_id'];
     }
 
     /**
@@ -1360,7 +1360,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $oldSkus[$sku] = [
                 'type_id' => $typeId,
                 'attr_set_id' => $info['attribute_set_id'],
-                'entity_id' => $info['entity_id'],
+                $this->getProductIdentifierField() => $info[$this->getProductIdentifierField()],
                 'supported_type' => isset($this->_productTypeModels[$typeId]),
                 $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
             ];
