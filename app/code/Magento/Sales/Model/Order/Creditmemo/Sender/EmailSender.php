@@ -42,11 +42,6 @@ class EmailSender extends Sender implements SenderInterface
     private $globalConfig;
 
     /**
-     * @var Renderer
-     */
-    protected $addressRenderer;
-
-    /**
      * Application Event Dispatcher
      *
      * @var ManagerInterface
@@ -79,7 +74,6 @@ class EmailSender extends Sender implements SenderInterface
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
         $this->globalConfig = $globalConfig;
-        $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
     }
 
