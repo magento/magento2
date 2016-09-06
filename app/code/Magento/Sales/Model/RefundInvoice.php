@@ -10,7 +10,7 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundInvoiceInterface;
-use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
@@ -84,7 +84,7 @@ class RefundInvoice implements RefundInvoiceInterface
     private $notifier;
 
     /**
-     * @var Config
+     * @var OrderConfig
      */
     private $config;
 
@@ -107,7 +107,7 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param PaymentAdapterInterface $paymentAdapter
      * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
      * @param NotifierInterface $notifier
-     * @param Config $config
+     * @param OrderConfig $config
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -122,7 +122,7 @@ class RefundInvoice implements RefundInvoiceInterface
         PaymentAdapterInterface $paymentAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
         NotifierInterface $notifier,
-        Config $config,
+        OrderConfig $config,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
