@@ -80,7 +80,7 @@ class VaultConfigProvider implements ConfigProviderInterface
     /**
      * Get list of active Vault payment methods.
      *
-     * @return \Magento\Payment\Model\MethodInterface[]
+     * @return VaultPaymentInterface[]
      */
     private function getVaultPaymentMethodList()
     {
