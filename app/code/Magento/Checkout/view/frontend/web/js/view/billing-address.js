@@ -7,6 +7,7 @@
 define(
     [
         'ko',
+        'underscore',
         'Magento_Ui/js/form/form',
         'Magento_Customer/js/model/customer',
         'Magento_Customer/js/model/address-list',
@@ -17,12 +18,12 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/action/set-billing-address',
-        'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
     function (
         ko,
+        _,
         Component,
         customer,
         addressList,
@@ -33,7 +34,6 @@ define(
         checkoutDataResolver,
         customerData,
         setBillingAddressAction,
-        setShippingInformationAction,
         globalMessageList,
         $t
     ) {
@@ -149,11 +149,6 @@ define(
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
                     checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
-
-                    if (window.checkoutConfig.reloadOnBillingAddress) {
-                        setBillingAddressAction(globalMessageList);
-                    }
-                    this.updateAddresses();
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
@@ -176,13 +171,9 @@ define(
                         selectBillingAddress(newBillingAddress);
                         checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
                         checkoutData.setNewCustomerBillingAddress(addressData);
-
-                        if (window.checkoutConfig.reloadOnBillingAddress) {
-                            setBillingAddressAction(globalMessageList);
-                        }
-                        this.updateAddresses();
                     }
                 }
+                this.updateAddresses();
             },
 
             /**
@@ -239,18 +230,20 @@ define(
              * Trigger action to update shipping and billing addresses
              */
             updateAddresses: function () {
-                if (!window.checkoutConfig.displayBillingOnPaymentMethod) {
-                    setShippingInformationAction();
+                if (window.checkoutConfig.reloadOnBillingAddress ||
+                    !window.checkoutConfig.displayBillingOnPaymentMethod
+                ) {
+                    setBillingAddressAction(globalMessageList);
                 }
             },
 
             /**
              * Get code
-             * @param {Object} $parent
+             * @param {Object} parent
              * @returns {String}
              */
-            getCode: function ($parent) {
-                return $parent.getCode === 'function' ? $parent.getCode() : 'shared';
+            getCode: function (parent) {
+                return _.isFunction(parent.getCode) ? parent.getCode() : 'shared';
             }
         });
     }

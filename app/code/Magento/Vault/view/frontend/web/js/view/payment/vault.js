@@ -31,8 +31,8 @@ define(
                      * @return {Boolean}
                      */
                     typeComparatorCallback: function (typeA, typeB) {
-                        // vaults items have the same name as vault payment without index
-                        return typeA.substring(0, typeA.length - 2) === typeB;
+                        // vault token items have the same name as vault payment without index
+                        return typeA.substring(0, typeA.lastIndexOf('_')) === typeB;
                     }
                 }
             );
