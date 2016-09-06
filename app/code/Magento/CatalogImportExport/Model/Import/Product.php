@@ -1303,7 +1303,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $select = $this->_connection->select()->from(
                 $entityTable,
-                $this->getNewSkuFieldsForSelect()
+                array_merge($this->getNewSkuFieldsForSelect(), $this->getOldSkuFieldsForSelect())
             )->where(
                 'sku IN (?)',
                 array_keys($entityRowsIn)
@@ -1316,8 +1316,42 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->skuProcessor->setNewSkuData($sku, $key, $value);
                 }
             }
+
+            $this->updateOldSku($newProducts);
         }
         return $this;
+    }
+
+    /**
+     * Return additional data, needed to select.
+     * @return array
+     */
+    private function getOldSkuFieldsForSelect()
+    {
+        return ['type_id', 'attribute_set_id'];
+    }
+
+    /**
+     * Adds newly created products to _oldSku
+     * @param array $newProducts
+     * @return void
+     */
+    private function updateOldSku(array $newProducts)
+    {
+        $oldSkus = [];
+        foreach ($newProducts as $info) {
+            $typeId = $info['type_id'];
+            $sku = $info['sku'];
+            $oldSkus[$sku] = [
+                'type_id' => $typeId,
+                'attr_set_id' => $info['attribute_set_id'],
+                $this->getProductIdentifierField() => $info[$this->getProductIdentifierField()],
+                'supported_type' => isset($this->_productTypeModels[$typeId]),
+                $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
+            ];
+        }
+
+        $this->_oldSku = array_replace($this->_oldSku, $oldSkus);
     }
 
     /**
