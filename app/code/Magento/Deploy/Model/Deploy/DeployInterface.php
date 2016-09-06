@@ -15,10 +15,4 @@ interface DeployInterface
      * @return int
      */
     public function deploy($area, $themePath, $locale);
-
-    /**
-     * @param array $options
-     * @return void
-     */
-    public function setOptions(array $options);
 }

@@ -16,11 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DeployStrategyProvider
 {
     /**
-     * @var DeployInterface[]
-     */
-    private $deployStrategies;
-
-    /**
      * @var RulePool
      */
     private $rulePool;
@@ -86,7 +81,7 @@ class DeployStrategyProvider
     {
         if (count($locales) == 1) {
             $locale = current($locales);
-            return [$locale => $this->getDeployStrategy($area, DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD)];
+            return [$locale => $this->getDeployStrategy(DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD)];
         }
 
         $baseLocale = null;
@@ -114,7 +109,7 @@ class DeployStrategyProvider
         );
 
         return array_map(function ($strategyType) use ($area, $baseLocale) {
-            return $this->getDeployStrategy($area, $strategyType, $baseLocale);
+            return $this->getDeployStrategy($strategyType, $baseLocale);
         }, $deployStrategies);
     }
 
@@ -178,29 +173,20 @@ class DeployStrategyProvider
     }
 
     /**
-     * @param string $area
      * @param string $type
      * @param null|string $baseLocale
      * @return DeployInterface
      */
-    private function getDeployStrategy($area, $type, $baseLocale = null)
+    private function getDeployStrategy($type, $baseLocale = null)
     {
-        $key = $area . '-' . $type;
-        if (!isset($this->deployStrategies[$key])) {
-            $this->deployStrategies[$key] = $this->deployStrategyFactory->create(
-                $area,
-                $type,
-                ['output' => $this->output]
-            );
-        }
-
-        $deployStrategy = $this->deployStrategies[$key];
         $options = $this->options;
         if ($baseLocale) {
             $options[DeployManager::DEPLOY_BASE_LOCALE] = $baseLocale;
         }
-        $deployStrategy->setOptions($options);
 
-        return $deployStrategy;
+        return $this->deployStrategyFactory->create(
+            $type,
+            ['output' => $this->output, 'options' => $options]
+        );
     }
 }

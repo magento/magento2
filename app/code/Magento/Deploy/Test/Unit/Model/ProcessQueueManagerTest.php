@@ -5,7 +5,6 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
-use Magento\Deploy\Model\Process\ResourceConnectionProvider;
 use Magento\Deploy\Model\ProcessManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -25,17 +24,17 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
      */
-    private $resourceConnectionProviderMock;
+    private $resourceConnectionMock;
 
     protected function setUp()
     {
         $this->processManagerMock = $this->getMock(ProcessManager::class, [], [], '', false);
-        $this->resourceConnectionProviderMock = $this->getMock(ResourceConnectionProvider::class, [], [], '', false);
+        $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
         $this->model = (new ObjectManager($this))->getObject(
             \Magento\Deploy\Model\ProcessQueueManager::class,
             [
                 'processManager' => $this->processManagerMock,
-                'resourceConnectionProvider' => $this->resourceConnectionProviderMock,
+                'resourceConnection' => $this->resourceConnectionMock,
             ]
         );
     }
@@ -62,10 +61,7 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
         $processMock->expects($this->once())->method('getStatus')->willReturn(0);
         $this->processManagerMock->expects($this->once())->method('delete')->with($processMock);
 
-        $resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-        $resourceConnectionMock->expects(self::once())->method('closeConnection');
-        $this->resourceConnectionProviderMock->expects($this->once())->method('get')
-            ->willReturn($resourceConnectionMock);
+        $this->resourceConnectionMock->expects(self::once())->method('closeConnection');
 
         $this->assertEquals(0, $this->model->process());
     }

@@ -21,11 +21,6 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
     private $outputMock;
 
     /**
-     * @var LocaleQuickDeploy
-     */
-    private $unit;
-
-    /**
      * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $staticDirectoryMock;
@@ -39,14 +34,6 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
         $this->staticDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->setMethods(['createSymlink', 'getAbsolutePath', 'getRelativePath', 'copyFile', 'readRecursively'])
             ->getMockForAbstractClass();
-
-        $this->unit = (new ObjectManager($this))->getObject(
-            LocaleQuickDeploy::class,
-            [
-                'output' => $this->outputMock,
-                'staticDirectory' => $this->staticDirectoryMock
-            ]
-        );
     }
 
     /**
@@ -55,7 +42,7 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeployWithoutBaseLocale()
     {
-        $this->unit->deploy('adminhtml', 'Magento/backend', 'en_US');
+        $this->getModel()->deploy('adminhtml', 'Magento/backend', 'en_US');
     }
 
     public function testDeployWithSymlinkStrategy()
@@ -72,11 +59,11 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
                 ['_requirejs/adminhtml/Magento/backend/en_US', '_requirejs/adminhtml/Magento/backend/uk_UA']
             );
 
-        $this->unit->setOptions([
+        $model =$this->getModel([
             DeployManager::DEPLOY_BASE_LOCALE => $baseLocal,
             Options::SYMLINK_LOCALE => 1,
         ]);
-        $this->unit->deploy($area, $themePath, $locale);
+        $model->deploy($area, $themePath, $locale);
     }
 
     public function testDeployWithCopyStrategy()
@@ -102,10 +89,26 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
             [$baseLocal . 'file2', $locale . 'file2', null]
         );
 
-        $this->unit->setOptions([
+        $model =$this->getModel([
             DeployManager::DEPLOY_BASE_LOCALE => $baseLocal,
             Options::SYMLINK_LOCALE => 0,
         ]);
-        $this->unit->deploy($area, $themePath, $locale);
+        $model->deploy($area, $themePath, $locale);
+    }
+
+    /**
+     * @param array $options
+     * @return LocaleQuickDeploy
+     */
+    private function getModel($options = [])
+    {
+        return (new ObjectManager($this))->getObject(
+            LocaleQuickDeploy::class,
+            [
+                'output' => $this->outputMock,
+                'staticDirectory' => $this->staticDirectoryMock,
+                'options' => $options
+            ]
+        );
     }
 }

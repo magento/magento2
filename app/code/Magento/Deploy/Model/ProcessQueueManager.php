@@ -6,7 +6,7 @@
 
 namespace Magento\Deploy\Model;
 
-use Magento\Deploy\Model\Process\ResourceConnectionProvider;
+use Magento\Framework\App\ResourceConnection;
 
 class ProcessQueueManager
 {
@@ -31,18 +31,18 @@ class ProcessQueueManager
     private $processManager;
 
     /**
-     * @var ResourceConnectionProvider
+     * @var ResourceConnection
      */
-    private $resourceConnectionProvider;
+    private $resourceConnection;
 
     /**
      * @param ProcessManager $processManager
-     * @param ResourceConnectionProvider $resourceConnectionProvider
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(ProcessManager $processManager, ResourceConnectionProvider $resourceConnectionProvider)
+    public function __construct(ProcessManager $processManager, ResourceConnection $resourceConnection)
     {
         $this->processManager = $processManager;
-        $this->resourceConnectionProvider = $resourceConnectionProvider;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -98,7 +98,7 @@ class ProcessQueueManager
             }
             usleep(5000);
         }
-        $this->resourceConnectionProvider->get()->closeConnection();
+        $this->resourceConnection->closeConnection();
 
         return $returnStatus;
     }

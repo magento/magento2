@@ -37,6 +37,11 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $processQueueManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     */
+    private $stateMock;
+
     protected function setUp()
     {
         $this->deployStrategyProviderFactoryMock = $this->getMock(
@@ -67,6 +72,9 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->stateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->outputMock = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
     }
 
@@ -129,8 +137,9 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
             ['output' => $this->outputMock, 'options' => $options]
         )->willReturn($strategyProviderMock);
         $strategyProviderMock->expects($this->once())->method('getDeployStrategies')->with($area, $themePath, [$locale])
-            ->willReturn([$deployStrategyMock]);
-        $deployStrategyMock->expects($this->once())->method('deploy')
+            ->willReturn([$locale => $deployStrategyMock]);
+        $this->stateMock->expects(self::once())->method('emulateAreaCode')
+            ->with($area, [$deployStrategyMock, 'deploy'], [$area, $themePath, $locale])
             ->willReturn(\Magento\Framework\Console\Cli::RETURN_SUCCESS);
 
         $version = (new \DateTime())->getTimestamp();
@@ -152,6 +161,7 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
             $this->deployStrategyProviderFactoryMock,
             $this->processQueueManager,
             $this->minifierTemplateMock,
+            $this->stateMock,
             $options
         );
     }

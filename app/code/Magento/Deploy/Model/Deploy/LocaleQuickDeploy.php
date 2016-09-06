@@ -41,11 +41,13 @@ class LocaleQuickDeploy implements DeployInterface
     /**
      * @param Filesystem $filesystem
      * @param OutputInterface $output
+     * @param array $options
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, OutputInterface $output)
+    public function __construct(\Magento\Framework\Filesystem $filesystem, OutputInterface $output, $options = [])
     {
         $this->filesystem = $filesystem;
         $this->output = $output;
+        $this->options = $options;
     }
 
     /**
@@ -108,14 +110,6 @@ class LocaleQuickDeploy implements DeployInterface
         }
 
         return Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
     }
 
     /**

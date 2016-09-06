@@ -5,28 +5,32 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
 
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Translate\Js\Config;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\RepositoryFactory;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LocaleDeployTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\Deploy\LocaleDeploy
-     */
-    private $model;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\Js\Config
+     * @var \PHPUnit_Framework_MockObject_MockObject|Config
      */
     private $jsTranslationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Minification
+     * @var \PHPUnit_Framework_MockObject_MockObject|Minification
      */
     private $minificationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\RepositoryFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|RepositoryFactory
      */
     private $assetRepoFactoryMock;
 
@@ -46,7 +50,7 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
     private $bundleManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Utility\Files
+     * @var \PHPUnit_Framework_MockObject_MockObject|Files
      */
     private $filesUtilMock;
 
@@ -60,17 +64,42 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
      */
     private $localeResolverMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|OutputInterface
+     */
+    private $outputMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     */
+    private $loggerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $assetRepoMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $assetPublisherMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themeProviderMock;
+
     protected function setUp()
     {
-        $outputMock = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
-        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
-        $this->filesUtilMock = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
-        $assetRepoMock = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->minificationMock = $this->getMock(\Magento\Framework\View\Asset\Minification::class, [], [], '', false);
-        $this->jsTranslationMock = $this->getMock(\Magento\Framework\Translate\Js\Config::class, [], [], '', false);
-        $assetPublisherMock = $this->getMock(\Magento\Framework\App\View\Asset\Publisher::class, [], [], '', false);
+        $this->outputMock = $this->getMock(OutputInterface::class, [], [], '', false);
+        $this->loggerMock = $this->getMock(LoggerInterface::class, [], [], '', false);
+        $this->filesUtilMock = $this->getMock(Files::class, [], [], '', false);
+        $this->assetRepoMock = $this->getMock(Repository::class, [], [], '', false);
+        $this->minificationMock = $this->getMock(Minification::class, [], [], '', false);
+        $this->jsTranslationMock = $this->getMock(Config::class, [], [], '', false);
+        $this->assetPublisherMock = $this->getMock(Publisher::class, [], [], '', false);
         $this->assetRepoFactoryMock = $this->getMock(
-            \Magento\Framework\View\Asset\RepositoryFactory::class,
+            RepositoryFactory::class,
             ['create'],
             [],
             '',
@@ -97,7 +126,7 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $themeProviderMock = $this->getMock(
+        $this->themeProviderMock = $this->getMock(
             \Magento\Framework\View\Design\Theme\ThemeProviderInterface::class,
             [],
             [],
@@ -118,24 +147,6 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $this->model = new \Magento\Deploy\Model\Deploy\LocaleDeploy(
-            $outputMock,
-            $this->jsTranslationMock,
-            $this->minificationMock,
-            $assetRepoMock,
-            $this->assetRepoFactoryMock,
-            $this->fileManagerFactoryMock,
-            $this->configFactoryMock,
-            $assetPublisherMock,
-            $this->bundleManagerMock,
-            $themeProviderMock,
-            $loggerMock,
-            $this->filesUtilMock,
-            $this->designFactoryMock,
-            $this->localeResolverMock,
-            []
-        );
     }
 
     public function testDeploy()
@@ -145,11 +156,11 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
         $locale = 'en_US';
 
         $designMock = $this->getMock(\Magento\Framework\View\DesignInterface::class, [], [], '', false);
-        $assetRepoMock = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $assetRepoMock = $this->getMock(Repository::class, [], [], '', false);
         $requireJsConfigMock = $this->getMock(\Magento\Framework\RequireJs\Config::class, [], [], '', false);
         $fileManagerMock = $this->getMock(\Magento\RequireJs\Model\FileManager::class, [], [], '', false);
 
-        $this->model->setOptions([\Magento\Deploy\Console\Command\DeployStaticOptionsInterface::NO_JAVASCRIPT => 0]);
+        $model = $this->getModel([\Magento\Deploy\Console\Command\DeployStaticOptionsInterface::NO_JAVASCRIPT => 0]);
 
         $this->localeResolverMock->expects($this->once())->method('setLocale')->with($locale);
         $this->designFactoryMock->expects($this->once())->method('create')->willReturn($designMock);
@@ -171,7 +182,33 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             \Magento\Framework\Console\Cli::RETURN_SUCCESS,
-            $this->model->deploy($area, $themePath, $locale)
+            $model->deploy($area, $themePath, $locale)
+        );
+    }
+
+    /**
+     * @param array $options
+     * @return \Magento\Deploy\Model\Deploy\LocaleDeploy
+     */
+    private function getModel($options = [])
+    {
+        return new \Magento\Deploy\Model\Deploy\LocaleDeploy(
+            $this->outputMock,
+            $this->jsTranslationMock,
+            $this->minificationMock,
+            $this->assetRepoMock,
+            $this->assetRepoFactoryMock,
+            $this->fileManagerFactoryMock,
+            $this->configFactoryMock,
+            $this->assetPublisherMock,
+            $this->bundleManagerMock,
+            $this->themeProviderMock,
+            $this->loggerMock,
+            $this->filesUtilMock,
+            $this->designFactoryMock,
+            $this->localeResolverMock,
+            [],
+            $options
         );
     }
 }

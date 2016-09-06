@@ -7,16 +7,15 @@ namespace Magento\Deploy\Test\Unit\Model;
 
 use Magento\Deploy\Model\Deploy\LocaleDeploy;
 use Magento\Deploy\Model\DeployStrategyFactory;
-use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class DeployStrategyFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManagerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $objectManagerFactoryMock;
+    private $objectManagerMock;
 
     /**
      * @var DeployStrategyFactory
@@ -25,18 +24,12 @@ class DeployStrategyFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerFactoryMock = $this->getMock(
-            ObjectManagerFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
 
         $this->unit = (new ObjectManager($this))->getObject(
             DeployStrategyFactory::class,
             [
-                'objectManagerFactory' => $this->objectManagerFactoryMock,
+                'objectManager' => $this->objectManagerMock,
             ]
         );
     }
@@ -47,29 +40,14 @@ class DeployStrategyFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateWithWrongStrategyType()
     {
-        $this->unit->create('adminhtml', 'wrong-type');
+        $this->unit->create('wrong-type');
     }
 
     public function testCreate()
     {
-        $areaCode = 'adminhtml';
-
-        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stateMock->expects(self::once())->method('setAreaCode')->with($areaCode)->willReturnSelf();
-
-        $this->objectManagerFactoryMock->expects(self::once())->method('create')
-            ->with([State::PARAM_MODE => State::MODE_PRODUCTION])
-            ->willReturn($objectManagerMock);
-
-        $objectManagerMock->expects(self::once())->method('get')->willReturn($stateMock);
-        $objectManagerMock->expects(self::once())->method('create')
+        $this->objectManagerMock->expects(self::once())->method('create')
             ->with(LocaleDeploy::class, ['arg1' => 1]);
 
-        $this->unit->create($areaCode, DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD, ['arg1' => 1]);
+        $this->unit->create(DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD, ['arg1' => 1]);
     }
 }

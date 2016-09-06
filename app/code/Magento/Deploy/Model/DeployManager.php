@@ -10,6 +10,7 @@ use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
+use \Magento\Framework\App\State;
 
 class DeployManager
 {
@@ -59,11 +60,17 @@ class DeployManager
     private $idDryRun;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param OutputInterface $output
      * @param StorageInterface $versionStorage
      * @param DeployStrategyProviderFactory $deployStrategyProviderFactory
      * @param ProcessQueueManager $processQueueManager
      * @param TemplateMinifier $templateMinifier
+     * @param State $state
      * @param array $options
      */
     public function __construct(
@@ -72,6 +79,7 @@ class DeployManager
         DeployStrategyProviderFactory $deployStrategyProviderFactory,
         ProcessQueueManager $processQueueManager,
         TemplateMinifier $templateMinifier,
+        State $state,
         array $options
     ) {
         $this->output = $output;
@@ -80,6 +88,7 @@ class DeployManager
         $this->deployStrategyProviderFactory = $deployStrategyProviderFactory;
         $this->processQueueManager = $processQueueManager;
         $this->templateMinifier = $templateMinifier;
+        $this->state = $state;
     }
 
     /**
@@ -119,7 +128,11 @@ class DeployManager
                 $locales = array_keys($package);
                 list($area, $themePath) = current($package);
                 foreach ($strategyProvider->getDeployStrategies($area, $themePath, $locales) as $locale => $strategy) {
-                    $result |= $strategy->deploy($area, $themePath, $locale);
+                    $result |= $this->state->emulateAreaCode(
+                        $area,
+                        [$strategy, 'deploy'],
+                        [$area, $themePath, $locale]
+                    );
                 }
             }
         }
@@ -157,7 +170,7 @@ class DeployManager
             $dependentStrategy = [];
             foreach ($strategyProvider->getDeployStrategies($area, $themePath, $locales) as $locale => $strategy) {
                 $deploymentFunc = function () use ($area, $themePath, $locale, $strategy) {
-                    return $strategy->deploy($area, $themePath, $locale);
+                    return $this->state->emulateAreaCode($area, [$strategy, 'deploy'], [$area, $themePath, $locale]);
                 };
                 if (null === $baseStrategy) {
                     $baseStrategy = $deploymentFunc;

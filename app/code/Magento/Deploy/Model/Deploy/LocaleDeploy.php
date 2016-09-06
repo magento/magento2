@@ -152,6 +152,7 @@ class LocaleDeploy implements DeployInterface
      * @param \Magento\Framework\View\DesignInterfaceFactory $designFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $alternativeSources
+     * @param array $options
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -169,7 +170,8 @@ class LocaleDeploy implements DeployInterface
         Files $filesUtil,
         \Magento\Framework\View\DesignInterfaceFactory $designFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        array $alternativeSources
+        array $alternativeSources,
+        $options = []
     ) {
         $this->output = $output;
         $this->assetRepo = $assetRepo;
@@ -191,6 +193,7 @@ class LocaleDeploy implements DeployInterface
         );
         $this->designFactory = $designFactory;
         $this->localeResolver = $localeResolver;
+        $this->options = $options;
     }
 
     /**
@@ -245,14 +248,6 @@ class LocaleDeploy implements DeployInterface
         $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
 
         return $this->errorCount ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
     }
 
     /**
