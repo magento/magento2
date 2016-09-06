@@ -1571,12 +1571,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        if (!empty($trackInfo->ShipTimestamp)) {
-            // Add default timezone in case if it is not present in string
-            if(!preg_match('/(.*)+(\+[0-9]+:[0-9]+)/', $trackInfo->ShipTimestamp)) {
-                $trackInfo->ShipTimestamp .= '+00:00';
-            }
-            $datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $trackInfo->ShipTimestamp);
+        if (!empty($trackInfo->ShipTimestamp) &&
+            ($datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $trackInfo->ShipTimestamp)) !== false
+        ) {
             $result['shippeddate'] = $datetime->format('Y-m-d');
         }
 
