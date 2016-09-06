@@ -9,7 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;
-use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
@@ -72,7 +72,7 @@ class RefundOrder implements RefundOrderInterface
     private $notifier;
 
     /**
-     * @var Config
+     * @var OrderConfig
      */
     private $config;
 
@@ -82,7 +82,18 @@ class RefundOrder implements RefundOrderInterface
     private $logger;
 
     /**
-     * @inheritDoc
+     * RefundOrder constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param OrderStateResolverInterface $orderStateResolver
+     * @param OrderRepositoryInterface $orderRepository
+     * @param OrderValidatorInterface $orderValidator
+     * @param CreditmemoValidatorInterface $creditmemoValidator
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @param PaymentAdapterInterface $paymentAdapter
+     * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
+     * @param NotifierInterface $notifier
+     * @param OrderConfig $config
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -94,7 +105,7 @@ class RefundOrder implements RefundOrderInterface
         PaymentAdapterInterface $paymentAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
         NotifierInterface $notifier,
-        Config $config,
+        OrderConfig $config,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
