@@ -557,7 +557,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
-     *
+     * @magentoAppIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSaveMediaImage()
@@ -732,6 +732,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testValidateInvalidMultiselectValues()
     {

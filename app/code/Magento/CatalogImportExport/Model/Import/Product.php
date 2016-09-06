@@ -1317,7 +1317,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $select = $this->_connection->select()->from(
                 $entityTable,
-                $this->getNewSkuFieldsForSelect()
+                array_merge($this->getNewSkuFieldsForSelect(), $this->getOldSkuFieldsForSelect())
             )->where(
                 'sku IN (?)',
                 array_keys($entityRowsIn)
@@ -1330,8 +1330,42 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->skuProcessor->setNewSkuData($sku, $key, $value);
                 }
             }
+
+            $this->_oldSku = $this->prepareUpdatedOldSkus($newProducts);
         }
+
         return $this;
+    }
+
+    /**
+     * Return additional data, needed to select.
+     * @return array
+     */
+    private function getOldSkuFieldsForSelect()
+    {
+        return ['type_id', 'attribute_set_id', 'sku'];
+    }
+
+    /**
+     * @param array $newProducts
+     * @return array
+     */
+    private function prepareUpdatedOldSkus(array $newProducts)
+    {
+        $oldSkus = [];
+        foreach ($newProducts as $info) {
+            $typeId = $info['type_id'];
+            $sku = $info['sku'];
+            $oldSkus[$sku] = [
+                'type_id' => $typeId,
+                'attr_set_id' => $info['attribute_set_id'],
+                'entity_id' => $info['entity_id'],
+                'supported_type' => isset($this->_productTypeModels[$typeId]),
+                $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
+            ];
+        }
+
+        return array_replace($this->_oldSku, $oldSkus);
     }
 
     /**
@@ -1718,6 +1752,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ['adapter' => $this, 'bunch' => $bunch]
             );
         }
+
         return $this;
     }
 
@@ -2452,6 +2487,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $source = $this->_getSource();
         $source->rewind();
+
         while ($source->valid()) {
             try {
                 $rowData = $source->current();
@@ -2465,6 +2501,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData = $this->_customFieldsMapping($rowData);
 
             $this->validateRow($rowData, $source->key());
+            
             $source->next();
         }
         $this->checkUrlKeyDuplicates();
