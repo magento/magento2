@@ -157,7 +157,6 @@ class RefundInvoice implements RefundInvoiceInterface
         $order = $this->orderRepository->get($invoice->getOrderId());
         $creditmemo = $this->creditmemoDocumentFactory->createFromInvoice(
             $invoice,
-            $order,
             $items,
             $comment,
             ($appendComment && $notify),
