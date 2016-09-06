@@ -158,7 +158,6 @@ class Mapper
     private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder)
     {
         $parentSelect = $this->getConnection()->select();
-        $select->limit(10000000000); // MySQL 5.7 workaround
         $parentSelect->from(
             ['main_select' => $select],
             [
