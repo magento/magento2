@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ad3de2234f78fd4b353ae6a1b22401fc",
-    "content-hash": "25dcf96ed1d8b12a25111e8b3af61317",
+    "hash": "1c5d7ca4fa68bea1ab7490cb8ac62342",
+    "content-hash": "ecfa548096f500a6a98a5fc41c21e53b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3232,7 +3232,7 @@
             "time": "2015-06-14 21:17:01"
         },
         {
-            "name": "fabpot/php-cs-fixer",
+            "name": "friendsofphp/php-cs-fixer",
             "version": "v1.12.0",
             "source": {
                 "type": "git",
@@ -3287,7 +3287,6 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "abandoned": "friendsofphp/php-cs-fixer",
             "time": "2016-08-17 00:17:27"
         },
         {
@@ -4597,7 +4596,8 @@
         "ext-xsl": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "ext-pdo_mysql": "*"
     },
     "platform-dev": []
 }
