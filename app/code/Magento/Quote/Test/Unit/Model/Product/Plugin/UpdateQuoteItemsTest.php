@@ -31,22 +31,19 @@ class UpdateQuoteItemsTest extends \PHPUnit_Framework_TestCase
      * @param int $newPrice
      * @param bool $callMethod
      */
-    public function testAroundUpdate($originalPrice, $newPrice, $callMethod)
+    public function testAfterUpdate($originalPrice, $newPrice, $callMethod)
     {
         $productResourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
         $productMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrigData', 'getPrice', 'getId'])
             ->getMockForAbstractClass();
-        $closure = function () use ($productResourceMock) {
-            return $productResourceMock;
-        };
         $productId = 1;
         $productMock->expects($this->any())->method('getOrigData')->with('price')->willReturn($originalPrice);
         $productMock->expects($this->any())->method('getPrice')->willReturn($newPrice);
         $productMock->expects($this->any())->method('getId')->willReturn($productId);
         $this->quoteResource->expects($this->$callMethod())->method('markQuotesRecollect')->with($productId);
-        $result = $this->model->aroundSave($productResourceMock, $closure, $productMock);
+        $result = $this->model->afterSave($productResourceMock, $productResourceMock, $productMock);
         $this->assertEquals($result, $productResourceMock);
     }
 

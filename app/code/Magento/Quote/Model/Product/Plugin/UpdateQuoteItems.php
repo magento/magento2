@@ -23,17 +23,16 @@ class UpdateQuoteItems
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Closure $proceed
+     * @param \Magento\Catalog\Model\ResourceModel\Product $result
      * @param \Magento\Framework\Model\AbstractModel $product
-     * @return mixed
+     * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Closure $proceed,
+        \Magento\Catalog\Model\ResourceModel\Product $result,
         \Magento\Framework\Model\AbstractModel $product
     ) {
-        $result = $proceed($product);
         $originalPrice = $product->getOrigData('price');
         if (!empty($originalPrice) && ($originalPrice != $product->getPrice())) {
             $this->resource->markQuotesRecollect($product->getId());
