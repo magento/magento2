@@ -39,8 +39,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected $_uploader;
 
-    protected $importExport;
-
     /**
      * @var \Magento\CatalogImportExport\Model\Import\UploaderFactory
      */
@@ -1287,19 +1285,18 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple3'
         ];
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $importExportData = $this->getMockBuilder(\Magento\ImportExport\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $importExportData->expects($this->atLeastOnce())
             ->method('getBunchSize')
             ->willReturn(1);
-        $this->_model = $objectManager->create(
+        $this->_model = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['importExportData' => $importExportData]
         );
 
-        $filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
@@ -1317,7 +1314,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
-        $productCollection = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $productCollection = $this->objectManager
+            ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $this->assertCount(3, $productCollection->getItems());
         $actualProductSkus = array_map(
             function(ProductInterface $item) {
