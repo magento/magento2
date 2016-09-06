@@ -54,8 +54,8 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
 
         @uasort(
             $methodsInstances,
-            function (MethodInterface $a, MethodInterface $b) {
-                return (int)$a->getConfigData('sort_order') - (int)$b->getConfigData('sort_order');
+            function (MethodInterface $a, MethodInterface $b) use ($storeId) {
+                return (int)$a->getConfigData('sort_order', $storeId) - (int)$b->getConfigData('sort_order', $storeId);
             }
         );
 
