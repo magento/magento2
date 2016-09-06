@@ -41,6 +41,7 @@ class Manager
 
     /** @var array */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+
     /**
      * @var Asset\Minification
      */
@@ -127,7 +128,7 @@ class Manager
         /** @var $asset LocalInterface */
         $filePathInfo = $this->splitPath($filePath);
         if ($filePathInfo && $this->compareModules($filePathInfo, $asset)) {
-            return $asset->getSourceFile() == $filePathInfo['excludedPath'];
+            return $asset->getFilePath() == $filePathInfo['excludedPath'];
         }
         return false;
     }
@@ -237,13 +238,8 @@ class Manager
             return false;
         }
 
-        if ($type == self::ASSET_TYPE_HTML) {
-            return $asset->getModule() !== '';
-        }
-
         return true;
     }
-
 
     /**
      * Flush bundle
