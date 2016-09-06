@@ -248,7 +248,6 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('createFromInvoice')
             ->with(
                 $this->invoiceMock,
-                $this->orderMock,
                 $items,
                 $this->creditmemoCommentCreationMock,
                 ($appendComment && $notify),
@@ -358,7 +357,6 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('createFromInvoice')
             ->with(
                 $this->invoiceMock,
-                $this->orderMock,
                 $items,
                 $this->creditmemoCommentCreationMock,
                 ($appendComment && $notify),
@@ -417,7 +415,6 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('createFromInvoice')
             ->with(
                 $this->invoiceMock,
-                $this->orderMock,
                 $items,
                 $this->creditmemoCommentCreationMock,
                 ($appendComment && $notify),
