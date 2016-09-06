@@ -135,7 +135,8 @@ define([
             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
             drEl.instanceCtx = this.getRecord(originRecord[0]);
             drEl.eventMousedownY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY;
-            drEl.minYpos = $table.offset().top - originRecord.offset().top + $table.find('thead').outerHeight();
+            drEl.minYpos =
+                $table.offset().top - originRecord.offset().top + $table.find('thead').outerHeight();
             drEl.maxYpos = drEl.minYpos + $table.find('tbody').outerHeight() - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
 
