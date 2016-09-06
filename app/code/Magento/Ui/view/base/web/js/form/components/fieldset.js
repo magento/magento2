@@ -85,6 +85,7 @@ define([
                 hasChanged = _.some(this.delegate('hasChanged'));
             }
 
+            this.bubble('update', hasChanged);
             this.changed(hasChanged);
         },
 
