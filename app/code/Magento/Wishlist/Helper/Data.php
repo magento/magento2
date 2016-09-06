@@ -449,7 +449,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $params = [
             'item' => is_string($item) ? $item : $item->getWishlistItemId(),
         ];
-        if (is_object($item)) {
+        if ($item instanceof \Magento\Wishlist\Model\Item) {
             $params['qty'] = $item->getQty();
         }
         return $params;
