@@ -14,6 +14,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Bootstrap;
@@ -37,6 +38,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @var \Magento\CatalogImportExport\Model\Import\Uploader
      */
     protected $_uploader;
+
+    protected $importExport;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\UploaderFactory
@@ -1268,5 +1271,63 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $stockItem = $stockRegistry->getStockItemBySku($sku);
             $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
         }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/website.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductWithMultipleStoresInDifferentBunches()
+    {
+        $products = [
+            'simple1',
+            'simple2',
+            'simple3'
+        ];
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $importExportData = $this->getMockBuilder(\Magento\ImportExport\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $importExportData->expects($this->atLeastOnce())
+            ->method('getBunchSize')
+            ->willReturn(1);
+        $this->_model = $objectManager->create(
+            \Magento\CatalogImportExport\Model\Import\Product::class,
+            ['importExportData' => $importExportData]
+        );
+
+        $filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_multiple_store.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+        $productCollection = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->assertCount(3, $productCollection->getItems());
+        $actualProductSkus = array_map(
+            function(ProductInterface $item) {
+                return $item->getSku();
+            },
+            $productCollection->getItems()
+        );
+        $this->assertEquals(
+            $products,
+            array_values($actualProductSkus)
+        );
     }
 }
