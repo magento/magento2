@@ -94,7 +94,21 @@ class RefundInvoice implements RefundInvoiceInterface
     private $logger;
 
     /**
-     * @inheritDoc
+     * RefundInvoice constructor.
+     *
+     * @param ResourceConnection $resourceConnection
+     * @param OrderStateResolverInterface $orderStateResolver
+     * @param OrderRepositoryInterface $orderRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param OrderValidatorInterface $orderValidator
+     * @param InvoiceValidatorInterface $invoiceValidator
+     * @param CreditmemoValidatorInterface $creditmemoValidator
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @param PaymentAdapterInterface $paymentAdapter
+     * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
+     * @param NotifierInterface $notifier
+     * @param Config $config
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
