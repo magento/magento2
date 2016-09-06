@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Validation;
 
+use Magento\Sales\Api\Data\OrderInterface;
+
 /**
  * Class CanRefundTest
  */
@@ -16,6 +18,21 @@ class CanRefundTest extends \PHPUnit_Framework_TestCase
     private $invoiceMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderPaymentRepositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderRepositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentMock;
+
+    /**
      * @var \Magento\Sales\Model\Order\Invoice\Validation\CanRefund
      */
     private $validator;
@@ -25,7 +42,21 @@ class CanRefundTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->validator = new \Magento\Sales\Model\Order\Invoice\Validation\CanRefund();
+        $this->orderPaymentRepositoryMock = $this->getMockBuilder(
+            \Magento\Sales\Api\OrderPaymentRepositoryInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->validator = new \Magento\Sales\Model\Order\Invoice\Validation\CanRefund(
+            $this->orderPaymentRepositoryMock,
+            $this->orderRepositoryMock
+        );
     }
 
     public function testValidateWrongInvoiceState()
@@ -68,6 +99,24 @@ class CanRefundTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getState')
             ->willReturn(\Magento\Sales\Model\Order\Invoice::STATE_PAID);
+        $orderMock = $this->getMockBuilder(OrderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($orderMock);
+        $orderMock->expects($this->once())
+            ->method('getPayment')
+            ->willReturn($this->paymentMock);
+        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->paymentMock->expects($this->once())
+            ->method('getMethodInstance')
+            ->willReturn($methodInstanceMock);
+        $methodInstanceMock->expects($this->atLeastOnce())
+            ->method('canRefund')
+            ->willReturn(true);
         $this->invoiceMock->expects($this->once())
             ->method('getBaseGrandTotal')
             ->willReturn(1);
