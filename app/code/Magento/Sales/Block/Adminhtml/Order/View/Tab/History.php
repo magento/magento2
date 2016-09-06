@@ -161,7 +161,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             ? $item['created_at']
             : new \DateTime($item['created_at']);
         if ('date' === $dateType) {
-            return $this->_localeDate->formatDateTime($date, $format, $format);
+            return $this->_localeDate->formatDate($date, $format);
         }
         return $this->_localeDate->formatDateTime($date, \IntlDateFormatter::NONE, $format);
     }
