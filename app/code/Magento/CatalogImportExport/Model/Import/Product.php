@@ -1331,7 +1331,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
-            $this->_oldSku = $this->prepareUpdatedOldSkus($newProducts);
+            $this->updateOldSku($newProducts);
         }
 
         return $this;
@@ -1347,10 +1347,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Adds newly created products to _oldSku
      * @param array $newProducts
-     * @return array
+     * @return void
      */
-    private function prepareUpdatedOldSkus(array $newProducts)
+    private function updateOldSku(array $newProducts)
     {
         $oldSkus = [];
         foreach ($newProducts as $info) {
@@ -1365,7 +1366,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ];
         }
 
-        return array_replace($this->_oldSku, $oldSkus);
+        $this->_oldSku = array_replace($this->_oldSku, $oldSkus);
     }
 
     /**
