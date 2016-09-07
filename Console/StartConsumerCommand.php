@@ -65,6 +65,7 @@ class StartConsumerCommand extends Command
         }
         $consumer = $this->consumerFactory->get($consumerName);
         $consumer->process($numberOfMessages);
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

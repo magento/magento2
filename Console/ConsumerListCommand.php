@@ -43,6 +43,7 @@ class ConsumerListCommand extends Command
     {
         $consumers = $this->getConsumers();
         $output->writeln($consumers);
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
