@@ -17,7 +17,7 @@
         <option value="<?php echo $block->escapeHtmlAttr($_queue['value']) ?>"><?php echo $block->escapeHtml($_queue['label']) ?> #<?php echo $block->escapeHtml($_queue['value']) ?></option>
     <?php endforeach; ?>
     </select>
-    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php /* @escapeNotVerified */ echo __('Add to Queue'); ?></span></span></span></button>
+    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php echo $block->escapeHtml(__('Add to Queue')); ?></span></span></span></button>
 </div>
 <?php endif ?>
 <script>
