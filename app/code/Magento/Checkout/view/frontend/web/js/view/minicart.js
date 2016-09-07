@@ -97,8 +97,7 @@ define([
                 addToCartCalls++;
                 self.isLoading(true);
             });
-
-            if (cartData().websiteId !== window.checkout.websiteId) {
+            if (cartData().website_id !== window.checkout.websiteId) {
                 customerData.reload(['cart'], false);
             }
 
