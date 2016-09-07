@@ -55,9 +55,10 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
             $block = $this->getLayout()->getBlock('category.products.list');
             if ($block) {
                 $productCollection = $block->getLoadedProductCollection();
+                $productTypes = [];
                 /** @var $product \Magento\Catalog\Model\Product */
                 foreach ($productCollection as $product) {
-                    $productTypes[] = $product->getTypeId();
+                    $productTypes[] = $this->escapeHtml($product->getTypeId());
                 }
                 $this->productTypes = array_unique($productTypes);
             }
