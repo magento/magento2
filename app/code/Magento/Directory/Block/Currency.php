@@ -111,7 +111,7 @@ class Currency extends \Magento\Framework\View\Element\Template
      */
     public function getSwitchCurrencyPostData($code)
     {
-        return $this->_postDataHelper->getPostData($this->getSwitchUrl(), ['currency' => $code]);
+        return $this->_postDataHelper->getPostData($this->escapeUrl($this->getSwitchUrl()), ['currency' => $code]);
     }
 
     /**

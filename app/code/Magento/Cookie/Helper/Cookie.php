@@ -84,7 +84,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAcceptedSaveCookiesWebsiteIds()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        $acceptedSaveCookiesWebsites[$this->_website->getId()] = 1;
+        $acceptedSaveCookiesWebsites[(int)$this->_website->getId()] = 1;
         return json_encode($acceptedSaveCookiesWebsites);
     }
 
