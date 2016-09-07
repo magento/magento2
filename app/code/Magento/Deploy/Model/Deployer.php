@@ -216,7 +216,9 @@ class Deployer
         $appFiles = $this->filesUtil->getStaticPreProcessingFiles();
 
         $version = (new \DateTime())->getTimestamp();
-        $this->versionStorage->save($version);
+        if (!$this->getOption(Options::DRY_RUN)) {
+            $this->versionStorage->save($version);
+        }
 
         foreach ($deployableAreaThemeMap as $area => $themes) {
             $this->emulateApplicationArea($area);
@@ -228,31 +230,33 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
 
-                    /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
-                    $design->setDesignTheme($themePath, $area);
+                    if (!$this->getOption(Options::DRY_RUN)) {
+                        /** @var \Magento\Theme\Model\View\Design $design */
+                        $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
+                        $design->setDesignTheme($themePath, $area);
 
-                    $assetRepo = $this->objectManager->create(
-                        \Magento\Framework\View\Asset\Repository::class,
-                        [
-                            'design' => $design,
-                        ]
-                    );
-                    /** @var \Magento\RequireJs\Model\FileManager $fileManager */
-                    $fileManager = $this->objectManager->create(
-                        \Magento\RequireJs\Model\FileManager::class,
-                        [
-                            'config' => $this->objectManager->create(
-                                \Magento\Framework\RequireJs\Config::class,
-                                [
-                                    'assetRepo' => $assetRepo,
-                                    'design' => $design,
-                                ]
-                            ),
-                            'assetRepo' => $assetRepo,
-                        ]
-                    );
-                    $fileManager->createRequireJsConfigAsset();
+                        $assetRepo = $this->objectManager->create(
+                            \Magento\Framework\View\Asset\Repository::class,
+                            [
+                                'design' => $design,
+                            ]
+                        );
+                        /** @var \Magento\RequireJs\Model\FileManager $fileManager */
+                        $fileManager = $this->objectManager->create(
+                            \Magento\RequireJs\Model\FileManager::class,
+                            [
+                                'config' => $this->objectManager->create(
+                                    \Magento\Framework\RequireJs\Config::class,
+                                    [
+                                        'assetRepo' => $assetRepo,
+                                        'design' => $design,
+                                    ]
+                                ),
+                                'assetRepo' => $assetRepo,
+                            ]
+                        );
+                        $fileManager->createRequireJsConfigAsset();
+                    }
 
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath, $fullPath) = $info;
