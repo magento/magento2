@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class RefundInvoiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
 {
