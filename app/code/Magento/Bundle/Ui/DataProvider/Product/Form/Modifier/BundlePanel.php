@@ -342,9 +342,7 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
                                                 ],
-                                                'links' => [
-                                                    'insertData' => '${ $.provider }:${ $.dataProvider }'
-                                                ],
+                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'source' => 'product',
                                                 'addButton' => false,
                                             ],
@@ -588,10 +586,7 @@ class BundlePanel extends AbstractModifier
                                 'prefer' => 'radio',
                                 'value' => '0',
                                 'sortOrder' => 50,
-                                'valueMap' => [
-                                    'false' => '0',
-                                    'true' => '1'
-                                ]
+                                'valueMap' => ['false' => '0', 'true' => '1']
                             ],
                         ],
                     ],
@@ -642,7 +637,8 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'required-entry' => true,
-                                    'validate-zero-or-greater' => true
+                                    'validate-number' => true,
+                                    'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
                                     'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
