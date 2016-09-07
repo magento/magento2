@@ -215,6 +215,9 @@ class Deployer
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         $appFiles = $this->filesUtil->getStaticPreProcessingFiles();
 
+        $version = (new \DateTime())->getTimestamp();
+        $this->versionStorage->save($version);
+
         foreach ($deployableAreaThemeMap as $area => $themes) {
             $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
@@ -319,11 +322,7 @@ class Deployer
             $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
         }
 
-        $version = (new \DateTime())->getTimestamp();
         $this->output->writeln("New version of deployed files: {$version}");
-        if (!$this->getOption(Options::DRY_RUN)) {
-            $this->versionStorage->save($version);
-        }
 
         if ($this->errorCount > 0) {
             // we must have an exit code higher than zero to indicate something was wrong
