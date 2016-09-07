@@ -29,6 +29,7 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -80,6 +81,11 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @var AccountRedirect
      */
     private $accountRedirect;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param Context $context
@@ -198,6 +204,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -257,6 +264,12 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
                 $this->messageManager->addSuccess($this->getSuccessMessage());
+                $requestedRedirect = $this->accountRedirect->getRedirectCookie();
+                if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
+                    $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
+                    $this->accountRedirect->clearRedirectCookie();
+                    return $resultRedirect;
+                }
                 $resultRedirect = $this->accountRedirect->getRedirect();
             }
             return $resultRedirect;
