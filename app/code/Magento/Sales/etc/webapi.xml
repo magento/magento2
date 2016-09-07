@@ -127,6 +127,12 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/invoice/:invoiceId/refund" method="POST">
+        <service class="Magento\Sales\Api\RefundInvoiceInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/creditmemo/:id/comments" method="GET">
         <service class="Magento\Sales\Api\CreditmemoManagementInterface" method="getCommentsList"/>
         <resources>
@@ -165,6 +171,12 @@
     </route>
     <route url="/V1/creditmemo" method="POST">
         <service class="Magento\Sales\Api\CreditmemoRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:orderId/refund" method="POST">
+        <service class="Magento\Sales\Api\RefundOrderInterface" method="execute"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
