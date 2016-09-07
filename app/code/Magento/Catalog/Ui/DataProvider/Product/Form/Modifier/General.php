@@ -9,12 +9,9 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for main panel of product page
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class General extends AbstractModifier
 {
@@ -29,7 +26,7 @@ class General extends AbstractModifier
     protected $arrayManager;
 
     /**
-     * @var CurrencyInterface
+     * @var \Magento\Framework\Locale\CurrencyInterface
      */
     private $localeCurrency;
 
@@ -369,7 +366,8 @@ class General extends AbstractModifier
     private function getLocaleCurrency()
     {
         if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
         }
         return $this->localeCurrency;
     }
