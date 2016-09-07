@@ -10,6 +10,9 @@ namespace Magento\CatalogInventory\Model\Quote\Item;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 
+/**
+ * Class QuantityValidator
+ */
 class QuantityValidator
 {
     /**
@@ -23,20 +26,21 @@ class QuantityValidator
     protected $stockItemInitializer;
 
     /**
-     * @var StockRegistryInterface
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     protected $stockRegistry;
 
     /**
-     * @var StockStateInterface
+     * @var \Magento\CatalogInventory\Api\StockStateInterface
      */
     protected $stockState;
 
     /**
      * @param QuantityValidator\Initializer\Option $optionInitializer
      * @param QuantityValidator\Initializer\StockItem $stockItemInitializer
-     * @param StockRegistryInterface $stockRegistry
-     * @param StockStateInterface $stockState
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @return void
      */
     public function __construct(
         QuantityValidator\Initializer\Option $optionInitializer,
@@ -48,6 +52,30 @@ class QuantityValidator
         $this->stockItemInitializer = $stockItemInitializer;
         $this->stockRegistry = $stockRegistry;
         $this->stockState = $stockState;
+    }
+
+    /**
+     * Add error information to Quote Item
+     *
+     * @param \Magento\Framework\DataObject $result
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
+     * @param bool $removeError
+     * @return void
+     */
+    private function addErrorInfoToQuote($result, $quoteItem)
+    {
+            $quoteItem->addErrorInfo(
+                'cataloginventory',
+                \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
+                $result->getMessage()
+            );
+
+            $quoteItem->getQuote()->addErrorInfo(
+                $result->getQuoteMessageIndex(),
+                'cataloginventory',
+                \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
+                $result->getQuoteMessage()
+            );
     }
 
     /**
@@ -81,7 +109,6 @@ class QuantityValidator
             $quoteItem->getProduct()->getId(),
             $quoteItem->getProduct()->getStore()->getWebsiteId()
         );
-        /* @var $stockItem \Magento\CatalogInventory\Api\Data\StockItemInterface */
         if (!$stockItem instanceof \Magento\CatalogInventory\Api\Data\StockItemInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The stock item for Product is not valid.'));
         }
@@ -152,47 +179,29 @@ class QuantityValidator
                     );
                 }
             }
+            // variable to keep track if we have previously encountered an error in one of the options
+            $removeError = true;
 
             foreach ($options as $option) {
                 $result = $this->optionInitializer->initialize($option, $quoteItem, $qty);
                 if ($result->getHasError()) {
                     $option->setHasError(true);
-
-                    $quoteItem->addErrorInfo(
-                        'cataloginventory',
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                        $result->getMessage()
-                    );
-
-                    $quoteItem->getQuote()->addErrorInfo(
-                        $result->getQuoteMessageIndex(),
-                        'cataloginventory',
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                        $result->getQuoteMessage()
-                    );
-                } else {
-                    // Delete error from item and its quote, if it was set due to qty lack
-                    $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
+                    //Setting this to false, so no error statuses are cleared
+                    $removeError = false;
+                    $this->addErrorInfoToQuote($result, $quoteItem, $removeError);
                 }
             }
-        } else {
-            $result = $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
-            if ($result->getHasError()) {
-                $quoteItem->addErrorInfo(
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    $result->getMessage()
-                );
-
-                $quoteItem->getQuote()->addErrorInfo(
-                    $result->getQuoteMessageIndex(),
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    $result->getQuoteMessage()
-                );
-            } else {
-                // Delete error from item and its quote, if it was set due to qty lack
+            if ($removeError) {
                 $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
+            }
+        } else {
+            if ($quoteItem->getParentItem() === null) {
+                $result = $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
+                if ($result->getHasError()) {
+                    $this->addErrorInfoToQuote($result, $quoteItem);
+                } else {
+                    $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
+                }
             }
         }
     }

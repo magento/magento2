@@ -106,6 +106,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             '__wakeup',
             'unsIsChildItem',
             'getItemId',
+            'setProductName'
         ];
 
         $this->stockItemMock = $this->getMock(
