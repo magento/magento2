@@ -93,9 +93,8 @@ class Context
      *
      * @param string $type
      * @param array $value
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
-     * @throws UnregisteredComponentException
      */
     public function buildPathToLocaleDirectoryByContext($type, $value)
     {
@@ -113,10 +112,6 @@ class Context
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));
         }
 
-        if (null === $path) {
-            throw new UnregisteredComponentException();
-        }
-
-        return $path . '/' . self::LOCALE_DIRECTORY . '/';
+        return (null === $path) ? null : $path . '/' . self::LOCALE_DIRECTORY . '/';
     }
 }

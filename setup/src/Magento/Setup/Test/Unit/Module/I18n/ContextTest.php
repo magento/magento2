@@ -127,8 +127,19 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 BP . '/app/design/frontend/Magento/luma/i18n/',
-                [Context::CONTEXT_TYPE_THEME, 'rontend/Magento/luma'],
-                [[ComponentRegistrar::THEME, 'rontend/Magento/luma', BP . '/app/design/frontend/Magento/luma']]
+                [Context::CONTEXT_TYPE_THEME, 'frontend/Magento/luma'],
+                [[ComponentRegistrar::THEME, 'frontend/Magento/luma', BP . '/app/design/frontend/Magento/luma']]
+            ],
+
+            [
+                null,
+                [Context::CONTEXT_TYPE_MODULE, 'Unregistered_Module'],
+                [[ComponentRegistrar::MODULE, 'Unregistered_Module', null]]
+            ],
+            [
+                null,
+                [Context::CONTEXT_TYPE_THEME, 'frontend/Magento/unregistered'],
+                [[ComponentRegistrar::THEME, 'frontend/Magento/unregistered', null]]
             ],
             [BP . '/lib/web/i18n/', [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], []],
         ];
@@ -144,19 +155,5 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getPath');
         $this->context = new Context($this->componentRegistrar);
         $this->context->buildPathToLocaleDirectoryByContext('invalid_type', 'Magento_Module');
-    }
-
-    /**
-     * @expectedException \Magento\Setup\Module\I18n\UnregisteredComponentException
-     */
-    public function testBuildPathToLocaleDirectoryByContextWithUnregisteredComponent()
-    {
-        $moduleName = 'Magento_Module';
-        $this->componentRegistrar->expects($this->once())
-            ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, $moduleName)
-            ->willReturn(null);
-        $this->context = new Context($this->componentRegistrar);
-        $this->context->buildPathToLocaleDirectoryByContext(ComponentRegistrar::MODULE, $moduleName);
     }
 }

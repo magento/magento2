@@ -10,7 +10,6 @@ use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Dictionary;
 use Magento\Setup\Module\I18n\Dictionary\Phrase;
 use Magento\Setup\Module\I18n\Pack\Writer\File\AbstractFile;
-use Magento\Setup\Module\I18n\UnregisteredComponentException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractFileTest extends \PHPUnit_Framework_TestCase
@@ -122,7 +121,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testWriteDictionaryWithUnregisteredComponentException()
+    public function testWriteDictionaryWherePathIsNull()
     {
         $contextType = 'module';
         $contextValue = 'Magento_Module';
@@ -137,7 +136,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('buildPathToLocaleDirectoryByContext')
             ->with($contextType, $contextValue)
-            ->willThrowException(new UnregisteredComponentException);
+            ->willReturn(null);
 
         $this->object->writeDictionary($this->dictionaryMock, $this->localeMock);
     }
