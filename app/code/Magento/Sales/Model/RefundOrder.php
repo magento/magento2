@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class RefundOrder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundOrder implements RefundOrderInterface
 {

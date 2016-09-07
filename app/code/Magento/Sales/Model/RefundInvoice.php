@@ -25,6 +25,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class RefundInvoice
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundInvoice implements RefundInvoiceInterface
 {
