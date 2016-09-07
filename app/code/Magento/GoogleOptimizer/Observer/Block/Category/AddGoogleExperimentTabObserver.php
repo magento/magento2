@@ -6,40 +6,30 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleOptimizer\Observer\Block\Category;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\View\LayoutInterface;
-use Magento\GoogleOptimizer\Helper\Data;
 
 class AddGoogleExperimentTabObserver implements ObserverInterface
 {
     /**
-     * @var string
-     */
-    public static $googleOptimizerBlockId ='google-experiment-form';
-
-    /**
-     * @var string
-     */
-    public static $googleOptimizerTabId ='google-experiment-tab';
-
-    /**
-     * @var Data
+     * @var \Magento\GoogleOptimizer\Helper\Data
      */
     protected $_helper;
 
     /**
-     * @var LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @param Data $helper
-     * @param LayoutInterface $layout
+     * @param \Magento\GoogleOptimizer\Helper\Data $helper
+     * @param \Magento\Framework\View\LayoutInterface $layout
      */
-    public function __construct(Data $helper, LayoutInterface $layout)
+    public function __construct(\Magento\GoogleOptimizer\Helper\Data $helper, \Magento\Framework\View\LayoutInterface $layout)
     {
         $this->_helper = $helper;
         $this->_layout = $layout;
@@ -53,17 +43,16 @@ class AddGoogleExperimentTabObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        $storeId = $observer->getEvent()->getTabs()->getCategory()->getStoreId();
-        if ($this->_helper->isGoogleExperimentActive($storeId)) {
+        if ($this->_helper->isGoogleExperimentActive()) {
             $block = $this->_layout->createBlock(
-                \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer::class,
-                self::$googleOptimizerBlockId
+                'Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer',
+                'google-experiment-form'
             );
 
             /** @var $tabs \Magento\Catalog\Block\Adminhtml\Category\Tabs */
             $tabs = $observer->getEvent()->getTabs();
             $tabs->addTab(
-                self::$googleOptimizerTabId,
+                'google-experiment-tab',
                 ['label' => __('Category View Optimization'), 'content' => $block->toHtml()]
             );
         }
