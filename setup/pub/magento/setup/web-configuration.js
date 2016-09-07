@@ -68,12 +68,12 @@ angular.module('web-configuration', ['ngStorage'])
 
         $scope.$watch('config.address.base_url', function() {
             if (angular.equals($scope.config.https.text, '') || angular.isUndefined($scope.config.https.text)) {
-                $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+                $scope.config.https.text = $scope.config.address.base_url.replace('http://', 'https://');
             }
         });
 
         $scope.populateHttps = function() {
-            $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+            $scope.config.https.text = $scope.config.address.base_url.replace('http://', 'https://');
         };
 
         $scope.showEncryptKey = function() {
