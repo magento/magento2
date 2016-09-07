@@ -95,6 +95,7 @@ class RefundOrder implements RefundOrderInterface
      * @param NotifierInterface $notifier
      * @param OrderConfig $config
      * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resourceConnection,

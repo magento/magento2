@@ -30,6 +30,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class RefundInvoiceTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -267,36 +268,29 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->invoiceMock)
             ->willReturn([]);
-
         $this->paymentAdapterMock->expects($this->once())
             ->method('refund')
             ->with($this->creditmemoMock, $this->orderMock)
             ->willReturn($this->orderMock);
-
         $this->orderStateResolverMock->expects($this->once())
             ->method('getStateForOrder')
             ->with($this->orderMock, [])
             ->willReturn(Order::STATE_CLOSED);
-
         $this->orderMock->expects($this->once())
             ->method('setState')
             ->with(Order::STATE_CLOSED)
             ->willReturnSelf();
-
         $this->orderMock->expects($this->once())
             ->method('getState')
             ->willReturn(Order::STATE_CLOSED);
-
         $this->configMock->expects($this->once())
             ->method('getStateDefaultStatus')
             ->with(Order::STATE_CLOSED)
             ->willReturn('Closed');
-
         $this->orderMock->expects($this->once())
             ->method('setStatus')
             ->with('Closed')
             ->willReturnSelf();
-
         $this->creditmemoMock->expects($this->once())
             ->method('setState')
             ->with(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED)
@@ -306,18 +300,15 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->creditmemoMock)
             ->willReturn($this->creditmemoMock);
-
         $this->orderRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->orderMock)
             ->willReturn($this->orderMock);
-
         if ($notify) {
             $this->notifierMock->expects($this->once())
                 ->method('notify')
                 ->with($this->orderMock, $this->creditmemoMock, $this->creditmemoCommentCreationMock);
         }
-
         $this->creditmemoMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn(2);

@@ -110,6 +110,7 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param NotifierInterface $notifier
      * @param OrderConfig $config
      * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resourceConnection,

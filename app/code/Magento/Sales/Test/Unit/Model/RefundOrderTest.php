@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class RefundOrderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class RefundOrderTest extends \PHPUnit_Framework_TestCase
 {
