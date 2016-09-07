@@ -31,6 +31,9 @@ use Magento\Vault\Model\VaultPaymentInterface;
  */
 final class Vault implements VaultPaymentInterface
 {
+    /**
+     * @deprecated
+     */
     const TOKEN_METADATA_KEY = 'token_metadata';
 
     /**
@@ -111,6 +114,8 @@ final class Vault implements VaultPaymentInterface
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param string $code
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $config,
@@ -452,17 +457,14 @@ final class Vault implements VaultPaymentInterface
     private function attachTokenExtensionAttribute(OrderPaymentInterface $orderPayment)
     {
         $additionalInformation = $orderPayment->getAdditionalInformation();
-
-        $tokenData = isset($additionalInformation[self::TOKEN_METADATA_KEY])
-            ? $additionalInformation[self::TOKEN_METADATA_KEY]
-            : null;
-
-        if ($tokenData === null) {
-            throw new \LogicException("Token metadata should be defined");
+        if (empty($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ||
+            empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])
+        ) {
+            throw new \LogicException('Customer id and public hash should be defined');
         }
 
-        $customerId = $tokenData[PaymentTokenInterface::CUSTOMER_ID];
-        $publicHash = $tokenData[PaymentTokenInterface::PUBLIC_HASH];
+        $customerId = $additionalInformation[PaymentTokenInterface::CUSTOMER_ID];
+        $publicHash = $additionalInformation[PaymentTokenInterface::PUBLIC_HASH];
 
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
 
