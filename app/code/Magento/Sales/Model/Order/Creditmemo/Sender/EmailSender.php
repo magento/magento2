@@ -5,18 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Sender;
 
-use Magento\Payment\Helper\Data as PaymentHelper;
-use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
-use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
-use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
-use Magento\Sales\Model\Order\Address\Renderer;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Model\Order\Creditmemo\SenderInterface;
 
 /**
@@ -25,52 +14,55 @@ use Magento\Sales\Model\Order\Creditmemo\SenderInterface;
 class EmailSender extends Sender implements SenderInterface
 {
     /**
-     * @var PaymentHelper
+     * @var \Magento\Payment\Helper\Data
      */
     private $paymentHelper;
 
     /**
-     * @var CreditmemoResource
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo
      */
     private $creditmemoResource;
 
     /**
-     * Global configuration storage.
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $globalConfig;
 
     /**
-     * Application Event Dispatcher
-     *
-     * @var ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @param Template $templateContainer
-     * @param CreditmemoIdentity $identityContainer
-     * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Magento\Sales\Model\Order\Email\Container\Template $templateContainer
+     * @param \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity $identityContainer
+     * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param PaymentHelper $paymentHelper
-     * @param CreditmemoResource $creditmemoResource
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
+     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo $creditmemoResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
-     * @param ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        Template $templateContainer,
-        CreditmemoIdentity $identityContainer,
+        \Magento\Sales\Model\Order\Email\Container\Template $templateContainer,
+        \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
-        Renderer $addressRenderer,
-        PaymentHelper $paymentHelper,
-        CreditmemoResource $creditmemoResource,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
+        \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo $creditmemoResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
+        parent::__construct(
+            $templateContainer,
+            $identityContainer,
+            $senderBuilderFactory,
+            $logger,
+            $addressRenderer
+        );
+
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
         $this->globalConfig = $globalConfig;
@@ -88,22 +80,22 @@ class EmailSender extends Sender implements SenderInterface
      * Otherwise, email will be sent later during running of
      * corresponding cron job.
      *
-     * @param OrderInterface $order
-     * @param CreditmemoInterface $creditmemo
-     * @param CreditmemoCommentCreationInterface $comment
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
+     * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param bool $forceSyncMode
+     *
      * @return bool
      */
     public function send(
-        OrderInterface $order,
-        CreditmemoInterface $creditmemo,
-        CreditmemoCommentCreationInterface $comment = null,
+        \Magento\Sales\Api\Data\OrderInterface $order,
+        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
+        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         $creditmemo->setSendEmail(true);
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
-
             $transport = [
                 'order' => $order,
                 'creditmemo' => $creditmemo,
@@ -124,11 +116,14 @@ class EmailSender extends Sender implements SenderInterface
 
             if ($this->checkAndSend($order)) {
                 $creditmemo->setEmailSent(true);
+
                 $this->creditmemoResource->saveAttribute($creditmemo, ['send_email', 'email_sent']);
+
                 return true;
             }
         } else {
             $creditmemo->setEmailSent(null);
+
             $this->creditmemoResource->saveAttribute($creditmemo, 'email_sent');
         }
 
@@ -138,12 +133,13 @@ class EmailSender extends Sender implements SenderInterface
     }
 
     /**
-     * Return payment info block as html
+     * Returns payment info block as HTML.
      *
-     * @param Order $order
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     *
      * @return string
      */
-    private function getPaymentHtml(Order $order)
+    private function getPaymentHtml(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         return $this->paymentHelper->getInfoBlockHtml(
             $order->getPayment(),
