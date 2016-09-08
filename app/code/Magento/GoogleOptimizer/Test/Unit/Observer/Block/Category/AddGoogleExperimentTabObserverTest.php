@@ -56,7 +56,7 @@ class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock = $this->getMock(Layout::class, [], [], '', false);
         $this->tabsMock = $this->getMock(Tabs::class, [], [], '', false);
         $this->eventObserverMock = $this->getMock(Observer::class, [], [], '', false);
-        $this->categoryMock = $this->getMock(Category::class, ['getStoreId'], [], '', false);
+        $this->categoryMock = $this->getMock(Category::class, [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $this->modelObserver = $objectManagerHelper->getObject(
             AddGoogleExperimentTabObserver::class,
