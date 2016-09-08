@@ -112,12 +112,12 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param CreditmemoValidatorInterface $creditmemoValidator
      * @param Order\Creditmemo\ItemCreationValidatorInterface $itemCreationValidator
-     * @internal param CreditmemoRepositoryInterface $creditmemoRepository
-     * @internal param PaymentAdapterInterface $paymentAdapter
-     * @internal param CreditmemoDocumentFactory $creditmemoDocumentFactory
-     * @internal param NotifierInterface $notifier
-     * @internal param OrderConfig $config
-     * @internal param LoggerInterface $logger
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @param PaymentAdapterInterface $paymentAdapter
+     * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
+     * @param NotifierInterface $notifier
+     * @param OrderConfig $config
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
