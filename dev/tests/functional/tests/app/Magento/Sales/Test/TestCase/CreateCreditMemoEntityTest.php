@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. On order's page click 'Refund offline' button.
  * 5. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29116
  */
 class CreateCreditMemoEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

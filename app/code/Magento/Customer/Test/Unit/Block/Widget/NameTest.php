@@ -44,7 +44,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     const INVALID_ATTRIBUTE_CODE = 'invalid attribute code';
 
-    const PREFIX_STORE_LABEL = 'Prefix';
+    const PREFIX_STORE_LABEL = 'Name Prefix';
 
     /**#@-*/
 

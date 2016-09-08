@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save product
  * 6. Verify created product
  *
- * @group Bundle_Product_(CS)
+ * @group Bundle_Product
  * @ZephyrId MAGETWO-24118
  */
 class CreateBundleProductEntityTest extends Injectable
@@ -29,7 +29,6 @@ class CreateBundleProductEntityTest extends Injectable
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

@@ -29,14 +29,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click button Show Report
  * 5. Perform Asserts
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-29348
  */
 class SalesRefundsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

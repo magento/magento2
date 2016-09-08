@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Ok
  * 5. Perform all assertions
  *
- * @group Mini_Shopping_Cart_(CS)
+ * @group Mini_Shopping_Cart
  * @ZephyrId MAGETWO-29104
  */
 class DeleteProductFromMiniShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
