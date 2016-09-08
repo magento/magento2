@@ -4,7 +4,17 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item;
+
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
+use Magento\Framework\Event\Observer;
+use Magento\CatalogInventory\Model\StockState;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
+use Magento\CatalogInventory\Observer\QuantityValidatorObserver;
+use Magento\Framework\Event;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
+use Magento\Checkout\Model\Session;
 
 class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,36 +57,21 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\ObjectManagerInterface objectManager */
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
-            ->getMock();
-        $this->optionInitializer = $this->getMockBuilder(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockState = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockState::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['checkQtyIncrements', 'getHasError', 'getQuoteMessageIndex', 'getQuoteMessage'])
-            ->getMock();
-        $this->quantityValidator = $this->objectManager->create(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator::class,
+        $this->observerMock = $this->getMock(Observer::class, [], [], '', false);
+        $this->optionInitializer = $this->getMock(Option::class, [], [], '', false);
+        $this->stockState = $this->getMock(StockState::class, [], [], '', false);
+        $this->quantityValidator = $this->objectManager->create(QuantityValidator::class,
             [
                 'optionInitializer' => $this->optionInitializer,
                 'stockState' => $this->stockState
             ]
         );
-        $this->observer = $this->objectManager->create(
-            \Magento\CatalogInventory\Observer\QuantityValidatorObserver::class,
+        $this->observer = $this->objectManager->create(QuantityValidatorObserver::class,
             [
                 'quantityValidator' => $this->quantityValidator
             ]
         );
-        $this->eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getItem'])
-            ->getMock();
+        $this->eventMock = $this->getMock(Event::class, ['getItem'], [], '', false);
     }
 
     /**
@@ -87,16 +82,13 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
     public function testQuoteWithOptions()
     {
         /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->objectManager->create(\Magento\Checkout\Model\Session::class);
+        $session = $this->objectManager->create(Session::class);
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('bundle-product');
-        $resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'])
-            ->getMock();
+        $resultMock = $this->getMock(DataObject::class, [], [], '', false);
         $this->stockState->expects($this->any())->method('checkQtyIncrements')->willReturn($resultMock);
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), $product->getId());
@@ -115,17 +107,18 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
     public function testQuoteWithOptionsWithErrors()
     {
         /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->objectManager->create(\Magento\Checkout\Model\Session::class);
+        $session = $this->objectManager->create(Session::class);
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('bundle-product');
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), $product->getId());
-        $resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'])
-            ->getMock();
+        $resultMock = $this->getMock(
+            DataObject::class,
+            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'],
+            [], '', false
+        );
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects($this->once())->method('getItem')->willReturn($quoteItem);
         $this->stockState->expects($this->any())->method('checkQtyIncrements')->willReturn($resultMock);

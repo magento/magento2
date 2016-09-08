@@ -6,6 +6,25 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem;
+use Magento\CatalogInventory\Model\StockState;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
+use Magento\Framework\Event\Observer;
+use Magento\Quote\Model\Quote;
+use Magento\Store\Model\Store;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Model\Stock\Item as StockMock;
+use Magento\Bundle\Model\Product\Type;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Event;
+use Magento\CatalogInventory\Helper\Data;
+use Magento\Quote\Model\Quote\Item\Option as OptionItem;
+
 /**
  * Class QuantityValidatorTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -13,7 +32,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\
 class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator
      */
     private $quantityValidator;
 
@@ -82,85 +101,56 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $resultMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockState;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockItemInitializer;
+
+
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->stockRegistryMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
-            ->getMock();
-        $this->optionInitializer = $this->getMockBuilder(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockItemInitializer = $this->getMockBuilder(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockState = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockState::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['checkQtyIncrements', 'getHasError', 'getQuoteMessageIndex', 'getQuoteMessage'])
-            ->getMock();
-        $this->quantityValidator = $objectManagerHelper->getObject(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator::class,
+        $objectManagerHelper = new ObjectManager($this);
+        $this->stockRegistryMock = $this->getMock(StockRegistry::class, ['getStockItem'], [], '', false);
+        $this->optionInitializer = $this->getMock(Option::class, [], [], '', false);
+        $this->stockItemInitializer = $this->getMock(StockItem::class, [], [], '', false);
+        $this->stockState = $this->getMock(StockState::class, [], [], '', false);
+        $this->quantityValidator = $objectManagerHelper->getObject(QuantityValidator::class,
             [
                 'optionInitializer' => $this->optionInitializer,
                 'stockItemInitializer' => $this->stockItemInitializer,
                 'stockRegistry' => $this->stockRegistryMock,
                 'stockState' => $this->stockState
-            ],
-            '',
-            false
+            ]
         );
-        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
-            ->getMock();
-        $this->eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getItem'])
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIsSuperMode', 'addErrorInfo', 'getQuote', 'getItemsCollection'])
-            ->getMock();
-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
-            ->getMock();
-        $this->quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                ['getProductId', 'getQuote', 'getQty', 'getProduct', 'getParentItem',
-                    'addErrorInfo', 'setData', 'getQtyOptions']
-            )
-            ->getMock();
-        $this->parentItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getProduct', 'getId', 'getStore'])
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getStore', 'getTypeInstance'])
-            ->getMock();
-        $this->stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIsInStock'])
-            ->getMock();
-        $this->parentStockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIsInStock'])
-            ->getMock();
-        $this->typeInstanceMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['prepareQuoteItemQty'])
-            ->getMock();
-        $this->resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'])
-            ->getMock();
+        $this->observerMock = $this->getMock(Observer::class, [], [], '', false);
+        $this->eventMock = $this->getMock(Event::class, ['getItem'], [], '', false);
+        $this->quoteMock = $this->getMock(Quote::class, [], [], '', false);
+        $this->storeMock = $this->getMock(Store::class, [], [], '', false);
+        $this->quoteItemMock = $this->getMock(
+            Item::class,
+            ['getProductId', 'getQuote', 'getQty', 'getProduct', 'getParentItem',
+            'addErrorInfo', 'setData', 'getQtyOptions'],
+            [], '', false
+        );
+        $this->parentItemMock = $this->getMock(
+            Item::class,
+            ['getProduct', 'getId', 'getStore'],
+            [], '', false
+        );
+        $this->productMock = $this->getMock(Product::class, [], [], '', false);
+        $this->stockItemMock = $this->getMock(StockMock::class, [], [], '', false);
+        $this->parentStockItemMock = $this->getMock(StockMock::class, [], [], '', false);
+        $this->typeInstanceMock = $this->getMock(Type::class, [], [], '', false);
+        $this->resultMock = $this->getMock(
+            DataObject::class,
+            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'],
+            [], '', false
+        );
     }
 
     /**
@@ -181,7 +171,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('addErrorInfo')
             ->with(
                 'cataloginventory',
-                \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
+                 Data::ERROR_QTY,
                 __('This product is out of stock.')
             );
         $this->quoteMock->expects($this->once())
@@ -189,7 +179,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'stock',
                 'cataloginventory',
-                \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
+                 Data::ERROR_QTY,
                 __('Some of the products are out of stock.')
             );
         $this->quantityValidator->validate($this->observerMock);
@@ -225,7 +215,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('addErrorInfo')
             ->with(
                 'cataloginventory',
-                \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
+                 Data::ERROR_QTY,
                 __('This product is out of stock.')
             );
         $this->quoteMock->expects($this->once())
@@ -233,7 +223,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'stock',
                 'cataloginventory',
-                \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
+                 Data::ERROR_QTY,
                 __('Some of the products are out of stock.')
             );
         $this->quantityValidator->validate($this->observerMock);
@@ -246,7 +236,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateWithOptions()
     {
-        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+        $optionMock = $this->getMockBuilder(OptionItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['setHasError'])
             ->getMock();
@@ -279,8 +269,9 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testValidateWithOptionsAndError(){
-        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+    public function testValidateWithOptionsAndError()
+    {
+        $optionMock = $this->getMockBuilder(OptionItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['setHasError'])
             ->getMock();
@@ -348,7 +339,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->stockRegistryMock->expects($this->at(0))
             ->method('getStockItem')
             ->willReturn(null);
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->setExpectedException(LocalizedException::class);
         $this->quantityValidator->validate($this->observerMock);
     }
 
@@ -439,7 +430,8 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultMock);
     }
 
-    private function setUpStubForRemoveError(){
+    private function setUpStubForRemoveError()
+    {
         $quoteItems = [$this->quoteItemMock];
         $this->quoteItemMock->expects($this->any())
             ->method('getHasError')
