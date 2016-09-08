@@ -100,11 +100,8 @@ class MassProductUpdateTest extends Injectable
      * @param array $initialProducts
      * @return array
      */
-    public function test(
-        CatalogProductSimple $product,
-        $configData,
-        array $initialProducts
-    ) {
+    public function test(CatalogProductSimple $product, $configData, array $initialProducts)
+    {
         $this->configData = $configData;
 
         // Preconditions
