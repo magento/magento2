@@ -12,7 +12,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\GoogleOptimizer\Helper\Data;
-use \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer;
+use Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer;
 
 class AddGoogleExperimentTabObserver implements ObserverInterface
 {
