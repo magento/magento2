@@ -198,8 +198,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $this->customOptionMock->expects($this->once())
             ->method('setProductSku');
-        $this->customOptionMock->expects($this->once())
-            ->method('setOptionId');
 
         $optionsData = [
             'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1'],

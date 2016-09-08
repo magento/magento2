@@ -206,7 +206,6 @@ class Helper
                     }
                     $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
-                    $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
                 }
             }
@@ -255,7 +254,7 @@ class Helper
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array) $links[$linkType] as $linkData) {
+                foreach ((array)$links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
                     }

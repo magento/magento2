@@ -36,15 +36,28 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
+        $options = $entity->getOptions();
+        $optionIds = [];
+
+        if ($options) {
+            $optionIds = array_map(function ($option) {
+                /** @var \Magento\Catalog\Model\Product\Option $option */
+                return $option->getOptionId();
+            }, $entity->getOptions());
+        }
+
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($this->optionRepository->getProductOptions($entity) as $option) {
-            $this->optionRepository->delete($option);
+            if (!in_array($option->getOptionId(), $optionIds)) {
+                $this->optionRepository->delete($option);
+            }
         }
-        if ($entity->getOptions()) {
-            foreach ($entity->getOptions() as $option) {
+        if ($options) {
+            foreach ($options as $option) {
                 $this->optionRepository->save($option);
             }
         }
+
         return $entity;
     }
 }
