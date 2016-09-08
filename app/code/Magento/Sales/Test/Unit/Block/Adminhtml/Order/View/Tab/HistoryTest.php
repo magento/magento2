@@ -88,16 +88,38 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $this->commentsHistory->getItemComment($item));
     }
 
-    public function testGetItemCreatedAt()
+    public function testGetItemCreatedAtDate()
     {
         $date = new \DateTime;
         $item = ['created_at' => $date ];
 
         $this->localeDateMock->expects($this->once())
-            ->method('formatDate')
-            ->with($date, \IntlDateFormatter::MEDIUM)
+            ->method('formatDateTime')
+            ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE)
             ->willReturn('date');
 
         $this->assertEquals('date', $this->commentsHistory->getItemCreatedAt($item));
+    }
+
+    public function testGetItemCreatedAtTime()
+    {
+        $date = new \DateTime;
+        $item = ['created_at' => $date ];
+
+        $this->localeDateMock->expects($this->once())
+            ->method('formatDateTime')
+            ->with($date, \IntlDateFormatter::NONE, \IntlDateFormatter::MEDIUM)
+            ->willReturn('time');
+
+        $this->assertEquals('time', $this->commentsHistory->getItemCreatedAt($item, 'time'));
+    }
+
+    public function testGetItemCreatedAtEmpty()
+    {
+        $item = ['title' => "Test" ];
+
+        $this->localeDateMock->expects($this->never())->method('formatDateTime');
+        $this->assertEquals('', $this->commentsHistory->getItemCreatedAt($item));
+        $this->assertEquals('', $this->commentsHistory->getItemCreatedAt($item, 'time'));
     }
 }
