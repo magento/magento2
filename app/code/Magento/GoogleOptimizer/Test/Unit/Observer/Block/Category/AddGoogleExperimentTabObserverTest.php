@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Observer\Block\Category\AddGoogleExperimentTabObserver;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\Event;
+use Magento\Catalog\Model\Category;
 
 class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
 {
