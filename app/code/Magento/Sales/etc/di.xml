@@ -104,6 +104,7 @@
     <preference for="Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface" type="Magento\Sales\Model\Order\Invoice\InvoiceValidator"/>
     <preference for="Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentValidator"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidator"/>
+    <preference for="Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemCreationValidator"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>

@@ -11,7 +11,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
+use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
+use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
@@ -53,6 +55,11 @@ class RefundOrder implements RefundOrderInterface
     private $creditmemoValidator;
 
     /**
+     * @var Order\Creditmemo\ItemCreationValidatorInterface
+     */
+    private $itemCreationValidator;
+
+    /**
      * @var CreditmemoRepositoryInterface
      */
     private $creditmemoRepository;
@@ -89,6 +96,7 @@ class RefundOrder implements RefundOrderInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param OrderValidatorInterface $orderValidator
      * @param CreditmemoValidatorInterface $creditmemoValidator
+     * @param ItemCreationValidatorInterface $itemCreationValidator
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param PaymentAdapterInterface $paymentAdapter
      * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
@@ -103,6 +111,7 @@ class RefundOrder implements RefundOrderInterface
         OrderRepositoryInterface $orderRepository,
         OrderValidatorInterface $orderValidator,
         CreditmemoValidatorInterface $creditmemoValidator,
+        ItemCreationValidatorInterface $itemCreationValidator,
         CreditmemoRepositoryInterface $creditmemoRepository,
         PaymentAdapterInterface $paymentAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
@@ -115,6 +124,7 @@ class RefundOrder implements RefundOrderInterface
         $this->orderRepository = $orderRepository;
         $this->orderValidator = $orderValidator;
         $this->creditmemoValidator = $creditmemoValidator;
+        $this->itemCreationValidator = $itemCreationValidator;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->paymentAdapter = $paymentAdapter;
         $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
@@ -156,7 +166,18 @@ class RefundOrder implements RefundOrderInterface
                 TotalsValidator::class
             ]
         );
-        $validationMessages = array_merge($orderValidationResult, $creditmemoValidationResult);
+        $itemsValidation = [];
+        foreach ($items as $item) {
+            $itemsValidation = array_merge(
+                $itemsValidation,
+                $this->itemCreationValidator->validate(
+                    $item,
+                    [CreationQuantityValidator::class],
+                    $order
+                )
+            );
+        }
+        $validationMessages = array_merge($orderValidationResult, $creditmemoValidationResult, $itemsValidation);
         if (!empty($validationMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages))
