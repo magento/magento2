@@ -302,7 +302,7 @@ class Deployer
                             $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                             $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
                         }
-                        if ($this->getMinification()->isEnabled('js')) {
+                        if ($this->getMinification()->isEnabled('js') && !$this->getOption(Options::DRY_RUN)) {
                             $fileManager->createMinResolverAsset();
                         }
                     }
