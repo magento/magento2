@@ -115,6 +115,7 @@ class Deployer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function deploy(ObjectManagerFactory $omFactory, array $locales)
     {
@@ -126,6 +127,12 @@ class Deployer
         $this->output->writeln("Requested languages: {$langList}");
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         list($areas, $appFiles) = $this->collectAppFiles($locales);
+
+        $version = (new \DateTime())->getTimestamp();
+        if (!$this->isDryRun) {
+            $this->versionStorage->save($version);
+        }
+
         foreach ($areas as $area => $themes) {
             $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
@@ -135,30 +142,32 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
 
-                    /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
-                    $design->setDesignTheme($themePath, $area);
-                    $assetRepo = $this->objectManager->create(
-                        'Magento\Framework\View\Asset\Repository',
-                        [
-                            'design' => $design,
-                        ]
-                    );
-                    /** @var \Magento\RequireJs\Model\FileManager $fileManager */
-                    $fileManager = $this->objectManager->create(
-                        'Magento\RequireJs\Model\FileManager',
-                        [
-                            'config' => $this->objectManager->create(
-                                'Magento\Framework\RequireJs\Config',
-                                [
-                                    'assetRepo' => $assetRepo,
-                                    'design' => $design,
-                                ]
-                            ),
-                            'assetRepo' => $assetRepo,
-                        ]
-                    );
-                    $fileManager->createRequireJsConfigAsset();
+                    if (!$this->isDryRun) {
+                        /** @var \Magento\Theme\Model\View\Design $design */
+                        $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                        $design->setDesignTheme($themePath, $area);
+                        $assetRepo = $this->objectManager->create(
+                            'Magento\Framework\View\Asset\Repository',
+                            [
+                                'design' => $design,
+                            ]
+                        );
+                        /** @var \Magento\RequireJs\Model\FileManager $fileManager */
+                        $fileManager = $this->objectManager->create(
+                            'Magento\RequireJs\Model\FileManager',
+                            [
+                                'config' => $this->objectManager->create(
+                                    'Magento\Framework\RequireJs\Config',
+                                    [
+                                        'assetRepo' => $assetRepo,
+                                        'design' => $design,
+                                    ]
+                                ),
+                                'assetRepo' => $assetRepo,
+                            ]
+                        );
+                        $fileManager->createRequireJsConfigAsset();
+                    }
 
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
@@ -190,8 +199,10 @@ class Deployer
                             null
                         );
                     }
-                    $fileManager->clearBundleJsPool();
-                    $this->bundleManager->flush();
+                    if (!$this->isDryRun) {
+                        $fileManager->clearBundleJsPool();
+                        $this->bundleManager->flush();
+                    }
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
@@ -210,9 +221,6 @@ class Deployer
         $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
         $version = (new \DateTime())->getTimestamp();
         $this->output->writeln("New version of deployed files: {$version}");
-        if (!$this->isDryRun) {
-            $this->versionStorage->save($version);
-        }
     }
 
     /**
