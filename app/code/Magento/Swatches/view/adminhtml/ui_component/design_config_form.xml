@@ -48,12 +48,13 @@
                 <field name="watermark_swatch_image_size">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="component" xsi:type="string">Magento_Catalog/component/image-size-field</item>
                             <item name="label" xsi:type="string" translate="true">Image Size</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_swatch_image_size</item>
                             <item name="validation" xsi:type="array">
-                                <item name="validate-digits" xsi:type="boolean">true</item>
+                                <item name="validate-image-size-range" xsi:type="boolean">true</item>
                             </item>
                             <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
