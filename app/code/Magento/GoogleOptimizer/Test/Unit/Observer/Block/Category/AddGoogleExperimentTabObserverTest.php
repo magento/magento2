@@ -6,7 +6,16 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Block\Category;
-use \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer;
+
+use Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer;
+use Magento\GoogleOptimizer\Helper\Data;
+use Magento\Framework\View\Layout;
+use Magento\Catalog\Block\Adminhtml\Category\Tabs;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Observer\Block\Category\AddGoogleExperimentTabObserver;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\Event;
 
 class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,14 +51,14 @@ class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helperMock = $this->getMock(\Magento\GoogleOptimizer\Helper\Data::class, [], [], '', false);
-        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
-        $this->tabsMock = $this->getMock(\Magento\Catalog\Block\Adminhtml\Category\Tabs::class, [], [], '', false);
-        $this->eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $this->categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, ['getStoreId'], [], '', false);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helperMock = $this->getMock(Data::class, [], [], '', false);
+        $this->layoutMock = $this->getMock(Layout::class, [], [], '', false);
+        $this->tabsMock = $this->getMock(Tabs::class, [], [], '', false);
+        $this->eventObserverMock = $this->getMock(Observer::class, [], [], '', false);
+        $this->categoryMock = $this->getMock(Category::class, ['getStoreId'], [], '', false);
+        $objectManagerHelper = new ObjectManager($this);
         $this->modelObserver = $objectManagerHelper->getObject(
-            \Magento\GoogleOptimizer\Observer\Block\Category\AddGoogleExperimentTabObserver::class,
+            AddGoogleExperimentTabObserver::class,
             ['helper' => $this->helperMock, 'layout' => $this->layoutMock]
         );
     }
@@ -57,7 +66,7 @@ class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
     public function testAddGoogleExperimentTabSuccess()
     {
         $this->helperMock->expects($this->once())->method('isGoogleExperimentActive')->will($this->returnValue(true));
-        $block = $this->getMock(\Magento\Framework\View\Element\BlockInterface::class, [], [], '', false);
+        $block = $this->getMock(BlockInterface::class, [], [], '', false);
         $block->expects($this->once())->method('toHtml')->will($this->returnValue('generated html'));
         $this->layoutMock->expects($this->once())->method('createBlock')
             ->with(
@@ -65,7 +74,7 @@ class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
                 'google-experiment-form'
             )
             ->will($this->returnValue($block));
-        $event = $this->getMock(\Magento\Framework\Event::class, ['getTabs'], [], '', false);
+        $event = $this->getMock(Event::class, ['getTabs'], [], '', false);
         $event->expects($this->any())->method('getTabs')->will($this->returnValue($this->tabsMock));
         $this->eventObserverMock->expects($this->any())->method('getEvent')->will($this->returnValue($event));
         $this->tabsMock->expects($this->once())->method('addTab')
@@ -87,7 +96,7 @@ class AddGoogleExperimentTabObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->layoutMock->expects($this->never())->method('createBlock');
         $this->tabsMock->expects($this->never())->method('addTab');
-        $event = $this->getMock('Magento\Framework\Event', ['getTabs'], [], '', false);
+        $event = $this->getMock(Event::class, ['getTabs'], [], '', false);
         $this->eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
         $event->expects($this->any())->method('getTabs')->will($this->returnValue($this->tabsMock));
         $this->modelObserver->execute($this->eventObserverMock);
