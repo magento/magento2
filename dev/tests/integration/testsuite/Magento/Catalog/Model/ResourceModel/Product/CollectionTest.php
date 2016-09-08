@@ -103,7 +103,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
      */
     public function testAddTierPrice()
@@ -115,10 +115,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get('simple');
+        $this->assertEquals(3, count($product->getTierPrices()));
 
         $product->setTierPrices([]);
         $this->assertEquals(0, count($product->getTierPrices()));
+
         $this->collection->addTierPriceData();
-        $this->assertEquals(1, count($product->getTierPrices()));
+        $this->collection->load();
+
+        $items = $this->collection->getItems();
+        $product = reset($items);
+        $this->assertEquals(3, count($product->getTierPrices()));
     }
 }
