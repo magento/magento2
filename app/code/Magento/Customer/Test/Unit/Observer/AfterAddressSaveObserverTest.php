@@ -587,7 +587,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
                 'country_id' => 1,
                 'country_code' => 'US',
                 'group_id' => 1,
-                'area_code' => Area::AREA_ADMIN,
+                'area_code' => Area::AREA_ADMINHTML,
                 'is_vat_valid' => false,
                 'request_sucess' => false,
                 'valid_message' => '',
