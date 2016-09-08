@@ -14,6 +14,7 @@ use Magento\Framework\App\State as AppState;
  *
  * @magentoComponentsDir Magento/Framework/View/_files/static/theme
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -139,27 +140,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store dev/css/minify_files 1
-     */
-    public function testCssMinification()
-    {
-        $this->_testCssMinification(
-            '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css',
-            function ($path) {
-                $this->assertEquals(
-                    file_get_contents(
-                        dirname(__DIR__)
-                        . '/_files/static/expected/styles.magento.min.css'
-                    ),
-                    file_get_contents($path),
-                    'Minified files are not equal or minification did not work for requested CSS'
-                );
-            }
-        );
-    }
-
-    /**
      * @magentoConfigFixture current_store dev/css/minify_files 0
+     * @magentoAppIsolation enabled
      */
     public function testCssMinificationOff()
     {
@@ -176,6 +158,26 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                     ),
                     $content,
                     'CSS is minified when minification turned off'
+                );
+            }
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 1
+     */
+    public function testCssMinification()
+    {
+        $this->_testCssMinification(
+            '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css',
+            function ($path) {
+                $this->assertEquals(
+                    file_get_contents(
+                        dirname(__DIR__)
+                        . '/_files/static/expected/styles.magento.min.css'
+                    ),
+                    file_get_contents($path),
+                    'Minified files are not equal or minification did not work for requested CSS'
                 );
             }
         );
@@ -233,13 +235,13 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        /** @var \Magento\Deploy\Model\Deployer $deployer */
+        /** @var \Magento\Deploy\Model\Deploy\LocaleDeploy $deployer */
         $deployer = $this->objectManager->create(
-            'Magento\Deploy\Model\Deployer',
-            ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => false]
+            \Magento\Deploy\Model\Deploy\LocaleDeploy::class,
+            ['filesUtil' => $filesUtil, 'output' => $output]
         );
 
-        $deployer->deploy($omFactory, ['en_US']);
+        $deployer->deploy('frontend', 'FrameworkViewMinifier/default', 'en_US', []);
 
         $this->assertFileExists($fileToBePublished);
         $this->assertEquals(
