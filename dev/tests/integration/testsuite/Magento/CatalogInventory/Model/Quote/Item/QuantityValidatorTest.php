@@ -16,7 +16,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Checkout\Model\Session;
 
-
 /**
  * Class QuantityValidatorTest
  *
