@@ -60,13 +60,15 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->observerMock = $this->getMock(Observer::class, [], [], '', false);
         $this->optionInitializer = $this->getMock(Option::class, [], [], '', false);
         $this->stockState = $this->getMock(StockState::class, [], [], '', false);
-        $this->quantityValidator = $this->objectManager->create(QuantityValidator::class,
+        $this->quantityValidator = $this->objectManager->create(
+            QuantityValidator::class,
             [
                 'optionInitializer' => $this->optionInitializer,
                 'stockState' => $this->stockState
             ]
         );
-        $this->observer = $this->objectManager->create(QuantityValidatorObserver::class,
+        $this->observer = $this->objectManager->create(
+            QuantityValidatorObserver::class,
             [
                 'quantityValidator' => $this->quantityValidator
             ]
@@ -117,7 +119,9 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $resultMock = $this->getMock(
             DataObject::class,
             ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'],
-            [], '', false
+            [],
+            '',
+            false
         );
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects($this->once())->method('getItem')->willReturn($quoteItem);

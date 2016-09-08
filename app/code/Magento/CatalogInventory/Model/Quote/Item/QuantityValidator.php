@@ -15,6 +15,7 @@ use Magento\CatalogInventory\Helper\Data;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem;
 use Magento\Framework\Event\Observer;
+
 /**
  * Class QuantityValidator
  */

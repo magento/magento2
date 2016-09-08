@@ -111,7 +111,6 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $stockItemInitializer;
 
-
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -119,7 +118,8 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->optionInitializer = $this->getMock(Option::class, [], [], '', false);
         $this->stockItemInitializer = $this->getMock(StockItem::class, [], [], '', false);
         $this->stockState = $this->getMock(StockState::class, [], [], '', false);
-        $this->quantityValidator = $objectManagerHelper->getObject(QuantityValidator::class,
+        $this->quantityValidator = $objectManagerHelper->getObject(
+            QuantityValidator::class,
             [
                 'optionInitializer' => $this->optionInitializer,
                 'stockItemInitializer' => $this->stockItemInitializer,
@@ -135,12 +135,16 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             Item::class,
             ['getProductId', 'getQuote', 'getQty', 'getProduct', 'getParentItem',
             'addErrorInfo', 'setData', 'getQtyOptions'],
-            [], '', false
+            [],
+            '',
+            false
         );
         $this->parentItemMock = $this->getMock(
             Item::class,
             ['getProduct', 'getId', 'getStore'],
-            [], '', false
+            [],
+            '',
+            false
         );
         $this->productMock = $this->getMock(Product::class, [], [], '', false);
         $this->stockItemMock = $this->getMock(StockMock::class, [], [], '', false);
@@ -149,7 +153,9 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
         $this->resultMock = $this->getMock(
             DataObject::class,
             ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'],
-            [], '', false
+            [],
+            '',
+            false
         );
     }
 
@@ -171,7 +177,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('addErrorInfo')
             ->with(
                 'cataloginventory',
-                 Data::ERROR_QTY,
+                Data::ERROR_QTY,
                 __('This product is out of stock.')
             );
         $this->quoteMock->expects($this->once())
@@ -179,7 +185,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'stock',
                 'cataloginventory',
-                 Data::ERROR_QTY,
+                Data::ERROR_QTY,
                 __('Some of the products are out of stock.')
             );
         $this->quantityValidator->validate($this->observerMock);
@@ -215,7 +221,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('addErrorInfo')
             ->with(
                 'cataloginventory',
-                 Data::ERROR_QTY,
+                Data::ERROR_QTY,
                 __('This product is out of stock.')
             );
         $this->quoteMock->expects($this->once())
@@ -223,7 +229,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'stock',
                 'cataloginventory',
-                 Data::ERROR_QTY,
+                Data::ERROR_QTY,
                 __('Some of the products are out of stock.')
             );
         $this->quantityValidator->validate($this->observerMock);
