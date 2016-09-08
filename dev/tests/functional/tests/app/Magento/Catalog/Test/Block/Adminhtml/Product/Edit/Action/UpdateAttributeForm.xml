@@ -24,11 +24,11 @@
         <selector>#attributes_update_tabs_inventory</selector>
         <fields>
             <stock_data_checkbox>
-                <selector>[id=inventory_stock_availability_checkbox]</selector>
+                <selector>#inventory_stock_availability_checkbox</selector>
                 <input>checkbox</input>
             </stock_data_checkbox>
             <stock_data>
-                <selector>[id=inventory_stock_availability]</selector>
+                <selector>#inventory_stock_availability</selector>
                 <input>select</input>
             </stock_data>
         </fields>

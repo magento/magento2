@@ -42,6 +42,6 @@ class AssertProductsInStock extends AbstractConstraint
      */
     public function toString()
     {
-        return 'In stock control is visible.';
+        return 'In stock control is visible for each product.';
     }
 }

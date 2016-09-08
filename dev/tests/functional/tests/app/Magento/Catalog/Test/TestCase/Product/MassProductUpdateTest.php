@@ -98,14 +98,12 @@ class MassProductUpdateTest extends Injectable
      * @param CatalogProductSimple $product
      * @param string $configData
      * @param array $initialProducts
-     * @param string $checkbox
      * @return array
      */
     public function test(
         CatalogProductSimple $product,
         $configData,
-        array $initialProducts,
-        $checkbox
+        array $initialProducts
     ) {
         $this->configData = $configData;
 
@@ -123,9 +121,22 @@ class MassProductUpdateTest extends Injectable
         // Steps
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->updateAttributes($products);
-        $this->attributeMassActionPage->getAttributesBlockForm()->fillForm($product, $checkbox);
+        $this->attributeMassActionPage->getAttributesBlockForm()->fill($product);
         $this->attributeMassActionPage->getFormPageActions()->save();
+        $updatedProducts = $this->prepareUpdatedProducts($products, $product);
+        
+        return ['products' => $updatedProducts];
+    }
 
+    /**
+     * Prepare updated products.
+     *
+     * @param array $products
+     * @param CatalogProductSimple $product
+     * @return array
+     */
+    private function prepareUpdatedProducts(array $products, CatalogProductSimple $product)
+    {
         $productsReturn = [];
         /** @var FixtureInterface $item */
         foreach ($products as $item) {
@@ -134,8 +145,8 @@ class MassProductUpdateTest extends Injectable
                 ['data' => array_merge($item->getData(), $product->getData())]
             );
         }
-        
-        return ['products' => $productsReturn];
+
+        return $productsReturn;
     }
 
     /**

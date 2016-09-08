@@ -15,12 +15,12 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 class Grid extends DataGrid
 {
     /**
-     * Update attributes for product.
+     * Prepare data.
      *
      * @param ConfigurableProduct $product
      * @return array
      */
-    public function updateAttributes($product)
+    public function prepareData($product)
     {
         $configurableAttributesData = $product->getConfigurableAttributesData();
         $productItems[] = ['sku' => $product->getSku()];

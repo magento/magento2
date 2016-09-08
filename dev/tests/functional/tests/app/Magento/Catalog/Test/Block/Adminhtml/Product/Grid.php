@@ -78,7 +78,7 @@ class Grid extends DataGrid
      */
     public function updateAttributes(array $items = [])
     {
-        $productsSku = [];
+        $products = [];
         /** @var FixtureInterface $product */
         foreach ($items as $product) {
             $dataConfig = $product->getDataConfig();
@@ -87,12 +87,12 @@ class Grid extends DataGrid
                 $renderArguments = [
                     'product' => $product,
                 ];
-                $productsSku = $this->callRender($typeId, 'updateAttributes', $renderArguments);
+                $products = $this->callRender($typeId, 'prepareData', $renderArguments);
             } else {
-                $productsSku[] = ["sku" => $product->getSku()];
+                $products[] = ["sku" => $product->getSku()];
             }
         }
-        $this->massaction($productsSku, 'Update attributes');
+        $this->massaction($products, 'Update attributes');
     }
 
     /**

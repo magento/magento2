@@ -11,7 +11,7 @@ use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Product update attributes Attributes tab.
+ * Attributes tab on Product update attributes Form.
  */
 class Attributes extends Tab
 {

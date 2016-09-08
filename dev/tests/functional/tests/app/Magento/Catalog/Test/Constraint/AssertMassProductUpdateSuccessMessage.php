@@ -23,7 +23,7 @@ class AssertMassProductUpdateSuccessMessage extends AbstractConstraint
      * Assert that after mass update successful message appears.
      *
      * @param CatalogProductIndex $productGrid
-     * @param $productsCount
+     * @param string $productsCount
      * @return void
      */
     public function processAssert(CatalogProductIndex $productGrid, $productsCount)
