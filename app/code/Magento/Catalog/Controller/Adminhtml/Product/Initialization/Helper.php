@@ -320,9 +320,11 @@ class Helper
 
             if (isset($option['values']) && isset($overwriteOptions[$optionId]['values'])) {
                 foreach ($option['values'] as $valueIndex => $value) {
-                    $valueId = $value['option_type_id'];
-                    $value = $this->overwriteValue($valueId, $value, $overwriteOptions[$optionId]['values']);
-                    $option['values'][$valueIndex] = $value;
+                    if (isset($value['option_type_id'])) {
+                        $valueId = $value['option_type_id'];
+                        $value = $this->overwriteValue($valueId, $value, $overwriteOptions[$optionId]['values']);
+                        $option['values'][$valueIndex] = $value;
+                    }
                 }
             }
 
