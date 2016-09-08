@@ -29,13 +29,6 @@ class UpdateAttributeForm extends FormTabs
     ];
 
     /**
-     * Advanced Inventory Tab selector.
-     *
-     * @var string
-     */
-    protected $advancedInventoryTab = '#attributes_update_tabs_inventory';
-
-    /**
      * Create data array for filling containers.
      *
      * Returns data in format

@@ -6,13 +6,12 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
 /**
  * Backend catalog product grid.
  */
-class Grid extends DataGrid
+class Grid extends \Magento\Catalog\Test\Block\Adminhtml\Product\Grid
 {
     /**
      * Prepare data.
