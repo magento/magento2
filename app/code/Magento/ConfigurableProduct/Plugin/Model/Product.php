@@ -26,7 +26,7 @@ class Product
         /** @var Configurable $productType */
         $productType = $product->getTypeInstance();
         if ($productType instanceof Configurable) {
-            foreach ($productType->getUsedProductIds($product) as $productId) {
+            foreach ($productType->getChildrenIds($product->getId())[0] as $productId) {
                 $result[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $productId;
             }
         }

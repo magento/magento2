@@ -20,8 +20,7 @@ use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 class FlushStaticFilesCacheButtonVisibilityTest extends Injectable
 {
     /* tags */
-    const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const MVP = 'no';
     const SEVERITY = 'S2';
     /* end tags */
     
