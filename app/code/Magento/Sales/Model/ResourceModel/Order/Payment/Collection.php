@@ -89,7 +89,7 @@ class Collection extends AbstractCollection implements OrderPaymentSearchResultI
     /**
      * Convert multidimensional additional information array to single
      *
-     * @param $info
+     * @param array $info
      * @return array
      */
     private function convertAdditionalInfo($info)

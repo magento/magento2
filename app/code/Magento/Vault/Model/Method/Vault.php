@@ -32,6 +32,11 @@ use Magento\Vault\Model\VaultPaymentInterface;
 final class Vault implements VaultPaymentInterface
 {
     /**
+     * @deprecated
+     */
+    const TOKEN_METADATA_KEY = 'token_metadata';
+
+    /**
      * @var string
      */
     private static $activeKey = 'active';
@@ -446,6 +451,7 @@ final class Vault implements VaultPaymentInterface
     /**
      * @param OrderPaymentInterface $orderPayment
      * @return void
+     * @throws \LogicException
      */
     private function attachTokenExtensionAttribute(OrderPaymentInterface $orderPayment)
     {
