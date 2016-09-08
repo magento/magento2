@@ -59,9 +59,12 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
             LockerProcess::class,
             [
                 'filesystem' => $this->filesystemMock,
-                'state' => $this->stateMock,
             ]
         );
+        $reflection = new \ReflectionClass(LockerProcess::class);
+        $reflectionProperty = $reflection->getProperty('state');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->lockerProcess, $this->stateMock);
     }
 
     /**

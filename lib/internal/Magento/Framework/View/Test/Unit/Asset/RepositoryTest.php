@@ -12,6 +12,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,7 +105,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = (new ObjectManager($this))->getObject(Repository::class, [
             'baseUrl' => $this->urlMock,
             'design' => $this->designMock,
-            'themeProvider' => $this->themeProvider,
             'assetSource' => $this->sourceMock,
             'request' => $this->httpMock,
             'fileFactory' => $this->fileFactoryMock,
@@ -112,6 +112,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'contextFactory' => $this->contextFactoryMock,
             'remoteFactory' => $this->remoteFactoryMock
         ]);
+
+        $reflection = new \ReflectionClass(Repository::class);
+        $reflectionProperty = $reflection->getProperty('themeProvider');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->repository, $this->themeProvider);
     }
 
     /**

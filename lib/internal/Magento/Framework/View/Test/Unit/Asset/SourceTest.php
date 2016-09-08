@@ -102,12 +102,15 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $this->object = (new ObjectManager($this))->getObject(Source::class, [
             'filesystem' => $this->filesystem,
-            'readFactory' => $this->readFactory,
             'preProcessorPool' => $this->preProcessorPool,
             'fallback' => $this->viewFileResolution,
-            'themeProvider' => $themeProvider,
             'chainFactory' => $this->chainFactory
         ]);
+
+        $reflection = new \ReflectionClass(Source::class);
+        $reflectionProperty = $reflection->getProperty('themeProvider');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->object, $themeProvider);
     }
 
     /**
