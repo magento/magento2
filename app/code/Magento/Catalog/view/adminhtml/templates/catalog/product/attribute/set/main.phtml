@@ -53,9 +53,10 @@
                     "jquery",
                     "Magento_Ui/js/modal/prompt",
                     "Magento_Ui/js/modal/alert",
+                    "Magento_Ui/js/modal/confirm",
                     "extjs/ext-tree-checkbox",
                     "prototype"
-                ], function(jQuery, prompt, alert){
+                ], function(jQuery, prompt, alert, confirm){
 
                 //<![CDATA[
                 var allowDragAndDrop = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
@@ -208,6 +209,8 @@
                         },
 
                         submit : function() {
+                            var i, child, newNode;
+
                             if( TreePanels.root.firstChild == TreePanels.root.lastChild ) {
                                 return;
                             }
@@ -220,23 +223,40 @@
                             }
 
                             if( editSet.currentNode && editSet.currentNode.attributes.cls == 'folder' ) {
-                                TreePanels.root.removeChild(editSet.currentNode);
-                                for( i in editSet.currentNode.childNodes ) {
-                                    if( editSet.currentNode.childNodes[i].id ) {
-                                        child = editSet.currentNode.childNodes[i];
-                                        newNode = new Ext.tree.TreeNode(child.attributes);
+                                confirm({
+                                    title: "<?php /* @escapeNotVerified */ echo __('Delete Group') ?>",
+                                    content: '<?php echo $block->escapeJs(__('Are you sure you want to delete this group?')) ?>',
+                                    actions: {
+                                        confirm: function () {
+                                            TreePanels.root.removeChild(editSet.currentNode);
 
-                                        if( child.attributes.is_user_defined == 1 ) {
-                                            TreePanels.root2.appendChild(newNode);
+                                            for( i in editSet.currentNode.childNodes ) {
+                                                if( editSet.currentNode.childNodes[i].id ) {
+                                                    child = editSet.currentNode.childNodes[i];
+                                                    newNode = new Ext.tree.TreeNode(child.attributes);
+
+                                                    if( child.attributes.is_user_defined == 1 ) {
+                                                        TreePanels.root2.appendChild(newNode);
+                                                    }
+                                                }
+                                            }
+
+                                            editSet.req.removeGroups[editSet.currentNode.id] = editSet.currentNode.id;
+                                            editSet.currentNode = false;
                                         }
                                     }
-                                }
-                                editSet.req.removeGroups[editSet.currentNode.id] = editSet.currentNode.id;
-                                editSet.currentNode = false;
+                                });
                             }
                         },
 
                         SystemNodesExists : function(currentNode) {
+                            if (!currentNode) {
+                                alert({
+                                    content: '<?php echo $block->escapeJs(__('Please select a node.')) ?>'
+                                });
+                                return;
+                            }
+
                             for (i in currentNode.childNodes) {
                                 if (currentNode.childNodes[i].id) {
                                     child = editSet.currentNode.childNodes[i];
@@ -253,31 +273,40 @@
 
                         addGroup : function() {
                             prompt({
+                                title: "<?php /* @escapeNotVerified */ echo __('Add New Group') ?>",
                                 content: "<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>",
                                 value: "",
+                                validation: true,
+                                validationRules: ['required-entry'],
+                                attributesForm: {
+                                    novalidate: 'novalidate',
+                                    action: ''
+                                },
+                                attributesField: {
+                                    name: 'name',
+                                    'data-validate': '{required:true}',
+                                    maxlength: '255'
+                                },
                                 actions: {
                                     confirm: function (group_name) {
                                         group_name = group_name.strip();
-                                        if( group_name == '' ) {
-                                            self.addGroup();
-                                        } else if( group_name != false && group_name != null && group_name != '' ) {
 
-                                            if (!editSet.validateGroupName(group_name, 0)) {
-                                                return;
-                                            }
-
-                                            var newNode = new Ext.tree.TreeNode({
-                                                text : group_name.escapeHTML(),
-                                                cls : 'folder',
-                                                allowDrop : true,
-                                                allowDrag : true
-                                            });
-                                            TreePanels.root.appendChild(newNode);
-                                            newNode.addListener('beforemove', editSet.groupBeforeMove);
-                                            newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
-                                            newNode.addListener('beforeappend', editSet.groupBeforeInsert);
-                                            newNode.addListener('click', editSet.register);
+                                        if (!editSet.validateGroupName(group_name, 0)) {
+                                            return;
                                         }
+
+                                        var newNode = new Ext.tree.TreeNode({
+                                            text : group_name.escapeHTML(),
+                                            cls : 'folder',
+                                            allowDrop : true,
+                                            allowDrag : true
+                                        });
+
+                                        TreePanels.root.appendChild(newNode);
+                                        newNode.addListener('beforemove', editSet.groupBeforeMove);
+                                        newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
+                                        newNode.addListener('beforeappend', editSet.groupBeforeInsert);
+                                        newNode.addListener('click', editSet.register);
                                     }
                                 }
                             });
@@ -302,7 +331,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
+                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists.') ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
