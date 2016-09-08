@@ -16,10 +16,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Checkout\Model\Session;
 
+
+/**
+ * Class QuantityValidatorTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator
+     * @var QuantityValidator
      */
     private $quantityValidator;
 

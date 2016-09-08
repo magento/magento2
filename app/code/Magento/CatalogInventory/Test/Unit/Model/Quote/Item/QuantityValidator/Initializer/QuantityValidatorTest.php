@@ -28,6 +28,7 @@ use Magento\Quote\Model\Quote\Item\Option as OptionItem;
 /**
  * Class QuantityValidatorTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
 {
