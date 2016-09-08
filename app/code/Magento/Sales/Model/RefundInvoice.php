@@ -12,7 +12,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundInvoiceInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
+use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
+use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
@@ -65,6 +67,11 @@ class RefundInvoice implements RefundInvoiceInterface
     private $creditmemoValidator;
 
     /**
+     * @var ItemCreationValidatorInterface
+     */
+    private $itemCreationValidator;
+
+    /**
      * @var CreditmemoRepositoryInterface
      */
     private $creditmemoRepository;
@@ -104,12 +111,13 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param OrderValidatorInterface $orderValidator
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param CreditmemoValidatorInterface $creditmemoValidator
-     * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @param PaymentAdapterInterface $paymentAdapter
-     * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
-     * @param NotifierInterface $notifier
-     * @param OrderConfig $config
-     * @param LoggerInterface $logger
+     * @param Order\Creditmemo\ItemCreationValidatorInterface $itemCreationValidator
+     * @internal param CreditmemoRepositoryInterface $creditmemoRepository
+     * @internal param PaymentAdapterInterface $paymentAdapter
+     * @internal param CreditmemoDocumentFactory $creditmemoDocumentFactory
+     * @internal param NotifierInterface $notifier
+     * @internal param OrderConfig $config
+     * @internal param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,6 +128,7 @@ class RefundInvoice implements RefundInvoiceInterface
         OrderValidatorInterface $orderValidator,
         InvoiceValidatorInterface $invoiceValidator,
         CreditmemoValidatorInterface $creditmemoValidator,
+        ItemCreationValidatorInterface $itemCreationValidator,
         CreditmemoRepositoryInterface $creditmemoRepository,
         PaymentAdapterInterface $paymentAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
@@ -133,6 +142,7 @@ class RefundInvoice implements RefundInvoiceInterface
         $this->invoiceRepository = $invoiceRepository;
         $this->orderValidator = $orderValidator;
         $this->creditmemoValidator = $creditmemoValidator;
+        $this->itemCreationValidator = $itemCreationValidator;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->paymentAdapter = $paymentAdapter;
         $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
@@ -183,10 +193,22 @@ class RefundInvoice implements RefundInvoiceInterface
                 TotalsValidator::class
             ]
         );
+        $itemsValidation = [];
+        foreach ($items as $item) {
+            $itemsValidation = array_merge(
+                $itemsValidation,
+                $this->itemCreationValidator->validate(
+                    $item,
+                    [CreationQuantityValidator::class],
+                    $order
+                )
+            );
+        }
         $validationMessages = array_merge(
             $orderValidationResult,
             $invoiceValidationResult,
-            $creditmemoValidationResult
+            $creditmemoValidationResult,
+            $itemsValidation
         );
         if (!empty($validationMessages )) {
             throw new \Magento\Sales\Exception\DocumentValidationException(

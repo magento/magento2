@@ -61,7 +61,7 @@ class QuantityValidator implements ValidatorInterface
          * @var $entity CreditmemoInterface
          */
         if ($entity->getOrderId() === null) {
-            return [__('Order Id is required for shipment document')];
+            return [__('Order Id is required for creditmemo document')];
         }
 
         $messages = [];
