@@ -16,11 +16,6 @@ class TemplateMinifierTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\ConfigInterface
-     */
-    private $assetConfigMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Utility\Files
      */
     private $filesUtilsMock;
@@ -32,13 +27,6 @@ class TemplateMinifierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->assetConfigMock = $this->getMock(
-            \Magento\Framework\View\Asset\ConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
         $this->minifierMock = $this->getMock(
             \Magento\Framework\View\Template\Html\MinifierInterface::class,
             [],
@@ -49,7 +37,6 @@ class TemplateMinifierTest extends \PHPUnit_Framework_TestCase
         $this->filesUtilsMock = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
 
         $this->model = new \Magento\Deploy\Model\Deploy\TemplateMinifier(
-            $this->assetConfigMock,
             $this->filesUtilsMock,
             $this->minifierMock
         );
@@ -60,7 +47,6 @@ class TemplateMinifierTest extends \PHPUnit_Framework_TestCase
         $templateMock = "template.phtml";
         $templatesMock = [$templateMock];
 
-        $this->assetConfigMock->expects($this->once())->method('isMinifyHtml')->willReturn(true);
         $this->filesUtilsMock->expects($this->once())->method('getPhtmlFiles')->with(false, false)
             ->willReturn($templatesMock);
         $this->minifierMock->expects($this->once())->method('minify')->with($templateMock);
