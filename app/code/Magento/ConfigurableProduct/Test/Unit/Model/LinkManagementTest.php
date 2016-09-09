@@ -7,6 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -162,7 +163,15 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue([0 => [1, 2, 3]])
             );
-        $configurable->expects($this->once())->method('__call')->with('setAssociatedProductIds', [[1, 2, 3, 999]]);
+
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
+            ->setMethods(['setConfigurableProductLinks'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $configurable->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $extensionAttributes->expects($this->once())->method('setConfigurableProductLinks')->willReturnSelf();
+
         $configurable->expects($this->once())->method('save');
 
         $this->assertTrue(true, $this->object->addChild($productSku, $childSku));

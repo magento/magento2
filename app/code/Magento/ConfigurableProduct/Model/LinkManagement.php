@@ -103,7 +103,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         }
 
         $childrenIds[] = $child->getId();
-        $product->setAssociatedProductIds($childrenIds);
+        $product->getExtensionAttributes()->setConfigurableProductLinks($childrenIds);
         $product->save();
         return true;
     }
