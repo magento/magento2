@@ -83,8 +83,8 @@ $params = [
 productConfigure.addListType(
     '<?php echo $block->escapeJs($listType) ?>',
     {
-        urlFetch: '<?php echo $block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params)) ?>',
-        urlConfirm: '<?php echo $block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params)) ?>'
+        urlFetch: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params))) ?>',
+        urlConfirm: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params))) ?>'
     }
 );
 

@@ -176,7 +176,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $actionsFieldSetId = $model->getActionsFieldSetId($formName);
 
         $newChildUrl = $this->getUrl(
-            'sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset_' . $actionsFieldSetId,
+            'sales_rule/promo_quote/newActionHtml/form/' . $actionsFieldSetId,
             ['form_namespace' => $formName]
         );
 

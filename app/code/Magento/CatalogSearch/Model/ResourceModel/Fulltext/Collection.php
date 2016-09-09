@@ -265,7 +265,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $this->getSearchCriteriaBuilder();
         $this->getFilterBuilder();
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
+        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'], true)) {
             $this->filterBuilder->setField($field);
             $this->filterBuilder->setValue($condition);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
@@ -371,7 +371,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
         $this->order = ['field' => $attribute, 'dir' => $dir];
-        if ($attribute != 'relevance') {
+        if ($attribute !== 'relevance') {
             parent::setOrder($attribute, $dir);
         }
         return $this;

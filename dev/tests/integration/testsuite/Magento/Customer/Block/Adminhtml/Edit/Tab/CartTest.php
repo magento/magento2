@@ -101,7 +101,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertContains("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $html);
         $this->assertContains("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
         $this->assertContains(
-            "backend/customer/cart_product_composite_cart/configure/customer_id/" . self::CUSTOMER_ID_VALUE,
+            'backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fcustomer_id\u002F'
+            . self::CUSTOMER_ID_VALUE,
             $html
         );
     }
