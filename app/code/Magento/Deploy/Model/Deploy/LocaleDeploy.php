@@ -197,28 +197,6 @@ class LocaleDeploy implements DeployInterface
     }
 
     /**
-     * @param string $area
-     * @param string $themePath
-     * @return \Magento\RequireJs\Model\FileManager
-     */
-    private function getRequireJsFileManager($area, $themePath)
-    {
-        $design = $this->designFactory->create()->setDesignTheme($themePath, $area);
-        $assetRepo = $this->assetRepoFactory->create(['design' => $design]);
-        return $this->fileManagerFactory->create(
-            [
-                'config' => $this->requireJsConfigFactory->create(
-                    [
-                        'assetRepo' => $assetRepo,
-                        'design' => $design,
-                    ]
-                ),
-                'assetRepo' => $assetRepo,
-            ]
-        );
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function deploy($area, $themePath, $locale)
@@ -228,10 +206,7 @@ class LocaleDeploy implements DeployInterface
         // emulate application locale needed for correct file path resolving
         $this->localeResolver->setLocale($locale);
 
-        $fileManager = $this->getRequireJsFileManager($area, $themePath);
-        if (!$this->getOption(Options::DRY_RUN)) {
-            $fileManager->createRequireJsConfigAsset();
-        }
+        $this->deployRequireJsConfig($area, $themePath);
         $this->deployAppFiles($area, $themePath, $locale);
         $this->deployLibFiles($area, $themePath, $locale);
 
@@ -240,14 +215,42 @@ class LocaleDeploy implements DeployInterface
                 $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                 $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
             }
-            if ($this->minification->isEnabled('js') && !$this->getOption(Options::DRY_RUN)) {
-                $fileManager->createMinResolverAsset();
-            }
         }
-        $this->bundleManager->flush();
+        if (!$this->getOption(Options::NO_JAVASCRIPT)) {
+            $this->bundleManager->flush();
+        }
         $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
 
         return $this->errorCount ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * @param string $area
+     * @param string $themePath
+     * @return void
+     */
+    private function deployRequireJsConfig($area, $themePath)
+    {
+        if (!$this->getOption(Options::DRY_RUN) && !$this->getOption(Options::NO_JAVASCRIPT)) {
+            $design = $this->designFactory->create()->setDesignTheme($themePath, $area);
+            $assetRepo = $this->assetRepoFactory->create(['design' => $design]);
+            /** @var \Magento\RequireJs\Model\FileManager $fileManager */
+            $fileManager = $this->fileManagerFactory->create(
+                [
+                    'config' => $this->requireJsConfigFactory->create(
+                        [
+                            'assetRepo' => $assetRepo,
+                            'design' => $design,
+                        ]
+                    ),
+                    'assetRepo' => $assetRepo,
+                ]
+            );
+            $fileManager->createRequireJsConfigAsset();
+            if ($this->minification->isEnabled('js')) {
+                $fileManager->createMinResolverAsset();
+            }
+        }
     }
 
     /**
@@ -280,7 +283,7 @@ class LocaleDeploy implements DeployInterface
                     $module,
                     $fullPath
                 );
-                if ($compiledFile !== '') {
+                if ($compiledFile !== '' && !$this->checkSkip($compiledFile)) {
                     $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
                 }
             }
@@ -303,7 +306,7 @@ class LocaleDeploy implements DeployInterface
 
             $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
 
-            if ($compiledFile !== '') {
+            if ($compiledFile !== '' && !$this->checkSkip($compiledFile)) {
                 $this->deployFile($compiledFile, $area, $themePath, $locale, null);
             }
         }
@@ -359,7 +362,9 @@ class LocaleDeploy implements DeployInterface
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
-                $this->bundleManager->addAsset($asset);
+                if (!$this->getOption(Options::NO_JAVASCRIPT)) {
+                    $this->bundleManager->addAsset($asset);
+                }
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
