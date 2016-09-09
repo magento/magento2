@@ -114,6 +114,7 @@ final class Vault implements VaultPaymentInterface
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param string $code
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $config,

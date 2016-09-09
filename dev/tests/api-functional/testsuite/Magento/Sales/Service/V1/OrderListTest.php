@@ -80,7 +80,8 @@ class OrderListTest extends WebapiAbstract
         // check what additional information is single dimension array
         static::assertEquals(
             count($item['payment']['additional_information']),
-            count($item['payment']['additional_information']), COUNT_RECURSIVE
+            count($item['payment']['additional_information']),
+            COUNT_RECURSIVE
         );
     }
 }

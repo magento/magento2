@@ -18,6 +18,10 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Model\VaultPaymentInterface;
 
+/**
+ * Class VaultTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class VaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
