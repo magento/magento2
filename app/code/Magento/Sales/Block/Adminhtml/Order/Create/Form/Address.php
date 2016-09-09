@@ -6,8 +6,8 @@
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Backend\Model\Session\Quote;
-use Magento\Customer\Model\CountryHandler;
-use Magento\Directory\Model\CountryHandlerInterface;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -79,6 +79,16 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @var \Magento\Customer\Model\Address\Mapper
      */
     protected $addressMapper;
+
+    /**
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     */
+    private $countriesCollection;
+
+    /**
+     * @var \Magento\Backend\Model\Session\Quote
+     */
+    private $backendQuoteSession;
 
     /**
      * Constructor
@@ -291,38 +301,40 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
     {
         $storeId = $this->getBackendQuoteSession()->getStoreId();
-        $options = $this->getCountryHandler()
-            ->loadByScope($this->getCountriesCollection(), $storeId, ScopeInterface::SCOPE_STORE)
+        $options = $this->getCountriesCollection()
+            ->loadByScope($storeId, ScopeInterface::SCOPE_STORE)
             ->toOptionArray();
 
         $countryElement->setValues($options);
     }
 
     /**
+     * Retrieve Directiry Countries collection
      * @deprecated
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     private function getCountriesCollection()
     {
-        return ObjectManager::getInstance()->get(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+        if (!$this->countriesCollection) {
+            $this->countriesCollection = ObjectManager::getInstance()
+                ->get(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+        }
+
+        return $this->countriesCollection;
     }
 
     /**
-     * @deprecated
-     * @return CountryHandlerInterface
-     */
-    private function getCountryHandler()
-    {
-        return ObjectManager::getInstance()->get(CountryHandlerInterface::class);
-    }
-
-    /**
+     * Retrieve Backend Quote Session
      * @deprecated
      * @return Quote
      */
     private function getBackendQuoteSession()
     {
-        return ObjectManager::getInstance()->get(Quote::class);
+        if (!$this->backendQuoteSession) {
+            $this->backendQuoteSession = ObjectManager::getInstance()->get(Quote::class);
+        }
+
+        return $this->backendQuoteSession;
     }
 
     /**

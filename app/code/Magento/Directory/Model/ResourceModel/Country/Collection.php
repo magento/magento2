@@ -10,7 +10,7 @@
  * Directory Country Resource Collection
  */
 namespace Magento\Directory\Model\ResourceModel\Country;
-use Magento\Directory\Model\CountryHandlerInterface;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
@@ -55,6 +55,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @var \Magento\Directory\Helper\Data
      */
     protected $helperData;
+
+    /**
+     * @var AllowedCountries
+     */
+    private $allowedCountries;
 
     /**
      * @var string[]
@@ -122,12 +127,34 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Return Allowed Countries reader
      * @deprecated
-     * @return \Magento\Directory\Model\CountryHandlerInterface
+     * @return \Magento\Directory\Model\AllowedCountries
      */
-    private function getCountryHandler()
+    private function getAllowedCountriesReader()
     {
-        return ObjectManager::getInstance()->get(CountryHandlerInterface::class);
+        if (!$this->allowedCountries) {
+            $this->allowedCountries = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountries;
+    }
+
+    /**
+     * Apply allowed countries by specific scope: store, website, etc.
+     * @param string $filter
+     * @param string $scope
+     * @return self
+     */
+    public function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE)
+    {
+        $allowedCountries = $this->getAllowedCountriesReader()->getAllowedCountries($filter, $scope);
+
+        if (!empty($allowedCountries)) {
+            $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
+        }
+
+        return $this;
     }
 
     /**
@@ -138,8 +165,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        $this->getCountryHandler()->loadByScope($this, $store, ScopeInterface::SCOPE_STORE);
-        return $this;
+        return $this->loadByScope($store, ScopeInterface::SCOPE_STORE);
     }
 
     /**

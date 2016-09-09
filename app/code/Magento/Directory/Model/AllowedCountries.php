@@ -4,22 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Model;
+namespace Magento\Directory\Model;
 
-use Magento\Customer\Model\Config\Share;
-use Magento\Directory\Model\CountryHandlerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class CountryHandler.
- * @package Magento\Customer\Model
  */
-class CountryHandler implements CountryHandlerInterface
+class AllowedCountries
 {
+    const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
+
     /**
      * @var ScopeConfigInterface
      */
@@ -31,44 +29,30 @@ class CountryHandler implements CountryHandlerInterface
     private $storeManager;
 
     /**
-     * @var Share
-     */
-    private $customerConfigShare;
-
-    /**
-     * CountryHandler constructor.
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Config\Share $configShare
+     * @return void
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
-        Share $configShare
+        StoreManagerInterface $storeManager
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
-        $this->customerConfigShare = $configShare;
     }
 
     /**
-     * @inheritdoc
+     * Retrieve all allowed countries for scope or scopes
+     * @param string | null $filter
+     * @param string $scope
+     * @return array
      */
     public function getAllowedCountries(
         $filter = null,
-        $scope = ScopeInterface::SCOPE_WEBSITE,
-        $ignoreGlobalScope = false
+        $scope = ScopeInterface::SCOPE_WEBSITE
     ) {
         if (empty($filter)) {
             $filter = $this->storeManager->getWebsite()->getId();
-        }
-
-        if ($this->customerConfigShare->isGlobalScope() && !$ignoreGlobalScope) {
-            //Check if we have shared accounts - than merge all website allowed countries
-            $filter = array_map(function (WebsiteInterface $website) {
-                return $website->getId();
-            }, $this->storeManager->getWebsites());
-            $scope = ScopeInterface::SCOPE_WEBSITES;
         }
 
         switch ($scope) {
@@ -86,19 +70,21 @@ class CountryHandler implements CountryHandlerInterface
                 $allowedCountries = $this->getCountriesFromConfig($scope, $filter);
         }
 
-        return $this->makeCountriesUnique($allowedCountries);
+        return $this->getUniqueCountries($allowedCountries);
     }
 
     /**
+     * Return Unique Countries by merging them by keys.
      * @param array $allowedCountries
      * @return array
      */
-    private function makeCountriesUnique(array $allowedCountries)
+    private function getUniqueCountries(array $allowedCountries)
     {
         return array_combine($allowedCountries, $allowedCountries);
     }
 
     /**
+     * Takes countries from Countries Config data
      * @param string $scope
      * @param int $filter
      * @return array
@@ -116,20 +102,7 @@ class CountryHandler implements CountryHandlerInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function loadByScope(AbstractDb $collection, $filter, $scope = ScopeInterface::SCOPE_STORE)
-    {
-        $allowCountries = $this->getAllowedCountries($filter, $scope);
-
-        if (!empty($allowCountries)) {
-            $collection->addFieldToFilter("country_id", ['in' => $allowCountries]);
-        }
-
-        return $collection;
-    }
-
-    /**
+     * Return Single Scope
      * @param string $scope
      * @return string
      */

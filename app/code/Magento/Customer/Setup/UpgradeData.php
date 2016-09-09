@@ -7,7 +7,8 @@
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
-use Magento\Directory\Model\CountryHandlerInterface;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Setup\SetupInterface;
@@ -29,6 +30,11 @@ class UpgradeData implements UpgradeDataInterface
      * @var CustomerSetupFactory
      */
     protected $customerSetupFactory;
+
+    /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
 
     /**
      * @var IndexerRegistry
@@ -138,12 +144,17 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Retrieve Allowed Countries Reader
      * @deprecated
-     * @return CountryHandlerInterface
+     * @return AllowedCountries
      */
-    private function getCountryHandler()
+    private function getAllowedCountriesReader()
     {
-        return \Magento\Framework\App\ObjectManager::getInstance()->get(CountryHandlerInterface::class);
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
     }
 
     /**
@@ -175,7 +186,8 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getStores() as $store) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $this->getCountryHandler()->getAllowedCountries($store->getId(), ScopeInterface::SCOPE_STORE),
+                $this->getAllowedCountriesReader()
+                    ->getAllowedCountries($store->getId(), ScopeInterface::SCOPE_STORE),
                 $store->getWebsiteId()
             );
         }
@@ -183,7 +195,8 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getWebsites() as $website) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $this->getCountryHandler()->getAllowedCountries($website->getId(), ScopeInterface::SCOPE_WEBSITE),
+                $this->getAllowedCountriesReader()
+                    ->getAllowedCountries($website->getId(), ScopeInterface::SCOPE_WEBSITE),
                 $website->getId()
             );
         }
@@ -194,7 +207,7 @@ class UpgradeData implements UpgradeDataInterface
         $connection->delete(
             $setup->getTable('core_config_data'),
             [
-                'path = ?' => CountryHandlerInterface::ALLOWED_COUNTRIES_PATH,
+                'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
                 'scope = ?' => ScopeInterface::SCOPE_STORES
             ]
         );
@@ -207,7 +220,7 @@ class UpgradeData implements UpgradeDataInterface
                     'value' => implode(',', $countries)
                 ],
                 [
-                    'path = ?' => CountryHandlerInterface::ALLOWED_COUNTRIES_PATH,
+                    'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
                     'scope_id = ?' => $scopeId,
                     'scope = ?' => ScopeInterface::SCOPE_WEBSITES
                 ]
