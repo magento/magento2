@@ -68,7 +68,7 @@ CountryModel.prototype = {
             if (specifCountryElement) {
                 if (applyCountryElement.value == 1) {
                    // enable related country select only if its 'Use Default' checkbox is absent or is unchecked
-                   specifCountryElement.disabled = (useDefaultElement) ? useDefaultElement.checked : false;
+                   specifCountryElement.disabled = useDefaultElement ? useDefaultElement.checked : false;
                    if (showMethodElement) {
                        this.showElement(showMethodElement.up(1));
                    }

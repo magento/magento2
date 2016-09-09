@@ -37,7 +37,7 @@ document.getElementById('{$elementId}').addEventListener('change', function(even
 
     if (isCountrySpecific) {
         // enable related country select only if its 'Use Default' checkbox is absent or is unchecked
-        specificCountriesElement.disabled = (useDefaultElement) ? useDefaultElement.checked : false;
+        specificCountriesElement.disabled = useDefaultElement ? useDefaultElement.checked : false;
     } else {
         // disable related country select if all countries are used
         specificCountriesElement.disabled = true;
