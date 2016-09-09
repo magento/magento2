@@ -122,7 +122,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->setMethods([
                 'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
-                'getId', 'getIncrementId'
+                'getId', 'getIncrementId', 'getBaseTaxAmount', 'getBaseShippingAmount'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -176,6 +176,12 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->addressShippingMock);
+        $this->orderMock->expects(static::once())
+            ->method('getBaseTaxAmount')
+            ->willReturn(1.24);
+        $this->orderMock->expects(static::once())
+            ->method('getBaseShippingAmount')
+            ->willReturn(5);
         $this->addressBillingMock->expects($this->once())
             ->method('getFirstname')
             ->willReturn('Firstname');
@@ -425,6 +431,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->method('setVaultPaymentToken')
             ->with($paymentTokenMock);
 
-        $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
+        $this->object->authorize($this->paymentMock, 33);
+//        $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Paypal\Model\Payflow\Request::class);
     }
 }
