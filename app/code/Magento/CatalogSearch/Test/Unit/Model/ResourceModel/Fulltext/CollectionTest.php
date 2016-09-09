@@ -6,12 +6,49 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
+use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CollectionTest extends BaseCollectionTest
 {
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $temporaryStorage;
+
+    /**
+     * @var \Magento\Search\Api\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $search;
+
+    /**
+     * @var MockObject
+     */
+    private $criteriaBuilder;
+
+    /**
+     * @var MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var MockObject
+     */
+    private $universalFactory;
+
+    /**
+     * @var MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @var MockObject
+     */
+    private $filterBuilder;
+
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection
      */
@@ -29,32 +66,48 @@ class CollectionTest extends BaseCollectionTest
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $storeManager = $this->getStoreManager();
-        $universalFactory = $this->getUniversalFactory();
-        $scopeConfig = $this->getScopeConfig();
-        $criteriaBuilder = $this->getCriteriaBuilder();
-        $filterBuilder = $this->getFilterBuilder();
+        $this->storeManager = $this->getStoreManager();
+        $this->universalFactory = $this->getUniversalFactory();
+        $this->scopeConfig = $this->getScopeConfig();
+        $this->criteriaBuilder = $this->getCriteriaBuilder();
+        $this->filterBuilder = $this->getFilterBuilder();
 
-        $this->prepareObjectManager([
-            [\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
-                $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-            ],
-        ]);
+        $this->prepareObjectManager(
+            [
+                [
+                    \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
+                    $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
+                ],
+            ]
+        );
+
+        $this->temporaryStorage = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $temporaryStorageFactory = $this->getMockBuilder(TemporaryStorageFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $temporaryStorageFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->temporaryStorage);
 
         $this->model = $helper->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             [
-                'storeManager' => $storeManager,
-                'universalFactory' => $universalFactory,
-                'scopeConfig' => $scopeConfig,
+                'storeManager' => $this->storeManager,
+                'universalFactory' => $this->universalFactory,
+                'scopeConfig' => $this->scopeConfig,
+                'temporaryStorageFactory' => $temporaryStorageFactory
             ]
         );
 
-        $search = $this->getMockForAbstractClass(\Magento\Search\Api\SearchInterface::class);
-        $this->model->setSearchCriteriaBuilder($criteriaBuilder);
-        $this->model->setSearch($search);
-        $this->model->setFilterBuilder($filterBuilder);
-
+        $this->search = $this->getMockBuilder(\Magento\Search\Api\SearchInterface::class)
+            ->setMethods(['search'])
+            ->getMockForAbstractClass();
+        $this->model->setSearchCriteriaBuilder($this->criteriaBuilder);
+        $this->model->setSearch($this->search);
+        $this->model->setFilterBuilder($this->filterBuilder);
     }
 
     /**
@@ -62,13 +115,50 @@ class CollectionTest extends BaseCollectionTest
      * @expectedExceptionCode 333
      * @expectedExceptionMessage setRequestName
      */
-    public function testGetFacetedData()
+    public function testGetFacetedDataWithException()
     {
+        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
+        $criteria->expects($this->once())
+            ->method('setRequestName')
+            ->withConsecutive(['catalog_view_container'])
+            ->willThrowException(new \Exception('setRequestName', 333));
         $this->model->getFacetedData('field');
     }
 
+    public function testGetFacetedDataWithEmptyAggregations()
+    {
+        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
+        $criteria->expects($this->once())
+            ->method('setRequestName')
+            ->withConsecutive(['catalog_view_container']);
+        $searchResult = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultInterface::class)
+            ->getMockForAbstractClass();
+        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
+            ->setMethods(['getName'])
+            ->getMock();
+        $this->temporaryStorage->expects($this->once())
+            ->method('storeApiDocuments')
+            ->willReturn($table);
+        $this->search->expects($this->once())
+            ->method('search')
+            ->willReturn($searchResult);
+        $this->model->getFacetedData('field');
+    }
+
+    public function testAddFieldToFilter()
+    {
+        $this->filter = $this->createFilter();
+        $this->criteriaBuilder->expects($this->once())
+            ->method('addFilter')
+            ->with($this->filter);
+        $this->filterBuilder->expects($this->once())->method('create')->willReturn($this->filter);
+        $this->model->addFieldToFilter('someMultiselectValue', [3, 5, 8]);
+    }
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getScopeConfig()
     {
@@ -76,15 +166,12 @@ class CollectionTest extends BaseCollectionTest
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->willReturn(1);
 
         return $scopeConfig;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getCriteriaBuilder()
     {
@@ -92,31 +179,32 @@ class CollectionTest extends BaseCollectionTest
             ->setMethods(['addFilter', 'create', 'setRequestName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filter = new \Magento\Framework\Api\Filter();
-        $this->filter->setField('price_dynamic_algorithm');
-        $this->filter->setValue(1);
-        $criteriaBuilder->expects($this->once())
-            ->method('addFilter')
-            ->with($this->filter);
-        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
-        $criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
-        $criteria->expects($this->once())
-            ->method('setRequestName')
-            ->withConsecutive(['catalog_view_container'])
-            ->willThrowException(new \Exception('setRequestName', 333));
 
         return $criteriaBuilder;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getFilterBuilder()
     {
         $filterBuilder = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
-        $filterBuilder->expects($this->once())->method('setField')->with('price_dynamic_algorithm');
-        $filterBuilder->expects($this->once())->method('setValue')->with(1);
-        $filterBuilder->expects($this->once())->method('create')->willReturn($this->filter);
+        return $filterBuilder;
+    }
+
+    protected function addFiltersToFilterBuilder(MockObject $filterBuilder, array $filters)
+    {
+        $i = 1;
+        foreach ($filters as $field => $value) {
+            $filterBuilder->expects($this->at($i++))
+                ->method('setField')
+                ->with($field)
+                ->willReturnSelf();
+            $filterBuilder->expects($this->at($i++))
+                ->method('setValue')
+                ->with($value)
+                ->willReturnSelf();
+        }
         return $filterBuilder;
     }
 
@@ -134,5 +222,13 @@ class CollectionTest extends BaseCollectionTest
         $reflectionProperty = $reflectionClass->getProperty('_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock);
+    }
+
+    protected function createFilter()
+    {
+        $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        return $filter;
     }
 }
