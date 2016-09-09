@@ -226,7 +226,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->with('(someName=someValue)')
             ->willReturnSelf();
         $this->select->expects($this->at(3))
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['stock_index' => 'cataloginventory_stock_status'],
                 'search_index.entity_id = stock_index.product_id'
