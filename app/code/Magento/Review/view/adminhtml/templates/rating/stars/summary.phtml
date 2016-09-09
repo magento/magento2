@@ -13,5 +13,5 @@
         <div class="rating" style="width:<?php /* @noEscape */ echo ceil($block->getRatingSummary()->getSum() / ($block->getRatingSummary()->getCount())) ?>%;"></div>
     </div>
 <?php else: ?>
-    <?php /* @escapeNotVerified */ echo __("Rating isn't Available") ?>
+    <?php echo $block->escapeHtml(__("Rating isn't Available")) ?>
 <?php endif; ?>
