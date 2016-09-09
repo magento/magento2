@@ -22,13 +22,41 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+        $connection = $setup->getConnection();
 
+        // data update for Vault module < 2.0.1
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $connection = $setup->getConnection();
+            // update sets credit card as default token type
             $connection->update($setup->getTable(InstallSchema::PAYMENT_TOKEN_TABLE), [
                 PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD
             ], PaymentTokenInterface::TYPE . ' = ""');
         }
+
+        // data update for Vault module < 2.0.2
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            // update converts additional info with token metadata to single dimensional array
+            $select = $connection->select()
+                ->from($setup->getTable('sales_order_payment'), 'entity_id')
+                ->columns(['additional_information'])
+                ->where('additional_information LIKE ?', '%token_metadata%');
+
+            $items = $connection->fetchAll($select);
+            foreach ($items as $item) {
+                $additionalInfo = unserialize($item['additional_information']);
+                $additionalInfo[PaymentTokenInterface::CUSTOMER_ID] =
+                    $additionalInfo['token_metadata'][PaymentTokenInterface::CUSTOMER_ID];
+                $additionalInfo[PaymentTokenInterface::PUBLIC_HASH] =
+                    $additionalInfo['token_metadata'][PaymentTokenInterface::PUBLIC_HASH];
+                unset($additionalInfo['token_metadata']);
+
+                $connection->update(
+                    $setup->getTable('sales_order_payment'),
+                    ['additional_information' => serialize($additionalInfo)],
+                    ['entity_id = ?' => $item['entity_id']]
+                );
+            }
+        }
+
         $setup->endSetup();
     }
 }
