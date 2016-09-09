@@ -65,13 +65,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     ];
 
     /**
-     * Website Ids for current Product.
-     *
-     * @var array
-     */
-    private $websiteIds = [];
-
-    /**
      * @constructor
      * @param DataInterface $configuration
      * @param EventManagerInterface $eventManager
