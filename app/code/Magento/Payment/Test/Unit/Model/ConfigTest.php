@@ -8,10 +8,10 @@
 
 namespace Magento\Payment\Test\Unit\Model;
 
-use \Magento\Payment\Model\Config;
-
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -127,24 +127,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetActiveMethods($isActive)
     {
-        $abstractMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Method\AbstractMethod'
-        )->disableOriginalConstructor()->setMethods(['setId', 'setStore', 'getConfigData'])->getMock();
-        $this->scopeConfig->expects($this->once())->method('getValue')->with(
-            'payment', ScopeInterface::SCOPE_STORE, null
-        )->will($this->returnValue($this->paymentMethodsList));
-        $this->paymentMethodFactory->expects($this->once())->method('create')->with(
-            $this->paymentMethodsList['active_method']['model']
-        )->will($this->returnValue($abstractMethod));
-        $abstractMethod->expects($this->any())->method('setId')->with('active_method')->will(
-            $this->returnValue($abstractMethod)
-        );
-        $abstractMethod->expects($this->any())->method('setStore')->with(null);
-        $abstractMethod->expects($this->any())
+        $adapter = $this->getMock(MethodInterface::class);
+        $this->scopeConfig->expects(static::once())
+            ->method('getValue')
+            ->with('payment', ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($this->paymentMethodsList);
+        $this->paymentMethodFactory->expects(static::once())
+            ->method('create')
+            ->with($this->paymentMethodsList['active_method']['model'])
+            ->willReturn($adapter);
+        $adapter->expects(static::once())
+            ->method('setStore')
+            ->with(null);
+        $adapter->expects(static::once())
             ->method('getConfigData')
-            ->with('active', $this->isNull())
-            ->will($this->returnValue($isActive));
-        $this->assertEquals($isActive ? ['active_method' => $abstractMethod] : [], $this->config->getActiveMethods());
+            ->with('active', static::isNull())
+            ->willReturn($isActive);
+        static::assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
     }
 
     public function getActiveMethodsDataProvider()
