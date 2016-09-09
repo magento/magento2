@@ -69,9 +69,19 @@ class OrderListTest extends WebapiAbstract
         ];
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertArrayHasKey('items', $result);
-        $this->assertCount(1, $result['items']);
-        $this->assertArrayHasKey('search_criteria', $result);
-        $this->assertEquals($searchData, $result['search_criteria']);
+        static::assertArrayHasKey('items', $result);
+        static::assertCount(1, $result['items']);
+        static::assertArrayHasKey('search_criteria', $result);
+        static::assertEquals($searchData, $result['search_criteria']);
+
+        $item = $result['items'][0];
+        static::assertNotEmpty($item['payment']);
+
+        // check what additional information is single dimension array
+        static::assertEquals(
+            count($item['payment']['additional_information']),
+            count($item['payment']['additional_information']),
+            COUNT_RECURSIVE
+        );
     }
 }
