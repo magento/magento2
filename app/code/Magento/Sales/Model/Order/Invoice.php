@@ -792,6 +792,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns increment id
      *

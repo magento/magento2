@@ -123,7 +123,6 @@ class StaticProperties
         return false; // File is not in an "include" directory
     }
 
-
     /**
      * Restore static variables (after running controller test case)
      * @TODO: refactor all code where objects are stored to static variables to use object manager instead

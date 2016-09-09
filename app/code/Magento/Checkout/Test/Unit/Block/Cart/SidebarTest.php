@@ -124,6 +124,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $websiteId = 100;
 
         $shoppingCartUrl = 'http://url.com/cart';
         $checkoutUrl = 'http://url.com/checkout';
@@ -139,7 +140,8 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             'removeItemUrl' => $removeItemUrl,
             'imageTemplate' => $imageTemplate,
             'baseUrl' => $baseUrl,
-            'minicartMaxItemsVisible' => 3
+            'minicartMaxItemsVisible' => 3,
+            'websiteId' => $websiteId
         ];
 
         $valueMap = [
@@ -156,8 +158,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
 
         $this->scopeConfigMock->expects($this->once())
