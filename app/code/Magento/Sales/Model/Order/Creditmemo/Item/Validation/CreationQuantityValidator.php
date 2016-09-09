@@ -54,7 +54,7 @@ class CreationQuantityValidator implements ValidatorInterface
         }
 
         if (!$this->isQtyAvailable($orderItem, $entity->getQty())) {
-            return [__('The quantity to refund must not be greater than the unrefunded quantity')];
+            return [__('The quantity to refund must not be greater than the unrefunded quantity.')];
         }
 
         return [];
