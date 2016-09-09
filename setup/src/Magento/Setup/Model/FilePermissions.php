@@ -8,7 +8,9 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
 
 class FilePermissions
 {
@@ -21,6 +23,11 @@ class FilePermissions
      * @var DirectoryList
      */
     protected $directoryList;
+
+    /**
+     * @var File
+     */
+    protected $driverFile;
 
     /**
      * List of required writable directories for installation
@@ -51,15 +58,25 @@ class FilePermissions
     protected $applicationCurrentNonWritableDirectories = [];
 
     /**
+     * List of non-writable paths in a specified directory
+     *
+     * @var array
+     */
+    protected $nonWritablePathsInDirectories = [];
+
+    /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @param File $driverFile
      */
     public function __construct(
         Filesystem $filesystem,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        File $driverFile
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
+        $this->driverFile = $driverFile;
     }
 
     /**
@@ -110,8 +127,12 @@ class FilePermissions
     {
         if (!$this->installationCurrentWritableDirectories) {
             foreach ($this->installationWritableDirectories as $code => $path) {
-                if ($this->isWritable($code) && $this->checkRecursiveDirectories($path)) {
-                    $this->installationCurrentWritableDirectories[] = $path;
+                if ($this->isWritable($code)) {
+                    if ($this->checkRecursiveDirectories($path)) {
+                        $this->installationCurrentWritableDirectories[] = $path;
+                    }
+                } else {
+                    $this->nonWritablePathsInDirectories[$path] = [$path];
                 }
             }
         }
@@ -132,21 +153,31 @@ class FilePermissions
         );
         $noWritableFilesFolders = [
             $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) .'/'
+            $this->directoryList->getPath(DirectoryList::DI) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
 
+        $directoryIterator = new ExcludeFilter(
+            $directoryIterator,
+            [
+                $this->directoryList->getPath(DirectoryList::SESSION) . '/',
+            ]
+        );
+
+        $foundNonWritable = false;
+
         try {
             foreach ($directoryIterator as $subDirectory) {
-                if (!$subDirectory->isWritable()) {
-                    return false;
+                if (!$subDirectory->isWritable() && !$subDirectory->isLink()) {
+                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory;
+                    $foundNonWritable = true;
                 }
             }
         } catch (\UnexpectedValueException $e) {
             return false;
         }
-        return true;
+        return !$foundNonWritable;
     }
 
     /**
@@ -191,6 +222,28 @@ class FilePermissions
     }
 
     /**
+     * Checks if var/generation/* has read and execute permissions
+     *
+     * @return bool
+     */
+    public function checkDirectoryPermissionForCLIUser()
+    {
+        $varGenerationDir = $this->directoryList->getPath(DirectoryList::GENERATION);
+        $dirs = $this->driverFile->readDirectory($varGenerationDir);
+        array_unshift($dirs, $varGenerationDir);
+
+        foreach ($dirs as $dir) {
+            if (!is_dir($dir)
+                || !is_readable($dir)
+                || !is_executable($dir)
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Checks if directory exists and is readable
      *
      * @param \Magento\Framework\Filesystem\Directory\WriteInterface $directory
@@ -205,8 +258,30 @@ class FilePermissions
     }
 
     /**
+     * Checks writable paths for installation
+     *
+     * @return array
+     */
+    public function getMissingWritablePathsForInstallation()
+    {
+        $required = $this->getInstallationWritableDirectories();
+        $current = $this->getInstallationCurrentWritableDirectories();
+        $missingPaths = [];
+        foreach (array_diff($required, $current) as $missingPath) {
+            if (isset($this->nonWritablePathsInDirectories[$missingPath])) {
+                $missingPaths = array_merge(
+                    $missingPaths,
+                    $this->nonWritablePathsInDirectories[$missingPath]
+                );
+            }
+        }
+        return $missingPaths;
+    }
+
+    /**
      * Checks writable directories for installation
      *
+     * @deprecated Use getMissingWritablePathsForInstallation() to get all missing writable paths required for install
      * @return array
      */
     public function getMissingWritableDirectoriesForInstallation()
