@@ -584,6 +584,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $validatedRows;
 
     /**
+     * Array of row ids inserted (needed to check updated products).
+     *
+     * @var
+     */
+    protected $rowIdsInserted = [];
+
+    /**
+     * Array of row ids updated (needed to check updated products).
+     *
+     * @var
+     */
+    protected $rowIdsUpdated = [];
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $_logger;
@@ -1304,13 +1318,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         static $entityTable = null;
         $this->countItemsCreated += count($entityRowsIn);
-        $this->countItemsUpdated += count($entityRowsUp);
+        $updatedRowIds = [];
+        foreach ($entityRowsUp as $entityRowsUpData) {
+            if (isset($entityRowsUpData[$this->getProductEntityLinkField()])) {
+                $updatedRowIds[] = $entityRowsUpData[$this->getProductEntityLinkField()];
+            }
+        }
+        $updatedRowIds = array_unique($updatedRowIds);
+        $this->countItemsUpdated += count(
+            array_diff($updatedRowIds, $this->rowIdsInserted, $this->rowIdsUpdated)
+        );
 
         if (!$entityTable) {
             $entityTable = $this->_resourceFactory->create()->getEntityTable();
         }
         if ($entityRowsUp) {
             $this->_connection->insertOnDuplicate($entityTable, $entityRowsUp, ['updated_at']);
+            foreach ($entityRowsUp as $data) {
+                $this->rowIdsUpdated[] = $data[$this->getProductEntityLinkField()];
+            }
         }
         if ($entityRowsIn) {
             $this->_connection->insertMultiple($entityTable, $entityRowsIn);
@@ -1323,13 +1349,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 array_keys($entityRowsIn)
             );
             $newProducts = $this->_connection->fetchAll($select);
+            $skusList = [];
             foreach ($newProducts as $data) {
+                $this->rowIdsInserted[] = $data[$this->getProductEntityLinkField()];
                 $sku = $data['sku'];
+                $skusList[] = $sku;
                 unset($data['sku']);
                 foreach ($data as $key => $value) {
                     $this->skuProcessor->setNewSkuData($sku, $key, $value);
                 }
             }
+
+            $this->_oldSku = $this->skuProcessor->updateOldSkus($skusList)->getOldSkus();
         }
         return $this;
     }

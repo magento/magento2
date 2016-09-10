@@ -2230,12 +2230,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve product entities info as array
      *
-     * @param string|array $columns One or several columns
+     * @param string|array|null $columns One or several columns
+     * @param array|null $productSkuList List of skus
+     *
      * @return array
      */
-    public function getProductEntitiesInfo($columns = null)
+    public function getProductEntitiesInfo($columns = null, $productSkuList = null)
     {
-        return $this->_getResource()->getProductEntitiesInfo($columns);
+        return $this->_getResource()->getProductEntitiesInfo($columns, $productSkuList);
     }
 
     /**

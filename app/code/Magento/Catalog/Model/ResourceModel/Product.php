@@ -511,9 +511,11 @@ class Product extends AbstractResource
      * Retrieve product entities info
      *
      * @param  array|string|null $columns
+     * @param  array|null $productSkuList
+     *
      * @return array
      */
-    public function getProductEntitiesInfo($columns = null)
+    public function getProductEntitiesInfo($columns = null, $productSkuList = null)
     {
         if (!empty($columns) && is_string($columns)) {
             $columns = [$columns];
@@ -524,6 +526,9 @@ class Product extends AbstractResource
 
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getTable('catalog_product_entity'), $columns);
+        if ($productSkuList) {
+            $select->where('sku in (?)', $productSkuList);
+        }
 
         return $connection->fetchAll($select);
     }
