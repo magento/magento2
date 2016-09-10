@@ -87,6 +87,10 @@ class ClassesScanner implements ClassesScannerInterface
      */
     private function isExclude(\SplFileInfo $fileItem, $patterns)
     {
+        if($fileItem->getBasename()[0] == '.') {
+            return true;
+        } 
+
         if (!is_array($patterns)) {
             $patterns = (array)$patterns;
         }
