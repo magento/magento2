@@ -28,6 +28,11 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_countriesFactory;
 
     /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
@@ -65,11 +70,16 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Retrieve Store Resolver
      * @deprecated
      * @return StoreResolverInterface
      */
     private function getStoreResolver()
     {
-        return ObjectManager::getInstance()->get(StoreResolverInterface::class);
+        if (!$this->storeResolver) {
+            $this->storeResolver = ObjectManager::getInstance()->get(StoreResolverInterface::class);
+        }
+
+        return $this->storeResolver;
     }
 }
