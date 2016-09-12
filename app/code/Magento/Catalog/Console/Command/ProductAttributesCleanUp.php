@@ -78,7 +78,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->setDecorated(true);
-        $this->appState->setAreaCode('catalog');
+        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
         $connection = $this->attributeResource->getConnection();
         $attributeTables = $this->getAttributeTables();
 
