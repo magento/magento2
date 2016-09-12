@@ -146,7 +146,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $scope
      * @return self
      */
-    public function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE)
+    private function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE)
     {
         $allowedCountries = $this->getAllowedCountriesReader()->getAllowedCountries($filter, $scope);
 
