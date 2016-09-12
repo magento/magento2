@@ -65,6 +65,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * Retrieve Store Resolver
+     *
      * @deprecated
      * @return StoreResolverInterface
      */

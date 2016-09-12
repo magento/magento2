@@ -106,6 +106,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
 
     /**
      * Create Countries Collection with all countries
+     *
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     private function createCountriesCollection()

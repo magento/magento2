@@ -132,6 +132,8 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Retrieve Store Manager
+     *
      * @deprecated
      * @return StoreManagerInterface
      */
@@ -146,6 +148,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * Retrieve Allowed Countries Reader
+     *
      * @deprecated
      * @return AllowedCountries
      */
@@ -159,6 +162,8 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Merge allowed countries from different scopes
+     *
      * @param array $countries
      * @param array $newCountries
      * @param string $identifier
@@ -177,6 +182,8 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Migrate and merge allowed countries
+     *
      * @param SetupInterface $setup
      * @return void
      */
