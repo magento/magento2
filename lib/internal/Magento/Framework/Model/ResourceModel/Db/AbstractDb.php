@@ -10,6 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\DB\Adapter\DuplicateException;
 
 /**
  * Abstract resource model class
@@ -409,7 +410,12 @@ abstract class AbstractDb extends AbstractResource
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
+        } catch (DuplicateException $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw new AlreadyExistsException(__('Database duplicate value found'));
+        }
+        catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;

@@ -101,6 +101,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
             }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the attribute set.'));
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Attribute group with same code is already exist. Please enter other Group name')
+            );
+            $hasError = true;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $hasError = true;
