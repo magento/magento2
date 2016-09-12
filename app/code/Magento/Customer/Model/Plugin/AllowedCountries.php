@@ -40,23 +40,24 @@ class AllowedCountries
 
     /**
      * Retrieve all allowed countries or specific by scope depends on customer share setting
+     *
      * @param \Magento\Directory\Model\AllowedCountries $subject
      * @param string | null $filter
      * @param string $scope
      */
     public function beforeGetAllowedCountries(
         \Magento\Directory\Model\AllowedCountries $subject,
-        $filter = null,
+        $scopeCode = null,
         $scope = ScopeInterface::SCOPE_WEBSITE
     ) {
         if ($this->shareConfig->isGlobalScope()) {
             //Check if we have shared accounts - than merge all website allowed countries
-            $filter = array_map(function (WebsiteInterface $website) {
+            $scopeCode = array_map(function (WebsiteInterface $website) {
                 return $website->getId();
             }, $this->storeManager->getWebsites());
             $scope = ScopeInterface::SCOPE_WEBSITES;
         }
 
-        return [$filter, $scope];
+        return [$scopeCode, $scope];
     }
 }

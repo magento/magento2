@@ -12,7 +12,6 @@
 namespace Magento\Directory\Model\ResourceModel\Country;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Collection
@@ -59,7 +58,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @var AllowedCountries
      */
-    private $allowedCountries;
+    private $allowedCountriesReader;
 
     /**
      * @var string[]
@@ -128,33 +127,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Return Allowed Countries reader
+     *
      * @deprecated
      * @return \Magento\Directory\Model\AllowedCountries
      */
     private function getAllowedCountriesReader()
     {
-        if (!$this->allowedCountries) {
-            $this->allowedCountries = ObjectManager::getInstance()->get(AllowedCountries::class);
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
         }
 
-        return $this->allowedCountries;
-    }
-
-    /**
-     * Apply allowed countries by specific scope: store, website, etc.
-     * @param string $filter
-     * @param string $scope
-     * @return self
-     */
-    private function loadByScope($filter, $scope = ScopeInterface::SCOPE_STORE)
-    {
-        $allowedCountries = $this->getAllowedCountriesReader()->getAllowedCountries($filter, $scope);
-
-        if (!empty($allowedCountries)) {
-            $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
-        }
-
-        return $this;
+        return $this->allowedCountriesReader;
     }
 
     /**
@@ -165,7 +148,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        return $this->loadByScope($store, ScopeInterface::SCOPE_STORE);
+        $allowedCountries = $this->getAllowedCountriesReader()->getAllowedCountries($store);
+
+        if (!empty($allowedCountries)) {
+            $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
+        }
+
+        return $this;
     }
 
     /**

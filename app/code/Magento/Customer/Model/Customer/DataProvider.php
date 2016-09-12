@@ -61,7 +61,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var CountryWithWebsites
      */
-    private $countryByWebsiteSource;
+    private $countryWithWebsiteSource;
 
     /**
      * @var \Magento\Customer\Model\Config\Share
@@ -321,7 +321,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if ($attribute->usesSource()) {
                 if ($code == AddressInterface::COUNTRY_ID) {
-                    $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryByWebsiteSource()
+                    $meta[$code]['arguments']['data']['config']['options'] = $this->getcountryWithWebsiteSource()
                         ->getAllOptions();
                 } else {
                     $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
@@ -342,19 +342,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Retrieve Country With Websites Source
+     *
      * @deprecated
      * @return CountryWithWebsites
      */
-    private function getCountryByWebsiteSource()
+    private function getCountryWithWebsiteSource()
     {
-        if (!$this->countryByWebsiteSource) {
-            $this->countryByWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
+        if (!$this->countryWithWebsiteSource) {
+            $this->countryWithWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
         }
 
-        return $this->countryByWebsiteSource;
+        return $this->countryWithWebsiteSource;
     }
 
     /**
+     * Retrieve Customer Config Share
+     *
      * @deprecated
      * @return \Magento\Customer\Model\Config\Share
      */
@@ -368,6 +372,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Add global scope parameter and filter options to website meta
+     *
      * @param array $meta
      * @return void
      */

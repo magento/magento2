@@ -47,6 +47,11 @@ class UpgradeData implements UpgradeDataInterface
     protected $eavConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param CustomerSetupFactory $customerSetupFactory
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -135,16 +140,23 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Retrieve Store Manager
+     *
      * @deprecated
      * @return StoreManagerInterface
      */
     private function getStoreManager()
     {
-        return \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        if (!$this->storeManager) {
+            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        }
+
+        return $this->storeManager;
     }
 
     /**
      * Retrieve Allowed Countries Reader
+     *
      * @deprecated
      * @return AllowedCountries
      */
@@ -158,6 +170,8 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Merge allowed countries between different scopes
+     *
      * @param array $countries
      * @param array $newCountries
      * @param string $identifier
@@ -176,6 +190,8 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Merge allowed countries from stores to websites
+     *
      * @param SetupInterface $setup
      * @return void
      */

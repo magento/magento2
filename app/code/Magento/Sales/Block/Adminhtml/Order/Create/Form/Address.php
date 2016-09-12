@@ -6,12 +6,9 @@
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Backend\Model\Session\Quote;
-use Magento\Directory\Model\AllowedCountries;
-use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Order create address form

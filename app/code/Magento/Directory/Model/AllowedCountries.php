@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class CountryHandler.
+ * Class CountryHandler
  */
 class AllowedCountries
 {
@@ -43,23 +43,24 @@ class AllowedCountries
 
     /**
      * Retrieve all allowed countries for scope or scopes
-     * @param string | null $filter
+     *
+     * @param string | null $scopeCode
      * @param string $scope
      * @return array
      */
     public function getAllowedCountries(
-        $filter = null,
+        $scopeCode = null,
         $scope = ScopeInterface::SCOPE_WEBSITE
     ) {
-        if (empty($filter)) {
-            $filter = $this->storeManager->getWebsite()->getId();
+        if (empty($scopeCode)) {
+            $scopeCode = $this->getDefaultScopeCode($scope);
         }
 
         switch ($scope) {
             case ScopeInterface::SCOPE_WEBSITES:
             case ScopeInterface::SCOPE_STORES:
                 $allowedCountries = [];
-                foreach ($filter as $singleFilter) {
+                foreach ($scopeCode as $singleFilter) {
                     $allowedCountries = array_merge(
                         $allowedCountries,
                         $this->getCountriesFromConfig($this->getSingleScope($scope), $singleFilter)
@@ -67,14 +68,40 @@ class AllowedCountries
                 }
                 break;
             default:
-                $allowedCountries = $this->getCountriesFromConfig($scope, $filter);
+                $allowedCountries = $this->getCountriesFromConfig($scope, $scopeCode);
         }
 
         return $this->getUniqueCountries($allowedCountries);
     }
 
     /**
-     * Return Unique Countries by merging them by keys.
+     * Resolve scope code by scope
+     *
+     * @throws \InvalidArgumentException
+     * @param $scope
+     * @return array|int
+     */
+    private function getDefaultScopeCode($scope)
+    {
+        switch ($scope) {
+            case ScopeInterface::SCOPE_WEBSITE:
+                return $this->storeManager->getWebsite()->getId();
+            case ScopeInterface::SCOPE_STORE:
+                return $this->storeManager->getStore()->getId();
+            case ScopeInterface::SCOPE_GROUP:
+                return $this->storeManager->getGroup()->getId();
+            case ScopeInterface::SCOPE_WEBSITES:
+                return [$this->storeManager->getWebsite()->getId()];
+            case ScopeInterface::SCOPE_STORES:
+                return [$this->storeManager->getStore()->getId()];
+            default:
+                throw new \InvalidArgumentException("Invalid scope is specified");
+        }
+    }
+
+    /**
+     * Return Unique Countries by merging them by keys
+     *
      * @param array $allowedCountries
      * @return array
      */
@@ -85,24 +112,26 @@ class AllowedCountries
 
     /**
      * Takes countries from Countries Config data
+     *
      * @param string $scope
-     * @param int $filter
+     * @param int $scopeCode
      * @return array
      */
-    private function getCountriesFromConfig($scope, $filter)
+    private function getCountriesFromConfig($scope, $scopeCode)
     {
         return explode(
             ',',
             (string) $this->scopeConfig->getValue(
                 self::ALLOWED_COUNTRIES_PATH,
                 $scope,
-                $filter
+                $scopeCode
             )
         );
     }
 
     /**
      * Return Single Scope
+     *
      * @param string $scope
      * @return string
      */
