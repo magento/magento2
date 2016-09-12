@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
+namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Item\Validation;
 
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
@@ -11,34 +11,35 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Item;
 
-
-
+/**
+ * Class CreateQuantityValidatorTest
+ */
 class CreateQuantityValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderItemRepositoryMock;
+    private $orderItemRepositoryMock;
 
     /**
      * @var Item|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderItemMock;
+    private $orderItemMock;
 
     /**
      * @var CreationQuantityValidator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $createQuantityValidator;
+    private $createQuantityValidator;
 
     /**
      * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contexMock;
+    private $contexMock;
 
     /**
      * @var \stdClass|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entity;
+    private $entity;
 
     protected function setUp()
     {
@@ -88,7 +89,7 @@ class CreateQuantityValidatorTest extends \PHPUnit_Framework_TestCase
                 ->willReturn(11);
         }
 
-        $this->createQuantityValidator = New CreationQuantityValidator(
+        $this->createQuantityValidator = new CreationQuantityValidator(
             $this->orderItemRepositoryMock,
             $this->contexMock
         );

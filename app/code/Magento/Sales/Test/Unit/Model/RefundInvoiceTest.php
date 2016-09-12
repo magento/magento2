@@ -151,31 +151,25 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->creditmemoDocumentFactoryMock = $this->getMockBuilder(CreditmemoDocumentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->creditmemoValidatorMock = $this->getMockBuilder(CreditmemoValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->orderValidatorMock = $this->getMockBuilder(OrderValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->invoiceValidatorMock = $this->getMockBuilder(InvoiceValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        
         $this->paymentAdapterMock = $this->getMockBuilder(PaymentAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
