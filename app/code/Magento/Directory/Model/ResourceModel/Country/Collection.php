@@ -12,6 +12,7 @@
 namespace Magento\Directory\Model\ResourceModel\Country;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Collection
@@ -148,7 +149,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        $allowedCountries = $this->getAllowedCountriesReader()->getAllowedCountries($store);
+        $allowedCountries = $this->getAllowedCountriesReader()
+            ->getAllowedCountries($store, ScopeInterface::SCOPE_STORE);
 
         if (!empty($allowedCountries)) {
             $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
