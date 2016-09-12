@@ -85,8 +85,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(\Magento\Framework\View\DesignInterface::DEFAULT_AREA, $this->_model->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
-            ->setAreaCode('test');
-        $this->assertEquals('test', $this->_model->getArea());
+            ->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        $this->assertEquals(\Magento\Framework\App\Area::AREA_ADMINHTML, $this->_model->getArea());
     }
 
     public function testSetDesignTheme()
