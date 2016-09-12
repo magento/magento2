@@ -99,7 +99,7 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
         $creditmemoMock->expects($this->never())->method('getItems');
         $this->assertEquals(
-            [__('Order Id is required for shipment document')],
+            [__('Order Id is required for creditmemo document')],
             $this->validator->validate($creditmemoMock)
         );
     }
