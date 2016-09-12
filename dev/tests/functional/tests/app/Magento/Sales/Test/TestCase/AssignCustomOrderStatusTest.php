@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Create Order.
  * 8. Perform all assertions from dataset.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29382
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -37,7 +37,6 @@ class AssignCustomOrderStatusTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

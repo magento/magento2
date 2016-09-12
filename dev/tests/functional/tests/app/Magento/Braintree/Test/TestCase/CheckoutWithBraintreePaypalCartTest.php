@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 8.  Select payment method
  * 12. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-39363
  */
 class CheckoutWithBraintreePaypalCartTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
     /* end tags */
 

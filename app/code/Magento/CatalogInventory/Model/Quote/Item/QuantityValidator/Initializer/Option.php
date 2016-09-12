@@ -101,6 +101,7 @@ class Option
         );
 
         $stockItem = $this->getStockItem($option, $quoteItem);
+        $stockItem->setProductName($option->getProduct()->getName());
         $result = $this->stockState->checkQuoteItemQty(
             $option->getProduct()->getId(),
             $optionQty,

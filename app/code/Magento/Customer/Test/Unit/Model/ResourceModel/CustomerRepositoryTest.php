@@ -7,9 +7,11 @@
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,6 +84,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customer;
+
+    /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
@@ -167,6 +174,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
 
         $this->model = new \Magento\Customer\Model\ResourceModel\CustomerRepository(
             $this->customerFactory,
@@ -181,7 +190,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->extensibleDataObjectConverter,
             $this->dataObjectHelper,
             $this->imageProcessor,
-            $this->extensionAttributesJoinProcessor
+            $this->extensionAttributesJoinProcessor,
+            $this->collectionProcessorMock
         );
     }
 
@@ -665,9 +675,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $sortOrder = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
-        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $collection = $this->getMock(
             \Magento\Customer\Model\ResourceModel\Customer\Collection::class,
             [],
@@ -763,48 +770,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('joinAttribute')
             ->with('company', 'customer_address/company', 'default_billing', null, 'left')
             ->willReturnSelf();
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroup]);
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with([['attribute' => 'Field', 'eq' => 'Value']]);
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-        $filter->expects($this->once())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->once())
-            ->method('getField')
-            ->willReturn('Field');
-        $filter->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn('Value');
-        $collection->expects($this->once())
-            ->method('addOrder')
-            ->with('Field', 'ASC');
-        $searchCriteria->expects($this->atLeastOnce())
-            ->method('getSortOrders')
-            ->willReturn([$sortOrder]);
-        $sortOrder->expects($this->once())
-            ->method('getField')
-            ->willReturn('Field');
-        $sortOrder->expects($this->once())
-            ->method('getDirection')
-            ->willReturn(\Magento\Framework\Api\SortOrder::SORT_ASC);
-        $searchCriteria->expects($this->once())
-            ->method('getCurrentPage')
-            ->willReturn(1);
-        $collection->expects($this->once())
-            ->method('setCurPage')
-            ->with(1);
-        $searchCriteria->expects($this->once())
-            ->method('getPageSize')
-            ->willReturn(10);
-        $collection->expects($this->once())
-            ->method('setPageSize')
-            ->with(10);
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
         $collection->expects($this->once())
             ->method('getSize')
             ->willReturn(23);
