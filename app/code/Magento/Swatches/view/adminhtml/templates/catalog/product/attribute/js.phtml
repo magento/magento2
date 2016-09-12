@@ -119,14 +119,6 @@ require([
             }
         }
 
-        if (frontendInput && !frontendInput.disabled
-            && (frontendInput.value=='swatch_text' || frontendInput.value=='swatch_visual')
-        ) {
-            $('used_in_product_listing').value = 1;
-            $('is_visible_on_front').value = 1;
-            $('update_product_preview_image').value = 1;
-        }
-
         if (frontendInput && (frontendInput.value=='multiselect'
             || frontendInput.value=='gallery'
             || frontendInput.value=='textarea')) {
