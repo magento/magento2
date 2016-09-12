@@ -6,8 +6,9 @@
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address\Attribute\Source;
 
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
-use Magento\Directory\Model\CountryHandlerInterface;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -20,9 +21,9 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
     private $countriesFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\CountryHandler | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\AllowedCountries | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $countryHandlerMock;
+    private $allowedCountriesMock;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -34,6 +35,11 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
      */
     private $countryByWebsite;
 
+    /**
+     * @var Share | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shareConfigMock;
+
     public function setUp()
     {
         $this->countriesFactoryMock =
@@ -41,7 +47,7 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->countryHandlerMock = $this->getMockBuilder(CountryHandlerInterface::class)
+        $this->allowedCountriesMock = $this->getMockBuilder(AllowedCountries::class)
             ->disableOriginalConstructor()
             ->getMock();
         $eavCollectionFactoryMock =
@@ -53,12 +59,16 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
+        $this->shareConfigMock = $this->getMockBuilder(Share::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->countryByWebsite = new CountryWithWebsites(
             $eavCollectionFactoryMock,
             $optionsFactoryMock,
             $this->countriesFactoryMock,
-            $this->countryHandlerMock,
-            $this->storeManagerMock
+            $this->allowedCountriesMock,
+            $this->storeManagerMock,
+            $this->shareConfigMock
         );
     }
 
@@ -80,15 +90,15 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->countryHandlerMock->expects($this->exactly(2))
+        $this->allowedCountriesMock->expects($this->exactly(2))
             ->method('getAllowedCountries')
             ->withConsecutive(
-                [1, 'website', true],
-                [2, 'website', true]
+                [1, 'website'],
+                [2, 'website']
             )
             ->willReturnMap([
-                [1, 'website', true, ['AM' => 'AM']],
-                [2, 'website', true, ['AM' => 'AM', 'DZ' => 'DZ']]
+                [1, 'website', ['AM' => 'AM']],
+                [2, 'website', ['AM' => 'AM', 'DZ' => 'DZ']]
             ]);
         $this->countriesFactoryMock->expects($this->once())
             ->method('create')

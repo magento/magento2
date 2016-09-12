@@ -48,6 +48,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
+     * @var CountryWithWebsites
+     */
+    private $countryByWebsiteSource;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    private $shareConfig;
+
+    /**
      * EAV attribute properties to fetch from meta storage
      * @var array
      */
@@ -218,21 +228,31 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Retrieve Country With Website options Source
      * @deprecated
      * @return CountryWithWebsites
      */
     private function getCountryByWebsiteSource()
     {
-        return ObjectManager::getInstance()->get(CountryWithWebsites::class);
+        if (!$this->countryByWebsiteSource) {
+            $this->countryByWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
+        }
+
+        return $this->countryByWebsiteSource;
     }
 
     /**
+     * Retrive Customer Share Config
      * @deprecated
      * @return \Magento\Customer\Model\Config\Share
      */
     private function getShareConfig()
     {
-        return ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+        if (!$this->shareConfig) {
+            $this->shareConfig = ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+        }
+
+        return $this->shareConfig;
     }
 
     /**
