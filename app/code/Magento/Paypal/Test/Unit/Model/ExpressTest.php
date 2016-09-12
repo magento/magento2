@@ -207,9 +207,9 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $paymentInfo->expects(static::exactly(3))
             ->method('setAdditionalInformation')
             ->withConsecutive(
-                [Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $transportValue],
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT, $transportValue],
                 [Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $transportValue],
-                [Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT, $transportValue]
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $transportValue]
             );
 
         $this->_model->assignData($data);
