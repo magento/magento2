@@ -1547,6 +1547,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function applyCoupon($code)
     {
         $code = trim((string)$code);
+        $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
+
+        if (empty($code)) {
+            $this->getQuote()->getShippingAddress()->setFreeShipping(null);
+        }
         $this->getQuote()->setCouponCode($code);
         $this->setRecollect(true);
 
