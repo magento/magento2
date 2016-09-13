@@ -22,7 +22,6 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method Product setHasError(bool $value)
  * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
- * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
@@ -2612,4 +2611,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $this->mediaGalleryProcessor;
     }
+
+    /**
+     * Set the associated products
+     * @param array $productIds
+     * @return void
+     */
+    public function setAssociatedProductIds(array $productIds)
+    {
+ 	    $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+ 	}
 }
