@@ -134,11 +134,11 @@
         <strategy>xpath</strategy>
         <fields>
             <schedule_update_from>
-                <input>text</input>
+                <input>datepicker</input>
                 <selector>input[name='custom_design_from']</selector>
             </schedule_update_from>
             <schedule_update_to>
-                <input>text</input>
+                <input>datepicker</input>
                 <selector>input[name='custom_design_to']</selector>
             </schedule_update_to>
         </fields>
