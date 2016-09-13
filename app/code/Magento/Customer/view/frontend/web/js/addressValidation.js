@@ -28,7 +28,7 @@ define([
 
                 /**
                  * Submit Handler
-                 * @param form element
+                 * @param form - address form
                  */
                 submitHandler: function (form) {
                     button.attr('disabled', true);
