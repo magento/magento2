@@ -243,7 +243,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
         $customerGroupMock->expects($this->once())->method('getTaxClassId')->will($this->returnValue($taxClassId));
         $customerFormMock = $this->getMock(\Magento\Customer\Model\Metadata\Form::class, [], [], '', false);
-        $customerFormMock->expects($this->any())->method('getAttributes')->will($this->returnValue([$attributeMocks[1]]));
+        $customerFormMock->expects($this->any())
+            ->method('getAttributes')
+            ->will($this->returnValue([$attributeMocks[1]]));
         $customerFormMock->expects($this->any())->method('extractData')->will($this->returnValue([]));
         $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue(['group_id' => 1]));
 
