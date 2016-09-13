@@ -9,7 +9,9 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
-use \Magento\Catalog\Model\Product\Attribute\Repository;
+use Magento\Catalog\Model\Product\Attribute\Repository;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -258,6 +260,31 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->exactly(2))->method('getDefaultFrontendLabel')->willReturn('test');
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(0);
         $labelMock->expects($this->once())->method('getLabel')->willReturn(null);
+
+        $this->model->save($attributeMock);
+    }
+
+    public function testSaveDoesNotSaveAttributeOptionsIfOptionsAreAbsentInPayload()
+    {
+        $attributeId = 1;
+        $attributeCode = 'existing_attribute_code';
+        $attributeMock = $this->getMock(Attribute::class, [], [], '', false);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+
+        $existingModelMock = $this->getMock(Attribute::class, [], [], '', false);
+        $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+
+        $this->eavAttributeRepositoryMock->expects($this->any())
+            ->method('get')
+            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
+            ->willReturn($existingModelMock);
+
+        // Attribute code must not be changed after attribute creation
+        $attributeMock->expects($this->once())->method('setAttributeCode')->with($attributeCode);
+        $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
+        $this->optionManagementMock->expects($this->never())->method('add');
 
         $this->model->save($attributeMock);
     }
