@@ -31,7 +31,7 @@ define([
                  * @param {Element} form - address form
                  */
                 submitHandler: function (form) {
-                    console.log(form);
+
                     button.attr('disabled', true);
                     form.submit();
                 }
