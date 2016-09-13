@@ -26,7 +26,6 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
                     'packages' => ['magento/package-a', 'magento/package-b'],
                     '--no-update' => true,
                 ]
-
             );
         $composerAppFactory->expects($this->once())
             ->method('create')
