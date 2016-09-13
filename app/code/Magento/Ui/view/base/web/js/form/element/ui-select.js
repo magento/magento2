@@ -432,6 +432,8 @@ define([
                 return false;
             }
 
+            this.cleanHoveredElement();
+
             if (!value) {
                 this.renderPath = false;
                 this.options(this.cacheOptions.tree);
@@ -455,7 +457,6 @@ define([
                     this.options(array);
                     this._setItemsQuantity(array.length);
                 }
-                this.cleanHoveredElement();
 
                 return false;
             }
