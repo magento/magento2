@@ -9,7 +9,6 @@ namespace Magento\Security\Test\TestCase;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountEdit;
-use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Test Flow:
@@ -56,12 +55,11 @@ class SecureChangingCustomerEmailTest extends Injectable
     /**
      * Change customer password in Account Information tab.
      *
-     * @param FixtureFactory $fixtureFactory,
      * @param Customer $initialCustomer
      * @param Customer $customer
      * @return void
      */
-    public function test(FixtureFactory $fixtureFactory, Customer $initialCustomer, Customer $customer)
+    public function test(Customer $initialCustomer, Customer $customer)
     {
         // Preconditions
         $initialCustomer->persist();

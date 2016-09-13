@@ -23,25 +23,25 @@ class AssertDefaultAccountInformation extends AbstractConstraint
     public function processAssert(
         CustomerAccountEdit $customerAccountEdit
     ) {
-        $InfoForm = $customerAccountEdit->getAccountInfoForm();
+        $infoForm = $customerAccountEdit->getAccountInfoForm();
 
         \PHPUnit_Framework_Assert::assertFalse(
-            $InfoForm->isEmailVisible(),
+            $infoForm->isEmailVisible(),
             'Email text field should not be visible.'
         );
 
         \PHPUnit_Framework_Assert::assertFalse(
-            $InfoForm->isCurrentPasswordVisible(),
+            $infoForm->isCurrentPasswordVisible(),
             'Current Password text field should not be visible.'
         );
 
         \PHPUnit_Framework_Assert::assertFalse(
-            $InfoForm->isPasswordVisible(),
+            $infoForm->isPasswordVisible(),
             'New Password text field should not be visible.'
         );
 
         \PHPUnit_Framework_Assert::assertFalse(
-            $InfoForm->isConfirmPasswordVisible(),
+            $infoForm->isConfirmPasswordVisible(),
             'Password Confirmation text field should not be visible.'
         );
     }

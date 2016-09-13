@@ -117,7 +117,7 @@ class CustomerForm extends Form
      * @param string $value
      * @return void
      */
-    public function SetChangeEmail($value)
+    public function setChangeEmail($value)
     {
         $mapping = $this->dataMapping();
         $this->_rootElement->find(
@@ -133,7 +133,7 @@ class CustomerForm extends Form
      * @param string $value
      * @return void
      */
-    public function SetChangePassword($value)
+    public function setChangePassword($value)
     {
         $mapping = $this->dataMapping();
         $this->_rootElement->find(
