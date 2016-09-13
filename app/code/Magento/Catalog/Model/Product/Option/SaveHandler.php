@@ -20,7 +20,6 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * @param OptionRepository $optionRepository
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         OptionRepository $optionRepository
@@ -43,7 +42,7 @@ class SaveHandler implements ExtensionInterface
             $optionIds = array_map(function ($option) {
                 /** @var \Magento\Catalog\Model\Product\Option $option */
                 return $option->getOptionId();
-            }, $entity->getOptions());
+            }, $options);
         }
 
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */

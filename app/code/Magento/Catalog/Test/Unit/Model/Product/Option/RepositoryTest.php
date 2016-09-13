@@ -8,6 +8,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use \Magento\Catalog\Model\Product\Option\Repository;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -30,7 +31,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $optionResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCustomOptionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionMock;
 
@@ -239,5 +240,58 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 $reflectionProperty->setValue($object, $value);
             }
         }
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedExceptionMessage ProductSku should be specified
+     */
+    public function testSaveCouldNotSaveException()
+    {
+        $this->optionMock->expects($this->once())->method('getProductSku')->willReturn(null);
+        $this->optionRepository->save($this->optionMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testSaveNoSuchEntityException()
+    {
+        $productSku = 'simple_product';
+        $optionId = 1;
+        $this->optionMock->expects($this->once())->method('getProductSku')->willReturn($productSku);
+        $this->productRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($productSku)
+            ->willReturn($this->productMock);
+        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $this->productMock->expects($this->once())->method('getOptionById')->with($optionId)->willReturn(null);
+        $this->optionRepository->save($this->optionMock);
+    }
+
+    public function testSave()
+    {
+        $productSku = 'simple_product';
+        $optionId = 1;
+        $this->optionMock->expects($this->once())->method('getProductSku')->willReturn($productSku);
+        $this->productRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($productSku)
+            ->willReturn($this->productMock);
+        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getOptionById')
+            ->with($optionId)
+            ->willReturn($this->optionMock);
+        $this->optionMock->expects($this->once())->method('getData')->with('values')->willReturn([
+            ['option_type_id' => 3],
+            ['option_type_id' => 4],
+            ['option_type_id' => 5],
+        ]);
+        $this->optionMock->expects($this->once())->method('getValues')->willReturn([]);
+        $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
 }
