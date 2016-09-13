@@ -268,13 +268,7 @@ class LocaleDeploy implements DeployInterface
                 continue;
             }
 
-            if (($fileArea == $area || $fileArea == 'base') &&
-                ($fileTheme == '' || $fileTheme == $themePath ||
-                    in_array(
-                        $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
-                        $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
-                    ))
-            ) {
+            if ($this->isCanBeDeployed($fileArea, $fileTheme, $area, $themePath)) {
                 $compiledFile = $this->deployFile(
                     $filePath,
                     $area,
@@ -288,6 +282,24 @@ class LocaleDeploy implements DeployInterface
                 }
             }
         }
+    }
+
+    /**
+     * @param string $fileArea
+     * @param string $fileTheme
+     * @param string $area
+     * @param string $themePath
+     * @return bool
+     */
+    private function isCanBeDeployed($fileArea, $fileTheme, $area, $themePath)
+    {
+        return ($fileArea == $area || $fileArea == 'base')
+        && ($fileTheme == '' || $fileTheme == $themePath
+            || in_array(
+                $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
+                $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
+            )
+        );
     }
 
     /**
