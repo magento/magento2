@@ -33,14 +33,20 @@ class Validator
     /**
      * @param object $entity
      * @param ValidatorInterface[] $validators
-     * @return string[]
+     * @param object|null $context
+     * @return \string[]
      * @throws ConfigurationMismatchException
      */
-    public function validate($entity, array $validators)
+    public function validate($entity, array $validators, $context = null)
     {
         $messages = [];
+        $validatorArguments = [];
+        if ($context !== null) {
+            $validatorArguments['context'] = $context;
+        }
+
         foreach ($validators as $validatorName) {
-            $validator = $this->objectManager->get($validatorName);
+            $validator = $this->objectManager->create($validatorName, $validatorArguments);
             if (!$validator instanceof ValidatorInterface) {
                 throw new ConfigurationMismatchException(
                     __(
