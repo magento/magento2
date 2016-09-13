@@ -35,9 +35,9 @@ class SetupTest extends \PHPUnit_Framework_TestCase
         $this->resourceModelMock = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->connection = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\AdapterInterface');
         $this->resourceModelMock->expects($this->any())
-            ->method('getConnection')
-            ->with(self::CONNECTION_NAME)
-            ->will($this->returnValue($this->connection));
+            ->method('getConnectionByName')
+            ->with(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION)
+            ->willReturn($this->connection);
         $this->setup = new Setup($this->resourceModelMock, self::CONNECTION_NAME);
     }
 

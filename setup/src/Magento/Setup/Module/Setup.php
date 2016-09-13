@@ -6,6 +6,7 @@
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\App\ResourceConnection;
 
 class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterface
 {
@@ -15,11 +16,16 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
      * @param string $tableName
      * @param array|string $fields
      * @param string $indexType
+     * @param string $connectionName
      * @return string
      */
-    public function getIdxName($tableName, $fields, $indexType = '')
-    {
-        return $this->getConnection()->getIndexName($this->getTable($tableName), $fields, $indexType);
+    public function getIdxName(
+        $tableName,
+        $fields,
+        $indexType = '',
+        $connectionName = ResourceConnection::DEFAULT_CONNECTION
+    ) {
+        return $this->getConnection($connectionName)->getIndexName($this->getTable($tableName), $fields, $indexType);
     }
 
     /**
@@ -29,11 +35,17 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
      * @param string $priColumnName the target table column name
      * @param string $refTableName  the reference table name
      * @param string $refColumnName the reference table column name
+     * @param string $connectionName
      * @return string
      */
-    public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
-    {
-        return $this->getConnection()->getForeignKeyName(
+    public function getFkName(
+        $priTableName,
+        $priColumnName,
+        $refTableName,
+        $refColumnName,
+        $connectionName = ResourceConnection::DEFAULT_CONNECTION
+    ) {
+        return $this->getConnection($connectionName)->getForeignKeyName(
             $this->getTable($priTableName),
             $priColumnName,
             $refTableName,

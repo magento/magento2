@@ -16,6 +16,11 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class InstallSchema implements InstallSchemaInterface
 {
     /**
+     * @var string
+     */
+    private static $connectionName = 'checkout';
+
+    /**
      * {@inheritdoc}
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
@@ -97,8 +102,8 @@ class InstallSchema implements InstallSchemaInterface
          * Alter quote table with is_persistent flag
          *
          */
-        $installer->getConnection()->addColumn(
-            $installer->getTable('quote'),
+        $installer->getConnection(self::$connectionName)->addColumn(
+            $installer->getTable('quote', self::$connectionName),
             'is_persistent',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
