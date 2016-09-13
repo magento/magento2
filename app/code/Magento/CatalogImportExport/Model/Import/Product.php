@@ -1473,7 +1473,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                if (empty($rowData[self::URL_KEY]) && !empty($rowData[self::COL_NAME])) {
+                if (empty($rowData[self::URL_KEY])) {
                     $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
                 }
 
@@ -2528,12 +2528,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
+            return $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
         }
-        $urlKey = !empty($this->productUrlKeys[$rowData[self::COL_SKU]])
-            ? $this->productUrlKeys[$rowData[self::COL_SKU]]
-            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
-        return $urlKey;
+
+        if (!empty($this->productUrlKeys[$rowData[self::COL_SKU]])) {
+            return $this->productUrlKeys[$rowData[self::COL_SKU]];
+        }
+
+        if (!empty($rowData[self::COL_NAME])) {
+            return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        }
+
+        return '';
     }
 
     /**
