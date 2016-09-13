@@ -47,8 +47,8 @@ class AllowedCountries
      */
     public function beforeGetAllowedCountries(
         \Magento\Directory\Model\AllowedCountries $subject,
-        $scopeCode = null,
-        $scope = ScopeInterface::SCOPE_WEBSITE
+        $scope = ScopeInterface::SCOPE_WEBSITE,
+        $scopeCode = null
     ) {
         if ($this->shareConfig->isGlobalScope()) {
             //Check if we have shared accounts - than merge all website allowed countries
@@ -58,6 +58,6 @@ class AllowedCountries
             $scope = ScopeInterface::SCOPE_WEBSITES;
         }
 
-        return [$scopeCode, $scope];
+        return [$scope, $scopeCode];
     }
 }

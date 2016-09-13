@@ -67,7 +67,7 @@ class AllowedCountriesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             ['AM' => 'AM'],
-            $this->allowedCountriesReader->getAllowedCountries(1, ScopeInterface::SCOPE_WEBSITE, true)
+            $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, 1)
         );
     }
 }

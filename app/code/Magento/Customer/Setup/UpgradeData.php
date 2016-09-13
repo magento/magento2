@@ -195,7 +195,7 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getStores() as $store) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $allowedCountriesReader->getAllowedCountries($store->getId(), ScopeInterface::SCOPE_STORE),
+                $allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
                 $store->getWebsiteId()
             );
         }
@@ -203,7 +203,7 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getWebsites() as $website) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $allowedCountriesReader->getAllowedCountries($website->getId(), ScopeInterface::SCOPE_WEBSITE),
+                $allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
                 $website->getId()
             );
         }
