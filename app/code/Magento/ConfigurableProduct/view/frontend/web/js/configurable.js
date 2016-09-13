@@ -53,6 +53,8 @@ define([
 
             // Setup/configure values to inputs
             this._configureForValues();
+
+            $(this.element).trigger('configurable.initialized');
         },
 
         /**

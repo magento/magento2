@@ -34,7 +34,6 @@ app/code/Magento/Catalog/view/adminhtml/web/js/category-tree.js
 app/code/Magento/Catalog/view/adminhtml/web/js/custom-options.js
 app/code/Magento/Catalog/view/adminhtml/web/js/new-category-dialog.js
 app/code/Magento/Catalog/view/adminhtml/web/js/product-gallery.js
-app/code/Magento/Catalog/view/base/web/js/price-box.js
 app/code/Magento/Catalog/view/base/web/js/price-option-date.js
 app/code/Magento/Catalog/view/base/web/js/price-option-file.js
 app/code/Magento/Catalog/view/base/web/js/price-options.js
