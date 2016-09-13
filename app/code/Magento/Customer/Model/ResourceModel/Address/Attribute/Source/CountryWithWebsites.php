@@ -78,7 +78,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
             if (!$this->shareConfig->isGlobalScope()) {
                 foreach ($this->storeManager->getWebsites() as $website) {
                     $countries = $this->allowedCountriesReader
-                        ->getAllowedCountries($website->getId(), ScopeInterface::SCOPE_WEBSITE);
+                        ->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId());
                     $allowedCountries = array_merge($allowedCountries, $countries);
 
                     foreach ($countries as $countryCode) {

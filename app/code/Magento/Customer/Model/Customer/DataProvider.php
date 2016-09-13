@@ -321,7 +321,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if ($attribute->usesSource()) {
                 if ($code == AddressInterface::COUNTRY_ID) {
-                    $meta[$code]['arguments']['data']['config']['options'] = $this->getcountryWithWebsiteSource()
+                    $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryWithWebsiteSource()
                         ->getAllOptions();
                 } else {
                     $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();

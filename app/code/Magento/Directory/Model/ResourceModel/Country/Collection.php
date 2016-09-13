@@ -150,7 +150,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function loadByStore($store = null)
     {
         $allowedCountries = $this->getAllowedCountriesReader()
-            ->getAllowedCountries($store, ScopeInterface::SCOPE_STORE);
+            ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
 
         if (!empty($allowedCountries)) {
             $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);

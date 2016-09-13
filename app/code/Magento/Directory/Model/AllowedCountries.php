@@ -49,8 +49,8 @@ class AllowedCountries
      * @return array
      */
     public function getAllowedCountries(
-        $scopeCode = null,
-        $scope = ScopeInterface::SCOPE_WEBSITE
+        $scope = ScopeInterface::SCOPE_WEBSITE,
+        $scopeCode = null
     ) {
         if (empty($scopeCode)) {
             $scopeCode = $this->getDefaultScopeCode($scope);

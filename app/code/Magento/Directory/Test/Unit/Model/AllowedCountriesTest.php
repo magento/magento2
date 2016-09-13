@@ -67,27 +67,7 @@ class AllowedCountriesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             ['AM' => 'AM'],
-            $this->allowedCountriesReader->getAllowedCountries(1, ScopeInterface::SCOPE_WEBSITE, true)
+            $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, true)
         );
     }
-
-//    public function testLoadByScope()
-//    {
-//        $this->scopeConfigMock->expects($this->once())
-//            ->method('getValue')
-//            ->with(CountryHandlerInterface::ALLOWED_COUNTRIES_PATH, 'website', 1)
-//            ->willReturn('AM');
-//
-//        $collectionMock = $this->getMockBuilder(AbstractDb::class)
-//            ->disableOriginalConstructor()
-//            ->getMock();
-//        $collectionMock->expects($this->once())
-//            ->method('addFieldToFilter')
-//            ->with('country_id', ['in' => ['AM' => 'AM']]);
-//
-//        $this->assertEquals(
-//            $collectionMock,
-//            $this->countryHandler->loadByScope($collectionMock, 1, ScopeInterface::SCOPE_WEBSITE)
-//        );
-//    }
 }
