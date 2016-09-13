@@ -42,7 +42,6 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
         }
 
-
         $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
 
         $expectedProductExtensionAttributes = $expectedProduct->getExtensionAttributes();
