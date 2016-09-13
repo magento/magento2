@@ -9,9 +9,6 @@ require_once dirname(__FILE__) . '/' . 'bootstrap.php';
 $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
 $magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);
 
-// Generate repositories
-$magentoObjectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-
 // Generate factories for old end-to-end tests
 $magentoObjectManager->create(\Magento\Mtf\Util\Generate\Factory::class)->launch();
 
