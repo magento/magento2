@@ -238,7 +238,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setConfigurableProductLinks'])
             ->getMock();
 
- 	 	$product->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
+        $product->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
         $product->expects($this->once())->method('save');
         $this->assertTrue($this->object->removeChild($productSku, $childSku));
     }

@@ -2619,6 +2619,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setAssociatedProductIds(array $productIds)
     {
- 	    $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
- 	}
+        $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+    }
 }
