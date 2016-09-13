@@ -1473,7 +1473,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
-                if (empty($rowData[self::URL_KEY])) {
+                if (empty($rowData[self::URL_KEY]) && !empty($rowData[self::COL_NAME])) {
                     $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
                 }
 
