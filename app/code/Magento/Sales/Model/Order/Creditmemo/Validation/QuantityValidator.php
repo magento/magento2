@@ -188,35 +188,14 @@ class QuantityValidator implements ValidatorInterface
      * @param double $qty
      * @param array $invoiceQtysRefundLimits
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function canRefundItem(\Magento\Sales\Model\Order\Item $item, $qty, $invoiceQtysRefundLimits)
+    private function canRefundItem(\Magento\Sales\Model\Order\Item $item, $qty, array $invoiceQtysRefundLimits)
     {
         if ($item->isDummy()) {
-            if ($item->getHasChildren()) {
-                foreach ($item->getChildrenItems() as $child) {
-                    if ($qty === null) {
-                        if ($this->canRefundNoDummyItem($child, $invoiceQtysRefundLimits)) {
-                            return true;
-                        }
-                    } else {
-                        if ($qty > 0) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            } elseif ($item->getParentItem()) {
-                $parent = $item->getParentItem();
-                if ($qty === null) {
-                    return $this->canRefundNoDummyItem($parent, $invoiceQtysRefundLimits);
-                } else {
-                    return $qty > 0;
-                }
-            }
-        } else {
-            return $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
+            return $this->canRefundDummyItem($item, $qty, $invoiceQtysRefundLimits);
         }
+
+        return $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
     }
 
     /**
@@ -226,7 +205,7 @@ class QuantityValidator implements ValidatorInterface
      * @param array $invoiceQtysRefundLimits
      * @return bool
      */
-    private function canRefundNoDummyItem($item, $invoiceQtysRefundLimits = [])
+    private function canRefundNoDummyItem(\Magento\Sales\Model\Order\Item $item, array $invoiceQtysRefundLimits = [])
     {
         if ($item->getQtyToRefund() < 0) {
             return false;
@@ -235,5 +214,40 @@ class QuantityValidator implements ValidatorInterface
             return $invoiceQtysRefundLimits[$item->getId()] > 0;
         }
         return true;
+    }
+
+    /**
+     * @param Item $item
+     * @param int $qty
+     * @param array $invoiceQtysRefundLimits
+     * @return bool
+     */
+    private function canRefundDummyItem(\Magento\Sales\Model\Order\Item $item, $qty, array $invoiceQtysRefundLimits)
+    {
+        if ($item->getHasChildren()) {
+            foreach ($item->getChildrenItems() as $child) {
+                if ($this->canRefundRequestedQty($child, $qty, $invoiceQtysRefundLimits)) {
+                    return true;
+                }
+            }
+        } elseif ($item->getParentItem()) {
+            return $this->canRefundRequestedQty($item->getParentItem(), $qty, $invoiceQtysRefundLimits);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Item $item
+     * @param int $qty
+     * @param array $invoiceQtysRefundLimits
+     * @return bool
+     */
+    private function canRefundRequestedQty(
+        \Magento\Sales\Model\Order\Item $item,
+        $qty,
+        array $invoiceQtysRefundLimits
+    ) {
+        return $qty === null ? $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits) : $qty > 0;
     }
 }
