@@ -7,15 +7,29 @@
 
 namespace Magento\ConfigurableProduct\Plugin\Model;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-
 /**
  * Plugin for Product Identity
  */
 class Product
 {
     /**
-     * Add identity of child product to identities
+     *  Configurable product type resource
+     *
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     */
+    private $catalogProductTypeConfigurable;
+
+    /**
+     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
+     */
+    public function __construct(
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
+    ) {
+        $this->catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
+    }
+
+    /**
+     * Add identity of parent product to identities of configurable
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string[] $result
@@ -23,13 +37,10 @@ class Product
      */
     public function afterGetIdentities(\Magento\Catalog\Model\Product $product, $result)
     {
-        /** @var Configurable $productType */
-        $productType = $product->getTypeInstance();
-        if ($productType instanceof Configurable) {
-            foreach ($productType->getChildrenIds($product->getId())[0] as $productId) {
-                $result[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $productId;
-            }
+        foreach ($this->catalogProductTypeConfigurable->getParentIdsByChild($product->getId()) as $parentId) {
+            $result[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $parentId;
         }
+
         return $result;
     }
 }
