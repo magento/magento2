@@ -16,6 +16,7 @@ define([
                 button: '[data-action=save-address]'
             }
         },
+
         /**
          * Validation creation
          * @protected
@@ -24,6 +25,11 @@ define([
             var button = $(this.options.selectors.button, this.element);
 
             this.element.validation({
+
+                /**
+                 * Submit Handler
+                 * @param form element
+                 */
                 submitHandler: function (form) {
                     button.attr('disabled', true);
                     form.submit();
