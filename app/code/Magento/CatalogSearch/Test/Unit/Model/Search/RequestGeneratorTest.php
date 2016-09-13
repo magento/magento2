@@ -87,6 +87,14 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 ],
                 ['attr_int', 'int', 0, 1, 0]
             ],
+            [
+                [
+                    'quick_search_container' => ['queries' => 2, 'filters' => 1, 'aggregations' => 1],
+                    'advanced_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
+                    'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
+                ],
+                ['custom_price_attr', 'price', 0, 1, 0],
+            ],
         ];
     }
 

@@ -62,7 +62,7 @@ class RequestGenerator
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
             if ($attribute->getData($attributeType)) {
-                if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'])) {
+                if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'], true)) {
                     $queryName = $attribute->getAttributeCode() . '_query';
 
                     $request['queries'][$container]['queryReference'][] = [
@@ -114,7 +114,9 @@ class RequestGenerator
                 //same fields have special semantics
                 continue;
             }
-            if ($useFulltext) {
+
+            // Match search by custom price attribute isn't supported
+            if ($useFulltext && !in_array($attribute->getFrontendInput(), ['price'], true)) {
                 $request['queries']['search']['match'][] = [
                     'field' => $attribute->getAttributeCode(),
                     'boost' => $attribute->getSearchWeight() ?: 1,
