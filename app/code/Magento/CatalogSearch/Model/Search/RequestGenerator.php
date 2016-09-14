@@ -8,7 +8,8 @@ namespace Magento\CatalogSearch\Model\Search;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\Framework\Search\Request\BucketInterface;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorCollection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 
@@ -26,11 +27,23 @@ class RequestGenerator
     private $productAttributeCollectionFactory;
 
     /**
-     * @param CollectionFactory $productAttributeCollectionFactory
+     * @var GeneratorCollection
      */
-    public function __construct(CollectionFactory $productAttributeCollectionFactory)
-    {
+    private $generatorCollection;
+
+    /**
+     * @param CollectionFactory $productAttributeCollectionFactory
+     * @param GeneratorCollection $generatorCollection
+     */
+    public function __construct(
+        CollectionFactory $productAttributeCollectionFactory,
+        GeneratorCollection $generatorCollection = null
+    ) {
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
+        $this->generatorCollection = $generatorCollection
+            ?: ObjectManager::getInstance()->get(
+                GeneratorCollection::class
+            );
     }
 
     /**
@@ -76,53 +89,26 @@ class RequestGenerator
                         'filterReference' => [['ref' => $filterName]],
                     ];
                     $bucketName = $attribute->getAttributeCode() . self::BUCKET_SUFFIX;
-                    if ($attribute->getBackendType() == 'decimal') {
-                        $request['filters'][$filterName] = [
-                            'type' => FilterInterface::TYPE_RANGE,
-                            'name' => $filterName,
-                            'field' => $attribute->getAttributeCode(),
-                            'from' => '$' . $attribute->getAttributeCode() . '.from$',
-                            'to' => '$' . $attribute->getAttributeCode() . '.to$',
-                        ];
-                        $request['aggregations'][$bucketName] = [
-                            'type' => BucketInterface::TYPE_DYNAMIC,
-                            'name' => $bucketName,
-                            'field' => $attribute->getAttributeCode(),
-                            'method' => 'manual',
-                            'metric' => [["type" => "count"]],
-                        ];
-                    } else {
-                        $request['filters'][$filterName] = [
-                            'type' => FilterInterface::TYPE_TERM,
-                            'name' => $filterName,
-                            'field' => $attribute->getAttributeCode(),
-                            'value' => '$' . $attribute->getAttributeCode() . '$',
-                        ];
-                        $request['aggregations'][$bucketName] = [
-                            'type' => BucketInterface::TYPE_TERM,
-                            'name' => $bucketName,
-                            'field' => $attribute->getAttributeCode(),
-                            'metric' => [["type" => "count"]],
-                        ];
-                    }
+                    $generator = $this->generatorCollection->getGeneratorForType($attribute->getBackendType());
+                    $request['filters'][$filterName] = $generator->getFilterData($attribute, $filterName);
+                    $request['aggregations'][$bucketName] = $generator->getAggregationData($attribute, $bucketName);
                 }
             }
             /** @var $attribute Attribute */
-            if (in_array($attribute->getAttributeCode(), ['price', 'sku'])
-                || !$attribute->getIsSearchable()
-            ) {
+            if (!$attribute->getIsSearchable() || in_array($attribute->getAttributeCode(), ['price', 'sku'], true)) {
                 //same fields have special semantics
                 continue;
             }
 
             // Match search by custom price attribute isn't supported
-            if ($useFulltext && !in_array($attribute->getFrontendInput(), ['price'], true)) {
+            if ($useFulltext && $attribute->getFrontendInput() !== 'price') {
                 $request['queries']['search']['match'][] = [
                     'field' => $attribute->getAttributeCode(),
                     'boost' => $attribute->getSearchWeight() ?: 1,
                 ];
             }
         }
+
         return $request;
     }
 
@@ -233,6 +219,7 @@ class RequestGenerator
                     ];
             }
         }
+
         return $request;
     }
 }

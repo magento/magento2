@@ -85,11 +85,11 @@ class Result extends Template
         return parent::_prepareLayout();
     }
 
-    /*
-    * Get search query text
-    *
-    * @return \Magento\Framework\Phrase
-    */
+    /**
+     * Get page title
+     *
+     * @return \Magento\Framework\Phrase
+     */
     private function getPageTitle()
     {
         return __('Advanced Search Results');

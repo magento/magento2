@@ -6,6 +6,8 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorCollection;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
 class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +27,29 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
+        $generatorCollection = $this->getMockBuilder(GeneratorCollection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getGeneratorForType'])
+            ->getMock();
+        $generator = $this->getMockBuilder(GeneratorInterface::class)
+            ->setMethods(['getFilterData', 'getAggregationData'])
+            ->getMockForAbstractClass();
+        $generator->expects($this->any())
+            ->method('getFilterData')
+            ->willReturn(['some filter data goes here']);
+        $generator->expects($this->any())
+            ->method('getAggregationData')
+            ->willReturn(['some aggregation data goes here']);
+        $generatorCollection->method('getGeneratorForType')
+            ->willReturn($generator);
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Search\RequestGenerator::class,
-            ['productAttributeCollectionFactory' => $this->productAttributeCollectionFactory]
+            [
+                'productAttributeCollectionFactory' => $this->productAttributeCollectionFactory,
+                'generatorCollection' => $generatorCollection
+            ]
         );
     }
 
@@ -132,19 +152,23 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $countResult['quick_search_container']['queries'],
-            $this->countVal($result['quick_search_container']['queries'])
+            $this->countVal($result['quick_search_container']['queries']),
+            'Queries count for "quick_search_container" doesn\'t match'
         );
         $this->assertEquals(
             $countResult['advanced_search_container']['queries'],
-            $this->countVal($result['advanced_search_container']['queries'])
+            $this->countVal($result['advanced_search_container']['queries']),
+            'Queries count for "advanced_search_container" doesn\'t match'
         );
         $this->assertEquals(
             $countResult['advanced_search_container']['filters'],
-            $this->countVal($result['advanced_search_container']['filters'])
+            $this->countVal($result['advanced_search_container']['filters']),
+            'Filters count for "advanced_search_container" doesn\'t match'
         );
         $this->assertEquals(
             $countResult['catalog_view_container']['queries'],
-            $this->countVal($result['catalog_view_container']['queries'])
+            $this->countVal($result['catalog_view_container']['queries']),
+            'Queries count for "catalog_view_container" doesn\'t match'
         );
     }
 
@@ -152,11 +176,12 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
      * Create attribute mock
      *
      * @param $attributeOptions
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createAttributeMock($attributeOptions)
     {
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute::class)
+        /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -192,8 +217,8 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturnMap(
                 [
-                    ['is_filterable', $attributeOptions[2]],
-                    ['is_filterable_in_search', $attributeOptions[3]]
+                    ['is_filterable', null, $attributeOptions[2]],
+                    ['is_filterable_in_search', null, $attributeOptions[3]],
                 ]
             );
 
