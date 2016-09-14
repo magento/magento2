@@ -41,9 +41,7 @@ class RequestGenerator
     ) {
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
         $this->generatorCollection = $generatorCollection
-            ?: ObjectManager::getInstance()->get(
-                GeneratorCollection::class
-            );
+            ?: ObjectManager::getInstance()->get(GeneratorCollection::class);
     }
 
     /**
@@ -115,7 +113,7 @@ class RequestGenerator
     /**
      * Retrieve searchable attributes
      *
-     * @return \Magento\Catalog\Model\Entity\Attribute[]
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     protected function getSearchableAttributes()
     {

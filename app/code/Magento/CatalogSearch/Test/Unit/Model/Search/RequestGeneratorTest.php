@@ -181,7 +181,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     private function createAttributeMock($attributeOptions)
     {
         /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

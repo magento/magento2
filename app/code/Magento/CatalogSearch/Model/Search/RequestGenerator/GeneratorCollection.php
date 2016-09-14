@@ -20,7 +20,7 @@ class GeneratorCollection
 
     /**
      * GeneratorCollection constructor.
-     * @param General $defaultGenerator
+     * @param GeneratorInterface $defaultGenerator
      * @param GeneratorInterface[] $generators
      */
     public function __construct(GeneratorInterface $defaultGenerator, array $generators)
@@ -30,7 +30,7 @@ class GeneratorCollection
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @return GeneratorInterface
      */
     public function getGeneratorForType($type)

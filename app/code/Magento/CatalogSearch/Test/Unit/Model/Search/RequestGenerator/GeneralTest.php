@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\RequestGenerator;
 
-use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\General;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
