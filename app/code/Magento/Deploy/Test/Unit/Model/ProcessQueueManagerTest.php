@@ -42,7 +42,7 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->processManagerMock = $this->getMock(ProcessManager::class, [], [], '', false);
         $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-        $this->processTaskFactoryMock = $this->getMock(ProcessTaskFactory::class, [], [], '', false);
+        $this->processTaskFactoryMock = $this->getMock(ProcessTaskFactory::class, ['create'], [], '', false);
         $this->processTaskMock = $this->getMock(ProcessTask::class, [], [], '', false);
         $this->processTaskFactoryMock->expects($this->any())->method('create')->willReturn($this->processTaskMock);
         $this->model = (new ObjectManager($this))->getObject(
