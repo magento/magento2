@@ -112,7 +112,7 @@ class CustomOptions extends AbstractModifier
      * @var UrlInterface
      */
     protected $urlBuilder;
-    
+
     /**
      * @var ArrayManager
      */
@@ -162,9 +162,14 @@ class CustomOptions extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Product\Option $option */
         foreach ($productOptions as $index => $option) {
-            $options[$index] = $this->formatPriceByPath(static::FIELD_PRICE_NAME, $option->getData());
+            $optionData = $option->getData();
+            $optionData['is_use_default'] = !$option->getData('store_title');
+            $options[$index] = $this->formatPriceByPath(static::FIELD_PRICE_NAME, $optionData);
             $values = $option->getValues() ?: [];
 
+            foreach ($values as $value) {
+                $value->setData('is_use_default', !$value->getData('store_title'));
+            }
             /** @var \Magento\Catalog\Model\Product\Option $value */
             foreach ($values as $value) {
                 $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatPriceByPath(
@@ -529,7 +534,8 @@ class CustomOptions extends AbstractModifier
                                     'component' => 'Magento_Catalog/component/static-type-input',
                                     'valueUpdate' => 'input',
                                     'imports' => [
-                                        'optionId' => '${ $.provider }:${ $.parentScope }.option_id'
+                                        'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
+                                        'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default'
                                     ]
                                 ],
                             ],
@@ -604,6 +610,7 @@ class CustomOptions extends AbstractModifier
                         'imports' => [
                             'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
                             'optionTypeId' => '${ $.provider }:${ $.parentScope }.option_type_id',
+                            'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default'
                         ],
                         'service' => [
                             'template' => 'Magento_Catalog/form/element/helper/custom-option-type-service',
@@ -1109,7 +1116,7 @@ class CustomOptions extends AbstractModifier
         }
         return $this->localeCurrency;
     }
-    
+
     /**
      * Format price according to the locale of the currency
      *

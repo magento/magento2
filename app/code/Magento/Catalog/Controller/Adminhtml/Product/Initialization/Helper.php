@@ -348,6 +348,7 @@ class Helper
             foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
                 if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
                     $option[$fieldName] = $option['default_' . $fieldName];
+                    $option['is_delete_store_title'] = 1;
                 }
             }
         }
