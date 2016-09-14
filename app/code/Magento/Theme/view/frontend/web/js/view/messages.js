@@ -15,11 +15,23 @@ define([
             cookieMessages: [],
             messages: []
         },
+
+        /**
+         * Extends Component object by storage observable messages.
+         */
         initialize: function () {
             this._super();
 
             this.cookieMessages = $.cookieStorage.get('mage-messages');
-            this.messages = customerData.get('messages').extend({disposableCustomerData: 'messages'});
+            this.messages = customerData.get('messages').extend({
+                disposableCustomerData: 'messages'
+            });
+
+            // Force to clean obsolete messages
+            if (!_.isEmpty(this.messages().messages)) {
+                customerData.set('messages', {});
+            }
+
             $.cookieStorage.setConf({path: '/', expires: -1}).set('mage-messages', null);
         }
     });

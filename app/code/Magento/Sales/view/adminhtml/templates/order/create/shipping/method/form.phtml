@@ -10,7 +10,7 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method\Form */ ?>
 <?php $_shippingRateGroups = $block->getShippingRates(); ?>
 <?php if ($_shippingRateGroups): ?>
-    <div id="order-shipping-method-choose" style="display:none">
+    <div id="order-shipping-method-choose" class="control" style="display:none">
         <dl class="admin__order-shipment-methods">
         <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
             <dt class="admin__order-shipment-methods-title"><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></dt>
@@ -30,7 +30,7 @@
                             <?php $_checked = $block->isMethodActive($_code) ? 'checked="checked"' : '' ?>
                             <input <?php /* @escapeNotVerified */ echo $_radioProperty ?> value="<?php /* @escapeNotVerified */ echo $_code ?>"
                                                                  id="s_method_<?php /* @escapeNotVerified */ echo $_code ?>" <?php /* @escapeNotVerified */ echo $_checked ?>
-                                                                 class="admin__control-radio"/>
+                                                                 class="admin__control-radio required-entry"/>
                             <label class="admin__field-label" for="s_method_<?php /* @escapeNotVerified */ echo $_code ?>">
                                 <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                                 <strong>

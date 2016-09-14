@@ -122,7 +122,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 $objectManager = $objectManagerProvider->get();
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get(\Magento\Framework\App\State::class);
-                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
                 /** @var \Magento\Backend\Model\Session\AdminConfig $sessionConfig */
                 $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
                 $cookiePath = $this->getSetupCookiePath($objectManager);
