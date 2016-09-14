@@ -15,10 +15,7 @@ class General implements GeneratorInterface
 {
 
     /**
-     * Generate filter data for specific attribute
-     * @param Attribute $attribute
-     * @param string $filterName
-     * @return array
+     * {@inheritdoc}
      */
     public function getFilterData(Attribute $attribute, $filterName)
     {
@@ -31,10 +28,7 @@ class General implements GeneratorInterface
     }
 
     /**
-     * Generate aggregations data for specific attribute
-     * @param Attribute $attribute
-     * @param string $bucketName
-     * @return array
+     * {@inheritdoc}
      */
     public function getAggregationData(Attribute $attribute, $bucketName)
     {

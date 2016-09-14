@@ -13,11 +13,9 @@ use Magento\Framework\Search\Request\FilterInterface;
 
 class Decimal implements GeneratorInterface
 {
+
     /**
-     * Generate filter data for specific attribute
-     * @param Attribute $attribute
-     * @param string $filterName
-     * @return array
+     * {@inheritdoc}
      */
     public function getFilterData(Attribute $attribute, $filterName)
     {
@@ -31,10 +29,7 @@ class Decimal implements GeneratorInterface
     }
 
     /**
-     * Generate aggregations data for specific attribute
-     * @param Attribute $attribute
-     * @param string $bucketName
-     * @return array
+     * {@inheritdoc}
      */
     public function getAggregationData(Attribute $attribute, $bucketName)
     {

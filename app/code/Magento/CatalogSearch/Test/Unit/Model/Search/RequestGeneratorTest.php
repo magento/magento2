@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorCollection;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
 class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +27,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $generatorCollection = $this->getMockBuilder(GeneratorCollection::class)
+        $generatorResolver = $this->getMockBuilder(GeneratorResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGeneratorForType'])
             ->getMock();
@@ -40,7 +40,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->expects($this->any())
             ->method('getAggregationData')
             ->willReturn(['some aggregation data goes here']);
-        $generatorCollection->method('getGeneratorForType')
+        $generatorResolver->method('getGeneratorForType')
             ->willReturn($generator);
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -48,7 +48,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
             \Magento\CatalogSearch\Model\Search\RequestGenerator::class,
             [
                 'productAttributeCollectionFactory' => $this->productAttributeCollectionFactory,
-                'generatorCollection' => $generatorCollection
+                'generatorResolver' => $generatorResolver
             ]
         );
     }

@@ -7,13 +7,13 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\RequestGenerator;
 
 
-use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorCollection;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
-class GeneratorCollectionTest extends \PHPUnit_Framework_TestCase
+class GeneratorResolverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  GeneratorCollection */
-    private $collection;
+    /** @var  GeneratorResolver */
+    private $resolver;
 
     /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $defaultGenerator;
@@ -38,8 +38,8 @@ class GeneratorCollectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMockForAbstractClass();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->collection = $objectManager->getObject(
-            GeneratorCollection::class,
+        $this->resolver = $objectManager->getObject(
+            GeneratorResolver::class,
             [
                 'defaultGenerator' => $this->defaultGenerator,
                 'generators' => [
@@ -52,12 +52,12 @@ class GeneratorCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSpecificGenerator()
     {
-        $this->assertEquals($this->rangeGenerator, $this->collection->getGeneratorForType('range'));
-        $this->assertEquals($this->datetimeGenerator, $this->collection->getGeneratorForType('datetime'));
+        $this->assertEquals($this->rangeGenerator, $this->resolver->getGeneratorForType('range'));
+        $this->assertEquals($this->datetimeGenerator, $this->resolver->getGeneratorForType('datetime'));
     }
 
     public function testGetFallbackGenerator()
     {
-        $this->assertEquals($this->defaultGenerator, $this->collection->getGeneratorForType('unknown_type'));
+        $this->assertEquals($this->defaultGenerator, $this->resolver->getGeneratorForType('unknown_type'));
     }
 }

@@ -6,20 +6,19 @@
 
 namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 
-class GeneratorCollection
+class GeneratorResolver
 {
     /**
-     * @var array|GeneratorInterface[]
+     * @var GeneratorInterface[]
      */
     private $generators;
 
     /**
-     * @var General
+     * @var GeneratorInterface
      */
     private $defaultGenerator;
 
     /**
-     * GeneratorCollection constructor.
      * @param GeneratorInterface $defaultGenerator
      * @param GeneratorInterface[] $generators
      */

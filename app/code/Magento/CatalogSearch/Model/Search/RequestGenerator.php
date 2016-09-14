@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Search;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorCollection;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
@@ -27,21 +27,21 @@ class RequestGenerator
     private $productAttributeCollectionFactory;
 
     /**
-     * @var GeneratorCollection
+     * @var GeneratorResolver
      */
-    private $generatorCollection;
+    private $generatorResolver;
 
     /**
      * @param CollectionFactory $productAttributeCollectionFactory
-     * @param GeneratorCollection $generatorCollection
+     * @param GeneratorResolver $generatorResolver
      */
     public function __construct(
         CollectionFactory $productAttributeCollectionFactory,
-        GeneratorCollection $generatorCollection = null
+        GeneratorResolver $generatorResolver = null
     ) {
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
-        $this->generatorCollection = $generatorCollection
-            ?: ObjectManager::getInstance()->get(GeneratorCollection::class);
+        $this->generatorResolver = $generatorResolver
+            ?: ObjectManager::getInstance()->get(GeneratorResolver::class);
     }
 
     /**
@@ -87,14 +87,14 @@ class RequestGenerator
                         'filterReference' => [['ref' => $filterName]],
                     ];
                     $bucketName = $attribute->getAttributeCode() . self::BUCKET_SUFFIX;
-                    $generator = $this->generatorCollection->getGeneratorForType($attribute->getBackendType());
+                    $generator = $this->generatorResolver->getGeneratorForType($attribute->getBackendType());
                     $request['filters'][$filterName] = $generator->getFilterData($attribute, $filterName);
                     $request['aggregations'][$bucketName] = $generator->getAggregationData($attribute, $bucketName);
                 }
             }
             /** @var $attribute Attribute */
             if (!$attribute->getIsSearchable() || in_array($attribute->getAttributeCode(), ['price', 'sku'], true)) {
-                //same fields have special semantics
+                // Some fields have their own specific handlers
                 continue;
             }
 
