@@ -156,7 +156,7 @@ class InvoiceOrder implements InvoiceOrderInterface
             $comment,
             $arguments
         );
-        if (!empty($errorMessages->hasMessages())) {
+        if ($errorMessages->hasMessages()) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages->getMessages()))
             );

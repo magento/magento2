@@ -157,7 +157,7 @@ class ShipOrder implements ShipOrderInterface
             $tracks,
             $packages
         );
-        if (!empty($validationMessages->hasMessages())) {
+        if ($validationMessages->hasMessages()) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
             );
