@@ -90,7 +90,7 @@ class Result extends Template
     *
     * @return \Magento\Framework\Phrase
     */
-    public function getPageTitle()
+    private function getPageTitle()
     {
         return __('Advanced Search Results');
     }
