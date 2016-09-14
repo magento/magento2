@@ -33,6 +33,16 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $dataObjectHelper;
 
     /**
+     * @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory;
+     */
+    private $optionsFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     */
+    private $attributeFactory;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
@@ -102,9 +112,28 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             throw new StateException(__('Product has been already attached'));
         }
 
+        $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        if (empty($configurableProductOptions)) {
+            throw new StateException(__('Parent product does not have configurable product options'));
+        }
+
+        $configurableOptionData = [];
+        foreach ($configurableProductOptions as $configurableProductOption) {
+            $attributeCode = $configurableProductOption->getProductAttribute()->getAttributeCode();
+            if (!$child->getData($attributeCode)) {
+                throw new StateException(__('Child product does not have attribute value %1', $attributeCode));
+            }
+            $configurableOptionData = array_merge($configurableOptionData,
+                $this->getConfigurableAttributesData($configurableProductOption->getAttributeId()));
+        }
+
+        /** @var Factory $optionFactory */
+        $optionFactory = $this->getOptionsFactory();
+        $options = $optionFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
-        $product->setAssociatedProductIds($childrenIds);
-        $product->save();
+        $product->getExtensionAttributes()->setConfigurableProductOptions($options);
+        $product->getExtensionAttributes()->setConfigurableProductLinks($childrenIds);
+        $this->productRepository->save($product);
         return true;
     }
 
@@ -132,8 +161,73 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         if (count($options) == count($ids)) {
             throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
-        $product->setAssociatedProductIds($ids);
-        $product->save();
+        $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
+        $this->productRepository->save($product);
         return true;
+    }
+
+    /**
+     * Get Options Factory
+     *
+     * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
+     *
+     * @deprecated
+     */
+    private function getOptionsFactory()
+    {
+        if (!$this->optionsFactory) {
+            $this->optionsFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
+        }
+        return $this->optionsFactory;
+    }
+
+    /**
+     * Get Attribute Factory
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     *
+     * @deprecated
+     */
+    private function getAttributeFactory()
+    {
+        if (!$this->attributeFactory) {
+            $this->attributeFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
+        }
+        return $this->attributeFactory;
+    }
+
+    /**
+     * Get Configurable Attribute Data
+     *
+     * @param int $attributeId
+     * @return array
+     */
+    private function getConfigurableAttributesData($attributeId)
+    {
+        $attributeValues = [];
+        $attribute = $this->getAttributeFactory()->create();
+        $attribute->load($attributeId);
+        foreach ($attribute->getOptions() as $option) {
+            if ($option->getValue()) {
+                $attributeValues[] = [
+                    'label' => $option->getLabel(),
+                    'attribute_id' => $attribute->getId(),
+                    'value_index' => $option->getValue(),
+                ];
+            }
+        }
+
+        $configurableAttributesData = [
+            [
+                'attribute_id' => $attribute->getId(),
+                'code' => $attribute->getAttributeCode(),
+                'label' => $attribute->getStoreLabel(),
+                'values' => $attributeValues,
+            ],
+        ];
+
+        return $configurableAttributesData;
     }
 }

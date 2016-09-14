@@ -6,6 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
+use Magento\ConfigurableProduct\Model\LinkManagement;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class LinkManagementTest extends \PHPUnit_Framework_TestCase
@@ -142,15 +143,52 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
         $configurable = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getExtensionAttributes', 'save'])
             ->getMock();
-
-        $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
-
         $simple = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getData'])
             ->getMock();
 
-        $simple->expects($this->any())->method('getId')->will($this->returnValue(999));
+        $extensionAttributesMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductExtension')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getConfigurableProductOptions', 'setConfigurableProductOptions', 'setConfigurableProductLinks'
+            ])
+            ->getMock();
+        $optionMock = $this->getMockBuilder('Magento\ConfigurableProduct\Api\Data\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductAttribute', 'getAttributeId'])
+            ->getMock();
+        $productAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttributeCode'])
+            ->getMock();
+        $optionsFactoryMock = $this->getMockBuilder('Magento\ConfigurableProduct\Helper\Product\Options\Factory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $reflectionClass = new \ReflectionClass('Magento\ConfigurableProduct\Model\LinkManagement');
+        $optionsFactoryReflectionProperty = $reflectionClass->getProperty('optionsFactory');
+        $optionsFactoryReflectionProperty->setAccessible(true);
+        $optionsFactoryReflectionProperty->setValue($this->object, $optionsFactoryMock);
+
+        $attributeFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $attributeFactoryReflectionProperty = $reflectionClass->getProperty('attributeFactory');
+        $attributeFactoryReflectionProperty->setAccessible(true);
+        $attributeFactoryReflectionProperty->setValue($this->object, $attributeFactoryMock);
+
+        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getOptions', 'getId', 'getAttributeCode', 'getStoreLabel'])
+            ->getMock();
+        $attributeOptionMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue', 'getLabel'])
+            ->getMock();
 
         $this->productRepository->expects($this->at(0))->method('get')->with($productSku)->willReturn($configurable);
         $this->productRepository->expects($this->at(1))->method('get')->with($childSku)->willReturn($simple);
@@ -159,7 +197,28 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue([0 => [1, 2, 3]])
             );
-        $configurable->expects($this->once())->method('save');
+
+        $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
+        $simple->expects($this->any())->method('getId')->will($this->returnValue(999));
+
+        $configurable->expects($this->any())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
+        $extensionAttributesMock->expects($this->any())
+            ->method('getConfigurableProductOptions')
+            ->willReturn([$optionMock]);
+        $optionMock->expects($this->any())->method('getProductAttribute')->willReturn($productAttributeMock);
+        $productAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('color');
+        $simple->expects($this->any())->method('getData')->willReturn('color');
+        $optionMock->expects($this->any())->method('getAttributeId')->willReturn('1');
+
+        $optionsFactoryMock->expects($this->any())->method('create')->willReturn([$optionMock]);
+        $attributeFactoryMock->expects($this->any())->method('create')->willReturn($attributeMock);
+        $attributeMock->expects($this->any())->method('load');
+        $attributeMock->expects($this->any())->method('getOptions')->willReturn([$attributeOptionMock]);
+
+        $extensionAttributesMock->expects($this->any())->method('setConfigurableProductOptions');
+        $extensionAttributesMock->expects($this->any())->method('setConfigurableProductLinks');
+
+        $this->productRepository->expects($this->once())->method('save');
 
         $this->assertTrue(true, $this->object->addChild($productSku, $childSku));
     }
@@ -236,7 +295,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $product->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
-        $product->expects($this->once())->method('save');
+        $this->productRepository->expects($this->once())->method('save');
         $this->assertTrue($this->object->removeChild($productSku, $childSku));
     }
 
