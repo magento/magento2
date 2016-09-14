@@ -11,17 +11,16 @@ namespace Magento\Sales\Model;
 class ValidatorResult implements ValidatorResultInterface
 {
     /**
-     * @var \Magento\Framework\Phrase[]
+     * @var \string[]
      */
     private $messages = [];
 
     /**
-     * @param \Magento\Framework\Phrase
-     * @return void
+     * @inheritdoc
      */
-    public function addMessage(\Magento\Framework\Phrase $message)
+    public function addMessage($message)
     {
-        $this->messages[] = $message;
+        $this->messages[] = (string)$message;
     }
 
     /**
@@ -33,7 +32,7 @@ class ValidatorResult implements ValidatorResultInterface
     }
 
     /**
-     * @return \Magento\Framework\Phrase[]
+     * @return \string[]
      */
     public function getMessages()
     {

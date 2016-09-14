@@ -19,9 +19,9 @@ use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
- * Class RefundArgumentValidator
+ * Class RefundInvoice
  */
-class RefundArguments
+class RefundInvoice
 {
     /**
      * @var OrderValidatorInterface

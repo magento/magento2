@@ -7,14 +7,15 @@ namespace Magento\Sales\Model;
 
 /**
  * Interface ValidatorResultInterface
+ * @api
  */
 interface ValidatorResultInterface
 {
     /**
-     * @param \Magento\Framework\Phrase
+     * @param string $message
      * @return void
      */
-    public function addMessage(\Magento\Framework\Phrase $message);
+    public function addMessage($message);
 
     /**
      * @return bool
@@ -22,7 +23,7 @@ interface ValidatorResultInterface
     public function hasMessages();
 
     /**
-     * @return \Magento\Framework\Phrase[]
+     * @return \string[]
      */
     public function getMessages();
 }
