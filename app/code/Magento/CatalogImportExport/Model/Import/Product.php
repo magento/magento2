@@ -561,7 +561,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /** @var array */
     protected $productUrlSuffix = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @deprecated
+     */
     protected $productUrlKeys = [];
 
     /**
@@ -2528,11 +2531,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            return $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
-        }
-
-        if (!empty($this->productUrlKeys[$rowData[self::COL_SKU]])) {
-            return $this->productUrlKeys[$rowData[self::COL_SKU]];
+            return $rowData[self::URL_KEY];
         }
 
         if (!empty($rowData[self::COL_NAME])) {
