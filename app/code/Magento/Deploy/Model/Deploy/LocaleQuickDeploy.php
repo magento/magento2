@@ -73,13 +73,13 @@ class LocaleQuickDeploy implements DeployInterface
 
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
-        if (!isset($this->options[DeployManager::DEPLOY_BASE_LOCALE])) {
+        if (!isset($this->options[self::DEPLOY_BASE_LOCALE])) {
             throw new \InvalidArgumentException('Deploy base locale must be set for Quick Deploy');
         }
         $processedFiles = 0;
         $errorAmount = 0;
 
-        $baseLocale = $this->options[DeployManager::DEPLOY_BASE_LOCALE];
+        $baseLocale = $this->options[self::DEPLOY_BASE_LOCALE];
         $newLocalePath = $this->getLocalePath($area, $themePath, $locale);
         $baseLocalePath = $this->getLocalePath($area, $themePath, $baseLocale);
         $baseRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $baseLocalePath;

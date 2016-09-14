@@ -8,6 +8,8 @@ namespace Magento\Deploy\Test\Unit\Model;
 use Magento\Deploy\Model\ProcessManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Deploy\Model\ProcessTaskFactory;
+use Magento\Deploy\Model\ProcessTask;
 
 class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,15 +28,29 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProcessTaskFactory
+     */
+    private $processTaskFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProcessTask
+     */
+    private $processTaskMock;
+
     protected function setUp()
     {
         $this->processManagerMock = $this->getMock(ProcessManager::class, [], [], '', false);
         $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
+        $this->processTaskFactoryMock = $this->getMock(ProcessTaskFactory::class, [], [], '', false);
+        $this->processTaskMock = $this->getMock(ProcessTask::class, [], [], '', false);
+        $this->processTaskFactoryMock->expects($this->any())->method('create')->willReturn($this->processTaskMock);
         $this->model = (new ObjectManager($this))->getObject(
             \Magento\Deploy\Model\ProcessQueueManager::class,
             [
                 'processManager' => $this->processManagerMock,
                 'resourceConnection' => $this->resourceConnectionMock,
+                'processTaskFactory' => $this->processTaskFactoryMock
             ]
         );
     }
@@ -44,6 +60,7 @@ class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
         $callableMock = function () {
             return true;
         };
+        $this->processTaskMock->expects($this->any())->method('getHandler')->willReturn($callableMock);
 
         $processMock = $this->getMock(\Magento\Deploy\Model\Process::class, [], [], '', false);
 
