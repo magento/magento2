@@ -12,15 +12,12 @@ use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
-use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
-use Magento\Sales\Model\Order\InvoiceQuantityValidator;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\Validation\CanInvoice;
+use Magento\Sales\Model\Order\Validation\InvoiceOrder as InvoiceOrderValidator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -45,11 +42,6 @@ class InvoiceOrder implements InvoiceOrderInterface
     private $invoiceDocumentFactory;
 
     /**
-     * @var InvoiceValidatorInterface
-     */
-    private $invoiceValidator;
-
-    /**
      * @var PaymentAdapterInterface
      */
     private $paymentAdapter;
@@ -70,6 +62,11 @@ class InvoiceOrder implements InvoiceOrderInterface
     private $invoiceRepository;
 
     /**
+     * @var InvoiceOrderValidator
+     */
+    private $invoiceOrderValidator;
+
+    /**
      * @var NotifierInterface
      */
     private $notifierInterface;
@@ -80,17 +77,10 @@ class InvoiceOrder implements InvoiceOrderInterface
     private $logger;
 
     /**
-     * @var OrderValidatorInterface
-     */
-    private $orderValidator;
-
-    /**
      * OrderInvoice constructor.
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
-     * @param InvoiceValidatorInterface $invoiceValidator
-     * @param OrderValidatorInterface $orderValidator
      * @param PaymentAdapterInterface $paymentAdapter
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderConfig $config
@@ -103,24 +93,22 @@ class InvoiceOrder implements InvoiceOrderInterface
         ResourceConnection $resourceConnection,
         OrderRepositoryInterface $orderRepository,
         InvoiceDocumentFactory $invoiceDocumentFactory,
-        InvoiceValidatorInterface $invoiceValidator,
-        OrderValidatorInterface $orderValidator,
         PaymentAdapterInterface $paymentAdapter,
         OrderStateResolverInterface $orderStateResolver,
         OrderConfig $config,
         InvoiceRepository $invoiceRepository,
+        InvoiceOrderValidator $invoiceOrderValidator,
         NotifierInterface $notifierInterface,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
         $this->invoiceDocumentFactory = $invoiceDocumentFactory;
-        $this->invoiceValidator = $invoiceValidator;
-        $this->orderValidator = $orderValidator;
         $this->paymentAdapter = $paymentAdapter;
         $this->orderStateResolver = $orderStateResolver;
         $this->config = $config;
         $this->invoiceRepository = $invoiceRepository;
+        $this->invoiceOrderValidator = $invoiceOrderValidator;
         $this->notifierInterface = $notifierInterface;
         $this->logger = $logger;
     }
@@ -158,19 +146,19 @@ class InvoiceOrder implements InvoiceOrderInterface
             ($appendComment && $notify),
             $arguments
         );
-        $errorMessages = array_merge(
-            $this->invoiceValidator->validate(
-                $invoice,
-                [InvoiceQuantityValidator::class]
-            )->getMessages(),
-            $this->orderValidator->validate(
-                $order,
-                [CanInvoice::class]
-            )->getMessages()
+        $errorMessages = $this->invoiceOrderValidator->validate(
+            $order,
+            $invoice,
+            $capture,
+            $items,
+            $notify,
+            $appendComment,
+            $comment,
+            $arguments
         );
-        if (!empty($errorMessages)) {
+        if (!empty($errorMessages->hasMessages())) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages))
+                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages->getMessages()))
             );
         }
         $connection->beginTransaction();
