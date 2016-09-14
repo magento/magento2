@@ -199,6 +199,9 @@ class Helper
             $customOptions = [];
             foreach ($options as $customOptionData) {
                 if (empty($customOptionData['is_delete'])) {
+                    if (empty($customOptionData['option_id'])) {
+                        $customOptionData['option_id'] = null;
+                    }
                     if (isset($customOptionData['values'])) {
                         $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
                             return empty($valueData['is_delete']);
