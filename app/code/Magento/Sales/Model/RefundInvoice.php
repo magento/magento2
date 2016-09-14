@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
+use Magento\Sales\Model\Order\Invoice\Validation\RefundArguments;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
@@ -27,7 +28,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class RefundInvoice
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundInvoice implements RefundInvoiceInterface
 {
@@ -50,26 +50,6 @@ class RefundInvoice implements RefundInvoiceInterface
      * @var InvoiceRepositoryInterface
      */
     private $invoiceRepository;
-
-    /**
-     * @var OrderValidatorInterface
-     */
-    private $orderValidator;
-
-    /**
-     * @var InvoiceValidatorInterface
-     */
-    private $invoiceValidator;
-
-    /**
-     * @var CreditmemoValidatorInterface
-     */
-    private $creditmemoValidator;
-
-    /**
-     * @var ItemCreationValidatorInterface
-     */
-    private $itemCreationValidator;
 
     /**
      * @var CreditmemoRepositoryInterface
@@ -102,16 +82,18 @@ class RefundInvoice implements RefundInvoiceInterface
     private $logger;
 
     /**
+     * @var Order\Invoice\Validation\RefundArguments
+     */
+    private $refundArgumentsValidator;
+
+    /**
      * RefundInvoice constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param OrderValidatorInterface $orderValidator
-     * @param InvoiceValidatorInterface $invoiceValidator
-     * @param CreditmemoValidatorInterface $creditmemoValidator
-     * @param Order\Creditmemo\ItemCreationValidatorInterface $itemCreationValidator
+     * @param RefundArguments $refundArgumentsValidator
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param PaymentAdapterInterface $paymentAdapter
      * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
@@ -125,10 +107,7 @@ class RefundInvoice implements RefundInvoiceInterface
         OrderStateResolverInterface $orderStateResolver,
         OrderRepositoryInterface $orderRepository,
         InvoiceRepositoryInterface $invoiceRepository,
-        OrderValidatorInterface $orderValidator,
-        InvoiceValidatorInterface $invoiceValidator,
-        CreditmemoValidatorInterface $creditmemoValidator,
-        ItemCreationValidatorInterface $itemCreationValidator,
+        RefundArguments $refundArgumentsValidator,
         CreditmemoRepositoryInterface $creditmemoRepository,
         PaymentAdapterInterface $paymentAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
@@ -140,16 +119,13 @@ class RefundInvoice implements RefundInvoiceInterface
         $this->orderStateResolver = $orderStateResolver;
         $this->orderRepository = $orderRepository;
         $this->invoiceRepository = $invoiceRepository;
-        $this->orderValidator = $orderValidator;
-        $this->creditmemoValidator = $creditmemoValidator;
-        $this->itemCreationValidator = $itemCreationValidator;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->paymentAdapter = $paymentAdapter;
         $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
         $this->notifier = $notifier;
         $this->config = $config;
         $this->logger = $logger;
-        $this->invoiceValidator = $invoiceValidator;
+        $this->refundArgumentsValidator = $refundArgumentsValidator;
     }
 
     /**
@@ -174,43 +150,19 @@ class RefundInvoice implements RefundInvoiceInterface
             ($appendComment && $notify),
             $arguments
         );
-        $orderValidationResult = $this->orderValidator->validate(
-            $order,
-            [
-                CanRefund::class
-            ]
-        );
-        $invoiceValidationResult = $this->invoiceValidator->validate(
+
+        $validationMessages = $this->refundArgumentsValidator->validate(
             $invoice,
-            [
-                \Magento\Sales\Model\Order\Invoice\Validation\CanRefund::class
-            ]
-        );
-        $creditmemoValidationResult = $this->creditmemoValidator->validate(
+            $order,
             $creditmemo,
-            [
-                QuantityValidator::class,
-                TotalsValidator::class
-            ]
+            $items,
+            $isOnline,
+            $notify,
+            $appendComment,
+            $comment,
+            $arguments
         );
-        $itemsValidation = [];
-        foreach ($items as $item) {
-            $itemsValidation = array_merge(
-                $itemsValidation,
-                $this->itemCreationValidator->validate(
-                    $item,
-                    [CreationQuantityValidator::class],
-                    $order
-                )
-            );
-        }
-        $validationMessages = array_merge(
-            $orderValidationResult,
-            $invoiceValidationResult,
-            $creditmemoValidationResult,
-            $itemsValidation
-        );
-        if (!empty($validationMessages )) {
+        if (!empty($validationMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages))
             );
