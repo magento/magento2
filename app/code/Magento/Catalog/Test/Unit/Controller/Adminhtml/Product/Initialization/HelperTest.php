@@ -200,8 +200,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('setProductSku');
 
         $optionsData = [
-            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1'],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1'],
+            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
+            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
         ];
         $productData = [
             'stock_data' => ['stock_data'],
