@@ -193,4 +193,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         }
         return $values;
     }
+
+    /**
+     * Get Merchant account ID
+     *
+     * @return string
+     */
+    public function getMerchantAccountId()
+    {
+        return $this->getValue(self::KEY_MERCHANT_ACCOUNT_ID);
+    }
 }

@@ -31,7 +31,7 @@ angular.module('start-updater', ['ngStorage'])
             var payLoad = {
                 'packages': $scope.packages,
                 'type': $state.current.type,
-                'headerTitle': $scope.title,
+                'headerTitle': $scope.packages.size == 1 ? $scope.title : 'Process extensions',
                 'dataOption': $localStorage.dataOption
             };
             $http.post('index.php/start-updater/update', payLoad)

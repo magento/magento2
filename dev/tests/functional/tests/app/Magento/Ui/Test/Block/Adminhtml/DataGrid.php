@@ -135,7 +135,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $sortLink = "//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
+    protected $sortLink = './/div[@data-role="grid-wrapper"]//th[contains(@class, "%s")]/span[contains(text(), "%s")]';
 
     /**
      * Current page input.

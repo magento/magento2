@@ -24,6 +24,9 @@
             <gender>
                 <input>select</input>
             </gender>
+            <dob>
+                <input>datepicker</input>
+            </dob>
         </fields>
     </account_information>
     <addresses>

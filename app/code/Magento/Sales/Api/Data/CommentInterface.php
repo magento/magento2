@@ -12,15 +12,25 @@ namespace Magento\Sales\Api\Data;
  */
 interface CommentInterface
 {
+    /*
+     * Is-visible-on-storefront flag.
+     */
+    const IS_VISIBLE_ON_FRONT = 'is_visible_on_front';
+
+    /*
+     * Comment.
+     */
+    const COMMENT = 'comment';
+
     /**
-     * Gets the comment for the invoice.
+     * Gets the comment text.
      *
      * @return string Comment.
      */
     public function getComment();
 
     /**
-     * Sets the comment for the invoice.
+     * Sets the comment text.
      *
      * @param string $comment
      * @return $this
@@ -28,14 +38,14 @@ interface CommentInterface
     public function setComment($comment);
 
     /**
-     * Gets the is-visible-on-storefront flag value for the invoice.
+     * Gets the is-visible-on-storefront flag value for the comment.
      *
      * @return int Is-visible-on-storefront flag value.
      */
     public function getIsVisibleOnFront();
 
     /**
-     * Sets the is-visible-on-storefront flag value for the invoice.
+     * Sets the is-visible-on-storefront flag value for the comment.
      *
      * @param int $isVisibleOnFront
      * @return $this

@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Fill fields with test data and save.
  * 7. Perform all assertions.
  *
- * @group Customer_Account_(CS)
+ * @group Customer_Account
  * @ZephyrId MAGETWO-25925
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,7 +38,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 

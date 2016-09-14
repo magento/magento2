@@ -19,12 +19,10 @@ class IdentityService implements IdentityGeneratorInterface
 
     /**
      * IdentityService constructor.
-     * @param \Ramsey\Uuid\UuidFactory $uuidFactory
      */
-    public function __construct(
-        \Ramsey\Uuid\UuidFactory $uuidFactory
-    ) {
-        $this->uuidFactory = $uuidFactory;
+    public function __construct()
+    {
+        $this->uuidFactory = new \Ramsey\Uuid\UuidFactory();
     }
 
     /**

@@ -43,7 +43,7 @@ use Magento\Mtf\Client\BrowserInterface;
  * 14. Click "Next" and on the "Step 6: Install" page click "Install Now" button.
  * 15. Perform assertions.
  *
- * @group Installer_and_Upgrade/Downgrade_(PS)
+ * @group Installer_and_Upgrade/Downgrade
  * @ZephyrId MAGETWO-31431
  */
 class InstallTest extends Injectable
