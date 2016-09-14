@@ -134,13 +134,13 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
         }
 
         $html = '<select name="' .
-            $this->getName() .
+            $this->escapeHtmlAttr($this->getName()) .
             '" id="' .
-            $this->getId() .
+            $this->escapeHtmlAttr($this->getId()) .
             '" class="' .
-            $this->getClass() .
+            $this->escapeHtmlAttr($this->getClass()) .
             '" title="' .
-            $this->getTitle() .
+            $this->escapeHtmlAttr($this->getTitle()) .
             '" ' .
             $this->getExtraParams() .
             '>';
@@ -166,7 +166,8 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             }
 
             if (is_array($value)) {
-                $html .= '<optgroup label="' . $label . '" data-optgroup-name="' . $optgroupName . '">';
+                $html .= '<optgroup label="' . $this->escapeHtmlAttr($label)
+                    . '" data-optgroup-name="' . $this->escapeHtmlAttr($optgroupName) . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
                         $optionGroup = ['value' => $keyGroup, 'label' => $optionGroup];
@@ -204,10 +205,10 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             foreach ($option['params'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $keyMulti => $valueMulti) {
-                        $params .= sprintf(' %s="%s" ', $keyMulti, $valueMulti);
+                        $params .= sprintf(' %s="%s" ', $keyMulti, $this->escapeHtmlAttr($valueMulti));
                     }
                 } else {
-                    $params .= sprintf(' %s="%s" ', $key, $value);
+                    $params .= sprintf(' %s="%s" ', $key, $this->escapeHtmlAttr($value));
                 }
             }
         }
