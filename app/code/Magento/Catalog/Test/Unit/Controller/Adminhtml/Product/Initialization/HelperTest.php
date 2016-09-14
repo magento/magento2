@@ -360,9 +360,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                     [
                         'option_id' => '5',
                         'key1' => 'val1',
-                        'key2' => 'val2',
+                        'title' => 'val2',
                         'default_key1' => 'val3',
-                        'default_key2' => 'val4',
+                        'default_title' => 'val4',
                         'values' => [
                             [
                                 'option_type_id' => '2',
@@ -377,7 +377,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 [
                     5 => [
                         'key1' => '0',
-                        'key2' => '1',
+                        'title' => '1',
                         'values' => [2 => ['key1' => 1]]
                     ]
                 ],
@@ -385,9 +385,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                     [
                         'option_id' => '5',
                         'key1' => 'val1',
-                        'key2' => 'val4',
+                        'title' => 'val4',
                         'default_key1' => 'val3',
-                        'default_key2' => 'val4',
+                        'default_title' => 'val4',
+                        'is_delete_store_title' => 1,
                         'values' => [
                             [
                                 'option_type_id' => '2',
@@ -411,8 +412,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                             [
                                 'option_type_id' => '2',
                                 'key1' => 'val1',
-                                'key2' => 'val2',
-                                'default_key1' => 'val11'
+                                'title' => 'val2',
+                                'default_key1' => 'val11',
+                                'default_title' => 'val22'
                             ]
                         ]
                     ]
@@ -421,7 +423,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                     7 => [
                         'key1' => '1',
                         'key2' => '1',
-                        'values' => [2 => ['key1' => 1, 'key2' => 1]]
+                        'values' => [2 => ['key1' => 0, 'title' => 1]]
                     ]
                 ],
                 [
@@ -433,9 +435,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                         'values' => [
                             [
                                 'option_type_id' => '2',
-                                'key1' => 'val11',
-                                'key2' => 'val2',
-                                'default_key1' => 'val11'
+                                'key1' => 'val1',
+                                'title' => 'val22',
+                                'default_key1' => 'val11',
+                                'default_title' => 'val22',
+                                'is_delete_store_title' => 1
                             ]
                         ]
                     ]
