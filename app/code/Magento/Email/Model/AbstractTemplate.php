@@ -669,7 +669,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function emulateDesign($storeId, $area = self::DEFAULT_DESIGN_AREA)
     {
-        if ($storeId) {
+        if ($storeId !== false) {
             // save current design settings
             $this->emulatedDesignConfig = clone $this->getDesignConfig();
             if (
