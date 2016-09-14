@@ -5,11 +5,12 @@
  */
 namespace Magento\CatalogInventory\Setup;
 
-use Magento\CatalogInventory\Model\Configuration;
-use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\Indexer\AbstractProcessor;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Upgrade Data script
@@ -18,25 +19,33 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var Configuration
+     * @var StockConfigurationInterface
      */
     private $configuration;
 
     /**
-     * @var Processor
+     * @var AbstractProcessor
      */
-    private $stockIndexerProcessor;
+    private $indexerProcessor;
 
     /**
-     * @param Configuration $configuration
-     * @param Processor $stockIndexerProcessor
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param StockConfigurationInterface $configuration
+     * @param StoreManagerInterface $storeManager
+     * @param AbstractProcessor $indexerProcessor
      */
     public function __construct(
-        Configuration $configuration,
-        Processor $stockIndexerProcessor
+        StockConfigurationInterface $configuration,
+        StoreManagerInterface $storeManager,
+        AbstractProcessor $indexerProcessor
     ) {
         $this->configuration = $configuration;
-        $this->stockIndexerProcessor = $stockIndexerProcessor;
+        $this->storeManager = $storeManager;
+        $this->indexerProcessor = $indexerProcessor;
     }
 
     /**
@@ -60,8 +69,9 @@ class UpgradeData implements UpgradeDataInterface
     {
         $setup->getConnection()->update(
             $setup->getTable('cataloginventory_stock_item'),
-            ['website_id' => $this->configuration->getDefaultScopeId()]
+            ['website_id' => $this->configuration->getDefaultScopeId()],
+            ['website_id = ?' => $this->storeManager->getWebsite()->getId()]
         );
-        $this->stockIndexerProcessor->getIndexer()->reindexAll();
+        $this->indexerProcessor->getIndexer()->reindexAll();
     }
 }
