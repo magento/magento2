@@ -8,6 +8,7 @@ namespace Magento\Deploy\Model;
 
 use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
@@ -122,7 +123,7 @@ class DeployStrategyProvider
         $dirs = $this->getFallbackRule()->getPatternDirs($params);
 
         return array_filter($dirs, function ($dir) {
-            return strpos($dir, 'i18n');
+            return strpos($dir, Dir::MODULE_I18N_DIR);
         });
     }
 
@@ -181,7 +182,7 @@ class DeployStrategyProvider
     {
         $options = $this->options;
         if ($baseLocale) {
-            $options[DeployManager::DEPLOY_BASE_LOCALE] = $baseLocale;
+            $options[DeployInterface::DEPLOY_BASE_LOCALE] = $baseLocale;
         }
 
         return $this->deployStrategyFactory->create(

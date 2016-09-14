@@ -9,6 +9,11 @@ namespace Magento\Deploy\Model\Deploy;
 interface DeployInterface
 {
     /**
+     * Base locale option without customizations
+     */
+    const DEPLOY_BASE_LOCALE = 'deploy_base_locale';
+
+    /**
      * @param string $area
      * @param string $themePath
      * @param string $locale

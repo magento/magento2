@@ -11,6 +11,11 @@ use Magento\Framework\App\ResourceConnection;
 class ProcessQueueManager
 {
     /**
+     * Default max amount of processes
+     */
+    const DEFAULT_MAX_PROCESSES_AMOUNT = 4;
+
+    /**
      * @var ProcessTask[]
      */
     private $tasksQueue = [];
@@ -23,7 +28,7 @@ class ProcessQueueManager
     /**
      * @var int
      */
-    private $maxProcesses = 4;
+    private $maxProcesses;
 
     /**
      * @var ProcessManager
@@ -36,21 +41,25 @@ class ProcessQueueManager
     private $resourceConnection;
 
     /**
-     * @param ProcessManager $processManager
-     * @param ResourceConnection $resourceConnection
+     * @var ProcessTaskFactory
      */
-    public function __construct(ProcessManager $processManager, ResourceConnection $resourceConnection)
-    {
-        $this->processManager = $processManager;
-        $this->resourceConnection = $resourceConnection;
-    }
+    private $processTaskFactory;
 
     /**
+     * @param ProcessManager $processManager
+     * @param ResourceConnection $resourceConnection
+     * @param ProcessTaskFactory $processTaskFactory
      * @param int $maxProcesses
-     * @return void
      */
-    public function setMaxProcessesAmount($maxProcesses)
-    {
+    public function __construct(
+        ProcessManager $processManager,
+        ResourceConnection $resourceConnection,
+        ProcessTaskFactory $processTaskFactory,
+        $maxProcesses = self::DEFAULT_MAX_PROCESSES_AMOUNT
+    ) {
+        $this->processManager = $processManager;
+        $this->resourceConnection = $resourceConnection;
+        $this->processTaskFactory = $processTaskFactory;
         $this->maxProcesses = $maxProcesses;
     }
 
@@ -78,7 +87,7 @@ class ProcessQueueManager
         $processQueue = [];
         $this->internalQueueProcess($this->tasksQueue, $processQueue);
 
-        $returnStatus = null;
+        $returnStatus = 0;
         while (count($this->processManager->getProcesses()) > 0) {
             foreach ($this->processManager->getProcesses() as $process) {
                 if ($process->isCompleted()) {
@@ -131,7 +140,7 @@ class ProcessQueueManager
      */
     private function createTask($handler, $dependentTasks = [])
     {
-        return new ProcessTask($handler, $dependentTasks);
+        return $this->processTaskFactory->create(['handler' => $handler, 'dependentTasks' => $dependentTasks]);
     }
 
     /**

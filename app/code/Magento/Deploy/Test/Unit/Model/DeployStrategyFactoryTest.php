@@ -35,7 +35,7 @@ class DeployStrategyFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Wrong deploy strategy type: wrong-type
      */
     public function testCreateWithWrongStrategyType()

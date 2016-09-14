@@ -74,6 +74,18 @@ class Deployer
     }
 
     /**
+     * @return \Magento\Deploy\Model\DeployManagerFactory
+     */
+    private function getDeployManagerFactory()
+    {
+        if (null === $this->deployManagerFactory) {
+            $this->deployManagerFactory = ObjectManager::getInstance()->get(DeployManagerFactory::class);
+        }
+
+        return $this->deployManagerFactory;
+    }
+
+    /**
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
@@ -85,11 +97,8 @@ class Deployer
      */
     public function deploy(ObjectManagerFactory $omFactory, array $locales, array $deployableAreaThemeMap = [])
     {
-        if (null === $this->deployManagerFactory) {
-            $this->deployManagerFactory = ObjectManager::getInstance()->get(DeployManagerFactory::class);
-        }
         /** @var DeployManager $deployerManager */
-        $deployerManager = $this->deployManagerFactory->create(
+        $deployerManager = $this->getDeployManagerFactory()->create(
             ['options' => $this->options, 'output' => $this->output]
         );
 

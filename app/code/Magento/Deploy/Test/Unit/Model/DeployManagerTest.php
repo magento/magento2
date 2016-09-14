@@ -33,9 +33,9 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
     private $minifierTemplateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\ProcessQueueManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\ProcessQueueManagerFactory
      */
-    private $processQueueManager;
+    private $processQueueManagerFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
@@ -65,8 +65,8 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->processQueueManager = $this->getMock(
-            \Magento\Deploy\Model\ProcessQueueManager::class,
+        $this->processQueueManagerFactoryMock = $this->getMock(
+            \Magento\Deploy\Model\ProcessQueueManagerFactory::class,
             [],
             [],
             '',
@@ -159,7 +159,7 @@ class DeployManagerTest extends \PHPUnit_Framework_TestCase
             $this->outputMock,
             $this->versionStorageMock,
             $this->deployStrategyProviderFactoryMock,
-            $this->processQueueManager,
+            $this->processQueueManagerFactoryMock,
             $this->minifierTemplateMock,
             $this->stateMock,
             $options
