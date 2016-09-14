@@ -191,6 +191,9 @@
     <type name="Magento\Sales\Controller\Order\View">
         <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
+    <type name="Magento\Sales\Model\RefundOrder">
+        <plugin name="returnToStock" type="Magento\Sales\Model\Order\ReturnToStockPlugin"/>
+    </type>
     <type name="Magento\Framework\App\Rss\RssManagerInterface">
         <arguments>
             <argument name="dataProviders" xsi:type="array">

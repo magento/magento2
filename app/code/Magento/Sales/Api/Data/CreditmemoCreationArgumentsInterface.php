@@ -34,6 +34,13 @@ interface CreditmemoCreationArgumentsInterface
     public function getAdjustmentNegative();
 
     /**
+     * Gets the items ids for return to stock.
+     *
+     * @return int[]|null
+     */
+    public function getReturnToStockItems();
+
+    /**
      * Sets the credit memo shipping amount.
      *
      * @param float $amount
@@ -56,6 +63,14 @@ interface CreditmemoCreationArgumentsInterface
      * @return $this
      */
     public function setAdjustmentNegative($amount);
+
+    /**
+     * Sets the items ids for return to stock.
+     *
+     * @param int[] $items
+     * @return $this
+     */
+    public function setReturnToStockItems($items);
 
     /**
      * Gets existing extension attributes.
