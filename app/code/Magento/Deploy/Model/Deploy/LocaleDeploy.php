@@ -25,10 +25,14 @@ use Magento\Framework\Console\Cli;
  */
 class LocaleDeploy implements DeployInterface
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     private $count = 0;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $errorCount = 0;
 
     /**
@@ -36,13 +40,19 @@ class LocaleDeploy implements DeployInterface
      */
     private $output;
 
-    /** @var \Magento\Framework\View\Asset\Repository */
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
     private $assetRepo;
 
-    /** @var Publisher */
+    /**
+     * @var Publisher
+     */
     private $assetPublisher;
 
-    /** @var \Magento\Framework\View\Asset\Bundle\Manager */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\Manager
+     */
     private $bundleManager;
 
     /**

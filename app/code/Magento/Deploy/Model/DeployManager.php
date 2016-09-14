@@ -10,15 +10,10 @@ use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
-use \Magento\Framework\App\State;
+use Magento\Framework\App\State;
 
 class DeployManager
 {
-    /**
-     * Base locale without customizations
-     */
-    const DEPLOY_BASE_LOCALE = 'deploy_base_locale';
-
     /**
      * @var array
      */
@@ -45,12 +40,12 @@ class DeployManager
     private $deployStrategyProviderFactory;
 
     /**
-     * @var ProcessQueueManager
+     * @var ProcessQueueManagerFactory
      */
-    private $processQueueManager;
+    private $processQueueManagerFactory;
 
     /**
-     * @var \Magento\Deploy\Model\TemplateMinifier
+     * @var TemplateMinifier
      */
     private $templateMinifier;
 
@@ -68,7 +63,7 @@ class DeployManager
      * @param OutputInterface $output
      * @param StorageInterface $versionStorage
      * @param DeployStrategyProviderFactory $deployStrategyProviderFactory
-     * @param ProcessQueueManager $processQueueManager
+     * @param ProcessQueueManagerFactory $processQueueManagerFactory
      * @param TemplateMinifier $templateMinifier
      * @param State $state
      * @param array $options
@@ -77,7 +72,7 @@ class DeployManager
         OutputInterface $output,
         StorageInterface $versionStorage,
         DeployStrategyProviderFactory $deployStrategyProviderFactory,
-        ProcessQueueManager $processQueueManager,
+        ProcessQueueManagerFactory $processQueueManagerFactory,
         TemplateMinifier $templateMinifier,
         State $state,
         array $options
@@ -86,9 +81,10 @@ class DeployManager
         $this->options = $options;
         $this->versionStorage = $versionStorage;
         $this->deployStrategyProviderFactory = $deployStrategyProviderFactory;
-        $this->processQueueManager = $processQueueManager;
+        $this->processQueueManagerFactory = $processQueueManagerFactory;
         $this->templateMinifier = $templateMinifier;
         $this->state = $state;
+        $this->idDryRun = !empty($this->options[Options::DRY_RUN]);
     }
 
     /**
@@ -110,7 +106,6 @@ class DeployManager
      */
     public function deploy()
     {
-        $this->idDryRun = isset($this->options[Options::DRY_RUN]) && $this->options[Options::DRY_RUN];
         if ($this->idDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
@@ -123,7 +118,7 @@ class DeployManager
         if ($this->isCanBeParalleled()) {
             $result = $this->runInParallel($strategyProvider);
         } else {
-            $result = null;
+            $result = 0;
             foreach ($this->packages as $package) {
                 $locales = array_keys($package);
                 list($area, $themePath) = current($package);
@@ -162,7 +157,9 @@ class DeployManager
      */
     private function runInParallel(DeployStrategyProvider $strategyProvider)
     {
-        $this->processQueueManager->setMaxProcessesAmount($this->getProcessesAmount());
+        $processQueueManager = $this->processQueueManagerFactory->create(
+            ['maxProcesses' => $this->getProcessesAmount()]
+        );
         foreach ($this->packages as $package) {
             $locales = array_keys($package);
             list($area, $themePath) = current($package);
@@ -179,10 +176,10 @@ class DeployManager
                 }
 
             }
-            $this->processQueueManager->addTaskToQueue($baseStrategy, $dependentStrategy);
+            $processQueueManager->addTaskToQueue($baseStrategy, $dependentStrategy);
         }
 
-        return $this->processQueueManager->process();
+        return $processQueueManager->process();
     }
 
     /**

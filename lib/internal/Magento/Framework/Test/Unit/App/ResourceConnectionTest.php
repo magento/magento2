@@ -17,12 +17,12 @@ class ResourceConnectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ResourceConnection
      */
-    protected $unit;
+    private $unit;
 
     /**
      * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $deploymentConfigMock;
+    private $deploymentConfigMock;
 
     /**
      * @var ConnectionFactoryInterface|\PHPUnit_Framework_MockObject_MockObject

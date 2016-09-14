@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
 
+use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Deploy\Model\Deploy\LocaleQuickDeploy;
-use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,8 +59,8 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
                 ['_requirejs/adminhtml/Magento/backend/en_US', '_requirejs/adminhtml/Magento/backend/uk_UA']
             );
 
-        $model =$this->getModel([
-            DeployManager::DEPLOY_BASE_LOCALE => $baseLocal,
+        $model = $this->getModel([
+            DeployInterface::DEPLOY_BASE_LOCALE => $baseLocal,
             Options::SYMLINK_LOCALE => 1,
         ]);
         $model->deploy($area, $themePath, $locale);
@@ -89,8 +89,8 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
             [$baseLocal . 'file2', $locale . 'file2', null]
         );
 
-        $model =$this->getModel([
-            DeployManager::DEPLOY_BASE_LOCALE => $baseLocal,
+        $model = $this->getModel([
+            DeployInterface::DEPLOY_BASE_LOCALE => $baseLocal,
             Options::SYMLINK_LOCALE => 0,
         ]);
         $model->deploy($area, $themePath, $locale);

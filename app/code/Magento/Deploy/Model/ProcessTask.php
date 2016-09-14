@@ -27,7 +27,7 @@ class ProcessTask
      * @param callable $handler
      * @param array $dependentTasks
      */
-    public function __construct($handler, $dependentTasks = [])
+    public function __construct($handler, array $dependentTasks = [])
     {
         $this->taskId = uniqid('', true);
         $this->handler = $handler;

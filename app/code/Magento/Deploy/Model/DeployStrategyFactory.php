@@ -33,6 +33,7 @@ class DeployStrategyFactory
      * @param string $type
      * @param array $arguments
      * @return DeployInterface
+     * @throws \InvalidArgumentException
      */
     public function create($type, array $arguments = [])
     {
