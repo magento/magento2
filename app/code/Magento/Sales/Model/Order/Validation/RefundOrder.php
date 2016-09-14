@@ -13,13 +13,12 @@ use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
-use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundOrder
  */
-class RefundOrder
+class RefundOrder implements RefundOrderInterface
 {
     /**
      * @var OrderValidatorInterface
@@ -62,14 +61,7 @@ class RefundOrder
     }
 
     /**
-     * @param OrderInterface $order
-     * @param CreditmemoInterface $creditmemo
-     * @param array $items
-     * @param bool $notify
-     * @param bool $appendComment
-     * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
-     * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
-     * @return ValidatorResultInterface
+     * @inheritdoc
      */
     public function validate(
         OrderInterface $order,

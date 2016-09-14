@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\Validation\InvoiceOrder as InvoiceOrderValidator;
+use Magento\Sales\Model\Order\Validation\InvoiceOrderInterface as InvoiceOrderValidator;
 use Psr\Log\LoggerInterface;
 
 /**

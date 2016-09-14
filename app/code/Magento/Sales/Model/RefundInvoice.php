@@ -13,7 +13,7 @@ use Magento\Sales\Api\RefundInvoiceInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
-use Magento\Sales\Model\Order\Invoice\Validation\RefundInvoice as RefundInvoiceValidator;
+use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface as RefundInvoiceValidator;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Psr\Log\LoggerInterface;

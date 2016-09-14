@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order\Shipment\NotifierInterface;
 use Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface;
-use Magento\Sales\Model\Order\Validation\ShipOrder as ShipOrderValidator;
+use Magento\Sales\Model\Order\Validation\ShipOrderInterface as ShipOrderValidator;
 use Psr\Log\LoggerInterface;
 
 /**

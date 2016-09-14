@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order\Invoice\Validation;
+namespace Magento\Sales\Model\Order\Validation;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
@@ -21,7 +21,7 @@ use Magento\Sales\Model\ValidatorResultMerger;
 /**
  * Class RefundInvoice
  */
-class RefundInvoice
+class RefundInvoice implements RefundInvoiceInterface
 {
     /**
      * @var OrderValidatorInterface
@@ -71,16 +71,7 @@ class RefundInvoice
     }
 
     /**
-     * @param InvoiceInterface $invoice
-     * @param OrderInterface $order
-     * @param CreditmemoInterface $creditmemo
-     * @param array $items
-     * @param bool $isOnline
-     * @param bool $notify
-     * @param bool $appendComment
-     * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
-     * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
-     * @return ValidatorResultInterface
+     * @inheritdoc
      */
     public function validate(
         InvoiceInterface $invoice,

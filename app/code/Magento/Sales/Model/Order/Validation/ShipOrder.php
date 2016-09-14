@@ -16,7 +16,7 @@ use Magento\Sales\Model\ValidatorResultMerger;
 /**
  * Class ShipOrder
  */
-class ShipOrder
+class ShipOrder implements ShipOrderInterface
 {
     /**
      * @var OrderValidatorInterface

@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\Validation\RefundOrder as RefundOrderValidator;
+use Magento\Sales\Model\Order\Validation\RefundOrderInterface as RefundOrderValidator;
 use Psr\Log\LoggerInterface;
 
 /**
