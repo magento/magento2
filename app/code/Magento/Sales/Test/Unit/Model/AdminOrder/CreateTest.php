@@ -351,4 +351,32 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->adminOrderCreate->setRecollect(false);
         $this->adminOrderCreate->updateQuoteItems($items);
     }
+
+    public function testApplyCoupon()
+    {
+        $couponCode = '';
+        $quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getShippingAddress', 'setCouponCode'],
+            [],
+            '',
+            false
+        );
+        $this->sessionQuoteMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+
+        $addressMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates', 'setFreeShipping'],
+            [],
+            '',
+            false
+        );
+        $quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($addressMock);
+        $quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode)->willReturnSelf();
+
+        $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setFreeShipping')->with(null)->willReturnSelf();
+
+        $this->adminOrderCreate->applyCoupon($couponCode);
+    }
 }
