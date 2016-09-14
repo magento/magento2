@@ -7,7 +7,6 @@ namespace Magento\Vault\Test\Unit\Model\Ui;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Payment\Helper\Data;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
@@ -21,14 +20,24 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Data|MockObject
+     * @var \Magento\Payment\Api\PaymentMethodListInterface|MockObject
      */
-    private $paymentDataHelper;
+    private $paymentMethodList;
+
+    /**
+     * @var \Magento\Payment\Model\Method\InstanceFactory|MockObject
+     */
+    private $paymentMethodInstanceFactory;
+
+    /**
+     * @var \Magento\Payment\Api\Data\PaymentMethodInterface|MockObject
+     */
+    private $vaultPayment;
 
     /**
      * @var VaultPaymentInterface|MockObject
      */
-    private $vaultPayment;
+    private $vaultPaymentInstance;
 
     /**
      * @var Session|MockObject
@@ -52,12 +61,16 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDataHelper = $this->getMockBuilder(Data::class)
+        $this->paymentMethodList = $this->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreMethods'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
+        $this->paymentMethodInstanceFactory = $this->getMockBuilder(
+            \Magento\Payment\Model\Method\InstanceFactory::class
+        )->disableOriginalConstructor()->getMock();
+
+        $this->vaultPayment = $this->getMockForAbstractClass(\Magento\Payment\Api\Data\PaymentMethodInterface::class);
+        $this->vaultPaymentInstance = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->session = $this->getMockBuilder(Session::class)
@@ -68,8 +81,13 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);
         $objectManager->setBackwardCompatibleProperty(
             $this->vaultConfigProvider,
-            'paymentDataHelper',
-            $this->paymentDataHelper
+            'paymentMethodList',
+            $this->paymentMethodList
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->vaultConfigProvider,
+            'paymentMethodInstanceFactory',
+            $this->paymentMethodInstanceFactory
         );
     }
 
@@ -101,15 +119,19 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->paymentDataHelper->expects(static::once())
-            ->method('getStoreMethods')
+        $this->paymentMethodList->expects(static::once())
+            ->method('getActiveList')
             ->with($storeId)
             ->willReturn([$this->vaultPayment]);
 
-        $this->vaultPayment->expects(static::once())
+        $this->paymentMethodInstanceFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->vaultPaymentInstance);
+
+        $this->vaultPaymentInstance->expects(static::once())
             ->method('getCode')
             ->willReturn($vaultPaymentCode);
-        $this->vaultPayment->expects($customerId !== null ? static::once() : static::never())
+        $this->vaultPaymentInstance->expects($customerId !== null ? static::once() : static::never())
             ->method('isActive')
             ->with($storeId)
             ->willReturn($vaultEnabled);
