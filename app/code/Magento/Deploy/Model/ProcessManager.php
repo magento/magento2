@@ -84,7 +84,7 @@ class ProcessManager
     }
 
     /**
-     * Protect against zombie process§
+     * Protect against zombie process
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */

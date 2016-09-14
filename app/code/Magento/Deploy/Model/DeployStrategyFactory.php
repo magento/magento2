@@ -7,6 +7,7 @@
 namespace Magento\Deploy\Model;
 
 use Magento\Deploy\Model\Deploy\DeployInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 
 class DeployStrategyFactory
@@ -33,7 +34,7 @@ class DeployStrategyFactory
      * @param string $type
      * @param array $arguments
      * @return DeployInterface
-     * @throws \InvalidArgumentException
+     * @throws InputException
      */
     public function create($type, array $arguments = [])
     {
@@ -43,7 +44,7 @@ class DeployStrategyFactory
         ];
 
         if (!isset($strategyMap[$type])) {
-            throw new \InvalidArgumentException('Wrong deploy strategy type: ' . $type);
+            throw new InputException(__('Wrong deploy strategy type: %1', $type));
         }
 
         return $this->objectManager->create($strategyMap[$type], $arguments);
