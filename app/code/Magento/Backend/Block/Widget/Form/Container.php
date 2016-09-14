@@ -37,6 +37,11 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * @var string
      */
     protected $_blockGroup = 'Magento_Backend';
+    
+    /**
+     *  @var string
+     * /
+    const PARAM_BLOCK_GROUP = 'block_group';
 
     /**
      * @var string
@@ -49,6 +54,10 @@ class Container extends \Magento\Backend\Block\Widget\Container
     protected function _construct()
     {
         parent::_construct();
+                
+        if ($this->hasData(self::PARAM_BLOCK_GROUP)) {
+            $this->_blockGroup = $this->_getData(self::PARAM_BLOCK_GROUP);
+        }
 
         $this->addButton(
             'back',
