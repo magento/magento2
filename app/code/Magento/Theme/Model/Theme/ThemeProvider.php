@@ -18,6 +18,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     protected $themeFactory;
 
     /**
+     * @var \Magento\Framework\View\Design\ThemeInterface[]
+     */
+    private $themes;
+
+    /**
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      */
@@ -34,9 +39,16 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeByFullPath($fullPath)
     {
+        if (isset($this->themes[$fullPath])) {
+            return $this->themes[$fullPath];
+        }
+
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $themeCollection = $this->collectionFactory->create();
-        return $themeCollection->getThemeByFullPath($fullPath);
+        $item = $themeCollection->getThemeByFullPath($fullPath);
+        $this->themes[$fullPath] = $item;
+
+        return $item;
     }
 
     /**
@@ -57,8 +69,16 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeById($themeId)
     {
+        if (isset($this->themes[$themeId])) {
+            return $this->themes[$themeId];
+        }
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = $this->themeFactory->create();
-        return $themeModel->load($themeId);
+        $themeModel->load($themeId);
+        if ($themeModel->getId()) {
+            $this->themes[$themeId] = $themeModel;
+        }
+
+        return $themeModel;
     }
 }
