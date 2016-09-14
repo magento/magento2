@@ -162,9 +162,9 @@ class RefundInvoice implements RefundInvoiceInterface
             $comment,
             $arguments
         );
-        if (!empty($validationMessages)) {
+        if ($validationMessages->hasMessages()) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages))
+                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
             );
         }
         $connection->beginTransaction();

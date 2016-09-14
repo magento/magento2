@@ -9,7 +9,14 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
-use Magento\Sales\Model\Order\Validation\RefundArguments as OrderRefundArgumentsValidator;
+use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
+use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
+use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
+use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
+use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
+use Magento\Sales\Model\Order\OrderValidatorInterface;
+use Magento\Sales\Model\ValidatorResultInterface;
+use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundArgumentValidator
@@ -17,9 +24,19 @@ use Magento\Sales\Model\Order\Validation\RefundArguments as OrderRefundArguments
 class RefundArguments
 {
     /**
-     * @var OrderRefundArgumentsValidator
+     * @var OrderValidatorInterface
      */
-    private $refundArgumentsValidator;
+    private $orderValidator;
+
+    /**
+     * @var CreditmemoValidatorInterface
+     */
+    private $creditmemoValidator;
+
+    /**
+     * @var ItemCreationValidatorInterface
+     */
+    private $itemCreationValidator;
 
     /**
      * @var InvoiceValidatorInterface
@@ -27,14 +44,30 @@ class RefundArguments
     private $invoiceValidator;
 
     /**
-     * @inheritDoc
+     * @var ValidatorResultMerger
+     */
+    private $validatorResultMerger;
+
+    /**
+     * RefundArguments constructor.
+     * @param OrderValidatorInterface $orderValidator
+     * @param CreditmemoValidatorInterface $creditmemoValidator
+     * @param ItemCreationValidatorInterface $itemCreationValidator
+     * @param InvoiceValidatorInterface $invoiceValidator
+     * @param ValidatorResultMerger $validatorResultMerger
      */
     public function __construct(
-        OrderRefundArgumentsValidator $refundArgumentsValidator,
-        InvoiceValidatorInterface $invoiceValidator
+        OrderValidatorInterface $orderValidator,
+        CreditmemoValidatorInterface $creditmemoValidator,
+        ItemCreationValidatorInterface $itemCreationValidator,
+        InvoiceValidatorInterface $invoiceValidator,
+        ValidatorResultMerger $validatorResultMerger
     ) {
-        $this->refundArgumentsValidator = $refundArgumentsValidator;
+        $this->orderValidator = $orderValidator;
+        $this->creditmemoValidator = $creditmemoValidator;
+        $this->itemCreationValidator = $itemCreationValidator;
         $this->invoiceValidator = $invoiceValidator;
+        $this->validatorResultMerger = $validatorResultMerger;
     }
 
     /**
@@ -47,7 +80,7 @@ class RefundArguments
      * @param bool $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
-     * @return array
+     * @return ValidatorResultInterface
      */
     public function validate(
         InvoiceInterface $invoice,
@@ -60,15 +93,29 @@ class RefundArguments
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
-        $validationMessages = $this->refundArgumentsValidator->validate(
+        $orderValidationResult = $this->orderValidator->validate(
             $order,
-            $creditmemo,
-            $items,
-            $notify,
-            $appendComment,
-            $comment,
-            $arguments
+            [
+                CanRefund::class
+            ]
         );
+        $creditmemoValidationResult = $this->creditmemoValidator->validate(
+            $creditmemo,
+            [
+                QuantityValidator::class,
+                TotalsValidator::class
+            ]
+        );
+
+        $itemsValidation = [];
+        foreach ($items as $item) {
+            $itemsValidation[] = $this->itemCreationValidator->validate(
+                $item,
+                [CreationQuantityValidator::class],
+                $order
+            )->getMessages();
+        }
+
         $invoiceValidationResult = $this->invoiceValidator->validate(
             $invoice,
             [
@@ -76,9 +123,11 @@ class RefundArguments
             ]
         );
 
-        return array_merge(
-            $validationMessages,
-            $invoiceValidationResult
+        return $this->validatorResultMerger->merge(
+            $orderValidationResult,
+            $creditmemoValidationResult,
+            $invoiceValidationResult->getMessages(),
+            ...$itemsValidation
         );
     }
 }

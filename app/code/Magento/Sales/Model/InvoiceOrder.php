@@ -162,11 +162,11 @@ class InvoiceOrder implements InvoiceOrderInterface
             $this->invoiceValidator->validate(
                 $invoice,
                 [InvoiceQuantityValidator::class]
-            ),
+            )->getMessages(),
             $this->orderValidator->validate(
                 $order,
                 [CanInvoice::class]
-            )
+            )->getMessages()
         );
         if (!empty($errorMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(

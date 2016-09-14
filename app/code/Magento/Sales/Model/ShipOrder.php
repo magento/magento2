@@ -172,7 +172,10 @@ class ShipOrder implements ShipOrderInterface
                 TrackValidator::class
             ]
         );
-        $validationMessages = array_merge($orderValidationResult, $shipmentValidationResult);
+        $validationMessages = array_merge(
+            $orderValidationResult->getMessages(),
+            $shipmentValidationResult->getMessages()
+        );
         if (!empty($validationMessages)) {
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages))

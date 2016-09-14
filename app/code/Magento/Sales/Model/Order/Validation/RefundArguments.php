@@ -13,6 +13,8 @@ use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Creditmemo\Validation\TotalsValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
+use Magento\Sales\Model\ValidatorResultInterface;
+use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundArgumentsValidator
@@ -35,20 +37,28 @@ class RefundArguments
     private $itemCreationValidator;
 
     /**
+     * @var ValidatorResultMerger
+     */
+    private $validatorResultMerger;
+
+    /**
      * RefundArguments constructor.
      *
      * @param OrderValidatorInterface $orderValidator
      * @param CreditmemoValidatorInterface $creditmemoValidator
      * @param ItemCreationValidatorInterface $itemCreationValidator
+     * @param ValidatorResultMerger $validatorResultMerger
      */
     public function __construct(
         OrderValidatorInterface $orderValidator,
         CreditmemoValidatorInterface $creditmemoValidator,
-        ItemCreationValidatorInterface $itemCreationValidator
+        ItemCreationValidatorInterface $itemCreationValidator,
+        ValidatorResultMerger $validatorResultMerger
     ) {
         $this->orderValidator = $orderValidator;
         $this->creditmemoValidator = $creditmemoValidator;
         $this->itemCreationValidator = $itemCreationValidator;
+        $this->validatorResultMerger = $validatorResultMerger;
     }
 
     /**
@@ -59,7 +69,7 @@ class RefundArguments
      * @param bool $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
-     * @return array
+     * @return ValidatorResultInterface
      */
     public function validate(
         OrderInterface $order,
@@ -86,16 +96,17 @@ class RefundArguments
 
         $itemsValidation = [];
         foreach ($items as $item) {
-            $itemsValidation = array_merge(
-                $itemsValidation,
-                $this->itemCreationValidator->validate(
-                    $item,
-                    [CreationQuantityValidator::class],
-                    $order
-                )
-            );
+            $itemsValidation[] = $this->itemCreationValidator->validate(
+                $item,
+                [CreationQuantityValidator::class],
+                $order
+            )->getMessages();
         }
 
-        return array_merge($orderValidationResult, $creditmemoValidationResult, $itemsValidation);
+        return $this->validatorResultMerger->merge(
+            $orderValidationResult,
+            $creditmemoValidationResult,
+            ...$itemsValidation
+        );
     }
 }
