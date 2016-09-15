@@ -60,7 +60,8 @@ class UpgradeData implements UpgradeDataInterface
         CustomerSetupFactory $customerSetupFactory,
         IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig
-    ) {
+    )
+    {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
@@ -190,6 +191,19 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Retrieve countries not depending on global scope
+     *
+     * @param string $scope
+     * @param int $scopeCode
+     * @return array
+     */
+    private function getAllowedCountries($scope, $scopeCode)
+    {
+        $reader = $this->getAllowedCountriesReader();
+        return $reader->makeCountriesUnique($reader->getCountriesFromConfig($scope, $scopeCode));
+    }
+
+    /**
      * Merge allowed countries from stores to websites
      *
      * @param SetupInterface $setup
@@ -202,8 +216,7 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getStores() as $store) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $this->getAllowedCountriesReader()
-                    ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
+                $this->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
                 $store->getWebsiteId()
             );
         }
@@ -211,8 +224,7 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getWebsites() as $website) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $this->getAllowedCountriesReader()
-                    ->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
+                $this->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
                 $website->getId()
             );
         }

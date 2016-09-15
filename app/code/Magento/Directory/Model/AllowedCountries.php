@@ -71,14 +71,14 @@ class AllowedCountries
                 $allowedCountries = $this->getCountriesFromConfig($scope, $scopeCode);
         }
 
-        return $this->getUniqueCountries($allowedCountries);
+        return $this->makeCountriesUnique($allowedCountries);
     }
 
     /**
      * Resolve scope code by scope
      *
      * @throws \InvalidArgumentException
-     * @param $scope
+     * @param string $scope
      * @return array|int
      */
     private function getDefaultScopeCode($scope)
@@ -105,7 +105,7 @@ class AllowedCountries
      * @param array $allowedCountries
      * @return array
      */
-    private function getUniqueCountries(array $allowedCountries)
+    public function makeCountriesUnique(array $allowedCountries)
     {
         return array_combine($allowedCountries, $allowedCountries);
     }
@@ -117,7 +117,7 @@ class AllowedCountries
      * @param int $scopeCode
      * @return array
      */
-    private function getCountriesFromConfig($scope, $scopeCode)
+    public function getCountriesFromConfig($scope, $scopeCode)
     {
         return explode(
             ',',

@@ -56,7 +56,7 @@ class AllowedCountriesTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$websiteMock]);
 
         $this->assertEquals(
-            [[$expectedFilter], $expectedScope],
+            [$expectedScope, [$expectedFilter]],
             $this->plugin->beforeGetAllowedCountries($originalAllowedCountriesMock)
         );
     }
