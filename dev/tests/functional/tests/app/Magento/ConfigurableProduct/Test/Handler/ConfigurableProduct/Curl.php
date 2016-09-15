@@ -62,6 +62,24 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     }
 
     /**
+     * Preparation of websites data.
+     *
+     * @return void
+     */
+    protected function prepareWebsites()
+    {
+        if (!empty($this->fields['product']['website_ids'])) {
+            foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
+                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
+            }
+        } else {
+            $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+                ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
+            $this->fields['product']['website_ids'][] = $website->getWebsiteId();
+        }
+    }
+
+    /**
      * Preparation of attribute set data.
      *
      * @return void

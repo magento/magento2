@@ -114,9 +114,8 @@ class RefundOperation
                 $order->getBaseTotalInvoicedCost() - $creditmemo->getBaseCost()
             );
 
-            if ($online) {
-                $order->getPayment()->refund($creditmemo);
-            }
+            $creditmemo->setDoTransaction($online);
+            $order->getPayment()->refund($creditmemo);
 
             $this->eventManager->dispatch('sales_order_creditmemo_refund', ['creditmemo' => $creditmemo]);
         }
