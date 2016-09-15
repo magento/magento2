@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\EntityManager\Operation;
 
-use Magento\Framework\EntityManager\Operation\UpdateInterface;
+use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\EntityManager\Operation\Update\UpdateMain;
 use Magento\Framework\EntityManager\Operation\Update\UpdateAttributes;
 use Magento\Framework\EntityManager\Operation\Update\UpdateExtensions;
@@ -13,6 +13,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * Class Update
@@ -114,6 +115,9 @@ class Update implements UpdateInterface
                 ]
             );
             $connection->commit();
+        } catch (DuplicateException $e) {
+            $connection->rollBack();
+            throw new AlreadyExistsException();
         } catch (\Exception $e) {
             $connection->rollBack();
             throw $e;

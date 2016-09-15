@@ -3,14 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Exception;
+namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Phrase;
 
 /**
  * Class AlreadyExistsException
  */
-class AlreadyExistsException extends LocalizedException
+class AttributeGroupAlreadyExistsException extends AlreadyExistsException
 {
     /**
      * @param Phrase $phrase
@@ -19,7 +20,7 @@ class AlreadyExistsException extends LocalizedException
     public function __construct(Phrase $phrase = null, \Exception $cause = null)
     {
         if ($phrase === null) {
-            $phrase = new Phrase('Database duplicate value found');
+            $phrase = new Phrase('Attribute group with same code is already exist. Please enter other Group name');
         }
         parent::__construct($phrase, $cause);
     }

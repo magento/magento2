@@ -376,6 +376,7 @@ abstract class AbstractDb extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
+     * @throws AlreadyExistsException
      * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
@@ -413,9 +414,8 @@ abstract class AbstractDb extends AbstractResource
         } catch (DuplicateException $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
-            throw new AlreadyExistsException(__('Database duplicate value found'));
-        }
-        catch (\Exception $e) {
+            throw new AlreadyExistsException();
+        } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;

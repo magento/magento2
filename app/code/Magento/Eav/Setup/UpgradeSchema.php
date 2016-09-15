@@ -25,7 +25,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $this->addUniqueKeyToEavAttributeGroupTable($setup);
         }
-
         $setup->endSetup();
     }
 
@@ -33,7 +32,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    protected function addUniqueKeyToEavAttributeGroupTable(SchemaSetupInterface $setup)
+    private function addUniqueKeyToEavAttributeGroupTable(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->addIndex(
             $setup->getTable('eav_attribute_group'),
