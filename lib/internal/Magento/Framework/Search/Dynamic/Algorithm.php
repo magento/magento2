@@ -338,7 +338,7 @@ class Algorithm
                 }
             }
         } else {
-            if($lastValue) {
+            if ($lastValue) {
                 $bestRoundValue = $this->_findRoundValue(
                     $values[0] + self::MIN_POSSIBLE_VALUE / 10,
                     $lastValue
