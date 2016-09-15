@@ -6,13 +6,20 @@
 
 namespace Magento\Review\Test\Block\Adminhtml\Product;
 
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
 
 /**
  * Review catalog product grid.
  */
-class Grid extends DataGrid
+class Grid extends AbstractGrid
 {
+    /**
+     * First row selector
+     *
+     * @var string
+     */
+    protected $firstRowSelector = './/tbody/tr[1]';
+
     /**
      * Grid filter selectors
      *

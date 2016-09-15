@@ -567,4 +567,13 @@ abstract class AbstractType
         }
         return $this->productEntityLinkField;
     }
+
+    /**
+     * Clean cached values
+     */
+    public function __destruct()
+    {
+        self::$attributeCodeToId = [];
+        self::$commonAttributesCache = [];
+    }
 }
