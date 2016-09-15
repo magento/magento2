@@ -37,14 +37,14 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
     public function testGetAfterElementHtml()
     {
         $this->_formMock->expects(
-            $this->exactly(2)
+            $this->once()
         )->method(
             'getHtmlIdPrefix'
         )->will(
             $this->returnValue('test_prefix_')
         );
         $this->_formMock->expects(
-            $this->exactly(2)
+            $this->once()
         )->method(
             'getHtmlIdSuffix'
         )->will(
@@ -57,7 +57,7 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
 
         $actual = $this->_object->getAfterElementHtml();
 
-        $this->assertStringEndsWith($afterHtmlCode, $actual);
+        $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
         $this->assertStringStartsWith('<script type="text/javascript">', trim($actual));
         $this->assertContains('test_prefix_spec_element_test_suffix', $actual);
     }
