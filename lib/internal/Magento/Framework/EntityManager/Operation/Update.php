@@ -14,6 +14,7 @@ use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Phrase;
 
 /**
  * Class Update
@@ -117,7 +118,7 @@ class Update implements UpdateInterface
             $connection->commit();
         } catch (DuplicateException $e) {
             $connection->rollBack();
-            throw new AlreadyExistsException(__('Unique constraint violation found'), $e);
+            throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $connection->rollBack();
             throw $e;
