@@ -182,6 +182,21 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * Retrieve unqiue allowed countries by scope
+     *
+     * @param string $scope
+     * @param int $scopeCode
+     * @return array
+     */
+    private function getAllowedCountries($scope, $scopeCode)
+    {
+        $allowedCountriesReader = $this->getAllowedCountriesReader();
+        return $allowedCountriesReader->getUniqueCountries(
+            $allowedCountriesReader->getCountriesFromConfig($scope, $scopeCode)
+        );
+    }
+
+    /**
      * Migrate and merge allowed countries
      *
      * @param SetupInterface $setup
@@ -189,13 +204,13 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
     {
-        $allowedCountriesReader = $this->getAllowedCountriesReader();
+
         $allowedCountries = [];
         //Process Websites
         foreach ($this->getStoreManager()->getStores() as $store) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
+                $this->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
                 $store->getWebsiteId()
             );
         }
@@ -203,7 +218,7 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($this->getStoreManager()->getWebsites() as $website) {
             $allowedCountries = $this->mergeAllowedCountries(
                 $allowedCountries,
-                $allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
+                $this->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
                 $website->getId()
             );
         }
