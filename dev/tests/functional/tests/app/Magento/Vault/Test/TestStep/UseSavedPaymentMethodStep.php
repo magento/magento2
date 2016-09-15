@@ -22,21 +22,21 @@ class UseSavedPaymentMethodStep implements TestStepInterface
     protected $checkoutOnepage;
 
     /**
-     * Vault provider code.
+     * Vault provider.
      *
-     * @var string
+     * @var array
      */
-    protected $vaultCode;
+    protected $vault;
 
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param string $vaultCode
+     * @param array $vault
      */
-    public function __construct (CheckoutOnepage $checkoutOnepage, string $vaultCode)
+    public function __construct (CheckoutOnepage $checkoutOnepage, array $vault)
     {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->vaultCode = $vaultCode;
+        $this->vault = $vault;
     }
 
     /**
@@ -46,6 +46,6 @@ class UseSavedPaymentMethodStep implements TestStepInterface
      */
     public function run()
     {
-        $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod($this->vaultCode);
+        $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod($this->vault);
     }
 }
