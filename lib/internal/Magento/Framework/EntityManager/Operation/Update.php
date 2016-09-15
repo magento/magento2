@@ -117,7 +117,7 @@ class Update implements UpdateInterface
             $connection->commit();
         } catch (DuplicateException $e) {
             $connection->rollBack();
-            throw new AlreadyExistsException();
+            throw new AlreadyExistsException(__('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $connection->rollBack();
             throw $e;

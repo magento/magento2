@@ -19,7 +19,7 @@ class AlreadyExistsException extends LocalizedException
     public function __construct(Phrase $phrase = null, \Exception $cause = null)
     {
         if ($phrase === null) {
-            $phrase = new Phrase('Database duplicate value found');
+            $phrase = new Phrase('Unique constraint violation found');
         }
         parent::__construct($phrase, $cause);
     }

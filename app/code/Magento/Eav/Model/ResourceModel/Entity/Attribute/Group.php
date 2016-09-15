@@ -143,7 +143,12 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         try {
             return parent::saveNewObject($object);
         } catch (DuplicateException $e) {
-            throw new AttributeGroupAlreadyExistsException();
+            throw new AttributeGroupAlreadyExistsException(
+                __(
+                    'Attribute group with same code already exist. Please rename "%1" group',
+                    $object->getAttributeGroupName()
+                )
+            );
         }
     }
 
@@ -155,7 +160,12 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         try {
             return parent::updateObject($object);
         } catch (DuplicateException $e) {
-            throw new AttributeGroupAlreadyExistsException();
+            throw new AttributeGroupAlreadyExistsException(
+                __(
+                    'Attribute group with same code already exist. Please rename "%1" group',
+                    $object->getAttributeGroupName()
+                )
+            );
         }
     }
 }

@@ -1152,7 +1152,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         } catch (DuplicateException $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
-            throw new AlreadyExistsException();
+            throw new AlreadyExistsException(__('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);

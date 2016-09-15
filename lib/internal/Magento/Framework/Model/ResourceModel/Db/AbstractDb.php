@@ -11,6 +11,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Phrase;
 
 /**
  * Abstract resource model class
@@ -414,7 +415,7 @@ abstract class AbstractDb extends AbstractResource
         } catch (DuplicateException $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
-            throw new AlreadyExistsException();
+            throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
