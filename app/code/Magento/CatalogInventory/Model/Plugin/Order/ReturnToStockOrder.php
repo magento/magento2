@@ -12,7 +12,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 /**
  * Class ReturnToStock
  */
-class ReturnToStock
+class ReturnToStockOrder
 {
     /**
      * @var ReturnProcessor
@@ -50,9 +50,9 @@ class ReturnToStock
      * @param \Magento\Sales\Model\RefundOrder|\Magento\Sales\Model\RefundInvoice $refundService
      * @param int $resultEntityId
      * @param int $orderId
-     * @param array $items
-     * @param bool $notify
-     * @param bool $appendComment
+     * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
+     * @param bool|null $notify
+     * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return int
