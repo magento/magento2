@@ -116,9 +116,17 @@ class ProductFieldMapper implements FieldMapperInterface
             $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
             $frontendInput = $attribute->getFrontendInput();
             $notUsedInSearch = [];
-            if ($this->isAttributeUsedInAdvancedSearch($attribute) === false && $attributeCode !=='media_gallery'
-                && $attributeCode !=='quantity_and_stock_status' && $attributeCode !=='tier_price'
-                && $attributeCode !=='category_ids') {
+            // List of attributes which are required to be indexable
+            $alwaysIndexableAttributes = [
+                'media_gallery',
+                'quantity_and_stock_status',
+                'tier_price',
+                'category_ids',
+                'visibility',
+            ];
+            if ($this->isAttributeUsedInAdvancedSearch($attribute) === false
+                && !in_array($attributeCode, $alwaysIndexableAttributes, true)
+            ) {
                 $notUsedInSearch = ['index' => 'no'];
             }
 
@@ -133,7 +141,7 @@ class ProductFieldMapper implements FieldMapperInterface
                 );
             }
 
-            if ($frontendInput == 'select') {
+            if ($frontendInput === 'select') {
                 $allAttributes[$attributeCode . '_value'] = [
                     'type' => FieldType::ES_DATA_TYPE_STRING,
                 ];
