@@ -207,6 +207,7 @@ class Deployer
      */
     public function deploy(ObjectManagerFactory $omFactory, array $locales, array $deployableAreaThemeMap = [])
     {
+        $this->errorCount = 0;
         $this->omFactory = $omFactory;
 
         if ($this->getOption(Options::DRY_RUN)) {
@@ -223,7 +224,6 @@ class Deployer
 
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
-                    $this->errorCount = 0;
 
                     /** @var \Magento\Theme\Model\View\Design $design */
                     $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
