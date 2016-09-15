@@ -102,11 +102,6 @@ class Deployer
             ['options' => $this->options, 'output' => $this->output]
         );
 
-        $version = (new \DateTime())->getTimestamp();
-        if (!$this->getOption(Options::DRY_RUN)) {
-            $this->versionStorage->save($version);
-        }
-
         foreach ($deployableAreaThemeMap as $area => $themes) {
             foreach ($locales as $locale) {
                 foreach ($themes as $themePath) {

@@ -110,6 +110,11 @@ class DeployManager
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
 
+        if (!$this->idDryRun) {
+            $version = (new \DateTime())->getTimestamp();
+            $this->versionStorage->save($version);
+        }
+
         /** @var DeployStrategyProvider $strategyProvider */
         $strategyProvider = $this->deployStrategyProviderFactory->create(
             ['output' => $this->output, 'options' => $this->options]
@@ -133,7 +138,9 @@ class DeployManager
         }
 
         $this->minifyTemplates();
-        $this->saveDeployedVersion();
+        if (!$this->idDryRun) {
+            $this->output->writeln("New version of deployed files: {$version}");
+        }
 
         return $result;
     }
@@ -196,18 +203,5 @@ class DeployManager
     private function getProcessesAmount()
     {
         return isset($this->options[Options::JOBS_AMOUNT]) ? (int)$this->options[Options::JOBS_AMOUNT] : 0;
-    }
-
-    /**
-     * Save version of deployed files
-     * @return void
-     */
-    private function saveDeployedVersion()
-    {
-        if (!$this->idDryRun) {
-            $version = (new \DateTime())->getTimestamp();
-            $this->output->writeln("New version of deployed files: {$version}");
-            $this->versionStorage->save($version);
-        }
     }
 }
