@@ -60,8 +60,7 @@ class UpgradeData implements UpgradeDataInterface
         CustomerSetupFactory $customerSetupFactory,
         IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig
-    )
-    {
+    ) {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
