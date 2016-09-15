@@ -52,7 +52,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $additionalInfo
      * @expectedException \LogicException
-     * @expectedExceptionMessage Customer id and public hash should be defined
+     * @expectedExceptionMessage Public hash should be defined
      * @dataProvider additionalInfoDataProvider
      */
     public function testAuthorizeNoTokenMetadata(array $additionalInfo)
@@ -79,7 +79,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
         return [
             ['additionalInfo' => []],
             ['additionalInfo' => ['customer_id' => 1]],
-            ['additionalInfo' => ['public_hash' => 'df768aak12uf']],
+            ['additionalInfo' => ['public_hash' => null]],
         ];
     }
 

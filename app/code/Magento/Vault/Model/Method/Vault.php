@@ -458,7 +458,7 @@ final class Vault implements VaultPaymentInterface
     {
         $additionalInformation = $orderPayment->getAdditionalInformation();
         if (empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])) {
-            throw new \LogicException('Customer public hash should be defined');
+            throw new \LogicException('Public hash should be defined');
         }
 
         $customerId = isset($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ?
