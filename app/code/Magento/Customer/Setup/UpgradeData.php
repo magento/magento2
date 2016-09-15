@@ -191,7 +191,7 @@ class UpgradeData implements UpgradeDataInterface
     private function getAllowedCountries($scope, $scopeCode)
     {
         $allowedCountriesReader = $this->getAllowedCountriesReader();
-        return $allowedCountriesReader->getUniqueCountries(
+        return $allowedCountriesReader->makeCountriesUnique(
             $allowedCountriesReader->getCountriesFromConfig($scope, $scopeCode)
         );
     }

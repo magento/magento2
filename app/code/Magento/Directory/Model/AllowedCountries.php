@@ -105,7 +105,7 @@ class AllowedCountries
      * @param array $allowedCountries
      * @return array
      */
-    public function getUniqueCountries(array $allowedCountries)
+    public function makeCountriesUnique(array $allowedCountries)
     {
         return array_combine($allowedCountries, $allowedCountries);
     }

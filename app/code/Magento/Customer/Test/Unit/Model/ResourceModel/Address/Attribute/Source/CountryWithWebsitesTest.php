@@ -93,12 +93,12 @@ class CountryWithWebsitesTest extends \PHPUnit_Framework_TestCase
         $this->allowedCountriesMock->expects($this->exactly(2))
             ->method('getAllowedCountries')
             ->withConsecutive(
-                [1, 'website'],
-                [2, 'website']
+                ['website', 1],
+                ['website', 2]
             )
             ->willReturnMap([
-                [1, 'website', ['AM' => 'AM']],
-                [2, 'website', ['AM' => 'AM', 'DZ' => 'DZ']]
+                ['website', 1, ['AM' => 'AM']],
+                ['website', 2, ['AM' => 'AM', 'DZ' => 'DZ']]
             ]);
         $this->countriesFactoryMock->expects($this->once())
             ->method('create')

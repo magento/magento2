@@ -48,6 +48,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
      * @param AllowedCountries $allowedCountries
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Share $shareConfig
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
