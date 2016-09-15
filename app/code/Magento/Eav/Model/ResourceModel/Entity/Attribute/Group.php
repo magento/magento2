@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
+
 use Magento\Eav\Model\Entity\Attribute\AttributeGroupAlreadyExistsException;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Model\AbstractModel;
