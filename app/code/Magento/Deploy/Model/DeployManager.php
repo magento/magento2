@@ -108,9 +108,7 @@ class DeployManager
     {
         if ($this->idDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
-        }
-
-        if (!$this->idDryRun) {
+        } else {
             $version = (new \DateTime())->getTimestamp();
             $this->versionStorage->save($version);
         }
