@@ -28,11 +28,6 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
     private $adjustmentNegative;
 
     /**
-     * @var int[]\null
-     */
-    private $returnToStockItems;
-
-    /**
      * @var \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface
      */
     private $extensionAttributes;
@@ -64,14 +59,6 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
     /**
      * @inheritdoc
      */
-    public function getReturnToStockItems()
-    {
-        return $this->returnToStockItems;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function setShippingAmount($amount)
     {
         $this->shippingAmount = $amount;
@@ -93,15 +80,6 @@ class CreationArguments implements CreditmemoCreationArgumentsInterface
     public function setAdjustmentNegative($amount)
     {
         $this->adjustmentNegative = $amount;
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setReturnToStockItems($items)
-    {
-        $this->returnToStockItems = $items;
         return $this;
     }
 

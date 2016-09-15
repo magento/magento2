@@ -70,8 +70,11 @@ class ReturnToStock
         $order = $this->orderRepository->get($orderId);
 
         $returnToStockItems = [];
-        if ($arguments !== null && $arguments->getReturnToStockItems() !== null) {
-            $returnToStockItems = $arguments->getReturnToStockItems();
+        if ($arguments !== null
+            && $arguments->getExtensionAttributes() !== null
+            && $arguments->getExtensionAttributes()->getReturnToStockItems() !== null
+        ) {
+            $returnToStockItems = $arguments->getExtensionAttributes()->getReturnToStockItems();
         }
 
         $creditmemo = $this->creditmemoRepository->get($resultEntityId);

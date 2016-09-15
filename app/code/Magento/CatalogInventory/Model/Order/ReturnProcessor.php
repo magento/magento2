@@ -102,6 +102,9 @@ class ReturnProcessor
         OrderInterface $order,
         array $returnToStockItems = []
     ) {
+        if ($this->stockConfiguration->isAutoReturnEnabled()) {
+            return;
+        }
         $itemsToUpdate = [];
 
         /** @var CreditmemoItemInterface $item */
@@ -161,7 +164,6 @@ class ReturnProcessor
      */
     private function canReturnItem(CreditmemoItemInterface $item, array $returnToStockItems, $qty)
     {
-        return $this->stockConfiguration->isAutoReturnEnabled()
-        || in_array($item->getOrderItemId(), $returnToStockItems) && $qty;
+        return in_array($item->getOrderItemId(), $returnToStockItems) && $qty;
     }
 }
