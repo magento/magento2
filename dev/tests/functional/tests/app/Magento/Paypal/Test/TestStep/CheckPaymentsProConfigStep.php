@@ -130,7 +130,7 @@ class CheckPaymentsProConfigStep implements TestStepInterface
         $this->paymentsProConfigBlock->enablePaymentsPro();
         $this->assertFieldsAreActive->processAssert(
             $this->systemConfigEditSectionPayment,
-            [$enablers['Enable this Solution'], $enablers['Enable PayPal Credit'], $enablers['Vault enabled']]
+            [$enablers['Enable this Solution'], $enablers['Enable PayPal Credit'], $enablers['Vault Enabled']]
         );
         $this->assertFieldsAreEnabled->processAssert(
             $this->systemConfigEditSectionPayment,
