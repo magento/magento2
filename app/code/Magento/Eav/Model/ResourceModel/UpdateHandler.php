@@ -80,12 +80,28 @@ class UpdateHandler implements AttributeInterface
     }
 
     /**
+     * @return \Magento\Eav\Model\Entity\AttributeCache
+
+     */
+    private function getAttributeCache()
+    {
+        return ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\AttributeCache::class);
+    }
+
+
+    /**
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception
      */
     protected function getAttributes($entityType)
     {
+        /** @var \Magento\Eav\Model\Entity\AttributeCache $cache */
+        $cache = $this->getAttributeCache();
+        if ($attributes = $cache->getAttributes($entityType)) {
+            return $attributes;
+        }
+
         $metadata = $this->metadataPool->getMetadata($entityType);
 
         $searchResult = $this->attributeRepository->getList(

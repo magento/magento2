@@ -606,7 +606,7 @@
                         <item name="websiteReader" xsi:type="string">Magento\Catalog\Model\Product\Website\ReadHandler</item>
                     </item>
                     <item name="create" xsi:type="array">
-                        <item name="custom_options" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
+                        <item name="custom_options" xsi:type="string">Magento\Catalog\Model\Product\Option\CreateHandler</item>
                         <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
