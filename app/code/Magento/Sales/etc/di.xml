@@ -933,4 +933,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
+        <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
+    </type>
 </config>
