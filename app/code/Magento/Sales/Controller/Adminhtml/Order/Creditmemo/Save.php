@@ -102,6 +102,7 @@ class Save extends \Magento\Backend\App\Action
                 $creditmemoManagement = $this->_objectManager->create(
                     \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
+                $creditmemo->setCustomerNoteNotify(!empty($data['send_email']));
                 $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline']);
 
                 if (!empty($data['send_email'])) {
