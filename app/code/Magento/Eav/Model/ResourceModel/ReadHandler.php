@@ -131,7 +131,6 @@ class ReadHandler implements AttributeInterface
 
         $attributeTables = [];
         $attributesMap = [];
-        $selects = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($this->getAttributes($entityType) as $attribute) {
@@ -141,20 +140,31 @@ class ReadHandler implements AttributeInterface
             }
         }
         if (count($attributeTables)) {
+            $entityId = $entityData[$metadata->getLinkField()];
             $attributeTables = array_keys($attributeTables);
+
+            $fields = ['value' => 't.value', 'attribute_id' => 't.attribute_id'];
+            foreach ($context as $scope) {
+                //TODO: if (in table exists context field)
+                $fields[$scope->getIdentifier()] = 't.' . $scope->getIdentifier();
+            }
+
+            $orders = [];
+            foreach ($context as $scope) {
+                $orders[] = $scope->getIdentifier().' ASC';
+            }
+
+            $selects = [];
             foreach ($attributeTables as $attributeTable) {
                 $select = $connection->select()
-                    ->from(
-                        ['t' => $attributeTable],
-                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
-                    )
-                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+                    ->from(['t' => $attributeTable], $fields)
+                    ->where($metadata->getLinkField() . ' = ?', $entityId);
                 foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
                         $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
-                    )->order('t.' . $scope->getIdentifier() . ' DESC');
+                    );
                 }
                 $selects[] = $select;
             }
@@ -162,7 +172,11 @@ class ReadHandler implements AttributeInterface
                 $selects,
                 \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
-            foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
+            $query = (string) $unionSelect;
+            if (count($orders) > 0) {
+                $query.= ' ORDER BY '.implode(', ', $orders);
+            }
+            foreach ($connection->fetchAll($query) as $attributeValue) {
                 $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
             }
         }
