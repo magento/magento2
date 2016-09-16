@@ -6,6 +6,7 @@
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
@@ -92,9 +93,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockRegistryStorage;
-
-    /** @var  Collection */
-    protected $productCollection;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -186,17 +184,18 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productCollection = $this->getMockBuilder(
+        $productCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
-        $this->productCollection->expects($this->any())->method('addFieldToSelect')->willReturnSelf();
-        $this->productCollection->expects($this->any())->method('getFirstItem')->willReturn($this->productMock);
+        $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addFieldToSelect')->willReturnSelf();
+        $productCollection->expects($this->any())->method('getFirstItem')->willReturn($this->productMock);
 
-        $productCollectionFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
-        )->disableOriginalConstructor()->getMock();
+        $productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $productCollectionFactory->expects($this->any())->method('create')->willReturn($this->productCollection);
 

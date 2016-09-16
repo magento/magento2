@@ -147,7 +147,6 @@ class StockItemRepository implements StockItemRepositoryInterface
         return $this->productCollectionFactory;
     }
 
-
     /**
      * @inheritdoc
      */
