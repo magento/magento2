@@ -831,20 +831,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testStatusAfterLoad()
-    {
-        $this->resource->expects($this->once())->method('load')->with($this->model, 1, null);
-        $this->eventManagerMock->expects($this->exactly(4))->method('dispatch');
-        $this->model->load(1);
-        $this->assertEquals(
-            Status::STATUS_ENABLED,
-            $this->model->getData(\Magento\Catalog\Model\Product::STATUS)
-        );
-        $this->assertFalse($this->model->hasDataChanges());
-        $this->model->setStatus(Status::STATUS_DISABLED);
-        $this->assertTrue($this->model->hasDataChanges());
-    }
-
     /**
      * Test retrieving price Info
      */
