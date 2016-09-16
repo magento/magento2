@@ -162,7 +162,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue([0 => [1, 2, 3]])
             );
-        $configurable->expects($this->once())->method('__call')->with('setAssociatedProductIds', [[1, 2, 3, 999]]);
         $configurable->expects($this->once())->method('save');
 
         $this->assertTrue(true, $this->object->addChild($productSku, $childSku));
@@ -206,7 +205,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $childSku = 'simple_10';
 
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getTypeInstance', 'save', 'getTypeId', 'addData', '__wakeup'])
+            ->setMethods(['getTypeInstance', 'save', 'getTypeId', 'addData', '__wakeup', 'getExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -234,7 +233,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productType->expects($this->once())->method('getUsedProducts')
             ->will($this->returnValue([$option]));
 
-        $product->expects($this->once())->method('addData')->with(['associated_product_ids' => []]);
+        $extensionAttributesMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setConfigurableProductLinks'])
+            ->getMock();
+
+        $product->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
         $product->expects($this->once())->method('save');
         $this->assertTrue($this->object->removeChild($productSku, $childSku));
     }
