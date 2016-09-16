@@ -33,6 +33,7 @@ class AddressUpdate
 
     /**
      * @param \Magento\Sales\Model\ResourceModel\Order\Handler\Address $subject
+     * @param \Magento\Sales\Model\ResourceModel\Order\Handler\Address $result
      * @param \Magento\Sales\Model\Order $order
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -51,13 +52,13 @@ class AddressUpdate
             foreach ($order->getInvoiceCollection()->getItems() as $invoice) {
                 $invoiceAttributesForSave = [];
 
-                if (!$invoice->getBillingAddressId()) {
+                if (!$invoice->getBillingAddressId() && $billingAddress) {
                     $invoice->setBillingAddressId($billingAddress->getId());
                     $invoiceAttributesForSave[] = 'billing_address_id';
                     $orderInvoiceHasChanges = true;
                 }
 
-                if (!$invoice->getShippingAddressId()) {
+                if (!$invoice->getShippingAddressId() && $shippingAddress) {
                     $invoice->setShippingAddressId($shippingAddress->getId());
                     $invoiceAttributesForSave[] = 'shipping_address_id';
                     $orderInvoiceHasChanges = true;
