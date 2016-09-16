@@ -10,10 +10,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Refresh entities index
      *
+     * @param bool $useTempTable
      * @return $this
      */
-    public function execute()
+    public function execute($useTempTable = false)
     {
+        $this->useTempTable = $useTempTable;
         $this->clearTmpData();
 
         $this->reindex();
