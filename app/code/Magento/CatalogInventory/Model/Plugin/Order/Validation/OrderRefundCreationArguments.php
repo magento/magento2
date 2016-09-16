@@ -1,0 +1,82 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\CatalogInventory\Model\Plugin\Order\Validation;
+
+use Magento\Sales\Model\ValidatorResult;
+use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
+use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
+use Magento\CatalogInventory\Model\Order\ReturnValidator;
+
+/**
+ * Class CreditmemoCreationArguments
+ */
+class OrderRefundCreationArguments
+{
+    /**
+     * @var ReturnValidator
+     */
+    private $returnValidator;
+
+    /**
+     * CreditmemoCreationArguments constructor.
+     * @param ReturnValidator $returnValidator
+     */
+    public function __construct(
+        ReturnValidator $returnValidator
+    ) {
+        $this->returnValidator = $returnValidator;
+    }
+
+    /**
+     * @param RefundOrderInterface $refundOrderValidator
+     * @param ValidatorResult $validationResults
+     * @param OrderInterface $order
+     * @param CreditmemoInterface $creditmemo
+     * @param array $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @param CreditmemoCommentCreationInterface|null $comment
+     * @param CreditmemoCreationArgumentsInterface|null $arguments
+     * @return ValidatorResult
+     */
+    public function afterValidate(
+        RefundOrderInterface $refundOrderValidator,
+        ValidatorResult $validationResults,
+        OrderInterface $order,
+        CreditmemoInterface $creditmemo,
+        array $items = [],
+        $notify = false,
+        $appendComment = false,
+        CreditmemoCommentCreationInterface $comment = null,
+        CreditmemoCreationArgumentsInterface $arguments = null
+    ) {
+        if ($this->isReturnToStockItems($arguments)) {
+            return $validationResults;
+        }
+
+        $returnToStockItems = $arguments->getExtensionAttributes()->getReturnToStockItems();
+        $validationMessage = $this->returnValidator->validate($returnToStockItems, $creditmemo);
+        if ($validationMessage) {
+            $validationResults->addMessage($validationMessage);
+        }
+
+        return $validationResults;
+    }
+
+    /**
+     * @param CreditmemoCreationArgumentsInterface|null $arguments
+     * @return bool
+     */
+    private function isReturnToStockItems($arguments)
+    {
+        return $arguments === null
+        || $arguments->getExtensionAttributes() === null
+        || $arguments->getExtensionAttributes()->getReturnToStockItems() === null;
+    }
+}
