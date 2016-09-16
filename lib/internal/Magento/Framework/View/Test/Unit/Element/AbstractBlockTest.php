@@ -19,6 +19,9 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
