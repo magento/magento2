@@ -266,12 +266,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
         $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $this->productMock->expects($this->once())->method('getOptions')->willReturn(['some options']);
         $this->productMock->expects($this->once())->method('getOptionById')->with($optionId)->willReturn(null);
         $this->optionRepository->save($this->optionMock);
     }
 
     public function testSave()
     {
+        $productId = 123;
         $productSku = 'simple_product';
         $optionId = 1;
         $this->optionMock->expects($this->once())->method('getProductSku')->willReturn($productSku);
@@ -281,6 +283,16 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
         $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $resourceModelMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resourceModelMock->expects($this->once())
+            ->method('load')
+            ->with($this->productMock, $productId)
+            ->willReturnSelf();
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->once())->method('getResource')->willReturn($resourceModelMock);
+        $this->productMock->expects($this->once())->method('getOptions')->willReturn([]);
         $this->productMock
             ->expects($this->once())
             ->method('getOptionById')
