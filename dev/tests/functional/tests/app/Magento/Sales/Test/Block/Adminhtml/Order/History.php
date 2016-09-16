@@ -22,6 +22,13 @@ class History extends Block
     protected $commentHistory = '.note-list-comment';
 
     /**
+     * Comment history status.
+     *
+     * @var string
+     */
+    protected $commentHistoryStatus = '.note-list-status';
+
+    /**
      * Authorized Amount.
      *
      * @var string
@@ -101,6 +108,17 @@ class History extends Block
             $result[] = $refundedComment->getText();
         }
         return $result;
+    }
+
+    /**
+     * Gets the status which presented in comment
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->commentHistoryStatus, Locator::SELECTOR_CSS)->getText();
     }
 
     /**
