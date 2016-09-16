@@ -117,15 +117,15 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             throw new StateException(__('Parent product does not have configurable product options'));
         }
 
-        $configurableOptionData = [];
+        $attributeIds = [];
         foreach ($configurableProductOptions as $configurableProductOption) {
             $attributeCode = $configurableProductOption->getProductAttribute()->getAttributeCode();
             if (!$child->getData($attributeCode)) {
                 throw new StateException(__('Child product does not have attribute value %1', $attributeCode));
             }
-            $configurableOptionData = array_merge($configurableOptionData,
-                $this->getConfigurableAttributesData($configurableProductOption->getAttributeId()));
+            $attributeIds[] = $configurableProductOption->getAttributeId();
         }
+        $configurableOptionData = $this->getConfigurableAttributesData($attributeIds);
 
         /** @var Factory $optionFactory */
         $optionFactory = $this->getOptionsFactory();
@@ -201,32 +201,34 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     /**
      * Get Configurable Attribute Data
      *
-     * @param int $attributeId
+     * @param int[] $attributeIds
      * @return array
      */
-    private function getConfigurableAttributesData($attributeId)
+    private function getConfigurableAttributesData($attributeIds)
     {
         $attributeValues = [];
-        $attribute = $this->getAttributeFactory()->create();
-        $attribute->load($attributeId);
-        foreach ($attribute->getOptions() as $option) {
-            if ($option->getValue()) {
-                $attributeValues[] = [
-                    'label' => $option->getLabel(),
-                    'attribute_id' => $attribute->getId(),
-                    'value_index' => $option->getValue(),
-                ];
+        $attributes = $this->getAttributeFactory()->create()
+            ->getCollection()
+            ->addFieldToFilter('attribute_id', $attributeIds)
+            ->getItems();
+        foreach ($attributes as $attribute) {
+            foreach ($attribute->getOptions() as $option) {
+                if ($option->getValue()) {
+                    $attributeValues[] = [
+                        'label' => $option->getLabel(),
+                        'attribute_id' => $attribute->getId(),
+                        'value_index' => $option->getValue(),
+                    ];
+                }
             }
+            $configurableAttributesData[] =
+                [
+                    'attribute_id' => $attribute->getId(),
+                    'code' => $attribute->getAttributeCode(),
+                    'label' => $attribute->getStoreLabel(),
+                    'values' => $attributeValues,
+                ];
         }
-
-        $configurableAttributesData = [
-            [
-                'attribute_id' => $attribute->getId(),
-                'code' => $attribute->getAttributeCode(),
-                'label' => $attribute->getStoreLabel(),
-                'values' => $attributeValues,
-            ],
-        ];
 
         return $configurableAttributesData;
     }

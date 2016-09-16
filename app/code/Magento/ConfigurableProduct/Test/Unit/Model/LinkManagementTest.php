@@ -183,11 +183,18 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
         $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getOptions', 'getId', 'getAttributeCode', 'getStoreLabel'])
+            ->setMethods(['getCollection', 'getOptions', 'getId', 'getAttributeCode', 'getStoreLabel'])
             ->getMock();
         $attributeOptionMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Option')
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'getLabel'])
+            ->getMock();
+
+        $attributeCollectionMock = $this->getMockBuilder(
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(['addFieldToFilter', 'getItems'])
             ->getMock();
 
         $this->productRepository->expects($this->at(0))->method('get')->with($productSku)->willReturn($configurable);
@@ -212,7 +219,10 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
         $optionsFactoryMock->expects($this->any())->method('create')->willReturn([$optionMock]);
         $attributeFactoryMock->expects($this->any())->method('create')->willReturn($attributeMock);
-        $attributeMock->expects($this->any())->method('load');
+        $attributeMock->expects($this->any())->method('getCollection')->willReturn($attributeCollectionMock);
+        $attributeCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
+        $attributeCollectionMock->expects($this->any())->method('getItems')->willReturn([$attributeMock]);
+
         $attributeMock->expects($this->any())->method('getOptions')->willReturn([$attributeOptionMock]);
 
         $extensionAttributesMock->expects($this->any())->method('setConfigurableProductOptions');
