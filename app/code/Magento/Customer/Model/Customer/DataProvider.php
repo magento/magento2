@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Model\Customer;
 
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
@@ -43,6 +46,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     protected $loadedData;
+
+    /**
+     * @var CountryWithWebsites
+     */
+    private $countryByWebsiteSource;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    private $shareConfig;
 
     /**
      * EAV attribute properties to fetch from meta storage
@@ -195,7 +208,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
 
             if ($attribute->usesSource()) {
-                $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                if ($code == AddressInterface::COUNTRY_ID) {
+                    $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryByWebsiteSource()
+                        ->getAllOptions();
+                } else {
+                    $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                }
             }
 
             $rules = $this->eavValidationRules->build($attribute, $meta[$code]['arguments']['data']['config']);
@@ -204,7 +222,55 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
             $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
         }
+
+        $this->processWebsiteMeta($meta);
         return $meta;
+    }
+
+    /**
+     * Retrieve Country With Website options Source
+     * @deprecated
+     * @return CountryWithWebsites
+     */
+    private function getCountryByWebsiteSource()
+    {
+        if (!$this->countryByWebsiteSource) {
+            $this->countryByWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
+        }
+
+        return $this->countryByWebsiteSource;
+    }
+
+    /**
+     * Retrive Customer Share Config
+     * @deprecated
+     * @return \Magento\Customer\Model\Config\Share
+     */
+    private function getShareConfig()
+    {
+        if (!$this->shareConfig) {
+            $this->shareConfig = ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+        }
+
+        return $this->shareConfig;
+    }
+
+    /**
+     * @param array $meta
+     * @return void
+     */
+    private function processWebsiteMeta(&$meta)
+    {
+        if (isset($meta[CustomerInterface::WEBSITE_ID]) && $this->getShareConfig()->isGlobalScope()) {
+            $meta[CustomerInterface::WEBSITE_ID]['arguments']['data']['config']['isGlobalScope'] = 1;
+        }
+
+        if (isset($meta[AddressInterface::COUNTRY_ID]) && !$this->getShareConfig()->isGlobalScope()) {
+            $meta[AddressInterface::COUNTRY_ID]['arguments']['data']['config']['filterBy'] = [
+                'target' => '${ $.provider }:data.customer.website_id',
+                'field' => 'website_ids'
+            ];
+        }
     }
 
     /**
