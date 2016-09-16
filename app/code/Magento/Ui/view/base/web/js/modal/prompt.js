@@ -154,7 +154,7 @@ define([
 
             if (result) {
                 if (this.options.validation && !this.validate()) {
-                    return;
+                    return false;
                 }
 
                 value = this.modal.find(this.options.promptField).val();

@@ -53,10 +53,9 @@
                     "jquery",
                     "Magento_Ui/js/modal/prompt",
                     "Magento_Ui/js/modal/alert",
-                    "Magento_Ui/js/modal/confirm",
                     "extjs/ext-tree-checkbox",
                     "prototype"
-                ], function(jQuery, prompt, alert, confirm){
+                ], function(jQuery, prompt, alert){
 
                 //<![CDATA[
                 var allowDragAndDrop = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
@@ -223,29 +222,21 @@
                             }
 
                             if( editSet.currentNode && editSet.currentNode.attributes.cls == 'folder' ) {
-                                confirm({
-                                    title: "<?php /* @escapeNotVerified */ echo __('Delete Group') ?>",
-                                    content: '<?php echo $block->escapeJs(__('Are you sure you want to delete this group?')) ?>',
-                                    actions: {
-                                        confirm: function () {
-                                            TreePanels.root.removeChild(editSet.currentNode);
+                                TreePanels.root.removeChild(editSet.currentNode);
 
-                                            for( i in editSet.currentNode.childNodes ) {
-                                                if( editSet.currentNode.childNodes[i].id ) {
-                                                    child = editSet.currentNode.childNodes[i];
-                                                    newNode = new Ext.tree.TreeNode(child.attributes);
+                                for( i in editSet.currentNode.childNodes ) {
+                                    if( editSet.currentNode.childNodes[i].id ) {
+                                        child = editSet.currentNode.childNodes[i];
+                                        newNode = new Ext.tree.TreeNode(child.attributes);
 
-                                                    if( child.attributes.is_user_defined == 1 ) {
-                                                        TreePanels.root2.appendChild(newNode);
-                                                    }
-                                                }
-                                            }
-
-                                            editSet.req.removeGroups[editSet.currentNode.id] = editSet.currentNode.id;
-                                            editSet.currentNode = false;
+                                        if( child.attributes.is_user_defined == 1 ) {
+                                            TreePanels.root2.appendChild(newNode);
                                         }
                                     }
-                                });
+                                }
+
+                                editSet.req.removeGroups[editSet.currentNode.id] = editSet.currentNode.id;
+                                editSet.currentNode = false;
                             }
                         },
 
