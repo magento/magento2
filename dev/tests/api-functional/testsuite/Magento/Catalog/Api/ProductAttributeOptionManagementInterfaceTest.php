@@ -107,10 +107,10 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
                 $optionPayload
             ],
             'option_with_value_node_that_starts_with_text' => [
-                array_merge($optionPayload , [AttributeOptionInterface::VALUE => 'some_text'])
+                array_merge($optionPayload, [AttributeOptionInterface::VALUE => 'some_text'])
             ],
             'option_with_value_node_that_starts_with_a_number' => [
-                array_merge($optionPayload , [AttributeOptionInterface::VALUE => '123_some_text'])
+                array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123_some_text'])
             ],
 
         ];
