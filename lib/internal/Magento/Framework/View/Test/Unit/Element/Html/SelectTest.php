@@ -29,12 +29,6 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaper->expects($this->any())
-            ->method('escapeHtml')
-            ->will($this->returnArgument(0));
-        $this->escaper->expects($this->any())
-            ->method('escapeHtmlAttr')
-            ->will($this->returnArgument(0));
 
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
             ->disableOriginalConstructor()
@@ -103,6 +97,13 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHtmlJs()
     {
+        $this->escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->will($this->returnArgument(0));
+        $this->escaper->expects($this->any())
+            ->method('escapeHtmlAttr')
+            ->will($this->returnArgument(0));
+
         $selectId = 'testId';
         $selectClass = 'testClass';
         $selectTitle = 'testTitle';
@@ -133,6 +134,13 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHtml()
     {
+        $this->escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->will($this->returnArgument(0));
+        $this->escaper->expects($this->any())
+            ->method('escapeHtmlAttr')
+            ->will($this->returnArgument(0));
+
         $selectId = 'testId';
         $selectClass = 'testClass';
         $selectTitle = 'testTitle';
@@ -190,9 +198,16 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             $this->getOptionsWithDoubleQuotes()
         ];
 
-        foreach ($optionsSets as $optionsSet) {
-            $inOptions = $optionsSet['in'];
+        $expectedResult = '<select name="ESCAPED_ATTR" id="ESCAPED_ATTR" class="ESCAPED_ATTR" title="ESCAPED_ATTR" >'
+            .   '<option value="ESCAPED"  paramKey="ESCAPED_ATTR" >ESCAPED</option>'
+            .   '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
+            .   '<optgroup label="ESCAPED_ATTR" data-optgroup-name="ESCAPED_ATTR">'
+            .       '<option value="ESCAPED" >ESCAPED</option>'
+            .       '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
+            .   '</optgroup>'
+            . '</select>';
 
+        foreach ($optionsSets as $inOptions) {
             $this->select->setId($inOptions['id']);
             $this->select->setClass($inOptions['class']);
             $this->select->setTitle($inOptions['title']);
@@ -203,140 +218,78 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             }
             $this->select->setValue($inOptions['values']);
 
-            $result = $this->prepareResult($optionsSet['out']);
-
-            $this->assertEquals($result, $this->select->getHtml());
+            $this->assertEquals($expectedResult, $this->select->getHtml());
 
             // reset
             $this->select->setOptions([]);
         }
     }
 
-    private function prepareResult(array $optionSet)
-    {
-        $result = '<select name="ESCAPED_ATTR" id="ESCAPED_ATTR" class="ESCAPED_ATTR" title="ESCAPED_ATTR" >'
-            .   '<option value="'
-            .   $optionSet['options']['regular']['value']
-            .   '"  paramKey="ESCAPED_ATTR" >ESCAPED</option>'
-            .   '<option value="'.$optionSet['options']['selected']['value'].'" selected="selected" >ESCAPED</option>'
-            .   '<optgroup label="ESCAPED_ATTR" data-optgroup-name="ESCAPED_ATTR">'
-            .       '<option value="groupElementValue" >ESCAPED</option>'
-            .       '<option value="selectedGroupElementValue" selected="selected" >ESCAPED</option>'
-            .   '</optgroup>'
-            . '</select>';
-
-        return $result;
-    }
-
+    /**
+     * @return array
+     */
     private function getOptionsWithSingleQuotes()
     {
         return [
-            'in' => [
-                'id' => "test'Id",
-                'class' => "test'Class",
-                'title' => "test'Title",
-                'name' => "test'Name",
-                'options' => [
-                    'regular' => [
-                        'value' => 'testValue',
-                        'label' => "test'Label",
-                        'params' => ['paramKey' => "param'Value"]
-                    ],
-                    'selected' => [
-                        'value' => 'selectedValue',
-                        'label' => "selected'Label"
-                    ],
-                    'optgroup' => [
-                        'value' => [
-                            'groupElementValue' => "GroupElement'Label",
-                            'selectedGroupElementValue' => "SelectedGroupElement'Label"
-                        ],
-                        'label' => "group'Label"
-                    ]
+            'id' => "test'Id",
+            'class' => "test'Class",
+            'title' => "test'Title",
+            'name' => "test'Name",
+            'options' => [
+                'regular' => [
+                    'value' => 'testValue',
+                    'label' => "test'Label",
+                    'params' => ['paramKey' => "param'Value"]
                 ],
-                'values' => ['selectedValue', 'selectedGroupElementValue']
+                'selected' => [
+                    'value' => 'selectedValue',
+                    'label' => "selected'Label",
+                    'params' => []
+                ],
+                'optgroup' => [
+                    'value' => [
+                        'groupElementValue' => "GroupElement'Label",
+                        'selectedGroupElementValue' => "SelectedGroupElement'Label"
+                    ],
+                    'label' => "group'Label",
+                    'params' => []
+                ]
             ],
-            'out' => [
-                'id' => 'ESCAPED_ATTR',
-                'class' => 'ESCAPED_ATTR',
-                'title' => 'ESCAPED_ATTR',
-                'name' => 'ESCAPED_ATTR',
-                'options' => [
-                    'regular' => [
-                        'value' => 'testValue',
-                        'label' => 'ESCAPED',
-                        'params' => ['paramKey' => 'ESCAPED_ATTR']
-                    ],
-                    'selected' => [
-                        'value' => 'selectedValue',
-                        'label' => 'ESCAPED'
-                    ],
-                    'optgroup' => [
-                        'value' => [
-                            'groupElementValue' => 'ESCAPED',
-                            'selectedGroupElementValue' => 'ESCAPED'
-                        ],
-                        'label' => 'ESCAPED_ATTR'
-                    ]
-                ],
-                'values' => ['selectedValue', 'selectedGroupElementValue']
-            ]
+            'values' => ['selectedValue', 'selectedGroupElementValue']
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getOptionsWithDoubleQuotes()
     {
         return [
-            'in' => [
-                'id' => 'test"Id',
-                'class' => 'test"Class',
-                'title' => 'test"Title',
-                'name' => 'test"Name',
-                'options' => [
-                    'regular' => [
-                        'value' => 'testValue',
-                        'label' => 'test"Label',
-                        'params' => ['paramKey' => 'param"Value']
-                    ],
-                    'selected' => [
-                        'value' => 'selectedValue',
-                        'label' => 'selected"Label'
-                    ],
-                    'optgroup' => [
-                        'value' => [
-                            'groupElementValue' => 'GroupElement"Label',
-                            'selectedGroupElementValue' => 'SelectedGroupElement"Label'
-                        ],
-                        'label' => 'group"Label'
-                    ]
+            'id' => 'test"Id',
+            'class' => 'test"Class',
+            'title' => 'test"Title',
+            'name' => 'test"Name',
+            'options' => [
+                'regular' => [
+                    'value' => 'testValue',
+                    'label' => 'test"Label',
+                    'params' => ['paramKey' => 'param"Value']
                 ],
-                'values' => ['selectedValue', 'selectedGroupElementValue']
+                'selected' => [
+                    'value' => 'selectedValue',
+                    'label' => 'selected"Label',
+                    'params' => []
+                ],
+                'optgroup' => [
+                    'value' => [
+                        'groupElementValue' => 'GroupElement"Label',
+                        'selectedGroupElementValue' => 'SelectedGroupElement"Label'
+                    ],
+                    'label' => 'group"Label',
+                    'params' => []
+                ]
             ],
-            'out' => [
-                'id' => 'ESCAPED_ATTR',
-                'class' => 'ESCAPED_ATTR',
-                'title' => 'ESCAPED_ATTR',
-                'name' => 'ESCAPED_ATTR',
-                'options' => [
-                    'regular' => [
-                        'value' => 'testValue',
-                        'label' => 'ESCAPED',
-                        'params' => ['paramKey' => 'ESCAPED_ATTR']
-                    ],
-                    'selected' => [
-                        'value' => 'selectedValue',
-                        'label' => 'ESCAPED'
-                    ],
-                    'optgroup' => [
-                        'value' => [
-                            'groupElementValue' => 'ESCAPED',
-                            'selectedGroupElementValue' => 'ESCAPED'
-                        ],
-                        'label' => 'ESCAPED_ATTR'
-                    ]
-                ],
-                'values' => ['selectedValue', 'selectedGroupElementValue']
-            ]
+            'values' => ['selectedValue', 'selectedGroupElementValue']
         ];
     }
 }
