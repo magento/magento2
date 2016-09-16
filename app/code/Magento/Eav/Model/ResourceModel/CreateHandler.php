@@ -43,6 +43,11 @@ class CreateHandler implements AttributeInterface
     private $scopeResolver;
 
     /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -80,8 +85,6 @@ class CreateHandler implements AttributeInterface
         }
         return $this->attributes[$entityType];
     }
-
-    private $attributes = [];
 
     /**
      * @param string $entityType

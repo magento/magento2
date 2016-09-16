@@ -99,10 +99,10 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Is product has links
      *
-     * @param $entity
+     * @param int $parentId
      * @return int
      */
-    public function hasProductLinks($entity)
+    public function hasProductLinks($parentId)
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -115,7 +115,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $connection->fetchOne(
             $select,
             [
-                'product_id' => $entity->getId()
+                'product_id' => $parentId
             ]
         ) > 0;
     }

@@ -53,7 +53,7 @@ class SaveHandler
      */
     public function execute($entityType, $entity)
     {
-        if ($this->linkResource->hasProductLinks($entity)) {
+        if ($this->linkResource->hasProductLinks($entity->getId())) {
             /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
             foreach ($this->productLinkRepository->getList($entity) as $link) {
                 $this->productLinkRepository->delete($link);

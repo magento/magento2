@@ -80,14 +80,13 @@ class UpdateHandler implements AttributeInterface
     }
 
     /**
+     * @deprecated
      * @return \Magento\Eav\Model\Entity\AttributeCache
-
      */
     private function getAttributeCache()
     {
         return ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\AttributeCache::class);
     }
-
 
     /**
      * @param string $entityType

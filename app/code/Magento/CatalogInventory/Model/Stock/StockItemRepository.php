@@ -15,6 +15,7 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as StockItemResource;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilderFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -89,6 +90,9 @@ class StockItemRepository implements StockItemRepositoryInterface
      */
     protected $stockRegistryStorage;
 
+    /** @var  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    protected $productCollectionFactory;
+
     /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockStateProviderInterface $stockStateProvider
@@ -130,14 +134,28 @@ class StockItemRepository implements StockItemRepositoryInterface
     }
 
     /**
+     * @return  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
+    private function getProductCollectionFactory()
+    {
+        if ($this->productCollectionFactory === null) {
+            $this->productCollectionFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
+            );
+        }
+
+        return $this->productCollectionFactory;
+    }
+
+
+    /**
      * @inheritdoc
      */
     public function save(\Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
     {
         try {
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->productFactory->create();
-            $product =  $product->getCollection()
+            $product = $this->getProductCollectionFactory()->create()
                 ->addIdFilter($stockItem->getProductId())
                 ->addFieldToSelect('type_id')
                 ->getFirstItem();
