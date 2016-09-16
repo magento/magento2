@@ -71,7 +71,7 @@ class AllowedCountries
                 $allowedCountries = $this->getCountriesFromConfig($scope, $scopeCode);
         }
 
-        return $this->getUniqueCountries($allowedCountries);
+        return $this->makeCountriesUnique($allowedCountries);
     }
 
     /**
