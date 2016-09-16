@@ -197,7 +197,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productCollectionFactory->expects($this->any())->method('create')->willReturn($this->productCollection);
+        $productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
 
         $this->model = (new ObjectManager($this))->getObject(
             StockItemRepository::class,
