@@ -78,7 +78,7 @@ class AllowedCountries
      * Resolve scope code by scope
      *
      * @throws \InvalidArgumentException
-     * @param $scope
+     * @param string $scope
      * @return array|int
      */
     private function getDefaultScopeCode($scope)

@@ -90,7 +90,6 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
                 $allowedCountries = $this->allowedCountriesReader->getAllowedCountries();
             }
 
-
             $this->options = $this->createCountriesCollection()
                 ->addFieldToFilter('country_id', ['in' => $allowedCountries])
                 ->toOptionArray();

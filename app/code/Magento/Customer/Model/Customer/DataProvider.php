@@ -242,7 +242,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Retrive Customer Share Config
+     * Retrieve Customer Share Config
      * @deprecated
      * @return \Magento\Customer\Model\Config\Share
      */
