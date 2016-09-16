@@ -115,6 +115,8 @@ class DeployManager
             ['output' => $this->output, 'options' => $this->options]
         );
 
+        $this->saveDeployedVersion();
+
         if ($this->isCanBeParalleled()) {
             $result = $this->runInParallel($strategyProvider);
         } else {
@@ -133,7 +135,6 @@ class DeployManager
         }
 
         $this->minifyTemplates();
-        $this->saveDeployedVersion();
 
         return $result;
     }
