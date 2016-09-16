@@ -27,7 +27,7 @@ class RemoveQuoteItemsTest extends \PHPUnit_Framework_TestCase
     {
         $productResourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
         $productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $closure = function ($product) use ($productResourceMock) {
+        $closure = function () use ($productResourceMock) {
             return $productResourceMock;
         };
 

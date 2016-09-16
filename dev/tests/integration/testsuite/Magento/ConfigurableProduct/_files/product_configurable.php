@@ -110,10 +110,10 @@ try {
 
     /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $itemResource */
     $itemResource = Bootstrap::getObjectManager()->get(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
- 	$itemResource->getConnection()->delete(
-    $itemResource->getMainTable(),
- 	    'product_id = ' . $productToDelete->getId()
- 	);
+    $itemResource->getConnection()->delete(
+        $itemResource->getMainTable(),
+        'product_id = ' . $productToDelete->getId()
+    );
 } catch (\Exception $e) {
     // Nothing to remove
 }

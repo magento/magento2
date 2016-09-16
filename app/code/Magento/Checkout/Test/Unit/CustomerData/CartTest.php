@@ -112,7 +112,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $storeMock = $this->getMock(\Magento\Store\Model\System\Store::class, ['getWebsiteId'], [], '', false);
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
- 	 	$quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->checkoutCartMock->expects($this->once())->method('getSummaryQty')->willReturn($summaryQty);
         $this->checkoutHelperMock->expects($this->once())

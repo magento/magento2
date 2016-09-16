@@ -87,4 +87,9 @@ interface DeployStaticOptionsInterface
      * Jey for jobs option
      */
     const JOBS_AMOUNT = 'jobs';
+
+    /**
+     * Symlink locale if it not customized
+     */
+    const SYMLINK_LOCALE = 'symlink-locale';
 }
