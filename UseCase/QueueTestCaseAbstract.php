@@ -37,13 +37,11 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisher = $this->objectManager->get(PublisherInterface::class);
         /** @var \Magento\Framework\OsInfo $osInfo */
         $osInfo = $this->objectManager->get(\Magento\Framework\OsInfo::class);
         if ($osInfo->isWindows()) {
             $this->markTestSkipped("This test relies on *nix shell and should be skipped in Windows environment.");
         }
-        parent::setUp();
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
                 exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
@@ -60,18 +58,16 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
                 );
             }
         }
+
+        $this->publisher = $this->objectManager->get(PublisherInterface::class);
     }
 
     protected function tearDown()
     {
-        parent::tearDown();
         foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
                 exec("kill {$consumerProcessId}");
             }
-        }
-        if (file_exists($this->logFilePath)) {
-            unlink($this->logFilePath);
         }
     }
 
@@ -122,6 +118,20 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
 
         if (!file_exists($logFilePath)) {
             $this->fail("No asynchronous messages were processed.");
+        }
+    }
+
+    /**
+     * Workaround for https://bugs.php.net/bug.php?id=72286
+     */
+    public static function tearDownAfterClass()
+    {
+        if (version_compare(phpversion(), '7') == -1) {
+            $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');
+            $closeConnection->setAccessible(true);
+
+            $config = Bootstrap::getObjectManager()->get(\Magento\Amqp\Model\Config::class);
+            $closeConnection->invoke($config);
         }
     }
 }
