@@ -204,7 +204,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $moduleName = 'Test';
         $this->block->setData('module_name', $moduleName);
 
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
         $this->scopeConfigMock->expects($this->once())
@@ -239,7 +239,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->block->setData('module_name', $moduleName);
         $this->block->setData('cache_lifetime', $cacheLifetime);
 
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
         $this->scopeConfigMock->expects($this->once())
