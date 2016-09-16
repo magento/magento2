@@ -200,13 +200,18 @@ class Deployer
      * @param ObjectManagerFactory $omFactory
      * @param array $locales
      * @param array $deployableAreaThemeMap
+     * @param int $staticContentVersion
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $deployableAreaThemeMap = [])
-    {
+    public function deploy(
+        ObjectManagerFactory $omFactory,
+        array $locales,
+        array $deployableAreaThemeMap = [],
+        $staticContentVersion = null
+    ) {
         $this->omFactory = $omFactory;
 
         if ($this->getOption(Options::DRY_RUN)) {
@@ -214,6 +219,11 @@ class Deployer
         }
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         $appFiles = $this->filesUtil->getStaticPreProcessingFiles();
+
+        $staticContentVersion = $staticContentVersion ?: time();
+        if (!$this->getOption(Options::DRY_RUN)) {
+            $this->versionStorage->save($staticContentVersion);
+        }
 
         foreach ($deployableAreaThemeMap as $area => $themes) {
             $this->emulateApplicationArea($area);
@@ -319,11 +329,7 @@ class Deployer
             $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
         }
 
-        $version = (new \DateTime())->getTimestamp();
-        $this->output->writeln("New version of deployed files: {$version}");
-        if (!$this->getOption(Options::DRY_RUN)) {
-            $this->versionStorage->save($version);
-        }
+        $this->output->writeln("New version of deployed files: {$staticContentVersion}");
 
         if ($this->errorCount > 0) {
             // we must have an exit code higher than zero to indicate something was wrong

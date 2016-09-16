@@ -402,7 +402,11 @@ class DeployStaticContentCommand extends Command
         if ($this->isCanBeParalleled()) {
             return $this->runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages);
         } else {
-            return $this->deploy($deployer, $deployableLanguages, $deployableAreaThemeMap);
+            return $deployer->deploy(
+                $this->objectManagerFactory,
+                $deployableLanguages,
+                $deployableAreaThemeMap
+            );
         }
     }
 
@@ -467,21 +471,6 @@ class DeployStaticContentCommand extends Command
 
     /**
      * @param \Magento\Deploy\Model\Deployer $deployer
-     * @param array $deployableLanguages
-     * @param array $deployableAreaThemeMap
-     * @return int
-     */
-    private function deploy($deployer, $deployableLanguages, $deployableAreaThemeMap)
-    {
-        return $deployer->deploy(
-            $this->objectManagerFactory,
-            $deployableLanguages,
-            $deployableAreaThemeMap
-        );
-    }
-
-    /**
-     * @param \Magento\Deploy\Model\Deployer $deployer
      * @param array $deployableAreaThemeMap
      * @param array $deployableLanguages
      * @return int
@@ -493,11 +482,23 @@ class DeployStaticContentCommand extends Command
         $processManager = $this->objectManager->create(ProcessManager::class);
         $processNumber = 0;
         $processQueue = [];
+        $staticContentVersion = time();
         foreach ($deployableAreaThemeMap as $area => &$themes) {
             foreach ($themes as $theme) {
                 foreach ($deployableLanguages as $lang) {
-                    $deployerFunc = function (Process $process) use ($area, $theme, $lang, $deployer) {
-                        return $this->deploy($deployer, [$lang], [$area => [$theme]]);
+                    $deployerFunc = function (Process $process) use (
+                        $area,
+                        $theme,
+                        $lang,
+                        $deployer,
+                        $staticContentVersion
+                    ) {
+                        return $deployer->deploy(
+                            $this->objectManagerFactory,
+                            [$lang],
+                            [$area => [$theme]],
+                            $staticContentVersion
+                        );
                     };
                     if ($processNumber >= $this->getProcessesAmount()) {
                         $processQueue[] = $deployerFunc;
