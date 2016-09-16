@@ -950,6 +950,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Load object base row data
          */
+        $object->beforeLoad($entityId);
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 
@@ -962,11 +963,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->loadAttributesMetadata($attributes);
 
         $this->_loadModelAttributes($object);
-
-        $object->setOrigData();
-
         $this->_afterLoad($object);
-
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }

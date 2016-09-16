@@ -107,6 +107,7 @@ class Read implements ReadInterface
             'load_before',
             [
                 'identifier' => $identifier,
+                'entity' => $entity,
                 'arguments' => $arguments
             ]
         );
