@@ -6,7 +6,6 @@
 namespace Magento\CatalogInventory\Setup;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\Indexer\AbstractProcessor;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -24,11 +23,6 @@ class UpgradeData implements UpgradeDataInterface
     private $configuration;
 
     /**
-     * @var AbstractProcessor
-     */
-    private $indexerProcessor;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -36,16 +30,13 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param StockConfigurationInterface $configuration
      * @param StoreManagerInterface $storeManager
-     * @param AbstractProcessor $indexerProcessor
      */
     public function __construct(
         StockConfigurationInterface $configuration,
-        StoreManagerInterface $storeManager,
-        AbstractProcessor $indexerProcessor
+        StoreManagerInterface $storeManager
     ) {
         $this->configuration = $configuration;
         $this->storeManager = $storeManager;
-        $this->indexerProcessor = $indexerProcessor;
     }
 
     /**
@@ -72,6 +63,5 @@ class UpgradeData implements UpgradeDataInterface
             ['website_id' => $this->configuration->getDefaultScopeId()],
             ['website_id = ?' => $this->storeManager->getWebsite()->getId()]
         );
-        $this->indexerProcessor->getIndexer()->reindexAll();
     }
 }
