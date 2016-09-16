@@ -198,10 +198,10 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             $this->getOptionsWithDoubleQuotes()
         ];
 
-        $expectedResult = '<select name="ESCAPED_ATTR" id="ESCAPED_ATTR" class="ESCAPED_ATTR" title="ESCAPED_ATTR" >'
-            .   '<option value="ESCAPED"  paramKey="ESCAPED_ATTR" >ESCAPED</option>'
+        $expectedResult = '<select name="test[name]" id="testId" class="test class" title="ESCAPED" >'
+            .   '<option value="ESCAPED"  paramKey="ESCAPED" >ESCAPED</option>'
             .   '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
-            .   '<optgroup label="ESCAPED_ATTR" data-optgroup-name="ESCAPED_ATTR">'
+            .   '<optgroup label="ESCAPED" data-optgroup-name="ESCAPED">'
             .       '<option value="ESCAPED" >ESCAPED</option>'
             .       '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
             .   '</optgroup>'
@@ -231,10 +231,10 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     private function getOptionsWithSingleQuotes()
     {
         return [
-            'id' => "test'Id",
-            'class' => "test'Class",
+            'id' => "testId",
+            'name' => "test[name]",
+            'class' => "test class",
             'title' => "test'Title",
-            'name' => "test'Name",
             'options' => [
                 'regular' => [
                     'value' => 'testValue',
@@ -265,10 +265,10 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     private function getOptionsWithDoubleQuotes()
     {
         return [
-            'id' => 'test"Id',
-            'class' => 'test"Class',
+            'id' => 'testId',
+            'name' => 'test[name]',
+            'class' => 'test class',
             'title' => 'test"Title',
-            'name' => 'test"Name',
             'options' => [
                 'regular' => [
                     'value' => 'testValue',

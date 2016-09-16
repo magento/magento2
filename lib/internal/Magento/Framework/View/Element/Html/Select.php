@@ -134,13 +134,13 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
         }
 
         $html = '<select name="' .
-            $this->escapeHtmlAttr($this->getName()) .
+            $this->getName() .
             '" id="' .
-            $this->escapeHtmlAttr($this->getId()) .
+            $this->getId() .
             '" class="' .
-            $this->escapeHtmlAttr($this->getClass()) .
+            $this->getClass() .
             '" title="' .
-            $this->escapeHtmlAttr($this->getTitle()) .
+            $this->escapeHtml($this->getTitle()) .
             '" ' .
             $this->getExtraParams() .
             '>';
@@ -166,8 +166,8 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             }
 
             if (is_array($value)) {
-                $html .= '<optgroup label="' . $this->escapeHtmlAttr($label)
-                    . '" data-optgroup-name="' . $this->escapeHtmlAttr($optgroupName) . '">';
+                $html .= '<optgroup label="' . $this->escapeHtml($label)
+                    . '" data-optgroup-name="' . $this->escapeHtml($optgroupName) . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
                         $optionGroup = ['value' => $keyGroup, 'label' => $optionGroup];
@@ -205,10 +205,10 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             foreach ($option['params'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $keyMulti => $valueMulti) {
-                        $params .= sprintf(' %s="%s" ', $keyMulti, $this->escapeHtmlAttr($valueMulti));
+                        $params .= sprintf(' %s="%s" ', $keyMulti, $this->escapeHtml($valueMulti));
                     }
                 } else {
-                    $params .= sprintf(' %s="%s" ', $key, $this->escapeHtmlAttr($value));
+                    $params .= sprintf(' %s="%s" ', $key, $this->escapeHtml($value));
                 }
             }
         }
