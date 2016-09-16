@@ -91,7 +91,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'id' => 1,
-                    'option_id' => 0,
+                    'option_id' => null,
                     'previous_group' => 'text',
                     'title' => 'Test Field',
                     'type' => 'field',
