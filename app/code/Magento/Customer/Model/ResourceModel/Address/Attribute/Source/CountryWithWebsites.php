@@ -43,11 +43,13 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     private $shareConfig;
 
     /**
+     * CountryWithWebsites constructor.
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
      * @param AllowedCountries $allowedCountriesReader
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Share $shareConfig
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
@@ -88,7 +90,6 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
             } else {
                 $allowedCountries = $this->allowedCountriesReader->getAllowedCountries();
             }
-
 
             $this->options = $this->createCountriesCollection()
                 ->addFieldToFilter('country_id', ['in' => $allowedCountries])

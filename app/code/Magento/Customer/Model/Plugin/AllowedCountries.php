@@ -44,6 +44,8 @@ class AllowedCountries
      * @param \Magento\Directory\Model\AllowedCountries $subject
      * @param string | null $filter
      * @param string $scope
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetAllowedCountries(
         \Magento\Directory\Model\AllowedCountries $subject,
