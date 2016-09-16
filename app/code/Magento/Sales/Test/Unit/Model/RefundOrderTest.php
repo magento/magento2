@@ -238,6 +238,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
                 [CreationQuantityValidator::class],
                 $this->orderMock
             )->willReturn([]);
+        $this->orderMock->expects($this->once())->method('setCustomerNoteNotify')->with($notify);
         $this->paymentAdapterMock->expects($this->once())
             ->method('refund')
             ->with($this->creditmemoMock, $this->orderMock)

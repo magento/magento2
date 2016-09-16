@@ -703,7 +703,7 @@ class Payment extends Info implements OrderPaymentInterface
             ->addStatusHistoryComment(
                 $message,
                 $this->getOrder()->getConfig()->getStateDefaultStatus($orderState)
-            )->setIsCustomerNotified($creditmemo->getCustomerNoteNotify());
+            )->setIsCustomerNotified($creditmemo->getOrder()->getCustomerNoteNotify());
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
             ['payment' => $this, 'creditmemo' => $creditmemo]

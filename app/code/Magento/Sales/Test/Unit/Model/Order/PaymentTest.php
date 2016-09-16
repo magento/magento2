@@ -282,7 +282,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'getGrandTotal',
                 'getBaseGrandTotal',
                 'getDoTransaction',
-                'getInvoice'
+                'getInvoice',
+                'getOrder'
             ],
             [],
             '',
@@ -1480,6 +1481,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects(static::once())
             ->method('getInvoice')
             ->willReturn($this->invoiceMock);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
 
         $captureTranId = self::TRANSACTION_ID . '-' . Transaction::TYPE_CAPTURE;
         $captureTransaction = $this->getMockBuilder(Transaction::class)
