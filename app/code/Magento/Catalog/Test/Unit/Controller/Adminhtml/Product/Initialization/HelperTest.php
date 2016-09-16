@@ -6,10 +6,11 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -17,7 +18,6 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 
 /**
@@ -95,7 +95,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $customOptionFactoryMock;
 
     /**
-     * @var ProductCustomOptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customOptionMock;
 
@@ -136,8 +136,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->setMethods([
-                'setData',
-                'addData',
                 'getId',
                 'setWebsiteIds',
                 'isLockedAttribute',
@@ -145,7 +143,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'getAttributes',
                 'unlockAttribute',
                 'getOptionsReadOnly',
-                'setOptions',
                 'setCanSaveCustomOptions',
                 '__sleep',
                 '__wakeup',
@@ -159,9 +156,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->customOptionMock = $this->getMockBuilder(ProductCustomOptionInterface::class)
+        $this->customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->setMethods(null)
+            ->getMock();
         $this->productLinksMock = $this->getMockBuilder(ProductLinks::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -196,12 +194,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitialize()
     {
-        $this->customOptionMock->expects($this->once())
-            ->method('setProductSku');
-
         $optionsData = [
             'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
             'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
+            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14']
         ];
         $productData = [
             'stock_data' => ['stock_data'],
@@ -275,14 +271,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributes')
             ->willReturn($attributesArray);
 
-        $productData['category_ids'] = [];
-        $productData['website_ids'] = [];
-        unset($productData['options']);
-
-        $this->productMock->expects($this->once())
-            ->method('addData')
-            ->with($productData);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects($this->any())
             ->method('getSku')
             ->willReturn('sku');
         $this->productMock->expects($this->any())
@@ -291,13 +280,25 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $this->customOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->with(['data' => $optionsData['option2']])
-            ->willReturn($this->customOptionMock);
-        $this->productMock->expects($this->once())
-            ->method('setOptions')
-            ->with([$this->customOptionMock]);
+            ->willReturnMap([
+                [
+                    ['data' => $optionsData['option2']],
+                    (clone $this->customOptionMock)->setData($optionsData['option2'])
+                ], [
+                    ['data' => $optionsData['option3']],
+                    (clone $this->customOptionMock)->setData($optionsData['option3'])
+                ]
+            ]);
 
         $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
+
+        $productOptions = $this->productMock->getOptions();
+        $this->assertTrue(2 == count($productOptions));
+        list($option2, $option3) = $productOptions;
+        $this->assertTrue($option2->getOptionId() == $optionsData['option2']['option_id']);
+        $this->assertTrue('sku' == $option2->getData('product_sku'));
+        $this->assertTrue($option3->getOptionId() == $optionsData['option3']['option_id']);
+        $this->assertTrue('sku' == $option2->getData('product_sku'));
     }
 
     /**
