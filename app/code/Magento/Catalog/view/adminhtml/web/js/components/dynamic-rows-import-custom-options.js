@@ -18,9 +18,10 @@ define([
      */
     initMaxId = function (data) {
         if (data && data.length) {
-            maxId = ~~_.max(data, function (record) {
-                return ~~record['option_id'];
+            maxId = _.max(data, function (record) {
+                return parseInt(record['option_id'], 10) || 0;
             })['option_id'];
+            maxId = parseInt(maxId, 10) || 0;
         }
     };
 
