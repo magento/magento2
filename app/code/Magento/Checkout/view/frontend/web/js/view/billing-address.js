@@ -128,9 +128,7 @@ define(
                 if (this.isAddressSameAsShipping()) {
                     selectBillingAddress(quote.shippingAddress());
 
-                    if (window.checkoutConfig.reloadOnBillingAddress) {
-                        setBillingAddressAction(globalMessageList);
-                    }
+                    this.updateAddresses();
                     this.isAddressDetailsVisible(true);
                 } else {
                     lastSelectedBillingAddress = quote.billingAddress();
