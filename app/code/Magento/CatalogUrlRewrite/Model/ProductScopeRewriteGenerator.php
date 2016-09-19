@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ProductScopeRewriteGenerator
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductScopeRewriteGenerator
 {
@@ -54,7 +55,6 @@ class ProductScopeRewriteGenerator
      * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
      */
     private $canonicalUrlRewriteGenerator;
-
 
     /**
      * @param StoreViewService $storeViewService
@@ -122,6 +122,7 @@ class ProductScopeRewriteGenerator
      *
      * @param int $storeId
      * @param \Magento\Framework\Data\Collection $productCategories
+     * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
     public function generateForSpecificStoreView($storeId, $productCategories, Product $product)

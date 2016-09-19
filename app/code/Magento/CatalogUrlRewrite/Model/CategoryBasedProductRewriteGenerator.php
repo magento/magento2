@@ -36,7 +36,6 @@ class CategoryBasedProductRewriteGenerator
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator;
     }
 
-
     /**
      * Generate product url rewrites based on category
      *

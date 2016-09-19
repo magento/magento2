@@ -125,7 +125,7 @@ class UrlRewriteHandler
             $product->setData('save_rewrites_history', $saveRewriteHistory);
             $productUrls = array_merge(
                 $productUrls,
-                $this->productUrlRewriteGenerator->generate($product, $category)
+                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category)
             );
         }
         return $productUrls;
