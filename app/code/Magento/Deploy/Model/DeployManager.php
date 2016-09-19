@@ -205,17 +205,4 @@ class DeployManager
     {
         return isset($this->options[Options::JOBS_AMOUNT]) ? (int)$this->options[Options::JOBS_AMOUNT] : 0;
     }
-
-    /**
-     * Save version of deployed files
-     * @return void
-     */
-    private function saveDeployedVersion()
-    {
-        if (!$this->idDryRun) {
-            $version = (new \DateTime())->getTimestamp();
-            $this->output->writeln("New version of deployed files: {$version}");
-            $this->versionStorage->save($version);
-        }
-    }
 }
