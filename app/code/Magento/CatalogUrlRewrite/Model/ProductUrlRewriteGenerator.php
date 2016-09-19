@@ -11,7 +11,7 @@ use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
-use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Visibility;
 
 /**
@@ -54,6 +54,11 @@ class ProductUrlRewriteGenerator
     private $anchorUrlRewriteGenerator;
 
     /**
+     * @var ProductScopeRewriteGenerator
+     */
+    private $productScopeRewriteGenerator;
+
+    /**
      * @param \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
@@ -92,6 +97,22 @@ class ProductUrlRewriteGenerator
     }
 
     /**
+     * Retrieve Delegator for generation rewrites in different scopes
+     *
+     * @deprecated
+     * @return ProductScopeRewriteGenerator|mixed
+     */
+    private function getProductScopeRewriteGenerator()
+    {
+        if (!$this->productScopeRewriteGenerator) {
+            $this->productScopeRewriteGenerator = ObjectManager::getInstance()
+            ->get(ProductScopeRewriteGenerator::class);
+        }
+
+        return $this->productScopeRewriteGenerator;
+    }
+
+    /**
      * Generate product url rewrites
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -126,7 +147,7 @@ class ProductUrlRewriteGenerator
      */
     protected function isGlobalScope($storeId)
     {
-        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
+        return $this->getProductScopeRewriteGenerator()->isGlobalScope($storeId);
     }
 
     /**
@@ -137,16 +158,7 @@ class ProductUrlRewriteGenerator
      */
     protected function generateForGlobalScope($productCategories)
     {
-        $urls = [];
-        $productId = $this->product->getEntityId();
-        foreach ($this->product->getStoreIds() as $id) {
-            if (!$this->isGlobalScope($id)
-                && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $productId, Product::ENTITY)
-            ) {
-                $urls = array_merge($urls, $this->generateForSpecificStoreView($id, $productCategories));
-            }
-        }
-        return $urls;
+        return $this->getProductScopeRewriteGenerator()->generateForGlobalScope($productCategories, $this->product);
     }
 
     /**
@@ -158,30 +170,8 @@ class ProductUrlRewriteGenerator
      */
     protected function generateForSpecificStoreView($storeId, $productCategories)
     {
-        $categories = [];
-        foreach ($productCategories as $category) {
-            if ($this->isCategoryProperForGenerating($category, $storeId)) {
-                $categories[] = $category;
-            }
-        }
-        $this->productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
-        /**
-         * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-         */
-        $urls = array_merge(
-            $this->canonicalUrlRewriteGenerator->generate($storeId, $this->product),
-            $this->categoriesUrlRewriteGenerator->generate($storeId, $this->product, $this->productCategories),
-            $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->productCategories),
-            $this->getAnchorUrlRewriteGenerator()->generate($storeId, $this->product, $this->productCategories)
-        );
-
-        /* Reduce duplicates. Last wins */
-        $result = [];
-        foreach ($urls as $url) {
-            $result[$url->getTargetPath() . '-' . $url->getStoreId()] = $url;
-        }
-        $this->productCategories = null;
-        return $result;
+        return $this->getProductScopeRewriteGenerator()
+            ->generateForSpecificStoreView($storeId, $productCategories, $this->product);
     }
 
     /**
@@ -191,10 +181,7 @@ class ProductUrlRewriteGenerator
      */
     protected function isCategoryProperForGenerating($category, $storeId)
     {
-        if ($category->getParentId() != \Magento\Catalog\Model\Category::TREE_ROOT_ID) {
-            list(, $rootCategoryId) = $category->getParentIds();
-            return $rootCategoryId == $this->storeManager->getStore($storeId)->getRootCategoryId();
-        }
-        return false;
+       return $this->getProductScopeRewriteGenerator()
+           ->isCategoryProperForGenerating($category, $storeId);
     }
 }
