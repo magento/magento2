@@ -12,6 +12,9 @@ use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
 use Magento\Framework\App\State;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployManager
 {
     /**
@@ -108,14 +111,15 @@ class DeployManager
     {
         if ($this->idDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
+        } else {
+            $version = (new \DateTime())->getTimestamp();
+            $this->versionStorage->save($version);
         }
 
         /** @var DeployStrategyProvider $strategyProvider */
         $strategyProvider = $this->deployStrategyProviderFactory->create(
             ['output' => $this->output, 'options' => $this->options]
         );
-
-        $this->saveDeployedVersion();
 
         if ($this->isCanBeParalleled()) {
             $result = $this->runInParallel($strategyProvider);
@@ -135,6 +139,9 @@ class DeployManager
         }
 
         $this->minifyTemplates();
+        if (!$this->idDryRun) {
+            $this->output->writeln("New version of deployed files: {$version}");
+        }
 
         return $result;
     }
