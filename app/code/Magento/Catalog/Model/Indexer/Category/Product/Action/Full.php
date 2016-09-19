@@ -8,14 +8,19 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
+     * Whether to use main or temporary index table
+     *
+     * @var bool
+     */
+    protected $useTempTable = false;
+
+    /**
      * Refresh entities index
      *
-     * @param bool $useTempTable
      * @return $this
      */
-    public function execute($useTempTable = false)
+    public function execute()
     {
-        $this->useTempTable = $useTempTable;
         $this->clearTmpData();
 
         $this->reindex();
