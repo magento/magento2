@@ -5,16 +5,16 @@
  */
 namespace Magento\CatalogInventory\Model\Plugin\Order\Validation;
 
-use Magento\Sales\Model\ValidatorResult;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
 use Magento\CatalogInventory\Model\Order\ReturnValidator;
+use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
- * Class CreditmemoCreationArguments
+ * Class OrderRefundCreationArguments
  */
 class OrderRefundCreationArguments
 {
@@ -24,7 +24,7 @@ class OrderRefundCreationArguments
     private $returnValidator;
 
     /**
-     * CreditmemoCreationArguments constructor.
+     * OrderRefundCreationArguments constructor.
      * @param ReturnValidator $returnValidator
      */
     public function __construct(
@@ -35,7 +35,7 @@ class OrderRefundCreationArguments
 
     /**
      * @param RefundOrderInterface $refundOrderValidator
-     * @param ValidatorResult $validationResults
+     * @param ValidatorResultInterface $validationResults
      * @param OrderInterface $order
      * @param CreditmemoInterface $creditmemo
      * @param array $items
@@ -43,11 +43,11 @@ class OrderRefundCreationArguments
      * @param bool $appendComment
      * @param CreditmemoCommentCreationInterface|null $comment
      * @param CreditmemoCreationArgumentsInterface|null $arguments
-     * @return ValidatorResult
+     * @return ValidatorResultInterface
      */
     public function afterValidate(
         RefundOrderInterface $refundOrderValidator,
-        ValidatorResult $validationResults,
+        ValidatorResultInterface $validationResults,
         OrderInterface $order,
         CreditmemoInterface $creditmemo,
         array $items = [],

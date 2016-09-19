@@ -6,22 +6,21 @@
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin\Order\Validation;
 
 use Magento\CatalogInventory\Model\Order\ReturnValidator;
-use Magento\CatalogInventory\Model\Plugin\Order\Validation\InvoiceRefundCreationArguments;
+use Magento\CatalogInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments;
+use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 
 /**
- * Class InvoiceRefundCreatetionArgumentsTest
+ * Class OrderRefundCreatetionArgumentsTest
  */
-class InvoiceRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
+class OrderRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var InvoiceRefundCreationArguments
+     * @var OrderRefundCreationArguments
      */
     private $plugin;
 
@@ -41,14 +40,9 @@ class InvoiceRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
     private $creditmemoCreationArgumentsMock;
 
     /**
-     * @var RefundInvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundOrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $refundInvoiceValidatorMock;
-
-    /**
-     * @var InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $invoiceMock;
+    private $refundOrderValidatorMock;
 
     /**
      * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -84,11 +78,7 @@ class InvoiceRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->refundInvoiceValidatorMock = $this->getMockBuilder(RefundInvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
+        $this->refundOrderValidatorMock = $this->getMockBuilder(RefundOrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -100,7 +90,7 @@ class InvoiceRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->plugin = new InvoiceRefundCreationArguments($this->returnValidatorMock);
+        $this->plugin = new OrderRefundCreationArguments($this->returnValidatorMock);
     }
 
     /**
@@ -126,13 +116,11 @@ class InvoiceRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
             ->with($erroMessage);
 
         $this->plugin->afterValidate(
-            $this->refundInvoiceValidatorMock,
+            $this->refundOrderValidatorMock,
             $this->validateResultMock,
-            $this->invoiceMock,
             $this->orderMock,
             $this->creditmemoMock,
             [],
-            false,
             false,
             false,
             null,
