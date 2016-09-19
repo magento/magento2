@@ -57,16 +57,25 @@ class Config implements \Magento\Framework\View\ConfigInterface
     public function getViewConfig(array $params = [])
     {
         $this->assetRepo->updateDesignParams($params);
-        /** @var $currentTheme \Magento\Framework\View\Design\ThemeInterface */
-        $currentTheme = $params['themeModel'];
-        $key = $currentTheme->getCode();
-        if (isset($this->viewConfigs[$key])) {
-            return $this->viewConfigs[$key];
+        $viewConfigParams = [];
+
+        if (isset($params['themeModel'])) {
+            /** @var \Magento\Framework\View\Design\ThemeInterface $currentTheme */
+            $currentTheme = $params['themeModel'];
+            $key = $currentTheme->getCode();
+            if (isset($this->viewConfigs[$key])) {
+                return $this->viewConfigs[$key];
+            }
+            $viewConfigParams['themeModel'] = $currentTheme;
         }
+        $viewConfigParams['area'] = (isset($params['area'])) ? $params['area'] : null;
 
-        $config = $this->viewConfigFactory->create();
+        /** @var \Magento\Framework\Config\View $config */
+        $config = $this->viewConfigFactory->create($viewConfigParams);
 
-        $this->viewConfigs[$key] = $config;
+        if (isset($key)) {
+            $this->viewConfigs[$key] = $config;
+        }
         return $config;
     }
 }
