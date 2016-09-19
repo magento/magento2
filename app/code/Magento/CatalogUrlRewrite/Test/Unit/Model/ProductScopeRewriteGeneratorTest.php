@@ -8,9 +8,13 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class ProductScopeRewriteGeneratorTest
+ * @package Magento\CatalogUrlRewrite\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -24,9 +28,6 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $anchorUrlRewriteGenerator;
-
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
-    private $productUrlRewriteGenerator;
 
     /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject */
     private $storeViewService;
@@ -178,5 +179,4 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->with(['entities' => $entities])
             ->will($this->returnValue($objectRegistry));
     }
-
 }

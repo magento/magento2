@@ -71,7 +71,7 @@ abstract class Category extends \Magento\Backend\App\Action
     {
         $categoryId = (int)$this->getRequest()->getParam('id', false);
 
-        return $categoryId ?:  (int)$this->getRequest()->getParam('entity_id', false);
+        return $categoryId ?: (int)$this->getRequest()->getParam('entity_id', false);
     }
 
     /**

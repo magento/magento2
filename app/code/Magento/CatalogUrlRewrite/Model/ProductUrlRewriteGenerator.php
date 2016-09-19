@@ -181,8 +181,8 @@ class ProductUrlRewriteGenerator
     }
 
     /**
-     * @param \Magento\Catalog\Model\Category $category
      * @deprecated
+     * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool
      */
