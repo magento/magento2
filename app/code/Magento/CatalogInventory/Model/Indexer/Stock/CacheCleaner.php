@@ -58,7 +58,6 @@ class CacheCleaner
         CacheContext $cacheContext,
         ManagerInterface $eventManager
     ) {
-
         $this->resource = $resource;
         $this->stockConfiguration = $stockConfiguration;
         $this->cacheContext = $cacheContext;
