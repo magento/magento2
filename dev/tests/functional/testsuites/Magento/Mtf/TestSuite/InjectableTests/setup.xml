@@ -11,5 +11,8 @@
         <allow>
             <module value="Magento_Setup"/>
         </allow>
+        <deny>
+            <class value="Magento\Setup\Test\TestCase\UpgradeSystemTest"/>
+        </deny>
     </rule>
 </config>

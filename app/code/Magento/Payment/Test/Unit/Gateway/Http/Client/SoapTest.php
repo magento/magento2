@@ -48,6 +48,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             \Magento\Payment\Gateway\Http\ConverterInterface::class
         )->getMockForAbstractClass();
         $this->client = $this->getMockBuilder(\SoapClient::class)
+            ->setMethods(['__setSoapHeaders', '__soapCall', '__getLastRequest'])
             ->disableOriginalConstructor()
             ->getMock();
 
