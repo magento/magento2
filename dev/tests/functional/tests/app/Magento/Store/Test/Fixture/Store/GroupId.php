@@ -39,6 +39,9 @@ class GroupId extends DataSource
             }
             $this->storeGroup = $storeGroup;
             $this->data = $storeGroup->getWebsiteId() . "/" . $storeGroup->getName();
+        } elseif (isset($data['fixture'])) {
+            $this->storeGroup = $data['fixture'];
+            $this->data = $this->storeGroup->getWebsiteId() . "/" . $this->storeGroup->getName();
         }
     }
 

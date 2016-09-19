@@ -579,7 +579,7 @@ final class Vault implements VaultPaymentInterface
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return $this->getVaultProvider()->isAvailable($quote)
-            && $this->config->getValue(self::$activeKey, $this->getStore() ?: $quote->getStoreId());
+            && $this->config->getValue(self::$activeKey, $this->getStore() ?: ($quote ? $quote->getStoreId() : null));
     }
 
     /**
