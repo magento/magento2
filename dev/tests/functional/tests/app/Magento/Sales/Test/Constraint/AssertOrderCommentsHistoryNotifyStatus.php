@@ -11,9 +11,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Class AssertRefundOrderStatusInCommentsHistory
+ * Class AssertOrderCommentsHistoryNotifyStatus
  */
-class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
+class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
 {
     /**
      * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
@@ -21,18 +21,23 @@ class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param OrderInjectable $order
-     * @return void
+     * @param array $data
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        OrderInjectable $order
+        OrderInjectable $order,
+        array $data
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
+        $sendMail = isset($data['form_data']['send_email']) ? filter_var(
+            $data['form_data']['send_email'],
+            FILTER_VALIDATE_BOOLEAN
+        ) : false;
         \PHPUnit_Framework_Assert::assertContains(
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
-            $salesOrderView->getOrderHistoryBlock()->getStatus()
+            $salesOrderView->getOrderHistoryBlock()->getNotifiedStatus(),
+            (bool)$sendMail ? 'Customer Notified' : 'Customer Not Notified'
         );
     }
 
@@ -43,6 +48,6 @@ class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message with appropriate order status is available in Comments History section.";
+        return "Message with appropriate notification status is available in Comments History section.";
     }
 }

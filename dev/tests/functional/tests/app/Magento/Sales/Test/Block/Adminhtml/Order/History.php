@@ -29,6 +29,13 @@ class History extends Block
     protected $commentHistoryStatus = '.note-list-status';
 
     /**
+     * Comment history notified status.
+     *
+     * @var string
+     */
+    protected $commentHistoryNotifiedStatus = '.note-list-customer';
+
+    /**
      * Authorized Amount.
      *
      * @var string
@@ -119,6 +126,17 @@ class History extends Block
     {
         $this->waitCommentsHistory();
         return $this->_rootElement->find($this->commentHistoryStatus, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Gets the is customer notified status which presented in comment
+     *
+     * @return string
+     */
+    public function getNotifiedStatus()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->commentHistoryNotifiedStatus, Locator::SELECTOR_CSS)->getText();
     }
 
     /**
