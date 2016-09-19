@@ -20,11 +20,13 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
+        $grandTotal = $total->getGrandTotal();
+        $baseGrandTotal = $total->getBaseGrandTotal();
         $totals = array_sum($total->getAllTotalAmounts());
         $baseTotals = array_sum($total->getAllBaseTotalAmounts());
 
-        $total->setGrandTotal($totals);
-        $total->setBaseGrandTotal($baseTotals);
+        $total->setGrandTotal($grandTotal + $totals);
+        $total->setBaseGrandTotal($baseGrandTotal + $baseTotals);
         return $this;
     }
 
