@@ -31,7 +31,6 @@ class ReturnToStockInvoice
      */
     private $orderRepository;
 
-
     /**
      * @var InvoiceRepositoryInterface
      */

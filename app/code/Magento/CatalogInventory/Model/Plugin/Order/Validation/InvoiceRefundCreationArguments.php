@@ -20,7 +20,6 @@ use Magento\CatalogInventory\Model\Order\ReturnValidator;
  */
 class InvoiceRefundCreationArguments
 {
-
     /**
      * @var ReturnValidator
      */
