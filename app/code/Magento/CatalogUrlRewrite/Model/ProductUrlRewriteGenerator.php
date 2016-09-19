@@ -50,9 +50,6 @@ class ProductUrlRewriteGenerator
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
-    /** @var AnchorUrlRewriteGenerator */
-    private $anchorUrlRewriteGenerator;
-
     /**
      * @var ProductScopeRewriteGenerator
      */
@@ -167,7 +164,6 @@ class ProductUrlRewriteGenerator
      */
     protected function isCategoryProperForGenerating($category, $storeId)
     {
-       return $this->getProductScopeRewriteGenerator()
-           ->isCategoryProperForGenerating($category, $storeId);
+       return $this->getProductScopeRewriteGenerator()->isCategoryProperForGenerating($category, $storeId);
     }
 }
