@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <div class="field required">
+            <div class="field city required">
                 <label for="city" class="label"><span><?php echo $block->escapeHtml(__('City')) ?></span></label>
                 <div class="control">
                     <input type="text" name="city" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCity()) ?>" title="<?php echo $block->escapeHtmlAttr(__('City')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city')) ?>" id="city">
