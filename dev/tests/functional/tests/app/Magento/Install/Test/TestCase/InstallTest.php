@@ -29,7 +29,7 @@ use Magento\Mtf\Client\BrowserInterface;
  * Steps:
  * 1. Go setup landing page.
  * 2. Click on Developer Documentation link.
- * 3. Check  Developer Documentation title.
+ * 3. Check Developer Documentation title.
  * 4. Click on "Terms and agreements" button.
  * 5. Check license agreement text.
  * 6. Return back to landing page and click "Agree and Setup" button.
@@ -45,6 +45,8 @@ use Magento\Mtf\Client\BrowserInterface;
  *
  * @group Installer_and_Upgrade/Downgrade
  * @ZephyrId MAGETWO-31431
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallTest extends Injectable
 {
@@ -59,6 +61,13 @@ class InstallTest extends Injectable
      * @var DevdocsInstall
      */
     protected $devdocsInstallPage;
+
+    /**
+     * Terms and agreement selector.
+     *
+     * @var string
+     */
+    protected $termsLink = '.text-terms>a';
 
     /**
      * Install page.
@@ -138,9 +147,10 @@ class InstallTest extends Injectable
         // Verify Developer Documentation link.
         $handle = $browser->getCurrentWindow();
         $this->installPage->getLandingBlock()->clickLink(self::DEVDOCS_LINK_TEXT);
-        $browser->selectWindow();
+        $this->waitTillTermsLinkNotVisible($browser);
+        $docHandle = $browser->getCurrentWindow();
         $assertDevdocsLink->processAssert($this->devdocsInstallPage);
-        $browser->closeWindow();
+        $browser->closeWindow($docHandle);
         $browser->selectWindow($handle);
         // Verify license agreement.
         $this->installPage->getLandingBlock()->clickTermsAndAgreement();
@@ -169,5 +179,21 @@ class InstallTest extends Injectable
         $this->installPage->getInstallBlock()->clickInstallNow();
 
         return ['installConfig' => $installConfig];
+    }
+
+    /**
+     * Wait till terms link is not visible.
+     *
+     * @param BrowserInterface $browser
+     * @return void
+     */
+    private function waitTillTermsLinkNotVisible(BrowserInterface $browser)
+    {
+        $browser->waitUntil(
+            function () use ($browser) {
+                $browser->selectWindow();
+                return $browser->find($this->termsLink)->isVisible() ? null : true;
+            }
+        );
     }
 }
