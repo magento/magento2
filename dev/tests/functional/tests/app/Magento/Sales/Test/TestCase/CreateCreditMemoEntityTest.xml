@@ -15,7 +15,6 @@
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="order/data/price/dataset" xsi:type="string">partial_refund</data>
-            <data name="order/data/customer_note_notify" xsi:type="boolean">true</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoButton" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
