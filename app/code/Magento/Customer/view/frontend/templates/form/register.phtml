@@ -124,7 +124,7 @@
     <?php endif; ?>
     <fieldset class="fieldset create account" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
         <legend class="legend"><span><?php echo $block->escapeHtml(__('Sign-in Information')) ?></span></legend><br>
-        <div class="field required">
+        <div class="field email required">
             <label for="email_address" class="label"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getEmail()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
