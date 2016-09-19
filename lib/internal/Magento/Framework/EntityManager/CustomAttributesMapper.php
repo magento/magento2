@@ -11,12 +11,27 @@ namespace Magento\Framework\EntityManager;
 class CustomAttributesMapper implements MapperInterface
 {
     /**
+     * @var MapperInterface
+     */
+    private $mapper;
+
+    /**
+     * CustomAttributesMapper constructor.
+     *
+     * @param MapperInterface|null $mapper
+     */
+    public function __construct(MapperInterface $mapper = null)
+    {
+        $this->mapper = $mapper;
+    }
+
+    /**
      * {@inheritdoc}
      * @deprecated
      */
     public function entityToDatabase($entityType, $data)
     {
-        return $data;
+        return $this->mapper !== null ? $this->mapper->entityToDatabase($entityType, $data) : $data;
     }
 
     /**
@@ -25,6 +40,6 @@ class CustomAttributesMapper implements MapperInterface
      */
     public function databaseToEntity($entityType, $data)
     {
-        return $data;
+        return $this->mapper !== null ? $this->mapper->databaseToEntity($entityType, $data) : $data;
     }
 }
