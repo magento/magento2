@@ -77,7 +77,7 @@ class InvoiceOrder implements InvoiceOrderInterface
     private $logger;
 
     /**
-     * OrderInvoice constructor.
+     * InvoiceOrder constructor.
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
@@ -85,6 +85,7 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderConfig $config
      * @param InvoiceRepository $invoiceRepository
+     * @param InvoiceOrderValidator $invoiceOrderValidator
      * @param NotifierInterface $notifierInterface
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
