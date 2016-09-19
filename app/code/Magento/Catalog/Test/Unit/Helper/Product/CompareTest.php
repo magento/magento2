@@ -154,7 +154,6 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     public function testGetPostDataClearList()
     {
         //Data
-        $refererUrl = 'home/';
         $clearUrl = 'catalog/product_compare/clear';
         $postParams = [
             Action::PARAM_NAME_URL_ENCODED => ''
