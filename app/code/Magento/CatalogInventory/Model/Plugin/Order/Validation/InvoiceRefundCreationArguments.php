@@ -6,14 +6,13 @@
 namespace Magento\CatalogInventory\Model\Plugin\Order\Validation;
 
 use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\RefundInvoiceInterface;
-use Magento\Sales\Model\Order\Validation\RefundInvoice;
+use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 use Magento\Sales\Model\ValidatorResult;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
 use Magento\CatalogInventory\Model\Order\ReturnValidator;
+use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Class CreditmemoCreationArguments
@@ -37,7 +36,7 @@ class InvoiceRefundCreationArguments
 
     /**
      * @param RefundInvoiceInterface $refundInvoiceValidator
-     * @param ValidatorResult $validationResults
+     * @param ValidatorResultInterface $validationResults
      * @param InvoiceInterface $invoice
      * @param OrderInterface $order
      * @param CreditmemoInterface $creditmemo
@@ -47,11 +46,11 @@ class InvoiceRefundCreationArguments
      * @param bool $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
-     * @return ValidatorResult
+     * @return ValidatorResultInterface
      */
     public function afterValidate(
         RefundInvoiceInterface $refundInvoiceValidator,
-        ValidatorResult $validationResults,
+        ValidatorResultInterface $validationResults,
         InvoiceInterface $invoice,
         OrderInterface $order,
         CreditmemoInterface $creditmemo,
