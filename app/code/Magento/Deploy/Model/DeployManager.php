@@ -12,6 +12,9 @@ use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
 use Magento\Framework\App\State;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployManager
 {
     /**
