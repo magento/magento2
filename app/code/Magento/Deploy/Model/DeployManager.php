@@ -12,6 +12,9 @@ use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
 use Magento\Framework\App\State;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployManager
 {
     /**
@@ -108,6 +111,9 @@ class DeployManager
     {
         if ($this->idDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
+        } else {
+            $version = (new \DateTime())->getTimestamp();
+            $this->versionStorage->save($version);
         }
 
         /** @var DeployStrategyProvider $strategyProvider */
@@ -133,7 +139,9 @@ class DeployManager
         }
 
         $this->minifyTemplates();
-        $this->saveDeployedVersion();
+        if (!$this->idDryRun) {
+            $this->output->writeln("New version of deployed files: {$version}");
+        }
 
         return $result;
     }
@@ -196,18 +204,5 @@ class DeployManager
     private function getProcessesAmount()
     {
         return isset($this->options[Options::JOBS_AMOUNT]) ? (int)$this->options[Options::JOBS_AMOUNT] : 0;
-    }
-
-    /**
-     * Save version of deployed files
-     * @return void
-     */
-    private function saveDeployedVersion()
-    {
-        if (!$this->idDryRun) {
-            $version = (new \DateTime())->getTimestamp();
-            $this->output->writeln("New version of deployed files: {$version}");
-            $this->versionStorage->save($version);
-        }
     }
 }

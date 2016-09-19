@@ -39,6 +39,9 @@ class WebsiteId extends DataSource
             }
             $this->website = $website;
             $this->data = $website->getName();
+        } elseif (isset($data['fixture'])) {
+            $this->website = $data['fixture'];
+            $this->data = $this->website->getName();
         }
     }
 
