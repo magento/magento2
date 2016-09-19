@@ -1242,8 +1242,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'simple-2',
             'simple3' => 'simple-3'
         ];
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
@@ -1262,9 +1261,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }

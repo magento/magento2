@@ -8,11 +8,15 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Pack\Writer\File;
 use Magento\Setup\Module\I18n\Context;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Dictionary;
+use Magento\Setup\Module\I18n\Factory;
 use Magento\Setup\Module\I18n\Dictionary\Phrase;
-use Magento\Setup\Module\I18n\Pack\Writer\File\AbstractFile;
+use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
+use Magento\Setup\Module\I18n\Dictionary\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AbstractFileTest extends \PHPUnit_Framework_TestCase
+require_once __DIR__ . '/_files/ioMock.php';
+
+class CsvTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -35,7 +39,12 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     protected $phraseMock;
 
     /**
-     * @var AbstractFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $factoryMock;
+
+    /**
+     * @var Csv|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $object;
 
@@ -51,15 +60,16 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $this->localeMock = $this->getMock(Locale::class, [], [], '', false, false);
         $this->dictionaryMock = $this->getMock(Dictionary::class, [], [], '', false, false);
         $this->phraseMock = $this->getMock(Phrase::class, [], [], '', false, false);
+        $this->factoryMock = $this->getMock(Factory::class, [], [], '', false, false);
 
         $constructorArguments = $objectManagerHelper->getConstructArguments(
-            AbstractFile::class,
-            ['context' => $this->contextMock]
+            Csv::class,
+            [
+                'context' => $this->contextMock,
+                'factory' => $this->factoryMock
+            ]
         );
-        $this->object = $this->getMockBuilder(AbstractFile::class)
-            ->setMethods(['_createDirectoryIfNotExist', '_writeFile'])
-            ->setConstructorArgs($constructorArguments)
-            ->getMockForAbstractClass();
+        $this->object = $objectManagerHelper->getObject(Csv::class, $constructorArguments);
     }
 
     /**
@@ -72,11 +82,6 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     public function testWriteDictionaryWithRuntimeException($contextType, $contextValue)
     {
         $this->configureGeneralPhrasesMock($contextType, $contextValue);
-
-        $this->object->expects($this->never())
-            ->method('_createDirectoryIfNotExist');
-        $this->object->expects($this->never())
-            ->method('_writeFile');
 
         $this->object->writeDictionary($this->dictionaryMock, $this->localeMock);
     }
@@ -105,11 +110,6 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
 
         $this->configureGeneralPhrasesMock($contextType, [$contextValue]);
 
-        $this->object->expects($this->never())
-            ->method('_createDirectoryIfNotExist');
-        $this->object->expects($this->never())
-            ->method('_writeFile');
-
         $this->contextMock->expects($this->once())
             ->method('buildPathToLocaleDirectoryByContext')
             ->with($contextType, $contextValue)
@@ -128,15 +128,15 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
 
         $this->configureGeneralPhrasesMock($contextType, [$contextValue]);
 
-        $this->object->expects($this->never())
-            ->method('_createDirectoryIfNotExist');
-        $this->object->expects($this->never())
-            ->method('_writeFile');
-
         $this->contextMock->expects($this->once())
             ->method('buildPathToLocaleDirectoryByContext')
             ->with($contextType, $contextValue)
             ->willReturn(null);
+
+        $this->phraseMock->expects($this->never())
+            ->method('setContextType');
+        $this->phraseMock->expects($this->never())
+            ->method('setContextValue');
 
         $this->object->writeDictionary($this->dictionaryMock, $this->localeMock);
     }
@@ -151,32 +151,36 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path/';
         $phrase = 'Phrase';
         $locale = 'en_EN';
-        $fileExtension = 'csv';
-        $file = $path . $locale . '.' . $fileExtension;
+        $file = $path . $locale . '.' . Csv::FILE_EXTENSION;
 
         $this->configureGeneralPhrasesMock($contextType, [$contextValue]);
 
         $this->phraseMock->expects($this->once())
             ->method('getPhrase')
             ->willReturn($phrase);
+        $this->phraseMock->expects($this->once())
+            ->method('setContextType')
+            ->with(null);
+        $this->phraseMock->expects($this->once())
+            ->method('setContextValue')
+            ->with(null);
         $this->localeMock->expects($this->once())
             ->method('__toString')
             ->willReturn($locale);
-
-        $this->object->expects($this->once())
-            ->method('_getFileExtension')
-            ->willReturn($fileExtension);
-        $this->object->expects($this->once())
-            ->method('_createDirectoryIfNotExist')
-            ->with(dirname($file));
-        $this->object->expects($this->once())
-            ->method('_writeFile')
-            ->with($file, [$phrase => $this->phraseMock]);
 
         $this->contextMock->expects($this->once())
             ->method('buildPathToLocaleDirectoryByContext')
             ->with($contextType, $contextValue)
             ->willReturn($path);
+
+        $writerMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $writerMock->expects($this->once())
+            ->method('write')
+            ->with($this->phraseMock);
+        $this->factoryMock->expects($this->once())
+            ->method('createDictionaryWriter')
+            ->with($file)
+            ->willReturn($writerMock);
 
         $this->object->writeDictionary($this->dictionaryMock, $this->localeMock);
     }
