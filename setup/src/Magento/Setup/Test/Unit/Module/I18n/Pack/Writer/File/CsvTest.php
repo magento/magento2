@@ -16,6 +16,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 require_once __DIR__ . '/_files/ioMock.php';
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CsvTest extends \PHPUnit_Framework_TestCase
 {
     /**
