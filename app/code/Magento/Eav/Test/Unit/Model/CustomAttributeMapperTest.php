@@ -5,9 +5,9 @@
  */
 namespace Magento\Eav\Test\Unit\Model;
 
-
-use Magento\Framework\App\ResourceConnection;
-
+/**
+ * Class CustomAttributesMapperTest
+ */
 class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -56,7 +56,7 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with($this->equalTo(\Magento\Customer\Api\Data\AddressInterface::class))
+            ->with($this->equalTo(\Magento\Framework\Api\CustomAttributesDataInterface::class))
             ->will($this->returnValue($metadata));
         $metadataPool->expects($this->once())
             ->method('hasConfiguration')
@@ -85,7 +85,7 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $actual = $customAttributesMapper->entityToDatabase(
-            \Magento\Customer\Api\Data\AddressInterface::class,
+            \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [
                 \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                     'test' => [
@@ -152,7 +152,7 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with($this->equalTo(\Magento\Customer\Api\Data\AddressInterface::class))
+            ->with($this->equalTo(\Magento\Framework\Api\CustomAttributesDataInterface::class))
             ->will($this->returnValue($metadata));
 
         $searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
@@ -177,7 +177,7 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
                 'searchCriteriaBuilder' => $searchCriteriaBuilder
             ]);
         $actual = $customAttributesMapper->databaseToEntity(
-            \Magento\Customer\Api\Data\AddressInterface::class,
+            \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [
                 'test' => 'test',
                 'test4' => 'test4',
@@ -201,10 +201,10 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
     private function getAttributes()
     {
         /* Attribute with the code we want to copy */
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['isStatic', 'getAttributeCode'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $attribute->expects($this->any())
             ->method('isStatic')
             ->will($this->returnValue(false));
@@ -213,10 +213,10 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test'));
 
         /* Attribute with the code we don't want to copy */
-        $attribute1 = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+        $attribute1 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['isStatic', 'getAttributeCode'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $attribute1->expects($this->any())
             ->method('isStatic')
             ->will($this->returnValue(false));
@@ -225,10 +225,10 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test1'));
 
         /* Static attribute but with the code which exists in custom attributes */
-        $attribute2 = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+        $attribute2 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['isStatic', 'getAttributeCode'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $attribute2->expects($this->any())
             ->method('isStatic')
             ->will($this->returnValue(true));
