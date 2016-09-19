@@ -22,6 +22,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Cli extends SymfonyApplication
 {
     /**
+     * Cli exit codes
+     */
+    const RETURN_SUCCESS = 0;
+    const RETURN_FAILURE = 1;
+
+    /**
      * Name of input option
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
