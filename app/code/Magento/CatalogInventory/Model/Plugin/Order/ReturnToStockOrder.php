@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Model\Plugin\Order;
 use Magento\CatalogInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\RefundOrderInterface;
 
 /**
  * Class ReturnToStock
@@ -47,7 +48,7 @@ class ReturnToStockOrder
     }
 
     /**
-     * @param \Magento\Sales\Model\RefundOrder|\Magento\Sales\Model\RefundInvoice $refundService
+     * @param RefundOrderInterface $refundService
      * @param int $resultEntityId
      * @param int $orderId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items

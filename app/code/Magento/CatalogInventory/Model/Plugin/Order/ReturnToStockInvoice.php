@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,6 +9,7 @@ use Magento\CatalogInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\RefundInvoiceInterface;
 
 /**
  * Class ReturnToStockInvoice
@@ -56,7 +56,7 @@ class ReturnToStockInvoice
     }
 
     /**
-     * @param \Magento\Sales\Model\RefundOrder|\Magento\Sales\Model\RefundInvoice $refundService
+     * @param RefundInvoiceInterface $refundService
      * @param int $resultEntityId
      * @param int $invoiceId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
