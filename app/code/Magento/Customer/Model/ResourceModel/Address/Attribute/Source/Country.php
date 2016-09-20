@@ -11,12 +11,26 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
+/**
+ * Class Country.
+ * @package Magento\Customer\Model\ResourceModel\Address\Attribute\Source
+ */
 class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $_countriesFactory;
+
+    /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
@@ -41,7 +55,7 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     {
         if (!$this->_options) {
             $this->_options = $this->_createCountriesCollection()->loadByStore(
-                $this->getAttribute()->getStoreId()
+                $this->getStoreResolver()->getCurrentStoreId()
             )->toOptionArray();
         }
         return $this->_options;
@@ -53,5 +67,19 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected function _createCountriesCollection()
     {
         return $this->_countriesFactory->create();
+    }
+
+    /**
+     * Retrieve Store Resolver
+     * @deprecated
+     * @return StoreResolverInterface
+     */
+    private function getStoreResolver()
+    {
+        if (!$this->storeResolver) {
+            $this->storeResolver = ObjectManager::getInstance()->get(StoreResolverInterface::class);
+        }
+
+        return $this->storeResolver;
     }
 }
