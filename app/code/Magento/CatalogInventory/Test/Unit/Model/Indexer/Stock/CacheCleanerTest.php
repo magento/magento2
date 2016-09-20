@@ -106,7 +106,9 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock->expects($this->once())->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
 
-        $this->unit->clean([], function() {});
+        $callback = function () {
+        };
+        $this->unit->clean([], $callback);
     }
 
     /**
@@ -148,7 +150,9 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
         $this->cacheContextMock->expects($this->never())->method('registerEntities');
         $this->eventManagerMock->expects($this->never())->method('dispatch');
 
-        $this->unit->clean([], function() {});
+        $callback = function () {
+        };
+        $this->unit->clean([], $callback);
     }
 
     /**
