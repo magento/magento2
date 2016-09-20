@@ -144,10 +144,16 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $option->setData('store_id', $product->getStoreId());
 
         if ($option->getOptionId()) {
-            if (!$product->getOptions()) {
-                $product->getResource()->load($product, $product->getId());
+            $options = $product->getOptions();
+            if (!$options) {
+                $options = $this->getProductOptions($product);
             }
-            $persistedOption = $product->getOptionById($option->getOptionId());
+
+            $persistedOption = array_filter($options, function ($iOption) use ($option) {
+                return $option->getOptionId() == $iOption->getOptionId();
+            });
+            $persistedOption = reset($persistedOption);
+
             if (!$persistedOption) {
                 throw new NoSuchEntityException();
             }

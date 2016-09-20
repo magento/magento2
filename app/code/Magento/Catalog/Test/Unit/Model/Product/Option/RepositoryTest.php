@@ -259,15 +259,17 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $productSku = 'simple_product';
         $optionId = 1;
+        $productOptionId = 2;
         $this->optionMock->expects($this->once())->method('getProductSku')->willReturn($productSku);
         $this->productRepositoryMock
             ->expects($this->once())
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
+        $productOption = clone $this->optionMock;
         $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
-        $this->productMock->expects($this->once())->method('getOptions')->willReturn(['some options']);
-        $this->productMock->expects($this->once())->method('getOptionById')->with($optionId)->willReturn(null);
+        $productOption->expects($this->any())->method('getOptionId')->willReturn($productOptionId);
+        $this->productMock->expects($this->once())->method('getOptions')->willReturn([$productOption]);
         $this->optionRepository->save($this->optionMock);
     }
 
