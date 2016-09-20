@@ -40,6 +40,15 @@ class GroupId extends DataSource
             $this->storeGroup = $storeGroup;
             $this->data = $storeGroup->getWebsiteId() . "/" . $storeGroup->getName();
         }
+
+        if (isset($data['storeGroup']) && $data['storeGroup'] instanceof StoreGroup) {
+            $this->storeGroup = $data['storeGroup'];
+            $this->data = $data['storeGroup']->getWebsiteId() . "/" . $data['storeGroup']->getName();
+        }
+
+        if (isset($data['value'])) {
+            $this->data = $data['value'];
+        }
     }
 
     /**
