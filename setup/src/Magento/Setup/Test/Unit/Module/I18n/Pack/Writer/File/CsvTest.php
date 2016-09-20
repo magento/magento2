@@ -24,32 +24,32 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
      * @var Locale|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeMock;
+    private $localeMock;
 
     /**
      * @var Dictionary|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dictionaryMock;
+    private $dictionaryMock;
 
     /**
      * @var Phrase|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $phraseMock;
+    private $phraseMock;
 
     /**
      * @var Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $factoryMock;
+    private $factoryMock;
 
     /**
      * @var Csv|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $object;
+    private $object;
 
     /**
      * @return void
@@ -193,7 +193,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      * @param array $contextValue
      * @return void
      */
-    protected function configureGeneralPhrasesMock($contextType, $contextValue)
+    private function configureGeneralPhrasesMock($contextType, $contextValue)
     {
         $this->phraseMock->expects($this->any())
             ->method('getContextType')
