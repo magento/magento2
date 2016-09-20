@@ -71,7 +71,7 @@ class SecureChangingCustomerEmailTest extends Injectable
         )->run();
 
         $this->customerAccountEdit->getAccountMenuBlock()->openMenuItem('Account Information');
-        $this->customerAccountEdit->getAccountInfoForm()->SetChangeEmail('Yes');
+        $this->customerAccountEdit->getAccountInfoForm()->SetChangeEmail(true);
         $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
         $this->customerAccountEdit->getAccountInfoForm()->submit();
     }
