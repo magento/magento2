@@ -8,7 +8,8 @@ define([
     'jquery',
     'Magento_Ui/js/core/app',
     'underscore',
-    'notification'
+    'notification',
+    'mage/translate'
 ], function (Component, $, bootstrap, _) {
     'use strict';
 
@@ -221,9 +222,7 @@ define([
 
             if (data.items.length) {
                 this.productsModal.notification('add', {
-                    message: $.mage.__(
-                        'Choose a new product to delete and replace the current product configuration.'
-                    ),
+                    message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
                     messageContainer: this.gridSelector
                 });
             } else {
