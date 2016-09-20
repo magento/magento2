@@ -148,10 +148,14 @@ class VariationHandler
         \Magento\Catalog\Model\Product $parentProduct,
         $postData
     ) {
+        $typeId = isset($postData['weight']) && !empty($postData['weight'])
+            ? ProductType::TYPE_SIMPLE
+            : ProductType::TYPE_VIRTUAL;
+
         $product->setStoreId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
-            $postData['weight'] ? ProductType::TYPE_SIMPLE : ProductType::TYPE_VIRTUAL
+            $typeId
         )->setAttributeSetId(
             $parentProduct->getNewVariationsAttributeSetId()
         );
