@@ -62,7 +62,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'areaCode::RoutesConfig'
         )->will(
-            $this->returnValue(serialize(['expected']))
+            $this->returnValue(\Zend_Json::encode(['expected']))
         );
         $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
@@ -76,7 +76,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'areaCode::RoutesConfig'
         )->will(
-            $this->returnValue(serialize(['routerCode' => ['frontName' => 'routerName']]))
+            $this->returnValue(\Zend_Json::encode(['routerCode' => ['frontName' => 'routerName']]))
         );
 
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
@@ -94,7 +94,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'areaCode::RoutesConfig'
         )->will(
-            $this->returnValue(serialize([]))
+            $this->returnValue(\Zend_Json::encode([]))
         );
 
         $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
@@ -112,7 +112,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'scope::RoutesConfig'
         )->will(
-            $this->returnValue(serialize(false))
+            $this->returnValue(\Zend_Json::encode(false))
         );
 
         $routes = [
@@ -152,7 +152,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->method(
             'save'
         )->with(
-            serialize($routes),
+            \Zend_Json::encode($routes),
             'scope::RoutesConfig'
         );
 
@@ -172,7 +172,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'areaCode::RoutesConfig'
         )->will(
             $this->returnValue(
-                serialize(['routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]])
+                \Zend_Json::encode(['routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]])
             )
         );
         $this->assertEquals(['Module1'], $this->_config->getModulesByFrontName('routerName'));
