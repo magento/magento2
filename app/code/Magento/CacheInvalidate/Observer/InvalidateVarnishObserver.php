@@ -5,6 +5,7 @@
  */
 namespace Magento\CacheInvalidate\Observer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
 class InvalidateVarnishObserver implements ObserverInterface
@@ -22,6 +23,13 @@ class InvalidateVarnishObserver implements ObserverInterface
     protected $purgeCache;
 
     /**
+     * Invalidation tags resolver
+     *
+     * @var \Magento\PageCache\Model\Cache\Tag\Resolver
+     */
+    private $tagResolver;
+
+    /**
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\CacheInvalidate\Model\PurgeCache $purgeCache
      */
@@ -31,6 +39,7 @@ class InvalidateVarnishObserver implements ObserverInterface
     ) {
         $this->config = $config;
         $this->purgeCache = $purgeCache;
+        $this->tagResolver = $this->getTagResolver();
     }
 
     /**
@@ -44,16 +53,26 @@ class InvalidateVarnishObserver implements ObserverInterface
     {
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
-            if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
-                $tags = [];
-                $pattern = "((^|,)%s(,|$))";
-                foreach ($object->getIdentities() as $tag) {
-                    $tags[] = sprintf($pattern, $tag);
-                }
-                if (!empty($tags)) {
-                    $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
-                }
+            $bareTags = $this->tagResolver->getTags($object);
+
+            $tags = [];
+            $pattern = "((^|,)%s(,|$))";
+            foreach ($bareTags as $tag) {
+                $tags[] = sprintf($pattern, $tag);
             }
+            if (!empty($tags)) {
+                $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+            }
+
         }
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Framework\App\Cache\Tag\Resolver
+     */
+    private function getTagResolver()
+    {
+        return ObjectManager::getInstance()->get('\Magento\Framework\App\Cache\Tag\Resolver');
     }
 }

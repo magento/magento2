@@ -51,11 +51,10 @@ class FlushCacheByTags implements ObserverInterface
     {
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->_config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
-            if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
-                $tags = $object->getIdentities();
-                if (!empty($tags)) {
-                    $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
-                }
+            $tags = $this->getTagResolver()->getTags($object);
+
+            if (!empty($tags)) {
+                $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
             }
         }
     }
@@ -71,5 +70,14 @@ class FlushCacheByTags implements ObserverInterface
             $this->fullPageCache = ObjectManager::getInstance()->get(\Magento\PageCache\Model\Cache\Type::class);
         }
         return $this->fullPageCache;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\PageCache\Model\Cache\Tag\Resolver
+     */
+    private function getTagResolver()
+    {
+        return ObjectManager::getInstance()->get('\Magento\PageCache\Model\Cache\Tag\Resolver');
     }
 }
