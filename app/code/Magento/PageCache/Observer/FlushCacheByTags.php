@@ -74,10 +74,10 @@ class FlushCacheByTags implements ObserverInterface
 
     /**
      * @deprecated
-     * @return \Magento\PageCache\Model\Cache\Tag\Resolver
+     * @return \Magento\Framework\App\Cache\Tag\Resolver
      */
     private function getTagResolver()
     {
-        return ObjectManager::getInstance()->get('\Magento\PageCache\Model\Cache\Tag\Resolver');
+        return ObjectManager::getInstance()->get(\Magento\Framework\App\Cache\Tag\Resolver::class);
     }
 }

@@ -10,16 +10,27 @@ use \Magento\Framework\App\Cache\Tag\Strategy\Dummy;
 
 class DummyTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetTags()
+
+    private $model;
+
+    protected function setUp()
     {
-        $model = new Dummy();
+        $this->model = new Dummy();
+    }
+
+    public function testGetTagsWithScalar()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->model->getTags('scalar');
+    }
+
+    public function testGetTagsWithObject()
+    {
         $emptyArray = [];
 
-        $this->assertEquals($emptyArray, $model->getTags('scalar'));
-
-        $this->assertEquals($emptyArray, $model->getTags(new \StdClass));
+        $this->assertEquals($emptyArray, $this->model->getTags(new \StdClass));
 
         $identityInterface = $this->getMockForAbstractClass(\Magento\Framework\DataObject\IdentityInterface::class);
-        $this->assertEquals($emptyArray, $model->getTags($identityInterface));
+        $this->assertEquals($emptyArray, $this->model->getTags($identityInterface));
     }
 }

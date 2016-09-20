@@ -48,7 +48,7 @@ class Factory
      *
      * @param object $object
      * @throws \InvalidArgumentException
-     * @return \Magento\Framework\App\Cache\Tag\StrategyInterface|null
+     * @return \Magento\Framework\App\Cache\Tag\StrategyInterface
      */
     public function getStrategy($object)
     {
@@ -62,7 +62,8 @@ class Factory
             class_implements($object)
         );
 
-        if ($result = array_intersect(array_keys($this->customStrategies), $classHierarchy)) {
+        $result = array_intersect(array_keys($this->customStrategies), $classHierarchy);
+        if ($result) {
             return $this->customStrategies[array_shift($result)];
         }
 
