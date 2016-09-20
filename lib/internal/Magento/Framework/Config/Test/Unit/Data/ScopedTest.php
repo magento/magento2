@@ -55,7 +55,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
                 'key_1.2' => ['some' => 'arrayValue'],
             ],
         ];
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize([])));
+        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(\Zend_Json::encode([])));
         $this->_model->merge($testData);
         $this->assertEquals($expectedValue, $this->_model->get($path, $default));
     }
@@ -110,7 +110,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         );
 
         /** test cache saving  */
-        $this->_cacheMock->expects($this->once())->method('save')->with(serialize($testValue), 'adminhtml::tag');
+        $this->_cacheMock->expects($this->once())->method('save')->with(\Zend_Json::encode($testValue), 'adminhtml::tag');
 
         /** test config value existence */
         $this->assertEquals('testValue', $this->_model->get('some'));
@@ -140,7 +140,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         )->with(
             'adminhtml::tag'
         )->will(
-            $this->returnValue(serialize($testValue))
+            $this->returnValue(\Zend_Json::encode($testValue))
         );
 
         /** test preventing of getting data from reader  */

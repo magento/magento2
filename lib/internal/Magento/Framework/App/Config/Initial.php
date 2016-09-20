@@ -41,9 +41,9 @@ class Initial
         $data = $cache->load(self::CACHE_ID);
         if (!$data) {
             $data = $reader->read();
-            $cache->save(serialize($data), self::CACHE_ID);
+            $cache->save(\Zend_Json::encode($data), self::CACHE_ID);
         } else {
-            $data = unserialize($data);
+            $data = \Zend_Json::decode($data);
         }
         $this->_data = $data['data'];
         $this->_metadata = $data['metadata'];

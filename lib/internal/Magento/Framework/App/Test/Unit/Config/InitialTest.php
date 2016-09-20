@@ -28,7 +28,7 @@ class InitialTest extends \PHPUnit_Framework_TestCase
             $this->getMock(\Magento\Framework\App\Config\Initial\Reader::class, [], [], '', false);
         $this->_configCacheMock =
             $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
-        $serializedData = serialize(
+        $serializedData = \Zend_Json::encode(
             [
                 'data' => [
                     'default' => ['key' => 'default_value'],

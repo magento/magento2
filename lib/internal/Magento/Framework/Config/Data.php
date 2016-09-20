@@ -89,9 +89,9 @@ class Data implements \Magento\Framework\Config\DataInterface
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
-            $this->cache->save(serialize($data), $this->cacheId, $this->cacheTags);
+            $this->cache->save(\Zend_Json::encode($data), $this->cacheId, $this->cacheTags);
         } else {
-            $data = unserialize($data);
+            $data = \Zend_Json::decode($data);
         }
         $this->merge($data);
     }

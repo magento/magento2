@@ -47,7 +47,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testReset()
     {
         $cacheid = 'test';
-        $this->cache->expects($this->once())->method('load')->will($this->returnValue(serialize([])));
+        $this->cache->expects($this->once())->method('load')->will($this->returnValue(\Zend_Json::encode([])));
         $this->cache->expects($this->once())->method('remove')->with($cacheid);
 
         $config = new \Magento\Framework\Config\Data(

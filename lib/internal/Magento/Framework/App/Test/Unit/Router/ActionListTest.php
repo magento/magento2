@@ -44,7 +44,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(serialize('data')));
+            ->will($this->returnValue(\Zend_Json::encode('data')));
         $this->cacheMock->expects($this->never())
             ->method('save');
         $this->moduleReaderMock->expects($this->never())

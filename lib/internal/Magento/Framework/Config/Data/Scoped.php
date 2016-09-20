@@ -98,11 +98,11 @@ class Scoped extends \Magento\Framework\Config\Data
                 if (false == isset($this->_loadedScopes[$scopeCode])) {
                     if ($scopeCode !== 'primary' && ($data = $this->_cache->load($scopeCode . '::' . $this->_cacheId))
                     ) {
-                        $data = unserialize($data);
+                        $data = \Zend_Json::decode($data);
                     } else {
                         $data = $this->_reader->read($scopeCode);
                         if ($scopeCode !== 'primary') {
-                            $this->_cache->save(serialize($data), $scopeCode . '::' . $this->_cacheId);
+                            $this->_cache->save(\Zend_Json::encode($data), $scopeCode . '::' . $this->_cacheId);
                         }
                     }
                     $this->merge($data);

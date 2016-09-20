@@ -112,7 +112,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             )->method(
                 'save'
             )->with(
-                serialize($data),
+                \Zend_Json::encode($data),
                 $cacheKey,
                 [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
             );
@@ -148,7 +148,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
         $baseScope->expects($this->any())->method('getCode')->will($this->returnValue('testScope'));
         return [
             ['scopeType1', 'testScope', ['key' => 'value'], null],
-            ['scopeType2', 'testScope', ['key' => 'value'], serialize(['key' => 'value'])],
+            ['scopeType2', 'testScope', ['key' => 'value'], \Zend_Json::encode(['key' => 'value'])],
             ['scopeType1', $baseScope, ['key' => 'value'], null]
         ];
     }

@@ -105,7 +105,7 @@ class ScopePool
             $data = $this->_cache->load($cacheKey);
 
             if ($data) {
-                $data = unserialize($data);
+                $data = \Zend_Json::decode($data);
             } else {
                 $reader = $this->_readerPool->getReader($scopeType);
                 if ($scopeType === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
@@ -113,7 +113,7 @@ class ScopePool
                 } else {
                     $data = $reader->read($scopeCode);
                 }
-                $this->_cache->save(serialize($data), $cacheKey, [self::CACHE_TAG]);
+                $this->_cache->save(\Zend_Json::encode($data), $cacheKey, [self::CACHE_TAG]);
             }
             $this->_scopes[$code] = $this->_dataFactory->create(['data' => $data]);
         }

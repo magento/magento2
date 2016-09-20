@@ -54,9 +54,9 @@ class ActionList
         $data = $cache->load($cacheKey);
         if (!$data) {
             $this->actions = $moduleReader->getActionFiles();
-            $cache->save(serialize($this->actions), $cacheKey);
+            $cache->save(\Zend_Json::encode($this->actions), $cacheKey);
         } else {
-            $this->actions = unserialize($data);
+            $this->actions = \Zend_Json::decode($data);
         }
     }
 
