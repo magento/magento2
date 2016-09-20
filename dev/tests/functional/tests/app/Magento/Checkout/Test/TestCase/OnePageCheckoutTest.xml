@@ -47,7 +47,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
-        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product">
+        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>

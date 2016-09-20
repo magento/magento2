@@ -274,4 +274,32 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ['isAvailableProvider' => true, 'isActiveVault' => true, 'expected' => true],
         ];
     }
+
+    /**
+     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     */
+    public function testIsAvailableWithoutQuote()
+    {
+        $quote = null;
+
+        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+
+        $vaultProvider->expects(static::once())
+            ->method('isAvailable')
+            ->with($quote)
+            ->willReturn(true);
+
+        $config->expects(static::once())
+            ->method('getValue')
+            ->with('active', $quote)
+            ->willReturn(false);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(Vault::class, [
+            'config' => $config,
+            'vaultProvider' => $vaultProvider
+        ]);
+        static::assertFalse($model->isAvailable($quote));
+    }
 }
