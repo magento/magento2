@@ -56,9 +56,9 @@ class Definition
         $cachedData = $this->cache->load(static::CACHE_ID);
         if ($cachedData === false) {
             $data = $uiReader->read();
-            $this->cache->save(serialize($data), static::CACHE_ID);
+            $this->cache->save(\Zend_Json::encode($data), static::CACHE_ID);
         } else {
-            $data = unserialize($cachedData);
+            $data = \Zend_Json::decode($cachedData);
         }
         $this->prepareComponentData($data);
     }

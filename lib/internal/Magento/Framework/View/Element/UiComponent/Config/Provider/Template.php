@@ -81,7 +81,7 @@ class Template
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
 
         $cachedTemplates = $this->cache->load(static::CACHE_ID);
-        $this->cachedTemplates = $cachedTemplates === false ? [] : unserialize($cachedTemplates);
+        $this->cachedTemplates = $cachedTemplates === false ? [] : \Zend_Json::decode($cachedTemplates);
     }
 
     /**
@@ -104,7 +104,7 @@ class Template
                 'domMerger' => $this->domMerger
             ]
         )->getContent();
-        $this->cache->save(serialize($this->cachedTemplates), static::CACHE_ID);
+        $this->cache->save(\Zend_Json::encode($this->cachedTemplates), static::CACHE_ID);
 
         return $this->cachedTemplates[$hash];
     }
