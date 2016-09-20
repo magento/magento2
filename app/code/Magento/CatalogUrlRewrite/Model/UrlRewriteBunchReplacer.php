@@ -27,6 +27,7 @@ class UrlRewriteBunchReplacer
      *
      * @param array $urls
      * @param int $bunchSize
+     * @return void
      */
     public function doBunchReplace(array $urls, $bunchSize = 10000)
     {

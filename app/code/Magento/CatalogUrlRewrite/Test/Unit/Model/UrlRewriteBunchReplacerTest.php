@@ -3,8 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogUrlRewrite\Model;
+namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 class UrlRewriteBunchReplacerTest extends \PHPUnit_Framework_TestCase
