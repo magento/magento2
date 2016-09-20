@@ -44,7 +44,7 @@ class UpdateAttributeForm extends FormTabs
         $data = $fixture->getData();
 
         foreach ($this->containers as $key => $container) {
-            foreach ($container['fields'] as $fieldKey => $field) {
+            foreach (array_keys($container['fields']) as $fieldKey) {
                 if (isset($data[$fieldKey])) {
                     $dataByContainer[$key][$fieldKey]['value'] = $data[$fieldKey];
                     if (isset($this->checkboxMapping[$key][$fieldKey])) {
