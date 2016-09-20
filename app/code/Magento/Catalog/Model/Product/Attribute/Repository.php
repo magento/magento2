@@ -125,7 +125,10 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setFrontendInput($existingModel->getFrontendInput());
 
             if (is_array($attribute->getFrontendLabels())) {
-                $frontendLabel[0] = $existingModel->getDefaultFrontendLabel();
+                $defaultFrontendLabel = $attribute->getDefaultFrontendLabel();
+                $frontendLabel[0] = !empty($defaultFrontendLabel)
+                    ? $defaultFrontendLabel
+                    : $existingModel->getDefaultFrontendLabel();
                 foreach ($attribute->getFrontendLabels() as $item) {
                     $frontendLabel[$item->getStoreId()] = $item->getLabel();
                 }
