@@ -85,8 +85,10 @@ class MoveStoreToOtherGroupSameWebsiteTest extends Injectable
                     'name' => $storeInitialB->getName(),
                     'code' => $storeInitialB->getCode(),
                     'is_active' => $storeInitialB->getIsActive(),
-                    'group_id' => ['storeGroup' => $storeInitialA->getDataFieldConfig('group_id')['source']->getStoreGroup()],
-                ]
+                    'group_id' => [
+                        'storeGroup' => $storeInitialA->getDataFieldConfig('group_id')['source']->getStoreGroup()
+                    ],
+                ],
             ]
         );
 

@@ -48,6 +48,7 @@ class StoreForm extends Form
      */
     public function selectStore($name)
     {
-        return $this->_rootElement->find($this->storeGroupId, Locator::SELECTOR_XPATH, 'optgroupselect')->setValue($name);
+        return $this->_rootElement->find($this->storeGroupId, Locator::SELECTOR_XPATH, 'optgroupselect')
+            ->setValue($name);
     }
 }
