@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
@@ -43,11 +44,6 @@ class CreateHandler implements AttributeInterface
     private $scopeResolver;
 
     /**
-     * @var array
-     */
-    private $attributes = [];
-
-    /**
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -69,21 +65,34 @@ class CreateHandler implements AttributeInterface
     }
 
     /**
+     * @deprecated
+     * @return \Magento\Eav\Model\Entity\AttributeCache
+     */
+    private function getAttributeCache()
+    {
+        return ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\AttributeCache::class);
+    }
+
+    /**
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception
      */
     protected function getAttributes($entityType)
     {
-        if (!isset($this->attributes[$entityType])) {
-            $metadata = $this->metadataPool->getMetadata($entityType);
-            $searchResult = $this->attributeRepository->getList(
-                $metadata->getEavEntityType(),
-                $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
-            );
-            $this->attributes[$entityType] = $searchResult->getItems();
+        /** @var \Magento\Eav\Model\Entity\AttributeCache $cache */
+        $cache = $this->getAttributeCache();
+        if ($attributes = $cache->getAttributes($entityType)) {
+            return $attributes;
         }
-        return $this->attributes[$entityType];
+
+        $metadata = $this->metadataPool->getMetadata($entityType);
+
+        $searchResult = $this->attributeRepository->getList(
+            $metadata->getEavEntityType(),
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
+        );
+        return $searchResult->getItems();
     }
 
     /**
