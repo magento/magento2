@@ -73,7 +73,7 @@ class SecureChangingCustomerPasswordTest extends Injectable
 
         $this->customerAccountEdit->getAccountMenuBlock()->openMenuItem('Account Information');
         if ($check) {
-            $this->customerAccountEdit->getAccountInfoForm()->SetChangePassword('Yes');
+            $this->customerAccountEdit->getAccountInfoForm()->SetChangePassword(true);
             $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
             $this->customerAccountEdit->getAccountInfoForm()->submit();
         }

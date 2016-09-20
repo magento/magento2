@@ -39,6 +39,16 @@ class CustomerForm extends Form
     protected $validationText = '.mage-error[for="%s"]';
 
     /**
+     * Data mapping
+     *
+     * @var array
+     */
+    protected $boolToStringMapping = [
+        1 => 'Yes',
+        0 => 'No',
+    ];
+
+    /**
      * Click on save button.
      *
      * @return void
@@ -114,7 +124,7 @@ class CustomerForm extends Form
     /**
      * Set 'Change Email' checkbox value.
      *
-     * @param string $value
+     * @param boolean $value
      * @return void
      */
     public function setChangeEmail($value)
@@ -124,13 +134,13 @@ class CustomerForm extends Form
             $mapping['change_email']['selector'],
             $mapping['change_email']['strategy'],
             'checkbox'
-        )->setValue($value);
+        )->setValue($this->boolToStringMapping[$value]);
     }
 
     /**
      * Set 'Change Password' checkbox value.
      *
-     * @param string $value
+     * @param boolean $value
      * @return void
      */
     public function setChangePassword($value)
@@ -140,7 +150,7 @@ class CustomerForm extends Form
             $mapping['change_password']['selector'],
             $mapping['change_password']['strategy'],
             'checkbox'
-        )->setValue($value);
+        )->setValue($this->boolToStringMapping[$value]);
     }
 
     /**
