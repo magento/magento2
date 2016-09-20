@@ -164,17 +164,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $name = session_name();
         $cookie = 'cookie';
-        $lifetime = 900;
         $path = '/';
         $domain = 'magento2';
         $secure = true;
         $httpOnly = true;
-
         $cookieMetadata = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
-        $cookieMetadata->expects($this->once())
-            ->method('setDuration')
-            ->with($lifetime)
-            ->will($this->returnSelf());
         $cookieMetadata->expects($this->once())
             ->method('setPath')
             ->with($path)
@@ -191,11 +185,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('setHttpOnly')
             ->with($httpOnly)
             ->will($this->returnSelf());
-
         $this->cookieMetadataFactory->expects($this->once())
             ->method('createPublicCookieMetadata')
             ->will($this->returnValue($cookieMetadata));
-
         $this->cookieManager->expects($this->once())
             ->method('getCookie')
             ->with($name)
@@ -203,11 +195,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->cookieManager->expects($this->once())
             ->method('setPublicCookie')
             ->with($name, $cookie, $cookieMetadata);
-
-        $this->config->expects($this->once())
-            ->method('getValue')
-            ->with(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME)
-            ->will($this->returnValue($lifetime));
         $this->sessionConfig->expects($this->once())
             ->method('getCookiePath')
             ->will($this->returnValue($path));
@@ -220,9 +207,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->sessionConfig->expects($this->once())
             ->method('getCookieHttpOnly')
             ->will($this->returnValue($httpOnly));
-
         $this->session->prolong();
-
         $this->assertLessThanOrEqual(time(), $this->session->getUpdatedAt());
     }
 
