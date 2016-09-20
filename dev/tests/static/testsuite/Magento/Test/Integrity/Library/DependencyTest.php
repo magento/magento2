@@ -31,9 +31,22 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function getForbiddenNamespaces()
+    protected function getAllowedNamespaces()
     {
-        return ['Magento'];
+        return [
+            'Framework',
+            'SomeModule',
+            'ModuleName',
+            'Setup',
+            'Store',
+            'Directory',
+            'PageCache',
+            'Backup',
+            'Backend',
+            'Ui',
+            'SalesRule',
+            'Theme'
+        ];
     }
 
     public function testCheckDependencies()
@@ -53,15 +66,14 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     (new Injectable())->getDependencies($fileReflection),
                     $tokens->getDependencies()
                 );
-
-                $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
+                $pattern = '#Magento\\\\(?!' . implode('|', $this->getAllowedNamespaces()) . ').*#';
                 foreach ($dependencies as $dependency) {
-                    $dependencyPaths = explode('/', $dependency);
+                    $dependencyPaths = explode('\\', $dependency);
                     $dependencyPaths = array_slice($dependencyPaths, 2);
-                    $dependency = implode('\\', $dependencyPaths);
+                    $dependencyPath = implode('\\', $dependencyPaths);
                     $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
                     foreach ($libraryPaths as $libraryPath) {
-                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependency . '.php');
+                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependencyPath . '.php');
                         if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
                             $this->errors[$fileReflection->getFileName()][] = $dependency;
                         }
