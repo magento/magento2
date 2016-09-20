@@ -303,6 +303,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->setData($key, $value);
         }
         $this->assignProductToWebsites($product);
+        $this->assignAdminWebsiteToProduct($product);
 
         return $product;
     }
@@ -314,13 +315,22 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
         if (!$this->storeManager->hasSingleStore()) {
-            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
-                $websiteIds = array_keys($this->storeManager->getWebsites());
-            } else {
-                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
-            }
-
+            $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
             $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        }
+    }
+
+    /**
+     * Assign all websites to product if current product is admin
+     *
+     * @param Product $product
+     * @return void
+     */
+    private function assignAdminWebsiteToProduct(\Magento\Catalog\Model\Product $product)
+    {
+        if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+            $websiteIds = array_keys($this->storeManager->getWebsites());
+            $product->setWebsiteIds($websiteIds);
         }
     }
 
