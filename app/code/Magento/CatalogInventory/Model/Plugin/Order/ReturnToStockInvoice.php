@@ -60,6 +60,7 @@ class ReturnToStockInvoice
      * @param int $resultEntityId
      * @param int $invoiceId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
+     * @param bool|null $isOnline
      * @param bool|null $notify
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment

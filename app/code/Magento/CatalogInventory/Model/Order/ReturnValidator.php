@@ -60,7 +60,7 @@ class ReturnValidator
      */
     private function isOrderItemPartOfCreditmemo(array $creditmemoItems, OrderItemInterface $orderItem)
     {
-        foreach ($creditmemoItems as $key => $creditmemoItem) {
+        foreach ($creditmemoItems as $creditmemoItem) {
             if ($creditmemoItem->getOrderItemId() == $orderItem->getItemId()) {
                 return true;
             }

@@ -130,7 +130,7 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->returnProcessor = New ReturnProcessor(
+        $this->returnProcessor = new ReturnProcessor(
             $this->stockConfigurationMock,
             $this->stockManagementMock,
             $this->stockIndexerProcessorMock,

@@ -5,15 +5,9 @@
  */
 namespace Magento\CatalogInventory\Model\Order;
 
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockManagementInterface;
-use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ReturnProcessor
@@ -21,12 +15,12 @@ use Magento\Store\Model\StoreManagerInterface;
 class ReturnProcessor
 {
     /**
-     * @var StockConfigurationInterface
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      */
     private $stockConfiguration;
 
     /**
-     * @var StockManagementInterface
+     * @var \Magento\CatalogInventory\Api\StockManagementInterface
      */
     private $stockManagement;
 
@@ -41,49 +35,49 @@ class ReturnProcessor
     private $priceIndexer;
 
     /**
-     * @var CreditmemoRepositoryInterface
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
      */
     private $creditmemoRepository;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var OrderRepositoryInterface
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     private $orderRepository;
 
     /**
-     * @var OrderItemRepositoryInterface
+     * @var \Magento\Sales\Api\OrderItemRepositoryInterface
      */
     private $orderItemRepository;
 
     /**
      * ReturnToStockPlugin constructor.
-     * @param StockConfigurationInterface $stockConfiguration
-     * @param StockManagementInterface $stockManagement
-     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement
+     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexer
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
-     * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @param StoreManagerInterface $storeManager
-     * @param OrderRepositoryInterface $orderRepository
-     * @param OrderItemRepositoryInterface $orderItemRepository
+     * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
      */
     public function __construct(
-        StockConfigurationInterface $stockConfiguration,
-        StockManagementInterface $stockManagement,
-        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
+        \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement,
+        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexer,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
-        CreditmemoRepositoryInterface $creditmemoRepository,
-        StoreManagerInterface $storeManager,
-        OrderRepositoryInterface $orderRepository,
-        OrderItemRepositoryInterface $orderItemRepository
+        \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockManagement = $stockManagement;
-        $this->stockIndexerProcessor = $stockIndexerProcessor;
+        $this->stockIndexerProcessor = $stockIndexer;
         $this->priceIndexer = $priceIndexer;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->storeManager = $storeManager;
@@ -106,17 +100,11 @@ class ReturnProcessor
             return;
         }
         $itemsToUpdate = [];
-
-        /** @var CreditmemoItemInterface $item */
         foreach ($creditmemo->getItems() as $item) {
             $qty = $item->getQty();
             if ($this->canReturnItem($item, $returnToStockItems, $qty)) {
                 $productId = $item->getProductId();
-                $orderItem = $this->orderItemRepository->get($item->getOrderItemId());
-                $parentItemId = $orderItem->getParentItemId();
-                /* @var $parentItem \Magento\Sales\Model\Order\Creditmemo\Item */
-                $parentItem = $parentItemId ? $this->getItemByOrderId($creditmemo, $parentItemId) : false;
-                $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
+                $qty = $this->calculateQty($item->getOrderItemId(), $qty, $creditmemo);
                 if (isset($itemsToUpdate[$productId])) {
                     $itemsToUpdate[$productId] += $qty;
                 } else {
@@ -142,11 +130,25 @@ class ReturnProcessor
     }
 
     /**
-     * @param CreditmemoInterface $creditmemo
+     * @param int $orderItemId
+     * @param int|float $qty
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
+     * @return float
+     */
+    private function calculateQty($orderItemId, $qty, \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo)
+    {
+        $orderItem = $this->orderItemRepository->get($orderItemId);
+        $parentItemId = $orderItem->getParentItemId();
+        $parentItem = $parentItemId ? $this->getItemByOrderId($creditmemo, $parentItemId) : false;
+        return $parentItem ? $parentItem->getQty() * $qty : $qty;
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
      * @param int $parentItemId
      * @return bool|CreditmemoItemInterface
      */
-    private function getItemByOrderId(CreditmemoInterface $creditmemo, $parentItemId)
+    private function getItemByOrderId(\Magento\Sales\Api\Data\CreditmemoInterface $creditmemo, $parentItemId)
     {
         foreach ($creditmemo->getItems() as $item) {
             if ($item->getOrderItemId() == $parentItemId) {
@@ -157,13 +159,16 @@ class ReturnProcessor
     }
 
     /**
-     * @param CreditmemoItemInterface $item
-     * @param array $returnToStockItems
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $item
+     * @param int[] $returnToStockItems
      * @param int $qty
      * @return bool
      */
-    private function canReturnItem(CreditmemoItemInterface $item, array $returnToStockItems, $qty)
-    {
+    private function canReturnItem(
+        \Magento\Sales\Api\Data\CreditmemoItemInterface $item,
+        array $returnToStockItems,
+        $qty
+    ) {
         return in_array($item->getOrderItemId(), $returnToStockItems) && $qty;
     }
 }
