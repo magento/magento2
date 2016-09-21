@@ -42,7 +42,7 @@ class PayflowPro extends Block
             '_payflow_required_enable_paypal_payflow',
         'Enable PayPal Credit' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal' .
             '_payflow_required_enable_express_checkout_bml_payflow',
-        'Vault enabled' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_' .
+        'Vault Enabled' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_' .
             'payflow_required_payflowpro_cc_vault_active'
     ];
 

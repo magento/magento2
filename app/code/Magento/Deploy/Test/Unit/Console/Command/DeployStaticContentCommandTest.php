@@ -16,7 +16,7 @@ require 'FunctionExistMock.php';
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\Deployer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Deploy\Model\DeployManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deployer;
 
@@ -60,7 +60,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->deployer = $this->getMock(\Magento\Deploy\Model\Deployer::class, [], [], '', false);
+        $this->deployer = $this->getMock(\Magento\Deploy\Model\DeployManager::class, [], [], '', false);
         $this->filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
         $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
