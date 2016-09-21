@@ -59,11 +59,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Product\Gallery\CreateHandler::execute
      * @dataProvider executeDataProvider
-     * @param array $expectedValues
+     * @param $image
+     * @param $smallImage
+     * @param $swatchImage
+     * @param $thumbnail
      */
-    public function testExecuteWithImageRoles($expectedValues)
+    public function testExecuteWithImageRoles($image, $smallImage, $swatchImage, $thumbnail)
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -74,25 +76,88 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'media_gallery',
             ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]]
         );
-        foreach ($expectedValues as $mediaAttribute => $value) {
-            if ($value) {
-                $product->setData($mediaAttribute, $value);
-            }
-        }
+        $product->setData('image', $image);
+        $product->setData('small_image', $smallImage);
+        $product->setData('swatch_image', $swatchImage);
+        $product->setData('thumbnail', $thumbnail);
         $this->createHandler->execute($product);
-        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
+
         $resource = $product->getResource();
-        $attributeValues = [];
-        foreach (array_keys($expectedValues) as $mediaAttribute) {
-            $attributeValues[$mediaAttribute] = $resource->getAttributeRawValue(
-                $product->getId(),
-                $resource->getAttribute($mediaAttribute),
-                $product->getStoreId()
-            );
-        }
+        $id = $product->getId();
+        $storeId = $product->getStoreId();
+
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
-        $this->assertEquals($expectedValues, $attributeValues);
+        $this->assertEquals(
+            $image,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('image'), $storeId)
+        );
+        $this->assertEquals(
+            $smallImage,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('small_image'), $storeId)
+        );
+        $this->assertEquals(
+            $swatchImage,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('swatch_image'), $storeId)
+        );
+        $this->assertEquals(
+            $thumbnail,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'),$storeId)
+        );
     }
+
+    /**
+     * @dataProvider executeDataProvider
+     * @param $image
+     * @param $smallImage
+     * @param $swatchImage
+     * @param $thumbnail
+     */
+    public function testExecuteWithoutImages($image, $smallImage, $swatchImage, $thumbnail)
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
+        );
+        $product->load(1);
+        $product->setData(
+            'media_gallery',
+            ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]]
+        );
+        $product->setData('image', $image);
+        $product->setData('small_image', $smallImage);
+        $product->setData('swatch_image', $swatchImage);
+        $product->setData('thumbnail', $thumbnail);
+        $this->createHandler->execute($product);
+
+        $product->unsetData('image');
+        $product->unsetData('small_image');
+        $product->unsetData('swatch_image');
+        $product->unsetData('thumbnail');
+        $this->createHandler->execute($product);
+
+        $resource = $product->getResource();
+        $id = $product->getId();
+        $storeId = $product->getStoreId();
+
+        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
+        $this->assertEquals(
+            $image,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('image'), $storeId)
+        );
+        $this->assertEquals(
+            $smallImage,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('small_image'), $storeId)
+        );
+        $this->assertEquals(
+            $swatchImage,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('swatch_image'), $storeId)
+        );
+        $this->assertEquals(
+            $thumbnail,
+            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'),$storeId)
+        );
+    }
+
 
     /**
      * @return array
@@ -101,28 +166,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [
-                    'image' => $this->fileName,
-                    'small_image' => $this->fileName,
-                    'swatch_image' => $this->fileName,
-                    'thumbnail' => $this->fileName
-                ]
+                'image' => $this->fileName,
+                'small_image' => $this->fileName,
+                'swatch_image' => $this->fileName,
+                'thumbnail' => $this->fileName
             ],
             [
-                [
-                    'image' => 'no_selection',
-                    'small_image' => 'no_selection',
-                    'swatch_image' => 'no_selection',
-                    'thumbnail' => 'no_selection'
-                ]
-            ],
-            [
-                [
-                    'image' => null,
-                    'small_image' => null,
-                    'swatch_image' => null,
-                    'thumbnail' => null
-                ]
+                'image' => 'no_selection',
+                'small_image' => 'no_selection',
+                'swatch_image' => 'no_selection',
+                'thumbnail' => 'no_selection'
             ]
         ];
     }
