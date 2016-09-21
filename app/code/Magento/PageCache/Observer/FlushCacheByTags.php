@@ -49,8 +49,12 @@ class FlushCacheByTags implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $object = $observer->getEvent()->getObject();
+        if (!is_object($object)) {
+            return;
+        }
+
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->_config->isEnabled()) {
-            $object = $observer->getEvent()->getObject();
             $tags = $this->getTagResolver()->getTags($object);
 
             if (!empty($tags)) {
@@ -61,6 +65,7 @@ class FlushCacheByTags implements ObserverInterface
 
     /**
      * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
+     *
      *
      * @return \Magento\PageCache\Model\Cache\Type
      */

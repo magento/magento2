@@ -51,8 +51,11 @@ class InvalidateVarnishObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $object = $observer->getEvent()->getObject();
+        if (!is_object($object)) {
+            return;
+        }
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
-            $object = $observer->getEvent()->getObject();
             $bareTags = $this->tagResolver->getTags($object);
 
             $tags = [];
