@@ -79,6 +79,9 @@ class ReturnItemsAfterRefundOrderTest extends \Magento\TestFramework\TestCase\We
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [
