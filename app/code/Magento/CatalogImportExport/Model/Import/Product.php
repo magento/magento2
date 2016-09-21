@@ -273,7 +273,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for item with SKU: \'%s\'. You need to specify a unique URL key manually'
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \' % s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually'
     ];
 
     /**
