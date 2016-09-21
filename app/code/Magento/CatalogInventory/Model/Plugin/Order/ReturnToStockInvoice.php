@@ -66,7 +66,7 @@ class ReturnToStockInvoice
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return int
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         $refundService,

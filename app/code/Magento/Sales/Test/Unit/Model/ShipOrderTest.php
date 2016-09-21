@@ -243,7 +243,8 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
                 $appendComment,
                 $this->shipmentCommentCreationMock,
                 [$this->trackMock],
-                [$this->packageMock])
+                [$this->packageMock]
+            )
             ->willReturn($this->validationMessagesMock);
         $hasMessages = false;
         $this->validationMessagesMock->expects($this->once())
@@ -339,7 +340,8 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
                 $appendComment,
                 $this->shipmentCommentCreationMock,
                 [$this->trackMock],
-                [$this->packageMock])
+                [$this->packageMock]
+            )
             ->willReturn($this->validationMessagesMock);
         $hasMessages = true;
         $this->validationMessagesMock->expects($this->once())
@@ -398,7 +400,8 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
                 $appendComment,
                 $this->shipmentCommentCreationMock,
                 [$this->trackMock],
-                [$this->packageMock])
+                [$this->packageMock]
+            )
             ->willReturn($this->validationMessagesMock);
         $hasMessages = false;
         $this->validationMessagesMock->expects($this->once())

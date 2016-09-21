@@ -44,7 +44,7 @@ class OrderRefundCreationArguments
      * @param CreditmemoCommentCreationInterface|null $comment
      * @param CreditmemoCreationArgumentsInterface|null $arguments
      * @return ValidatorResultInterface
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterValidate(
         RefundOrderInterface $refundOrderValidator,
