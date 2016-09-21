@@ -33,7 +33,7 @@ class ValidatorResultMerger
      * @param \string[] $validatorMessages
      * @return ValidatorResultInterface
      */
-    public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second, ...$validatorMessages)
+    public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second, ... $validatorMessages)
     {
         $messages = array_merge($first->getMessages(), $second->getMessages(), ...$validatorMessages);
 
