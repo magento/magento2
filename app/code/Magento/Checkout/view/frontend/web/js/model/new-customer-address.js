@@ -21,7 +21,7 @@ define([], function () {
 
         return {
             email: addressData.email,
-            countryId: (addressData.country_id) ? addressData.country_id : window.checkoutConfig.defaultCountryId,
+            countryId: addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
             regionId: regionId,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,

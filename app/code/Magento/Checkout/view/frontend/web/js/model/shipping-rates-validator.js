@@ -12,7 +12,8 @@ define(
         '../action/select-shipping-address',
         './postcode-validator',
         'mage/translate',
-        'uiRegistry'
+        'uiRegistry',
+        'Magento_Checkout/js/model/quote'
     ],
     function (
         $,
@@ -22,7 +23,8 @@ define(
         selectShippingAddress,
         postcodeValidator,
         $t,
-        uiRegistry
+        uiRegistry,
+        quote
     ) {
         'use strict';
 
@@ -174,7 +176,7 @@ define(
                     address;
 
                 if (this.validateAddressData(addressFlat)) {
-                    address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
+                    address = addressConverter.formAddressDataToQuoteAddress(quote.shippingAddress());
                     selectShippingAddress(address);
                 }
             },
