@@ -101,7 +101,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $thumbnail,
-            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'),$storeId)
+            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'), $storeId)
         );
     }
 
@@ -154,10 +154,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             $thumbnail,
-            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'),$storeId)
+            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'), $storeId)
         );
     }
-
 
     /**
      * @return array
