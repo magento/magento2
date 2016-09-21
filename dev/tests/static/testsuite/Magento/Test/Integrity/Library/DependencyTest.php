@@ -27,7 +27,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected $errors = [];
 
     /**
-     * Forbidden base namespaces
+     * Allowed sub namespaces
      *
      * @return array
      */
@@ -37,15 +37,22 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             'Framework',
             'SomeModule',
             'ModuleName',
-            'Setup',
-            'Store',
-            'Directory',
-            'PageCache',
-            'Backup',
-            'Backend',
-            'Ui',
-            'SalesRule',
-            'Theme'
+            'Setup\Console\CommandList',
+            'Setup\Console\CompilerPreparation',
+            'Setup\Model\ObjectManagerProvider',
+            'Setup\Mvc\Bootstrap\InitParamListener',
+            'Store\Model\ScopeInterface',
+            'Store\Model\StoreManagerInterface',
+            'Directory\Model\CurrencyFactory',
+            'PageCache\Model\Cache\Type',
+            'Backup\Model\ResourceModel\Db',
+            'Backend\Block\Widget\Button',
+            'Ui\Component\Container',
+            'SalesRule\Model\Rule',
+            'SalesRule\Api\Data\RuleInterface',
+            'SalesRule\Model\Rule\Interceptor',
+            'SalesRule\Model\Rule\Proxy',
+            'Theme\Model\View\Design'
         ];
     }
 
@@ -66,7 +73,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     (new Injectable())->getDependencies($fileReflection),
                     $tokens->getDependencies()
                 );
-                $pattern = '#Magento\\\\(?!' . implode('|', $this->getAllowedNamespaces()) . ').*#';
+                $allowedNamespaces = str_replace('\\','\\\\', implode('|', $this->getAllowedNamespaces()));
+                $pattern = '#Magento\\\\(?!' . $allowedNamespaces . ').*#';
                 foreach ($dependencies as $dependency) {
                     $dependencyPaths = explode('\\', $dependency);
                     $dependencyPaths = array_slice($dependencyPaths, 2);
