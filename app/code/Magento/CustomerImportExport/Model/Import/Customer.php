@@ -371,6 +371,7 @@ class Customer extends AbstractCustomer
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
             if ($newCustomer && !strlen($value)) {
+                $entityRow[$attributeCode] = $value;
                 continue;
             }
 
