@@ -70,7 +70,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->cacheId
         )->will(
-            $this->returnValue(serialize($this->views))
+            $this->returnValue(\Zend_Json::encode($this->views))
         );
 
         $this->stateCollection->expects($this->never())->method('getItems');
