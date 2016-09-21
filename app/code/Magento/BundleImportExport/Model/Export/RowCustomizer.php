@@ -357,9 +357,6 @@ class RowCustomizer implements RowCustomizerInterface
 
     /**
      * Retrieves additional attributes as array code=>value.
-     * Input argument with attributes is stored in format:
-     *  {attributeCode1}={attributeValue1}[$this->getMultipleValueSeparator(){attributeCodeN}={attributeValueN}]
-     *  where attributeValue can contain multiple value separator
      *
      * @param string $additionalAttributes
      * @return array
@@ -369,7 +366,8 @@ class RowCustomizer implements RowCustomizerInterface
         $attributeNameValuePairs = explode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
         $preparedAttributes = [];
         $code = '';
-        foreach ($attributeNameValuePairs as $i => $attributeData) {
+        foreach ($attributeNameValuePairs as $attributeData) {
+            //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
             if (strpos($attributeData, ImportProductModel::PAIR_NAME_VALUE_SEPARATOR) === false) {
                 if (!$code) {
                     continue;
@@ -377,7 +375,7 @@ class RowCustomizer implements RowCustomizerInterface
                 $preparedAttributes[$code] .= ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . $attributeData;
                 continue;
             }
-            list($code, $value) = explode(ImportProductModel::PAIR_NAME_VALUE_SEPARATOR, $attributeData);
+            list($code, $value) = explode(ImportProductModel::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
