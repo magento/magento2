@@ -74,16 +74,4 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="catalogInventoryAroundSave" sortOrder="20" type="Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
     </type>
-    <type name="Magento\Sales\Model\RefundOrder">
-        <plugin name="refundOrderAfter" type="Magento\CatalogInventory\Model\Plugin\Order\ReturnToStockOrder"/>
-    </type>
-    <type name="Magento\Sales\Model\RefundInvoice">
-        <plugin name="refundInvoiceAfter" type="Magento\CatalogInventory\Model\Plugin\Order\ReturnToStockInvoice"/>
-    </type>
-    <type name="Magento\Sales\Model\Order\Validation\RefundOrderInterface">
-        <plugin name="refundOrderValidationAfter" type="Magento\CatalogInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments"/>
-    </type>
-    <type name="Magento\Sales\Model\Order\Validation\RefundInvoiceInterface">
-        <plugin name="refundInvoiceValidationAfter" type="Magento\CatalogInventory\Model\Plugin\Order\Validation\InvoiceRefundCreationArguments"/>
-    </type>
 </config>

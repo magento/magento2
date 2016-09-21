@@ -6,25 +6,22 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin\Order;
 
-use Magento\CatalogInventory\Model\Order\ReturnProcessor;
-use Magento\CatalogInventory\Model\Plugin\Order\ReturnToStockInvoice;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
+use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Api\RefundInvoiceInterface;
 use Magento\Sales\Api\RefundOrderInterface;
 
 /**
- * Class ReturnToStockInvoiceTest
+ * Class ReturnToStockOrderTest
  */
-class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
+class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  ReturnToStockInvoice */
+    /** @var  ReturnToStockOrder */
     private $returnTOStock;
 
     /**
@@ -38,11 +35,6 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
     private $creditmemoRepositoryMock;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|InvoiceRepositoryInterface
-     */
-    private $invoiceRepositoryMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|OrderRepositoryInterface
      */
     private $orderRepositoryMock;
@@ -50,7 +42,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|RefundOrderInterface
      */
-    private $refundInvoiceMock;
+    private $refundOrderMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
@@ -68,11 +60,6 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceInterface
-     */
-    private $invoiceMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
      */
     private $extencionAttributesMock;
@@ -88,10 +75,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->refundInvoiceMock = $this->getMockBuilder(RefundInvoiceInterface::class)
+        $this->refundOrderMock = $this->getMockBuilder(RefundOrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
@@ -107,15 +91,11 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $this->returnTOStock = new ReturnToStockInvoice(
+        $this->returnTOStock = new ReturnToStockOrder(
             $this->returnProcessorMock,
             $this->creditmemoRepositoryMock,
-            $this->orderRepositoryMock,
-            $this->invoiceRepositoryMock
+            $this->orderRepositoryMock
         );
     }
 
@@ -125,15 +105,9 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $creditmemoId = 99;
         $items = [];
         $returnToStockItems = [1];
-        $invoiceId = 98;
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
             ->willReturn($this->extencionAttributesMock);
-
-        $this->invoiceRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($invoiceId)
-            ->willReturn($this->invoiceMock);
 
         $this->extencionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
@@ -153,17 +127,12 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->creditmemoMock, $this->orderMock, $returnToStockItems);
 
-        $this->invoiceMock->expects($this->once())
-            ->method('getOrderId')
-            ->willReturn($orderId);
-
         $this->assertEquals(
             $this->returnTOStock->afterExecute(
-                $this->refundInvoiceMock,
+                $this->refundOrderMock,
                 $creditmemoId,
-                $invoiceId,
+                $orderId,
                 $items,
-                false,
                 false,
                 false,
                 null,

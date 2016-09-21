@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model\Order;
+namespace Magento\SalesInventory\Model\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\CreditmemoInterface;

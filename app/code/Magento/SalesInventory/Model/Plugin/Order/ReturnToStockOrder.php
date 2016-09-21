@@ -3,9 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model\Plugin\Order;
+namespace Magento\SalesInventory\Model\Plugin\Order;
 
-use Magento\CatalogInventory\Model\Order\ReturnProcessor;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Order;
 
-use Magento\CatalogInventory\Model\Order\ReturnValidator;
+use Magento\SalesInventory\Model\Order\ReturnValidator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;

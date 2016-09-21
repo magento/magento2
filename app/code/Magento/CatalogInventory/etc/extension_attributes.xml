@@ -13,7 +13,4 @@
             </resources>
         </attribute>
     </extension_attributes>
-    <extension_attributes for="Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface">
-        <attribute code="return_to_stock_items" type="int[]"/>
-    </extension_attributes>
 </config>

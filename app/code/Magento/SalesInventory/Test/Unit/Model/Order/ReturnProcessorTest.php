@@ -16,7 +16,7 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogInventory\Model\Order\ReturnProcessor;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
  * Class ReturnProcessorTest
