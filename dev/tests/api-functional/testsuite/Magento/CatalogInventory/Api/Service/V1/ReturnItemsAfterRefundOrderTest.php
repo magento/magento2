@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Service\V1;
+namespace Magento\CatalogInventory\Api\Service\V1;
 
 /**
  * API test for return items to stock

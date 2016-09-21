@@ -60,7 +60,7 @@ class ReturnToStockOrder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
-        $refundService,
+        RefundOrderInterface $refundService,
         $resultEntityId,
         $orderId,
         array $items = [],

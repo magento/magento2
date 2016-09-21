@@ -69,7 +69,7 @@ class ReturnToStockInvoice
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
-        $refundService,
+        RefundInvoiceInterface $refundService,
         $resultEntityId,
         $invoiceId,
         array $items = [],
