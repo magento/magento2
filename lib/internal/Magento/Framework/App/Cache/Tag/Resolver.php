@@ -17,6 +17,11 @@ class Resolver
      */
     private $strategyFactory;
 
+    /**
+     * Resolver constructor.
+     *
+     * @param Strategy\Factory $factory
+     */
     public function __construct(\Magento\Framework\App\Cache\Tag\Strategy\Factory $factory)
     {
         $this->strategyFactory = $factory;

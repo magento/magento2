@@ -28,7 +28,11 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->strategyFactory = $this->getMock(
-            \Magento\Framework\App\Cache\Tag\Strategy\Factory::class, [], [], '', false
+            \Magento\Framework\App\Cache\Tag\Strategy\Factory::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->strategy = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\Tag\StrategyInterface::class);

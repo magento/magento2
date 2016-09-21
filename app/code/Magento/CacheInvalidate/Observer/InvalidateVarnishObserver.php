@@ -25,7 +25,7 @@ class InvalidateVarnishObserver implements ObserverInterface
     /**
      * Invalidation tags resolver
      *
-     * @var \Magento\PageCache\Model\Cache\Tag\Resolver
+     * @var \Magento\Framework\App\Cache\Tag\Resolver
      */
     private $tagResolver;
 
@@ -39,7 +39,6 @@ class InvalidateVarnishObserver implements ObserverInterface
     ) {
         $this->config = $config;
         $this->purgeCache = $purgeCache;
-        $this->tagResolver = $this->getTagResolver();
     }
 
     /**
@@ -56,7 +55,7 @@ class InvalidateVarnishObserver implements ObserverInterface
             return;
         }
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
-            $bareTags = $this->tagResolver->getTags($object);
+            $bareTags = $this->getTagResolver()->getTags($object);
 
             $tags = [];
             $pattern = "((^|,)%s(,|$))";
@@ -76,6 +75,10 @@ class InvalidateVarnishObserver implements ObserverInterface
      */
     private function getTagResolver()
     {
-        return ObjectManager::getInstance()->get(\Magento\Framework\App\Cache\Tag\Resolver::class);
+        if ($this->tagResolver === null) {
+            $this->tagResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Cache\Tag\Resolver::class);
+        }
+        return $this->tagResolver;
     }
 }

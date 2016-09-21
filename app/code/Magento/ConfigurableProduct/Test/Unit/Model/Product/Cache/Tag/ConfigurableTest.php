@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
+namespace Magento\Framework\App\Test\Unit\Model\Product\Cache\Tag;
 
 use \Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable;
 
@@ -12,7 +12,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     * @var \PHPUnit_Framework_MockObject_MockObject|Configurable
      */
     private $typeResource;
 
@@ -24,7 +24,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->typeResource = $this->getMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class, [], [], '', false
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->model = new Configurable($this->typeResource);

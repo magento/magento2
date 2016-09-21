@@ -37,6 +37,7 @@ class FlushCacheByTags
      * @param Type\FrontendPool $cachePool
      * @param StateInterface $cacheState
      * @param array $cacheList
+     * @param Tag\Resolver $tagResolver
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cachePool,

@@ -33,6 +33,13 @@ class Factory
      */
     private $customStrategies = [];
 
+    /**
+     * Factory constructor.
+     *
+     * @param Identifier $identifierStrategy
+     * @param Dummy $dummyStrategy
+     * @param array $customStrategies
+     */
     public function __construct(
         \Magento\Framework\App\Cache\Tag\Strategy\Identifier $identifierStrategy,
         \Magento\Framework\App\Cache\Tag\Strategy\Dummy $dummyStrategy,

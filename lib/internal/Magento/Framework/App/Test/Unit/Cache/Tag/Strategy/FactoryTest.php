@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Test\Unit\Cache\Tag;
+namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
 use \Magento\Framework\App\Cache\Tag\Strategy\Factory;
 
@@ -33,11 +33,19 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->identifierStrategy = $this->getMock(
-            \Magento\Framework\App\Cache\Tag\Strategy\Identifier::class, [], [], '', false
+            \Magento\Framework\App\Cache\Tag\Strategy\Identifier::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->dummyStrategy = $this->getMock(
-            \Magento\Framework\App\Cache\Tag\Strategy\Dummy::class, [], [], '', false
+            \Magento\Framework\App\Cache\Tag\Strategy\Dummy::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->customStrategy = $this->getMockForAbstractClass(
