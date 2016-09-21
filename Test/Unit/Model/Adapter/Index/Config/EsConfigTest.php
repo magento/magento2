@@ -44,7 +44,7 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->any())
             ->method('load')
-            ->willReturn('a:3:{i:1;s:6:"elem 1";i:2;s:6:"elem 2";i:3;s:7:" elem 3";}');
+            ->willReturn('["elem 1","elem 2"," elem 3"]');
 
         $objectManager = new ObjectManagerHelper($this);
         $this->config = $objectManager->getObject(
