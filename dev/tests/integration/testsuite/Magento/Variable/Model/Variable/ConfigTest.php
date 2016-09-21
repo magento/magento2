@@ -21,15 +21,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Variable\Model\Variable\Config'
+            \Magento\Variable\Model\Variable\Config::class
         );
     }
 
     public function testGetWysiwygJsPluginSrc()
     {
         $src = $this->_model->getWysiwygJsPluginSrc();
-        $this->assertStringStartsWith('http://localhost/pub/static/adminhtml/Magento/backend/en_US/mage/adminhtml/',
-            $src);
-        $this->assertStringEndsWith('editor_plugin.js', $src);
+        $this->assertStringMatchesFormat(
+            'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/adminhtml/%s/editor_plugin.js',
+            $src
+        );
     }
 }
