@@ -57,13 +57,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'validResource' => ['connection' => 'validConnectionName'],
         ];
 
-        $this->_cacheMock->expects(
-            $this->any()
-        )->method(
-            'load'
-        )->will(
-            $this->returnValue(serialize($this->_resourcesConfig))
-        );
+        $this->_cacheMock->expects($this->any())
+            ->method('load')
+            ->willReturn(\Zend_Json::encode($this->_resourcesConfig));
 
         $deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deploymentConfig->expects($this->once())

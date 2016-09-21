@@ -42,7 +42,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType($value, $expected)
     {
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($value)));
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->willReturn(\Zend_Json::encode($value));
         $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
         $this->assertEquals($expected, $this->model->getType('global'));
     }
@@ -58,20 +60,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAll()
     {
         $expected = ['Expected Data'];
-        $this->cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->will(
-            $this->returnValue(serialize(['types' => $expected]))
-        );
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn(\Zend_Json::encode(['types' => $expected]));
         $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
         $this->assertEquals($expected, $this->model->getAll());
     }
 
     public function testIsProductSet()
     {
-        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(serialize([])));
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn(\Zend_Json::encode([]));
         $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
 
         $this->assertEquals(false, $this->model->isProductSet('typeId'));

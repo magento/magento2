@@ -85,14 +85,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_readerMock->expects($this->once())->method('read')->will($this->returnValue($fixtureConfigData));
 
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'save'
-        )->with(
-            serialize($fixtureConfigData),
-            $this->_cacheId
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('save')
+            ->with(
+                \Zend_Json::encode($fixtureConfigData),
+                $this->_cacheId
+            );
 
         $this->_model = new \Magento\Customer\Model\Address\Config(
             $this->_readerMock,

@@ -54,15 +54,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->_cacheMock = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $this->_cacheId = 'eav_attributes';
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            $this->equalTo($this->_cacheId)
-        )->will(
-            $this->returnValue(serialize([]))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with($this->_cacheId)
+            ->willReturn(\Zend_Json::encode([]));
 
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
             $this->_readerMock,

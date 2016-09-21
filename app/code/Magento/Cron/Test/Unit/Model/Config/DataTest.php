@@ -30,15 +30,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'job2' => ['schedule' => '* * * * *', 'instance' => 'JobModel2', 'method' => 'method2'],
         ];
 
-        $cache->expects(
-            $this->any()
-        )->method(
-            'load'
-        )->with(
-            $this->equalTo('test_cache_id')
-        )->will(
-            $this->returnValue(serialize($jobs))
-        );
+        $cache->expects($this->any())
+            ->method('load')
+            ->with('test_cache_id')
+            ->willReturn(\Zend_Json::encode($jobs));
 
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
 
