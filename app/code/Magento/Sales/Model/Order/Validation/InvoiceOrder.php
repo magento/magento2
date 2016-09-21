@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order\Validation;
 
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\InvoiceQuantityValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
@@ -54,8 +56,8 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @inheritdoc
      */
     public function validate(
-        $order,
-        $invoice,
+        OrderInterface $order,
+        InvoiceInterface $invoice,
         $capture = false,
         array $items = [],
         $notify = false,
