@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Test\Unit\Model\Plugin\Order\Validation;
+namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order\Validation;
 
 use Magento\SalesInventory\Model\Order\ReturnValidator;
 use Magento\SalesInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments;

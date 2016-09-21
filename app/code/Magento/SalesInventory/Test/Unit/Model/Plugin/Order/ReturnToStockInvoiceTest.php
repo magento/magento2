@@ -4,7 +4,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Test\Unit\Model\Plugin\Order;
+namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
 
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockInvoice;
