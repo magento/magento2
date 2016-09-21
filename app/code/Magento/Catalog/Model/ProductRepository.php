@@ -313,12 +313,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        $websiteIds = [];
+        $websiteIds = $product->getWebsiteIds();
 
         if (!$this->storeManager->hasSingleStore()) {
             $websiteIds = array_unique(
                 array_merge(
-                    $product->getWebsiteIds(),
+                    $websiteIds,
                     [$this->storeManager->getStore()->getWebsiteId()]
                 )
             );
