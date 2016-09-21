@@ -53,7 +53,7 @@ define([
             if (method === this.options.gateway) {
                 $(this.options.editFormSelector)
                     .off('submitOrder')
-                    .on('submitOrder.' +  this.options.gateway, $.proxy(this._placeOrderHandler, this));
+                    .on('submitOrder.' +  this.options.gateway, this._placeOrderHandler.bind(this));
             } else {
                 $(this.options.editFormSelector)
                     .off('submitOrder.' + this.options.gateway);
@@ -70,7 +70,7 @@ define([
             if ($(this.options.editFormSelector).valid()) {
                 this._orderSave();
             } else {
-                this._processStop();
+                $('body').trigger('processStop');
             }
 
             return false;
@@ -109,7 +109,7 @@ define([
                     }
                 },
                 complete: function () {
-                    this._processStop();
+                    $('body').trigger('processStop');
                 }
             });
         },
@@ -224,15 +224,6 @@ define([
                     content: msg
                 });
             }
-        },
-
-        /**
-         * Processing stop
-         *
-         * @private
-         */
-        _processStop: function () {
-            $('body').trigger('processStop');
         }
     });
 
