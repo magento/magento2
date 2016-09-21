@@ -110,7 +110,9 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         );
 
         /** test cache saving  */
-        $this->_cacheMock->expects($this->once())->method('save')->with(\Zend_Json::encode($testValue), 'adminhtml::tag');
+        $this->_cacheMock->expects($this->once())
+            ->method('save')
+            ->with(\Zend_Json::encode($testValue), 'adminhtml::tag');
 
         /** test config value existence */
         $this->assertEquals('testValue', $this->_model->get('some'));

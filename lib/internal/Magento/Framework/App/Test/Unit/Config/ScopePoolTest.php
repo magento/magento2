@@ -8,6 +8,9 @@ namespace Magento\Framework\App\Test\Unit\Config;
 use Magento\Framework\App\Config\Scope\ReaderInterface;
 use Magento\Framework\App\Config\Scope\ReaderPoolInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ScopePoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
