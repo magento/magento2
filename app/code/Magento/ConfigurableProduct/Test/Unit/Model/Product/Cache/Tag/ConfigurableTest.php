@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Test\Unit\Model\Product\Cache\Tag;
+namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Cache\Tag;
 
 use \Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable;
 

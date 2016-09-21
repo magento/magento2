@@ -31,6 +31,13 @@ class FlushCacheByTags implements ObserverInterface
     private $fullPageCache;
 
     /**
+     * Invalidation tags resolver
+     *
+     * @var \Magento\Framework\App\Cache\Tag\Resolver
+     */
+    private $tagResolver;
+
+    /**
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\Framework\App\PageCache\Cache $cache
      */
@@ -49,12 +56,11 @@ class FlushCacheByTags implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $object = $observer->getEvent()->getObject();
-        if (!is_object($object)) {
-            return;
-        }
-
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->_config->isEnabled()) {
+            $object = $observer->getEvent()->getObject();
+            if (!is_object($object)) {
+                return;
+            }
             $tags = $this->getTagResolver()->getTags($object);
 
             if (!empty($tags)) {
@@ -83,6 +89,10 @@ class FlushCacheByTags implements ObserverInterface
      */
     private function getTagResolver()
     {
-        return ObjectManager::getInstance()->get(\Magento\Framework\App\Cache\Tag\Resolver::class);
+        if ($this->tagResolver === null) {
+            $this->tagResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Cache\Tag\Resolver::class);
+        }
+        return $this->tagResolver;
     }
 }
