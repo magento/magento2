@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Order\Validation;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
