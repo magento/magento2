@@ -53,7 +53,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $expected = ['someData' => ['someValue', 'someKey' => 'someValue']];
         $this->cacheMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(serialize($expected)));
+            ->will($this->returnValue(\Zend_Json::encode($expected)));
         $this->envReaderMock->expects($this->any())->method('read')->willReturn([]);
         $this->remoteServiceReaderMock->expects($this->any())->method('read')->willReturn([]);
         $this->assertEquals($expected, $this->getModel()->get());
