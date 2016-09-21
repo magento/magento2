@@ -111,10 +111,12 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->returnTOStock = new ReturnToStockInvoice($this->returnProcessorMock,
+        $this->returnTOStock = new ReturnToStockInvoice(
+            $this->returnProcessorMock,
             $this->creditmemoRepositoryMock,
             $this->orderRepositoryMock,
-            $this->invoiceRepositoryMock);
+            $this->invoiceRepositoryMock
+        );
     }
 
     public function testAfterExecute()

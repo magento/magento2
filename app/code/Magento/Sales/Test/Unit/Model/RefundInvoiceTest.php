@@ -230,7 +230,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
      * @throws \Magento\Sales\Exception\DocumentValidationException
      * @dataProvider dataProvider
      */
-    public function testOrderCreditmemo($invoiceId, $isOnline,  $items, $notify, $appendComment)
+    public function testOrderCreditmemo($invoiceId, $isOnline, $items, $notify, $appendComment)
     {
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')

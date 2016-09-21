@@ -73,8 +73,8 @@ class ReturnValidatorTest extends \PHPUnit_Framework_TestCase
         $returnToStockItems,
         $orderItemId,
         $creditMemoItemId,
-        $productSku = null)
-    {
+        $productSku = null
+    ) {
         $this->creditMemoMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->creditMemoItemMock]);

@@ -52,6 +52,7 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
      * @var ShipOrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $shipOrderValidatorMock;
+
     /**
      * @var OrderRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -103,17 +104,17 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
     private $shipmentMock;
 
     /**
-     * @var AdapterInterface
+     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $adapterMock;
 
     /**
-     * @var ShipmentTrackCreationInterface
+     * @var ShipmentTrackCreationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $trackMock;
 
     /**
-     * @var ShipmentPackageInterface
+     * @var ShipmentPackageInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $packageMock;
 
@@ -132,63 +133,48 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->shipmentDocumentFactoryMock = $this->getMockBuilder(ShipmentDocumentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->orderRegistrarMock = $this->getMockBuilder(OrderRegistrarInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->configMock = $this->getMockBuilder(OrderConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->shipmentRepositoryMock = $this->getMockBuilder(ShipmentRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->notifierInterfaceMock = $this->getMockBuilder(NotifierInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->shipmentCommentCreationMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->shipmentCreationArgumentsMock = $this->getMockBuilder(ShipmentCreationArgumentsInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->packageMock = $this->getMockBuilder(ShipmentPackageInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->trackMock = $this->getMockBuilder(ShipmentTrackCreationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -233,11 +219,9 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->with('sales')
             ->willReturn($this->adapterMock);
-
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
-
         $this->shipmentDocumentFactoryMock->expects($this->once())
             ->method('create')
             ->with(
@@ -249,7 +233,6 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
                 [$this->packageMock],
                 $this->shipmentCreationArgumentsMock
             )->willReturn($this->shipmentMock);
-
         $this->shipOrderValidatorMock->expects($this->once())
             ->method('validate')
             ->with(
@@ -265,56 +248,45 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
         $hasMessages = false;
         $this->validationMessagesMock->expects($this->once())
             ->method('hasMessages')->willReturn($hasMessages);
-
         $this->orderRegistrarMock->expects($this->once())
             ->method('register')
             ->with($this->orderMock, $this->shipmentMock)
             ->willReturn($this->orderMock);
-
         $this->orderStateResolverMock->expects($this->once())
             ->method('getStateForOrder')
             ->with($this->orderMock, [OrderStateResolverInterface::IN_PROGRESS])
             ->willReturn(Order::STATE_PROCESSING);
-
         $this->orderMock->expects($this->once())
             ->method('setState')
             ->with(Order::STATE_PROCESSING)
             ->willReturnSelf();
-
         $this->orderMock->expects($this->once())
             ->method('getState')
             ->willReturn(Order::STATE_PROCESSING);
-
         $this->configMock->expects($this->once())
             ->method('getStateDefaultStatus')
             ->with(Order::STATE_PROCESSING)
             ->willReturn('Processing');
-
         $this->orderMock->expects($this->once())
             ->method('setStatus')
             ->with('Processing')
             ->willReturnSelf();
-
         $this->shipmentRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->shipmentMock)
             ->willReturn($this->shipmentMock);
-
         $this->orderRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->orderMock)
             ->willReturn($this->orderMock);
-
         if ($notify) {
             $this->notifierInterfaceMock->expects($this->once())
                 ->method('notify')
                 ->with($this->orderMock, $this->shipmentMock, $this->shipmentCommentCreationMock);
         }
-
         $this->shipmentMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn(2);
-
         $this->assertEquals(
             2,
             $this->model->execute(
@@ -431,16 +403,16 @@ class ShipOrderTest extends \PHPUnit_Framework_TestCase
         $hasMessages = false;
         $this->validationMessagesMock->expects($this->once())
             ->method('hasMessages')->willReturn($hasMessages);
-        $e = new \Exception();
+        $exception = new \Exception();
 
         $this->orderRegistrarMock->expects($this->once())
             ->method('register')
             ->with($this->orderMock, $this->shipmentMock)
-            ->willThrowException($e);
+            ->willThrowException($exception);
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($e);
+            ->with($exception);
 
         $this->adapterMock->expects($this->once())
             ->method('rollBack');

@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order\Validation;
 
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
@@ -17,8 +19,8 @@ use Magento\Sales\Model\ValidatorResultInterface;
 interface InvoiceOrderInterface
 {
     /**
-     * @param $order
-     * @param $invoice
+     * @param OrderInterface $order
+     * @param InvoiceInterface $invoice
      * @param bool $capture
      * @param array $items
      * @param bool $notify
@@ -28,8 +30,8 @@ interface InvoiceOrderInterface
      * @return ValidatorResultInterface
      */
     public function validate(
-        $order,
-        $invoice,
+        OrderInterface $order,
+        InvoiceInterface $invoice,
         $capture = false,
         array $items = [],
         $notify = false,

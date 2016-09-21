@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class RefundInvoice
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundInvoice implements RefundInvoiceInterface
 {
@@ -88,7 +89,7 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param RefundInvoiceValidator $validator
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param PaymentAdapterInterface $paymentAdapter
-     * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
+     * @param CreditmemoDocumentFactory $creditmemotFactory
      * @param NotifierInterface $notifier
      * @param OrderConfig $config
      * @param LoggerInterface $logger
@@ -102,7 +103,7 @@ class RefundInvoice implements RefundInvoiceInterface
         RefundInvoiceValidator $validator,
         CreditmemoRepositoryInterface $creditmemoRepository,
         PaymentAdapterInterface $paymentAdapter,
-        CreditmemoDocumentFactory $creditmemoDocumentFactory,
+        CreditmemoDocumentFactory $creditmemotFactory,
         NotifierInterface $notifier,
         OrderConfig $config,
         LoggerInterface $logger
@@ -114,7 +115,7 @@ class RefundInvoice implements RefundInvoiceInterface
         $this->validator = $validator;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->paymentAdapter = $paymentAdapter;
-        $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
+        $this->creditmemoDocumentFactory = $creditmemotFactory;
         $this->notifier = $notifier;
         $this->config = $config;
         $this->logger = $logger;

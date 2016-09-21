@@ -92,9 +92,11 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->returnTOStock = new ReturnToStockOrder($this->returnProcessorMock,
+        $this->returnTOStock = new ReturnToStockOrder(
+            $this->returnProcessorMock,
             $this->creditmemoRepositoryMock,
-            $this->orderRepositoryMock);
+            $this->orderRepositoryMock
+        );
     }
 
     public function testAfterExecute()
