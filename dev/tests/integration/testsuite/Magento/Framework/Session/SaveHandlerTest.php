@@ -29,7 +29,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetSaveHandler($deploymentConfigHandler, $iniHandler)
     {
-        $this->markTestSkipped('MAGETWO-56529');
         // Set expected session.save_handler config
         if ($deploymentConfigHandler) {
             if ($deploymentConfigHandler !== 'files') {
