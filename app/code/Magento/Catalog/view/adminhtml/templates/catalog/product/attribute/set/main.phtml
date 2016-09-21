@@ -313,8 +313,13 @@
                         },
 
                         save : function() {
+                            var block;
+
                             if ($('messages')) {
                                 $('messages').update();
+                            } else {
+                                block = jQuery('<div/>').attr('id', 'messages');
+                                jQuery('.page-main-actions').after(block);
                             }
                             TreePanels.rebuildTrees();
                             if(!jQuery('#set-prop-form').valid()) {
