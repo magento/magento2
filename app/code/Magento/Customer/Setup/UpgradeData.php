@@ -7,14 +7,20 @@
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -36,6 +42,16 @@ class UpgradeData implements UpgradeDataInterface
     protected $eavConfig;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param CustomerSetupFactory $customerSetupFactory
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -53,6 +69,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -96,10 +113,141 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.9', '<')) {
+            $setup->getConnection()->beginTransaction();
+
+            try {
+                $this->migrateStoresAllowedCountriesToWebsite($setup);
+                $setup->getConnection()->commit();
+            } catch (\Exception $e) {
+                $setup->getConnection()->rollBack();
+                throw $e;
+            }
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
         $setup->endSetup();
+    }
+
+    /**
+     * Retrieve Store Manager
+     *
+     * @deprecated
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if (!$this->storeManager) {
+            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        }
+
+        return $this->storeManager;
+    }
+
+    /**
+     * Retrieve Allowed Countries Reader
+     *
+     * @deprecated
+     * @return AllowedCountries
+     */
+    private function getAllowedCountriesReader()
+    {
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
+    }
+
+    /**
+     * Merge allowed countries from different scopes
+     *
+     * @param array $countries
+     * @param array $newCountries
+     * @param string $identifier
+     * @return array
+     */
+    private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)
+    {
+        if (!isset($countries[$identifier])) {
+            $countries[$identifier] = $newCountries;
+        } else {
+            $countries[$identifier] =
+                array_replace($countries[$identifier], $newCountries);
+        }
+
+        return $countries;
+    }
+
+    /**
+     * Retrieve unqiue allowed countries by scope
+     *
+     * @param string $scope
+     * @param int $scopeCode
+     * @return array
+     */
+    private function getAllowedCountries($scope, $scopeCode)
+    {
+        $allowedCountriesReader = $this->getAllowedCountriesReader();
+        return $allowedCountriesReader->makeCountriesUnique(
+            $allowedCountriesReader->getCountriesFromConfig($scope, $scopeCode)
+        );
+    }
+
+    /**
+     * Migrate and merge allowed countries
+     *
+     * @param SetupInterface $setup
+     * @return void
+     */
+    private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
+    {
+
+        $allowedCountries = [];
+        //Process Websites
+        foreach ($this->getStoreManager()->getStores() as $store) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
+                $store->getWebsiteId()
+            );
+        }
+        //Process stores
+        foreach ($this->getStoreManager()->getWebsites() as $website) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
+                $website->getId()
+            );
+        }
+
+        $connection = $setup->getConnection();
+
+        //Remove everything from stores scope
+        $connection->delete(
+            $setup->getTable('core_config_data'),
+            [
+                'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                'scope = ?' => ScopeInterface::SCOPE_STORES
+            ]
+        );
+
+        //Update websites
+        foreach ($allowedCountries as $scopeId => $countries) {
+            $connection->update(
+                $setup->getTable('core_config_data'),
+                [
+                    'value' => implode(',', $countries)
+                ],
+                [
+                    'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                    'scope_id = ?' => $scopeId,
+                    'scope = ?' => ScopeInterface::SCOPE_WEBSITES
+                ]
+            );
+        }
     }
 
     /**
