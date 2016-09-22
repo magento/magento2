@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
@@ -22,18 +21,14 @@ class Date extends AbstractDataType
      *
      * @var string
      */
-    protected $locale;
+    private $locale;
 
     /**
-     * Wrapped component
-     *
-     * @var UiComponentInterface
+     * @var TimezoneInterface
      */
-    protected $wrappedComponent;
+    private $localeDate;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param TimezoneInterface $localeDate
      * @param ResolverInterface $localeResolver
@@ -69,6 +64,11 @@ class Date extends AbstractDataType
                 )
             ))->getOffset();
         }
+
+        // Set date format pattern by current locale
+        $localeDateFormat = $this->localeDate->getDateFormat();
+        $config['options']['dateFormat'] = $localeDateFormat;
+        $config['outputDateFormat'] = $localeDateFormat;
 
         $this->setData('config', $config);
 
