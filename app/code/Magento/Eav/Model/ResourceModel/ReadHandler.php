@@ -91,7 +91,6 @@ class ReadHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-
         $attributes = $this->attributeCache->getAttributes($entityType);
         if ($attributes) {
             return $attributes;
@@ -175,8 +174,9 @@ class ReadHandler implements AttributeInterface
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {
-                    $this->logger->warning("Attempt to load value of nonexistent EAV attribute 
-                        '{$attributeValue['attribute_id']}' for entity type '$entityType'."
+                    $this->logger->warning(
+                        "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}'
+                        for entity type '$entityType'."
                     );
                 }
             }
