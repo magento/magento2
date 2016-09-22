@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Cache\Type;
 
 use \Magento\Framework\App\CacheInterface;
@@ -25,6 +24,7 @@ class Dummy implements CacheInterface
      *
      * @param  string $identifier
      * @return null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load($identifier)
     {
@@ -39,6 +39,7 @@ class Dummy implements CacheInterface
      * @param array $tags
      * @param int $lifeTime
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
@@ -50,6 +51,7 @@ class Dummy implements CacheInterface
      *
      * @param string $identifier
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function remove($identifier)
     {
@@ -61,6 +63,7 @@ class Dummy implements CacheInterface
      *
      * @param array $tags
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clean($tags = [])
     {
