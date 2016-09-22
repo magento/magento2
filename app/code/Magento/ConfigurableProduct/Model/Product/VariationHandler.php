@@ -29,6 +29,9 @@ class VariationHandler
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
 
+    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[] */
+    private $attributes;
+
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      * @deprecated
@@ -132,8 +135,6 @@ class VariationHandler
             }
         }
     }
-
-    protected $attributes = null;
 
     /**
      * Fill simple product data during generation

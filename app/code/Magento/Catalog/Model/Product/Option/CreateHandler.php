@@ -36,6 +36,11 @@ class CreateHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+        foreach ($this->optionRepository->getProductOptions($entity) as $option) {
+            $this->optionRepository->delete($option);
+        }
+
         if ($entity->getOptions()) {
             foreach ($entity->getOptions() as $option) {
                 $this->optionRepository->save($option);
