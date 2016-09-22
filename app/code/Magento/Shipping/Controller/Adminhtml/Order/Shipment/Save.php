@@ -130,7 +130,9 @@ class Save extends \Magento\Backend\App\Action
                 $shipment->setCustomerNote($data['comment_text']);
                 $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
-            $errorMessages = $this->getShipmentValidator()->validate($shipment, [QuantityValidator::class]);
+            $errorMessages = $this->getShipmentValidator()
+                ->validate($shipment, [QuantityValidator::class])
+                ->getMessages();
             if (!empty($errorMessages)) {
                 $this->messageManager->addError(
                     __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
