@@ -107,6 +107,8 @@ class Save extends \Magento\Backend\App\Action
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCommentText($data['comment_text']);
         }
 
+        $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
+
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
@@ -140,7 +142,6 @@ class Save extends \Magento\Backend\App\Action
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $responseAjax = new \Magento\Framework\DataObject();
-            $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
 
             if ($isNeedCreateLabel) {
                 $this->labelGenerator->create($shipment, $this->_request);
