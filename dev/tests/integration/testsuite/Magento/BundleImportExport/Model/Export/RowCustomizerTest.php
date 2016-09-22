@@ -33,7 +33,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
-        $parsedAdditionalAttributes = 'text_attribute=One, Two,Three, !@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
+        $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
             . ',text_attribute2=,';
         $allAdditionalAttributes = $parsedAdditionalAttributes . ',weight_type=0,price_type=1';
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */

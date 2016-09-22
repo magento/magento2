@@ -16,6 +16,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $fileSystem;
+
+    /**
      * Stock item attributes which must be exported
      *
      * @var array
@@ -60,7 +70,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testExport()
     {
         $this->model->setWriter(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
@@ -73,8 +83,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Option 4 ""!@#$%^&*', $exportData);
         $this->assertContains('test_option_code_2', $exportData);
         $this->assertContains('max_characters=10', $exportData);
-        $this->assertContains('text_attribute=One, Two,Three, !@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
+        $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
+    }
 
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     */
+    public function testExportWithProductLinks()
+    {
+        $this->model->setWriter(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
         $this->assertNotEmpty($this->model->export());
     }
 
