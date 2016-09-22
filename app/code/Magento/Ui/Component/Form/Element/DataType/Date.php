@@ -7,6 +7,7 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
@@ -21,12 +22,14 @@ class Date extends AbstractDataType
      *
      * @var string
      */
-    private $locale;
+    protected $locale;
 
     /**
-     * @var TimezoneInterface
+     * Wrapped component
+     *
+     * @var UiComponentInterface
      */
-    private $localeDate;
+    protected $wrappedComponent;
 
     /**
      * @param ContextInterface $context
