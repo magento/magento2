@@ -31,9 +31,16 @@ class GeneratorResolver
     /**
      * @param string $type
      * @return GeneratorInterface
+     * @throws \InvalidArgumentException
      */
     public function getGeneratorForType($type)
     {
-        return isset($this->generators[$type]) ? $this->generators[$type] : $this->defaultGenerator;
+        $generator = isset($this->generators[$type]) ? $this->generators[$type] : $this->defaultGenerator;
+        if (!($generator instanceof GeneratorInterface)) {
+            throw new \InvalidArgumentException(
+                'Generator must implement ' . GeneratorInterface::class
+            );
+        }
+        return $generator;
     }
 }

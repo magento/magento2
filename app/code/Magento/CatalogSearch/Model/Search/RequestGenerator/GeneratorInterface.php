@@ -20,7 +20,7 @@ interface GeneratorInterface
     public function getFilterData(Attribute $attribute, $filterName);
 
     /**
-     * Get aggregations data for specific attribute
+     * Get aggregation data for specific attribute
      * @param Attribute $attribute
      * @param string $bucketName
      * @return array

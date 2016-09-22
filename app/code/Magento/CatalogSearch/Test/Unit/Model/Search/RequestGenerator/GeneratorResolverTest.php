@@ -37,6 +37,10 @@ class GeneratorResolverTest extends \PHPUnit_Framework_TestCase
         $this->rangeGenerator = $this->getMockBuilder(GeneratorInterface::class)
             ->setMethods([])
             ->getMockForAbstractClass();
+
+        $invalidTypeGenerator = $this->getMockBuilder(\stdClass::class)
+            ->setMethods([]);
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resolver = $objectManager->getObject(
             GeneratorResolver::class,
@@ -45,6 +49,7 @@ class GeneratorResolverTest extends \PHPUnit_Framework_TestCase
                 'generators' => [
                     'datetime' => $this->datetimeGenerator,
                     'range' => $this->datetimeGenerator,
+                    'invalid_type' => $invalidTypeGenerator,
                 ],
             ]
         );
@@ -59,5 +64,13 @@ class GeneratorResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetFallbackGenerator()
     {
         $this->assertEquals($this->defaultGenerator, $this->resolver->getGeneratorForType('unknown_type'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetInvalidGeneratorType()
+    {
+        $this->resolver->getGeneratorForType('invalid_type');
     }
 }
