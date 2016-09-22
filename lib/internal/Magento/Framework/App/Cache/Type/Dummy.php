@@ -12,7 +12,7 @@ class Dummy implements CacheInterface
     /**
      * Required by CacheInterface
      *
-     * @return Null
+     * @return null
      */
     public function getFrontend()
     {
