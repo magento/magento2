@@ -487,7 +487,6 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $connectionMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
         $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
-
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
             [

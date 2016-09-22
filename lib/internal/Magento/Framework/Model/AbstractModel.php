@@ -577,6 +577,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param string $identifier
      * @param string|null $field
+     * @return void
      */
     public function beforeLoad($identifier, $field = null)
     {

@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\EntityManager\Operation;
 
-use Magento\Framework\EntityManager\Operation\ReadInterface;
 use Magento\Framework\EntityManager\Operation\Read\ReadMain;
 use Magento\Framework\EntityManager\Operation\Read\ReadAttributes;
 use Magento\Framework\EntityManager\Operation\Read\ReadExtensions;
@@ -13,7 +12,6 @@ use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\EntityManager\TypeResolver;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class Read
