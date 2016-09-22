@@ -30,6 +30,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
+    /**
      * @var \Magento\Framework\Translate\AdapterInterface
      */
     private $defaultTranslator;
@@ -38,6 +43,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Validator\Factory
      */
     private $factory;
+
+    /**
+     * @var string
+     */
+    private $jsonString = '["\/tmp\/moduleOne\/etc\/validation.xml"]';
+
+    /**
+     * @var array
+     */
+    private $data = ['/tmp/moduleOne/etc/validation.xml'];
 
     protected function setUp()
     {
@@ -60,7 +75,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 \Magento\Framework\Validator\Config::class,
-                ['configFiles' => ['/tmp/moduleOne/etc/validation.xml']]
+                ['configFiles' => $this->data]
             )
             ->willReturn($this->validatorConfigMock);
         $this->readerMock = $this->getMock(
@@ -82,6 +97,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cacheMock
             ]
         );
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->factory, 'json', $this->jsonMock);
     }
 
     protected function tearDown()
@@ -94,7 +112,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
-            ->willReturn(['/tmp/moduleOne/etc/validation.xml']);
+            ->willReturn($this->data);
         $actualConfig = $this->factory->getValidatorConfig();
         $this->assertInstanceOf(
             \Magento\Framework\Validator\Config::class,
@@ -115,10 +133,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->readerMock->expects($this->once())
             ->method('getConfigurationFiles')
-            ->willReturn(['/tmp/moduleOne/etc/validation.xml']);
+            ->willReturn($this->data);
         $this->cacheMock->expects($this->once())
             ->method('save')
-            ->with('["\/tmp\/moduleOne\/etc\/validation.xml"]');
+            ->with($this->jsonString);
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->with($this->data)
+            ->willReturn($this->jsonString);
         $this->factory->getValidatorConfig();
         $this->factory->getValidatorConfig();
     }
@@ -127,11 +149,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn('["\/tmp\/moduleOne\/etc\/validation.xml"]');
+            ->willReturn($this->jsonString); // why json mock???
         $this->readerMock->expects($this->never())
             ->method('getConfigurationFiles');
         $this->cacheMock->expects($this->never())
             ->method('save');
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->with($this->jsonString)
+            ->willReturn($this->data);
         $this->factory->getValidatorConfig();
         $this->factory->getValidatorConfig();
     }
@@ -140,7 +166,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
-            ->willReturn(['/tmp/moduleOne/etc/validation.xml']);
+            ->willReturn($this->data);
         $builderMock = $this->getMock(\Magento\Framework\Validator\Builder::class, [], [], '', false);
         $this->validatorConfigMock->expects($this->once())
             ->method('createValidatorBuilder')
@@ -156,7 +182,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
-            ->willReturn(['/tmp/moduleOne/etc/validation.xml']);
+            ->willReturn($this->data);
         $validatorMock = $this->getMock(\Magento\Framework\Validator::class, [], [], '', false);
         $this->validatorConfigMock->expects($this->once())
             ->method('createValidator')
