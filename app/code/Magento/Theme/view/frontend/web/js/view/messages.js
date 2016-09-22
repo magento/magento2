@@ -5,9 +5,10 @@
 define([
     'jquery',
     'uiComponent',
+    'underscore',
     'Magento_Customer/js/customer-data',
     'jquery/jquery-storageapi'
-], function ($, Component, customerData) {
+], function ($, Component, _, customerData) {
     'use strict';
 
     return Component.extend({
@@ -15,12 +16,24 @@ define([
             cookieMessages: [],
             messages: []
         },
+
+        /** @inheritdoc */
         initialize: function () {
             this._super();
 
             this.cookieMessages = $.cookieStorage.get('mage-messages');
-            this.messages = customerData.get('messages').extend({disposableCustomerData: 'messages'});
-            $.cookieStorage.setConf({path: '/', expires: -1}).set('mage-messages', null);
+            this.messages = customerData.get('messages').extend({
+                disposableCustomerData: 'messages'
+            });
+
+            if (!_.isEmpty(this.messages().messages)) {
+                customerData.set('messages', {});
+            }
+
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: -1
+            }).set('mage-messages', null);
         }
     });
 });
