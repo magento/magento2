@@ -11,6 +11,7 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Json\JsonInterface;
 
 class Factory
 {
@@ -45,6 +46,11 @@ class Factory
     private $cache;
 
     /**
+     * @var JsonInterface
+     */
+    private $json;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -70,9 +76,9 @@ class Factory
             $this->_configFiles = $this->cache->load(self::CACHE_KEY);
             if (!$this->_configFiles) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save(serialize($this->_configFiles), self::CACHE_KEY);
+                $this->cache->save($this->getJson()->encode($this->_configFiles), self::CACHE_KEY);
             } else {
-                $this->_configFiles = unserialize($this->_configFiles);
+                $this->_configFiles = $this->getJson()->decode($this->_configFiles);
             }
         }
     }
@@ -139,5 +145,20 @@ class Factory
     {
         $this->_initializeDefaultTranslator();
         return $this->getValidatorConfig()->createValidator($entityName, $groupName, $builderConfig);
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }
