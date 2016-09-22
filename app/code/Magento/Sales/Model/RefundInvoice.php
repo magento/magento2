@@ -89,7 +89,7 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param RefundInvoiceValidator $validator
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param PaymentAdapterInterface $paymentAdapter
-     * @param CreditmemoDocumentFactory $creditmemotFactory
+     * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
      * @param NotifierInterface $notifier
      * @param OrderConfig $config
      * @param LoggerInterface $logger
@@ -103,7 +103,7 @@ class RefundInvoice implements RefundInvoiceInterface
         RefundInvoiceValidator $validator,
         CreditmemoRepositoryInterface $creditmemoRepository,
         PaymentAdapterInterface $paymentAdapter,
-        CreditmemoDocumentFactory $creditmemotFactory,
+        CreditmemoDocumentFactory $creditmemoDocumentFactory,
         NotifierInterface $notifier,
         OrderConfig $config,
         LoggerInterface $logger
@@ -115,7 +115,7 @@ class RefundInvoice implements RefundInvoiceInterface
         $this->validator = $validator;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->paymentAdapter = $paymentAdapter;
-        $this->creditmemoDocumentFactory = $creditmemotFactory;
+        $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
         $this->notifier = $notifier;
         $this->config = $config;
         $this->logger = $logger;

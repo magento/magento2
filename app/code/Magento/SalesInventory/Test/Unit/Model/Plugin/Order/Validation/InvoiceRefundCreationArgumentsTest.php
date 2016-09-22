@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 /**
  * Class InvoiceRefundCreatetionArgumentsTest
  */
-class InvoiceRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
+class InvoiceRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var InvoiceRefundCreationArguments

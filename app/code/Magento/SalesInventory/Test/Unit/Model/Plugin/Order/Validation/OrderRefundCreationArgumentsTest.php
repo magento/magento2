@@ -17,7 +17,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 /**
  * Class OrderRefundCreatetionArgumentsTest
  */
-class OrderRefundCreatetionArgumentsTest extends \PHPUnit_Framework_TestCase
+class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var OrderRefundCreationArguments
