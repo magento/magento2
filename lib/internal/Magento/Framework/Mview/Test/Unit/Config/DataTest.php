@@ -63,15 +63,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testConstructorWithCache()
     {
         $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
-        $this->cache->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            $this->cacheId
-        )->will(
-            $this->returnValue(\Zend_Json::encode($this->views))
-        );
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->with($this->cacheId)
+            ->willReturn(\Zend_Json::encode($this->views));
 
         $this->stateCollection->expects($this->never())->method('getItems');
 

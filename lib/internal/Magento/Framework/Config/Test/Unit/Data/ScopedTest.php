@@ -55,7 +55,9 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
                 'key_1.2' => ['some' => 'arrayValue'],
             ],
         ];
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(\Zend_Json::encode([])));
+        $this->_cacheMock->expects($this->any())
+            ->method('load')
+            ->willReturn(\Zend_Json::encode([]));
         $this->_model->merge($testData);
         $this->assertEquals($expectedValue, $this->_model->get($path, $default));
     }
@@ -135,15 +137,10 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         );
 
         /** set cache data */
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'adminhtml::tag'
-        )->will(
-            $this->returnValue(\Zend_Json::encode($testValue))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('adminhtml::tag')
+            ->willReturn(\Zend_Json::encode($testValue));
 
         /** test preventing of getting data from reader  */
         $this->_readerMock->expects($this->never())->method('read');

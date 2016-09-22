@@ -75,29 +75,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteFrontNameIfCacheIfRouterIdNotExist()
     {
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'areaCode::RoutesConfig'
-        )->will(
-            $this->returnValue(json_encode(['expected']))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('areaCode::RoutesConfig')
+            ->willReturn(json_encode(['expected']));
         $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
 
     public function testGetRouteByFrontName()
     {
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'areaCode::RoutesConfig'
-        )->will(
-            $this->returnValue(json_encode(['routerCode' => ['frontName' => 'routerName']]))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('areaCode::RoutesConfig')
+            ->willReturn(json_encode(['routerCode' => ['frontName' => 'routerName']]));
 
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
 
@@ -107,15 +97,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteByFrontNameNoRoutes()
     {
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'areaCode::RoutesConfig'
-        )->will(
-            $this->returnValue(json_encode([]))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('areaCode::RoutesConfig')
+            ->willReturn(json_encode([]));
 
         $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
 
@@ -125,15 +110,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteByFrontNameNoCache()
     {
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'scope::RoutesConfig'
-        )->will(
-            $this->returnValue(json_encode(false))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('scope::RoutesConfig')
+            ->willReturn(json_encode(false));
 
         $routes = [
             'routerCode' => [
@@ -167,14 +147,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('default_router')
         );
 
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'save'
-        )->with(
-            \Zend_Json::encode($routes),
-            'scope::RoutesConfig'
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('save')
+            ->with(json_encode($routes), 'scope::RoutesConfig');
 
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
 

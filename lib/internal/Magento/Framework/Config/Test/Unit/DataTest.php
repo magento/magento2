@@ -42,7 +42,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($data);
 
         $config = new \Magento\Framework\Config\Data(
-            $this->readerMock, $this->cacheMock, $cacheId
+            $this->readerMock,
+            $this->cacheMock,
+            $cacheId
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));

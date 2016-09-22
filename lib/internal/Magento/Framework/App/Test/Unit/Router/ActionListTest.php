@@ -96,7 +96,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
             ->method('save');
         $this->moduleReaderMock->expects($this->once())
             ->method('getActionFiles')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->actionList = $this->objectManager->getObject(
             \Magento\Framework\App\Router\ActionList::class,
             [

@@ -110,15 +110,13 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
 
         if (!$cachedData) {
             $this->_reader->expects($this->once())->method('read')->with('testScope')->will($this->returnValue($data));
-            $this->_cache->expects(
-                $this->once()
-            )->method(
-                'save'
-            )->with(
-                \Zend_Json::encode($data),
-                $cacheKey,
-                [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
-            );
+            $this->_cache->expects($this->once())
+                ->method('save')
+                ->with(
+                    \Zend_Json::encode($data),
+                    $cacheKey,
+                    [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
+                );
         }
 
         $configData = $this->getMockBuilder(\Magento\Framework\App\Config\Data::class)
