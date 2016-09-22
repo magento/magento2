@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Config\Initial as Config;
@@ -12,37 +13,22 @@ use Magento\Framework\App\Config\Initial as Config;
 class InitialTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Config
+     * @var ObjectManager
      */
-    private $config1;
-
-    /**
-     * @var Config
-     */
-    private $config2;
+    private $objectManager;
 
     protected function setUp()
     {
-        /** @var \Magento\TestFramework\ObjectManager $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var Pool $cachePool */
-        $cachePool = $objectManager->get(Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
-
-        $objectManager->removeSharedInstance(Config::class);
-        $this->config1 = $objectManager->get(Config::class);
-
-        $objectManager->removeSharedInstance(Config::class);
-        $this->config2 = $objectManager->get(Config::class);
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     public function testGetMetadata()
     {
-        $this->assertEquals($this->config1->getMetadata(), $this->config2->getMetadata());
+        $this->cleanCache();
+        $this->assertEquals(
+            $this->objectManager->create(Config::class)->getMetadata(),
+            $this->objectManager->create(Config::class)->getMetadata()
+        );
     }
 
     /**
@@ -51,7 +37,11 @@ class InitialTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetData($scope)
     {
-        $this->assertEquals($this->config1->getData($scope), $this->config2->getData($scope));
+        $this->cleanCache();
+        $this->assertEquals(
+            $this->objectManager->create(Config::class)->getData($scope),
+            $this->objectManager->create(Config::class)->getData($scope)
+        );
     }
 
     public function getDataDataProvider()
@@ -61,5 +51,15 @@ class InitialTest extends \PHPUnit_Framework_TestCase
             ['stores|default'],
             ['websites|default']
         ];
+    }
+
+    private function cleanCache()
+    {
+        /** @var Pool $cachePool */
+        $cachePool = $this->objectManager->get(Pool::class);
+        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
+        foreach ($cachePool as $cacheType) {
+            $cacheType->getBackend()->clean();
+        }
     }
 }
