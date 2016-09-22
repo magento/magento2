@@ -62,6 +62,13 @@ class InlineEdit extends \Magento\Backend\App\Action
             ]);
         }
 
+        if (!$this->_authorization->isAllowed('Magento_Cms::save')) {
+            return $resultJson->setData([
+                'messages' => [__('Access denied'), __('You need more permissions to access this.')],
+                'error' => true,
+            ]);
+        }
+
         foreach (array_keys($postItems) as $pageId) {
             /** @var \Magento\Cms\Model\Page $page */
             $page = $this->pageRepository->getById($pageId);
