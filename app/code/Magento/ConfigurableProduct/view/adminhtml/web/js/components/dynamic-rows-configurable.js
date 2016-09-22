@@ -391,7 +391,8 @@ define([
                     'small_image': row['small_image'],
                     image: row.image,
                     'thumbnail': row.thumbnail,
-                    'attributes': attributesText
+                    'attributes': attributesText,
+                    'need_update': true
                 };
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
