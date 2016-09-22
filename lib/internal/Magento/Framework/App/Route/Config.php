@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\Route;
 
-use Magento\Framework\Json\Json;
+use Magento\Framework\Json\JsonInterface;
 
 class Config implements ConfigInterface
 {
@@ -42,7 +42,7 @@ class Config implements ConfigInterface
     protected $_routes;
 
     /**
-     * @var Json
+     * @var JsonInterface
      */
     private $json;
 
@@ -144,14 +144,14 @@ class Config implements ConfigInterface
     /**
      * Ger json encoder/decoder
      *
-     * @return Json
+     * @return JsonInterface
      * @deprecated
      */
     private function getJson()
     {
         if ($this->json === null) {
             $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(Json::class);
+                ->get(JsonInterface::class);
         }
         return $this->json;
     }
