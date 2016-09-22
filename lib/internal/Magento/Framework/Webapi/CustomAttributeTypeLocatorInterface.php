@@ -16,7 +16,7 @@ interface CustomAttributeTypeLocatorInterface
      *
      * @param string $attributeCode
      * @param string $serviceClass
-     * @return string|null
+     * @return string
      */
     public function getType($attributeCode, $serviceClass);
 

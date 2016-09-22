@@ -32,15 +32,17 @@ class Transparent extends Payflowpro implements TransparentInterface
 
     const CC_DETAILS = 'cc_details';
 
-    /**
-     * @var string
-     */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    const CC_VAULT_CODE = 'payflowpro_cc_vault';
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
+
+    /**
+     * @var string
+     */
+    protected $_infoBlockType = \Magento\Paypal\Block\Payflow\Info::class;
 
     /**
      * @var ResponseValidator
@@ -131,7 +133,6 @@ class Transparent extends Payflowpro implements TransparentInterface
         return $this->responseValidator;
     }
 
-
     /**
      * Do not validate payment form using server methods
      *
@@ -165,6 +166,9 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token);
         $request->setData('amt', $this->formatPrice($amount));
+        $request->setData('currency', $order->getBaseCurrencyCode());
+        $request->setData('taxamt', $this->formatPrice($order->getBaseTaxAmount()));
+        $request->setData('freightamt', $this->formatPrice($order->getBaseShippingAmount()));
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);

@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Downloadable Product  Samples resource model

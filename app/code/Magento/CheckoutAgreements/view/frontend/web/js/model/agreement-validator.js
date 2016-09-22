@@ -11,7 +11,11 @@ define(
     ],
     function ($) {
         'use strict';
-        var agreementsConfig = window.checkoutConfig.checkoutAgreements;
+        var checkoutConfig = window.checkoutConfig,
+            agreementsConfig = checkoutConfig ? checkoutConfig.checkoutAgreements : {};
+
+        var agreementsInputPath = '.payment-method._active div.checkout-agreements input';
+
         return {
             /**
              * Validate checkout agreements
@@ -23,9 +27,22 @@ define(
                     return true;
                 }
 
-                var form = $('.payment-method._active form[data-role=checkout-agreements]');
-                form.validation();
-                return form.validation('isValid');
+                if ($(agreementsInputPath).length == 0) {
+                    return true;
+                }
+
+                return $('#co-payment-form').validate({
+                    errorClass: 'mage-error',
+                    errorElement: 'div',
+                    meta: 'validate',
+                    errorPlacement: function (error, element) {
+                        var errorPlacement = element;
+                        if (element.is(':checkbox') || element.is(':radio')) {
+                            errorPlacement = element.siblings('label').last();
+                        }
+                        errorPlacement.after(error);
+                    }
+                }).element(agreementsInputPath);
             }
         }
     }

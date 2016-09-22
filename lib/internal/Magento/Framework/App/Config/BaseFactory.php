@@ -30,6 +30,6 @@ class BaseFactory
      */
     public function create($sourceData = null)
     {
-        return $this->_objectManager->create('Magento\Framework\App\Config\Base', ['sourceData' => $sourceData]);
+        return $this->_objectManager->create(\Magento\Framework\App\Config\Base::class, ['sourceData' => $sourceData]);
     }
 }

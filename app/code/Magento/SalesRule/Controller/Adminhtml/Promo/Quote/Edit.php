@@ -43,7 +43,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
+        $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
 
         $this->_coreRegistry->register(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE, $model);
 
@@ -55,24 +55,23 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->_redirect('sales_rule/*');
                 return;
             }
+            $model->getConditions()->setFormName('sales_rule_form');
+            $model->getConditions()->setJsFormObject(
+                $model->getConditionsFieldSetId($model->getConditions()->getFormName())
+            );
+            $model->getActions()->setFormName('sales_rule_form');
+            $model->getActions()->setJsFormObject(
+                $model->getActionsFieldSetId($model->getActions()->getFormName())
+            );
 
             $resultPage->getLayout()->getBlock('promo_sales_rule_edit_tab_coupons')->setCanShow(true);
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
+        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }
-
-        $model->getConditions()->setFormName('sales_rule_form');
-        $model->getConditions()->setJsFormObject(
-            $model->getConditionsFieldSetId($model->getConditions()->getFormName())
-        );
-        $model->getActions()->setFormName('sales_rule_form');
-        $model->getActions()->setJsFormObject(
-            $model->getActionsFieldSetId($model->getActions()->getFormName())
-        );
 
         $this->_initAction();
 

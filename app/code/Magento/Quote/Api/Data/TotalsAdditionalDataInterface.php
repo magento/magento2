@@ -9,6 +9,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Additional data for totals collection.
+ * @api
  */
 interface TotalsAdditionalDataInterface extends CustomAttributesDataInterface
 {

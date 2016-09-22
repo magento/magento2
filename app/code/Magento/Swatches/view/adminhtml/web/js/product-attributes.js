@@ -106,14 +106,6 @@ define([
                         this.backendType.val('int');
                     }
 
-                    if (this.frontendInput.is(':visible') &&
-                        (this.frontendInput.val() === 'swatch_text' || this.frontendInput.val() === 'swatch_visual')
-                    ) {
-                        this.usedInProductListing.val(1);
-                        this.isVisibleOnFront.val(1);
-                        this.updateProductPreviewImage.val(1);
-                    }
-
                     if (this.frontendInput.val() === 'multiselect' ||
                         this.frontendInput.val() === 'gallery' ||
                         this.frontendInput.val() === 'textarea'

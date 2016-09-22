@@ -65,7 +65,10 @@ class ShippingProcessor
     {
         $this->shippingAddressManagement->assign($quote->getId(), $shipping->getAddress());
         if (!empty($shipping->getMethod()) && $quote->getItemsCount() > 0) {
-            list($carrierCode, $methodCode) = explode("_", $shipping->getMethod());
+            $nameComponents = explode('_', $shipping->getMethod());
+            $carrierCode = array_shift($nameComponents);
+            // carrier method code can contains more one name component
+            $methodCode = implode('_', $nameComponents);
             $this->shippingMethodManagement->apply($quote->getId(), $carrierCode, $methodCode);
         }
     }

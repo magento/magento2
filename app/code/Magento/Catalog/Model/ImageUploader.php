@@ -244,7 +244,8 @@ class ImageUploader
                 ->getStore()
                 ->getBaseUrl(
                     \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                ) . $this->getFilePath($baseTmpPath, $result['name']);
+                ) . $this->getFilePath($baseTmpPath, $result['file']);
+        $result['name'] = $result['file'];
 
         if (isset($result['file'])) {
             try {

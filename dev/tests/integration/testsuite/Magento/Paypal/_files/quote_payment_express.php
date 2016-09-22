@@ -5,21 +5,22 @@
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
 )->setValue(
     'carriers/flatrate/active',
     1,
     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
 )->setValue(
     'payment/paypal_express/active',
     1,
     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
     ->setId(1)
     ->setAttributeSetId(4)
@@ -58,7 +59,7 @@ $billingData = [
 ];
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\Quote\Address', ['data' => $billingData]);
+    ->create(\Magento\Quote\Model\Quote\Address::class, ['data' => $billingData]);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
@@ -67,12 +68,12 @@ $shippingAddress->setShippingMethod('flatrate_flatrate');
 $shippingAddress->setCollectShippingRates(true);
 
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
-    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+    $objectManager->get(
+        \Magento\Store\Model\StoreManagerInterface::class
     )->getStore()->getId()
 )->setReservedOrderId(
     '100000002'
@@ -87,11 +88,13 @@ $quote->setCustomerIsGuest(
 $quote->getShippingAddress()->setShippingMethod('flatrate_flatrate');
 $quote->getShippingAddress()->setCollectShippingRates(true);
 $quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS_EXPRESS);
-$quote->collectTotals()->save();
 
+$quoteRepository = $objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+$quoteRepository->save($quote);
+$quote = $quoteRepository->get($quote->getId());
 $quote->setCustomerEmail('admin@example.com');
 
 /** @var $service \Magento\Quote\Api\CartManagementInterface */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('\Magento\Quote\Api\CartManagementInterface');
+    ->create(\Magento\Quote\Api\CartManagementInterface::class);
 $order = $service->submit($quote, ['increment_id' => '100000002']);

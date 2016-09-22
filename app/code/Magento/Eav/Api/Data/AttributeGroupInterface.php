@@ -7,6 +7,10 @@ namespace Magento\Eav\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Interface AttributeGroupInterface
+ * @api
+ */
 interface AttributeGroupInterface extends ExtensibleDataInterface
 {
     const GROUP_ID = 'attribute_group_id';

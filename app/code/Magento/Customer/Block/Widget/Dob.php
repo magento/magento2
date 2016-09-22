@@ -175,6 +175,7 @@ class Dob extends AbstractWidget
     public function getFieldHtml()
     {
         $this->dateElement->setData([
+            'extra_params' => $this->isRequired() ? 'data-validate="{required:true}"' : '',
             'name' => $this->getHtmlId(),
             'id' => $this->getHtmlId(),
             'class' => $this->getHtmlClass(),

@@ -33,20 +33,13 @@ class TemporaryStorage
     /**
      * Stores Documents
      *
-     * @param \ArrayIterator|\Magento\Framework\Search\Document[] $documents
+     * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @deprecated
      */
     public function storeDocuments($documents)
     {
-        $data = [];
-        foreach ($documents as $document) {
-            $data[] = [
-                $document->getId(),
-                $document->getField('score')->getValue(),
-            ];
-        }
-
-        return $this->populateTemporaryTable($this->createTemporaryTable(), $data);
+        return $this->storeApiDocuments($documents);
     }
 
     /**

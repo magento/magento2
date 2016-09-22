@@ -7,8 +7,9 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
+    'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig) {
+], function ($, _, ko, sectionConfig, mageStorage) {
     'use strict';
 
     var options,

@@ -84,12 +84,14 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             $output->writeln(
                 "<info>Store settings can't be saved because the Magento application is not installed.</info>"
             );
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $errors = $this->validate($input);
         if ($errors) {
             $output->writeln($errors);
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installUserConfig($input->getOptions());
@@ -182,7 +184,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     if (strcmp($value, '{{base_url}}') == 0) {
                         break;
                     }
-                    $url = $this->objectManager->get('Magento\Framework\Url\Validator');
+                    $url = $this->objectManager->get(\Magento\Framework\Url\Validator::class);
                     if (!$url->isValid($value)) {
                         $errorMsgs = $url->getMessages();
                         $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL
@@ -191,7 +193,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     break;
                 case StoreConfigurationDataMapper::KEY_LANGUAGE:
                     /** @var Locale $lists */
-                    $lists = $this->objectManager->get('Magento\Framework\Validator\Locale');
+                    $lists = $this->objectManager->get(\Magento\Framework\Validator\Locale::class);
                     $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_LANGUAGE);
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
@@ -199,7 +201,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     break;
                 case StoreConfigurationDataMapper::KEY_TIMEZONE:
                     /** @var Timezone $lists */
-                    $lists = $this->objectManager->get('Magento\Framework\Validator\Timezone');
+                    $lists = $this->objectManager->get(\Magento\Framework\Validator\Timezone::class);
                     $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_TIMEZONE);
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
@@ -207,7 +209,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     break;
                 case StoreConfigurationDataMapper::KEY_CURRENCY:
                     /** @var Currency $lists */
-                    $lists = $this->objectManager->get('Magento\Framework\Validator\Currency');
+                    $lists = $this->objectManager->get(\Magento\Framework\Validator\Currency::class);
                     $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_CURRENCY);
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
@@ -228,7 +230,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                 case StoreConfigurationDataMapper::KEY_BASE_URL_SECURE:
                     try {
                         /** @var Validator $url */
-                        $url = $this->objectManager->get('Magento\Framework\Url\Validator');
+                        $url = $this->objectManager->get(\Magento\Framework\Url\Validator::class);
                         $errorMsgs = '';
                         if (!$url->isValid($value)) {
                             $errorMsgs = $url->getMessages();

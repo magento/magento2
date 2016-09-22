@@ -8,7 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
 
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**

@@ -57,7 +57,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetRelationInfo()
     {
         $info = $this->model->getRelationInfo();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $info);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $info);
         $this->assertEquals('catalog_product_super_link', $info->getTable());
         $this->assertEquals('parent_id', $info->getParentFieldName());
         $this->assertEquals('product_id', $info->getChildFieldName());
@@ -112,7 +112,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attributes = $this->product->getData('_cache_instance_configurable_attributes');
         $this->assertArrayHasKey(0, $attributes);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class,
             $attributes[0]
         );
         $this->assertSame($testConfigurable, $attributes[0]->getProductAttribute());
@@ -135,13 +135,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->model->getConfigurableAttributes($this->product);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection::class,
             $collection
         );
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
         foreach ($collection as $attribute) {
             $this->assertInstanceOf(
-                'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute',
+                \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class,
                 $attribute
             );
             $this->assertEquals($testConfigurable->getId(), $attribute->getAttributeId());
@@ -208,7 +208,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->model->getConfigurableAttributeCollection($this->product);
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection::class,
             $collection
         );
     }
@@ -234,14 +234,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $products);
         $this->assertTrue(2 === count($products));
         foreach ($products as $product) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         }
     }
 
     public function testGetUsedProductCollection()
     {
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class,
             $this->model->getUsedProductCollection($this->product)
         );
     }
@@ -283,7 +283,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [$attribute['attribute_id'] => $optionValueId],
             $this->product
         );
-        $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         $this->assertEquals("simple_10", $product->getSku());
     }
 
@@ -301,7 +301,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
         $info = $this->model->getSelectedAttributesInfo($product);
-        $this->assertEquals([['label' => 'Test Configurable', 'value' => 'Option 1']], $info);
+        $this->assertEquals('Test Configurable', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
@@ -322,7 +323,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $attribute->getProductAttribute()->setStoreLabel('store label');
         $info = $this->model->getSelectedAttributesInfo($this->product);
-        $this->assertEquals([['label' => 'store label', 'value' => 'Option 1']], $info);
+        $this->assertEquals('store label', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
@@ -343,9 +345,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         $this->assertTrue(2 === count($result));
         foreach ($result as $product) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         }
-        $this->assertInstanceOf('Magento\Framework\DataObject', $result[1]->getCustomOption('parent_product_id'));
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $result[1]->getCustomOption('parent_product_id'));
     }
 
     public function testGetSpecifyOptionMessage()
@@ -369,10 +371,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->getOrderOptions($product);
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
-        $this->assertEquals(
-            [['label' => 'Test Configurable', 'value' => 'Option 1']],
-            $result['attributes_info']
-        );
+        $this->assertEquals('Test Configurable', $result['attributes_info'][0]['label']);
+        $this->assertEquals('Option 1', $result['attributes_info'][0]['value']);
         $this->assertArrayHasKey('product_calculations', $result);
         $this->assertArrayHasKey('shipment_type', $result);
         $this->assertEquals(
@@ -442,7 +442,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(2 === count($result[0]));
         // fixture has 2 simple products
         foreach ($result[0] as $product) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         }
     }
 
@@ -533,7 +533,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function _getAttributeByCode($code)
     {
         return Bootstrap::getObjectManager()->get(
-            'Magento\Eav\Model\Config'
+            \Magento\Eav\Model\Config::class
         )->getAttribute(
             'catalog_product',
             $code

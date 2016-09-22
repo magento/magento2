@@ -82,10 +82,11 @@ class GenerateFixturesCommand extends Command
             }
 
             /** @var $config \Magento\Indexer\Model\Config */
-            $config = $fixtureModel->getObjectManager()->get('Magento\Indexer\Model\Config');
+            $config = $fixtureModel->getObjectManager()->get(\Magento\Indexer\Model\Config::class);
             $indexerListIds = $config->getIndexers();
             /** @var $indexerRegistry \Magento\Framework\Indexer\IndexerRegistry */
-            $indexerRegistry = $fixtureModel->getObjectManager()->create('Magento\Framework\Indexer\IndexerRegistry');
+            $indexerRegistry = $fixtureModel->getObjectManager()
+                ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
             $indexersState = [];
             foreach ($indexerListIds as $indexerId) {
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);
@@ -111,13 +112,15 @@ class GenerateFixturesCommand extends Command
             if (!$input->getOption(self::SKIP_REINDEX_OPTION)) {
                 $fixtureModel->reindex($output);
             }
-            
+
             $totalEndTime = microtime(true);
             $totalResultTime = $totalEndTime - $totalStartTime;
 
             $output->writeln('<info>Total execution time: ' . gmdate('H:i:s', $totalResultTime) . '</info>');
         } catch (\Exception $e) {
-             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }

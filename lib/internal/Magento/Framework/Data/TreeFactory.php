@@ -35,7 +35,7 @@ class TreeFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\Data\Tree'
+        $instanceName = \Magento\Framework\Data\Tree::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

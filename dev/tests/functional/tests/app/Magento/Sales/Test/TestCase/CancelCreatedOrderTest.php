@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Do cancel Order.
  * 5. Perform all assetions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28191
  */
 class CancelCreatedOrderTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -56,7 +55,7 @@ class CancelCreatedOrderTest extends Injectable
     public function __prepare()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'checkmo, flatrate', 'rollback' => true]
         )->run();
     }

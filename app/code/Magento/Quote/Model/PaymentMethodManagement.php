@@ -61,10 +61,6 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
         $payment = $quote->getPayment();
 
         $data = $method->getData();
-        if (isset($data['additional_data'])) {
-            $data = array_merge($data, (array)$data['additional_data']);
-            unset($data['additional_data']);
-        }
         $payment->importData($data);
 
         if ($quote->isVirtual()) {

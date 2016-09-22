@@ -7,13 +7,20 @@
 namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Util\ModuleResolver\SequenceSorterInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Block\Mapper;
+use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Customer addresses edit block.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Addresses extends Tab
 {
@@ -23,6 +30,29 @@ class Addresses extends Tab
      * @var string
      */
     protected $addNewAddress = '.address-list-actions .add';
+
+    /**
+     * Selector for address block.
+     *
+     * @var string
+     */
+    protected $addressSelector = "//li[address[contains(.,'%s')]]";
+
+    protected $countriesSelector = "//*/select[@name='address[new_%d][country_id]']/option";
+
+    /**
+     * Delete Address button.
+     *
+     * @var string
+     */
+    protected $deleteAddress = '.action-delete';
+
+    /**
+     * Accept button selector.
+     *
+     * @var string
+     */
+    private $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
      * Open customer address.
@@ -37,6 +67,36 @@ class Addresses extends Tab
      * @var string
      */
     protected $loader = '//ancestor::body/div[@data-role="loader"]';
+
+    /**
+     * Object Manager.
+     *
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @constructor
+     * @param SimpleElement $element
+     * @param BlockFactory $blockFactory
+     * @param Mapper $mapper
+     * @param BrowserInterface $browser
+     * @param SequenceSorterInterface $sequenceSorter
+     * @param ObjectManager $objectManager
+     * @param array $config [optional]
+     */
+    public function __construct(
+        SimpleElement $element,
+        BlockFactory $blockFactory,
+        Mapper $mapper,
+        BrowserInterface $browser,
+        SequenceSorterInterface $sequenceSorter,
+        ObjectManager $objectManager,
+        array $config = []
+    ) {
+        $this->objectManager = $objectManager;
+        parent::__construct($element, $blockFactory, $mapper, $browser, $sequenceSorter, $config);
+    }
 
     /**
      * Fill customer addresses.
@@ -95,7 +155,7 @@ class Addresses extends Tab
     }
 
     /**
-     * Get data of Customer addresses.
+     * Get data from Customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[]|null $address
      * @return array
@@ -181,5 +241,62 @@ class Addresses extends Tab
         );
 
         return $addressTab->isVisible();
+    }
+
+    /**
+     * Retrieve list of all countries
+     * @param int $addressNumber
+     * @return array
+     */
+    public function getCountriesList($addressNumber)
+    {
+        $this->openCustomerAddress($addressNumber);
+        /** @var SimpleElement $element */
+        $options = $this->_rootElement->getElements(
+            sprintf($this->countriesSelector, $addressNumber - 1),
+            Locator::SELECTOR_XPATH
+        );
+        $data = [];
+        /** @var SimpleElement $option */
+        foreach ($options as $option) {
+            if ($option->isVisible()) {
+                $value = $option->getValue();
+
+                if ($value != "") {
+                    $data[] = $value;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Click delete customer address button.
+     *
+     * @param Address $addressToDelete
+     * @return $this
+     */
+    public function deleteCustomerAddress(Address $addressToDelete)
+    {
+        $addressRenderer = $this->objectManager->create(
+            \Magento\Customer\Test\Block\Address\Renderer::class,
+            ['address' => $addressToDelete, 'type' => 'html']
+        );
+        $addressToDelete = $addressRenderer->render();
+
+        $dataList = explode("\n", $addressToDelete);
+        $dataList = implode("') and contains(.,'", $dataList);
+
+        $this->_rootElement
+            ->find(sprintf($this->addressSelector, $dataList), Locator::SELECTOR_XPATH)
+            ->find($this->deleteAddress)->click();
+
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
+
+        return $this;
     }
 }

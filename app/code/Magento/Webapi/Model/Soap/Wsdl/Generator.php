@@ -375,7 +375,7 @@ class Generator extends AbstractSchemaGenerator
         if (!$allowedServicesMetadata) {
             throw new AuthorizationException(
                 __(
-                    AuthorizationException::NOT_AUTHORIZED,
+                    'Consumer is not authorized to access %resources',
                     ['resources' => implode(', ', $requestedServices)]
                 )
             );

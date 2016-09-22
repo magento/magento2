@@ -233,9 +233,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.',
-                            'Magento\ImportExport\Model\Import\Entity\AbstractEntity',
-                            'Magento\ImportExport\Model\Import\AbstractEntity'
+                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Import\AbstractEntity::class
                         )
                     );
                 }
@@ -280,11 +278,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = [];
         if ($this->getProcessedRowsCount()) {
             if ($validationResult->getErrorsCount()) {
-                $messages[] = __('Data validation is failed. Please fix errors and re-upload the file.');
+                $messages[] = __('Data validation failed. Please fix the following errors and upload the file again.');
 
                 // errors info
                 foreach ($validationResult->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
-                    $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
+                    $error = $errorMessage . ' ' . __('in row(s)') . ': ' . implode(', ', $rows);
                     $messages[] = $error;
                 }
             } else {

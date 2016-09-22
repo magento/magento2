@@ -65,7 +65,7 @@ return [
             'templateUrl' => "$base/start-updater",
             'controller'  => 'startUpdaterController',
             'title'       => "Component \n Install",
-            'header'      => 'Step 3: Component Install',
+            'header'      => 'Step 3: Install',
             'nav'         => true,
             'order'       => 6,
             'type'        => 'install',

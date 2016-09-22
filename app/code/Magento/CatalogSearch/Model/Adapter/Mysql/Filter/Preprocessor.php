@@ -13,7 +13,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -179,14 +179,14 @@ class Preprocessor implements PreprocessorInterface
         $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
-        $linkIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $entityField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
 
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
         $select->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['entity_id'])
             ->join(
                 ['main_table' => $table],
-                "main_table.{$linkIdField} = e.{$linkIdField}",
+                "main_table.{$entityField} = e.{$entityField}",
                 []
             )
             ->columns([$filter->getField() => 'main_table.value'])
@@ -230,13 +230,13 @@ class Preprocessor implements PreprocessorInterface
     /**
      * Get product metadata pool
      *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

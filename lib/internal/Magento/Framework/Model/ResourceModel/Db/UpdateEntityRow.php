@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Model\ResourceModel\Db;
 
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityMetadata;
 
 /**
  * Class ReadEntityRow

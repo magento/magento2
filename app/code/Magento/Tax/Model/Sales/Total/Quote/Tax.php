@@ -303,7 +303,7 @@ class Tax extends CommonTaxCollector
             $applied = unserialize($applied);
         }
         $amount = $total->getTaxAmount();
-        if ($amount == null) {
+        if ($amount === null) {
             $this->enhanceTotalData($quote, $total);
             $amount = $total->getTaxAmount();
         }

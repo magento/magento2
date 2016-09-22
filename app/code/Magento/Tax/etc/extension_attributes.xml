@@ -14,4 +14,7 @@
         <attribute code="item_applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[]" />
         <attribute code="converting_from_quote" type="boolean" />
     </extension_attributes>
+    <extension_attributes for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface">
+        <attribute code="rates" type="Magento\Tax\Api\Data\AppliedTaxRateInterface[]" />
+    </extension_attributes>
 </config>

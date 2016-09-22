@@ -18,7 +18,7 @@ class ProductList
      */
     const XML_PATH_LIST_MODE = 'catalog/frontend/list_mode';
 
-    const VIEW_MODE_LIST = 'view';
+    const VIEW_MODE_LIST = 'list';
     const VIEW_MODE_GRID = 'grid';
 
     const DEFAULT_SORT_DIRECTION = 'asc';

@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <paypal>
-            <bncode>Magento_Cart_Community</bncode>
             <style>
                 <logo></logo>
             </style>
@@ -93,6 +92,10 @@
                 <can_authorize_vault>1</can_authorize_vault>
                 <can_capture_vault>1</can_capture_vault>
             </payflowpro>
+            <payflowpro_cc_vault>
+               <model>PayflowProCreditCardVaultFacade</model>
+               <title>Stored Cards (Payflow Pro)</title>
+            </payflowpro_cc_vault>
             <paypal_billing_agreement>
                 <active>1</active>
                 <allow_billing_agreement_wizard>1</allow_billing_agreement_wizard>

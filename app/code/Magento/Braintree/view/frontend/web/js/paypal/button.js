@@ -4,6 +4,7 @@
  */
 define(
     [
+        'rjsResolver',
         'uiRegistry',
         'uiComponent',
         'underscore',
@@ -13,6 +14,7 @@ define(
         'domReady!'
     ],
     function (
+        resolver,
         registry,
         Component,
         _,
@@ -47,8 +49,10 @@ define(
                      * @param {Object} integration
                      */
                     onReady: function (integration) {
-                        registry.set(this.integrationName, integration);
-                        $('#' + this.id).removeAttr('disabled');
+                        resolver(function () {
+                            registry.set(this.integrationName, integration);
+                            $('#' + this.id).removeAttr('disabled');
+                        }, this);
                     },
 
                     /**

@@ -16,7 +16,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $formName = $this->getRequest()->getParam('form_namespace');
+        $formName = $this->getRequest()->getParam('form');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -27,7 +27,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         )->setType(
             $type
         )->setRule(
-            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         )->setPrefix(
             'actions'
         );

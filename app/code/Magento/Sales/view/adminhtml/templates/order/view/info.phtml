@@ -64,6 +64,7 @@ $orderStoreDate = $block->formatDate(
                     <th><?php /* @escapeNotVerified */ echo __('Order Status') ?></th>
                     <td><span id="order_status"><?php /* @escapeNotVerified */ echo $_order->getStatusLabel() ?></span></td>
                 </tr>
+                <?php echo $block->getChildHtml(); ?>
                 <?php if ($block->isSingleStoreMode() == false):?>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Purchased From') ?></th>
@@ -89,7 +90,7 @@ $orderStoreDate = $block->formatDate(
                 <?php if ($_order->getRemoteIp() && $block->shouldDisplayCustomerIp()): ?>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Placed from IP') ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $_order->getRemoteIp(); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
+                        <td><?php echo $block->escapeHtml($_order->getRemoteIp()); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
                     </tr>
                 <?php endif; ?>
                 <?php if ($_order->getGlobalCurrencyCode() != $_order->getBaseCurrencyCode()): ?>

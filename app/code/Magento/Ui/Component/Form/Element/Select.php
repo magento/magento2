@@ -21,4 +21,12 @@ class Select extends AbstractOptionsField
     {
         return static::NAME;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsSelected($optionValue)
+    {
+        return $this->getValue() == $optionValue;
+    }
 }

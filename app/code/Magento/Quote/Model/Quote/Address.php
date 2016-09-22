@@ -347,7 +347,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address::class);
     }
 
     /**
@@ -512,7 +512,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $customerAddressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         return $addressDataObject;
     }
@@ -564,8 +564,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function getAllItems()
     {
         // We calculate item list once and cache it in three arrays - all items
-        $cachedItems = 'all';
-        $key = 'cached_items_' . $cachedItems;
+        $key = 'cached_items_all';
         if (!$this->hasData($key)) {
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
@@ -1056,7 +1055,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $addressTotal = null;
         if (is_array($total)) {
             /** @var \Magento\Quote\Model\Quote\Address\Total $addressTotal */
-            $addressTotal = $this->_addressTotalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+            $addressTotal = $this->_addressTotalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
             $addressTotal->setData($total);
         } elseif ($total instanceof \Magento\Quote\Model\Quote\Address\Total) {
             $addressTotal = $total;

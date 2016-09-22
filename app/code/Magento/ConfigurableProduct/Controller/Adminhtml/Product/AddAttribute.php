@@ -7,6 +7,7 @@
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\ResultFactory;
 
 class AddAttribute extends Action
 {
@@ -28,18 +29,11 @@ class AddAttribute extends Action
     }
 
     /**
-     * Add "super" attribute from popup window
-     *
-     * @return void
+     * @inheritdoc
      */
     public function execute()
     {
-        $this->_view->loadLayout('popup');
         $this->productBuilder->build($this->getRequest());
-        $attributeBlock = $this->_view->getLayout()->createBlock(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created'
-        );
-        $this->_addContent($attributeBlock);
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
     }
 }

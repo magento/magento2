@@ -85,6 +85,17 @@
     .action-menu {
         max-height: 45rem;
         overflow-y: auto;
+
+        ._disabled {
+            &:hover {
+                background: @color-white;
+            }
+
+            .action-menu-item {
+                cursor: default;
+                opacity: .5;
+            }
+        }
     }
 
     .action-menu-items {

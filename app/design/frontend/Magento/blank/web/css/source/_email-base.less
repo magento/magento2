@@ -35,6 +35,12 @@
 //      * pseudo (a:hover, a:active, a:focus, span:before, span:after, etc)
 
 //
+//  Variables
+//  _____________________________________________
+
+@font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
+
+//
 //  Resets
 //  ---------------------------------------------
 
@@ -92,7 +98,6 @@ table {
 
 //  See email-fonts.less for @font-face declarations
 
-@font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
 .lib-typography-all();
 
 body {

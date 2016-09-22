@@ -38,7 +38,10 @@ define([
 
         el.innerHTML = elem;
         actions = el.getElementsByClassName(actionsClass)[0];
-        el.removeChild(actions);
+
+        if (actions) {
+            el.removeChild(actions);
+        }
 
         return el.innerHTML;
     }
@@ -47,6 +50,7 @@ define([
         defaults: {
             externalFormName: '${ $.ns }.${ $.ns }',
             pageActionsClass: 'page-actions',
+            actionsContainerClass: 'page-main-actions',
             exports: {
                 prefix: '${ $.externalFormName }:selectorPrefix'
             },
@@ -89,7 +93,7 @@ define([
 
         /** @inheritdoc*/
         destroyInserted: function () {
-            if (this.isRendered) {
+            if (this.isRendered && this.externalForm()) {
                 this.externalForm().delegate('destroy');
                 this.removeActions();
                 this.responseStatus(undefined);
@@ -114,10 +118,17 @@ define([
         /**
          * Insert actions in toolbar.
          *
-         * @param {String} elem
+         * @param {String} actions
          */
-        renderActions: function (elem) {
-            this.formHeader = $(elem);
+        renderActions: function (actions) {
+            var $container = $('<div/>');
+
+            $container
+                .addClass(this.actionsContainerClass)
+                .append(actions);
+
+            this.formHeader = $container;
+
             $(this.toolbarSection).append(this.formHeader);
         },
 

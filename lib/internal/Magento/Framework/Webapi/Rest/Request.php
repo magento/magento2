@@ -190,13 +190,6 @@ class Request extends \Magento\Framework\Webapi\Request
             $requestBodyParams = $this->getBodyParams();
         }
 
-        /*
-         * Valid only for updates using PUT when passing id value both in URL and body
-         */
-        if ($httpMethod == self::HTTP_METHOD_PUT && !empty($params)) {
-            $requestBodyParams = $this->overrideRequestBodyIdWithPathParam($params);
-        }
-
         return array_merge($requestBodyParams, $params);
     }
 
@@ -214,6 +207,9 @@ class Request extends \Magento\Framework\Webapi\Request
      *
      * @param array $urlPathParams url path parameters as array
      * @return array
+     *
+     * @deprecated
+     * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::overrideRequestBodyIdWithPathParam
      */
     protected function overrideRequestBodyIdWithPathParam($urlPathParams)
     {
@@ -242,6 +238,8 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param string $key
      * @param string $value
      * @return void
+     * @deprecated
+     * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::substituteParameters
      */
     protected function substituteParameters(&$requestData, $key, $value)
     {

@@ -446,7 +446,7 @@ define([
                             $.unique(errorsMessage).join(', ');
                     };
 
-                    if (data.error && data.error.code === 400) {
+                    if (data.error && [400, 402, 403].indexOf(data.error.code) !== -1) {
                         this._onRequestError(createErrorMessage());
 
                         return;

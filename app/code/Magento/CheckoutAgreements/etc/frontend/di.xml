@@ -13,5 +13,4 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\CheckoutAgreements\Model\AgreementsValidator" />
 </config>

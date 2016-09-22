@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Model\ResourceModel\Grid;
 
+use Magento\Customer\Ui\Component\DataProvider\Document;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
@@ -13,6 +14,11 @@ use Psr\Log\LoggerInterface as Logger;
 
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
+    /**
+     * @inheritdoc
+     */
+    protected $document = Document::class;
+
     /**
      * Initialize dependencies.
      *
@@ -29,7 +35,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'customer_grid_flat',
-        $resourceModel = '\Magento\Customer\Model\ResourceModel\Customer'
+        $resourceModel = \Magento\Customer\Model\ResourceModel\Customer::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

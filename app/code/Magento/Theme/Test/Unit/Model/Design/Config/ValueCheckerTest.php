@@ -24,13 +24,13 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->fallbackResolver = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ScopeFallbackResolverInterface',
+            \Magento\Framework\App\ScopeFallbackResolverInterface::class,
             [],
             '',
             false
         );
-        $this->appConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+        $this->appConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->valueProcessor = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\ValueProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -53,7 +53,7 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
                 'value',
                 'default',
                 0,
-                'design/head/default_title'
+                ['path' => 'design/head/default_title']
             )
         );
     }
@@ -77,7 +77,7 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
                 'value',
                 'website',
                 1,
-                'design/head/default_title'
+                ['path' => 'design/head/default_title']
             )
         );
     }
@@ -111,7 +111,7 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
                 ],
                 'website',
                 1,
-                $path
+                ['path' => $path]
             )
         );
     }

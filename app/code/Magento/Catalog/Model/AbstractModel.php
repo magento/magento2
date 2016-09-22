@@ -302,7 +302,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     {
         if ($this->scopeOverriddenValue === null) {
             $this->scopeOverriddenValue = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Attribute\ScopeOverriddenValue');
+                ->get(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class);
         }
         return $this->scopeOverriddenValue;
     }

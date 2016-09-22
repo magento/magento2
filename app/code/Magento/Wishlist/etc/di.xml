@@ -33,4 +33,39 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Bundle\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="wishlist_configured_price" xsi:type="string">Magento\Bundle\Pricing\Price\ConfiguredPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="wishlist_configured_price" xsi:type="string">Magento\Catalog\Pricing\Price\ConfiguredPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\ConfigurableProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="wishlist_configured_price" xsi:type="string">Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Downloadable\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="wishlist_configured_price" xsi:type="string">Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\GroupedProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="wishlist_configured_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\ConfiguredPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

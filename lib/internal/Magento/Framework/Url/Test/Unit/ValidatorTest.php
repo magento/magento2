@@ -18,7 +18,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->object = $objectManager->getObject('Magento\Framework\Url\Validator');
+        $this->object = $objectManager->getObject(\Magento\Framework\Url\Validator::class);
     }
 
     public function testConstruct()

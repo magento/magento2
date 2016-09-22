@@ -80,7 +80,14 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
         $this->addColumn(
             'orders_count',
-            ['header' => __('Orders'), 'sortable' => false, 'index' => 'orders_count', 'type' => 'number']
+            [
+                'header' => __('Orders'),
+                'sortable' => false,
+                'index' => 'orders_count',
+                'type' => 'number',
+                'header_css_class' => 'col-orders',
+                'column_css_class' => 'col-orders'
+            ]
         );
 
         $baseCurrencyCode = (string)$this->_storeManager->getStore(

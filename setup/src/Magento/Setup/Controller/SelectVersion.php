@@ -71,7 +71,7 @@ class SelectVersion extends AbstractActionController
     {
         $data = [];
         try {
-            $data['packages'] = $this->systemPackage->getInstalledSystemPackages([]);
+            $data['packages'] = $this->systemPackage->getInstalledSystemPackages();
             $data['responseType'] = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         } catch (\Exception $e) {
             $data['error'] = $e->getMessage();

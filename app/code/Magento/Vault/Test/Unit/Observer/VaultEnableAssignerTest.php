@@ -10,6 +10,7 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
 
@@ -39,7 +40,9 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
     {
         $dataObject = new DataObject(
             [
-                VaultConfigProvider::IS_ACTIVE_CODE => $activeCode
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    VaultConfigProvider::IS_ACTIVE_CODE => $activeCode
+                ]
             ]
         );
         $paymentModel = $this->getMock(InfoInterface::class);
@@ -76,6 +79,30 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
             ['0', false],
             ['off', false]
         ];
+    }
+
+    public function testExecuteNever()
+    {
+        $dataObject = new DataObject(
+            [
+                PaymentInterface::KEY_ADDITIONAL_DATA => []
+            ]
+        );
+        $paymentModel = $this->getMock(InfoInterface::class);
+
+        $paymentModel->expects(static::never())
+            ->method('setAdditionalInformation');
+
+        $observer = $this->getPreparedObserverWithMap(
+            [
+                [AbstractDataAssignObserver::DATA_CODE, $dataObject],
+                [AbstractDataAssignObserver::MODEL_CODE, $paymentModel]
+            ]
+        );
+
+        $vaultEnableAssigner = new VaultEnableAssigner();
+
+        $vaultEnableAssigner->execute($observer);
     }
 
     /**

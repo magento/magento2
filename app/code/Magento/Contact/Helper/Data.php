@@ -8,6 +8,8 @@ namespace Magento\Contact\Helper;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Contact base helper
@@ -27,6 +29,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Customer\Helper\View
      */
     protected $_customerViewHelper;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
+     * @var array
+     */
+    private $postData = null;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -70,6 +82,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
          * @var \Magento\Customer\Api\Data\CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
+
         return trim($this->_customerViewHelper->getCustomerName($customer));
     }
 
@@ -87,6 +100,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
          * @var CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
+
         return $customer->getEmail();
+    }
+
+    /**
+     * Get value from POST by key
+     *
+     * @param string $key
+     * @return string
+     */
+    public function getPostValue($key)
+    {
+        if (null === $this->postData) {
+            $this->postData = (array) $this->getDataPersistor()->get('contact_us');
+            $this->getDataPersistor()->clear('contact_us');
+        }
+
+        if (isset($this->postData[$key])) {
+            return (string) $this->postData[$key];
+        }
+
+        return '';
+    }
+
+    /**
+     * Get Data Persistor
+     *
+     * @return DataPersistorInterface
+     */
+    private function getDataPersistor()
+    {
+        if ($this->dataPersistor === null) {
+            $this->dataPersistor = ObjectManager::getInstance()
+                ->get(DataPersistorInterface::class);
+        }
+
+        return $this->dataPersistor;
     }
 }

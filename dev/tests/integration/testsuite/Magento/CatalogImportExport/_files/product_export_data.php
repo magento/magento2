@@ -12,7 +12,7 @@ require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_a
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$productModel = $objectManager->create('Magento\Catalog\Model\Product');
+$productModel = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $customOptions = [
     [
@@ -23,8 +23,9 @@ $customOptions = [
         'type' => 'drop_down',
         'is_require' => 1,
         'values' => [
-            1 => ['option_type_id' => -1, 'title' => 'Option 1 Value 1', 'price' => '1.00', 'price_type' => 'fixed'],
-            2 => ['option_type_id' => -1, 'title' => 'Option 1 Value 2', 'price' => '2.00', 'price_type' => 'fixed']
+            1 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 1"', 'price' => '1.00', 'price_type' => 'fixed'],
+            2 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 2"', 'price' => '2.00', 'price_type' => 'fixed'],
+            3 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 3"', 'price' => '3.00', 'price_type' => 'fixed']
         ]
     ],
     [
@@ -74,7 +75,7 @@ $productModel->setTypeId(
 $options = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 
 foreach ($customOptions as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */

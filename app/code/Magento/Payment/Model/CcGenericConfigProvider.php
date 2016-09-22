@@ -51,8 +51,6 @@ class CcGenericConfigProvider implements ConfigProviderInterface
                             'months' => [$methodCode => $this->getCcMonths()],
                             'years' => [$methodCode => $this->getCcYears()],
                             'hasVerification' => [$methodCode => $this->hasVerification($methodCode)],
-                            'hasSsCardType' => [$methodCode => $this->hasSsCardType($methodCode)],
-                            'ssStartYears' => [$methodCode => $this->getSsStartYears()],
                             'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()]
                         ]
                     ]
@@ -66,6 +64,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Solo/switch card start years
      *
      * @return array
+     * @deprecated unused
      */
     protected function getSsStartYears()
     {
@@ -144,6 +143,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return bool
+     * @deprecated unused
      */
     protected function hasSsCardType($methodCode)
     {

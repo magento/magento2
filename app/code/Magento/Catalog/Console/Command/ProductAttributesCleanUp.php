@@ -37,7 +37,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     protected $appState;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $metadata;
 
@@ -46,14 +46,14 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->productAttributeRepository = $productAttributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -78,7 +78,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->setDecorated(true);
-        $this->appState->setAreaCode('catalog');
+        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
         $connection = $this->attributeResource->getConnection();
         $attributeTables = $this->getAttributeTables();
 
@@ -101,11 +101,14 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
             $output->writeln("");
             $output->writeln("<info>Unused product attributes successfully cleaned up:</info>");
             $output->writeln("<comment>  " . implode("\n  ", $attributeTables) . "</comment>");
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
             $this->attributeResource->rollBack();
 
             $output->writeln("");
             $output->writeln("<error>{$exception->getMessage()}</error>");
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 

@@ -42,6 +42,7 @@
     </type>
     <type name="Magento\Paypal\Model\Payflow\Transparent">
         <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
             <argument name="data" xsi:type="array">
                 <item name="formBlockType" xsi:type="string">Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm</item>
             </argument>
@@ -58,14 +59,6 @@
         <arguments>
             <argument xsi:type="object" name="fileResolver">Magento\Paypal\Model\Config\Rules\FileResolver</argument>
             <argument xsi:type="object" name="schemaLocator">Magento\Paypal\Model\Config\Rules\SchemaLocator</argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
-        <arguments>
-            <argument name="options" xsi:type="array">
-                <item xsi:type="object" name="payflowpro">Magento\Paypal\Model\Payflow\Transparent</item>
-            </argument>
         </arguments>
     </type>
 

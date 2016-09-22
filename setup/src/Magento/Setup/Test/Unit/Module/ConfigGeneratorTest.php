@@ -18,18 +18,11 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
+        $random = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
         $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deployConfig= $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
         $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
-    }
-
-    public function testCreateInstallConfig()
-    {
-        $returnValue = $this->configGeneratorObject->createInstallConfig([]);
-        $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
     }
 
     public function testCreateCryptConfigWithInput()

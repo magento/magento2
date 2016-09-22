@@ -134,6 +134,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $carrierCode = $addressInformation->getShippingCarrierCode();
         $methodCode = $addressInformation->getShippingMethodCode();
 
+        if (!$address->getCustomerAddressId()) {
+            $address->setCustomerAddressId(null);
+        }
+
         if (!$address->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
         }
@@ -197,9 +201,12 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         if ($cartExtension === null) {
             $cartExtension = $this->getCartExtensionFactory()->create();
         }
-        $shippingAssignment = $cartExtension->getShippingAssignments()[0];
-        if ($cartExtension->getShippingAssignments() === null) {
+
+        $shippingAssignments = $cartExtension->getShippingAssignments();
+        if (empty($shippingAssignments)) {
             $shippingAssignment = $this->getShippingAssignmentFactory()->create();
+        } else {
+            $shippingAssignment = $shippingAssignments[0];
         }
 
         $shipping = $shippingAssignment->getShipping();

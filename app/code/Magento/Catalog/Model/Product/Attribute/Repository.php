@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Eav\Api\Data\AttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -117,6 +118,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 throw NoSuchEntityException::singleField('attribute_code', $existingModel->getAttributeCode());
             }
 
+            // Attribute code must not be changed after attribute creation
+            $attribute->setAttributeCode($existingModel->getAttributeCode());
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
@@ -176,8 +179,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setIsUserDefined(1);
         }
         $this->attributeResource->save($attribute);
-        foreach ($attribute->getOptions() as $option) {
-            $this->getOptionManagement()->add($attribute->getAttributeCode(), $option);
+
+        if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
+            foreach ($attribute->getOptions() as $option) {
+                $this->getOptionManagement()->add($attribute->getAttributeCode(), $option);
+            }
         }
         return $this->get($attribute->getAttributeCode());
     }
@@ -265,7 +271,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     {
         if (null === $this->optionManagement) {
             $this->optionManagement = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductAttributeOptionManagementInterface');
+                ->get(\Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class);
         }
         return $this->optionManagement;
     }

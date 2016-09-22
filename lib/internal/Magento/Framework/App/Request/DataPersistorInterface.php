@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\App\Request;
 
+/**
+ * @api
+ */
 interface DataPersistorInterface
 {
     /**

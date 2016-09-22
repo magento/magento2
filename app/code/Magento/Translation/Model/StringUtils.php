@@ -25,7 +25,7 @@ class StringUtils extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Translation\Model\ResourceModel\StringUtils');
+        $this->_init(\Magento\Translation\Model\ResourceModel\StringUtils::class);
     }
 
     /**

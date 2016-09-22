@@ -170,7 +170,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock->expects(self::once())
             ->method('getItemsCount')
-            ->willReturn(1);
+            ->willReturn(0);
 
         $this->requestMock->expects(self::once())
             ->method('getPostValue')
@@ -188,7 +188,54 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('addExceptionMessage')
             ->with(
                 self::isInstanceOf('\InvalidArgumentException'),
-                'Data of request cannot be empty.'
+                'We can\'t initialize checkout.'
+            );
+
+        $this->resultFactoryMock->expects(self::once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($resultRedirectMock);
+
+        $resultRedirectMock->expects(self::once())
+            ->method('setPath')
+            ->with('checkout/cart')
+            ->willReturnSelf();
+
+        self::assertEquals($this->review->execute(), $resultRedirectMock);
+    }
+
+    public function testExecuteExceptionPaymentWithoutNonce()
+    {
+        $result = '{}';
+        $quoteMock = $this->getQuoteMock();
+        $resultRedirectMock = $this->getResultRedirectMock();
+
+        $quoteMock->expects(self::once())
+            ->method('getItemsCount')
+            ->willReturn(1);
+
+        $paymentMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $quoteMock->expects(self::once())
+            ->method('getPayment')
+            ->willReturn($paymentMock);
+
+        $this->requestMock->expects(self::once())
+            ->method('getPostValue')
+            ->with('result', '{}')
+            ->willReturn($result);
+
+        $this->checkoutSessionMock->expects(self::once())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
+
+        $this->messageManagerMock->expects(self::once())
+            ->method('addExceptionMessage')
+            ->with(
+                self::isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
+                'We can\'t initialize checkout.'
             );
 
         $this->resultFactoryMock->expects(self::once())

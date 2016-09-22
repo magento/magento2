@@ -185,6 +185,18 @@ define([
             }
         };
 
+        var isPopupBlocked = function(popupWindow) {
+            try {
+                popupWindow.focus();
+            } catch (e) {
+                alert({
+                    content: $.mage.__("Popup Blocker is enabled! Please add this site to your exception list.")
+                });
+                return true;
+            }
+            return false;
+        };
+
         var _showPopup = function (dialog, title, okButton, url) {
             $.ajax({
                 url: url,
@@ -217,13 +229,16 @@ define([
                         identityLinkUrl = resultObj['identity_link_url'];
                         consumerKey      = resultObj['oauth_consumer_key'];
                         popupHtml       = resultObj['popup_content'];
-                        
+
                     } catch (e) {
                         //This is expected if result is not json. Do nothing.
                     }
 
                     if (identityLinkUrl && consumerKey && popupHtml) {
                         IdentityLogin.invokePopup(identityLinkUrl, consumerKey, popup);
+                        if (isPopupBlocked(IdentityLogin.win)) {
+                            return;
+                        }
                     } else {
                         popupHtml = result;
                     }

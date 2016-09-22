@@ -17,7 +17,7 @@ class MsrpTest extends AbstractModifierTest
     /**
      * @var MsrpConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $msrpConfigMock;
+    private $msrpConfigMock;
 
     protected function setUp()
     {
@@ -41,20 +41,6 @@ class MsrpTest extends AbstractModifierTest
     public function testModifyData()
     {
         $this->assertSame([], $this->getModel()->modifyData([]));
-
-        $productId = 1;
-
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($productId);
-
-        $this->assertArrayHasKey($productId, $this->getModel()->modifyData([
-            $productId => [
-                Msrp::DATA_SOURCE_DEFAULT => [
-                    Msrp::FIELD_MSRP => 2
-                ],
-            ],
-        ]));
     }
 
     public function testModifyMeta()

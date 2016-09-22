@@ -14,7 +14,7 @@
         ); ?></h2>
     <div class="steps-wizard-info">
         <span><?php echo $block->escapeHtml(
-                __('Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU.')
+                __('Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.')
             );?></span>
     </div>
     <div data-bind="foreach: attributes, sortableList: attributes">
@@ -96,7 +96,7 @@
                                     data-action="remove"
                                     data-bind="click: $parents[1].removeOption.bind($parent)">
                                 <span><?php echo $block->escapeHtml(
-                                        _('Remove Option')
+                                        __('Remove Option')
                                     ); ?></span>
                             </button>
                         </div>

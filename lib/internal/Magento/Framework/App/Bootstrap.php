@@ -283,7 +283,7 @@ class Bootstrap
         }
         $this->initObjectManager();
         /** @var \Magento\Framework\App\MaintenanceMode $maintenance */
-        $this->maintenance = $this->objectManager->get('Magento\Framework\App\MaintenanceMode');
+        $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
         $isOn = $this->maintenance->isOn(isset($this->server['REMOTE_ADDR']) ? $this->server['REMOTE_ADDR'] : '');
         if ($isOn && !$isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
@@ -348,7 +348,7 @@ class Bootstrap
     {
         $this->initObjectManager();
         /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
-        $deploymentConfig = $this->objectManager->get('Magento\Framework\App\DeploymentConfig');
+        $deploymentConfig = $this->objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
         return $deploymentConfig->isAvailable();
     }
 
@@ -383,7 +383,7 @@ class Bootstrap
     {
         if (!$this->objectManager) {
             $this->objectManager = $this->factory->create($this->server);
-            $this->maintenance = $this->objectManager->get('Magento\Framework\App\MaintenanceMode');
+            $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
         }
     }
 
@@ -404,15 +404,18 @@ class Bootstrap
      */
     public function isDeveloperMode()
     {
-        if (isset($this->server[State::PARAM_MODE]) && $this->server[State::PARAM_MODE] == State::MODE_DEVELOPER) {
-            return true;
+        $mode = 'default';
+        if (isset($this->server[State::PARAM_MODE])) {
+            $mode = $this->server[State::PARAM_MODE];
+        } else {
+            $deploymentConfig = $this->getObjectManager()->get(DeploymentConfig::class);
+            $configMode = $deploymentConfig->get(State::PARAM_MODE);
+            if ($configMode) {
+                $mode = $configMode;
+            }
         }
-        /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
-        $deploymentConfig = $this->getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
-        if ($deploymentConfig->get(State::PARAM_MODE) == State::MODE_DEVELOPER) {
-            return true;
-        }
-        return false;
+
+        return $mode == State::MODE_DEVELOPER;
     }
 
     /**
@@ -432,7 +435,7 @@ class Bootstrap
                 if (!$this->objectManager) {
                     throw new \DomainException();
                 }
-                $this->objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }

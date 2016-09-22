@@ -8,8 +8,10 @@ namespace Magento\Vault\Test\Unit\Model\Method;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandManagerPoolInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -18,6 +20,10 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Model\VaultPaymentInterface;
 
+/**
+ * Class VaultTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class VaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,10 +50,12 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $additionalInfo
      * @expectedException \LogicException
-     * @expectedExceptionMessage Token metadata should be defined
+     * @expectedExceptionMessage Customer id and public hash should be defined
+     * @dataProvider additionalInfoDataProvider
      */
-    public function testAuthorizeNoTokenMetadata()
+    public function testAuthorizeNoTokenMetadata(array $additionalInfo)
     {
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
@@ -55,11 +63,24 @@ class VaultTest extends \PHPUnit_Framework_TestCase
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
-            ->willReturn([]);
+            ->willReturn($additionalInfo);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
         $model->authorize($paymentModel, 0);
+    }
+
+    /**
+     * Get list of additional information variations
+     * @return array
+     */
+    public function additionalInfoDataProvider()
+    {
+        return [
+            ['additionalInfo' => []],
+            ['additionalInfo' => ['customer_id' => 1]],
+            ['additionalInfo' => ['public_hash' => 'df768aak12uf']],
+        ];
     }
 
     /**
@@ -80,10 +101,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
-                    Vault::TOKEN_METADATA_KEY => [
-                        PaymentTokenInterface::CUSTOMER_ID => $customerId,
-                        PaymentTokenInterface::PUBLIC_HASH => $publicHash
-                    ]
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
         $tokenManagement->expects(static::once())
@@ -127,10 +146,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
-                    Vault::TOKEN_METADATA_KEY => [
-                        PaymentTokenInterface::CUSTOMER_ID => $customerId,
-                        PaymentTokenInterface::PUBLIC_HASH => $publicHash
-                    ]
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
         $tokenManagement->expects(static::once())
@@ -208,5 +225,81 @@ class VaultTest extends \PHPUnit_Framework_TestCase
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
         $model->capture($paymentModel, 0);
+    }
+
+    /**
+     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     * @dataProvider isAvailableDataProvider
+     */
+    public function testIsAvailable($isAvailableProvider, $isActive, $expected)
+    {
+        $storeId = 1;
+        $quote = $this->getMockForAbstractClass(CartInterface::class);
+        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+
+        $vaultProvider->expects(static::once())
+            ->method('isAvailable')
+            ->with($quote)
+            ->willReturn($isAvailableProvider);
+
+        $config->expects(static::any())
+            ->method('getValue')
+            ->with('active', $storeId)
+            ->willReturn($isActive);
+
+        $quote->expects(static::any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(Vault::class, [
+            'config' => $config,
+            'vaultProvider' => $vaultProvider
+        ]);
+        $actual = $model->isAvailable($quote);
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * List of variations for testing isAvailable method
+     * @return array
+     */
+    public function isAvailableDataProvider()
+    {
+        return [
+            ['isAvailableProvider' => true, 'isActiveVault' => false, 'expected' => false],
+            ['isAvailableProvider' => false, 'isActiveVault' => false, 'expected' => false],
+            ['isAvailableProvider' => false, 'isActiveVault' => true, 'expected' => false],
+            ['isAvailableProvider' => true, 'isActiveVault' => true, 'expected' => true],
+        ];
+    }
+
+    /**
+     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     */
+    public function testIsAvailableWithoutQuote()
+    {
+        $quote = null;
+
+        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+
+        $vaultProvider->expects(static::once())
+            ->method('isAvailable')
+            ->with($quote)
+            ->willReturn(true);
+
+        $config->expects(static::once())
+            ->method('getValue')
+            ->with('active', $quote)
+            ->willReturn(false);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(Vault::class, [
+            'config' => $config,
+            'vaultProvider' => $vaultProvider
+        ]);
+        static::assertFalse($model->isAvailable($quote));
     }
 }

@@ -73,5 +73,7 @@ class UpgradeCommand extends AbstractSetupCommand
         if (!$keepGenerated) {
             $output->writeln('<info>Please re-run Magento compile command</info>');
         }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

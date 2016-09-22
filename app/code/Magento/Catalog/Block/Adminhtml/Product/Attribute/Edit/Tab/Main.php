@@ -70,10 +70,10 @@ class Main extends AbstractMain
         }
         $this->_coreRegistry->register('attribute_type_hidden_fields', $_hiddenFields);
 
-        $this->_eventManager->dispatch('product_attribute_form_build_main_tab', ['form' => $form]);
-
         $frontendInputValues = array_merge($frontendInputElm->getValues(), $additionalTypes);
         $frontendInputElm->setValues($frontendInputValues);
+
+        $this->_eventManager->dispatch('product_attribute_form_build_main_tab', ['form' => $form]);
 
         return $this;
     }
@@ -85,6 +85,6 @@ class Main extends AbstractMain
      */
     protected function _getAdditionalElementTypes()
     {
-        return ['apply' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Apply'];
+        return ['apply' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Apply::class];
     }
 }

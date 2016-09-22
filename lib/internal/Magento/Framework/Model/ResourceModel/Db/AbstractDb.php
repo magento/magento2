@@ -167,7 +167,7 @@ abstract class AbstractDb extends AbstractResource
     public function __wakeup()
     {
         $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get('Magento\Framework\App\ResourceConnection');
+            ->get(\Magento\Framework\App\ResourceConnection::class);
     }
 
     /**
@@ -594,7 +594,7 @@ abstract class AbstractDb extends AbstractResource
                     }
                 }
 
-                if ($object->getId() || $object->getId() === '0') {
+                if ($object->getId() || (string)$object->getId() === '0') {
                     $select->where($this->getIdFieldName() . '!=?', $object->getId());
                 }
 

@@ -9,12 +9,17 @@ namespace Magento\Framework\Config;
 
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
 
-class FileResolver implements \Magento\Framework\Config\FileResolverInterface
+/**
+ * Class FileResolver
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FileResolver implements \Magento\Framework\Config\FileResolverInterface, DesignResolverInterface
 {
     /**
      * Module configuration file reader
@@ -115,6 +120,68 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                 $iterator = $this->iteratorFactory->create([]);
                 break;
         }
+        return $iterator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParents($filename, $scope)
+    {
+        switch ($scope) {
+            case 'global':
+                $iterator = $this->moduleReader->getConfigurationFiles($filename)->toArray();
+                $designPath = $this->resolver->resolve(
+                    RulePool::TYPE_FILE,
+                    'etc/view.xml',
+                    $this->area,
+                    $this->currentTheme
+                );
+
+                if (file_exists($designPath)) {
+                    try {
+                        $iterator = $this->getParentConfigs($this->currentTheme, []);
+                    } catch (\Exception $e) {
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            new \Magento\Framework\Phrase('Could not read config file')
+                        );
+                    }
+                }
+                break;
+            default:
+                $iterator = $this->iteratorFactory->create([]);
+                break;
+        }
+
+        return $iterator;
+    }
+
+    /**
+     * Recursively add parent theme configs
+     *
+     * @param ThemeInterface $theme
+     * @param array $iterator
+     * @param int $index
+     * @return array
+     */
+    private function getParentConfigs(ThemeInterface $theme, array $iterator, $index = 0)
+    {
+        if ($theme->getParentTheme() && $theme->isPhysical()) {
+            $parentDesignPath = $this->resolver->resolve(
+                RulePool::TYPE_FILE,
+                'etc/view.xml',
+                $this->area,
+                $theme->getParentTheme()
+            );
+
+            $parentDom = new \DOMDocument;
+            $parentDom->load($parentDesignPath);
+
+            $iterator[$index] = $parentDom->saveXML();
+
+            $iterator = $this->getParentConfigs($theme->getParentTheme(), $iterator, ++$index);
+        }
+
         return $iterator;
     }
 }

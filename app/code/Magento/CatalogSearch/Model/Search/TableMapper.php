@@ -6,8 +6,11 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -17,6 +20,9 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TableMapper
 {
     /**
@@ -30,42 +36,59 @@ class TableMapper
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @var EavConfig
      */
-    private $attributeCollection;
+    private $eavConfig;
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param AppResource $resource
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $attributeCollectionFactory
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         AppResource $resource,
         StoreManagerInterface $storeManager,
-        CollectionFactory $attributeCollectionFactory
+        CollectionFactory $attributeCollectionFactory,
+        EavConfig $eavConfig = null
     ) {
         $this->resource = $resource;
         $this->storeManager = $storeManager;
-        $this->attributeCollection = $attributeCollectionFactory->create();
+        $this->eavConfig = $eavConfig !== null ? $eavConfig : ObjectManager::getInstance()->get(EavConfig::class);
     }
 
     /**
      * @param Select $select
      * @param RequestInterface $request
      * @return Select
+     * @throws \LogicException
      */
     public function addTables(Select $select, RequestInterface $request)
     {
         $mappedTables = [];
         $filters = $this->getFilters($request->getQuery());
         foreach ($filters as $filter) {
-            list($alias, $table, $mapOn, $mappedFields) = $this->getMappingData($filter);
+            list($alias, $table, $mapOn, $mappedFields, $joinType) = $this->getMappingData($filter);
             if (!array_key_exists($alias, $mappedTables)) {
-                $select->joinLeft(
-                    [$alias => $table],
-                    $mapOn,
-                    $mappedFields
-                );
+                switch ($joinType) {
+                    case \Magento\Framework\DB\Select::INNER_JOIN:
+                        $select->joinInner(
+                            [$alias => $table],
+                            $mapOn,
+                            $mappedFields
+                        );
+                        break;
+                    case \Magento\Framework\DB\Select::LEFT_JOIN:
+                        $select->joinLeft(
+                            [$alias => $table],
+                            $mapOn,
+                            $mappedFields
+                        );
+                        break;
+                    default:
+                        throw new \LogicException(__('Unsupported join type: %1', $joinType));
+                }
                 $mappedTables[$alias] = $table;
             }
         }
@@ -87,7 +110,8 @@ class TableMapper
      *  'table_alias',
      *  'table',
      *  'join_condition',
-     *  ['fields']
+     *  ['fields'],
+     *  'joinType'
      * ]
      * @param FilterInterface $filter
      * @return array
@@ -99,6 +123,7 @@ class TableMapper
         $mapOn = null;
         $mappedFields = null;
         $field = $filter->getField();
+        $joinType = \Magento\Framework\DB\Select::INNER_JOIN;
         $fieldToTableMap = $this->getFieldToTableMap($field);
         if ($fieldToTableMap) {
             list($alias, $table, $mapOn, $mappedFields) = $fieldToTableMap;
@@ -107,8 +132,9 @@ class TableMapper
             if ($filter->getType() === FilterInterface::TYPE_TERM
                 && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
             ) {
+                $joinType = \Magento\Framework\DB\Select::LEFT_JOIN;
                 $table = $this->resource->getTableName('catalog_product_index_eav');
-                $alias = $field . '_filter';
+                $alias = $field . RequestGenerator::FILTER_SUFFIX;
                 $mapOn = sprintf(
                     'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
                     $alias,
@@ -118,13 +144,13 @@ class TableMapper
                 $mappedFields = [];
             } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                 $table = $attribute->getBackendTable();
-                $alias = $field . '_filter';
+                $alias = $field . RequestGenerator::FILTER_SUFFIX;
                 $mapOn = 'search_index.entity_id = ' . $alias . '.entity_id';
                 $mappedFields = null;
             }
         }
 
-        return [$alias, $table, $mapOn, $mappedFields];
+        return [$alias, $table, $mapOn, $mappedFields, $joinType];
     }
 
     /**
@@ -239,10 +265,11 @@ class TableMapper
     /**
      * @param string $field
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getAttributeByCode($field)
     {
-        $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+        $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $field);
         return $attribute;
     }
 }

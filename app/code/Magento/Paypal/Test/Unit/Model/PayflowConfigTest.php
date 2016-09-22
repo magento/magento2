@@ -36,15 +36,15 @@ class PayflowConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
-        $this->methodInterfaceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $this->methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
 
         $om = new ObjectManager($this);
         $this->config = $om->getObject(
-            'Magento\Paypal\Model\PayflowConfig',
+            \Magento\Paypal\Model\PayflowConfig::class,
             [
                 'scopeConfig' => $this->scopeConfigMock
             ]

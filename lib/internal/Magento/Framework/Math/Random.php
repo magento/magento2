@@ -7,6 +7,8 @@ namespace Magento\Framework\Math;
 
 /**
  * Random data generator
+ *
+ * @api
  */
 class Random
 {

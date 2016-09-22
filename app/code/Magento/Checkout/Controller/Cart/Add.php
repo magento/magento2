@@ -59,7 +59,9 @@ class Add extends \Magento\Checkout\Controller\Cart
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
-            $storeId = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
+            $storeId = $this->_objectManager->get(
+                \Magento\Store\Model\StoreManagerInterface::class
+            )->getStore()->getId();
             try {
                 return $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
@@ -85,7 +87,9 @@ class Add extends \Magento\Checkout\Controller\Cart
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
+                    ['locale' => $this->_objectManager->get(
+                        \Magento\Framework\Locale\ResolverInterface::class
+                    )->getLocale()]
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
@@ -128,13 +132,13 @@ class Add extends \Magento\Checkout\Controller\Cart
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice(
-                    $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
+                    $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
                 );
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
                     $this->messageManager->addError(
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($message)
+                        $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($message)
                     );
                 }
             }
@@ -142,7 +146,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             $url = $this->_checkoutSession->getRedirectUrl(true);
 
             if (!$url) {
-                $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
+                $cartUrl = $this->_objectManager->get(\Magento\Checkout\Helper\Cart::class)->getCartUrl();
                 $url = $this->_redirect->getRedirectUrl($cartUrl);
             }
 
@@ -150,7 +154,7 @@ class Add extends \Magento\Checkout\Controller\Cart
 
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->goBack();
         }
     }
@@ -181,7 +185,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         }
 
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
     }
 }

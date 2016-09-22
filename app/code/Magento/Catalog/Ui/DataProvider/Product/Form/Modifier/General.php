@@ -26,6 +26,11 @@ class General extends AbstractModifier
     protected $arrayManager;
 
     /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    private $localeCurrency;
+
+    /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
      */
@@ -42,7 +47,7 @@ class General extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        $data = $this->customizeNumberFormat($data);
+        $data = $this->customizeWeightFormat($data);
         $data = $this->customizeAdvancedPriceFormat($data);
         $modelId = $this->locator->getProduct()->getId();
 
@@ -54,45 +59,27 @@ class General extends AbstractModifier
     }
 
     /**
-     * Customizing number fields
+     * Customizing weight fields
      *
      * @param array $data
      * @return array
      */
-    protected function customizeNumberFormat(array $data)
+    protected function customizeWeightFormat(array $data)
     {
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
-        $numberFields = [
-            ProductAttributeInterface::CODE_PRICE,
-            ProductAttributeInterface::CODE_WEIGHT,
-            ProductAttributeInterface::CODE_SPECIAL_PRICE,
-            ProductAttributeInterface::CODE_COST,
-        ];
+        $weightFields = [ProductAttributeInterface::CODE_WEIGHT];
 
-        foreach ($numberFields as $fieldCode) {
+        foreach ($weightFields as $fieldCode) {
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/' . $fieldCode;
-            $number = (float)$this->arrayManager->get($path, $data);
             $data = $this->arrayManager->replace(
                 $path,
                 $data,
-                $this->formatNumber($number)
+                $this->formatWeight($this->arrayManager->get($path, $data))
             );
         }
 
         return $data;
-    }
-
-    /**
-     * Formatting numeric field
-     *
-     * @param float $number
-     * @param int $decimals
-     * @return string
-     */
-    protected function formatNumber($number, $decimals = 2)
-    {
-        return number_format($number, $decimals);
     }
 
     /**
@@ -109,7 +96,7 @@ class General extends AbstractModifier
         if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode])) {
             foreach ($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode] as &$value) {
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
-                    $this->formatNumber($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
+                    $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
                     (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
@@ -190,60 +177,58 @@ class General extends AbstractModifier
         $weightPath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_WEIGHT, $meta, null, 'children');
 
         if ($weightPath) {
-            if ($this->locator->getProduct()->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL) {
-                $meta = $this->arrayManager->merge(
-                    $weightPath . static::META_CONFIG_PATH,
-                    $meta,
-                    [
-                        'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
-                        'validation' => [
-                            'validate-zero-or-greater' => true
-                        ],
-                        'additionalClasses' => 'admin__field-small',
-                        'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
-                        'imports' => [
-                            'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
-                                . '.product_has_weight:value'
-                        ]
+            $meta = $this->arrayManager->merge(
+                $weightPath . static::META_CONFIG_PATH,
+                $meta,
+                [
+                    'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
+                    'validation' => [
+                        'validate-zero-or-greater' => true
+                    ],
+                    'additionalClasses' => 'admin__field-small',
+                    'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
+                    'imports' => [
+                        'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
+                            . '.product_has_weight:value'
                     ]
-                );
+                ]
+            );
 
-                $containerPath = $this->arrayManager->findPath(
-                    static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_WEIGHT,
-                    $meta,
-                    null,
-                    'children'
-                );
-                $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
-                    'component' => 'Magento_Ui/js/form/components/group',
-                ]);
+            $containerPath = $this->arrayManager->findPath(
+                static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_WEIGHT,
+                $meta,
+                null,
+                'children'
+            );
+            $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
+                'component' => 'Magento_Ui/js/form/components/group',
+            ]);
 
-                $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
-                    . ProductAttributeInterface::CODE_HAS_WEIGHT;
-                $meta = $this->arrayManager->set(
-                    $hasWeightPath . static::META_CONFIG_PATH,
-                    $meta,
-                    [
+            $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
+                . ProductAttributeInterface::CODE_HAS_WEIGHT;
+            $meta = $this->arrayManager->set(
+                $hasWeightPath . static::META_CONFIG_PATH,
+                $meta,
+                [
 
-                        'dataType' => 'boolean',
-                        'formElement' => Form\Element\Select::NAME,
-                        'componentType' => Form\Field::NAME,
-                        'dataScope' => 'product_has_weight',
-                        'label' => '',
-                        'options' => [
-                            [
-                                'label' => __('This item has weight'),
-                                'value' => 1
-                            ],
-                            [
-                                'label' => __('This item has no weight'),
-                                'value' => 0
-                            ],
+                    'dataType' => 'boolean',
+                    'formElement' => Form\Element\Select::NAME,
+                    'componentType' => Form\Field::NAME,
+                    'dataScope' => 'product_has_weight',
+                    'label' => '',
+                    'options' => [
+                        [
+                            'label' => __('This item has weight'),
+                            'value' => 1
                         ],
-                        'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
-                    ]
-                );
-            }
+                        [
+                            'label' => __('This item has no weight'),
+                            'value' => 0
+                        ],
+                    ],
+                    'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+                ]
+            );
         }
 
         return $meta;
@@ -266,14 +251,12 @@ class General extends AbstractModifier
         if ($fromFieldPath && $toFieldPath) {
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
             $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
-            $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
 
             $meta = $this->arrayManager->merge(
                 $fromFieldPath . self::META_CONFIG_PATH,
                 $meta,
                 [
                     'label' => __('Set Product as New From'),
-                    'scopeLabel' => null,
                     'additionalClasses' => 'admin__field-date',
                 ]
             );
@@ -294,7 +277,6 @@ class General extends AbstractModifier
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' => $scopeLabel,
                 ]
             );
             $meta = $this->arrayManager->set(
@@ -344,6 +326,7 @@ class General extends AbstractModifier
                     'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
                     'handleSizeChanges' => '${$.provider}:data.product.size'
                 ],
+                'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
             if (!in_array($listener, $textListeners)) {
@@ -358,8 +341,7 @@ class General extends AbstractModifier
             $skuPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'autoImportIfEmpty' => true,
-                'allowImport' => $this->locator->getProduct()->getId() ? false : true,
+                'autoImportIfEmpty' => true
             ]
         );
 
@@ -372,5 +354,62 @@ class General extends AbstractModifier
                 'valueUpdate' => 'keyup'
             ]
         );
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->locator->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
+    }
+
+    /**
+     * Format number according to the locale of the currency and precision of input
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatNumber($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $value = (float)$value;
+        $precision = strlen(substr(strrchr($value, "."), 1));
+        $store = $this->locator->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
+                                                'precision' => $precision]);
+
+        return $value;
     }
 }

@@ -126,7 +126,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             false
         );
         $this->select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['from', 'where', 'joinLeft', 'getConnection'],
             [],
             '',
@@ -162,8 +162,8 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'links' => $this->links
             ]
         );
-        $metadataPoolMock = $this->getMock(\Magento\Framework\Model\Entity\MetadataPool::class, [], [], '', false);
-        $entityMetadataMock = $this->getMock(\Magento\Framework\Model\Entity\EntityMetadata::class, [], [], '', false);
+        $metadataPoolMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $entityMetadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
         $metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Your {{var store.getFrontendName()}} order confirmation @-->
+<!--@subject {{trans "Your %store_name order confirmation" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var order.getEmailCustomerNote()":"Email Order Note",
@@ -14,7 +14,7 @@
 "layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description"
+"var order.getShippingDescription()":"Shipping Description",
 "var shipping_msg":"Shipping message"
 } @-->
 {{template config_path="design/email/header_template"}}

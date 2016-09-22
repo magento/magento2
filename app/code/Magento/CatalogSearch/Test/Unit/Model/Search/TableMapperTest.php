@@ -20,6 +20,11 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     const STORE_ID = 2514;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollection;
@@ -68,7 +73,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection->expects($this->any())
@@ -79,7 +84,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->method('getTableName')
@@ -92,19 +97,19 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->connection);
 
-        $this->website = $this->getMockBuilder('\Magento\Store\Api\Data\WebsiteInterface')
+        $this->website = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->website->expects($this->any())
             ->method('getId')
             ->willReturn(self::WEBSITE_ID);
-        $this->store = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
+        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->store->expects($this->any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
-        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager->expects($this->any())
@@ -114,32 +119,36 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->store);
         $this->attributeCollection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $attributeCollectionFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->attributeCollection);
+        $attributeCollectionFactory->expects($this->never())
+            ->method('create');
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->setMethods(['getAttribute'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\Search\TableMapper',
+            \Magento\CatalogSearch\Model\Search\TableMapper::class,
             [
                 'resource' => $this->resource,
                 'storeManager' => $this->storeManager,
-                'attributeCollectionFactory' => $attributeCollectionFactory
+                'attributeCollectionFactory' => $attributeCollectionFactory,
+                'eavConfig' => $this->eavConfig,
             ]
         );
 
-        $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -152,7 +161,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['price_index' => 'prefix_catalog_product_index_price'],
                 'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
@@ -172,7 +181,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['static_filter' => 'backend_table'],
                 'search_index.entity_id = static_filter.entity_id',
@@ -191,7 +200,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['category_ids_index' => 'prefix_catalog_category_product_index'],
                 'search_index.entity_id = category_ids_index.product_id',
@@ -309,7 +318,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturnSelf();
         $this->select->expects($this->at(1))
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['price_index' => 'prefix_catalog_product_index_price'],
                 'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
@@ -456,7 +465,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createFilterQuery($filter)
     {
-        $query = $this->getMockBuilder('\Magento\Framework\Search\Request\Query\Filter')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query->method('getType')
@@ -475,7 +484,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createBoolQuery(array $must, array $should, array $mustNot)
     {
-        $query = $this->getMockBuilder('\Magento\Framework\Search\Request\Query\BoolExpression')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\BoolExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query->method('getType')
@@ -498,7 +507,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createBoolFilter(array $must, array $should, array $mustNot)
     {
-        $query = $this->getMockBuilder('\Magento\Framework\Search\Request\Filter\BoolExpression')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\BoolExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query->method('getType')
@@ -519,7 +528,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     private function createRangeFilter($field)
     {
         $filter = $this->createFilterMock(
-            '\Magento\Framework\Search\Request\Filter\Range',
+            \Magento\Framework\Search\Request\Filter\Range::class,
             FilterInterface::TYPE_RANGE,
             $field
         );
@@ -533,7 +542,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     private function createTermFilter($field)
     {
         $filter = $this->createFilterMock(
-            '\Magento\Framework\Search\Request\Filter\Term',
+            \Magento\Framework\Search\Request\Filter\Term::class,
             FilterInterface::TYPE_TERM,
             $field
         );
@@ -574,7 +583,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $frontendInput = 'select',
         $positionInCollection = 0
     ) {
-        $attribute = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType', 'getBackendTable', 'getId', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -586,9 +595,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($backendTable);
         $attribute->method('getFrontendInput')
             ->willReturn($frontendInput);
-        $this->attributeCollection->expects($this->at($positionInCollection))
-            ->method('getItemByColumnValue')
-            ->with('attribute_code', $code)
+        $this->eavConfig->expects($this->at($positionInCollection))
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, $code)
             ->willReturn($attribute);
     }
 }

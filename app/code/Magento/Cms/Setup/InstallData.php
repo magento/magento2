@@ -336,7 +336,7 @@ EOD;
                 $content = preg_replace('/<li class="last">/ims', '<li>', $content);
                 $replacment = '<li class="last privacy">' .
                     "<a href=\"{{store direct_url=\"privacy-policy-cookie-restriction-mode\"}}\">" .
-                    "Privacy and Cookie Policy</a></li>\r\n</ul>";
+                    __('Privacy and Cookie Policy') . "</a></li>\r\n</ul>";
                 $content = preg_replace('/<\\/ul>/ims', $replacment, $content);
                 $footerLinksBlock->setContent($content)->save();
             }

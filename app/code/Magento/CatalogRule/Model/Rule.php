@@ -6,6 +6,8 @@
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Api\Data\RuleInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog Rule data model
@@ -21,7 +23,7 @@ use Magento\Catalog\Model\Product;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\CatalogRule\Api\Data\RuleInterface
+class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
 {
     /**
      * Prefix of model events names
@@ -138,8 +140,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      * Rule constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
@@ -163,8 +163,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
@@ -199,8 +197,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         parent::__construct(
             $context,
             $registry,
-            $extensionFactory,
-            $customAttributeFactory,
             $formFactory,
             $localeDate,
             $resource,
@@ -217,7 +213,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\CatalogRule\Model\ResourceModel\Rule');
+        $this->_init(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
         $this->setIdFieldName('rule_id');
     }
 
@@ -775,14 +771,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
 
     /**
      * @return Data\Condition\Converter
+     * @deprecated
      */
     private function getRuleConditionConverter()
     {
         if (null === $this->ruleConditionConverter) {
             $this->ruleConditionConverter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogRule\Model\Data\Condition\Converter');
+                ->get(\Magento\CatalogRule\Model\Data\Condition\Converter::class);
         }
         return $this->ruleConditionConverter;
     }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * @inheritDoc
+     */
+    public function getIdentities()
+    {
+        return ['price'];
+    }
 }

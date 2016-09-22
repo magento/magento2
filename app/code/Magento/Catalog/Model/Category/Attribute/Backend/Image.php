@@ -80,7 +80,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         if ($this->imageUploader === null) {
             $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Catalog\CategoryImageUpload'
+                \Magento\Catalog\CategoryImageUpload::class
             );
         }
         return $this->imageUploader;
@@ -94,20 +94,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        $value = $object->getData($this->getAttribute()->getName() . '_additional_data');
+        $image = $object->getData($this->getAttribute()->getName(), null);
 
-        if (is_array($value) && !empty($value['delete'])) {
-            $object->setData($this->getAttribute()->getName(), '');
-            $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
-            return $this;
-        }
-
-        if (isset($value[0]['name']) && isset($value[0]['tmp_name'])) {
+        if ($image !== null) {
             try {
-                $result = $this->getImageUploader()->moveFileFromTmp($value[0]['name']);
-
-                $object->setData($this->getAttribute()->getName(), $result);
-                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
+                $this->getImageUploader()->moveFileFromTmp($image);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }

@@ -37,9 +37,8 @@ define(
                     click: function (event) {
                         event.preventDefault();
 
-                        paypalExpressCheckout.checkout.initXO();
-
                         if (additionalValidators.validate()) {
+                            paypalExpressCheckout.checkout.initXO();
                             this.selectPaymentMethod();
                             setPaymentMethodAction(this.messageContainer).done(
                                 function () {

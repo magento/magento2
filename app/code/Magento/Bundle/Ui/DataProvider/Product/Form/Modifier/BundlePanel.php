@@ -5,6 +5,7 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\UrlInterface;
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
@@ -44,15 +45,23 @@ class BundlePanel extends AbstractModifier
     protected $arrayManager;
 
     /**
+     * @var LocatorInterface
+     */
+    protected $locator;
+
+    /**
+     * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ShipmentType $shipmentType
      * @param ArrayManager $arrayManager
      */
     public function __construct(
+        LocatorInterface $locator,
         UrlInterface $urlBuilder,
         ShipmentType $shipmentType,
         ArrayManager $arrayManager
     ) {
+        $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
         $this->shipmentType = $shipmentType;
         $this->arrayManager = $arrayManager;
@@ -237,7 +246,7 @@ class BundlePanel extends AbstractModifier
                                     [
                                         'targetName' => 'product_form.product_form.'
                                             . self::CODE_BUNDLE_DATA . '.' . self::CODE_BUNDLE_OPTIONS,
-                                        'actionName' => 'addChild',
+                                        'actionName' => 'processingAddChild',
                                     ]
                                 ],
                             ],
@@ -263,7 +272,6 @@ class BundlePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'label' => '',
                         'additionalClasses' => 'admin__field-wide',
-                        'itemTemplate' => 'record',
                         'collapsibleHeader' => true,
                         'columnsHeader' => false,
                         'deleteProperty' => false,
@@ -295,6 +303,7 @@ class BundlePanel extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => 'fieldset',
+                                        'collapsible' => true,
                                         'label' => '',
                                         'opened' => true,
                                     ],
@@ -315,22 +324,25 @@ class BundlePanel extends AbstractModifier
                                                 'additionalClasses' => 'admin__field-wide',
                                                 'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
                                                 'template' => 'ui/dynamic-rows/templates/default',
-                                                'renderDefaultRecord' => true,
                                                 'columnsHeader' => false,
                                                 'columnsHeaderAfterRender' => true,
-                                                'recordTemplate' => 'record',
                                                 'provider' => 'product_form.product_form_data_source',
                                                 'dataProvider' => '${ $.dataScope }' . '.bundle_button_proxy',
+                                                'identificationDRProperty' => 'product_id',
+                                                'identificationProperty' => 'product_id',
                                                 'map' => [
-                                                    'id' => 'entity_id',
                                                     'product_id' => 'entity_id',
                                                     'name' => 'name',
                                                     'sku' => 'sku',
                                                     'price' => 'price',
+                                                    'delete' => '',
+                                                    'selection_can_change_qty' => '',
+                                                    'selection_id' => '',
+                                                    'selection_price_type' => '',
+                                                    'selection_price_value' => '',
+                                                    'selection_qty' => '',
                                                 ],
-                                                'links' => [
-                                                    'insertData' => '${ $.provider }:${ $.dataProvider }'
-                                                ],
+                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'source' => 'product',
                                                 'addButton' => false,
                                             ],
@@ -412,13 +424,45 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
+     * Get configuration for option title
+     *
+     * @return array
+     */
+    protected function getTitleConfiguration()
+    {
+        $result['title']['arguments']['data']['config'] = [
+            'dataType' => Form\Element\DataType\Text::NAME,
+            'formElement' => Form\Element\Input::NAME,
+            'componentType' => Form\Field::NAME,
+            'dataScope' => $this->isDefaultStore() ? 'title' : 'default_title',
+            'label' => $this->isDefaultStore() ? __('Option Title') : __('Default Title'),
+            'sortOrder' => 10,
+            'validation' => ['required-entry' => true],
+        ];
+
+        if (!$this->isDefaultStore()) {
+            $result['store_title']['arguments']['data']['config'] = [
+                'dataType' => Form\Element\DataType\Text::NAME,
+                'formElement' => Form\Element\Input::NAME,
+                'componentType' => Form\Field::NAME,
+                'dataScope' => 'title',
+                'label' => __('Store View Title'),
+                'sortOrder' => 15,
+                'validation' => ['required-entry' => true],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * Get option info
      *
      * @return array
      */
     protected function getOptionInfo()
     {
-        return [
+        $result = [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -433,21 +477,6 @@ class BundlePanel extends AbstractModifier
                 ],
             ],
             'children' => [
-                'title' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'dataType' => Form\Element\DataType\Text::NAME,
-                                'formElement' => Form\Element\Input::NAME,
-                                'componentType' => Form\Field::NAME,
-                                'dataScope' => 'title',
-                                'label' => __('Option Title'),
-                                'sortOrder' => 10,
-                                'validation' => ['required-entry' => true],
-                            ],
-                        ],
-                    ],
-                ],
                 'type' => [
                     'arguments' => [
                         'data' => [
@@ -513,6 +542,8 @@ class BundlePanel extends AbstractModifier
                 ],
             ],
         ];
+
+        return $this->arrayManager->merge('children', $result, $this->getTitleConfiguration());
     }
 
     /**
@@ -550,15 +581,12 @@ class BundlePanel extends AbstractModifier
                                 'parentSelections' => 'bundle_selections',
                                 'changer' => 'option_info.type',
                                 'dataType' => Form\Element\DataType\Boolean::NAME,
-                                'label' => __('Default'),
+                                'label' => __('Is Default'),
                                 'dataScope' => 'is_default',
                                 'prefer' => 'radio',
                                 'value' => '0',
                                 'sortOrder' => 50,
-                                'valueMap' => [
-                                    'false' => '0',
-                                    'true' => '1'
-                                ]
+                                'valueMap' => ['false' => '0', 'true' => '1']
                             ],
                         ],
                     ],
@@ -609,7 +637,8 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'required-entry' => true,
-                                    'validate-zero-or-greater' => true
+                                    'validate-number' => true,
+                                    'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
                                     'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
@@ -714,5 +743,15 @@ class BundlePanel extends AbstractModifier
                 ],
             ],
         ];
+    }
+
+    /**
+     * Check that store is default
+     *
+     * @return bool
+     */
+    protected function isDefaultStore()
+    {
+        return $this->locator->getProduct()->getStoreId() == 0;
     }
 }

@@ -7,7 +7,7 @@ namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
@@ -105,13 +105,13 @@ class StoreViewService
     /**
      * Get product metadata pool
      *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

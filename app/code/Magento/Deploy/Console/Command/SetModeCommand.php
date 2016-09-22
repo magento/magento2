@@ -81,7 +81,7 @@ class SetModeCommand extends Command
         try {
             /** @var \Magento\Deploy\Model\Mode $modeController */
             $modeController = $this->objectManager->create(
-                'Magento\Deploy\Model\Mode',
+                \Magento\Deploy\Model\Mode::class,
                 [
                     'input' => $input,
                     'output' => $output,
@@ -104,12 +104,15 @@ class SetModeCommand extends Command
                     throw new LocalizedException(__('Cannot switch into given mode "%1"', $toMode));
             }
             $output->writeln('Enabled ' . $toMode . ' mode.');
+            
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }

@@ -37,13 +37,21 @@ class Address extends Form
     protected $title = 'legend';
 
     /**
+     * Sales order create account information block.
+     *
+     * @var string
+     */
+    private $accountInformationBlock = '#order-form_account';
+
+    /**
      * Check the 'Same as billing address' checkbox in shipping address.
      *
      * @return void
      */
     public function setSameAsBillingShippingAddress()
     {
-        $this->_rootElement->find($this->title)->click();
+        $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->hover();
+        $this->browser->find($this->accountInformationBlock)->hover();
         $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->setValue('Yes');
     }
 
@@ -54,7 +62,8 @@ class Address extends Form
      */
     public function uncheckSameAsBillingShippingAddress()
     {
-        $this->_rootElement->find($this->title)->click();
+        $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->hover();
+        $this->browser->find($this->accountInformationBlock)->hover();
         $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->setValue('No');
         $this->waitLoader();
     }
@@ -82,7 +91,7 @@ class Address extends Form
     protected function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
     }

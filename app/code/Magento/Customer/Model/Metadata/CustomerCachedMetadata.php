@@ -14,6 +14,11 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 class CustomerCachedMetadata extends CachedMetadata implements CustomerMetadataInterface
 {
     /**
+     * @var string
+     */
+    protected $entityType = 'customer';
+
+    /**
      * Initialize dependencies.
      *
      * @param CustomerMetadata $metadata

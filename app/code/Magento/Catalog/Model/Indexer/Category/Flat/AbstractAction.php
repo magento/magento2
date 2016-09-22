@@ -9,7 +9,7 @@
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class AbstractAction
 {
@@ -55,7 +55,7 @@ class AbstractAction
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $categoryMetadata;
 
@@ -467,13 +467,13 @@ class AbstractAction
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\EntityMetadata
+     * @return \Magento\Framework\EntityManager\EntityMetadata
      */
     private function getCategoryMetadata()
     {
         if (null === $this->categoryMetadata) {
             $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
             $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         }
         return $this->categoryMetadata;
@@ -486,7 +486,7 @@ class AbstractAction
     {
         if (null === $this->skipStaticColumns) {
             $provider = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider');
+                ->get(\Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider::class);
             $this->skipStaticColumns = $provider->get();
         }
         return $this->skipStaticColumns;

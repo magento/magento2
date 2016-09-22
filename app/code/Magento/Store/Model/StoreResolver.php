@@ -45,7 +45,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      */
     protected $scopeCode;
 
-    /*
+    /**
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;

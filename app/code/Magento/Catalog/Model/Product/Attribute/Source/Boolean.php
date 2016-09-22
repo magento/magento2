@@ -14,6 +14,11 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\Boolean
 {
     /**
+     * Value of 'Use Config' option
+     */
+    const VALUE_USE_CONFIG = 2;
+
+    /**
      * Retrieve all attribute options
      *
      * @return array
@@ -22,9 +27,9 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\Boolean
     {
         if (!$this->_options) {
             $this->_options = [
-                ['label' => __('Yes'), 'value' => 1],
-                ['label' => __('No'), 'value' => 0],
-                ['label' => __('Use config'), 'value' => 2],
+                ['label' => __('Yes'), 'value' => static::VALUE_YES],
+                ['label' => __('No'), 'value' => static::VALUE_NO],
+                ['label' => __('Use config'), 'value' => static::VALUE_USE_CONFIG],
             ];
         }
         return $this->_options;

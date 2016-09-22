@@ -209,7 +209,7 @@
                                                                         <!-- post-code field has custom UI component -->
                                                                         <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
                                                                         <item name="validation" xsi:type="array">
-                                                                            <item name="required-entry" xsi:type="string">true</item>
+                                                                            <item name="required-entry" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>
                                                                     <item name="company" xsi:type="array">
@@ -406,7 +406,6 @@
                                                                     </item>
                                                                 </item>
                                                             </item>
-
                                                         </item>
                                                     </item>
                                                     <item name="itemsAfter" xsi:type="array">
@@ -443,6 +442,5 @@
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
-        <move element="logo" destination="checkout.header.wrapper"/>
     </body>
 </page>

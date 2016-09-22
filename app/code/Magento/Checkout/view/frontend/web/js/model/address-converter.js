@@ -116,13 +116,13 @@ define(
             },
 
             addressToEstimationAddress: function (address) {
-                var estimatedAddressData = {
-                    country_id: address.countryId,
-                    region: address.region,
-                    region_id: address.regionId,
-                    postcode: address.postcode
-                };
-               return this.formAddressDataToQuoteAddress(estimatedAddressData);
+                var self = this;
+                var estimatedAddressData = {};
+
+                $.each(address, function (key) {
+                    estimatedAddressData[self.toUnderscore(key)] = address[key];
+                });
+                return this.formAddressDataToQuoteAddress(estimatedAddressData);
             }
         };
     }

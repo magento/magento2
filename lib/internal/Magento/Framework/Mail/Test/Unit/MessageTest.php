@@ -15,7 +15,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_messageMock = $this->getMock(
-            '\Magento\Framework\Mail\Message',
+            \Magento\Framework\Mail\Message::class,
             ['getBodyText', 'getBodyHtml', 'setBodyText', 'setBodyHtml']
         );
     }

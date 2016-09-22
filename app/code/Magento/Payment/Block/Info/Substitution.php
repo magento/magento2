@@ -25,7 +25,7 @@ class Substitution extends \Magento\Payment\Block\Info
         $container = $parentBlock->getParentBlock();
         if ($container) {
             $block = $this->_layout->createBlock(
-                'Magento\Framework\View\Element\Template',
+                \Magento\Framework\View\Element\Template::class,
                 '',
                 ['data' => ['method' => $this->getMethod(), 'template' => 'Magento_Payment::info/substitution.phtml']]
             );

@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Add to cart test product
  * 4. Perform all asserts
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-25382
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -85,11 +84,11 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Run test add products to shopping cart
      *
-     * @param string $productsData
+     * @param array $productsData
      * @param array $cart
      * @return array
      */
-    public function test($productsData, array $cart)
+    public function test(array $productsData, array $cart)
     {
         // Preconditions
         $products = $this->prepareProducts($productsData);
@@ -104,13 +103,13 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Create products
      *
-     * @param string $productList
+     * @param array $productList
      * @return array
      */
-    protected function prepareProducts($productList)
+    protected function prepareProducts(array $productList)
     {
         $addToCartStep = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $productList]
         );
 
@@ -127,7 +126,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     protected function addToCart(array $products)
     {
         $addToCartStep = ObjectManager::getInstance()->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         );
         $addToCartStep->run();

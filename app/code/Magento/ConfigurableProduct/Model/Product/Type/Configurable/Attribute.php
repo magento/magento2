@@ -8,7 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
@@ -75,7 +75,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     protected function _construct()
     {
-        $this->_init('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute');
+        $this->_init(\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class);
     }
 
     /**

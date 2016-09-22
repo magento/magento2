@@ -12,6 +12,8 @@ use Magento\Framework\View\Asset;
 
 /**
  * A publishing service for view assets
+ *
+ * @api
  */
 class Publisher
 {

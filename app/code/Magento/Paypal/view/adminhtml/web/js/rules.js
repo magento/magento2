@@ -3,15 +3,193 @@
  * See COPYING.txt for license details.
  */
 define([
-    'underscore',
     'uiClass',
     'Magento_Ui/js/modal/alert'
-], function (_, Class, alert) {
+], function (Class, alert) {
     'use strict';
+
+    /**
+     * Check is solution enabled
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     * @returns {Boolean}
+     */
+    var isSolutionEnabled = function (solution, enabler) {
+        return solution.find(enabler).val() === '1';
+    },
+
+    /**
+     * Check is solution has related solutions enabled
+     *
+     * @param {Object} data
+     * @returns {Boolean}
+     */
+    hasRelationsEnabled = function (data) {
+        var name;
+
+        for (name in data.argument) {
+            if (
+                data.solutionsElements[name] &&
+                isSolutionEnabled(data.solutionsElements[name], data.enableButton)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    /**
+     * Set solution select-enabler to certain option
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     * @param {Boolean} enabled
+     */
+    setSolutionSelectEnabled = function (solution, enabler, enabled) {
+        enabled = !(enabled || typeof enabled === 'undefined') ? '0' : '1';
+
+        solution.find(enabler + ' option[value=' + enabled + ']')
+            .prop('selected', true);
+    },
+
+    /**
+     * Set solution property 'disabled' value
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     * @param {Boolean} enabled
+     */
+    setSolutionPropEnabled = function (solution, enabler, enabled) {
+        enabled = !(enabled || typeof enabled === 'undefined');
+
+        solution.find(enabler).prop('disabled', enabled);
+    },
+
+    /**
+     * Set/unset solution select-enabler label
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     * @param {Boolean} enabled
+     */
+    setSolutionMarkEnabled = function (solution, enabler, enabled) {
+        var solutionEnabler = solution.find('label[for="' + solution.find(enabler).attr('id') + '"]');
+
+        enabled || typeof enabled === 'undefined' ?
+            solutionEnabler.addClass('enabled') :
+            solutionEnabler.removeClass('enabled');
+    },
+
+    /**
+     * Set/unset solution section label
+     *
+     * @param {*} solution
+     * @param {Boolean} enabled
+     */
+    setSolutionSectionMarkEnabled = function (solution, enabled) {
+        var solutionSection = solution.find('.section-config');
+
+        enabled || typeof enabled === 'undefined' ?
+            solutionSection.addClass('enabled') :
+            solutionSection.removeClass('enabled');
+    },
+
+    /**
+     * Set/unset solution section inner labels
+     *
+     * @param {*} solution
+     * @param {Boolean} enabled
+     */
+    setSolutionLabelsMarkEnabled = function (solution, enabled) {
+        var solutionLabels = solution.find('label.enabled');
+
+        enabled || typeof enabled === 'undefined' ?
+            solutionLabels.addClass('enabled') :
+            solutionLabels.removeClass('enabled');
+    },
+
+    /**
+     * Set solution as disabled
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     */
+    disableSolution = function (solution, enabler) {
+        setSolutionMarkEnabled(solution, enabler, false);
+        setSolutionSelectEnabled(solution, enabler, false);
+        setSolutionPropEnabled(solution, enabler, false);
+    },
+
+    /**
+     * Set solution as enabled
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     */
+    enableSolution = function (solution, enabler) {
+        setSolutionPropEnabled(solution, enabler);
+        setSolutionSelectEnabled(solution, enabler);
+        setSolutionMarkEnabled(solution, enabler);
+    },
+
+    /**
+     * Lock/unlock solution configuration button
+     *
+     * @param {*} solution
+     * @param {String} buttonConfiguration
+     * @param {Boolean} unlock
+     */
+    setSolutionConfigurationUnlock = function (solution, buttonConfiguration, unlock) {
+        var solutionConfiguration = solution.find(buttonConfiguration);
+
+        unlock || typeof unlock === 'undefined' ?
+            solutionConfiguration.removeClass('disabled').removeAttr('disabled') :
+            solutionConfiguration.addClass('disabled').attr('disabled', 'disabled');
+    },
+
+    /**
+     * Set/unset solution usedefault checkbox
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     * @param {Boolean} checked
+     */
+    setSolutionUsedefaultEnabled = function (solution, enabler, checked) {
+        checked = !(checked || typeof checked === 'undefined');
+
+        solution.find('input[id="' + solution.find(enabler).attr('id') + '_inherit"]')
+            .prop('checked', checked);
+    },
+
+    /**
+     * Forward solution select-enabler changes
+     *
+     * @param {*} solution
+     * @param {String} enabler
+     */
+    forwardSolutionChange = function (solution, enabler) {
+        solution.find(enabler).change();
+    },
+
+    /**
+     * Show/hide dependent fields
+     *
+     * @param {*} solution
+     * @param {String} identifier
+     * @param {Boolean} show
+     */
+    showDependsField = function (solution, identifier, show) {
+        show = show || typeof show === 'undefined';
+
+        solution.find(identifier).toggle(show);
+        solution.find(identifier).closest('tr').toggle(show);
+        solution.find(identifier).attr('disabled', !show);
+    };
 
     return Class.extend({
         defaults: {
-
             /**
              * Payment conflicts checker
              */
@@ -21,109 +199,61 @@ define([
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         simpleDisable: function ($target, $owner, data) {
-            $target.find(data.enableButton + ' option[value="0"]').prop('selected', true);
-            $target.find('label.enabled').removeClass('enabled');
-            $target.find('.section-config').removeClass('enabled');
+            setSolutionSelectEnabled($target, data.enableButton, false);
+            setSolutionLabelsMarkEnabled($target, false);
+            setSolutionSectionMarkEnabled($target, false);
         },
 
         /**
          * @param {*} $target
          */
         simpleMarkEnable: function ($target) {
-            $target.find('.section-config').addClass('enabled');
+            setSolutionSectionMarkEnabled($target);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         disable: function ($target, $owner, data) {
             this.simpleDisable($target, $owner, data);
-            $target.find(data.enableButton).change();
+            forwardSolutionChange($target, data.enableButton);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
-         */
-        conflict: function ($target, $owner, data) {
-            var isDisabled = true,
-                newLine = String.fromCharCode(10, 13);
-
-            if ($owner.find(data.enableButton).val() === '1') {
-                _.every(data.argument, function (name) {
-                    if (data.solutionsElements[name] &&
-                        data.solutionsElements[name].find(data.enableButton).val() === '1'
-                    ) {
-                        isDisabled = false;
-
-                        return isDisabled;
-                    }
-
-                    return isDisabled;
-                }, this);
-
-                if (!isDisabled && !this.executed) {
-                    this.executed = true;
-                    alert({
-                        content: 'The following error(s) occurred:' +
-                        newLine +
-                        'Some PayPal solutions conflict.' +
-                        newLine +
-                        'Please re-enable the previously enabled payment solutions.'
-                    });
-                }
-            }
-        },
-
-        /**
-         * @param {*} $target
-         * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalExpressDisable: function ($target, $owner, data) {
-            $target.find(data.enableButton + ' option[value="0"]').prop('selected', true);
-            $target.find('label.enabled').removeClass('enabled');
-            $target.find(data.enableButton).change();
+            setSolutionSelectEnabled($target, data.enableButton, false);
+            setSolutionLabelsMarkEnabled($target, false);
+            forwardSolutionChange($target, data.enableButton);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalExpressLockConfiguration: function ($target, $owner, data) {
-            $target.find(data.buttonConfiguration).addClass('disabled')
-                .attr('disabled', 'disabled');
+            setSolutionConfigurationUnlock($target, data.buttonConfiguration, false);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalExpressLockConfigurationConditional: function ($target, $owner, data) {
-            var isDisabled = true;
-
-            _.every(data.argument, function (name) {
-                if (data.solutionsElements[name] &&
-                    data.solutionsElements[name].find(data.enableButton).val() === '1'
-                ) {
-                    isDisabled = false;
-
-                    return isDisabled;
-                }
-
-                return isDisabled;
-            }, this);
-
-            if (!isDisabled &&
-                $target.find(data.enableInContextPayPal).val() === '0') {
+            if (
+                !isSolutionEnabled($target, data.enableInContextPayPal) &&
+                hasRelationsEnabled(data)
+            ) {
                 this.paypalExpressLockConfiguration($target, $owner, data);
             }
         },
@@ -131,24 +261,10 @@ define([
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalExpressMarkDisable: function ($target, $owner, data) {
-            var isDisabled = true;
-
-            _.every(data.argument, function (name) {
-                if (data.solutionsElements[name] &&
-                    data.solutionsElements[name].find(data.enableButton).val() === '1'
-                ) {
-                    isDisabled = false;
-
-                    return isDisabled;
-                }
-
-                return isDisabled;
-            }, this);
-
-            if (isDisabled) {
+            if (!hasRelationsEnabled(data)) {
                 this.simpleDisable($target, $owner, data);
             }
         },
@@ -156,47 +272,30 @@ define([
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalExpressUnlockConfiguration: function ($target, $owner, data) {
-            var isUnlock = true;
-
-            _.every(data.argument, function (name) {
-                if (data.solutionsElements[name] &&
-                    data.solutionsElements[name].find(data.enableButton).val() === '1'
-                ) {
-                    isUnlock = false;
-
-                    return isUnlock;
-                }
-
-                return isUnlock;
-            }, this);
-
-            if (isUnlock) {
-                $target.find(data.buttonConfiguration).removeClass('disabled')
-                    .removeAttr('disabled');
+            if (!hasRelationsEnabled(data)) {
+                setSolutionConfigurationUnlock($target, data.buttonConfiguration);
             }
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalBmlDisable: function ($target, $owner, data) {
-            $target.find('label[for="' + $target.find(data.enableBmlPayPal).attr('id') + '"]').removeClass('enabled');
-            $target.find(data.enableBmlPayPal + ' option[value="0"]').prop('selected', true);
-            $target.find(data.enableBmlPayPal).prop('disabled', true);
+            disableSolution($target, data.enableBmlPayPal);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalBmlDisableConditional: function ($target, $owner, data) {
-            if ($target.find(data.enableButton).val() === '0') {
+            if (!isSolutionEnabled($target, data.enableButton)) {
                 this.paypalBmlDisable($target, $owner, data);
             }
         },
@@ -204,173 +303,113 @@ define([
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         paypalBmlEnable: function ($target, $owner, data) {
-            $target.find(data.enableBmlPayPal).prop('disabled', false);
-            $target.find(data.enableBmlPayPal + ' option[value="1"]').prop('selected', true);
-            $target.find('label[for="' + $target.find(data.enableBmlPayPal).attr('id') + '"]').addClass('enabled');
+            enableSolution($target, data.enableBmlPayPal);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressDisable: function ($target, $owner, data) {
-            $target.find('label[for="' + $target.find(data.enableExpress).attr('id') + '"]').removeClass('enabled');
-            $target.find(data.enableExpress + ' option[value="0"]').prop('selected', true);
-            $target.find(data.enableExpress).prop('disabled', true);
+            disableSolution($target, data.enableExpress);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressDisableConditional: function ($target, $owner, data) {
-            var isDisabled;
-
-            if (data.argument) {
-                isDisabled = true;
-
-                _.every(data.argument, function (name) {
-                    if (data.solutionsElements[name] &&
-                        data.solutionsElements[name].find(data.enableButton).val() === '1'
-                    ) {
-                        isDisabled = false;
-
-                        return isDisabled;
-                    }
-
-                    return isDisabled;
-                }, this);
-
-                if (isDisabled) {
-                    this.payflowExpressDisable($target, $owner, data);
-                }
-            } else if ($target.find(data.enableButton).val() === '0') {
+            if (
+                !isSolutionEnabled($target, data.enableButton) ||
+                hasRelationsEnabled(data)
+            ) {
                 this.payflowExpressDisable($target, $owner, data);
-                $target.find(data.enableExpress).change();
+                forwardSolutionChange($target, data.enableExpress);
             }
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressEnable: function ($target, $owner, data) {
-            $target.find(data.enableExpress).prop('disabled', false);
-            $target.find(data.enableExpress + ' option[value="1"]').prop('selected', true);
-            $target.find('label[for="' + $target.find(data.enableExpress).attr('id') + '"]').addClass('enabled');
-            $target.find(data.enableExpress).change();
+            enableSolution($target, data.enableExpress);
+            forwardSolutionChange($target, data.enableExpress);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressEnableConditional: function ($target, $owner, data) {
-            var isDisabled = true;
-
-            _.every(data.argument, function (name) {
-                if (data.solutionsElements[name] &&
-                    data.solutionsElements[name].find(data.enableButton).val() === '1'
-                ) {
-                    isDisabled = false;
-
-                    return isDisabled;
-                }
-
-                return isDisabled;
-            }, this);
-
-            if (!isDisabled) {
-                $target.find(data.enableExpress).prop('disabled', true);
-                $target.find(data.enableExpress + ' option[value="1"]').prop('selected', true);
-                $target.find('label[for="' + $target.find(data.enableExpress).attr('id') + '"]').addClass('enabled');
+            if (hasRelationsEnabled(data)) {
+                setSolutionPropEnabled($target, data.enableExpress, false);
+                setSolutionSelectEnabled($target, data.enableExpress);
+                setSolutionMarkEnabled($target, data.enableExpress);
             } else {
-                $target.find('label[for="' + $target.find(data.enableExpress).attr('id') + '"]').removeClass('enabled');
-                $target.find(data.enableExpress + ' option[value="0"]').prop('selected', true);
-                $target.find(data.enableExpress).prop('disabled', true);
+                disableSolution($target, data.enableExpress);
             }
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressLockConditional: function ($target, $owner, data) {
-            if ($target.find(data.enableButton).val() === '0') {
-                $target.find(data.enableExpress).prop('disabled', true);
+            if (!isSolutionEnabled($target, data.enableButton)) {
+                setSolutionPropEnabled($target, data.enableExpress, false);
             }
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressUsedefaultDisable: function ($target, $owner, data) {
-            $target.find('input[id="' + $target.find(data.enableExpress).attr('id') + '_inherit"]')
-                .prop('checked', false);
+            setSolutionUsedefaultEnabled($target, data.enableExpress, false);
             this.payflowExpressEnable($target, $owner, data);
-            $target.find(data.enableExpress).change();
+            forwardSolutionChange($target, data.enableExpress);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowExpressUsedefaultEnable: function ($target, $owner, data) {
-            $target.find('input[id="' + $target.find(data.enableExpress).attr('id') + '_inherit"]')
-                .prop('checked', true);
+            setSolutionUsedefaultEnabled($target, data.enableExpress);
             this.payflowExpressDisable($target, $owner, data);
-            $target.find(data.enableExpress).change();
+            forwardSolutionChange($target, data.enableExpress);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowBmlDisable: function ($target, $owner, data) {
-            $target.find('label[for="' + $target.find(data.enableBml).attr('id') + '"]').removeClass('enabled');
-            $target.find(data.enableBml + ' option[value="0"]').prop('selected', true);
-            $target.find(data.enableBml).prop('disabled', true);
+            disableSolution($target, data.enableBml);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowBmlDisableConditional: function ($target, $owner, data) {
-            var isDisabled;
-
-            if (data.argument) {
-                isDisabled = true;
-
-                _.every(data.argument, function (name) {
-                    if (data.solutionsElements[name] &&
-                        data.solutionsElements[name].find(data.enableButton).val() === '1'
-                    ) {
-                        isDisabled = false;
-
-                        return isDisabled;
-                    }
-
-                    return isDisabled;
-                }, this);
-
-                if (isDisabled) {
-                    this.payflowBmlDisable($target, $owner, data);
-                }
-            } else if ($target.find(data.enableButton).val() === '0') {
+            if (
+                !isSolutionEnabled($target, data.enableButton) ||
+                hasRelationsEnabled(data)
+            ) {
                 this.payflowBmlDisable($target, $owner, data);
             }
         },
@@ -378,10 +417,10 @@ define([
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowBmlDisableConditionalExpress: function ($target, $owner, data) {
-            if ($target.find(data.enableExpress).val() === '0') {
+            if (!isSolutionEnabled($target, data.enableExpress)) {
                 this.payflowBmlDisable($target, $owner, data);
             }
         },
@@ -389,124 +428,160 @@ define([
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowBmlEnable: function ($target, $owner, data) {
-            $target.find(data.enableBml).prop('disabled', false);
-            $target.find(data.enableBml + ' option[value="1"]').prop('selected', true);
-            $target.find('label[for="' + $target.find(data.enableBml).attr('id') + '"]').addClass('enabled');
+            enableSolution($target, data.enableBml);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowBmlEnableConditional: function ($target, $owner, data) {
-            var isDisabled = true;
-
-            _.every(data.argument, function (name) {
-                if (data.solutionsElements[name] &&
-                    data.solutionsElements[name].find(data.enableButton).val() === '1'
-                ) {
-                    isDisabled = false;
-
-                    return isDisabled;
-                }
-
-                return isDisabled;
-            }, this);
-
-            if (!isDisabled) {
-                $target.find(data.enableBml).prop('disabled', true);
-                $target.find(data.enableBml + ' option[value="1"]').prop('selected', true);
-                $target.find('label[for="' + $target.find(data.enableBml).attr('id') + '"]').addClass('enabled');
+            if (hasRelationsEnabled(data)) {
+                setSolutionPropEnabled($target, data.enableBml, false);
+                setSolutionSelectEnabled($target, data.enableBml);
+                setSolutionMarkEnabled($target, data.enableBml);
             } else {
-                $target.find('label[for="' + $target.find(data.enableBml).attr('id') + '"]').removeClass('enabled');
-                $target.find(data.enableBml + ' option[value="0"]').prop('selected', true);
-                $target.find(data.enableBml).prop('disabled', true);
+                disableSolution($target, data.enableBml);
             }
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         payflowBmlLockConditional: function ($target, $owner, data) {
-            if ($target.find(data.enableButton).val() === '0') {
-                $target.find(data.enableBml).prop('disabled', true);
+            if (!isSolutionEnabled($target, data.enableButton)) {
+                setSolutionPropEnabled($target, data.enableBml, false);
             }
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         inContextEnable: function ($target, $owner, data) {
-            $target.find(data.enableInContextPayPal).prop('disabled', false);
-            $target.find(data.enableInContextPayPal + ' option[value="1"]').prop('selected', true);
-            $target.find('label[for="' + $target.find(data.enableInContextPayPal).attr('id') + '"]')
-                .addClass('enabled');
+            enableSolution($target, data.enableInContextPayPal);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         inContextDisable: function ($target, $owner, data) {
-            $target.find('label[for="' + $target.find(data.enableInContextPayPal).attr('id') + '"]')
-                .removeClass('enabled');
-            $target.find(data.enableInContextPayPal + ' option[value="0"]').prop('selected', true);
-            $target.find(data.enableInContextPayPal).prop('disabled', true);
-        },
-
-        /**
-         * @param {*} $target
-         */
-        inContextShowMerchantId: function ($target) {
-            $target.find('tr[id$="_merchant_id"], input[id$="_merchant_id"]').show();
-            $target.find('input[id$="_merchant_id"]').attr('disabled', false);
-        },
-
-        /**
-         * @param {*} $target
-         */
-        inContextHideMerchantId: function ($target) {
-            $target.find('tr[id$="_merchant_id"], input[id$="_merchant_id"]').hide();
-            $target.find('input[id$="_merchant_id"]').attr('disabled', true);
+            disableSolution($target, data.enableInContextPayPal);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
+         */
+        inContextShowMerchantId: function ($target, $owner, data) {
+            showDependsField($target, data.dependsMerchantId);
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        inContextHideMerchantId: function ($target, $owner, data) {
+            showDependsField($target, data.dependsMerchantId, false);
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        payflowShowSortOrder: function ($target, $owner, data) {
+            showDependsField($target, data.dependsBmlSortOrder);
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        payflowHideSortOrder: function ($target, $owner, data) {
+            showDependsField($target, data.dependsBmlSortOrder, false);
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        paypalShowSortOrder: function ($target, $owner, data) {
+            showDependsField($target, data.dependsBmlApiSortOrder);
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        paypalHideSortOrder: function ($target, $owner, data) {
+            showDependsField($target, data.dependsBmlApiSortOrder, false);
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
          */
         inContextActivate: function ($target, $owner, data) {
-            $target.find('label[for="' + $target.find(data.enableInContextPayPal).attr('id') + '"]')
-                .addClass('enabled');
+            setSolutionMarkEnabled($target, data.enableInContextPayPal);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         inContextDeactivate: function ($target, $owner, data) {
-            $target.find('label[for="' + $target.find(data.enableInContextPayPal).attr('id') + '"]')
-                .removeClass('enabled');
+            setSolutionMarkEnabled($target, data.enableInContextPayPal, false);
         },
 
         /**
          * @param {*} $target
          * @param {*} $owner
-         * @param {String} data
+         * @param {Object} data
          */
         inContextDisableConditional: function ($target, $owner, data) {
-            if ($target.find(data.enableButton).val() === '0') {
+            if (!isSolutionEnabled($target, data.enableButton)) {
                 this.inContextDisable($target, $owner, data);
+            }
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        conflict: function ($target, $owner, data) {
+            var newLine = String.fromCharCode(10, 13);
+
+            if (
+                isSolutionEnabled($owner, data.enableButton) &&
+                hasRelationsEnabled(data) &&
+                !this.executed
+            ) {
+                this.executed = true;
+                alert({
+                    content: 'The following error(s) occurred:' +
+                    newLine +
+                    'Some PayPal solutions conflict.' +
+                    newLine +
+                    'Please re-enable the previously enabled payment solutions.'
+                });
             }
         }
     });

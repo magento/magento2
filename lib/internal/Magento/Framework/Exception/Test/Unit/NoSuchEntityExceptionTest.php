@@ -30,7 +30,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
-        $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\Renderer\Placeholder')
+        $this->rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\Renderer\Placeholder::class)
             ->setMethods(['render'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -73,46 +73,6 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
 
         $this->assertSame($cause, $localizeException->getPrevious());
-    }
-
-    /**
-     * @param string $message
-     * @param string $expectedMessage
-     * @return void
-     * @dataProvider constantsDataProvider
-     */
-    public function testConstants($message, $expectedMessage)
-    {
-        $this->renderedMessage = $message;
-        $this->rendererMock->expects($this->once())
-            ->method('render')
-            ->will($this->returnValue($this->renderedMessage));
-        \Magento\Framework\Phrase::setRenderer($this->rendererMock);
-
-        $exception = new NoSuchEntityException(
-            new Phrase(
-                $message,
-                ['consumer_id' => 1, 'resources' => 'record2']
-            )
-        );
-        $this->assertSame($expectedMessage, $exception->getMessage());
-    }
-
-    /**
-     * @return array
-     */
-    public function constantsDataProvider()
-    {
-        return [
-            'singleFields' => [
-                NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                'No such entity with %fieldName = %fieldValue',
-            ],
-            'doubleFields' => [
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
-            ]
-        ];
     }
 
     /**

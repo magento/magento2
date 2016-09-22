@@ -13,11 +13,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testListActionDesign()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')
+        $product = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class)
             ->get('custom-design-simple-product');
         $this->getRequest()->setParam('id', $product->getId());
         $this->dispatch('review/product/listAction');
         $result = $this->getResponse()->getBody();
-        $this->assertContains("static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico", $result);
+        $this->assertContains("/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico", $result);
     }
 }

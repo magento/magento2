@@ -7,10 +7,16 @@ namespace Magento\Vault\Model\Ui\Adminhtml;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
@@ -44,11 +50,6 @@ final class TokensConfigProvider
     private $session;
 
     /**
-     * @var VaultPaymentInterface
-     */
-    private $vaultPayment;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -59,14 +60,24 @@ final class TokensConfigProvider
     private $tokenUiComponentProviders;
 
     /**
-     * @var string
-     */
-    private $providerCode;
-
-    /**
      * @var DateTimeFactory
      */
     private $dateTimeFactory;
+
+    /**
+     * @var Data
+     */
+    private $paymentDataHelper;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var PaymentTokenManagementInterface
+     */
+    private $paymentTokenManagement;
 
     /**
      * Constructor
@@ -76,7 +87,6 @@ final class TokensConfigProvider
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StoreManagerInterface $storeManager
-     * @param VaultPaymentInterface $vaultPayment
      * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
@@ -86,7 +96,6 @@ final class TokensConfigProvider
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StoreManagerInterface $storeManager,
-        VaultPaymentInterface $vaultPayment,
         DateTimeFactory $dateTimeFactory,
         array $tokenUiComponentProviders = []
     ) {
@@ -94,82 +103,90 @@ final class TokensConfigProvider
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->session = $session;
-        $this->vaultPayment = $vaultPayment;
         $this->storeManager = $storeManager;
         $this->tokenUiComponentProviders = $tokenUiComponentProviders;
         $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
+     * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
      */
-    public function getTokensComponents()
+    public function getTokensComponents($vaultPaymentCode)
     {
         $result = [];
 
         $customerId = $this->session->getCustomerId();
-        if (!$customerId) {
+
+        $vaultPayment = $this->getVaultPayment($vaultPaymentCode);
+        if ($vaultPayment === null) {
             return $result;
         }
 
-        $vaultProviderCode = $this->getProviderMethodCode();
+        $vaultProviderCode = $vaultPayment->getProviderCode();
         $componentProvider = $this->getComponentProvider($vaultProviderCode);
-        if (null === $componentProvider) {
+        if ($componentProvider === null) {
             return $result;
         }
 
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
-            ->setValue($customerId)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
-            ->setValue($vaultProviderCode)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
-            ->setValue(1)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
-            ->setConditionType('gt')
-            ->setValue(
-                $this->dateTimeFactory->create(
-                    'now',
-                    new \DateTimeZone('UTC')
-                )->format('Y-m-d 00:00:00')
-            )
-            ->create();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
-            ->create();
+        if ($customerId) {
+            $this->searchCriteriaBuilder->addFilters(
+                [
+                    $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
+                    ->setValue($customerId)
+                    ->create(),
+                ]
+            );
+        } else {
+            try {
+                $this->searchCriteriaBuilder->addFilters(
+                    [
+                        $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
+                            ->setValue($this->getPaymentTokenEntityId())
+                            ->create(),
+                    ]
+                );
+            } catch (InputException $e) {
+                return $result;
+            } catch (NoSuchEntityException $e) {
+                return $result;
+            }
+        }
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
+                    ->setValue($vaultProviderCode)
+                    ->create(),
+                ]
+        );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+                    ->setValue(1)
+                    ->create(),
+                ]
+        );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+                    ->setConditionType('gt')
+                    ->setValue(
+                        $this->dateTimeFactory->create(
+                            'now',
+                            new \DateTimeZone('UTC')
+                        )->format('Y-m-d 00:00:00')
+                    )
+                    ->create(),
+                ]
+        );
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
             $result[] = $componentProvider->getComponentForToken($token);
         }
 
         return $result;
-    }
-
-    /**
-     * Get code of payment method provider
-     * @return null|string
-     */
-    private function getProviderMethodCode()
-    {
-        if (!$this->providerCode) {
-            $storeId = $this->getStoreId();
-            $this->providerCode = $storeId ? $this->vaultPayment->getProviderCode($storeId) : null;
-        }
-        return $this->providerCode;
-    }
-
-    /**
-     * Get store id for current active vault payment
-     * @return int|null
-     */
-    private function getStoreId()
-    {
-        $storeId = $this->storeManager->getStore()->getId();
-        if (!$this->vaultPayment->isActive($storeId)) {
-            return null;
-        }
-        return $storeId;
     }
 
     /**
@@ -184,5 +201,86 @@ final class TokensConfigProvider
         return $componentProvider instanceof TokenUiComponentProviderInterface
             ? $componentProvider
             : null;
+    }
+
+    /**
+     * Get active vault payment by code
+     * @param string $vaultPaymentCode
+     * @return VaultPaymentInterface|null
+     */
+    private function getVaultPayment($vaultPaymentCode)
+    {
+        $storeId = $this->storeManager->getStore()->getId();
+        $vaultPayment = $this->getPaymentDataHelper()->getMethodInstance($vaultPaymentCode);
+        return $vaultPayment->isActive($storeId) ? $vaultPayment : null;
+    }
+
+    /**
+     * Returns payment token entity id by order payment id
+     * @return int|null
+     */
+    private function getPaymentTokenEntityId()
+    {
+        return $this->getPaymentTokenManagement()
+            ->getByPaymentId($this->getOrderPaymentEntityId())
+            ->getEntityId();
+    }
+
+    /**
+     * Returns order payment entity id
+     * Using 'getReordered' for Reorder action
+     * Using 'getOrder' for Edit action
+     * @return int
+     */
+    private function getOrderPaymentEntityId()
+    {
+        $orderId = $this->session->getReordered()
+            ?: $this->session->getOrder()->getEntityId();
+        $order = $this->getOrderRepository()->get($orderId);
+
+        return (int) $order->getPayment()->getEntityId();
+    }
+
+    /**
+     * Get payment data helper instance
+     * @return Data
+     * @deprecated
+     */
+    private function getPaymentDataHelper()
+    {
+        if ($this->paymentDataHelper === null) {
+            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->paymentDataHelper;
+    }
+
+    /**
+     * Returns order repository instance
+     * @return OrderRepositoryInterface
+     * @deprecated
+     */
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = ObjectManager::getInstance()
+                ->get(OrderRepositoryInterface::class);
+        }
+
+        return $this->orderRepository;
+    }
+
+    /**
+     * Returns payment token management instance
+     * @return PaymentTokenManagementInterface
+     * @deprecated
+     */
+    private function getPaymentTokenManagement()
+    {
+        if ($this->paymentTokenManagement === null) {
+            $this->paymentTokenManagement = ObjectManager::getInstance()
+                ->get(PaymentTokenManagementInterface::class);
+        }
+
+        return $this->paymentTokenManagement;
     }
 }

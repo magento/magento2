@@ -5,30 +5,63 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['jquery', 'uiComponent'],
-    function ($, Component) {
+    [
+        'jquery',
+        'uiComponent',
+        'Magento_Ui/js/model/messageList'
+    ],
+    function ($, Component, messageList) {
         'use strict';
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/registration',
                 accountCreated: false,
-                creationStarted: false
+                creationStarted: false,
+                isFormVisible: true
             },
-            /** Initialize observable properties */
+
+            /**
+             * Initialize observable properties
+             */
             initObservable: function () {
                 this._super()
                     .observe('accountCreated')
+                    .observe('isFormVisible')
                     .observe('creationStarted');
+
                 return this;
             },
-            getEmailAddress: function() {
+
+            /**
+             * @return {*}
+             */
+            getEmailAddress: function () {
                 return this.email;
             },
-            createAccount: function() {
+
+            /**
+             * Create new user account
+             */
+            createAccount: function () {
                 this.creationStarted(true);
-                $.post(this.registrationUrl).done(
-                    function() {
-                        this.accountCreated(true)
+                $.post(
+                    this.registrationUrl
+                ).done(
+                    function (response) {
+
+                        if (response.errors == false) {
+                            this.accountCreated(true)
+                        } else {
+                            messageList.addErrorMessage(response);
+                        }
+                        this.isFormVisible(false);
+                    }.bind(this)
+                ).fail(
+                    function (response) {
+                        this.accountCreated(false)
+                        this.isFormVisible(false);
+                        messageList.addErrorMessage(response);
                     }.bind(this)
                 );
             }

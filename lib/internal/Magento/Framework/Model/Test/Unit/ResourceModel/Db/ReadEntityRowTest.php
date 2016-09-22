@@ -28,14 +28,14 @@ class ReadEntityRowTest extends \PHPUnit_Framework_TestCase
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
     protected function setUp()
     {
         $this->select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',
@@ -43,7 +43,7 @@ class ReadEntityRowTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -61,7 +61,7 @@ class ReadEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         $metadata = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',
@@ -81,7 +81,7 @@ class ReadEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturn('identifier');
 
         $this->metadataPool = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',

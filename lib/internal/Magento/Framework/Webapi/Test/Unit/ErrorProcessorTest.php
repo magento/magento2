@@ -31,18 +31,18 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Set up mocks for SUT. */
-        $this->encoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
+        $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
             ->disableOriginalConstructor()
             ->setMethods(['encode'])
             ->getMock();
 
-        $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->_appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $this->_loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
 
-        $filesystemMock = $this->getMockBuilder('\Magento\Framework\Filesystem')
+        $filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -194,7 +194,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         $logicalException = new \LogicException($errorMessage);
         /** Assert that Logic exception is converted to WebapiException without message obfuscation. */
         $maskedException = $this->_errorProcessor->maskException($logicalException);
-        $this->assertInstanceOf('Magento\Framework\Webapi\Exception', $maskedException);
+        $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $maskedException);
         $this->assertEquals(
             $errorMessage,
             $maskedException->getMessage(),
@@ -253,7 +253,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             'NoSuchEntityException' => [
                 new NoSuchEntityException(
                     new Phrase(
-                        NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                        'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                         [
                             'fieldName' => 'detail1',
                             'fieldValue' => 'value1',
@@ -263,7 +263,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                     )
                 ),
                 \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND,
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                 [
                     'fieldName' => 'detail1',
                     'fieldValue' => 'value1',
@@ -280,12 +280,12 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             'AuthorizationException' => [
                 new AuthorizationException(
                     new Phrase(
-                        AuthorizationException::NOT_AUTHORIZED,
+                        'Consumer %consumer_id is not authorized to access %resources',
                         ['consumer_id' => '3', 'resources' => '4']
                     )
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
-                AuthorizationException::NOT_AUTHORIZED,
+                'Consumer %consumer_id is not authorized to access %resources',
                 ['consumer_id' => '3', 'resources' => '4'],
             ],
             'Exception' => [
@@ -313,7 +313,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         $expectedDetails
     ) {
         /** All masked exceptions must be WebapiException */
-        $expectedType = 'Magento\Framework\Webapi\Exception';
+        $expectedType = \Magento\Framework\Webapi\Exception::class;
         $this->assertInstanceOf(
             $expectedType,
             $maskedException,

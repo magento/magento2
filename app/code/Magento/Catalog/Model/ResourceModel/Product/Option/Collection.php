@@ -22,7 +22,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $joinProcessor;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -73,7 +73,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Product\Option', 'Magento\Catalog\Model\ResourceModel\Product\Option');
+        $this->_init(
+            \Magento\Catalog\Model\Product\Option::class,
+            \Magento\Catalog\Model\ResourceModel\Product\Option::class
+        );
     }
 
     /**
@@ -316,13 +319,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }
@@ -334,7 +337,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         if (null === $this->joinProcessor) {
             $this->joinProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface');
+                ->get(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class);
         }
         return $this->joinProcessor;
     }

@@ -169,13 +169,19 @@ class ToModel
             }
         } else {
             $ruleModel = $this->ruleFactory->create();
+            $dataModel->setFromDate(
+                $this->formattingDate($dataModel->getFromDate())
+            );
+            $dataModel->setToDate(
+                $this->formattingDate($dataModel->getToDate())
+            );
         }
 
         $modelData = $ruleModel->getData();
 
         $data = $this->dataObjectProcessor->buildOutputDataArray(
             $dataModel,
-            '\Magento\SalesRule\Api\Data\RuleInterface'
+            \Magento\SalesRule\Api\Data\RuleInterface::class
         );
 
         $mergedData = array_merge($modelData, $data);
@@ -196,5 +202,21 @@ class ToModel
         $this->mapFields($ruleModel, $dataModel);
 
         return $ruleModel;
+    }
+
+    /**
+     * Convert date to ISO8601
+     *
+     * @param string|null $date
+     * @return string|null
+     */
+    private function formattingDate($date)
+    {
+        if ($date) {
+            $fromDate = new \DateTime($date);
+            $date = $fromDate->format(\DateTime::ISO8601);
+        }
+
+        return $date;
     }
 }

@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\ComponentInterface;
 use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
 
 /**

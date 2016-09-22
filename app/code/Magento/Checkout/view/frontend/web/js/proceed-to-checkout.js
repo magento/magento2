@@ -18,7 +18,7 @@ define([
 
                 event.preventDefault();
 
-                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
+                if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     authenticationPopup.showModal();
 
                     return false;

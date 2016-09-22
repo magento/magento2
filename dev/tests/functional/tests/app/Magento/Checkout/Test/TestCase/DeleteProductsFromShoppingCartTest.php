@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Click 'Remove item' button from Shopping Cart for each product(s)
  * 3. Perform all asserts
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-25218
  */
 class DeleteProductsFromShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -85,7 +84,7 @@ class DeleteProductsFromShoppingCartTest extends Injectable
     /**
      * Run test add products to shopping cart
      *
-     * @param string $productsData
+     * @param array $productsData
      * @return void
      */
     public function test($productsData)
@@ -101,13 +100,13 @@ class DeleteProductsFromShoppingCartTest extends Injectable
     /**
      * Create products
      *
-     * @param string $productList
+     * @param array $productList
      * @return InjectableFixture[]
      */
     protected function prepareProducts($productList)
     {
         $createProductsStep = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $productList]
         );
 
@@ -124,7 +123,7 @@ class DeleteProductsFromShoppingCartTest extends Injectable
     protected function addToCart(array $products)
     {
         $addToCartStep = ObjectManager::getInstance()->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         );
         $addToCartStep->run();
