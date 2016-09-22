@@ -96,6 +96,7 @@ class DeployStaticContentCommand extends Command
         $this->objectManagerFactory = $objectManagerFactory;
         $this->validator = $validator;
         $this->objectManager = $objectManager;
+
         parent::__construct();
     }
 
@@ -415,7 +416,13 @@ class DeployStaticContentCommand extends Command
             }
         }
 
-        return $deployManager->deploy();
+        try {
+            $this->disableCache();
+            return $deployManager->deploy();
+
+        } finally {
+            $this->enableCache();
+        }
     }
 
     /**
@@ -475,5 +482,23 @@ class DeployStaticContentCommand extends Command
         }
 
         return [$deployableLanguages, $deployableAreaThemeMap, $requestedThemes];
+    }
+
+    private function disableCache()
+    {
+        $this->objectManager->configure([
+            'preferences' => [
+                \Magento\Framework\App\Cache::class => \Magento\Framework\App\Cache\Type\Dummy::class
+            ]
+        ]);
+    }
+
+    private function enableCache()
+    {
+        $this->objectManager->configure([
+            'preferences' => [
+                \Magento\Framework\App\Cache::class => \Magento\Framework\App\Cache::class
+            ]
+        ]);
     }
 }
