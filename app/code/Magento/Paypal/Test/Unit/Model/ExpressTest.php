@@ -182,7 +182,9 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $data = new DataObject(
             [
                 PaymentInterface::KEY_ADDITIONAL_DATA => [
-                    Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => $transportValue
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => $transportValue,
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID => $transportValue,
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN => $transportValue
                 ]
             ]
         );
@@ -202,11 +204,12 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
 
         $this->parentAssignDataExpectation($data);
 
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects(static::exactly(3))
             ->method('setAdditionalInformation')
-            ->with(
-                Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
-                $transportValue
+            ->withConsecutive(
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT, $transportValue],
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $transportValue],
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $transportValue]
             );
 
         $this->_model->assignData($data);
