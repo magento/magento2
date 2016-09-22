@@ -9,6 +9,7 @@
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
@@ -97,6 +98,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     private $shipmentValidatorMock;
 
     /**
+     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationResult;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -106,6 +112,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
             ->disableOriginalConstructor()
             ->setMethods([])
+            ->getMock();
+        $this->validationResult = $this->getMockBuilder(ValidatorResultInterface::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->labelGenerator = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\LabelGenerator::class)
             ->disableOriginalConstructor()
@@ -362,7 +371,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $this->shipmentValidatorMock->expects($this->once())
                 ->method('validate')
                 ->with($shipment, [QuantityValidator::class])
-                ->willReturn([]);
+                ->willReturn($this->validationResult);
+
+            $this->validationResult->expects($this->once())
+                ->method('hasMessages')
+                ->willReturn(false);
 
             $this->saveAction->execute();
             $this->assertEquals($this->response, $this->saveAction->getResponse());
