@@ -45,12 +45,32 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('areaCode')
         );
-        $this->_config = new \Magento\Framework\App\Route\Config(
-            $this->_readerMock,
-            $this->_cacheMock,
-            $this->_configScopeMock,
-            $this->_areaList
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->_config = $objectManager->getObject(
+            \Magento\Framework\App\Route\Config::class,
+            [
+                'reader' => $this->_readerMock,
+                'cache' => $this->_cacheMock,
+                'configScope' => $this->_configScopeMock,
+                'areaList' => $this->_areaList
+            ]
         );
+
+
+        $jsonMock = $this->getMock(\Magento\Framework\Json\Json::class, [], [], '', false);
+
+        $objectManager->setBackwardCompatibleProperty($this->_config, 'json', new \Magento\Framework\Json\Json());
+
+        $jsonMock->method('encode')
+            ->willReturnCallback(function($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function($string) {
+                return json_decode($string);
+            });
     }
 
     public function testGetRouteFrontNameIfCacheIfRouterIdNotExist()
@@ -62,7 +82,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'areaCode::RoutesConfig'
         )->will(
-            $this->returnValue(\Zend_Json::encode(['expected']))
+            $this->returnValue(json_encode(['expected']))
         );
         $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
@@ -76,7 +96,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'areaCode::RoutesConfig'
         )->will(
-            $this->returnValue(\Zend_Json::encode(['routerCode' => ['frontName' => 'routerName']]))
+            $this->returnValue(json_encode(['routerCode' => ['frontName' => 'routerName']]))
         );
 
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
@@ -94,7 +114,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'areaCode::RoutesConfig'
         )->will(
-            $this->returnValue(\Zend_Json::encode([]))
+            $this->returnValue(json_encode([]))
         );
 
         $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
@@ -112,7 +132,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             'scope::RoutesConfig'
         )->will(
-            $this->returnValue(\Zend_Json::encode(false))
+            $this->returnValue(json_encode(false))
         );
 
         $routes = [
@@ -164,17 +184,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetModulesByFrontName()
     {
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'areaCode::RoutesConfig'
-        )->will(
-            $this->returnValue(
-                \Zend_Json::encode(['routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]])
-            )
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('areaCode::RoutesConfig')
+            ->willReturn(
+                json_encode(['routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]])
+            );
         $this->assertEquals(['Module1'], $this->_config->getModulesByFrontName('routerName'));
     }
 }
