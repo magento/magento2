@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-use \Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\CacheInterface;
 
 class Dummy implements CacheInterface
 {

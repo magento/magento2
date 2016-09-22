@@ -490,6 +490,8 @@ class DeployStaticContentCommand extends Command
 
     /**
      * Mock Cache class with dummy implementation
+     *
+     * @return void
      */
     private function disableCache()
     {
@@ -502,6 +504,8 @@ class DeployStaticContentCommand extends Command
 
     /**
      * Unmock Cache class
+     *
+     * @return void
      */
     private function enableCache()
     {
