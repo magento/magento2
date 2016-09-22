@@ -2424,7 +2424,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $additionalAttributes);
         $preparedAttributes = [];
         $code = '';
-        foreach ($attributeNameValuePairs as $i => $attributeData) {
+        foreach ($attributeNameValuePairs as $attributeData) {
             //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
             if (strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
                 if (!$code) {

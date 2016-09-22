@@ -1328,4 +1328,39 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             array_values($actualProductSkus)
         );
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
+     * @magentoDataIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductCustomAttributes()
+    {
+        $sku = 'simple';
+        $textAttribute = '!@#$%^&*()_+1234567890-=:;"\'>.?/<,|\\';
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_custom_attributes.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        /** @var \Magento\Catalog\Model\Pro $product */
+        $product = $productRepository->get($sku);
+        $this->assertEquals($textAttribute, $product->getData('text_attribute'));
+    }
 }
