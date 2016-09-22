@@ -40,7 +40,7 @@
         "magento/zendframework1": "1.12.16",
         "colinmollenhour/credis": "1.6",
         "colinmollenhour/php-redis-session-abstract": "1.1",
-        "composer/composer": "1.0.0-alpha10",
+        "composer/composer": "<=1.0.0-alpha10",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
         "pelago/emogrifier": "0.1.1",
