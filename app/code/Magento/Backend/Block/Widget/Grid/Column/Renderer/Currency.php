@@ -46,9 +46,9 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     protected $_localeCurrency;
 
     /**
-     * @var \Magento\Framework\Intl\NumberFormatterFactory
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
-    private $numberFormatterFactory;
+    private $priceCurrency;
 
     /**
      * @param \Magento\Backend\Block\Context $context
@@ -78,20 +78,20 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     }
 
     /**
-     * Get number formatter factory
+     * Get price currency
      *
-     * @return \Magento\Framework\Intl\NumberFormatterFactory
+     * @return \Magento\Framework\Pricing\PriceCurrencyInterface
      *
      * @deprecated
      */
-    private function getNumberFormatterFactory()
+    private function getPriceCurrency()
     {
-        if ($this->numberFormatterFactory === null) {
-            $this->numberFormatterFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Intl\NumberFormatterFactory::class
+        if ($this->priceCurrency === null) {
+            $this->priceCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Pricing\PriceCurrencyInterface::class
             );
         }
-        return $this->numberFormatterFactory;
+        return $this->priceCurrency;
     }
 
     /**
@@ -102,25 +102,9 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        if ($data = (string)$this->_getValue($row)) {
-            $currency_code = $this->_getCurrencyCode($row);
-            $currency = $this->_localeCurrency->getCurrency($currency_code);
-            $numberFormatter = $this->getNumberFormatterFactory()
-                ->create($currency->getLocale(), \NumberFormatter::CURRENCY);
-            // Optionally need to strip tags from the column field
-            if (!$stripData = $this->stripTags($data)) {
-                $stripData = $data;
-            }
-            // Optionally need to remove currency symbols
-            if (!$price = $numberFormatter->parseCurrency($stripData, $currency_code)) {
-                $price = $stripData;
-            }
-            $convertedPrice = $price * $this->_getRate($row);
-            $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $data > 0 ? '+' : '';
-            $data = $currency->toCurrency($convertedPrice);
-            return $sign . $data;
-        }
-        return $this->getColumn()->getDefault();
+        $price = $this->_getValue($row) ? $this->_getValue($row) : $this->getColumn()->getDefault();
+        $displayPrice = $this->getPriceCurrency()->convertAndFormat($price, false);
+        return $displayPrice;
     }
 
     /**

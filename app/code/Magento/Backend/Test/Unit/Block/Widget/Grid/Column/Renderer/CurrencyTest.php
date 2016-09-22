@@ -50,7 +50,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     /*
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $numberFactoryMock;
+    protected $priceCurrencyMock;
 
     protected function setUp()
     {
@@ -101,17 +101,19 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
         $this->_blockCurrency->setColumn($this->_columnMock);
 
-        $this->numberFormatterFactoryMock = $this->getMock(
-            \Magento\Framework\Intl::class,
-            ['create'],
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class,
             [],
             '',
-            false
+            false,
+            true,
+            true,
+            ['convertAndFormat']
         );
         $helper->setBackwardCompatibleProperty(
             $this->_blockCurrency,
-            'numberFormatterFactory',
-            $this->numberFormatterFactoryMock
+            'priceCurrency',
+            $this->priceCurrencyMock
         );
     }
 
@@ -131,40 +133,11 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderWithDefaultCurrency()
     {
-        $this->_currencyMock->expects($this->once())
-            ->method('getRate')
-            ->with('USD')
-            ->willReturn(1.5);
-        $currLocaleMock = $this->getMock(\Magento\Framework\Currency::class, ['getLocale','toCurrency'], [], '', false);
-        $currLocaleMock->expects($this->once())
-            ->method('getLocale')
-            ->willReturn('en_US');
-        $this->_localeMock->expects($this->once())
-            ->method('getCurrency')
-            ->with('USD')
-            ->will($this->returnValue($currLocaleMock));
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('convertAndFormat')
+            ->with('$10.00', false)
+            ->willReturn('$10.00');
 
-        $numberFormatterMock = $this->getMock(\NumberFormatter::class, ['parseCurrency'], [], '', false);
-        $this->numberFormatterFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('en_US', \NumberFormatter::CURRENCY)
-            ->will($this->returnValue($numberFormatterMock));
-
-        $numberFormatterMock->expects($this->once())
-            ->method('parseCurrency')
-            ->with('$10.00', 'USD')
-            ->willReturn(10);
-
-        $this->_curLocatorMock->expects($this->any())
-            ->method('getDefaultCurrency')
-            ->with($this->_requestMock)
-            ->willReturn('USD');
-
-        $currLocaleMock->expects($this->once())
-            ->method('toCurrency')
-            ->with(15.0000)
-            ->willReturn('$15.00');
-
-        $this->assertEquals('$15.00', $this->_blockCurrency->render($this->_row));
+        $this->assertEquals('$10.00', $this->_blockCurrency->render($this->_row));
     }
 }
