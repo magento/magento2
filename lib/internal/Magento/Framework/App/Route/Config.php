@@ -142,7 +142,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Ger json encoder/decoder
+     * Get json encoder/decoder
      *
      * @return JsonInterface
      * @deprecated

@@ -33,9 +33,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->any())
             ->method('load')
             ->with('test_cache_id')
-            ->willReturn(\Zend_Json::encode($jobs));
+            ->willReturn(json_encode($jobs));
 
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
+
+        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Cron\Model\Config\Data::setJson($jsonMock);
+
+        $jsonMock->method('decode')
+            ->willReturn($jobs);
 
         $configData = new \Magento\Cron\Model\Config\Data($reader, $cache, $dbReader, 'test_cache_id');
 

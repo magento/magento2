@@ -59,6 +59,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($this->_cacheId)
             ->willReturn(\Zend_Json::encode([]));
 
+        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Eav\Model\Entity\Attribute\Config::setJson($jsonMock);
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
             $this->_readerMock,
             $this->_cacheMock,

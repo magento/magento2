@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Json\JsonInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,6 +49,11 @@ class ScopePool
      * @var RequestInterface
      */
     private $request;
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * @param \Magento\Framework\App\Config\Scope\ReaderPoolInterface $readerPool
@@ -105,7 +111,7 @@ class ScopePool
             $data = $this->_cache->load($cacheKey);
 
             if ($data) {
-                $data = \Zend_Json::decode($data);
+                $data = $this->getJson()->decode($data);
             } else {
                 $reader = $this->_readerPool->getReader($scopeType);
                 if ($scopeType === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
@@ -113,7 +119,7 @@ class ScopePool
                 } else {
                     $data = $reader->read($scopeCode);
                 }
-                $this->_cache->save(\Zend_Json::encode($data), $cacheKey, [self::CACHE_TAG]);
+                $this->_cache->save($this->getJson()->encode($data), $cacheKey, [self::CACHE_TAG]);
             }
             $this->_scopes[$code] = $this->_dataFactory->create(['data' => $data]);
         }
@@ -152,5 +158,20 @@ class ScopePool
         }
 
         return $scopeCode;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }

@@ -37,6 +37,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexers = ['indexer1' => [], 'indexer3' => []];
 
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
     protected function setUp()
     {
         $this->reader = $this->getMock(\Magento\Framework\Indexer\Config\Reader::class, ['read'], [], '', false);
@@ -56,15 +61,23 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Framework\Mview\Config\Data::setJson($this->jsonMock);
     }
 
     public function testConstructorWithCache()
     {
+        $jsonString = json_encode($this->indexers);
         $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
         $this->cache->expects($this->once())
             ->method('load')
             ->with($this->cacheId)
-            ->willReturn(\Zend_Json::encode($this->indexers));
+            ->willReturn($jsonString);
+
+        $this->jsonMock->method('decode')
+            ->with($jsonString)
+            ->willReturn($this->indexers);
 
         $this->stateCollection->expects($this->never())->method('getItems');
 

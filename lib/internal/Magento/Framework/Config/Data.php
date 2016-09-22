@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Json\JsonInterface;
+
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -63,6 +65,11 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $cacheId;
 
     /**
+     * @var JsonInterface
+     */
+    protected static $json;
+
+    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -89,9 +96,9 @@ class Data implements \Magento\Framework\Config\DataInterface
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
-            $this->cache->save(\Zend_Json::encode($data), $this->cacheId, $this->cacheTags);
+            $this->cache->save($this->getJson()->encode($data), $this->cacheId, $this->cacheTags);
         } else {
-            $data = \Zend_Json::decode($data);
+            $data = $this->getJson()->decode($data);
         }
         $this->merge($data);
     }
@@ -138,5 +145,32 @@ class Data implements \Magento\Framework\Config\DataInterface
     public function reset()
     {
         $this->cache->remove($this->cacheId);
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    protected function getJson()
+    {
+        if (self::$json === null) {
+            self::$json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return self::$json;
+    }
+
+    /**
+     * Set json encoder/decoder
+     *
+     * @param JsonInterface $json
+     * @return void
+     * @deprecated
+     */
+    public static function setJson(JsonInterface $json)
+    {
+        self::$json = $json;
     }
 }

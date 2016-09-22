@@ -27,11 +27,18 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheMock;
 
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
     protected function setUp()
     {
         $this->_readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
 
         $this->_model = new \Magento\Framework\Config\Data\Scoped(
             $this->_readerMock,
@@ -39,6 +46,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->_cacheMock,
             'tag'
         );
+        \Magento\Framework\Config\Data\Scoped::setJson($this->jsonMock);
     }
 
     /**
@@ -47,7 +55,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
      * @param string $default
      * @dataProvider getConfigByPathDataProvider
      */
-    public function testgetConfigByPath($path, $expectedValue, $default)
+    public function testGetConfigByPath($path, $expectedValue, $default)
     {
         $testData = [
             'key_1' => [
@@ -55,9 +63,12 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
                 'key_1.2' => ['some' => 'arrayValue'],
             ],
         ];
-        $this->_cacheMock->expects($this->any())
+        $this->_cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn(\Zend_Json::encode([]));
+            ->willReturn('');
+        $this->_readerMock->expects($this->once())
+            ->method('read')
+            ->willReturn([]);
         $this->_model->merge($testData);
         $this->assertEquals($expectedValue, $this->_model->get($path, $default));
     }
@@ -79,6 +90,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeSwitchingWithNonCachedData()
     {
         $testValue = ['some' => 'testValue'];
+        $jsonString = '{"some":"testValue"}';
 
         /** change current area */
         $this->_configScopeMock->expects(
@@ -111,10 +123,14 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($testValue)
         );
 
+        $this->jsonMock->method('encode')
+            ->with($testValue)
+            ->willReturn($jsonString);
+
         /** test cache saving  */
         $this->_cacheMock->expects($this->once())
             ->method('save')
-            ->with(\Zend_Json::encode($testValue), 'adminhtml::tag');
+            ->with($jsonString, 'adminhtml::tag');
 
         /** test config value existence */
         $this->assertEquals('testValue', $this->_model->get('some'));
@@ -126,6 +142,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeSwitchingWithCachedData()
     {
         $testValue = ['some' => 'testValue'];
+        $jsonString = '{"some":"testValue"}';
 
         /** change current area */
         $this->_configScopeMock->expects(
@@ -136,11 +153,15 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('adminhtml')
         );
 
+        $this->jsonMock->method('decode')
+            ->with($jsonString)
+            ->willReturn($testValue);
+
         /** set cache data */
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('adminhtml::tag')
-            ->willReturn(\Zend_Json::encode($testValue));
+            ->willReturn($jsonString);
 
         /** test preventing of getting data from reader  */
         $this->_readerMock->expects($this->never())->method('read');
