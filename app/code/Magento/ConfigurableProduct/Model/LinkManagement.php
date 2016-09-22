@@ -103,7 +103,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         }
 
         $childrenIds[] = $child->getId();
-        $product->setAssociatedProductIds($childrenIds);
+        $product->getExtensionAttributes()->setConfigurableProductLinks($childrenIds);
         $product->save();
         return true;
     }
@@ -132,7 +132,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         if (count($options) == count($ids)) {
             throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
-        $product->addData(['associated_product_ids' => $ids]);
+        $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
         $product->save();
         return true;
     }
