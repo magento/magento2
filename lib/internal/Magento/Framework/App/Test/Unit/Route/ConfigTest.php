@@ -58,18 +58,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-
         $jsonMock = $this->getMock(\Magento\Framework\Json\Json::class, [], [], '', false);
+        $objectManager->setBackwardCompatibleProperty($this->_config, 'json', $jsonMock);
 
-        $objectManager->setBackwardCompatibleProperty($this->_config, 'json', new \Magento\Framework\Json\Json());
+        $json = new \Magento\Framework\Json\Json();
 
         $jsonMock->method('encode')
-            ->willReturnCallback(function($string) {
-                return json_encode($string);
+            ->willReturnCallback(function($string) use ($json) {
+                return $json->encode($string);
             });
         $jsonMock->method('decode')
-            ->willReturnCallback(function($string) {
-                return json_decode($string);
+            ->willReturnCallback(function($string) use ($json) {
+                return $json->decode($string);
             });
     }
 
