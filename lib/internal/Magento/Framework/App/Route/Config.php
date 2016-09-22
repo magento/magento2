@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App\Route;
 
+use Magento\Framework\Json\Json;
+
 class Config implements ConfigInterface
 {
     /**
@@ -38,6 +40,11 @@ class Config implements ConfigInterface
      * @var array
      */
     protected $_routes;
+
+    /**
+     * @var Json
+     */
+    private $json;
 
     /**
      * @param Config\Reader $reader
@@ -73,7 +80,7 @@ class Config implements ConfigInterface
             return $this->_routes[$scope];
         }
         $cacheId = $scope . '::' . $this->_cacheId;
-        $cachedRoutes = \Zend_Json::decode($this->_cache->load($cacheId));
+        $cachedRoutes = $this->getJson()->decode($this->_cache->load($cacheId));
         if (is_array($cachedRoutes)) {
             $this->_routes[$scope] = $cachedRoutes;
             return $cachedRoutes;
@@ -81,7 +88,7 @@ class Config implements ConfigInterface
 
         $routers = $this->_reader->read($scope);
         $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'];
-        $this->_cache->save(\Zend_Json::encode($routes), $cacheId);
+        $this->_cache->save($this->getJson()->encode($routes), $cacheId);
         $this->_routes[$scope] = $routes;
         return $routes;
     }
@@ -132,5 +139,20 @@ class Config implements ConfigInterface
         }
 
         return array_unique($modules);
+    }
+
+    /**
+     * Ger json encoder/decoder
+     *
+     * @return Json
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(Json::class);
+        }
+        return $this->json;
     }
 }
