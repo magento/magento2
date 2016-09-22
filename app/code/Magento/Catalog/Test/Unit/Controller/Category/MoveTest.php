@@ -10,6 +10,10 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 
+/**
+ * Class MoveTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MoveTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -245,7 +249,6 @@ class MoveTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessfullCategorySave()
     {
-        $exceptionMessage = 'Sorry, but we can\'t find the new category you selected.';
         $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -307,7 +310,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->with(__('You moved the category.'));
         $categoryMock->expects($this->once())
             ->method('move')
-            ->with(2,1);
+            ->with(2, 1);
         $this->resultJsonFactoryMock
             ->expects($this->once())
             ->method('create')
