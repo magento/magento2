@@ -64,11 +64,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $json = new \Magento\Framework\Json\Json();
 
         $jsonMock->method('encode')
-            ->willReturnCallback(function($string) use ($json) {
+            ->willReturnCallback(function ($string) use ($json) {
                 return $json->encode($string);
             });
         $jsonMock->method('decode')
-            ->willReturnCallback(function($string) use ($json) {
+            ->willReturnCallback(function ($string) use ($json) {
                 return $json->decode($string);
             });
     }
