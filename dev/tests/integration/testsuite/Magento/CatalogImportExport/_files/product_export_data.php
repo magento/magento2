@@ -55,7 +55,7 @@ $productModel->setTypeId(
 )->setPrice(
     10
 )->addData(
-    ['text_attribute' => 'One, Two,Three, !@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/']
+    ['text_attribute' => '!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/']
 )->setTierPrice(
     [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
 )->setVisibility(
