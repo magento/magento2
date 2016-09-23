@@ -125,7 +125,7 @@ class LockCustomerOnEditPageTest extends Injectable
 
         $this->cmsIndex->getLinksBlock()->openLink('My Account');
         $this->customerAccountIndex->getInfoBlock()->openChangePassword();
-        for ($i = 0; $i < $attempts; $i++) {
+        for ($i = 0; $i <= $attempts; $i++) {
             if ($i > 0) {
                 $this->customerAccountIndex->getInfoBlock()->checkChangePassword();
             }
