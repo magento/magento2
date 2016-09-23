@@ -27,7 +27,7 @@ class ShippingAddressAssignment
         \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory,
         \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor $shippingAssignmentProcessor
     ) {
-        $this->shippingAssignmentProcessor = $shippingAssignmentProcessor;;
+        $this->shippingAssignmentProcessor = $shippingAssignmentProcessor;
         $this->cartExtensionFactory = $cartExtensionFactory;
     }
 
