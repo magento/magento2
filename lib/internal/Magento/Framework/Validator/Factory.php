@@ -11,8 +11,6 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Json\JsonInterface;
-use Magento\Framework\Config\FileIteratorFactory;
 
 class Factory
 {
@@ -47,12 +45,12 @@ class Factory
     private $cache;
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Json\JsonInterface
      */
     private $json;
 
     /**
-     * @var FileIteratorFactory
+     * @var \Magento\Framework\Config\FileIteratorFactory
      */
     private $fileIteratorFactory;
 
@@ -157,14 +155,14 @@ class Factory
     /**
      * Get json encoder/decoder
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Json\JsonInterface
      * @deprecated
      */
     private function getJson()
     {
         if ($this->json === null) {
             $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+                ->get(\Magento\Framework\Json\JsonInterface::class);
         }
         return $this->json;
     }
@@ -172,14 +170,14 @@ class Factory
     /**
      * Get file iterator factory
      *
-     * @return FileIteratorFactory
+     * @return \Magento\Framework\Config\FileIteratorFactory
      * @deprecated
      */
     private function getFileIteratorFactory()
     {
         if ($this->fileIteratorFactory === null) {
             $this->fileIteratorFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(FileIteratorFactory::class);
+                ->get(\Magento\Framework\Config\FileIteratorFactory::class);
         }
         return $this->fileIteratorFactory;
     }
