@@ -127,20 +127,19 @@ define([
             var str = this.mask || '',
                 nonEmptyValueFlag = false,
                 placeholder,
-                tmpElement,
-                values = this.values;
+                tmpElement;
 
             if (!this.allowImport) {
                 return;
             }
 
             if (str) {
-                _.each(values, function (index, property) {
+                _.each(this.values, function (propertyValue, property) {
                     placeholder = '';
                     placeholder = placeholder.concat('{{', property, '}}');
-                    str = str.replace(placeholder, values[property]);
-                    nonEmptyValueFlag = nonEmptyValueFlag || !!values[property];
-                });
+                    str = str.replace(placeholder, this.values[property]);
+                    nonEmptyValueFlag = nonEmptyValueFlag || !!this.values[property];
+                }, this);
             }
 
             // strip tags
