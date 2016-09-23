@@ -7,12 +7,19 @@ namespace Magento\Framework\Json;
 
 interface JsonInterface
 {
+    /**
+     * Decode object as array
+     */
     const TYPE_ARRAY  = 1;
 
+    /**
+     * Decode object as object
+     */
     const TYPE_OBJECT = 0;
 
     /**
-     * Encode $data into the JSON format
+     * Encode $data into the JSON format. Please see http://php.net/manual/en/function.json-encode.php for supported
+     * values for $option
      *
      * @param array|string $data
      * @param int $options

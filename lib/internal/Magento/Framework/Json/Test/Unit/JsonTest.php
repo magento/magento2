@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Json\Test\Unit\Helper;
+namespace Magento\Framework\Json\Test\Unit;
 
 use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\Json\Json;
@@ -17,7 +17,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->json = new Json();
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->json = $objectManager->getObject(Json::class);
     }
 
     /**
