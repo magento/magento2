@@ -156,6 +156,8 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['load', 'getId', 'getTypeId', '__wakeup'])
             ->getMock();
 
+        $this->productFactoryMock->expects($this->any())->method('create')->willReturn($this->productMock);
+
         $this->queryBuilderFactoryMock = $this->getMockBuilder(\Magento\Framework\DB\QueryBuilderFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
