@@ -30,6 +30,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $cacheMock;
 
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
     protected function setUp()
     {
         $this->xmlReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Xml::class)
@@ -46,6 +51,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Framework\MessageQueue\Config\Data::setJson($this->jsonMock);
     }
 
     public function testGet()
@@ -53,7 +61,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $expected = ['someData' => ['someValue', 'someKey' => 'someValue']];
         $this->cacheMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(\Zend_Json::encode($expected)));
+            ->willReturn(json_encode($expected));
+
+        $this->jsonMock->method('decode')
+            ->willReturn($expected);
+
         $this->envReaderMock->expects($this->any())->method('read')->willReturn([]);
         $this->remoteServiceReaderMock->expects($this->any())->method('read')->willReturn([]);
         $this->assertEquals($expected, $this->getModel()->get());
