@@ -38,16 +38,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->_areaList = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
-        $this->_configScopeMock->expects(
-            $this->any()
-        )->method(
-            'getCurrentScope'
-        )->will(
-            $this->returnValue('areaCode')
-        );
-
+        $this->_configScopeMock->expects($this->any())
+            ->method('getCurrentScope')
+            ->willReturn('areaCode');
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->_config = $objectManager->getObject(
             \Magento\Framework\App\Route\Config::class,
             [
@@ -57,19 +51,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'areaList' => $this->_areaList
             ]
         );
-
         $jsonMock = $this->getMock(\Magento\Framework\Json\Json::class, [], [], '', false);
         $objectManager->setBackwardCompatibleProperty($this->_config, 'json', $jsonMock);
-
-        $json = new \Magento\Framework\Json\Json();
-
         $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) use ($json) {
-                return $json->encode($string);
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
             });
         $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) use ($json) {
-                return $json->decode($string);
+            ->willReturnCallback(function ($string) {
+                return json_decode($string);
             });
     }
 
@@ -78,7 +68,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('areaCode::RoutesConfig')
-            ->willReturn(json_encode(['expected']));
+            ->willReturn('["expected"]');
         $this->assertEquals('routerCode', $this->_config->getRouteFrontName('routerCode'));
     }
 
@@ -113,7 +103,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('scope::RoutesConfig')
-            ->willReturn(json_encode(false));
+            ->willReturn('false');
 
         $routes = [
             'routerCode' => [

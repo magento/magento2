@@ -64,10 +64,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'validResource' => ['connection' => 'validConnectionName'],
         ];
 
+        $jsonString = json_encode($this->resourcesConfig);
         $this->cacheMock->expects($this->any())
             ->method('load')
-            ->willReturn(json_encode($this->resourcesConfig));
+            ->willReturn($jsonString);
         $this->jsonMock->method('decode')
+            ->with($jsonString)
             ->willReturn($this->resourcesConfig);
 
         $deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);

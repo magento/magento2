@@ -65,7 +65,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         ];
         $this->_cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn('');
+            ->willReturn(false);
         $this->_readerMock->expects($this->once())
             ->method('read')
             ->willReturn([]);

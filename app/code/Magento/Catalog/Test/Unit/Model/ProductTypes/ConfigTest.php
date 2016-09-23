@@ -8,14 +8,14 @@ namespace Magento\Catalog\Test\Unit\Model\ProductTypes;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerMock;
+    private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
 
     /**
      * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -23,9 +23,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $jsonMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\Config
+     * @var \Magento\Catalog\Model\ProductTypes\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $config;
+    private $config;
 
     protected function setUp()
     {

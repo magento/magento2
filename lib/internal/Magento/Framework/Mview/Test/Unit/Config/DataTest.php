@@ -10,32 +10,32 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Mview\Config\Data
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Magento\Framework\Mview\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $reader;
+    private $reader;
 
     /**
      * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @var \Magento\Framework\Mview\View\State\CollectionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stateCollection;
+    private $stateCollection;
 
     /**
      * @var string
      */
-    protected $cacheId = 'mview_config';
+    private $cacheId = 'mview_config';
 
     /**
      * @var string
      */
-    protected $views = ['view1' => [], 'view3' => []];
+    private $views = ['view1' => [], 'view3' => []];
 
     /**
      * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject

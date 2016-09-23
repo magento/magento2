@@ -63,7 +63,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Framework\Mview\Config\Data::setJson($this->jsonMock);
+        \Magento\Indexer\Model\Config\Data::setJson($this->jsonMock);
     }
 
     public function testConstructorWithCache()

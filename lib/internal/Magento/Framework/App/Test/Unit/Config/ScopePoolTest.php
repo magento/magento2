@@ -92,76 +92,103 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getScopeDataProvider
-     *
      * @param string $scopeType
      * @param string $scope
      * @param array $data
-     * @param string|null $cachedData
+     * @dataProvider getScopeConfigNotCachedProvider
      */
-    public function testGetScope($scopeType, $scope, array $data, $cachedData)
+    public function testGetScopeConfigNotCached($scopeType, $scope, array $data)
     {
         $scopeCode = $scope instanceof \Magento\Framework\App\ScopeInterface ? $scope->getCode() : $scope;
         $cacheKey = "test_cache_id|{$scopeType}|{$scopeCode}|baseUrl";
-
-        $this->_readerPool->expects(
-            $this->any()
-        )->method(
-            'getReader'
-        )->with(
-            $scopeType
-        )->will(
-            $this->returnValue($this->_reader)
-        );
-        $this->_cache->expects($this->once())->method('load')->with($cacheKey)->will($this->returnValue($cachedData));
-
-        if (!$cachedData) {
-            $this->_reader->expects($this->once())->method('read')->with('testScope')->will($this->returnValue($data));
-            $this->_cache->expects($this->once())
-                ->method('save')
-                ->with(
-                    json_encode($data),
-                    $cacheKey,
-                    [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
-                );
-            $this->jsonMock->method('encode')
-                ->willReturn(json_encode($data));
-        } else {
-            $this->jsonMock->method('decode')
-                ->willReturn($data);
-        }
-        $configData = $this->getMockBuilder(\Magento\Framework\App\Config\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_dataFactory->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            ['data' => $data]
-        )->will(
-            $this->returnValue($configData)
-        );
+        $this->_readerPool->expects($this->any())
+            ->method('getReader')
+            ->with($scopeType)
+            ->willReturn($this->_reader);
+        $this->_cache->expects($this->once())
+            ->method('load')
+            ->with($cacheKey)
+            ->willReturn(null);
+        $this->_reader->expects($this->once())
+            ->method('read')
+            ->with('testScope')
+            ->willReturn($data);
+        $jsonString = json_encode($data);
+        $this->jsonMock->method('encode')
+            ->with($data)
+            ->willReturn($jsonString);
+        $this->_cache->expects($this->once())
+            ->method('save')
+            ->with(
+                $jsonString,
+                $cacheKey,
+                [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
+            );
+        $configData = $this->getMock(\Magento\Framework\App\Config\Data::class, [], [], '', false);
+        $this->_dataFactory->expects($this->once())
+            ->method('create')
+            ->with(['data' => $data])
+            ->willReturn($configData);
         $this->assertInstanceOf(
             \Magento\Framework\App\Config\DataInterface::class,
             $this->_object->getScope($scopeType, $scope)
         );
-
-        // second call to check caching
         $this->assertInstanceOf(
             \Magento\Framework\App\Config\DataInterface::class,
             $this->_object->getScope($scopeType, $scope)
         );
     }
 
-    public function getScopeDataProvider()
+    public function getScopeConfigNotCachedProvider()
     {
         $baseScope = $this->getMockForAbstractClass(\Magento\Framework\App\ScopeInterface::class);
         $baseScope->expects($this->any())->method('getCode')->will($this->returnValue('testScope'));
         return [
             ['scopeType1', 'testScope', ['key' => 'value'], null],
-            ['scopeType2', 'testScope', ['key' => 'value'], '{"key":"value"}'],
             ['scopeType1', $baseScope, ['key' => 'value'], null]
+        ];
+    }
+
+    /**
+     * @param string $scopeType
+     * @param string $scope
+     * @param array $data
+     * @param string $cachedData
+     * @dataProvider getScopeConfigCachedProvider
+     */
+    public function testGetScopeConfigCached($scopeType, $scope, array $data, $cachedData)
+    {
+        $scopeCode = $scope instanceof \Magento\Framework\App\ScopeInterface ? $scope->getCode() : $scope;
+        $cacheKey = "test_cache_id|{$scopeType}|{$scopeCode}|baseUrl";
+        $this->_readerPool->expects($this->any())
+            ->method('getReader')
+            ->with($scopeType)
+            ->willReturn($this->_reader);
+        $this->_cache->expects($this->once())
+            ->method('load')
+            ->with($cacheKey)
+            ->willReturn($cachedData);
+        $this->jsonMock->method('decode')
+            ->willReturn($data);
+        $configData = $this->getMock(\Magento\Framework\App\Config\Data::class, [], [], '', false);
+        $this->_dataFactory->expects($this->once())
+            ->method('create')
+            ->with(['data' => $data])
+            ->willReturn($configData);
+        $this->assertInstanceOf(
+            \Magento\Framework\App\Config\DataInterface::class,
+            $this->_object->getScope($scopeType, $scope)
+        );
+        $this->assertInstanceOf(
+            \Magento\Framework\App\Config\DataInterface::class,
+            $this->_object->getScope($scopeType, $scope)
+        );
+    }
+
+    public function getScopeConfigCachedProvider()
+    {
+        return [
+            ['scopeType2', 'testScope', ['key' => 'value'], '{"key":"value"}'],
         ];
     }
 

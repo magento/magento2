@@ -8,36 +8,18 @@ namespace Magento\Framework\App\Route;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Route\Config;
+use Magento\TestFramework\ObjectManager;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Config
+     * @var ObjectManager
      */
-    private $config1;
-
-    /**
-     * @var Config
-     */
-    private $config2;
+    private $objectManager;
 
     protected function setUp()
     {
-        /** @var \Magento\TestFramework\ObjectManager $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var Pool $cachePool */
-        $cachePool = $objectManager->get(Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
-
-        $objectManager->removeSharedInstance(Config::class);
-        $this->config1 = $objectManager->get(Config::class);
-
-        $objectManager->removeSharedInstance(Config::class);
-        $this->config2 = $objectManager->get(Config::class);
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
@@ -47,9 +29,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRouteFrontName($route, $scope)
     {
+        $this->cleanCache();
         $this->assertEquals(
-            $this->config1->getRouteFrontName($route, $scope),
-            $this->config2->getRouteFrontName($route, $scope)
+            $this->objectManager->create(Config::class)->getRouteFrontName($route, $scope),
+            $this->objectManager->create(Config::class)->getRouteFrontName($route, $scope)
         );
     }
 
@@ -59,5 +42,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['adminhtml', 'adminhtml'],
             ['catalog', 'frontend'],
         ];
+    }
+
+    private function cleanCache()
+    {
+        /** @var Pool $cachePool */
+        $cachePool = $this->objectManager->get(Pool::class);
+        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
+        foreach ($cachePool as $cacheType) {
+            $cacheType->getBackend()->clean();
+        }
     }
 }
