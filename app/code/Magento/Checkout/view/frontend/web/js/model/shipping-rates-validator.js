@@ -40,7 +40,7 @@ define(
              * @param {Object} validator
              */
             registerValidator: function (carrier, validator) {
-                if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
+                if (checkoutConfig.activeCarriers.indexOf(carrier) !== -1) {
                     validators.push(validator);
                 }
             },
@@ -141,7 +141,8 @@ define(
                     address;
 
                 if (this.validateAddressData(addressFlat)) {
-                    address = addressConverter.formAddressDataToQuoteAddress(quote.shippingAddress());
+                    addressFlat = $.extend(true, {}, quote.shippingAddress(), addressFlat);
+                    address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                     selectShippingAddress(address);
                 }
             },
