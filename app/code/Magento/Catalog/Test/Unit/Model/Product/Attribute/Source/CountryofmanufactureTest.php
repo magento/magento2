@@ -31,6 +31,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture */
     private $countryOfManufacture;
+
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
