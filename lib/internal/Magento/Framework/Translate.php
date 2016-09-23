@@ -109,6 +109,11 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $packDictionary;
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface
+     */
+    private $json;
+
+    /**
      * @param \Magento\Framework\View\DesignInterface $viewDesign
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -474,7 +479,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     {
         $data = $this->_cache->load($this->getCacheId());
         if ($data) {
-            $data = unserialize($data);
+            $data = $this->getJson()->decode($data);
         }
         return $data;
     }
@@ -486,7 +491,22 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _saveCache()
     {
-        $this->_cache->save(serialize($this->getData()), $this->getCacheId(true), [], false);
+        $this->_cache->save($this->getJson()->encode($this->getData()), $this->getCacheId(true), [], false);
         return $this;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return \Magento\Framework\Json\JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Json\JsonInterface::class);
+        }
+        return $this->json;
     }
 }

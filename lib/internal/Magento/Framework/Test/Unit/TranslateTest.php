@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
+use Magento\Framework\Json\JsonInterface;
 use \Magento\Framework\Translate;
 
 /**
@@ -104,6 +105,21 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             $this->csvParser,
             $this->packDictionary
         );
+
+        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->setBackwardCompatibleProperty(
+            $this->translate,
+            'json',
+            $jsonMock
+        );
     }
 
     /**
@@ -119,7 +135,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->exactly($forceReload ? 0 : 1))
             ->method('load')
-            ->will($this->returnValue(serialize($cachedData)));
+            ->will($this->returnValue(\Zend_Json::encode($cachedData)));
 
         if (!$forceReload && $cachedData !== false) {
             $this->translate->loadData($area, $forceReload);
@@ -222,7 +238,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(serialize($data)));
+            ->will($this->returnValue(\Zend_Json::encode($data)));
         $this->expectsSetConfig('themeId');
         $this->translate->loadData('frontend');
         $this->assertEquals($result, $this->translate->getData());

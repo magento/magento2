@@ -8,11 +8,16 @@ namespace Magento\Framework;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * @magentoCache all disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TranslateTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\Translate */
+    private $translate;
+
+    /** @var \Magento\TestFramework\ObjectManager */
+    private $objectManager;
+
     protected function setUp()
     {
         /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
@@ -36,11 +41,11 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
-        $objectManager = Bootstrap::getObjectManager();
-        $objectManager->addSharedInstance($viewFileSystem, \Magento\Framework\View\FileSystem::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->objectManager->addSharedInstance($viewFileSystem, \Magento\Framework\View\FileSystem::class);
 
         /** @var $moduleReader \Magento\Framework\Module\Dir\Reader */
-        $moduleReader = $objectManager->get(\Magento\Framework\Module\Dir\Reader::class);
+        $moduleReader = $this->objectManager->get(\Magento\Framework\Module\Dir\Reader::class);
         $moduleReader->setModuleDir(
             'Magento_Store',
             'i18n',
@@ -57,33 +62,45 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             \Magento\Theme\Model\View\Design::class,
             ['getDesignTheme'],
             [
-                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
-                $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
-                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
-                $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
-                $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
-                $objectManager->get(\Magento\Framework\App\State::class),
+                $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
+                $this->objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
+                $this->objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $this->objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
+                $this->objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
+                $this->objectManager->get(\Magento\Framework\App\State::class),
                 ['frontend' => 'Test/default']
             ]
         );
 
         $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
-        $objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
+        $this->objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
 
-        $model = $objectManager->create(\Magento\Framework\Translate::class);
-        $objectManager->addSharedInstance($model, \Magento\Framework\Translate::class);
-        $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Composite::class);
-        $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
-        \Magento\Framework\Phrase::setRenderer($objectManager->get(\Magento\Framework\Phrase\RendererInterface::class));
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
+        $this->translate = $this->objectManager->create(\Magento\Framework\Translate::class);
+        $this->objectManager->addSharedInstance($this->translate, \Magento\Framework\Translate::class);
+        $this->objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Composite::class);
+        $this->objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
+        \Magento\Framework\Phrase::setRenderer(
+            $this->objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
+        );
+    }
+
+    public function testLoadData()
+    {
+        $data = $this->translate->loadData(null, true)->getData();
+        $this->cleanAllCache();
+        $this->translate->loadData()->getData();
+        $dataCached = $this->translate->loadData()->getData();
+        $this->assertEquals($data, $dataCached);
     }
 
     /**
+     * @magentoCache all disabled
      * @dataProvider translateDataProvider
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
+        $this->translate->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
         $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
@@ -99,5 +116,15 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             ['text_with_no_translation', 'text_with_no_translation'],
             ['Design value to translate', 'Design translated value']
         ];
+    }
+
+    private function cleanAllCache()
+    {
+        /** @var \Magento\Framework\App\Cache\Frontend\Pool $cachePool */
+        $cachePool = $this->objectManager->get(\Magento\Framework\App\Cache\Frontend\Pool::class);
+        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
+        foreach ($cachePool as $cacheType) {
+            $cacheType->getBackend()->clean();
+        }
     }
 }
