@@ -419,13 +419,8 @@ class DeployStaticContentCommand extends Command
             }
         }
 
-        try {
-            $this->disableCache();
-            return $deployManager->deploy();
-
-        } finally {
-            $this->enableCache();
-        }
+        $this->mockCache();
+        return $deployManager->deploy();
     }
 
     /**
@@ -493,25 +488,11 @@ class DeployStaticContentCommand extends Command
      *
      * @return void
      */
-    private function disableCache()
+    private function mockCache()
     {
         $this->objectManager->configure([
             'preferences' => [
                 Cache::class => DummyCache::class
-            ]
-        ]);
-    }
-
-    /**
-     * Unmock Cache class
-     *
-     * @return void
-     */
-    private function enableCache()
-    {
-        $this->objectManager->configure([
-            'preferences' => [
-                Cache::class => Cache::class
             ]
         ]);
     }

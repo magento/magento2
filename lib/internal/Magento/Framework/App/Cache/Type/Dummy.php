@@ -22,9 +22,7 @@ class Dummy implements CacheInterface
     /**
      * Pretend to load data from cache by id
      *
-     * @param  string $identifier
-     * @return null
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function load($identifier)
     {
@@ -34,12 +32,7 @@ class Dummy implements CacheInterface
     /**
      * Pretend to save data
      *
-     * @param string $data
-     * @param string $identifier
-     * @param array $tags
-     * @param int $lifeTime
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
@@ -49,9 +42,7 @@ class Dummy implements CacheInterface
     /**
      * Pretend to remove cached data by identifier
      *
-     * @param string $identifier
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function remove($identifier)
     {
@@ -61,9 +52,7 @@ class Dummy implements CacheInterface
     /**
      * Pretend to clean cached data by specific tag
      *
-     * @param array $tags
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function clean($tags = [])
     {
