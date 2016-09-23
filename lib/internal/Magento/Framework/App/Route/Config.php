@@ -80,7 +80,7 @@ class Config implements ConfigInterface
             return $this->_routes[$scope];
         }
         $cacheId = $scope . '::' . $this->_cacheId;
-        $cachedRoutes = unserialize($this->_cache->load($cacheId));
+        $cachedRoutes = $this->getJson()->decode($this->_cache->load($cacheId));
         if (is_array($cachedRoutes)) {
             $this->_routes[$scope] = $cachedRoutes;
             return $cachedRoutes;
@@ -88,7 +88,7 @@ class Config implements ConfigInterface
 
         $routers = $this->_reader->read($scope);
         $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'];
-        $this->_cache->save(serialize($routes), $cacheId);
+        $this->_cache->save($this->getJson()->encode($routes), $cacheId);
         $this->_routes[$scope] = $routes;
         return $routes;
     }
