@@ -162,7 +162,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = new ComponentRegistrar();
         include_once $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
             . '/Option/ArrayInterface.php';
-        $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist.txt');
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist*.txt');
         $dataProvider = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 
         foreach ($dataProvider as $key => $data) {

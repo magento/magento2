@@ -23,7 +23,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     protected $priceLayout;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $price;
 
@@ -33,7 +33,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     protected $amount;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItem;
 
@@ -46,7 +46,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     {
         $this->priceLayout = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Layout::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->price = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
             ->disableOriginalConstructor()
