@@ -35,6 +35,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     private $jsonMock;
 
     /**
+     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileIteratorFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Config\FileIterator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileIteratorMock;
+
+    /**
      * @var \Magento\Framework\Translate\AdapterInterface
      */
     private $defaultTranslator;
@@ -71,11 +81,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(\Magento\Framework\Translate\Adapter::class)
             ->willReturn($translateAdapterMock);
+        $this->fileIteratorMock = $this->getMock(
+            \Magento\Framework\Config\FileIterator::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with(
                 \Magento\Framework\Validator\Config::class,
-                ['configFiles' => $this->data]
+                ['configFiles' => $this->fileIteratorMock]
             )
             ->willReturn($this->validatorConfigMock);
         $this->readerMock = $this->getMock(
@@ -99,7 +116,23 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $objectManager->setBackwardCompatibleProperty($this->factory, 'json', $this->jsonMock);
+        $this->fileIteratorFactoryMock = $this->getMock(
+            \Magento\Framework\Config\FileIteratorFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->factory,
+            'json',
+            $this->jsonMock
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->factory,
+            'fileIteratorFactory',
+            $this->fileIteratorFactoryMock
+        );
     }
 
     /**
@@ -115,6 +148,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
+            ->willReturn($this->fileIteratorMock);
+        $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
         $actualConfig = $this->factory->getValidatorConfig();
         $this->assertInstanceOf(
@@ -136,6 +171,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->readerMock->expects($this->once())
             ->method('getConfigurationFiles')
+            ->willReturn($this->fileIteratorMock);
+        $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
         $this->cacheMock->expects($this->once())
             ->method('save')
@@ -152,7 +189,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn($this->jsonString); // why json mock???
+            ->willReturn($this->jsonString);
         $this->readerMock->expects($this->never())
             ->method('getConfigurationFiles');
         $this->cacheMock->expects($this->never())
@@ -161,6 +198,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->method('decode')
             ->with($this->jsonString)
             ->willReturn($this->data);
+        $this->fileIteratorFactoryMock->method('create')
+            ->willReturn($this->fileIteratorMock);
         $this->factory->getValidatorConfig();
         $this->factory->getValidatorConfig();
     }
@@ -169,6 +208,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
+            ->willReturn($this->fileIteratorMock);
+        $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
         $builderMock = $this->getMock(\Magento\Framework\Validator\Builder::class, [], [], '', false);
         $this->validatorConfigMock->expects($this->once())
@@ -185,6 +226,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
+            ->willReturn($this->fileIteratorMock);
+        $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
         $validatorMock = $this->getMock(\Magento\Framework\Validator::class, [], [], '', false);
         $this->validatorConfigMock->expects($this->once())
