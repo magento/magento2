@@ -85,7 +85,6 @@ class Read implements ReadInterface
      * @param string $identifier
      * @param array $arguments
      * @return object
-     * @throws \Exception
      */
     public function execute($entity, $identifier, $arguments = [])
     {
