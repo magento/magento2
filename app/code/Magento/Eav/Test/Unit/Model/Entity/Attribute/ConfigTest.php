@@ -63,7 +63,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $jsonMock->method('decode')
             ->willReturn([]);
-       \Magento\Eav\Model\Entity\Attribute\Config::setJson($jsonMock);
+        \Magento\Eav\Model\Entity\Attribute\Config::setJson($jsonMock);
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
             $this->_readerMock,
             $this->_cacheMock,
