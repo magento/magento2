@@ -30,6 +30,11 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
     protected $cache;
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
@@ -47,6 +52,14 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn('["elem 1","elem 2"," elem 3"]');
 
         $objectManager = new ObjectManagerHelper($this);
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+
+        $this->jsonMock->method('decode')
+            ->willReturn(['elem 1', 'elem 2', ' elem 3']);
+
+        \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig::setJson($this->jsonMock);
+
         $this->config = $objectManager->getObject(
             \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig::class,
             [
