@@ -7,6 +7,12 @@ namespace Magento\Framework\App\Cache\Type;
 
 use Magento\Framework\App\CacheInterface;
 
+/**
+ * Dummy cache adapter
+ *
+ * for cases when need to disable interaction with cache
+ * but no specific cache type is used
+ */
 class Dummy implements CacheInterface
 {
     /**
