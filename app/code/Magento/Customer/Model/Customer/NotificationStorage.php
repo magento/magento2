@@ -26,6 +26,10 @@ class NotificationStorage
      */
     private $json;
 
+    /**
+     * NotificationStorage constructor.
+     * @param FrontendInterface $cache
+     */
     public function __construct(FrontendInterface $cache)
     {
         $this->cache = $cache;

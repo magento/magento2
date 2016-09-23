@@ -76,7 +76,7 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
                     'customer_id' => $customerId,
                     'notification_type' => $notificationType
                 ]),
-                 $this->getCacheKey($notificationType, $customerId)
+                $this->getCacheKey($notificationType, $customerId)
             );
         $this->model->add($notificationType, $customerId);
     }
