@@ -18,7 +18,7 @@ define([
         options: {
             modalClass: 'prompt',
             promptContentTmpl: promptContentTmpl,
-            promptField: '[data-role="prompt-field"]',
+            promptField: '[data-role="promptField"]',
             attributesForm: {},
             attributesField: {},
             value: '',
