@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Json\Test\Unit\Helper;
+namespace Magento\Framework\Json\Test\Unit;
 
 use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\Json\Json;
