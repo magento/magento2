@@ -18,37 +18,65 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cache;
+    private $cache;
 
     /**
      * Set up
      *
      * @return void
      */
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+    
     protected function setUp()
     {
         $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
             ->getMockForAbstractClass();
-        $this->model = new NotificationStorage($this->cache);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->model = $objectManager->getObject(
+            NotificationStorage::class,
+            [
+                'cache' => $this->cache
+            ]
+        );
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->model, 'json', $this->jsonMock);
     }
 
     public function testAdd()
     {
         $customerId = 1;
         $notificationType = 'some_type';
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->with(
+                [
+                    'customer_id' => $customerId,
+                    'notification_type' => $notificationType
+                ]
+            )
+            ->willReturn(
+                '{"customer_id":1,"notification_type":"some_type"}'
+            );
         $this->cache->expects($this->once())
             ->method('save')
             ->with(
-                serialize([
+                json_encode([
                     'customer_id' => $customerId,
                     'notification_type' => $notificationType
                 ]),
-                $this->getCacheKey($notificationType, $customerId)
+                 $this->getCacheKey($notificationType, $customerId)
             );
         $this->model->add($notificationType, $customerId);
     }

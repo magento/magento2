@@ -70,9 +70,9 @@ class Factory
             $this->_configFiles = $this->cache->load(self::CACHE_KEY);
             if (!$this->_configFiles) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save(serialize($this->_configFiles), self::CACHE_KEY);
+                $this->cache->save(\Zend_Json::encode($this->_configFiles), self::CACHE_KEY);
             } else {
-                $this->_configFiles = unserialize($this->_configFiles);
+                $this->_configFiles = \Zend_Json::decode($this->_configFiles);
             }
         }
     }

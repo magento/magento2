@@ -6,6 +6,7 @@
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Json\JsonInterface;
 
 class NotificationStorage
 {
@@ -19,6 +20,12 @@ class NotificationStorage
     /**
      * @param FrontendInterface $cache
      */
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
+
     public function __construct(FrontendInterface $cache)
     {
         $this->cache = $cache;
@@ -34,7 +41,7 @@ class NotificationStorage
     public function add($notificationType, $customerId)
     {
         $this->cache->save(
-            serialize([
+            $this->getJson()->encode([
                 'customer_id' => $customerId,
                 'notification_type' => $notificationType
             ]),
@@ -76,5 +83,20 @@ class NotificationStorage
     private function getCacheKey($notificationType, $customerId)
     {
         return 'notification_' . $notificationType . '_' . $customerId;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }
