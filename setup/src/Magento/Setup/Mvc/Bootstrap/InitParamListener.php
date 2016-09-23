@@ -102,7 +102,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * Check if user login
      *
      * @param \Zend\Mvc\MvcEvent $event
-     * @return bool
+     * @return false|\Zend\Http\Response
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function authPreDispatch($event)
@@ -135,17 +135,27 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                         'appState' => $adminAppState
                     ]
                 );
-                if (!$objectManager->get(\Magento\Backend\Model\Auth::class)->isLoggedIn()) {
+
+                /** @var \Magento\Backend\Model\Auth $auth */
+                $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
+
+                if (
+                    !$authentication->isLoggedIn() ||
+                    !$adminSession->isAllowed('Magento_Backend::setup_wizard')
+                ) {
                     $adminSession->destroy();
+                    /** @var \Zend\Http\Response $response */
                     $response = $event->getResponse();
                     $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
                     $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');
                     $response->setStatusCode(302);
                     $event->stopPropagation();
+
                     return $response;
                 }
             }
         }
+
         return false;
     }
 

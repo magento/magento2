@@ -312,6 +312,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Creates a PDO object and connects to the database.
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
@@ -334,6 +337,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             unset($this->_config['host']);
         } elseif (strpos($this->_config['host'], ':') !== false) {
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
+        }
+
+        if (!isset($this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS])) {
+            $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
         }
 
         $this->logger->startTimer();
@@ -684,6 +691,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $sql
      * @return array
+     *
+     * @deprecated
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
