@@ -40,6 +40,11 @@ class Definition
     protected $componentData;
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface
+     */
+    private $json;
+
+    /**
      * Constructor
      *
      * @param UiReaderInterface $uiReader
@@ -56,9 +61,9 @@ class Definition
         $cachedData = $this->cache->load(static::CACHE_ID);
         if ($cachedData === false) {
             $data = $uiReader->read();
-            $this->cache->save(\Zend_Json::encode($data), static::CACHE_ID);
+            $this->cache->save($this->getJson()->encode($data), static::CACHE_ID);
         } else {
-            $data = \Zend_Json::decode($cachedData);
+            $data = $this->getJson()->decode($cachedData);
         }
         $this->prepareComponentData($data);
     }
@@ -108,5 +113,20 @@ class Definition
         foreach ($componentsData as $name => $data) {
             $this->setComponentData($name, reset($data));
         }
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return \Magento\Framework\Json\JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Json\JsonInterface::class);
+        }
+        return $this->json;
     }
 }

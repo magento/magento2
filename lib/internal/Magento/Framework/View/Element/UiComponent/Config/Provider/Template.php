@@ -59,6 +59,11 @@ class Template
     protected $cachedTemplates = [];
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface
+     */
+    private $json;
+
+    /**
      * Constructor
      *
      * @param AggregatedFileCollector $aggregatedFileCollector
@@ -81,7 +86,7 @@ class Template
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
 
         $cachedTemplates = $this->cache->load(static::CACHE_ID);
-        $this->cachedTemplates = $cachedTemplates === false ? [] : \Zend_Json::decode($cachedTemplates);
+        $this->cachedTemplates = $cachedTemplates === false ? [] : $this->getJson()->decode($cachedTemplates);
     }
 
     /**
@@ -104,8 +109,23 @@ class Template
                 'domMerger' => $this->domMerger
             ]
         )->getContent();
-        $this->cache->save(\Zend_Json::encode($this->cachedTemplates), static::CACHE_ID);
+        $this->cache->save($this->getJson()->encode($this->cachedTemplates), static::CACHE_ID);
 
         return $this->cachedTemplates[$hash];
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return \Magento\Framework\Json\JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Json\JsonInterface::class);
+        }
+        return $this->json;
     }
 }
