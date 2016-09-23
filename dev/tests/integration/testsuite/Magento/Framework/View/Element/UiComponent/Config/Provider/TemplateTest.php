@@ -11,6 +11,7 @@ use Magento\Framework\App\Cache\Frontend\Pool;
 
 /**
  * @magentoComponentsDir Magento/Framework/View/_files/UiComponent/theme
+ * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -29,6 +30,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registerThemes();
+        $this->objectManager->addSharedInstance(
+            $this->objectManager->create(
+                \Magento\Framework\App\Arguments\ValidationState::class,
+                ['appMode' => 'default']
+            ),
+            \Magento\Framework\App\Arguments\ValidationState::class
+        );
         $this->model = $this->objectManager->create(
             \Magento\Framework\View\Element\UiComponent\Config\Provider\Template::class
         );
@@ -73,5 +81,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Theme\Model\Theme\Registration::class
         );
         $registration->register();
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(
+            \Magento\Framework\App\Arguments\ValidationState::class
+        );
     }
 }
