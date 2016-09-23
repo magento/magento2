@@ -36,6 +36,11 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     protected $_countryFactory;
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface
+     */
+    private $json;
+
+    /**
      * Construct
      *
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
@@ -61,15 +66,30 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     {
         $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         if ($cache = $this->_configCacheType->load($cacheKey)) {
-            $options = unserialize($cache);
+            $options = $this->getJson()->decode($cache);
         } else {
             /** @var \Magento\Directory\Model\Country $country */
             $country = $this->_countryFactory->create();
             /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
             $collection = $country->getResourceCollection();
             $options = $collection->load()->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getJson()->encode($options), $cacheKey);
         }
         return $options;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return \Magento\Framework\Json\JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Json\JsonInterface::class);
+        }
+        return $this->json;
     }
 }

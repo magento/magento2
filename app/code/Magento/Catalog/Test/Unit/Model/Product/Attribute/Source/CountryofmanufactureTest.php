@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use Magento\Framework\Json\JsonInterface;
+
 class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,12 +29,36 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
+    /** @var \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture */
+    private $countryOfManufacture;
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->cacheConfig = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->countryOfManufacture = $this->objectManagerHelper->getObject(
+            \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture::class,
+            [
+                'storeManager' => $this->storeManagerMock,
+                'configCacheType' => $this->cacheConfig,
+            ]
+        );
+
+        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->countryOfManufacture,
+            'json',
+            $jsonMock
+        );
     }
 
     /**
@@ -52,14 +78,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code'))
             ->will($this->returnValue($cachedDataSrl));
 
-        $countryOfManufacture = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture::class,
-            [
-                'storeManager' => $this->storeManagerMock,
-                'configCacheType' => $this->cacheConfig,
-            ]
-        );
-        $this->assertEquals($cachedDataUnsrl, $countryOfManufacture->getAllOptions());
+        $this->assertEquals($cachedDataUnsrl, $this->countryOfManufacture->getAllOptions());
     }
 
     /**
@@ -71,7 +90,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
     {
         return
             [
-                ['cachedDataSrl' => 'a:1:{s:3:"key";s:4:"data";}', 'cachedDataUnsrl' => ['key' => 'data']]
+                ['cachedDataSrl' => json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
             ];
     }
 }
