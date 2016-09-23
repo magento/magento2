@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
  * Class SaveTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
