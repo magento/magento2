@@ -31,22 +31,18 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function testRollback()
     {
-        $rootDir = Bootstrap::getInstance()->getAppTempDir();
+        $rootDir = Bootstrap::getInstance()->getAppTempDir()
+            . '/rollback_test_' . time();
         $backupsDir = __DIR__ . '/_files/var/backups';
         $fileName = 'test.txt';
+
+        mkdir($rootDir);
 
         $this->filesystem->setRootDir($rootDir)
             ->setBackupsDir($backupsDir)
             ->setTime(1474538269)
             ->setName('code')
-            ->setBackupExtension('tgz')
-            ->addIgnorePaths([
-                $rootDir . '/' . DirectoryList::CONFIG,
-                $rootDir . '/' . DirectoryList::VAR_DIR,
-                $rootDir . '/' . DirectoryList::PUB,
-                $rootDir . '/defaults_extra.cnf',
-                $rootDir . '/setup_dump_magento_integration_tests.sql',
-            ]);
+            ->setBackupExtension('tgz');
 
         $this->assertTrue($this->filesystem->rollback());
         $this->assertTrue(file_exists($rootDir . '/' . $fileName));
