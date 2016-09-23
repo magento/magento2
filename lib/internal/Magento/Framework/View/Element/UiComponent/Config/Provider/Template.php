@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider;
 
-use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
-use Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
 
@@ -32,19 +29,19 @@ class Template
     protected $aggregatedFileCollector;
 
     /**
-     * @var DomMergerInterface
+     * @var \Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface
      */
     protected $domMerger;
 
     /**
-     * @var CacheInterface
+     * @var \Magento\Framework\Config\CacheInterface
      */
     protected $cache;
 
     /**
      * Factory for UI config reader
      *
-     * @var ReaderFactory
+     * @var \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory
      */
     protected $readerFactory;
 
@@ -67,16 +64,16 @@ class Template
      * Constructor
      *
      * @param AggregatedFileCollector $aggregatedFileCollector
-     * @param DomMergerInterface $domMerger
-     * @param CacheInterface $cache
-     * @param ReaderFactory $readerFactory
+     * @param \Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface $domMerger
+     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory $readerFactory
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      */
     public function __construct(
         AggregatedFileCollector $aggregatedFileCollector,
-        DomMergerInterface $domMerger,
-        CacheInterface $cache,
-        ReaderFactory $readerFactory,
+        \Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface $domMerger,
+        \Magento\Framework\Config\CacheInterface $cache,
+        \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory $readerFactory,
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
     ) {
         $this->aggregatedFileCollector = $aggregatedFileCollector;
