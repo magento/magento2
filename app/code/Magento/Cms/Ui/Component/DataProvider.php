@@ -53,7 +53,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $data
         );
 
-        $this->meta = $this->prepareMetadata();
+        $this->meta = array_replace_recursive($meta, $this->prepareMetadata());
     }
 
     /**

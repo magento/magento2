@@ -8,41 +8,84 @@ namespace Magento\Cms\Test\Unit\Ui\Component\Listing;
 
 use Magento\Cms\Ui\Component\DataProvider;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Authorization;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\ObjectManagerInterface;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $authorizationMock;
+
+    /**
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Reporting|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $reportingMock;
+
+    /**
+     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $searchCriteriaBuilderMock;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $requestInterfaceMock;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $filterBuilderMock;
+
+    /**
+     * @var \Magento\Cms\Ui\Component\DataProvider
+     */
+    private $dataProvider;
+
+    /**
+     * @var string
+     */
     private $name = 'cms_page_listing_data_source';
+
+    /**
+     * @var string
+     */
     private $primaryFieldName = 'page';
+
+    /**
+     * @var string
+     */
     private $requestFieldName = 'id';
 
     public function setUp()
     {
-        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\Authorization::class)
+        $this->authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->reportingMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\DataProvider\Reporting::class)
+        $this->reportingMock = $this->getMockBuilder(Reporting::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchCriteriaBuilder::class)
+        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestInterfaceMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterBuilderMock = $this->getMockBuilder(\Magento\Framework\Api\FilterBuilder::class)
+        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock */
+        $objectManagerMock = $this->getMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($this->authorizationMock);
@@ -59,11 +102,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers \Magento\Cms\Ui\Component\DataProvider::prepareMetadata
+     */
     public function testPrepareMetadata()
     {
         $this->authorizationMock->expects($this->once())
             ->method('isAllowed')
-            ->with(DataProvider::ADMIN_RESOURCE)
+            ->with('Magento_Cms::save')
             ->willReturn(false);
 
         $metadata = [
