@@ -100,9 +100,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         } else {
             $data = $this->getJson()->decode($data);
         }
-        if (!is_array($data)) {
-            $data = [];
-        }
+
         $this->merge($data);
     }
 

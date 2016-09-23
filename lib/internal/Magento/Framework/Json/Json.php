@@ -20,6 +20,7 @@ class Json implements JsonInterface
      */
     public function decode($string, $objectDecodeType = self::TYPE_ARRAY)
     {
-        return json_decode($string, $objectDecodeType);
+        $result = json_decode($string, $objectDecodeType);
+        return $result;
     }
 }
