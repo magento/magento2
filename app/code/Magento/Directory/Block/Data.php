@@ -5,6 +5,9 @@
  */
 namespace Magento\Directory\Block;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Data extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -31,6 +34,11 @@ class Data extends \Magento\Framework\View\Element\Template
      * @var \Magento\Directory\Helper\Data
      */
     protected $directoryHelper;
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface
+     */
+    private $json;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -110,12 +118,12 @@ class Data extends \Magento\Framework\View\Element\Template
         $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = unserialize($cache);
+            $options = $this->getJson()->decode($cache);
         } else {
             $options = $this->getCountryCollection()
                 ->setForegroundCountries($this->getTopDestinations())
                 ->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getJson()->encode($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Select::class
@@ -160,10 +168,10 @@ class Data extends \Magento\Framework\View\Element\Template
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = unserialize($cache);
+            $options = $this->getJson()->decode($cache);
         } else {
             $options = $this->getRegionCollection()->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getJson()->encode($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Select::class
@@ -223,5 +231,20 @@ class Data extends \Magento\Framework\View\Element\Template
         }
         \Magento\Framework\Profiler::stop('TEST: ' . __METHOD__);
         return $regionsJs;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return \Magento\Framework\Json\JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Json\JsonInterface::class);
+        }
+        return $this->json;
     }
 }
