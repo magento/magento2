@@ -2340,7 +2340,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!$code) {
                     continue;
                 }
-                $preparedAttributes[$code] .= $this->getMultipleValueSeparator() .$attributeData;
+                $preparedAttributes[$code] .= $this->getMultipleValueSeparator() . $attributeData;
                 continue;
             }
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
