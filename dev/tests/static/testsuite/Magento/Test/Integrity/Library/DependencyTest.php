@@ -166,8 +166,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $dataProvider = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 
         foreach ($dataProvider as $key => $data) {
-            $file = str_replace(BP . '/', '', $data[0]);
-            if (in_array($file, $blackList)) {
+            if (in_array($data[0], $blackList)) {
                 unset($dataProvider[$key]);
             } else {
                 include_once $data[0];
