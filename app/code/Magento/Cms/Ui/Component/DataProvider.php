@@ -15,11 +15,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
-     * Authorization level of a basic admin session
-     */
-    const ADMIN_RESOURCE = 'Magento_Cms::save';
-
-    /**
      * @var AuthorizationInterface
      */
     private $authorization;
@@ -81,14 +76,14 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     public function prepareMetadata() {
         $metadata = [];
 
-        if (!$this->getAuthorizationInstance()->isAllowed(static::ADMIN_RESOURCE)) {
+        if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save')) {
             $metadata = [
                 'cms_page_columns' => [
                     'arguments' => [
                         'data' => [
                             'config' => [
                                 'editorConfig' => [
-                                    'enabled' => true
+                                    'enabled' => false
                                 ]
                             ]
                         ]

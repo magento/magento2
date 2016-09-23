@@ -17,6 +17,11 @@ use Magento\Cms\Api\Data\PageInterface;
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
     /** @var PostDataProcessor */
     protected $dataProcessor;
 
@@ -58,13 +63,6 @@ class InlineEdit extends \Magento\Backend\App\Action
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error' => true,
-            ]);
-        }
-
-        if (!$this->_authorization->isAllowed('Magento_Cms::save')) {
-            return $resultJson->setData([
-                'messages' => [__('Access denied'), __('You need more permissions to access this.')],
                 'error' => true,
             ]);
         }

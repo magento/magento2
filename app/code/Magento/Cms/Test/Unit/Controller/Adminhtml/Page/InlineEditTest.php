@@ -45,9 +45,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var InlineEdit */
     protected $controller;
 
-    /** @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private  $authorization;
-
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -57,14 +54,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->messageCollection = $this->getMock(\Magento\Framework\Message\Collection::class, [], [], '', false);
         $this->message = $this->getMockForAbstractClass(\Magento\Framework\Message\MessageInterface::class);
         $this->cmsPage = $this->getMock(\Magento\Cms\Model\Page::class, [], [], '', false);
-        $this->authorization = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
-            ->getMockForAbstractClass();
         $this->context = $helper->getObject(
             \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->request,
-                'messageManager' => $this->messageManager,
-                'authorization' => $this->authorization,
+                'messageManager' => $this->messageManager
             ]
         );
         $this->dataProcessor = $this->getMock(
@@ -153,42 +147,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
-
-        $this->authorization->expects($this->once())
-            ->method('isAllowed')
-            ->with('Magento_Cms::save')
-            ->willReturn(true);
-    }
-
-    public function testExecuteWithLowPermissions()
-    {
-        $this->request->expects($this->any())
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['isAjax', null, true],
-                    ['items', [], ['title' => '404 Not Found']]
-                ]
-            );
-        $this->authorization->expects($this->once())
-            ->method('isAllowed')
-            ->with('Magento_Cms::save')
-            ->willReturn(false);
-        $this->jsonFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultJson);
-        $this->resultJson->expects($this->once())
-            ->method('setData')
-            ->with([
-                'messages' => [
-                    __('Access denied'),
-                    __('You need more permissions to access this.')
-                ],
-                'error' => true,
-            ])
-            ->willReturnSelf();
-
-        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithLocalizedException()
