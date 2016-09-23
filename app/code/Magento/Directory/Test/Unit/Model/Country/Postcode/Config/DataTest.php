@@ -45,9 +45,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $expected = ['someData' => ['someValue', 'someKey' => 'someValue']];
-        $this->cacheMock->expects($this->any())
+        $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn(json_encode($expected));
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->willReturn($expected);
         $configData = new \Magento\Directory\Model\Country\Postcode\Config\Data($this->readerMock, $this->cacheMock);
         $this->assertEquals($expected, $configData->get());
     }
