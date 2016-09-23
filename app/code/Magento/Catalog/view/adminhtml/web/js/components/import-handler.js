@@ -126,7 +126,6 @@ define([
         updateValue: function () {
             var str = this.mask || '',
                 nonEmptyValueFlag = false,
-                placeholder,
                 tmpElement;
 
             if (!this.allowImport) {
@@ -134,12 +133,10 @@ define([
             }
 
             if (str) {
-                _.each(this.values, function (propertyValue, property) {
-                    placeholder = '';
-                    placeholder = placeholder.concat('{{', property, '}}');
-                    str = str.replace(placeholder, this.values[property]);
-                    nonEmptyValueFlag = nonEmptyValueFlag || !!this.values[property];
-                }, this);
+                _.each(this.values, function (propertyValue, propertyName) {
+                    str = str.replace('{{' + propertyName + '}}', propertyValue);
+                    nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
+                });
             }
 
             // strip tags
