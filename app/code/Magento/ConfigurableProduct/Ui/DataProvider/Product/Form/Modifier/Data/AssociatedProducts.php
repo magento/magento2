@@ -284,7 +284,7 @@ class AssociatedProducts
                         'sku' => $product->getSku(),
                         'name' => $product->getName(),
                         'qty' => $this->getProductStockQty($product),
-                        'price' => $currency->toCurrency(sprintf("%f", $price), ['display' => false]),
+                        'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),
                         'price_currency' => $this->locator->getStore()->getBaseCurrency()->getCurrencySymbol(),
                         'configurable_attribute' => $this->getJsonConfigurableAttributes($variationOptions),
