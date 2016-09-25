@@ -157,7 +157,7 @@ class CreateHandler implements ExtensionInterface
                 $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
             }
 
-            if (in_array($attrData, array_keys($existImages))) {
+            if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
 
