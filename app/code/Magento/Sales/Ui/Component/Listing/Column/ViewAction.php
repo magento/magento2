@@ -53,12 +53,13 @@ class ViewAction extends Column
                 if (isset($item['entity_id'])) {
                     $viewUrlPath = $this->getData('config/viewUrlPath') ?: '#';
                     $urlEntityParamName = $this->getData('config/urlEntityParamName') ?: 'entity_id';
+                    $indexField = $this->getData('config/indexField') ?: 'entity_id';
                     $item[$this->getData('name')] = [
                         'view' => [
                             'href' => $this->urlBuilder->getUrl(
                                 $viewUrlPath,
                                 [
-                                    $urlEntityParamName => $item['entity_id']
+                                    $urlEntityParamName => $item[$indexField]
                                 ]
                             ),
                             'label' => __('View')
