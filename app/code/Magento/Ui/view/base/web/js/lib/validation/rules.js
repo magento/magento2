@@ -9,8 +9,9 @@ define([
     'moment',
     'jquery/validate',
     'jquery/ui',
-    'mage/translate'
-], function ($, _, utils, moment) {
+    'mage/translate',
+    'mageUtils'
+], function ($, _, utils, moment, validate, ui, $t, mageUtils) {
     'use strict';
 
     /**
@@ -683,9 +684,9 @@ define([
             $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.')
         ],
         "validate-date": [
-            function(value) {
-                var test = new Date(value);
-                return utils.isEmptyNoTrim(value) || !isNaN(test);
+            function(value, params, additionalParams) {
+                var test = moment(value, additionalParams.dateFormat);
+                return utils.isEmptyNoTrim(value) || test.isValid();
             },$.mage.__('Please enter a valid date.')
 
         ],
