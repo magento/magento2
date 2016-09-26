@@ -256,11 +256,11 @@ class Query implements QueryInterface
                 $countSelect->reset($part);
             }
         }
-        if(count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP)) > 0) {
+        if (count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP)) > 0) {
             $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
             $countSelect->distinct(true);
             $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
-            $countSelect->columns("COUNT(DISTINCT ".implode(", ", $group).")");
+            $countSelect->columns("COUNT(DISTINCT " . implode(", ", $group) . ")");
         } else {
             $countSelect->columns('COUNT(*)');
         }
