@@ -7,109 +7,87 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Model\Customer\NotificationStorage;
 
-/**
- * Class NotificationStorageTest
- *
- * Test for class \Magento\Customer\Model\Customer\NotificationStorage
- */
 class NotificationStorageTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotificationStorage
      */
-    private $model;
+    private $notificationStorage;
 
     /**
      * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cache;
-
-    /**
-     * Set up
-     *
-     * @return void
-     */
+    private $cacheMock;
 
     /**
      * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $jsonMock;
-    
+
     protected function setUp()
     {
-        $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
-            ->getMockForAbstractClass();
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->model = $objectManager->getObject(
+        $this->cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->notificationStorage = $objectManager->getObject(
             NotificationStorage::class,
-            [
-                'cache' => $this->cache
-            ]
+            ['cache' => $this->cacheMock]
         );
-
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $objectManager->setBackwardCompatibleProperty($this->model, 'json', $this->jsonMock);
+        $objectManager->setBackwardCompatibleProperty($this->notificationStorage, 'json', $this->jsonMock);
     }
 
     public function testAdd()
     {
         $customerId = 1;
         $notificationType = 'some_type';
+        $data = [
+            'customer_id' => $customerId,
+            'notification_type' => $notificationType
+        ];
+        $jsonString = json_encode($data);
         $this->jsonMock->expects($this->once())
             ->method('encode')
-            ->with(
-                [
-                    'customer_id' => $customerId,
-                    'notification_type' => $notificationType
-                ]
-            )
-            ->willReturn(
-                '{"customer_id":1,"notification_type":"some_type"}'
-            );
-        $this->cache->expects($this->once())
+            ->with($data)
+            ->willReturn($jsonString);
+        $this->cacheMock->expects($this->once())
             ->method('save')
             ->with(
-                json_encode([
-                    'customer_id' => $customerId,
-                    'notification_type' => $notificationType
-                ]),
+                $jsonString,
                 $this->getCacheKey($notificationType, $customerId)
             );
-        $this->model->add($notificationType, $customerId);
+        $this->notificationStorage->add($notificationType, $customerId);
     }
 
     public function testIsExists()
     {
         $customerId = 1;
         $notificationType = 'some_type';
-        $this->cache->expects($this->once())
+        $this->cacheMock->expects($this->once())
             ->method('test')
             ->with($this->getCacheKey($notificationType, $customerId))
             ->willReturn(true);
-        $this->assertTrue($this->model->isExists($notificationType, $customerId));
+        $this->assertTrue($this->notificationStorage->isExists($notificationType, $customerId));
     }
 
     public function testRemove()
     {
         $customerId = 1;
         $notificationType = 'some_type';
-        $this->cache->expects($this->once())
+        $this->cacheMock->expects($this->once())
             ->method('remove')
             ->with($this->getCacheKey($notificationType, $customerId));
-        $this->model->remove($notificationType, $customerId);
+        $this->notificationStorage->remove($notificationType, $customerId);
     }
 
     /**
-     * Retrieve cache key
+     * Get cache key
      *
      * @param string $notificationType
      * @param string $customerId
      * @return string
      */
-    protected function getCacheKey($notificationType, $customerId)
+    private function getCacheKey($notificationType, $customerId)
     {
         return 'notification_' . $notificationType . '_' . $customerId;
     }
