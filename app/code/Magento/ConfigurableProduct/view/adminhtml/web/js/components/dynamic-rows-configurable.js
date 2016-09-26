@@ -392,11 +392,10 @@ define([
                     image: row.image,
                     'thumbnail': row.thumbnail,
                     'attributes': attributesText,
-                    'need_update': true
+                    'was_changed': true
                 };
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
-
                 tmpArray.push(product);
             }, this);
 

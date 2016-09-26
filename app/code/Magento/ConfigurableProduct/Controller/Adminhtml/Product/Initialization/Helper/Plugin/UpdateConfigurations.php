@@ -33,7 +33,6 @@ class UpdateConfigurations
         'small_image',
         'thumbnail',
         'image',
-        'need_update'
     ];
 
     /**
@@ -67,11 +66,6 @@ class UpdateConfigurations
         $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
-            if (empty($productData['need_update'])) {
-                continue;
-            } else {
-                unset($productData['need_update']);
-            }
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productRepository->getById($productId, false, $this->request->getParam('store', 0));
             $productData = $this->variationHandler->processMediaGallery($product, $productData);
@@ -97,6 +91,12 @@ class UpdateConfigurations
         }
 
         foreach ($configurableMatrix as $item) {
+            if (empty($item['was_changed'])) {
+                continue;
+            } else {
+                unset($item['was_changed']);
+            }
+
             if (!$item['newProduct']) {
                 $result[$item['id']] = $this->mapData($item);
 
