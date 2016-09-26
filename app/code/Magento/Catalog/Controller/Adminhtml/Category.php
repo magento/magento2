@@ -31,7 +31,7 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     protected function _initCategory($getRootInstead = false)
     {
-        $categoryId = (int)$this->getRequest()->getParam('id', false);
+        $categoryId = $this->resolveCategoryId();
         $storeId = (int)$this->getRequest()->getParam('store');
         $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
@@ -60,6 +60,18 @@ abstract class Category extends \Magento\Backend\App\Action
         $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
             ->setStoreId($this->getRequest()->getParam('store'));
         return $category;
+    }
+
+    /**
+     * Resolve Category Id (from get or from post)
+     *
+     * @return int
+     */
+    private function resolveCategoryId()
+    {
+        $categoryId = (int)$this->getRequest()->getParam('id', false);
+
+        return $categoryId ?: (int)$this->getRequest()->getParam('entity_id', false);
     }
 
     /**
