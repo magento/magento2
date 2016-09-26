@@ -6,9 +6,8 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Model\Session;
 
 class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +42,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     protected $eavAttributeResource;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldType|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldType|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldType;
 
@@ -64,7 +63,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getEntityType', 'getAttribute', 'getEntityAttributeCodes'])
             ->getMock();
 
-        $this->fieldType = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldType::class)
+        $this->fieldType = $this->getMockBuilder(FieldType::class)
             ->disableOriginalConstructor()
             ->setMethods(['getFieldType'])
             ->getMock();
@@ -187,20 +186,11 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testGetAllAttributesTypes($attributeCode)
+    public function testGetAllAttributesTypes($attributeCode, $inputType, $searchAttributes, $expected)
     {
         $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->setMethods(['getBackendType', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->setMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $this->storeManager->expects($this->any())
-            ->method('getStores')
-            ->will($this->returnValue([$store]));
 
         $this->eavConfig->expects($this->any())->method('getEntityAttributeCodes')
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE)
@@ -210,27 +200,26 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
             ->willReturn($attributeMock);
 
-        $attributeMock->expects($this->any())->method('getFrontendInput')
-            ->will($this->returnValue('select'));
+        $this->fieldType->expects($this->once())->method('getFieldType')->willReturn(FieldType::ES_DATA_TYPE_INT);
 
-        $this->eavAttributeResource->expects($this->any())
+        $attributeMock->expects($this->any())
+            ->method('getIsSearchable')
+            ->willReturn($searchAttributes['searchable']);
+        $attributeMock->expects($this->any())
             ->method('getIsFilterable')
-            ->willReturn(true);
-        $this->eavAttributeResource->expects($this->any())
-            ->method('getIsVisibleInAdvancedSearch')
-            ->willReturn(true);
-        $this->eavAttributeResource->expects($this->any())
+            ->willReturn($searchAttributes['filterable']);
+        $attributeMock->expects($this->any())
             ->method('getIsFilterableInSearch')
-            ->willReturn(false);
-        $this->eavAttributeResource->expects($this->any())
-            ->method('getIsGlobal')
-            ->willReturn(false);
-        $this->eavAttributeResource->expects($this->any())
-            ->method('getIsGlobal')
-            ->willReturn(true);
+            ->willReturn($searchAttributes['filterableInSearch']);
+        $attributeMock->expects($this->any())
+            ->method('getIsVisibleInAdvancedSearch')
+            ->willReturn($searchAttributes['advSearch']);
 
-        $this->assertInternalType(
-            'array',
+        $attributeMock->expects($this->any())->method('getFrontendInput')
+            ->will($this->returnValue($inputType));
+
+        $this->assertEquals(
+            $expected,
             $this->mapper->getAllAttributesTypes()
         );
     }
@@ -238,7 +227,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public static function attributeCodeProvider()
+    public function attributeCodeProvider()
     {
         return [
             ['id', 'id', 'string'],
@@ -258,11 +247,39 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public static function attributeProvider()
+    public function attributeProvider()
     {
         return [
-            ['category_ids'],
-            ['attr_code'],
+            [
+                'category_ids',
+                'select',
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => false],
+                ['category_ids' => ['type' => 'integer'], 'category_ids_value' => ['type' => 'string']]
+            ],
+            [
+                'attr_code',
+                'text',
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => false],
+                ['attr_code' => ['type' => 'integer', 'index' => 'no']]
+            ],
+            [
+                'attr_code',
+                'text',
+                ['searchable' => true, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => false],
+                ['attr_code' => ['type' => 'integer']]
+            ],
+            [
+                'attr_code',
+                'text',
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => true],
+                ['attr_code' => ['type' => 'integer']]
+            ],
+            [
+                'attr_code',
+                'text',
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => true, '', 'advSearch' => false],
+                ['attr_code' => ['type' => 'integer']]
+            ],
         ];
     }
 }
