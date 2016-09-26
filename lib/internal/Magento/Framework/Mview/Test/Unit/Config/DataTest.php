@@ -10,32 +10,37 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Mview\Config\Data
      */
-    protected $model;
+    private $config;
 
     /**
      * @var \Magento\Framework\Mview\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $reader;
+    private $reader;
 
     /**
      * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @var \Magento\Framework\Mview\View\State\CollectionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stateCollection;
+    private $stateCollection;
 
     /**
      * @var string
      */
-    protected $cacheId = 'mview_config';
+    private $cacheId = 'mview_config';
 
     /**
      * @var string
      */
-    protected $views = ['view1' => [], 'view3' => []];
+    private $views = ['view1' => [], 'view3' => []];
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
 
     protected function setUp()
     {
@@ -58,24 +63,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
             true,
             ['getItems']
         );
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Framework\Mview\Config\Data::setJson($this->jsonMock);
     }
 
     public function testConstructorWithCache()
     {
         $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
-        $this->cache->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            $this->cacheId
-        )->will(
-            $this->returnValue(serialize($this->views))
-        );
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->with($this->cacheId);
 
         $this->stateCollection->expects($this->never())->method('getItems');
 
-        $this->model = new \Magento\Framework\Mview\Config\Data(
+        $this->jsonMock->method('decode')
+            ->willReturn($this->views);
+
+        $this->config = new \Magento\Framework\Mview\Config\Data(
             $this->reader,
             $this->cache,
             $this->stateCollection,
@@ -114,7 +119,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->stateCollection->expects($this->once())->method('getItems')->will($this->returnValue($states));
 
-        $this->model = new \Magento\Framework\Mview\Config\Data(
+        $this->config = new \Magento\Framework\Mview\Config\Data(
             $this->reader,
             $this->cache,
             $this->stateCollection,

@@ -38,6 +38,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_scopeConfigMock;
 
     /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
+    /**
      * @var \Magento\Customer\Model\Address\Config
      */
     protected $_model;
@@ -85,14 +90,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_readerMock->expects($this->once())->method('read')->will($this->returnValue($fixtureConfigData));
 
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'save'
-        )->with(
-            serialize($fixtureConfigData),
-            $this->_cacheId
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('save')
+            ->with(
+                \Zend_Json::encode($fixtureConfigData),
+                $this->_cacheId
+            );
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Customer\Model\Address\Config::setJson($this->jsonMock);
+
+        $this->jsonMock->method('encode')
+            ->willReturn(json_encode($fixtureConfigData));
+        $this->jsonMock->method('decode')
+            ->willReturn($fixtureConfigData);
 
         $this->_model = new \Magento\Customer\Model\Address\Config(
             $this->_readerMock,

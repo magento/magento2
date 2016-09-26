@@ -6,6 +6,7 @@
  */
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
 class ActionList
@@ -36,6 +37,11 @@ class ActionList
     ];
 
     /**
+     * @var JsonInterface
+     */
+    private static $json;
+
+    /**
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
@@ -54,9 +60,9 @@ class ActionList
         $data = $cache->load($cacheKey);
         if (!$data) {
             $this->actions = $moduleReader->getActionFiles();
-            $cache->save(serialize($this->actions), $cacheKey);
+            $cache->save($this->getJson()->encode($this->actions), $cacheKey);
         } else {
-            $this->actions = unserialize($data);
+            $this->actions = $this->getJson()->decode($data);
         }
     }
 
@@ -91,5 +97,32 @@ class ActionList
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
         }
         return null;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if (self::$json === null) {
+            self::$json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return self::$json;
+    }
+
+    /**
+     * Set json encoder/decoder
+     *
+     * @param JsonInterface $json
+     * @return void
+     * @deprecated
+     */
+    public static function setJson(JsonInterface $json)
+    {
+        self::$json = $json;
     }
 }

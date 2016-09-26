@@ -17,6 +17,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheMock;
 
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
     protected function setUp()
     {
         $this->_readerMock = $this->getMockBuilder(
@@ -25,12 +30,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMockBuilder(
             \Magento\Framework\App\Cache\Type\Config::class
         )->disableOriginalConstructor()->getMock();
+
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Sales\Model\Config\Data::setJson($this->jsonMock);
     }
 
     public function testGet()
     {
         $expected = ['someData' => ['someValue', 'someKey' => 'someValue']];
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($expected)));
+        $this->_cacheMock->expects($this->once())
+            ->method('load');
+
+        $this->jsonMock->method('decode')
+            ->willReturn($expected);
+
         $configData = new \Magento\Sales\Model\Config\Data($this->_readerMock, $this->_cacheMock);
 
         $this->assertEquals($expected, $configData->get());

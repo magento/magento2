@@ -8,6 +8,7 @@
 namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Json\JsonInterface;
 
 class Initial
 {
@@ -31,6 +32,11 @@ class Initial
     protected $_metadata = [];
 
     /**
+     * @var JsonInterface
+     */
+    private static $json;
+
+    /**
      * @param \Magento\Framework\App\Config\Initial\Reader $reader
      * @param \Magento\Framework\App\Cache\Type\Config $cache
      */
@@ -41,9 +47,9 @@ class Initial
         $data = $cache->load(self::CACHE_ID);
         if (!$data) {
             $data = $reader->read();
-            $cache->save(serialize($data), self::CACHE_ID);
+            $cache->save($this->getJson()->encode($data), self::CACHE_ID);
         } else {
-            $data = unserialize($data);
+            $data = $this->getJson()->decode($data);
         }
         $this->_data = $data['data'];
         $this->_metadata = $data['metadata'];
@@ -75,5 +81,32 @@ class Initial
     public function getMetadata()
     {
         return $this->_metadata;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if (self::$json === null) {
+            self::$json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return self::$json;
+    }
+
+    /**
+     * Set json encoder/decoder
+     *
+     * @param JsonInterface $json
+     * @return void
+     * @deprecated
+     */
+    public static function setJson(JsonInterface $json)
+    {
+        self::$json = $json;
     }
 }

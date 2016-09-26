@@ -10,33 +10,46 @@ namespace Magento\Framework\Config\Test\Unit;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $reader;
-    /** @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cache;
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
-    protected $objectManagerHelper;
+    /**
+     * @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readerMock;
+
+    /**
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheMock;
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
 
     protected function setUp()
     {
-        $this->reader = $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cache = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Framework\Config\Data::setJson($this->jsonMock);
     }
 
-    public function testGet()
+    public function testGetConfigNotCached()
     {
         $data = ['a' => 'b'];
-        $cacheid = 'test';
-        $this->cache->expects($this->once())->method('load')->will($this->returnValue(false));
-        $this->reader->expects($this->once())->method('read')->will($this->returnValue($data));
-
+        $cacheId = 'test';
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->readerMock->expects($this->once())
+            ->method('read')
+            ->willReturn($data);
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->with($data);
         $config = new \Magento\Framework\Config\Data(
-            $this->reader, $this->cache, $cacheid
+            $this->readerMock,
+            $this->cacheMock,
+            $cacheId
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));
@@ -44,18 +57,48 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(33, $config->get('a/b', 33));
     }
 
+    public function testGetConfigCached()
+    {
+        $data = ['a' => 'b'];
+        $jsonString = '{"a":"b"}';
+        $cacheId = 'test';
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn($jsonString);
+        $this->readerMock->expects($this->never())
+            ->method('read');
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->with($jsonString)
+            ->willReturn($data);
+        $config = new \Magento\Framework\Config\Data(
+            $this->readerMock,
+            $this->cacheMock,
+            $cacheId
+        );
+        $this->assertEquals($data, $config->get());
+        $this->assertEquals('b', $config->get('a'));
+    }
+
     public function testReset()
     {
-        $cacheid = 'test';
-        $this->cache->expects($this->once())->method('load')->will($this->returnValue(serialize([])));
-        $this->cache->expects($this->once())->method('remove')->with($cacheid);
-
+        $jsonString = '';
+        $cacheId = 'test';
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn($jsonString);
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->with($jsonString)
+            ->willReturn([]);
+        $this->cacheMock->expects($this->once())
+            ->method('remove')
+            ->with($cacheId);
         $config = new \Magento\Framework\Config\Data(
-            $this->reader,
-            $this->cache,
-            $cacheid
+            $this->readerMock,
+            $this->cacheMock,
+            $cacheId
         );
-
         $config->reset();
     }
 }

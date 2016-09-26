@@ -11,7 +11,6 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Json\JsonInterface;
 
 class Factory
 {
@@ -46,9 +45,14 @@ class Factory
     private $cache;
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Json\JsonInterface
      */
     private $json;
+
+    /**
+     * @var \Magento\Framework\Config\FileIteratorFactory
+     */
+    private $fileIteratorFactory;
 
     /**
      * Initialize dependencies
@@ -76,9 +80,10 @@ class Factory
             $this->_configFiles = $this->cache->load(self::CACHE_KEY);
             if (!$this->_configFiles) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save($this->getJson()->encode($this->_configFiles), self::CACHE_KEY);
+                $this->cache->save($this->getJson()->encode($this->_configFiles->toArray()), self::CACHE_KEY);
             } else {
-                $this->_configFiles = $this->getJson()->decode($this->_configFiles);
+                $filesArray = $this->getJson()->decode($this->_configFiles);
+                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($filesArray));
             }
         }
     }
@@ -150,16 +155,30 @@ class Factory
     /**
      * Get json encoder/decoder
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Json\JsonInterface
      * @deprecated
      */
     private function getJson()
     {
         if ($this->json === null) {
             $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+                ->get(\Magento\Framework\Json\JsonInterface::class);
         }
         return $this->json;
     }
-}
 
+    /**
+     * Get file iterator factory
+     *
+     * @return \Magento\Framework\Config\FileIteratorFactory
+     * @deprecated
+     */
+    private function getFileIteratorFactory()
+    {
+        if ($this->fileIteratorFactory === null) {
+            $this->fileIteratorFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Config\FileIteratorFactory::class);
+        }
+        return $this->fileIteratorFactory;
+    }
+}

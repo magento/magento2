@@ -30,17 +30,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'job2' => ['schedule' => '* * * * *', 'instance' => 'JobModel2', 'method' => 'method2'],
         ];
 
-        $cache->expects(
-            $this->any()
-        )->method(
-            'load'
-        )->with(
-            $this->equalTo('test_cache_id')
-        )->will(
-            $this->returnValue(serialize($jobs))
-        );
+        $cache->expects($this->any())
+            ->method('load')
+            ->with('test_cache_id')
+            ->willReturn(json_encode($jobs));
 
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
+
+        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Cron\Model\Config\Data::setJson($jsonMock);
+
+        $jsonMock->method('decode')
+            ->willReturn($jobs);
 
         $configData = new \Magento\Cron\Model\Config\Data($reader, $cache, $dbReader, 'test_cache_id');
 

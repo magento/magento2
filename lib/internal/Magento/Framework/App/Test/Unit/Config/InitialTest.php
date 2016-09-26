@@ -10,56 +10,70 @@ class InitialTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\Config\Initial
      */
-    protected $_model;
+    private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\Initial\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_initialReaderMock;
+    private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configCacheMock;
+    private $cacheMock;
+
+    /**
+     * @var array
+     */
+    private $data = [
+        'data' => [
+            'default' => ['key' => 'default_value'],
+            'stores' => ['default' => ['key' => 'store_value']],
+            'websites' => ['default' => ['key' => 'website_value']],
+        ],
+        'metadata' => ['metadata'],
+    ];
 
     protected function setUp()
     {
-        $this->_initialReaderMock =
-            $this->getMock(\Magento\Framework\App\Config\Initial\Reader::class, [], [], '', false);
-        $this->_configCacheMock =
-            $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
-        $serializedData = serialize(
-            [
-                'data' => [
-                    'default' => ['key' => 'default_value'],
-                    'stores' => ['default' => ['key' => 'store_value']],
-                    'websites' => ['default' => ['key' => 'website_value']],
-                ],
-                'metadata' => ['metadata'],
-            ]
+        $this->readerMock = $this->getMock(
+            \Magento\Framework\App\Config\Initial\Reader::class,
+            [],
+            [],
+            '',
+            false
         );
-        $this->_configCacheMock->expects(
-            $this->any()
-        )->method(
-            'load'
-        )->with(
-            'initial_config'
-        )->will(
-            $this->returnValue($serializedData)
+        $this->cacheMock = $this->getMock(
+            \Magento\Framework\App\Cache\Type\Config::class,
+            [],
+            [],
+            '',
+            false
         );
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->with('initial_config')
+            ->willReturn(json_encode($this->data));
+        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $jsonMock->method('decode')
+            ->willReturn($this->data);
+        
+        \Magento\Framework\App\Config\Initial::setJson($jsonMock);
 
-        $this->_model = new \Magento\Framework\App\Config\Initial($this->_initialReaderMock, $this->_configCacheMock);
+        $this->config = new \Magento\Framework\App\Config\Initial(
+            $this->readerMock,
+            $this->cacheMock
+        );
     }
 
     /**
-     * @dataProvider getDataDataProvider
-     *
      * @param string $scope
-     * @param array $expectedResult
+     * @param array $expected
+     * @dataProvider getDataDataProvider
      */
-    public function testGetData($scope, $expectedResult)
+    public function testGetData($scope, $expected)
     {
-        $this->assertEquals($expectedResult, $this->_model->getData($scope));
+        $this->assertEquals($expected, $this->config->getData($scope));
     }
 
     public function getDataDataProvider()
@@ -73,7 +87,6 @@ class InitialTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMetadata()
     {
-        $expectedResult = ['metadata'];
-        $this->assertEquals($expectedResult, $this->_model->getMetadata());
+        $this->assertEquals(['metadata'], $this->config->getMetadata());
     }
 }

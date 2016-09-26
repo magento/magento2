@@ -8,19 +8,24 @@ namespace Magento\Catalog\Test\Unit\Model\ProductTypes;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerMock;
+    private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\Config
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $jsonMock;
+
+    /**
+     * @var \Magento\Catalog\Model\ProductTypes\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $config;
 
     protected function setUp()
     {
@@ -32,19 +37,25 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        \Magento\Catalog\Model\ProductTypes\Config::setJson($this->jsonMock);
     }
 
     /**
-     * @dataProvider getTypeDataProvider
-     *
      * @param array $value
      * @param mixed $expected
+     * @dataProvider getTypeDataProvider
      */
     public function testGetType($value, $expected)
     {
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($value)));
-        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
-        $this->assertEquals($expected, $this->model->getType('global'));
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->willReturn(json_encode($value));
+
+        $this->jsonMock->method('decode')
+            ->willReturn($value);
+        $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
+        $this->assertEquals($expected, $this->config->getType('global'));
     }
 
     public function getTypeDataProvider()
@@ -58,22 +69,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetAll()
     {
         $expected = ['Expected Data'];
-        $this->cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->will(
-            $this->returnValue(serialize(['types' => $expected]))
-        );
-        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
-        $this->assertEquals($expected, $this->model->getAll());
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn(json_encode('"types":["Expected Data"]]'));
+        $this->jsonMock->method('decode')
+            ->willReturn(['types' => $expected]);
+        $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
+        $this->assertEquals($expected, $this->config->getAll());
     }
 
     public function testIsProductSet()
     {
-        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(serialize([])));
-        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn('');
+        $this->jsonMock->method('decode')
+            ->willReturn([]);
+        $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
 
-        $this->assertEquals(false, $this->model->isProductSet('typeId'));
+        $this->assertEquals(false, $this->config->isProductSet('typeId'));
     }
 }
