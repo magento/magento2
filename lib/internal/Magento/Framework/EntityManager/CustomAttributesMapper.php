@@ -18,20 +18,19 @@ class CustomAttributesMapper implements MapperInterface
     /**
      * CustomAttributesMapper constructor.
      *
-     * @param MapperInterface|null $mapper
+     * @param MapperInterface $mapper
      */
-    public function __construct(MapperInterface $mapper = null)
+    public function __construct(MapperInterface $mapper)
     {
         $this->mapper = $mapper;
     }
 
     /**
      * {@inheritdoc}
-     * @deprecated
      */
     public function entityToDatabase($entityType, $data)
     {
-        return $this->mapper !== null ? $this->mapper->entityToDatabase($entityType, $data) : $data;
+        return $this->mapper->entityToDatabase($entityType, $data);
     }
 
     /**
@@ -40,6 +39,6 @@ class CustomAttributesMapper implements MapperInterface
      */
     public function databaseToEntity($entityType, $data)
     {
-        return $this->mapper !== null ? $this->mapper->databaseToEntity($entityType, $data) : $data;
+        return $this->mapper->databaseToEntity($entityType, $data);
     }
 }
