@@ -33,4 +33,4 @@ $attribute->setData(
 );
 $attribute->save();
 /* Assign attribute to attribute set */
-$installer->addAttributeToGroup('catalog_produc t', 'Default', 'General', $attribute->getId());
+$installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
