@@ -61,9 +61,6 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="configurableProductSaveOptions" sortOrder="10" type="Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave"/>
     </type>
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="configurable_identity" type="Magento\ConfigurableProduct\Plugin\Model\Product" />
-    </type>
     <type name="Magento\Catalog\Model\Product\Type">
         <plugin name="configurable_output" type="Magento\ConfigurableProduct\Model\Product\Type\Plugin" />
     </type>
@@ -157,6 +154,13 @@
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
                 <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">\Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable</item>
             </argument>
         </arguments>
     </type>
