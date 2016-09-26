@@ -73,7 +73,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     (new Injectable())->getDependencies($fileReflection),
                     $tokens->getDependencies()
                 );
-                $allowedNamespaces = str_replace('\\','\\\\', implode('|', $this->getAllowedNamespaces()));
+                $allowedNamespaces = str_replace('\\', '\\\\', implode('|', $this->getAllowedNamespaces()));
                 $pattern = '#Magento\\\\(?!' . $allowedNamespaces . ').*#';
                 foreach ($dependencies as $dependency) {
                     $dependencyPaths = explode('\\', $dependency);
