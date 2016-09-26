@@ -13,7 +13,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_config;
 
     /**
-     * @var Cache_Mock_Wrapper
+     * @var \Magento\Framework\App\Route\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_readerMock;
 
@@ -59,7 +59,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             });
         $jsonMock->method('decode')
             ->willReturnCallback(function ($string) {
-                return json_decode($string);
+                return json_decode($string, true);
             });
     }
 

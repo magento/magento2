@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
