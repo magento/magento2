@@ -6,6 +6,7 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
+use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -44,6 +45,11 @@ class CreateHandler implements AttributeInterface
     private $scopeResolver;
 
     /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
+
+    /**
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -66,11 +72,15 @@ class CreateHandler implements AttributeInterface
 
     /**
      * @deprecated
-     * @return \Magento\Eav\Model\Entity\AttributeCache
+     * @return AttributeCache
      */
     private function getAttributeCache()
     {
-        return ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\AttributeCache::class);
+        if ($this->attributeCache === null) {
+            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
+        }
+
+        return $this->attributeCache;
     }
 
     /**
@@ -80,7 +90,7 @@ class CreateHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-        /** @var \Magento\Eav\Model\Entity\AttributeCache $cache */
+        /** @var AttributeCache $cache */
         $cache = $this->getAttributeCache();
         if ($attributes = $cache->getAttributes($entityType)) {
             return $attributes;
