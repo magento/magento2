@@ -65,13 +65,15 @@ class UpdateConfigurations
     ) {
         $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
-        foreach ($configurations as $productId => $productData) {
-            /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->productRepository->getById($productId, false, $this->request->getParam('store', 0));
-            $productData = $this->variationHandler->processMediaGallery($product, $productData);
-            $product->addData($productData);
-            if ($product->hasDataChanges()) {
-                $product->save();
+        if (count($configurations)) {
+            foreach ($configurations as $productId => $productData) {
+                /** @var \Magento\Catalog\Model\Product $product */
+                $product = $this->productRepository->getById($productId, false, $this->request->getParam('store', 0));
+                $productData = $this->variationHandler->processMediaGallery($product, $productData);
+                $product->addData($productData);
+                if ($product->hasDataChanges()) {
+                    $product->save();
+                }
             }
         }
         return $configurableProduct;
