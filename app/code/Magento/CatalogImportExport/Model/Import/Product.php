@@ -2126,7 +2126,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
             }
 
-            if ($productIdsToReindex) {
+            if (!$indexer->isScheduled() && $productIdsToReindex) {
                 $indexer->reindexList($productIdsToReindex);
             }
         }
