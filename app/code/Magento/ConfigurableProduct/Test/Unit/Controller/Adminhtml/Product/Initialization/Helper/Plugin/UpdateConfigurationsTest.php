@@ -106,13 +106,7 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'sku' => 'simple2_sku',
                 'name' => 'simple2_name',
                 'price' => '3.33',
-                'configurable_attribute' => 'simple2_configurable_attribute',
                 'weight' => '5.55',
-                'media_gallery' => 'simple4_media_gallery',
-                'swatch_image' => 'simple4_swatch_image',
-                'small_image' => 'simple4_small_image',
-                'thumbnail' => 'simple4_thumbnail',
-                'image' => 'simple4_image'
             ],
         ];
         $configurations = [
