@@ -13,33 +13,30 @@
 
     <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <!-- ko if: gridNew().length -->
-        <!-- ko template: {name: getGridTemplate(), data: {
-            grid: gridNew,
-            paging: pagingNew,
-            id: getGridId(),
-            title: $t('New Product Review'),
-            note: $t('Here are the products you\'re about to create.')
-        }} --><!-- /ko -->
+            <!-- ko template: {name: getGridTemplate(), data: {
+                grid: gridNew,
+                id: getGridId(),
+                title: $t('New Product Review'),
+                note: $t('Here are the products you\'re about to create.')
+            }} --><!-- /ko -->
         <!-- /ko -->
 
         <!-- ko if: gridExisting().length -->
-        <!-- ko template: {name: getGridTemplate(), data: {
-            paging: pagingExisting,
-            grid: gridExisting,
-            id: getGridId(),
-            title: $t('Associated Products'),
-            note: $t('You created these products for this configuration.')
-        }} --><!-- /ko -->
+            <!-- ko template: {name: getGridTemplate(), data: {
+                grid: gridExisting,
+                id: getGridId(),
+                title: $t('Associated Products'),
+                note: $t('You created these products for this configuration.')
+            }} --><!-- /ko -->
         <!-- /ko -->
 
         <!-- ko if: gridDeleted().length -->
-        <!-- ko template: {name: getGridTemplate(), data: {
-            paging: pagingDeleted,
-            grid: gridDeleted,
-            id: getGridId(),
-            title: $t('Disassociated Products'),
-            note: $t('These products are not associated.')
-        }} --><!-- /ko -->
+            <!-- ko template: {name: getGridTemplate(), data: {
+                grid: gridDeleted,
+                id: getGridId(),
+                title: $t('Disassociated Products'),
+                note: $t('These products are not associated.')
+            }} --><!-- /ko -->
         <!-- /ko -->
     </div>
 </div>
