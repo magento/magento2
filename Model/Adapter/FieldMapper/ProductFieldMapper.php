@@ -127,10 +127,13 @@ class ProductFieldMapper implements FieldMapperInterface
                 'type' => $this->fieldType->getFieldType($attribute)
             ];
 
-            if ($attribute->getIsSearchable() === false && $this->isAttributeUsedInAdvancedSearch($attribute) === false
+            if (!$attribute->getIsSearchable() && $this->isAttributeUsedInAdvancedSearch($attribute) === false
                 && !in_array($attributeCode, $alwaysIndexableAttributes, true)
             ) {
-                $allAttributes[$attributeCode] = array_merge($allAttributes[$attributeCode], ['index' => 'no']);
+                $allAttributes[$attributeCode] = array_merge(
+                    $allAttributes[$attributeCode],
+                    ['index' => 'no']
+                );
             }
 
             if ($attribute->getFrontendInput() === 'select') {

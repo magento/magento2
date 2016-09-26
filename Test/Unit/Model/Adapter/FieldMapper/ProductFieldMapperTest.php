@@ -253,31 +253,43 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             [
                 'category_ids',
                 'select',
-                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => false],
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
                 ['category_ids' => ['type' => 'integer'], 'category_ids_value' => ['type' => 'string']]
             ],
             [
                 'attr_code',
                 'text',
-                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => false],
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
                 ['attr_code' => ['type' => 'integer', 'index' => 'no']]
             ],
             [
                 'attr_code',
                 'text',
-                ['searchable' => true, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => false],
+                ['searchable' => '0', 'filterable' => '0', 'filterableInSearch' => '0', 'advSearch' => '0'],
+                ['attr_code' => ['type' => 'integer', 'index' => 'no']]
+            ],
+            [
+                'attr_code',
+                'text',
+                ['searchable' => true, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
                 ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
                 'text',
-                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, '', 'advSearch' => true],
+                ['searchable' => '1', 'filterable' => '0', 'filterableInSearch' => '0', 'advSearch' => '0'],
                 ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
                 'text',
-                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => true, '', 'advSearch' => false],
+                ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => true],
+                ['attr_code' => ['type' => 'integer']]
+            ],
+            [
+                'attr_code',
+                'text',
+                ['searchable' => '0', 'filterable' => '0', 'filterableInSearch' => '1', 'advSearch' => '0'],
                 ['attr_code' => ['type' => 'integer']]
             ],
         ];
