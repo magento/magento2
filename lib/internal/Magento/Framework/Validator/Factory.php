@@ -12,6 +12,9 @@ namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Factory
 {
     /** cache key */
