@@ -73,7 +73,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      *
      * @return array
      */
-    public function prepareMetadata() {
+    public function prepareMetadata()
+    {
         $metadata = [];
 
         if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save')) {
@@ -95,4 +96,3 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         return $metadata;
     }
 }
-
