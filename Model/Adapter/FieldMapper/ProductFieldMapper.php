@@ -111,23 +111,23 @@ class ProductFieldMapper implements FieldMapperInterface
     {
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $allAttributes = [];
+        // List of attributes which are required to be indexable
+        $alwaysIndexableAttributes = [
+            'media_gallery',
+            'quantity_and_stock_status',
+            'tier_price',
+            'category_ids',
+            'visibility',
+        ];
 
         foreach ($attributeCodes as $attributeCode) {
             $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-            // List of attributes which are required to be indexable
-            $alwaysIndexableAttributes = [
-                'media_gallery',
-                'quantity_and_stock_status',
-                'tier_price',
-                'category_ids',
-                'visibility',
-            ];
 
             $allAttributes[$attributeCode] = [
                 'type' => $this->fieldType->getFieldType($attribute)
             ];
 
-            if (!$attribute->getIsSearchable() && $this->isAttributeUsedInAdvancedSearch($attribute) === false
+            if (!$attribute->getIsSearchable() && !$this->isAttributeUsedInAdvancedSearch($attribute)
                 && !in_array($attributeCode, $alwaysIndexableAttributes, true)
             ) {
                 $allAttributes[$attributeCode] = array_merge(
