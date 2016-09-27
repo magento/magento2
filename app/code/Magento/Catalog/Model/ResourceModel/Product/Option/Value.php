@@ -34,6 +34,12 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_config;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     * @deprecated
+     */
+    private $localeFormat;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -91,8 +97,9 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
     {
         $priceTable = $this->getTable('catalog_product_option_type_price');
+        $formattedPrice = $this->getLocaleFormatter()->getNumber($object->getPrice());
 
-        $price = (double)sprintf('%F', $object->getPrice());
+        $price = (double)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
         if ($object->getPrice() && $priceType) {
@@ -409,5 +416,20 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $object;
+    }
+
+    /**
+     * Get FormatInterface to convert price from string to number format
+     *
+     * @return \Magento\Framework\Locale\FormatInterface
+     * @deprecated
+     */
+    private function getLocaleFormatter()
+    {
+        if ($this->localeFormat === null) {
+            $this->localeFormat = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Locale\FormatInterface::class);
+        }
+        return $this->localeFormat;
     }
 }
