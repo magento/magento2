@@ -152,5 +152,10 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\EntityManager\CustomAttributesMapper">
+        <arguments>
+            <argument name="mapper" xsi:type="object">Magento\Eav\Model\CustomAttributesMapper</argument>
+        </arguments>
+    </type>
 </config>
 
