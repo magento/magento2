@@ -97,7 +97,7 @@ class Method extends Block
             if ($error->isVisible()) {
                 $label = $element->find('.//*[contains(@name,"payment")]', Locator::SELECTOR_XPATH);
                 $label = $label->getAttribute('name');
-                $label = preg_replace('/payment\[(.*)\]/u','$1' ,$label);
+                $label = preg_replace('/payment\[(.*)\]/u', '$1', $label);
                 $data[$label] = $error->getText();
             }
         }
