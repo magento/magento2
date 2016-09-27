@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Shipping;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Adminhtml sales order create shipping address block.
@@ -23,11 +24,25 @@ class Address extends Form
     protected $templateBlock = './ancestor::body';
 
     /**
+     * CSS selector for 'Phone Number' label.
+     *
+     * @var string
+     */
+    private $billingTelephoneLabel = '[data-ui-id$="billing-address-telephone-label"]';
+
+    /**
      * 'Same as billing address' checkbox.
      *
      * @var string
      */
     protected $sameAsBilling = '#order-shipping_same_as_billing';
+
+    /**
+     * Wait element.
+     *
+     * @var string
+     */
+    private $waitElement = '.loading-mask';
 
     /**
      * Shipping address title selector.
@@ -94,5 +109,32 @@ class Address extends Form
             \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * Fill specified form data.
+     *
+     * @param array $fields
+     * @param SimpleElement $element
+     * @return void
+     * @throws \Exception
+     */
+    protected function _fill(array $fields, SimpleElement $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
+        foreach ($fields as $name => $field) {
+            $this->_rootElement->click();
+            $this->browser->waitUntil(
+                function () {
+                    return $this->browser->find($this->waitElement)->isVisible() ? null : true;
+                }
+            );
+            $element = $this->getElement($context, $field);
+            if (!$element->isDisabled()) {
+                $element->setValue($field['value']);
+            } else {
+                throw new \Exception("Unable to set value to field '$name' as it's disabled.");
+            }
+        }
     }
 }

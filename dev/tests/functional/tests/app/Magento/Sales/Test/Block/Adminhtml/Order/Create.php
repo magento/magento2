@@ -279,24 +279,39 @@ class Create extends Block
     }
 
     /**
-     * Fill addresses based on present data in customer and order fixtures.
+     * Fill Billing Address.
      *
-     * @param FixtureInterface $address
-     * @param string $saveAddress
+     * @param FixtureInterface $billingAddress
+     * @param string $saveAddress [optional]
      * @param bool $setShippingAddress [optional]
      * @return void
      */
-    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No', $setShippingAddress = true)
-    {
+    public function fillBillingAddress(
+        FixtureInterface $billingAddress,
+        $saveAddress = 'No',
+        $setShippingAddress = true
+    ) {
         if ($setShippingAddress) {
             $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
         }
-        $this->browser->find($this->header)->hover();
-        $this->getBillingAddressBlock()->fill($address);
+        $this->getBillingAddressBlock()->fill($billingAddress);
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
-        if ($setShippingAddress) {
+    }
+
+    /**
+     * Fill Shipping Address.
+     *
+     * @param FixtureInterface $shippingAddress
+     * @return void
+     */
+    public function fillShippingAddress(FixtureInterface $shippingAddress)
+    {
+        if (!$shippingAddress) {
             $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
+            $this->getTemplateBlock()->waitLoader();
+        } else {
+            $this->getShippingAddressBlock()->fill($shippingAddress);
             $this->getTemplateBlock()->waitLoader();
         }
     }

@@ -11,7 +11,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Fill Sales Data.
+ * Fill Billing Address.
  */
 class FillBillingAddressStep implements TestStepInterface
 {
@@ -23,7 +23,7 @@ class FillBillingAddressStep implements TestStepInterface
     protected $orderCreateIndex;
 
     /**
-     * Address.
+     * Billing Address.
      *
      * @var Address
      */
@@ -44,7 +44,6 @@ class FillBillingAddressStep implements TestStepInterface
     protected $setShippingAddress;
 
     /**
-     * @constructor
      * @param OrderCreateIndex $orderCreateIndex
      * @param Address $billingAddress
      * @param string $saveAddress
@@ -63,14 +62,14 @@ class FillBillingAddressStep implements TestStepInterface
     }
 
     /**
-     * Fill Sales Data.
+     * Fill Billing Address.
      *
-     * @return Address
+     * @return array
      */
     public function run()
     {
         $this->orderCreateIndex->getCreateBlock()
-            ->fillAddresses($this->billingAddress, $this->saveAddress, $this->setShippingAddress);
+            ->fillBillingAddress($this->billingAddress, $this->saveAddress, $this->setShippingAddress);
 
         return ['billingAddress' => $this->billingAddress];
     }
