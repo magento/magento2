@@ -19,6 +19,7 @@ class Builder implements BuilderInterface
      * Builder constructor.
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $tableName
      */
     public function __construct(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $tableName)
     {

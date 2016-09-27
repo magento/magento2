@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class FlatTableBuilderTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
 {
