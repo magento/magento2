@@ -29,18 +29,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetSaveHandler($deploymentConfigHandler, $iniHandler)
     {
-        // Set expected session.save_handler config
-        if ($deploymentConfigHandler) {
-            if ($deploymentConfigHandler !== 'files') {
-                $expected = 'user';
-            } else {
-                $expected = $deploymentConfigHandler;
-            }
-        } else if ($iniHandler) {
-            $expected = $iniHandler;
-        } else {
-            $expected = SaveHandlerInterface::DEFAULT_HANDLER;
-        }
+        $expected = $this->getExpectedSaveHandler($deploymentConfigHandler, $iniHandler);
 
         // Set ini configuration
         if ($iniHandler) {
@@ -83,5 +72,32 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             [false, 'files'],
             [false, false],
         ];
+    }
+
+    /**
+     * Retrieve expected session.save_handler
+     *
+     * @param string $deploymentConfigHandler
+     * @param string $iniHandler
+     * @return string
+     */
+    private function getExpectedSaveHandler($deploymentConfigHandler, $iniHandler)
+    {
+        // Set expected session.save_handler config
+        if ($deploymentConfigHandler) {
+            if ($deploymentConfigHandler !== 'files') {
+                $expected = 'user';
+                return $expected;
+            } else {
+                $expected = $deploymentConfigHandler;
+                return $expected;
+            }
+        } elseif ($iniHandler) {
+            $expected = $iniHandler;
+            return $expected;
+        } else {
+            $expected = SaveHandlerInterface::DEFAULT_HANDLER;
+            return $expected;
+        }
     }
 }
