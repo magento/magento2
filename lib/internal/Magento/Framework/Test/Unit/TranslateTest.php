@@ -60,6 +60,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->viewDesign = $this->getMock(\Magento\Framework\View\DesignInterface::class, [], [], '', false);
         $this->cache = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class, [], [], '', false);
         $this->viewFileSystem = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
@@ -106,16 +107,16 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             $this->packDictionary
         );
 
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock = $this->getMock(JsonInterface::class);
         $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
             });
         $jsonMock->method('decode')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
-        (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->setBackwardCompatibleProperty(
+        $objectManager->setBackwardCompatibleProperty(
             $this->translate,
             'json',
             $jsonMock
@@ -135,7 +136,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->exactly($forceReload ? 0 : 1))
             ->method('load')
-            ->will($this->returnValue(\Zend_Json::encode($cachedData)));
+            ->will($this->returnValue(json_encode($cachedData)));
 
         if (!$forceReload && $cachedData !== false) {
             $this->translate->loadData($area, $forceReload);
@@ -238,7 +239,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(\Zend_Json::encode($data)));
+            ->will($this->returnValue(json_encode($data)));
         $this->expectsSetConfig('themeId');
         $this->translate->loadData('frontend');
         $this->assertEquals($result, $this->translate->getData());
