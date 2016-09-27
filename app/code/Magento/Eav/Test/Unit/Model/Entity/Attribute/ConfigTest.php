@@ -12,6 +12,11 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Eav\Model\Entity\Attribute\Config
      */
     protected $_model;
@@ -43,6 +48,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
         $this->_entityType = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
         $this->_readerMock = $this->getMock(
@@ -63,12 +69,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $jsonMock->method('decode')
             ->willReturn([]);
-        \Magento\Eav\Model\Entity\Attribute\Config::setJson($jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
             $this->_readerMock,
             $this->_cacheMock,
             $this->_cacheId
         );
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testGetLockedFieldsEmpty()

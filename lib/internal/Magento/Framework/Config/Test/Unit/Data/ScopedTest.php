@@ -8,6 +8,11 @@ namespace Magento\Framework\Config\Test\Unit\Data;
 class ScopedTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Framework\Config\Data\Scoped
      */
     protected $_model;
@@ -34,11 +39,13 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
 
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
 
         $this->_model = new \Magento\Framework\Config\Data\Scoped(
             $this->_readerMock,
@@ -46,7 +53,11 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->_cacheMock,
             'tag'
         );
-        \Magento\Framework\Config\Data\Scoped::setJson($this->jsonMock);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -174,5 +185,19 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
 
         /** test preventing of double config data loading from reader */
         $this->assertEquals('testValue', $this->_model->get('some'));
+    }
+
+    /**
+     * @param array $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

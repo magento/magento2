@@ -8,6 +8,11 @@ namespace Magento\Customer\Test\Unit\Model\Address;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_readerMock;
@@ -54,6 +59,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
@@ -98,7 +104,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Customer\Model\Address\Config::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
 
         $this->jsonMock->method('encode')
             ->willReturn(json_encode($fixtureConfigData));
@@ -113,6 +119,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_scopeConfigMock,
             $this->_cacheId
         );
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testGetStore()

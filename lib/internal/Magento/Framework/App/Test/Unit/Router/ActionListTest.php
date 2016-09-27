@@ -50,6 +50,12 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testConstructActionsCached()
@@ -169,7 +175,6 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
 
     private function createActionListInstance()
     {
-        \Magento\Framework\App\Router\ActionList::setJson($this->jsonMock);
         $this->actionList = $this->objectManager->getObject(
             \Magento\Framework\App\Router\ActionList::class,
             [

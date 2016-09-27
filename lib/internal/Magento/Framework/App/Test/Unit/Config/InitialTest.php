@@ -57,8 +57,10 @@ class InitialTest extends \PHPUnit_Framework_TestCase
         $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
         $jsonMock->method('decode')
             ->willReturn($this->data);
-        
-        \Magento\Framework\App\Config\Initial::setJson($jsonMock);
+
+        $this->prepareObjectManager([
+            [\Magento\Framework\Json\JsonInterface::class, $jsonMock]
+        ]);
 
         $this->config = new \Magento\Framework\App\Config\Initial(
             $this->readerMock,
@@ -88,5 +90,19 @@ class InitialTest extends \PHPUnit_Framework_TestCase
     public function testGetMetadata()
     {
         $this->assertEquals(['metadata'], $this->config->getMetadata());
+    }
+
+    /**
+     * @param array $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

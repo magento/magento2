@@ -8,6 +8,16 @@ namespace Magento\Cron\Test\Unit\Model\Config;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    public function setUp()
+    {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    }
+
+    /**
      * Testing return jobs from different sources (DB, XML)
      */
     public function testGetJobs()
@@ -38,7 +48,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
 
         $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Cron\Model\Config\Data::setJson($jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $jsonMock]);
 
         $jsonMock->method('decode')
             ->willReturn($jobs);
@@ -53,5 +63,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $result = $configData->getJobs();
         $this->assertEquals($expected, $result);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 }

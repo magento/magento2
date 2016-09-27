@@ -8,14 +8,19 @@ namespace Magento\Sales\Test\Unit\Model\Config;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $_readerMock;
+    private $objectManager;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cacheMock;
+    private $_readerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $_cacheMock;
 
     /**
      * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -24,15 +29,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_readerMock = $this->getMockBuilder(
             \Magento\Sales\Model\Config\Reader::class
         )->disableOriginalConstructor()->getMock();
         $this->_cacheMock = $this->getMockBuilder(
             \Magento\Framework\App\Cache\Type\Config::class
         )->disableOriginalConstructor()->getMock();
-
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Sales\Model\Config\Data::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testGet()
