@@ -15,17 +15,17 @@ class FrontController implements FrontControllerInterface
     protected $_routerList;
 
     /**
-     * @var \Magento\Framework\App\Response\Http
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
      * @param RouterList $routerList
-     * @param \Magento\Framework\App\Response\Http $response
+     * @param \Magento\Framework\App\ResponseInterface $response
      */
     public function __construct(
         RouterList $routerList,
-        \Magento\Framework\App\Response\Http $response
+        \Magento\Framework\App\ResponseInterface $response
     ) {
         $this->_routerList = $routerList;
         $this->response = $response;
