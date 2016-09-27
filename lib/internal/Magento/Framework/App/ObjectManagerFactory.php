@@ -41,7 +41,7 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $_locatorClassName = \Magento\Framework\ObjectManager\ObjectManager::class;
+    protected $_locatorClassName = \Magento\Framework\App\ObjectManager::class;
 
     /**
      * Config class name
@@ -180,7 +180,6 @@ class ObjectManagerFactory
         $objectManager = new $this->_locatorClassName($this->factory, $diConfig, $sharedInstances);
 
         $this->factory->setObjectManager($objectManager);
-        ObjectManager::setInstance($objectManager);
 
         $generatorParams = $diConfig->getArguments(\Magento\Framework\Code\Generator::class);
         /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
