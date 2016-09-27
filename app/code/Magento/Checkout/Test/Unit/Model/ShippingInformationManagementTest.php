@@ -459,7 +459,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $map
+     * @param array $map
      */
     private function prepareObjectManager($map)
     {
