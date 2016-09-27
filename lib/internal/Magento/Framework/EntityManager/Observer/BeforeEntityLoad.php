@@ -6,18 +6,16 @@
 
 namespace Magento\Framework\EntityManager\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Class AfterEntityLoad
+ * Class BeforeEntityLoad
  */
-class AfterEntityLoad implements ObserverInterface
+class BeforeEntityLoad
 {
     /**
-     * Apply model save operation
+     * Apply model before load operation
      *
      * @param Observer $observer
      * @throws \Magento\Framework\Validator\Exception
@@ -25,15 +23,10 @@ class AfterEntityLoad implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        $identifier = $observer->getEvent()->getIdentifier();
         $entity = $observer->getEvent()->getEntity();
         if ($entity instanceof AbstractModel) {
-            if ($entity->getResource() instanceof  AbstractDb) {
-                $entity->getResource()->unserializeFields($entity);
-            }
-            $entity->getResource()->afterLoad($entity);
-            $entity->afterLoad();
-            $entity->setOrigData();
-            $entity->setHasDataChanges(false);
+            $entity->beforeLoad($identifier);
         }
     }
 }
