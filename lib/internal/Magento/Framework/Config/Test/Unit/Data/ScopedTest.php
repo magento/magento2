@@ -186,18 +186,4 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         /** test preventing of double config data loading from reader */
         $this->assertEquals('testValue', $this->_model->get('some'));
     }
-
-    /**
-     * @param array $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
-    }
 }

@@ -355,6 +355,7 @@ class ObjectManager
      * $dependencies = [\Magento\Framework\Json\JsonInterface::class => $jsonMock]
      *
      * @param array $dependencies
+     * @return void
      */
     public function mockObjectManager($dependencies)
     {
@@ -375,6 +376,8 @@ class ObjectManager
     /**
      * Unset mocked object manager, must be used to restore
      * \Magento\Framework\App\ObjectManager::_instance after mockObjectManager called
+     *
+     * @return void
      */
     public function restoreObjectManager()
     {
