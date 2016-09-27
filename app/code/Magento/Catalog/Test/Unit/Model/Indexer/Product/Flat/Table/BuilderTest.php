@@ -38,7 +38,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $builder = $objectManagerHelper->getObject(
             \Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder::class,
             [
-                'connection' => $this->connectionMock
+                'connection' => $this->connectionMock,
+                'tableName' => $tableName
             ]
         );
         $this->assertEquals($builder, $builder->addColumn('test', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER));
