@@ -67,7 +67,7 @@ class Data implements \Magento\Framework\Config\DataInterface
     /**
      * @var JsonInterface
      */
-    private $json;
+    protected $json;
 
     /**
      * Constructor
