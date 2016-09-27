@@ -287,6 +287,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->creditmemoItemCreationMock)
             ->willReturn([]);
+        $this->orderMock->expects($this->once())->method('setCustomerNoteNotify')->with($notify);
         $this->paymentAdapterMock->expects($this->once())
             ->method('refund')
             ->with($this->creditmemoMock, $this->orderMock)
