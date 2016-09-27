@@ -10,7 +10,8 @@
         <item name="buttons" xsi:type="array">
             <item name="save" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Edit\Button\CreateCategory</item>
         </item>
-    <item name="js_config" xsi:type="array">
+        <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">new_category_form.new_category_form_data_source</item>
-        </item></argument>
+        </item>
+    </argument>
 </form>
