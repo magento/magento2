@@ -15,6 +15,11 @@ use Magento\Framework\Config\Data;
 class EsConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManager;
+
+    /**
      * @var EsConfig
      */
     protected $config;
@@ -39,6 +44,7 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new ObjectManagerHelper($this);
         $this->reader = $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,22 +57,25 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn('["elem 1","elem 2"," elem 3"]');
 
-        $objectManager = new ObjectManagerHelper($this);
-
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
 
         $this->jsonMock->method('decode')
             ->willReturn(['elem 1', 'elem 2', ' elem 3']);
 
-        \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
 
-        $this->config = $objectManager->getObject(
+        $this->config = $this->objectManager->getObject(
             \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig::class,
             [
                 'reader' => $this->reader,
                 'cache' => $this->cache
             ]
         );
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
