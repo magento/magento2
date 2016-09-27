@@ -302,10 +302,10 @@ class Create extends Block
     /**
      * Fill Shipping Address.
      *
-     * @param FixtureInterface $shippingAddress
+     * @param FixtureInterface $shippingAddress [optional]
      * @return void
      */
-    public function fillShippingAddress(FixtureInterface $shippingAddress)
+    public function fillShippingAddress(FixtureInterface $shippingAddress = null)
     {
         if (!$shippingAddress) {
             $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
