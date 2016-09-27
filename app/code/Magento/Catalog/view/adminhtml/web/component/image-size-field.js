@@ -7,7 +7,8 @@ define([
     'jquery',
     'Magento_Ui/js/lib/validation/utils',
     'Magento_Ui/js/form/element/abstract',
-    'Magento_Ui/js/lib/validation/validator'
+    'Magento_Ui/js/lib/validation/validator',
+    'mage/translate'
 ], function ($, utils, Abstract, validator) {
     'use strict';
 
