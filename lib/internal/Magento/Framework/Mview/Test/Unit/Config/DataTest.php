@@ -88,7 +88,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->stateCollection->expects($this->never())->method('getItems');
 
-        $this->jsonMock->method('decode')
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
             ->willReturn($this->views);
 
         $this->config = new \Magento\Framework\Mview\Config\Data(
