@@ -8,6 +8,7 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Info;
@@ -104,6 +105,11 @@ class Payment extends Info implements OrderPaymentInterface
      * @var OrderRepositoryInterface
      */
     protected $orderRepository;
+
+    /**
+     * @var OrderStateResolverInterface
+     */
+    private $orderStateResolver;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -692,7 +698,12 @@ class Payment extends Info implements OrderPaymentInterface
         }
         $message = $message = $this->prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $this->setOrderStateProcessing($message);
+        $orderState = $this->getOrderStateResolver()->getStateForOrder($this->getOrder());
+        $this->getOrder()
+            ->addStatusHistoryComment(
+                $message,
+                $this->getOrder()->getConfig()->getStateDefaultStatus($orderState)
+            )->setIsCustomerNotified($creditmemo->getOrder()->getCustomerNoteNotify());
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
             ['payment' => $this, 'creditmemo' => $creditmemo]
@@ -1386,6 +1397,19 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
         return false;
+    }
+
+    /**
+     * @deprecated
+     * @return OrderStateResolverInterface
+     */
+    private function getOrderStateResolver()
+    {
+        if ($this->orderStateResolver === null) {
+            $this->orderStateResolver = ObjectManager::getInstance()->get(OrderStateResolverInterface::class);
+        }
+
+        return$this->orderStateResolver;
     }
 
     //@codeCoverageIgnoreStart
