@@ -26,9 +26,8 @@ use Magento\Mtf\TestCase\Scenario;
  * 11. Select payment method Credit Card (PayFlow Pro)
  * 12. Leave empty required fields for credit card 
  * 13. Click Submit order button
-
  *
- * @group Order_Management
+ * @group PayPal
  * @ZephyrId MAGETWO-58934
  */
 class CreatePayFlowOrderBackendNegativeTest extends Scenario
