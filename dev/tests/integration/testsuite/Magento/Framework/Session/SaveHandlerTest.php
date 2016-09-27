@@ -46,14 +46,14 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         if ($iniHandler) {
             ini_set('session.save_handler', $iniHandler);
         }
-
+        $defaultHandler = ini_get('session.save_handler') ?: SaveHandlerInterface::DEFAULT_HANDLER;
         /** @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $deploymentConfigMock->expects($this->once())
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_METHOD, SaveHandlerInterface::DEFAULT_HANDLER)
+            ->with(Config::PARAM_SESSION_SAVE_METHOD, $defaultHandler)
             ->willReturn($deploymentConfigHandler ?: SaveHandlerInterface::DEFAULT_HANDLER);
 
         new SaveHandler(
