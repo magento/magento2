@@ -561,7 +561,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /** @var array */
     protected $productUrlSuffix = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @deprecated
+     */
     protected $productUrlKeys = [];
 
     /**
@@ -1317,7 +1320,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $select = $this->_connection->select()->from(
                 $entityTable,
-                $this->getNewSkuFieldsForSelect()
+                array_merge($this->getNewSkuFieldsForSelect(), $this->getOldSkuFieldsForSelect())
             )->where(
                 'sku IN (?)',
                 array_keys($entityRowsIn)
@@ -1330,8 +1333,43 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->skuProcessor->setNewSkuData($sku, $key, $value);
                 }
             }
+
+            $this->updateOldSku($newProducts);
         }
+
         return $this;
+    }
+
+    /**
+     * Return additional data, needed to select.
+     * @return array
+     */
+    private function getOldSkuFieldsForSelect()
+    {
+        return ['type_id', 'attribute_set_id'];
+    }
+
+    /**
+     * Adds newly created products to _oldSku
+     * @param array $newProducts
+     * @return void
+     */
+    private function updateOldSku(array $newProducts)
+    {
+        $oldSkus = [];
+        foreach ($newProducts as $info) {
+            $typeId = $info['type_id'];
+            $sku = $info['sku'];
+            $oldSkus[$sku] = [
+                'type_id' => $typeId,
+                'attr_set_id' => $info['attribute_set_id'],
+                $this->getProductIdentifierField() => $info[$this->getProductIdentifierField()],
+                'supported_type' => isset($this->_productTypeModels[$typeId]),
+                $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
+            ];
+        }
+
+        $this->_oldSku = array_replace($this->_oldSku, $oldSkus);
     }
 
     /**
@@ -1472,6 +1510,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
                 $rowScope = $this->getRowScope($rowData);
+
+                if (empty($rowData[self::URL_KEY])) {
+                    $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
+                }
 
                 $rowSku = $rowData[self::COL_SKU];
 
@@ -1718,6 +1760,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ['adapter' => $this, 'bunch' => $bunch]
             );
         }
+
         return $this;
     }
 
@@ -2452,6 +2495,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $source = $this->_getSource();
         $source->rewind();
+
         while ($source->valid()) {
             try {
                 $rowData = $source->current();
@@ -2465,6 +2509,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData = $this->_customFieldsMapping($rowData);
 
             $this->validateRow($rowData, $source->key());
+            
             $source->next();
         }
         $this->checkUrlKeyDuplicates();
@@ -2524,12 +2569,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
+            return $rowData[self::URL_KEY];
         }
-        $urlKey = !empty($this->productUrlKeys[$rowData[self::COL_SKU]])
-            ? $this->productUrlKeys[$rowData[self::COL_SKU]]
-            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
-        return $urlKey;
+
+        if (!empty($rowData[self::COL_NAME])) {
+            return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        }
+
+        return '';
     }
 
     /**

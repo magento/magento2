@@ -73,7 +73,6 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
         <plugin name="invalidate_pagecache_after_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute" />
-        <plugin name="max_heap_tablse_size_processor_on_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\MaxHeapTableSizeProcessorOnFullReindex"/>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save" />

@@ -52,7 +52,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      */
     public function getWishlistOptions()
     {
-        return ['productType' => $this->getProduct()->getTypeId()];
+        return ['productType' => $this->escapeHtml($this->getProduct()->getTypeId())];
     }
 
     /**

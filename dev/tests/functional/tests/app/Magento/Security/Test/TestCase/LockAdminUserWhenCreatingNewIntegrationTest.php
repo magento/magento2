@@ -33,7 +33,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**

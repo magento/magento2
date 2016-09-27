@@ -21,14 +21,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 6. Open Invoices tab.
  * 7. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-48614, MAGETWO-48615
  */
 class InvoicePayPalBraintreeTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
     /* end tags */
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Model\ResourceModel;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
@@ -38,19 +39,27 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     protected $searchResultsFactory;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory
      * @param Bookmark $bookmarkResourceModel
      * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CollectionProcessorInterface | null $collectionProcessor
      */
     public function __construct(
         \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
         \Magento\Ui\Model\ResourceModel\Bookmark $bookmarkResourceModel,
-        \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+        \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
 
         $this->bookmarkResourceModel = $bookmarkResourceModel;
         $this->bookmarkFactory = $bookmarkFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -101,24 +110,8 @@ class BookmarkRepository implements BookmarkRepositoryInterface
 
         /** @var \Magento\Ui\Model\ResourceModel\Bookmark\Collection $collection */
         $collection = $this->bookmarkFactory->create()->getCollection();
-        // Add filters from root filter group to the collection
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
+        $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults->setTotalCount($collection->getSize());
-        $sortOrders = $searchCriteria->getSortOrders();
-        if ($sortOrders) {
-            /** @var SortOrder $sortOrder */
-            foreach ($sortOrders as $sortOrder) {
-                $field = $sortOrder->getField();
-                $collection->addOrder(
-                    $field,
-                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
 
         $bookmarks = [];
         /** @var BookmarkInterface $bookmark */
@@ -166,6 +159,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
+     * @deprecated
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -174,5 +168,21 @@ class BookmarkRepository implements BookmarkRepositoryInterface
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
         }
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

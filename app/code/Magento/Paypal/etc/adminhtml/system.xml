@@ -28,12 +28,12 @@
             <group id="other_paypal_payment_solutions" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Other PayPal Payment Solutions:</label>
                 <fieldset_css>paypal-top-section paypal-other-header</fieldset_css>
-                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
+                <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>
             <group id="other_payment_methods" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Other Payment Methods:</label>
                 <fieldset_css>paypal-top-section payments-other-header</fieldset_css>
-                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
+                <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>
         </section>
         <section id="payment_all_paypal" showInDefault="0" showInWebsite="0" showInStore="0">
