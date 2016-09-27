@@ -80,7 +80,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
@@ -109,7 +109,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
         $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
@@ -137,7 +137,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
@@ -169,7 +169,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $emptyModuleList = [];
 
         // Stubs
@@ -192,7 +192,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Cms\Controller\Index\Index::class;
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
