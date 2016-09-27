@@ -18,7 +18,7 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
      *
      * @var string[]
      */
-    private $amqpConnectionName;
+    private $amqpConnectionName = [];
 
     /**
      * Initialize dependencies.
