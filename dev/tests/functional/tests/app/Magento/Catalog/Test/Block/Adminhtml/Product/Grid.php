@@ -81,16 +81,7 @@ class Grid extends DataGrid
         $products = [];
         /** @var FixtureInterface $product */
         foreach ($items as $product) {
-            $dataConfig = $product->getDataConfig();
-            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
-            if ($this->hasRender($typeId)) {
-                $renderArguments = [
-                    'product' => $product,
-                ];
-                $products = $this->callRender($typeId, 'prepareData', $renderArguments);
-            } else {
-                $products[] = ["sku" => $product->getSku()];
-            }
+            $products[] = ["sku" => $product->getSku()];
         }
         $this->massaction($products, 'Update attributes');
     }
