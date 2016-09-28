@@ -20,6 +20,6 @@ class CompiledStub extends Compiled
      */
     protected function _unpack($signature)
     {
-        return unserialize($signature);
+        return json_decode($signature);
     }
 }

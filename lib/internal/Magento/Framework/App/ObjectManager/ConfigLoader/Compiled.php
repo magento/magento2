@@ -6,11 +6,14 @@
  */
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 class Compiled implements ConfigLoaderInterface
 {
+    const COMPILED_FILE_EXTENSION  = '.json';
+
     /**
      * Global config
      *
@@ -36,14 +39,15 @@ class Compiled implements ConfigLoaderInterface
     }
 
     /**
-     * Returns path to cached configuration
+     * Returns path to compiled configuration
      *
      * @param string $area
      * @return string
      */
     public static function getFilePath($area)
     {
-        return BP . '/var/di/' . $area . '.ser';
+        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::DI][DirectoryList::PATH];
+        return BP . $diPath . '/' . $area . self::COMPILED_FILE_EXTENSION;
     }
 
     /**

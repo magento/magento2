@@ -11,6 +11,8 @@ use Magento\Framework\Interception\DefinitionInterface;
 
 class Compiled implements DefinitionInterface
 {
+    const FILE_NAME  = 'plugins.json';
+
     /**
      * List of plugin definitions
      *

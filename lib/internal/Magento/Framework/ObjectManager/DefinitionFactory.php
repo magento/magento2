@@ -11,18 +11,11 @@
 
 namespace Magento\Framework\ObjectManager;
 
-use Magento\Framework\Api\Code\Generator\Mapper as MapperGenerator;
-use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
-use Magento\Framework\ObjectManager\Code\Generator;
-use Magento\Framework\ObjectManager\Code\Generator\Converter as ConverterGenerator;
-use Magento\Framework\ObjectManager\Definition\Compiled\Binary;
-use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
+use Magento\Framework\ObjectManager\Definition\Compiled\Json;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
-use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
-use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -63,8 +56,7 @@ class DefinitionFactory
      * @var array
      */
     protected static $definitionClasses = [
-        Binary::MODE_NAME => \Magento\Framework\ObjectManager\Definition\Compiled\Binary::class,
-        Serialized::MODE_NAME => \Magento\Framework\ObjectManager\Definition\Compiled\Serialized::class,
+        Json::MODE_NAME => \Magento\Framework\ObjectManager\Definition\Compiled\Json::class,
     ];
 
     /**
@@ -116,7 +108,7 @@ class DefinitionFactory
      */
     public function createPluginDefinition()
     {
-        $path = $this->_definitionDir . '/plugins.ser';
+        $path = $this->_definitionDir . '/' . \Magento\Framework\Interception\Definition\Compiled::FILE_NAME;
         if ($this->_filesystemDriver->isReadable($path)) {
             return new \Magento\Framework\Interception\Definition\Compiled(
                 $this->_unpack($this->_filesystemDriver->fileGetContents($path))
@@ -133,7 +125,7 @@ class DefinitionFactory
      */
     public function createRelations()
     {
-        $path = $this->_definitionDir . '/' . 'relations.ser';
+        $path = $this->_definitionDir . '/' . \Magento\Framework\ObjectManager\Relations\Compiled::FILE_NAME;
         if ($this->_filesystemDriver->isReadable($path)) {
             return new \Magento\Framework\ObjectManager\Relations\Compiled(
                 $this->_unpack($this->_filesystemDriver->fileGetContents($path))
@@ -161,8 +153,7 @@ class DefinitionFactory
      */
     protected function _unpack($definitions)
     {
-        $extractor = $this->_definitionFormat == Binary::MODE_NAME ? 'igbinary_unserialize' : 'unserialize';
-        return $extractor($definitions);
+        return json_decode($definitions);
     }
 
     /**

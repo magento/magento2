@@ -9,6 +9,8 @@ namespace Magento\Framework\ObjectManager\Relations;
 
 class Compiled implements \Magento\Framework\ObjectManager\RelationsInterface
 {
+    const FILE_NAME  = 'relations.json';
+
     /**
      * List of class relations
      *
