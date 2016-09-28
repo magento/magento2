@@ -84,10 +84,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
-        $this->prepareObjectManager([
-            [JsonInterface::class, $this->jsonMock]
-        ]);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper->mockObjectManager([JsonInterface::class => $this->jsonMock]);
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManagerHelper->restoreObjectManager();
     }
 
     /**
@@ -245,20 +248,5 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [],
             ]
         ];
-    }
-
-    /**
-     * @param array $map
-     * @deprecated
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }
