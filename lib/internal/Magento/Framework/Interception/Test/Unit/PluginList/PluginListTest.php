@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Interception\Test\Unit\PluginList;
 
+use Magento\Framework\Json\JsonInterface;
+
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemContainer.php';
@@ -23,22 +25,17 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Interception\PluginList\PluginList
      */
-    protected $_model;
+    protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configScopeMock;
+    protected $configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_cacheMock;
+    protected $cacheMock;
 
     protected function setUp()
     {
@@ -46,10 +43,10 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
         $readerMock = $this->getMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class, [], [], '', false);
         $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
 
-        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         // turn cache off
-        $this->_cacheMock->expects($this->any())
+        $this->cacheMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue(false));
 
@@ -59,62 +56,80 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
-        $this->_model = new \Magento\Framework\Interception\PluginList\PluginList(
-            $readerMock,
-            $this->_configScopeMock,
-            $this->_cacheMock,
-            new \Magento\Framework\ObjectManager\Relations\Runtime(),
-            $omConfigMock,
-            new \Magento\Framework\Interception\Definition\Runtime(),
-            $this->_objectManagerMock,
-            $definitions,
-            ['global'],
-            'interception'
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->object = $objectManagerHelper->getObject(
+            \Magento\Framework\Interception\PluginList\PluginList::class,
+            [
+                'reader' => $readerMock,
+                'configScope' => $this->configScopeMock,
+                'cache' => $this->cacheMock,
+                'relations' => new \Magento\Framework\ObjectManager\Relations\Runtime(),
+                'omConfig' => $omConfigMock,
+                'definitions' => new \Magento\Framework\Interception\Definition\Runtime(),
+                'objectManager' => $objectManagerMock,
+                'classDefinitions' => $definitions,
+                'scopePriorityScheme' => ['global'],
+                'cacheId' => 'interception'
+            ]
+        );
+        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->object,
+            'json',
+            $jsonMock
         );
     }
 
     public function testGetPlugin()
     {
-        $this->_configScopeMock->expects($this->any())->method('getCurrentScope')->will($this->returnValue('backend'));
-        $this->_model->getNext(\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class, 'getName');
-        $this->_model->getNext(
+        $this->configScopeMock->expects($this->any())->method('getCurrentScope')->will($this->returnValue('backend'));
+        $this->object->getNext(\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class, 'getName');
+        $this->object->getNext(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
             'getName'
         );
-        $this->_model->getNext(
+        $this->object->getNext(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash::class,
             'getName'
         );
 
         $this->assertEquals(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
-            $this->_model->getPlugin(
+            $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'simple_plugin'
             )
         );
         $this->assertEquals(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
-            $this->_model->getPlugin(
+            $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'advanced_plugin'
             )
         );
         $this->assertEquals(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainerPlugin\Simple::class,
-            $this->_model->getPlugin(
+            $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
                 'simple_plugin'
             )
         );
         $this->assertEquals(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash\Plugin::class,
-            $this->_model->getPlugin(
+            $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash::class,
                 'simple_plugin'
             )
@@ -131,14 +146,14 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlugins($expectedResult, $type, $method, $scopeCode, $code = '__self')
     {
-        $this->_configScopeMock->expects(
+        $this->configScopeMock->expects(
             $this->any()
         )->method(
             'getCurrentScope'
         )->will(
             $this->returnValue($scopeCode)
         );
-        $this->assertEquals($expectedResult, $this->_model->getNext($type, $method, $code));
+        $this->assertEquals($expectedResult, $this->object->getNext($type, $method, $code));
     }
 
     /**
@@ -206,11 +221,11 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testInheritPluginsWithNonExistingClass()
     {
-        $this->_configScopeMock->expects($this->any())
+        $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->will($this->returnValue('frontend'));
 
-        $this->_model->getNext('SomeType', 'someMethod');
+        $this->object->getNext('SomeType', 'someMethod');
     }
 
     /**
@@ -219,17 +234,17 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadScopedDataCached()
     {
-        $this->_configScopeMock->expects($this->once())
+        $this->configScopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
 
         $data = [['key'], ['key'], ['key']];
 
-        $this->_cacheMock->expects($this->once())
+        $this->cacheMock->expects($this->once())
             ->method('load')
             ->with('global|scope|interception')
-            ->will($this->returnValue(serialize($data)));
+            ->will($this->returnValue(json_encode($data)));
 
-        $this->assertEquals(null, $this->_model->getNext('Type', 'method'));
+        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
     }
 }

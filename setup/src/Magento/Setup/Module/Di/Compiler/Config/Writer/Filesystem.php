@@ -8,7 +8,7 @@
 namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Json\JsonInterface;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 
 class Filesystem implements WriterInterface
@@ -17,6 +17,11 @@ class Filesystem implements WriterInterface
      * @var DirectoryList
      */
     private $directoryList;
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * Constructor
@@ -39,8 +44,10 @@ class Filesystem implements WriterInterface
     {
         $this->initialize();
 
-        $serialized = serialize($config);
-        file_put_contents($this->directoryList->getPath(DirectoryList::DI) . '/' . $key . '.ser', $serialized);
+        file_put_contents(
+            $this->directoryList->getPath(DirectoryList::DI) . '/' . $key . '.ser',
+            $this->getJson()->encode($config)
+        );
     }
 
     /**
@@ -53,5 +60,20 @@ class Filesystem implements WriterInterface
         if (!file_exists($this->directoryList->getPath(DirectoryList::DI))) {
             mkdir($this->directoryList->getPath(DirectoryList::DI));
         }
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }

@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Reflection\FieldNamer;
 
 /**
  * MethodsMap test
@@ -18,7 +18,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
     /**
      * @var MethodsMap
      */
-    private $model;
+    private $object;
 
     /**
      * Set up helper.
@@ -39,7 +39,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $fieldNamerMock = $this->getMockBuilder(\Magento\Framework\Reflection\FieldNamer::class)
             ->getMockForAbstractClass();
-        $this->model = $objectManager->getObject(
+        $this->object = $objectManager->getObject(
             \Magento\Framework\Reflection\MethodsMap::class,
             [
                 'cache' => $cacheMock,
@@ -48,27 +48,41 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $fieldNamerMock,
             ]
         );
+        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $objectManager->setBackwardCompatibleProperty(
+            $this->object,
+            'json',
+            $jsonMock
+        );
     }
 
     public function testGetMethodReturnType()
     {
         $this->assertEquals(
             'string',
-            $this->model->getMethodReturnType(
+            $this->object->getMethodReturnType(
                 \Magento\Framework\Reflection\FieldNamer::class,
                 'getFieldNameForMethodName'
             )
         );
         $this->assertEquals(
             'mixed',
-            $this->model->getMethodReturnType(
+            $this->object->getMethodReturnType(
                 \Magento\Framework\Reflection\TypeCaster::class,
                 'castValueToType'
             )
         );
         $this->assertEquals(
             'array',
-            $this->model->getMethodReturnType(
+            $this->object->getMethodReturnType(
                 \Magento\Framework\Reflection\MethodsMap::class,
                 'getMethodsMap'
             )
@@ -77,7 +91,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodsMap()
     {
-        $methodsMap = $this->model->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
+        $methodsMap = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertEquals(
             [
                 'getMethodReturnType' => [
@@ -125,7 +139,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsMethodValidForDataField($type, $methodName, $expectedResult)
     {
-        $this->assertEquals($this->model->isMethodValidForDataField($type, $methodName), $expectedResult);
+        $this->assertEquals($this->object->isMethodValidForDataField($type, $methodName), $expectedResult);
     }
 
     /**
@@ -157,7 +171,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsMethodReturnValueRequired($type, $methodName, $expectedResult)
     {
-        $this->assertEquals($this->model->isMethodValidForDataField($type, $methodName), $expectedResult);
+        $this->assertEquals($this->object->isMethodValidForDataField($type, $methodName), $expectedResult);
     }
 
     /**

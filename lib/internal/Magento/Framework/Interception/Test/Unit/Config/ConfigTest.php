@@ -6,6 +6,8 @@
 // @codingStandardsIgnoreFile
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
+use Magento\Framework\Json\JsonInterface;
+
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemContainer.php';
@@ -49,6 +51,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $relationsMock;
 
+    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $jsonMock;
+
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManagerHelper;
+
     protected function setUp()
     {
         $this->readerMock = $this->getMock(
@@ -67,6 +75,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManager\RelationsInterface::class
         );
+        $this->jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $this->jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $this->jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $this->prepareObjectManager([
+            [JsonInterface::class, $this->jsonMock]
+        ]);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     /**
@@ -131,14 +152,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
         $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
 
-        $model = new \Magento\Framework\Interception\Config\Config(
-            $this->readerMock,
-            $this->configScopeMock,
-            $this->cacheMock,
-            $this->relationsMock,
-            $this->omConfigMock,
-            $this->definitionMock,
-            'interception'
+        $model = $this->objectManagerHelper->getObject(
+            \Magento\Framework\Interception\Config\Config::class,
+            [
+                'reader' => $this->readerMock,
+                'scopeList' => $this->configScopeMock,
+                'cache' => $this->cacheMock,
+                'relations' => $this->relationsMock,
+                'omConfig' => $this->omConfigMock,
+                'classDefinitions' => $this->definitionMock,
+            ]
         );
 
         $this->assertEquals($expectedResult, $model->hasPlugins($type));
@@ -166,15 +189,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with($cacheId)
-            ->will($this->returnValue(serialize($interceptionData)));
-        $model = new \Magento\Framework\Interception\Config\Config(
-            $this->readerMock,
-            $this->configScopeMock,
-            $this->cacheMock,
-            new \Magento\Framework\ObjectManager\Relations\Runtime(),
-            $this->omConfigMock,
-            $this->definitionMock,
-            $cacheId
+            ->will($this->returnValue(json_encode($interceptionData)));
+
+        $model = $this->objectManagerHelper->getObject(
+            \Magento\Framework\Interception\Config\Config::class,
+            [
+                'reader' => $this->readerMock,
+                'scopeList' => $this->configScopeMock,
+                'cache' => $this->cacheMock,
+                'relations' => $this->objectManagerHelper->getObject(
+                    \Magento\Framework\ObjectManager\Relations\Runtime::class
+                ),
+                'omConfig' => $this->omConfigMock,
+                'classDefinitions' => $this->definitionMock,
+                'cacheId' => $cacheId,
+            ]
         );
 
         $this->assertEquals($expectedResult, $model->hasPlugins($type));
@@ -216,5 +245,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [],
             ]
         ];
+    }
+
+    /**
+     * @param array $map
+     * @deprecated
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

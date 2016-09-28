@@ -8,6 +8,7 @@
 
 namespace Magento\Framework\Webapi\Test\Unit;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
@@ -96,6 +97,20 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'attributeTypeResolver' => $this->attributeValueFactoryMock->create(),
                 'fieldNamer' => $this->fieldNamer
             ]
+        );
+        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $objectManager->setBackwardCompatibleProperty(
+            $this->methodsMap,
+            'json',
+            $jsonMock
         );
 
         $this->serviceInputProcessor = $objectManager->getObject(

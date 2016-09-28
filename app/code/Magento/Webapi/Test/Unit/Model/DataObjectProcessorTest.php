@@ -6,6 +6,7 @@
 
 namespace Magento\Webapi\Test\Unit\Model;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Webapi\Model\Config as ModelConfig;
 
 class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
@@ -29,6 +30,20 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class),
                 'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
+        );
+        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $jsonMock->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $objectManager->setBackwardCompatibleProperty(
+            $methodsMapProcessor,
+            'json',
+            $jsonMock
         );
         $this->dataObjectProcessor = $objectManager->getObject(
             \Magento\Framework\Reflection\DataObjectProcessor::class,

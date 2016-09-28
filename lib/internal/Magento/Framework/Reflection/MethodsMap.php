@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\Json\JsonInterface;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -44,6 +45,11 @@ class MethodsMap
      * @var FieldNamer
      */
     private $fieldNamer;
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -95,11 +101,11 @@ class MethodsMap
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);
             if ($methodMap) {
-                $this->serviceInterfaceMethodsMap[$key] = unserialize($methodMap);
+                $this->serviceInterfaceMethodsMap[$key] = $this->getJson()->decode($methodMap);
             } else {
                 $methodMap = $this->getMethodMapViaReflection($interfaceName);
                 $this->serviceInterfaceMethodsMap[$key] = $methodMap;
-                $this->cache->save(serialize($this->serviceInterfaceMethodsMap[$key]), $key);
+                $this->cache->save($this->getJson()->encode($this->serviceInterfaceMethodsMap[$key]), $key);
             }
         }
         return $this->serviceInterfaceMethodsMap[$key];
@@ -117,7 +123,7 @@ class MethodsMap
         $cacheId = self::SERVICE_METHOD_PARAMS_CACHE_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
         $params = $this->cache->load($cacheId);
         if ($params !== false) {
-            return unserialize($params);
+            return $this->getJson()->decode($params);
         }
         $serviceClass = new ClassReflection($serviceClassName);
         /** @var MethodReflection $serviceMethod */
@@ -133,7 +139,7 @@ class MethodsMap
                 self::METHOD_META_DEFAULT_VALUE => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
             ];
         }
-        $this->cache->save(serialize($params), $cacheId, [ReflectionCache::CACHE_TAG]);
+        $this->cache->save($this->getJson()->encode($params), $cacheId, [ReflectionCache::CACHE_TAG]);
         return $params;
     }
 
@@ -216,5 +222,20 @@ class MethodsMap
     {
         $methods = $this->getMethodsMap($type);
         return $methods[$methodName]['isRequired'];
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }
