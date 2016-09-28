@@ -54,8 +54,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $resultOne = $this->model->getTemplate('test.xml');
         $resultTwo = $this->model->getTemplate('test.xml');
 
-        $this->assertEquals($expected, $resultOne);
-        $this->assertEquals($expected, $resultTwo);
+        $this->assertXmlStringEqualsXmlString($expected, $resultOne);
+        $this->assertXmlStringEqualsXmlString($expected, $resultTwo);
     }
 
     /**
