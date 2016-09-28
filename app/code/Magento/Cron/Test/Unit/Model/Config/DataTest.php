@@ -12,9 +12,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -63,10 +68,5 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $result = $configData->getJobs();
         $this->assertEquals($expected, $result);
-    }
-
-    public function tearDown()
-    {
-        $this->objectManager->restoreObjectManager();
     }
 }

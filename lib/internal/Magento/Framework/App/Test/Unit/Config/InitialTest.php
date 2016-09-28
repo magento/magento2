@@ -8,6 +8,11 @@ namespace Magento\Framework\App\Test\Unit\Config;
 class InitialTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Framework\App\Config\Initial
      */
     private $config;
@@ -36,6 +41,7 @@ class InitialTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->readerMock = $this->getMock(
             \Magento\Framework\App\Config\Initial\Reader::class,
             [],
@@ -58,14 +64,17 @@ class InitialTest extends \PHPUnit_Framework_TestCase
         $jsonMock->method('decode')
             ->willReturn($this->data);
 
-        $this->prepareObjectManager([
-            [\Magento\Framework\Json\JsonInterface::class, $jsonMock]
-        ]);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $jsonMock]);
 
         $this->config = new \Magento\Framework\App\Config\Initial(
             $this->readerMock,
             $this->cacheMock
         );
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -90,19 +99,5 @@ class InitialTest extends \PHPUnit_Framework_TestCase
     public function testGetMetadata()
     {
         $this->assertEquals(['metadata'], $this->config->getMetadata());
-    }
-
-    /**
-     * @param array $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }
