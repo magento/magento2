@@ -44,6 +44,22 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedIdentifier, $page->getIdentifier());
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testUpdateTime()
+    {
+        $updateTime = '2016-09-01 00:00:00';
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $objectManager->create(\Magento\Cms\Model\Page::class);
+        $page->setData(['data' => ['title' => 'Test title', 'stores' => [1]], 'expectedIdentifier' => 'test-title']);
+        $page->setUpdateTime($updateTime);
+        $page->save();
+        $page = $page->load($page->getId());
+        $this->assertEquals($updateTime, $page->getUpdateTime());
+    }
+
     public function generateIdentifierFromTitleDataProvider()
     {
         return [
