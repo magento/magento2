@@ -32,11 +32,6 @@ class ObjectManager
     protected $_testObject;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * Class constructor
      *
      * @param \PHPUnit_Framework_TestCase $testObject
