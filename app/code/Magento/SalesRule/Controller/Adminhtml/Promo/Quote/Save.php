@@ -26,8 +26,13 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPostValue();
+
+                $filterValues = ['from_date' => $this->_dateFilter];
+                if ($this->getRequest()->getParam('to_date')) {
+                    $filterValues['to_date'] = $this->_dateFilter;
+                }
                 $inputFilter = new \Zend_Filter_Input(
-                    ['from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter],
+                    $filterValues,
                     [],
                     $data
                 );

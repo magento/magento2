@@ -114,10 +114,10 @@
             <field name="uses_per_coupon" xsi:type="string">13</field>
             <field name="uses_per_customer" xsi:type="string">63</field>
             <field name="from_date" xsi:type="array">
-                <item name="pattern" xsi:type="string">3/25/2014</item>
+                <item name="pattern" xsi:type="string">03/25/2014</item>
             </field>
             <field name="to_date" xsi:type="array">
-                <item name="pattern" xsi:type="string">6/29/2024</item>
+                <item name="pattern" xsi:type="string">-</item>
             </field>
             <field name="sort_order" xsi:type="string">1</field>
             <field name="is_rss" xsi:type="string">Yes</field>

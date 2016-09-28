@@ -25,8 +25,6 @@ class AssertCartPriceRuleForm extends AbstractConstraint
     protected $skippedFields = [
         'conditions_serialized',
         'actions_serialized',
-        'from_date',
-        'to_date',
         'rule_id'
     ];
 
