@@ -86,11 +86,13 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->refundInvoiceMock = $this->getMockBuilder(\Magento\Sales\Api\RefundInvoiceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface::class)
-            ->disableOriginalConstructor()
+        $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(
+            \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface::class
+        )->disableOriginalConstructor()
             ->getMock();
-        $this->extencionAttributesMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface::class)
-            ->disableOriginalConstructor()
+        $this->extencionAttributesMock = $this->getMockBuilder(
+            \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface::class
+        )->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
             ->getMock();
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
@@ -102,8 +104,9 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockConfigurationMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
-            ->disableOriginalConstructor()
+        $this->stockConfigurationMock = $this->getMockBuilder(
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->returnTOStock = new \Magento\SalesInventory\Model\Plugin\Order\ReturnToStockInvoice(
