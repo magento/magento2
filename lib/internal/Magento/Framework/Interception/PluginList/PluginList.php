@@ -76,6 +76,12 @@ class PluginList extends Scoped implements InterceptionPluginList
     protected $_pluginInstances = [];
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     * @deprecated
+     */
+    private $logger;
+
+    /**
      * @param ReaderInterface $reader
      * @param ScopeInterface $configScope
      * @param CacheInterface $cache
@@ -358,10 +364,25 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     private function filterPlugins(array &$plugins)
     {
-        foreach ($plugins as $key => $plugin) {
+        foreach ($plugins as $name => $plugin) {
             if (!isset($plugin['instance']) || empty($plugin['instance'])) {
-                unset($plugins[$key]);
+                unset($plugins[$name]);
+                $this->getLogger()->info("Reference to undeclared plugin with name '{$name}'.");
             }
         }
+    }
+
+    /**
+     * Returns logger instance
+     *
+     * @deprecated
+     * @return \Psr\Log\LoggerInterface
+     */
+    private function getLogger()
+    {
+        if ($this->logger === null) {
+            $this->logger = $this->_objectManager->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }
