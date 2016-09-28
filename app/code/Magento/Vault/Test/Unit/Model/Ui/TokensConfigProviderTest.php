@@ -137,7 +137,6 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->vaultService
         );
 
-
         static::assertEquals($expectedConfig, $configProvider->getConfig());
     }
 }

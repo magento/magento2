@@ -5,13 +5,13 @@
  */
 namespace Magento\Vault\Test\Unit\Model;
 
-use Magento\Vault\Model\VaultService;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Api\PaymentMethodListInterface;
 use Magento\Payment\Model\Method\InstanceFactory;
-use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\Vault\Model\VaultService;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class VaultServiceTest extends \PHPUnit_Framework_TestCase
 {

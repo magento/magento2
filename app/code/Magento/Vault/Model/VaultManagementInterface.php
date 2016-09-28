@@ -9,7 +9,7 @@ interface VaultManagementInterface
 {
     /**
      * Get list of active vault payment methods
-     * @param $storeId
+     * @param int $storeId
      * @return VaultPaymentInterface[]
      */
     public function getActivePaymentList($storeId);

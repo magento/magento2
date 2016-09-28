@@ -10,26 +10,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
+use Magento\Vault\Model\VaultManagementInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Vault\Model\VaultManagementInterface;
 
 /**
  * Class VaultConfigProviderTest
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|MockObject
-     */
-    private $paymentMethodList;
-
-    /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|MockObject
-     */
-    private $paymentMethodInstanceFactory;
-
     /**
      * @var VaultPaymentInterface|MockObject
      */
