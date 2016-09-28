@@ -93,6 +93,8 @@ define(
              * @returns {Object}
              */
             initClient: function () {
+                var selector = '#' + this.getButtonId();
+
                 _.each(this.clientConfig, function (fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
@@ -100,15 +102,15 @@ define(
                 }, this);
 
                 if (!paypalExpressCheckout.checkout.mageInit) {
-                    domObserver.get('#' + this.getButtonId(), function () {
+                    domObserver.get(selector, function () {
                         paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
                         paypalExpressCheckout.checkout.mageInit = true;
-                        domObserver.off('#' + this.getButtonId());
+                        domObserver.off(selector);
                     }.bind(this));
                 } else {
-                    domObserver.get('#' + this.getButtonId(), function () {
-                        $('#' + this.getButtonId()).on('click', this.clientConfig.click);
-                        domObserver.off('#' + this.getButtonId());
+                    domObserver.get(selector, function () {
+                        $(selector).on('click', this.clientConfig.click);
+                        domObserver.off(selector);
                     }.bind(this));
                 }
 
