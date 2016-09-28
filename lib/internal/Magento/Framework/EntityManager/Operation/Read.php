@@ -81,10 +81,7 @@ class Read implements ReadInterface
     }
 
     /**
-     * @param object $entity
-     * @param string $identifier
-     * @param array $arguments
-     * @return object
+     * {@inheritDoc}
      */
     public function execute($entity, $identifier, $arguments = [])
     {
