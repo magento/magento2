@@ -457,13 +457,13 @@ final class Vault implements VaultPaymentInterface
     private function attachTokenExtensionAttribute(OrderPaymentInterface $orderPayment)
     {
         $additionalInformation = $orderPayment->getAdditionalInformation();
-        if (empty($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ||
-            empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])
-        ) {
-            throw new \LogicException('Customer id and public hash should be defined');
+        if (empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])) {
+            throw new \LogicException('Public hash should be defined');
         }
 
-        $customerId = $additionalInformation[PaymentTokenInterface::CUSTOMER_ID];
+        $customerId = isset($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ?
+            $additionalInformation[PaymentTokenInterface::CUSTOMER_ID] : null;
+
         $publicHash = $additionalInformation[PaymentTokenInterface::PUBLIC_HASH];
 
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
