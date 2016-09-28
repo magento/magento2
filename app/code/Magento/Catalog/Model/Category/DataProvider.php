@@ -370,11 +370,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Converts category image data to acceptable for rendering format
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param array $categoryData
      * @return array
      */
-    protected function convertValues($category, $categoryData)
+    private function convertValues($category, $categoryData)
     {
         foreach ($category->getAttributes() as $attributeCode => $attribute) {
             if (!isset($categoryData[$attributeCode])) {

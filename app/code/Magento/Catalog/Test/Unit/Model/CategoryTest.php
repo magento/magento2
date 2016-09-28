@@ -9,7 +9,7 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Indexer;
-use Magento\Catalog\Model\Category as Model;
+use Magento\Catalog\Model\Category;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -17,83 +17,125 @@ use Magento\Catalog\Model\Category as Model;
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Catalog\Model\Category */
-    protected $category;
+    /**
+     * @var \Magento\Catalog\Model\Category
+     */
+    private $category;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $context;
+    /**
+     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $context;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $eventManager;
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventManager;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cacheManager;
+    /**
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheManager;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $registry;
+    /**
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $registry;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManager;
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
-    protected $categoryTreeResource;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $categoryTreeFactory;
-
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $categoryRepository;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $storeCollectionFactory;
-
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $url;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $productCollectionFactory;
-
-    /** @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $catalogConfig;
-
-    /** @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject */
-    protected $filterManager;
-
-    /** @var \Magento\Catalog\Model\Indexer\Category\Flat\State|\PHPUnit_Framework_MockObject_MockObject */
-    protected $flatState;
-
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $flatIndexer;
-
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $productIndexer;
-
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
-    protected $categoryUrlPathGenerator;
-
-    /** @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $urlFinder;
-
-    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resource;
-
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexerRegistry;
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryTreeResource;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataServiceMock;
+    private $categoryTreeFactory;
+
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryRepository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeValueFactory;
+    private $storeCollectionFactory;
+
+    /**
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $url;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productCollectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $catalogConfig;
+
+    /**
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterManager;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flatState;
+
+    /**
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flatIndexer;
+
+    /**
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productIndexer;
+
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryUrlPathGenerator;
+
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlFinder;
+
+    /**
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resource;
+
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerRegistry;
+
+    /**
+     * @var \Magento\Catalog\Api\CategoryAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeValueFactory;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     protected function setUp()
     {
@@ -496,21 +538,24 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function imageAttributeNameAndUrlProvider()
+    /**
+     * @return array
+     */
+    public function getImageWithAttributeCodeDataProvider()
     {
         return [
-            ['testimage', 'http://www.test123.com/catalog/category/testimage'],
+            ['testimage', 'http://www.example.com/catalog/category/testimage'],
             [false, false]
         ];
     }
 
     /**
-     * @param $value
-     * @param $url
+     * @param string|bool $value
+     * @param string|bool $url
      *
-     * @dataProvider imageAttributeNameAndUrlProvider
+     * @dataProvider getImageWithAttributeCodeDataProvider
      */
-    public function testGetImageUrlShouldGenerateMediaUrlForSpecifiedAttributeValue($value, $url)
+    public function testGetImageWithAttributeCode($value, $url)
     {
         $storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, ['getStore'], [], '', false);
         $store = $this->getMock(\Magento\Store\Model\Store::class, ['getBaseUrl'], [], '', false);
@@ -522,11 +567,15 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())
             ->method('getBaseUrl')
             ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
-            ->will($this->returnValue('http://www.test123.com/'));
+            ->will($this->returnValue('http://www.example.com/'));
 
-        $model = $this->objectManager->getObject(Model::class, [
-            'storeManager' => $storeManager
-        ]);
+        /** @var \Magento\Catalog\Model\Category $model */
+        $model = $this->objectManager->getObject(
+            \Magento\Catalog\Model\Category::class,
+            [
+                'storeManager' => $storeManager
+            ]
+        );
 
         $model->setData('attribute1', $value);
 
@@ -535,7 +584,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($url, $result);
     }
 
-    public function testGetImageUrlShouldGenerateMediaUrlForImageAttributeValue()
+    public function testGetImageWithoutAttributeCode()
     {
         $storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, ['getStore'], [], '', false);
         $store = $this->getMock(\Magento\Store\Model\Store::class, ['getBaseUrl'], [], '', false);
@@ -547,9 +596,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())
             ->method('getBaseUrl')
             ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
-            ->will($this->returnValue('http://www.test123.com/'));
+            ->will($this->returnValue('http://www.example.com/'));
 
-        $model = $this->objectManager->getObject(Model::class, [
+        /** @var \Magento\Catalog\Model\Category $model */
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category::class, [
             'storeManager' => $storeManager
         ]);
 
@@ -557,6 +607,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
         $result = $model->getImageUrl();
 
-        $this->assertEquals('http://www.test123.com/catalog/category/myimage', $result);
+        $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
     }
 }

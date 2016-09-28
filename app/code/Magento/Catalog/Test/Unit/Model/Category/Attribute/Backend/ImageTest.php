@@ -5,29 +5,27 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
-use \Magento\Catalog\Model\Category\Attribute\Backend\Image as Model;
-
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
-    protected $attribute;
+    private $attribute;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Catalog\Model\ImageUploader
      */
-    protected $imageUploader;
+    private $imageUploader;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     protected function setUp()
     {
@@ -66,7 +64,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function deletionValueProvider()
+    /**
+     * @return array
+     */
+    public function deletedValueDataProvider()
     {
         return [
             [false],
@@ -75,13 +76,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider deletionValueProvider
+     * @dataProvider deletedValueDataProvider
      *
-     * @param $value
+     * @param array $value
      */
-    public function testBeforeSaveShouldSetAttributeValueToBlankWhenImageValueRequiresDeletion($value)
+    public function testBeforeSaveValueDeletion($value)
     {
-        $model = $this->objectManager->getObject(Model::class);
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
         $object = new \Magento\Framework\DataObject([
@@ -93,7 +94,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $object->getTestAttribute());
     }
 
-    public function invalidValueProvider()
+    /**
+     * @return array
+     */
+    public function invalidValueDataProvider()
     {
         $closure = function () {
             return false;
@@ -109,13 +113,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider invalidValueProvider
+     * @dataProvider invalidValueDataProvider
      *
-     * @param $value
+     * @param array $value
      */
-    public function testBeforeSaveShouldSetAttributeValueToBlankWhenImageValueInvalid($value)
+    public function testBeforeSaveValueInvalid($value)
     {
-        $model = $this->objectManager->getObject(Model::class);
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
         $object = new \Magento\Framework\DataObject([
@@ -127,9 +131,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $object->getTestAttribute());
     }
 
-    public function testBeforeSaveShouldSetAttributeValueToUploadedImageName()
+    public function testBeforeSaveAttributeFileName()
     {
-        $model = $this->objectManager->getObject(Model::class);
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
         $object = new \Magento\Framework\DataObject([
@@ -143,27 +147,27 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test123.jpg', $object->getTestAttribute());
     }
 
-    public function testBeforeSaveShouldSetAttributeUploadInformationToTemporaryAttribute()
+    public function testBeforeSaveTemporaryAttribute()
     {
-        $model = $this->objectManager->getObject(Model::class);
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
         $object = new \Magento\Framework\DataObject([
             'test_attribute' => [
-                ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.test.com/test123.jpg']
+                ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
             ]
         ]);
 
         $model->beforeSave($object);
 
         $this->assertEquals([
-            ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.test.com/test123.jpg']
+            ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
         ], $object->getData('_additional_data_test_attribute'));
     }
 
-    public function testBeforeSaveShouldNotModifyAttributeValueWhenStringValue()
+    public function testBeforeSaveAttributeStringValue()
     {
-        $model = $this->objectManager->getObject(Model::class);
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
         $object = new \Magento\Framework\DataObject([
@@ -173,23 +177,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $model->beforeSave($object);
 
         $this->assertEquals('test123.jpg', $object->getTestAttribute());
-    }
-
-    public function testBeforeSaveShouldNotSetAdditionalDataWhenStringValue()
-    {
-        $model = $this->objectManager->getObject(Model::class);
-        $model->setAttribute($this->attribute);
-
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => 'test123.jpg'
-        ]);
-
-        $model->beforeSave($object);
-
         $this->assertNull($object->getData('_additional_data_test_attribute'));
     }
 
-    protected function setUpModelForAfterSave()
+    /**
+     * @return \Magento\Catalog\Model\Category\Attribute\Backend\Image
+     */
+    private function setUpModelForAfterSave()
     {
         $objectManagerMock = $this->getMock(
             \Magento\Framework\App\ObjectManager::class,
@@ -211,15 +205,16 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 return $this->objectManager->get($class, $params);
             }));
 
-        $model = $this->objectManager->getObject(Model::class, [
+        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
             'objectManager' => $objectManagerMock,
             'logger' => $this->logger
         ]);
+        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
 
         return $model->setAttribute($this->attribute);
     }
 
-    public function attributeValidValueProvider()
+    public function attributeValueDataProvider()
     {
         return [
             [[['name' => 'test1234.jpg']]],
@@ -230,11 +225,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider attributeValidValueProvider
+     * @dataProvider attributeValueDataProvider
      *
-     * @param $value
+     * @param array $value
      */
-    public function testAfterSaveShouldUploadImageWhenAdditionalDataSet($value)
+    public function testAfterSaveWithAdditionalData($value)
     {
         $model = $this->setUpModelForAfterSave();
 
@@ -242,36 +237,38 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('moveFileFromTmp')
             ->with($this->equalTo('test1234.jpg'));
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => $value,
-            '_additional_data_test_attribute' => [
-                ['name' => 'test1234.jpg']
+        $object = new \Magento\Framework\DataObject(
+            [
+                'test_attribute' => $value,
+                '_additional_data_test_attribute' => [['name' => 'test1234.jpg']]
             ]
-        ]);
+        );
 
         $model->afterSave($object);
     }
 
     /**
-     * @dataProvider attributeValidValueProvider
+     * @dataProvider attributeValueDataProvider
      *
-     * @param $value
+     * @param array $value
      */
-    public function testAfterSaveShouldNotUploadImageWhenAdditionalDataNotSet($value)
+    public function testAfterSaveWithoutAdditionalData($value)
     {
         $model = $this->setUpModelForAfterSave();
 
         $this->imageUploader->expects($this->never())
             ->method('moveFileFromTmp');
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => $value
-        ]);
+        $object = new \Magento\Framework\DataObject(
+            [
+                'test_attribute' => $value
+            ]
+        );
 
         $model->afterSave($object);
     }
 
-    public function testAfterSaveShouldCreateCriticalLogEntryOnUploadExceptions()
+    public function testAfterSaveWithExceptions()
     {
         $model = $this->setUpModelForAfterSave();
 
@@ -285,11 +282,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('critical')
             ->with($this->equalTo($exception));
 
-        $object = new \Magento\Framework\DataObject([
-            '_additional_data_test_attribute' => [
-                ['name' => 'test1234.jpg']
+        $object = new \Magento\Framework\DataObject(
+            [
+                '_additional_data_test_attribute' => [['name' => 'test1234.jpg']]
             ]
-        ]);
+        );
 
         $model->afterSave($object);
     }

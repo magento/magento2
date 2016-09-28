@@ -5,27 +5,26 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Image;
 
-use \Magento\Catalog\Controller\Adminhtml\Category\Image\Upload as Model;
-use \Magento\Framework\App\Request\Http as Request;
-use \Magento\Catalog\Model\ImageUploader;
-use \Magento\Framework\Controller\ResultFactory;
-use \Magento\Framework\DataObject;
-use \Magento\Backend\App\Action\Context;
+use Magento\Catalog\Controller\Adminhtml\Category\Image\Upload as Model;
+use Magento\Framework\App\Request\Http as Request;
+use Magento\Catalog\Model\ImageUploader;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\DataObject;
+use Magento\Backend\App\Action\Context;
 
 /**
  * Class UploadTest
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UploadTest extends \PHPUnit_Framework_TestCase
 {
-    protected $objectManager;
+    private $objectManager;
 
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
-    public function uploadedImageNameProvider()
+    public function executeDataProvider()
     {
         return [
             ['image1', 'image1'],
@@ -35,12 +34,12 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $name
-     * @param $savedName
+     * @param string $name
+     * @param string $savedName
      *
-     * @dataProvider uploadedImageNameProvider
+     * @dataProvider executeDataProvider
      */
-    public function testExecuteShouldSaveUploadedImageWithSpecifiedNameToTmpFolder($name, $savedName)
+    public function testExecute($name, $savedName)
     {
         $request = $this->objectManager->getObject(Request::class);
 

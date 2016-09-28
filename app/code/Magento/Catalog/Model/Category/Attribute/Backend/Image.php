@@ -49,33 +49,28 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private $imageUploader;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
-        $this->objectManager = $objectManager;
     }
 
     /**
+     * Gets image name from $value array.
+     * Will return empty string in a case when $value is not an array
+     *
      * @param array $value Attribute value
      * @return string
      */
-    protected function getUploadedImageName($value)
+    private function getUploadedImageName($value)
     {
         if (is_array($value) && isset($value[0]['name'])) {
             return $value[0]['name'];
@@ -86,6 +81,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Avoiding saving potential upload data to DB
+     * Will set empty image attribute value if image was not uploaded
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -113,7 +109,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private function getImageUploader()
     {
         if ($this->imageUploader === null) {
-            $this->imageUploader = $this->objectManager->get(\Magento\Catalog\CategoryImageUpload::class);
+            $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\CategoryImageUpload::class);
         }
 
         return $this->imageUploader;

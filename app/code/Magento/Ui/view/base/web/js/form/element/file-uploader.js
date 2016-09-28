@@ -299,16 +299,15 @@ define([
          */
         onBeforeFileUpload: function (e, data) {
             var file     = data.files[0],
-                allowed  = this.isFileAllowed(file);
+                allowed  = this.isFileAllowed(file),
+                target   = $(e.target);
 
             if (allowed.passed) {
-                var $target = $(e.target);
-
-                $target.on('fileuploadsend', function(event, postData) {
+                target.on('fileuploadsend', function (event, postData) {
                     postData.data.set('param_name', this.paramName);
                 }.bind(data));
 
-                $target.fileupload('process', data).done(function () {
+                target.fileupload('process', data).done(function () {
                     data.submit();
                 });
             } else {

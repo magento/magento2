@@ -16,67 +16,67 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultRedirectFactoryMock;
+    private $resultRedirectFactoryMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultRawFactoryMock;
+    private $resultRawFactoryMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultJsonFactoryMock;
+    private $resultJsonFactoryMock;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutFactoryMock;
+    private $layoutFactoryMock;
 
     /**
      * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $titleMock;
+    private $titleMock;
 
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManagerMock;
+    private $eventManagerMock;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $responseMock;
+    private $responseMock;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $messageManagerMock;
+    private $messageManagerMock;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Category\Save
      */
-    protected $save;
+    private $save;
 
     /**
      * Set up
@@ -581,7 +581,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function attributeValueDataProvider()
+    /**
+     * @return array
+     */
+    public function imagePreprocessingDataProvider()
     {
         return [
             [['attribute1' => null, 'attribute2' => 123]],
@@ -590,11 +593,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider attributeValueDataProvider
+     * @dataProvider imagePreprocessingDataProvider
      *
-     * @param $data
+     * @param array $data
      */
-    public function testImagePreprocessingShouldSetAttributesWithImageBackendToFalse($data)
+    public function testImagePreprocessingWithoutValue($data)
     {
         $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
 
@@ -630,7 +633,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         ], $result);
     }
 
-    public function testImagePreprocessingShouldNotSetValueToFalseWhenValueSet()
+    public function testImagePreprocessingWithValue()
     {
         $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityType'], [], '', false);
 

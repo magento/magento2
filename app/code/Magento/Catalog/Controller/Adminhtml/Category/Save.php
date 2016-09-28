@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Store\Model\StoreManagerInterface;
-use \Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 
 /**
  * Class Save
@@ -70,14 +70,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->storeManager = $storeManager;
-        $this->eavConfig = $eavConfig;
+        $this->eavConfig = $eavConfig
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
     }
 
     /**
@@ -233,9 +234,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
-     * @param array $data Category data
-     * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * Sets image attribute data to false if image was removed
+     *
+     * @param array $data
+     * @return array
      */
     public function imagePreprocessing(array $data)
     {
