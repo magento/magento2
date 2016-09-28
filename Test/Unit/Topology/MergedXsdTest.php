@@ -77,7 +77,7 @@ class MergedXsdTest extends \PHPUnit_Framework_TestCase
                         <exchange name="ex01" type="topic" connection="amqp" />
                 </config>',
                 [
-                    "Element 'exchange': Duplicate key-sequence ['ex01'] in unique identity-constraint 'unique-exchange-name'."
+                    "Element 'exchange': Duplicate key-sequence ['ex01', 'amqp'] in unique identity-constraint 'unique-exchange-name-connection'."
                 ],
             ],
             'non-unique-exchange-binding' => [

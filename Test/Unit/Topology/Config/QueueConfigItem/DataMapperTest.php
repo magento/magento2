@@ -108,14 +108,14 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $actualResult = $this->model->getMappedData();
         $expectedResult = [
-            'responseQueue.topic01-amqp' => [
+            'responseQueue.topic01--amqp' => [
                 'name' => 'responseQueue.topic01',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'some.queue-amqp' => [
+            'some.queue--amqp' => [
                 'name' => 'some.queue',
                 'connection' => 'amqp',
                 'durable' => true,
@@ -213,49 +213,49 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $actualResult = $this->model->getMappedData();
         $expectedResult = [
-            'responseQueue.topic01-amqp' => [
+            'responseQueue.topic01--amqp' => [
                 'name' => 'responseQueue.topic01',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'some.queue-amqp' => [
+            'some.queue--amqp' => [
                 'name' => 'some.queue',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'responseQueue.topic02-amqp' => [
+            'responseQueue.topic02--amqp' => [
                 'name' => 'responseQueue.topic02',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'responseQueue.topic03-amqp' => [
+            'responseQueue.topic03--amqp' => [
                 'name' => 'responseQueue.topic03',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'responseQueue.topic04.04.04-amqp' => [
+            'responseQueue.topic04.04.04--amqp' => [
                 'name' => 'responseQueue.topic04.04.04',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'responseQueue.topic05.05-amqp' => [
+            'responseQueue.topic05.05--amqp' => [
                 'name' => 'responseQueue.topic05.05',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,
                 'arguments' => [],
             ],
-            'responseQueue.topic08.part2.some.test-amqp' => [
+            'responseQueue.topic08.part2.some.test--amqp' => [
                 'name' => 'responseQueue.topic08.part2.some.test',
                 'connection' => 'amqp',
                 'durable' => true,

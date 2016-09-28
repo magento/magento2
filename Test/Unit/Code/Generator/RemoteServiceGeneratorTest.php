@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Code\Generator;
 
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,9 +26,9 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
     protected $serviceMethodsMapMock;
 
     /**
-     * @var RemoteServiceReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReflectionGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $communicationReaderMock;
+    protected $reflectionGeneratorMock;
 
     /**
      * @var \Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -45,11 +45,8 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->communicationReaderMock = $this
-            ->getMockBuilder(
-                \Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        $this->reflectionGeneratorMock = $this->getMockBuilder(ReflectionGenerator::class)
+            ->disableOriginalConstructor()->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->generator = $objectManager->getObject(
@@ -57,11 +54,15 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 'communicationConfig' => $this->communicationConfigMock,
                 'serviceMethodsMap' => $this->serviceMethodsMapMock,
-                'communicationRemoteServiceReader' => $this->communicationReaderMock,
                 'sourceClassName' => '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
                 'resultClassName' => '\\' . \Magento\Customer\Api\CustomerRepositoryInterfaceRemote::class,
                 'classGenerator' => null
             ]
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->generator,
+            'reflectionGenerator',
+            $this->reflectionGeneratorMock
         );
         parent::setUp();
     }
@@ -143,7 +144,7 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         );
-        $this->communicationReaderMock->expects($this->any())->method('generateTopicName')->willReturnMap(
+        $this->reflectionGeneratorMock->expects($this->any())->method('generateTopicName')->willReturnMap(
             [
                 ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'save', 'topic.save'],
                 ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'get', 'topic.get'],

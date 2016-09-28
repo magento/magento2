@@ -67,6 +67,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $exchange \DOMElement */
         foreach ($source->getElementsByTagName('exchange') as $exchange) {
             $name = $this->getAttributeValue($exchange, 'name');
+            $connection = $this->getAttributeValue($exchange, 'connection');
 
             $bindings = [];
             $exchangeArguments = [];
@@ -87,8 +88,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
-            $connection = $this->getAttributeValue($exchange, 'connection', $this->defaultValue->getConnection());
-            $result[$name] = [
+            $result[$name . '--' . $connection] = [
                 'name' => $name,
                 'type' => $this->getAttributeValue($exchange, 'type'),
                 'connection' => $connection,

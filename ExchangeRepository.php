@@ -13,18 +13,26 @@ class ExchangeRepository
     private $objectManager;
 
     /**
-     * @var string[]
+     * @var ExchangeFactoryInterface
      */
-    private $exchanges;
+    private $exchangeFactory;
+
+    /**
+     * Pool of exchange instances.
+     *
+     * @var ExchangeInterface[]
+     */
+    private $exchangePool = [];
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string[] $exchanges
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $exchanges)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $exchanges = [])
     {
         $this->objectManager = $objectManager;
-        $this->exchanges = $exchanges;
     }
 
     /**
@@ -34,21 +42,24 @@ class ExchangeRepository
      */
     public function getByConnectionName($connectionName)
     {
-        if (!isset($this->exchanges[$connectionName])) {
-            throw new \LogicException("Not found exchange for connection name '{$connectionName}' in config");
+        if (!isset($this->exchangePool[$connectionName])) {
+            $exchange = $this->getExchangeFactory()->create($connectionName);
+            $this->exchangePool[$connectionName] = $exchange;
         }
+        return $this->exchangePool[$connectionName];
+    }
 
-        $exchangeClassName = $this->exchanges[$connectionName];
-        $exchange = $this->objectManager->get($exchangeClassName);
-
-        if (!$exchange instanceof ExchangeInterface) {
-            $exchangeInterface = \Magento\Framework\MessageQueue\ExchangeInterface::class;
-            throw new \LogicException(
-                "Queue '{$exchangeClassName}' for connection name '{$connectionName}' " .
-                "does not implement interface '{$exchangeInterface}'"
-            );
+    /**
+     * Get exchange factory.
+     *
+     * @return ExchangeFactoryInterface
+     * @deprecated
+     */
+    private function getExchangeFactory()
+    {
+        if ($this->exchangeFactory === null) {
+            $this->exchangeFactory = $this->objectManager->get(ExchangeFactoryInterface::class);
         }
-
-        return $exchange;
+        return $this->exchangeFactory;
     }
 }
