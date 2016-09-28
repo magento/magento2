@@ -77,11 +77,6 @@ class PluginList extends Scoped implements InterceptionPluginList
     protected $_pluginInstances = [];
 
     /**
-     * @var JsonInterface
-     */
-    private $json;
-
-    /**
      * @param ReaderInterface $reader
      * @param ScopeInterface $configScope
      * @param CacheInterface $cache
@@ -356,20 +351,5 @@ class PluginList extends Scoped implements InterceptionPluginList
                 }
             }
         }
-    }
-
-    /**
-     * Get json encoder/decoder
-     *
-     * @return JsonInterface
-     * @deprecated
-     */
-    private function getJson()
-    {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
-        }
-        return $this->json;
     }
 }
