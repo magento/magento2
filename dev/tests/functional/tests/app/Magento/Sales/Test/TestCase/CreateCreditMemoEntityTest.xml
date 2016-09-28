@@ -11,6 +11,7 @@
             <data name="description" xsi:type="string">Assert items return to stock (partial refund)</data>
             <data name="data/items_data/0/back_to_stock" xsi:type="string">Yes</data>
             <data name="data/items_data/0/qty" xsi:type="string">1</data>
+            <data name="data/form_data/send_email" xsi:type="string">Yes</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="order/data/price/dataset" xsi:type="string">partial_refund</data>
@@ -18,6 +19,8 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoButton" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInRefundsGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundOrderStatusInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistoryNotifyStatus" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundedGrandTotalOnFrontend" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />

@@ -7,9 +7,6 @@
  */
 namespace Magento\Framework\App\Router;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\Store\Model\ScopeInterface;
-
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
