@@ -88,20 +88,26 @@ class ReturnProcessor
     /**
      * @param CreditmemoInterface $creditmemo
      * @param OrderInterface $order
+     * @param array $returnToStockItems
      * @return void
      */
     public function execute(
         CreditmemoInterface $creditmemo,
-        OrderInterface $order
+        OrderInterface $order,
+        array $returnToStockItems = []
     ) {
         if ($this->stockConfiguration->isAutoReturnEnabled()) {
             return;
         }
         $itemsToUpdate = [];
         foreach ($creditmemo->getItems() as $item) {
-            if ($item->getExtensionAttributes() && $item->getExtensionAttributes()->getReturnToStock()) {
-                $productId = $item->getProductId();
-                $qty = $item->getExtensionAttributes()->getReturnToStockQty();
+            $qty = $item->getQty();
+            $productId = $item->getProductId();
+            $orderItem = $this->orderItemRepository->get($item->getOrderItemId());
+            $parentItemId = $orderItem->getParentItemId();
+            if ($this->canReturnItem($item, $parentItemId, $returnToStockItems, $qty)) {
+                $parentItem = $parentItemId ? $this->getItemByOrderId($creditmemo, $parentItemId) : false;
+                $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
                 if (isset($itemsToUpdate[$productId])) {
                     $itemsToUpdate[$productId] += $qty;
                 } else {
@@ -124,5 +130,37 @@ class ReturnProcessor
             $this->stockIndexerProcessor->reindexList($updatedItemIds);
             $this->priceIndexer->reindexList($updatedItemIds);
         }
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
+     * @param int $parentItemId
+     * @return bool|CreditmemoItemInterface
+     */
+    private function getItemByOrderId(\Magento\Sales\Api\Data\CreditmemoInterface $creditmemo, $parentItemId)
+    {
+        foreach ($creditmemo->getItems() as $item) {
+            if ($item->getOrderItemId() == $parentItemId) {
+                return $item;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $item
+     * @param int[] $returnToStockItems
+     * @param int $parentItemId
+     * @param int $qty
+     * @return bool
+     */
+    private function canReturnItem(
+        \Magento\Sales\Api\Data\CreditmemoItemInterface $item,
+        $parentItemId = null,
+        array $returnToStockItems = [],
+        $qty
+    ) {
+        return (in_array($item->getOrderItemId(), $returnToStockItems) || in_array($parentItemId, $returnToStockItems))
+        && $qty;
     }
 }
