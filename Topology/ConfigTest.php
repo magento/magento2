@@ -28,7 +28,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $exchange = $config->getExchange('magento-topic-based-exchange1');
+        $exchange = $config->getExchange('magento-topic-based-exchange1', 'amqp');
         $this->assertEquals('magento-topic-based-exchange1', $exchange->getName());
         $this->assertEquals('topic', $exchange->getType());
         $this->assertEquals('amqp', $exchange->getConnection());
@@ -51,7 +51,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $exchange = $config->getExchange('magento-topic-based-exchange2');
+        $exchange = $config->getExchange('magento-topic-based-exchange2', 'amqp');
         $this->assertEquals('magento-topic-based-exchange2', $exchange->getName());
         $this->assertEquals('topic', $exchange->getType());
         $this->assertEquals('amqp', $exchange->getConnection());
