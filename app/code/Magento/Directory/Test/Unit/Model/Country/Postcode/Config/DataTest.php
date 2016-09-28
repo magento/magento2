@@ -8,6 +8,11 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Directory\Model\Country\Postcode\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $readerMock;
@@ -24,6 +29,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->readerMock = $this->getMock(
             \Magento\Directory\Model\Country\Postcode\Config\Reader::class,
             [],
@@ -39,7 +45,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Directory\Model\Country\Postcode\Config\Data::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
     }
 
     public function testGet()
@@ -53,5 +59,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($expected);
         $configData = new \Magento\Directory\Model\Country\Postcode\Config\Data($this->readerMock, $this->cacheMock);
         $this->assertEquals($expected, $configData->get());
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 }

@@ -39,7 +39,7 @@ class ActionList
     /**
      * @var JsonInterface
      */
-    private static $json;
+    private $json;
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -107,22 +107,10 @@ class ActionList
      */
     private function getJson()
     {
-        if (self::$json === null) {
-            self::$json = \Magento\Framework\App\ObjectManager::getInstance()
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(JsonInterface::class);
         }
-        return self::$json;
-    }
-
-    /**
-     * Set json encoder/decoder
-     *
-     * @param JsonInterface $json
-     * @return void
-     * @deprecated
-     */
-    public static function setJson(JsonInterface $json)
-    {
-        self::$json = $json;
+        return $this->json;
     }
 }

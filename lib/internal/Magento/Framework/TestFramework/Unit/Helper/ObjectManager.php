@@ -32,6 +32,11 @@ class ObjectManager
     protected $_testObject;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * Class constructor
      *
      * @param \PHPUnit_Framework_TestCase $testObject
@@ -341,5 +346,43 @@ class ObjectManager
         $reflectionProperty = $reflection->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies. Can be used in the case when need to add a
+     * new dependency that is used in the constructor keeping backwards compatibility
+     *
+     * $dependencies = [\Magento\Framework\Json\JsonInterface::class => $jsonMock]
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    public function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->_testObject->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->_testObject->any())
+            ->method('getInstance')
+            ->willReturnSelf();
+        $objectManagerMock->expects($this->_testObject->any())
+            ->method('get')
+            ->will($this->_testObject->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+    }
+
+    /**
+     * Unset mocked object manager, must be used to restore
+     * \Magento\Framework\App\ObjectManager::_instance after mockObjectManager called
+     *
+     * @return void
+     */
+    public function restoreObjectManager()
+    {
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
     }
 }

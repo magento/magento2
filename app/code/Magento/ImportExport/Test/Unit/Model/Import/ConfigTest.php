@@ -8,6 +8,11 @@ namespace Magento\ImportExport\Test\Unit\Model\Import;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_readerMock;
@@ -16,6 +21,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_configScopeMock;
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface
+     */
+    private $jsonMock;
 
     /**
      * @var string
@@ -29,6 +39,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_readerMock = $this->getMock(
             \Magento\ImportExport\Model\Import\Config\Reader::class,
             [],
@@ -37,6 +48,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**

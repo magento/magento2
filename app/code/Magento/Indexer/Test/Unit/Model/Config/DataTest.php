@@ -8,6 +8,11 @@ namespace Magento\Indexer\Test\Unit\Model\Config;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Indexer\Model\Config\Data
      */
     protected $model;
@@ -44,6 +49,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->reader = $this->getMock(\Magento\Framework\Indexer\Config\Reader::class, ['read'], [], '', false);
         $this->cache = $this->getMockForAbstractClass(
             \Magento\Framework\Config\CacheInterface::class,
@@ -61,9 +67,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Indexer\Model\Config\Data::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testConstructorWithCache()

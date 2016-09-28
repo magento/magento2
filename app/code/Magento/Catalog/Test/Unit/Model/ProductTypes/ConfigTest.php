@@ -8,6 +8,11 @@ namespace Magento\Catalog\Test\Unit\Model\ProductTypes;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Catalog\Model\ProductTypes\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $readerMock;
@@ -29,6 +34,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->readerMock = $this->getMock(
             \Magento\Catalog\Model\ProductTypes\Config\Reader::class,
             [],
@@ -38,7 +44,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Catalog\Model\ProductTypes\Config::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
