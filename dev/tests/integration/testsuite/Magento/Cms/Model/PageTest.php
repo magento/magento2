@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Model;
 
+use Magento\Cms\Api\PageRepositoryInterface;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -53,10 +55,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Cms\Model\Page $page */
         $page = $objectManager->create(\Magento\Cms\Model\Page::class);
-        $page->setData(['data' => ['title' => 'Test title', 'stores' => [1]], 'expectedIdentifier' => 'test-title']);
+        $page->setData(['title' => 'Test', 'stores' => [1]]);
         $page->setUpdateTime($updateTime);
         $page->save();
-        $page = $page->load($page->getId());
+        $page = $objectManager->get(PageRepositoryInterface::class)->getById($page->getId());
         $this->assertEquals($updateTime, $page->getUpdateTime());
     }
 

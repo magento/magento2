@@ -69,6 +69,18 @@ class UpdateRow
     }
 
     /**
+     * @param string $columnName
+     * @param string $column
+     * @param array $data
+     * @return bool
+     */
+    private function canNotSetTimeStamp($columnName, $column, array $data)
+    {
+        return $column['DEFAULT'] == 'CURRENT_TIMESTAMP' && !isset($data[$columnName])
+        && empty($column['NULLABLE']);
+    }
+
+    /**
      * @param string $entityType
      * @param array $data
      * @return array
@@ -83,17 +95,5 @@ class UpdateRow
             [$metadata->getLinkField() . ' = ?' => $data[$metadata->getLinkField()]]
         );
         return $data;
-    }
-
-    /**
-     * @param string $columnName
-     * @param string $column
-     * @param array $data
-     * @return bool
-     */
-    protected function canNotSetTimeStamp($columnName, $column, array $data)
-    {
-        return $column['DEFAULT'] == 'CURRENT_TIMESTAMP' && !isset($data[$columnName])
-        && empty($column['NULLABLE']);
     }
 }
