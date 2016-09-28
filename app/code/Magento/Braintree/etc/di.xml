@@ -22,6 +22,7 @@
             <argument name="code" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_CODE</argument>
             <argument name="infoBlockType" xsi:type="string">BraintreePayPalInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">BraintreePayPalValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">BraintreePayPalValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">BraintreePayPalCommandPool</argument>
         </arguments>
     </virtualType>
@@ -474,7 +475,7 @@
         </arguments>
     </virtualType>
 
-    <!-- Value validators infrastructure -->
+    <!-- Braintree validators infrastructure -->
     <virtualType name="BraintreeCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
         <arguments>
             <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\Config</argument>
@@ -487,6 +488,22 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- Braintree validators infrastructure -->
+
+    <!-- Braintree PayPal validators -->
+    <virtualType name="BraintreePayPalCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\PayPal\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreePayPalValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">BraintreePayPalCountryValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Braintree PayPal validators -->
 
     <type name="Magento\Braintree\Block\Info">
         <arguments>
