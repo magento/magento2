@@ -6,6 +6,7 @@
  */
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 class Compiled implements ConfigLoaderInterface
@@ -18,6 +19,11 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
+     * @var JsonInterface
+     */
+    private $json;
+
+    /**
      * {inheritdoc}
      */
     public function load($area)
@@ -25,7 +31,7 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $this->configCache[$area] = \unserialize(\file_get_contents(self::getFilePath($area)));
+        $this->configCache[$area] = $this->getJson()->decode(\file_get_contents(self::getFilePath($area)));
         return $this->configCache[$area];
     }
 
@@ -38,5 +44,19 @@ class Compiled implements ConfigLoaderInterface
     public static function getFilePath($area)
     {
         return BP . '/var/di/' . $area . '.ser';
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = new \Magento\Framework\Json\Json();
+        }
+        return $this->json;
     }
 }

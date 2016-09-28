@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Interception\Config;
 
+use Magento\Framework\Json\JsonInterface;
+
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
     /**
@@ -71,6 +73,11 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     protected $_scopeList;
 
     /**
+     * @var JsonInterface
+     */
+    private $json;
+
+    /**
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -98,7 +105,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
         $intercepted = $this->_cache->load($this->_cacheId);
         if ($intercepted !== false) {
-            $this->_intercepted = unserialize($intercepted);
+            $this->_intercepted = $this->getJson()->decode($intercepted);
         } else {
             $this->initialize($this->_classDefinitions->getClasses());
         }
@@ -129,7 +136,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
-        $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);
+        $this->_cache->save($this->getJson()->encode($this->_intercepted), $this->_cacheId);
     }
 
     /**
@@ -174,5 +181,20 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
             return $this->_intercepted[$type];
         }
         return $this->_inheritInterception($type);
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }

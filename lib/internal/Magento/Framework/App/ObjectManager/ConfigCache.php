@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App\ObjectManager;
 
+use Magento\Framework\Json\JsonInterface;
+
 class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterface
 {
     /**
@@ -20,6 +22,11 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      * @var string
      */
     protected $_prefix = 'diConfig';
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cacheFrontend
@@ -37,7 +44,7 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      */
     public function get($key)
     {
-        return unserialize($this->_cacheFrontend->load($this->_prefix . $key));
+        return $this->getJson()->decode($this->_cacheFrontend->load($this->_prefix . $key));
     }
 
     /**
@@ -49,6 +56,21 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      */
     public function save(array $config, $key)
     {
-        $this->_cacheFrontend->save(serialize($config), $this->_prefix . $key);
+        $this->_cacheFrontend->save($this->getJson()->encode($config), $this->_prefix . $key);
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }

@@ -14,6 +14,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
@@ -74,6 +75,11 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @var array
      */
     protected $_pluginInstances = [];
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * @param ReaderInterface $reader
@@ -269,7 +275,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
             $data = $this->_cache->load($cacheId);
             if ($data) {
-                list($this->_data, $this->_inherited, $this->_processed) = unserialize($data);
+                list($this->_data, $this->_inherited, $this->_processed) = $this->getJson()->decode($data);
                 foreach ($this->_scopePriorityScheme as $scope) {
                     $this->_loadedScopes[$scope] = true;
                 }
@@ -302,7 +308,10 @@ class PluginList extends Scoped implements InterceptionPluginList
                 foreach ($this->getClassDefinitions() as $class) {
                     $this->_inheritPlugins($class);
                 }
-                $this->_cache->save(serialize([$this->_data, $this->_inherited, $this->_processed]), $cacheId);
+                $this->_cache->save(
+                    $this->getJson()->encode([$this->_data, $this->_inherited, $this->_processed]),
+                    $cacheId
+                );
             }
             $this->_pluginInstances = [];
         }
@@ -347,5 +356,20 @@ class PluginList extends Scoped implements InterceptionPluginList
                 }
             }
         }
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }
