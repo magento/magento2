@@ -11,6 +11,11 @@ use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Mes
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Framework\MessageQueue\Config\Reader\Xml|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $xmlReaderMock;
@@ -37,6 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->xmlReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Xml::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,9 +57,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        \Magento\Framework\MessageQueue\Config\Data::setJson($this->jsonMock);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+    }
+
+    public function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testGet()
