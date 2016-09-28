@@ -9,6 +9,7 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;
+use Magento\SalesInventory\Model\Order\ReturnItemProcessor;
 
 /**
  * Class ReturnToStock
@@ -31,20 +32,27 @@ class ReturnToStockOrder
     private $orderRepository;
 
     /**
+     * @var ReturnItemProcessor
+     */
+    private $returnItemProcessor;
+    /**
      * ReturnToStockPlugin constructor.
      *
      * @param ReturnProcessor $returnProcessor
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param OrderRepositoryInterface $orderRepository
+     * @param ReturnItemProcessor $returnItemProcessor
      */
     public function __construct(
         ReturnProcessor $returnProcessor,
         CreditmemoRepositoryInterface $creditmemoRepository,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        ReturnItemProcessor $returnItemProcessor
     ) {
         $this->returnProcessor = $returnProcessor;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->orderRepository = $orderRepository;
+        $this->returnItemProcessor = $returnItemProcessor;
     }
 
     /**
@@ -80,7 +88,8 @@ class ReturnToStockOrder
         }
 
         $creditmemo = $this->creditmemoRepository->get($resultEntityId);
-        $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
+        $this->returnItemProcessor->execute($creditmemo, $returnToStockItems);
+        $this->returnProcessor->execute($creditmemo, $order);
 
         return $resultEntityId;
     }

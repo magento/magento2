@@ -9,4 +9,8 @@
     <extension_attributes for="Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface">
         <attribute code="return_to_stock_items" type="int[]"/>
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\CreditmemoItemInterface">
+        <attribute code="return_to_stock" type="bool"/>
+        <attribute code="return_to_stock_qty" type="int"/>
+    </extension_attributes>
 </config>
