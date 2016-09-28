@@ -137,7 +137,6 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->creditmemoMock, $this->orderMock, $returnToStockItems);
 
-
         $this->stockConfigurationMock->expects($this->once())
             ->method('isAutoReturnEnabled')
             ->willReturn(false);

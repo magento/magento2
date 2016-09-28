@@ -42,6 +42,7 @@ class ReturnToStockOrder
      * @param ReturnProcessor $returnProcessor
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param OrderRepositoryInterface $orderRepository
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         ReturnProcessor $returnProcessor,

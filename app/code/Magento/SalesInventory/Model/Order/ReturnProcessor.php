@@ -95,7 +95,7 @@ class ReturnProcessor
             $productId = $item->getProductId();
             $orderItem = $this->orderItemRepository->get($item->getOrderItemId());
             $parentItemId = $orderItem->getParentItemId();
-            if ($this->canReturnItem($item, $parentItemId, $returnToStockItems, $qty)) {
+            if ($this->canReturnItem($item, $qty, $parentItemId, $returnToStockItems)) {
                 $parentItem = $parentItemId ? $this->getItemByOrderId($creditmemo, $parentItemId) : false;
                 $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
                 if (isset($itemsToUpdate[$productId])) {
@@ -139,16 +139,16 @@ class ReturnProcessor
 
     /**
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $item
+     * @param int $qty
      * @param int[] $returnToStockItems
      * @param int $parentItemId
-     * @param int $qty
      * @return bool
      */
     private function canReturnItem(
         \Magento\Sales\Api\Data\CreditmemoItemInterface $item,
+        $qty,
         $parentItemId = null,
-        array $returnToStockItems = [],
-        $qty
+        array $returnToStockItems = []
     ) {
         return (in_array($item->getOrderItemId(), $returnToStockItems) || in_array($parentItemId, $returnToStockItems))
         && $qty;

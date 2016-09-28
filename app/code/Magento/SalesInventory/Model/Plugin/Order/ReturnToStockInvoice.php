@@ -5,57 +5,50 @@
  */
 namespace Magento\SalesInventory\Model\Plugin\Order;
 
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\SalesInventory\Model\Order\ReturnProcessor;
-use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Api\RefundInvoiceInterface;
-
 /**
  * Class ReturnToStockInvoice
  */
 class ReturnToStockInvoice
 {
     /**
-     * @var ReturnProcessor
+     * @var \Magento\SalesInventory\Model\Order\ReturnProcessor
      */
     private $returnProcessor;
 
     /**
-     * @var CreditmemoRepositoryInterface
+     * @var \Magento\Sales\Api\CreditmemoRepositoryInterface
      */
     private $creditmemoRepository;
 
     /**
-     * @var OrderRepositoryInterface
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     private $orderRepository;
 
     /**
-     * @var InvoiceRepositoryInterface
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
     private $invoiceRepository;
 
     /**
-     * @var StockConfigurationInterface
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      */
     private $stockConfiguration;
 
     /**
      * ReturnToStockInvoice constructor.
-     * @param ReturnProcessor $returnProcessor
-     * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @param OrderRepositoryInterface $orderRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param StockConfigurationInterface $stockConfiguration
+     * @param \Magento\SalesInventory\Model\Order\ReturnProcessor $returnProcessor
+     * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
-        ReturnProcessor $returnProcessor,
-        CreditmemoRepositoryInterface $creditmemoRepository,
-        OrderRepositoryInterface $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
-        StockConfigurationInterface $stockConfiguration
+        \Magento\SalesInventory\Model\Order\ReturnProcessor $returnProcessor,
+        \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
     ) {
         $this->returnProcessor = $returnProcessor;
         $this->creditmemoRepository = $creditmemoRepository;
@@ -65,7 +58,7 @@ class ReturnToStockInvoice
     }
 
     /**
-     * @param RefundInvoiceInterface $refundService
+     * @param \Magento\Sales\Api\RefundInvoiceInterface $refundService
      * @param int $resultEntityId
      * @param int $invoiceId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
@@ -78,7 +71,7 @@ class ReturnToStockInvoice
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
-        RefundInvoiceInterface $refundService,
+        \Magento\Sales\Api\RefundInvoiceInterface $refundService,
         $resultEntityId,
         $invoiceId,
         array $items = [],
