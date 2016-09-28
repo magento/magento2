@@ -15,11 +15,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 class ReturnProcessor
 {
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     */
-    private $stockConfiguration;
-
-    /**
      * @var \Magento\CatalogInventory\Api\StockManagementInterface
      */
     private $stockManagement;
@@ -66,7 +61,6 @@ class ReturnProcessor
      * @param \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
      */
     public function __construct(
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexer,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
@@ -75,7 +69,6 @@ class ReturnProcessor
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
     ) {
-        $this->stockConfiguration = $stockConfiguration;
         $this->stockManagement = $stockManagement;
         $this->stockIndexerProcessor = $stockIndexer;
         $this->priceIndexer = $priceIndexer;
@@ -96,9 +89,6 @@ class ReturnProcessor
         OrderInterface $order,
         array $returnToStockItems = []
     ) {
-        if ($this->stockConfiguration->isAutoReturnEnabled()) {
-            return;
-        }
         $itemsToUpdate = [];
         foreach ($creditmemo->getItems() as $item) {
             $qty = $item->getQty();

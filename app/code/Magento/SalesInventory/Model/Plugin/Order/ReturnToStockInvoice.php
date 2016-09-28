@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesInventory\Model\Plugin\Order;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
@@ -37,22 +38,30 @@ class ReturnToStockInvoice
     private $invoiceRepository;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * ReturnToStockInvoice constructor.
      * @param ReturnProcessor $returnProcessor
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         ReturnProcessor $returnProcessor,
         CreditmemoRepositoryInterface $creditmemoRepository,
         OrderRepositoryInterface $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository
+        InvoiceRepositoryInterface $invoiceRepository,
+        StockConfigurationInterface $stockConfiguration
     ) {
         $this->returnProcessor = $returnProcessor;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->orderRepository = $orderRepository;
         $this->invoiceRepository = $invoiceRepository;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -79,6 +88,10 @@ class ReturnToStockInvoice
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        if ($this->stockConfiguration->isAutoReturnEnabled()) {
+            return $resultEntityId;
+        }
+
         $invoice = $this->invoiceRepository->get($invoiceId);
         $order = $this->orderRepository->get($invoice->getOrderId());
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesInventory\Model\Plugin\Order;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -31,6 +32,11 @@ class ReturnToStockOrder
     private $orderRepository;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * ReturnToStockPlugin constructor.
      *
      * @param ReturnProcessor $returnProcessor
@@ -40,11 +46,13 @@ class ReturnToStockOrder
     public function __construct(
         ReturnProcessor $returnProcessor,
         CreditmemoRepositoryInterface $creditmemoRepository,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        StockConfigurationInterface $stockConfiguration
     ) {
         $this->returnProcessor = $returnProcessor;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->orderRepository = $orderRepository;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -69,6 +77,10 @@ class ReturnToStockOrder
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        if ($this->stockConfiguration->isAutoReturnEnabled()) {
+            return $resultEntityId;
+        }
+
         $order = $this->orderRepository->get($orderId);
 
         $returnToStockItems = [];
