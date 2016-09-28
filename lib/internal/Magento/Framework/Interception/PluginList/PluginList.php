@@ -365,7 +365,7 @@ class PluginList extends Scoped implements InterceptionPluginList
     private function filterPlugins(array &$plugins)
     {
         foreach ($plugins as $name => $plugin) {
-            if (!isset($plugin['instance']) || empty($plugin['instance'])) {
+            if (empty($plugin['instance'])) {
                 unset($plugins[$name]);
                 $this->getLogger()->info("Reference to undeclared plugin with name '{$name}'.");
             }
