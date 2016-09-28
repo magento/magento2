@@ -215,6 +215,19 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
+     */
+    public function testInheritPluginsWithNotExistingPlugin()
+    {
+        $this->_configScopeMock->expects($this->any())
+            ->method('getCurrentScope')
+            ->will($this->returnValue('frontend'));
+
+        $this->assertNull($this->_model->getNext('typeWithoutInstance', 'someMethod'));
+    }
+
+    /**
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
      * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
      */
     public function testLoadScopedDataCached()

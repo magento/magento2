@@ -149,6 +149,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             }
             $this->_inherited[$type] = null;
             if (is_array($plugins) && count($plugins)) {
+                $this->filterPlugins($plugins);
                 uasort($plugins, [$this, '_sort']);
                 $this->trimInstanceStartingBackslash($plugins);
                 $this->_inherited[$type] = $plugins;
@@ -345,6 +346,21 @@ class PluginList extends Scoped implements InterceptionPluginList
                 } else {
                     $this->_data[$type] = $typeConfig['plugins'];
                 }
+            }
+        }
+    }
+
+    /**
+     * Remove from list not existing plugins
+     *
+     * @param array $plugins
+     * @return void
+     */
+    private function filterPlugins(array &$plugins)
+    {
+        foreach ($plugins as $key => $plugin) {
+            if (!isset($plugin['instance']) || empty($plugin['instance'])) {
+                unset($plugins[$key]);
             }
         }
     }
