@@ -24,13 +24,6 @@ class Address extends Form
     protected $templateBlock = './ancestor::body';
 
     /**
-     * CSS selector for 'Phone Number' label.
-     *
-     * @var string
-     */
-    private $billingTelephoneLabel = '[data-ui-id$="billing-address-telephone-label"]';
-
-    /**
      * 'Same as billing address' checkbox.
      *
      * @var string
@@ -123,12 +116,7 @@ class Address extends Form
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($fields as $name => $field) {
-            $this->_rootElement->click();
-            $this->browser->waitUntil(
-                function () {
-                    return $this->browser->find($this->waitElement)->isVisible() ? null : true;
-                }
-            );
+            $this->waitFormLoading();
             $element = $this->getElement($context, $field);
             if (!$element->isDisabled()) {
                 $element->setValue($field['value']);
@@ -136,5 +124,20 @@ class Address extends Form
                 throw new \Exception("Unable to set value to field '$name' as it's disabled.");
             }
         }
+    }
+
+    /**
+     * Wait for form loading.
+     *
+     * @return void
+     */
+    private function waitFormLoading()
+    {
+        $this->_rootElement->click();
+        $this->browser->waitUntil(
+            function () {
+                return $this->browser->find($this->waitElement)->isVisible() ? null : true;
+            }
+        );
     }
 }
