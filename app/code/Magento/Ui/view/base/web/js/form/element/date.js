@@ -139,7 +139,7 @@ define([
             if (shiftedValue) {
                 if (this.options.showsTime) {
                     var formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
-                    value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').format();
+                    value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
                     value = moment(shiftedValue, this.pickerDateTimeFormat);
                     value = value.format(this.outputDateFormat);
