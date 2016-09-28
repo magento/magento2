@@ -17,5 +17,8 @@
         <dataset name="MAGETWO-12620">
             <field name="category_price" xsi:type="string">11</field>
         </dataset>
+        <dataset name="from-9">
+            <field name="price_from" xsi:type="string">9</field>
+        </dataset>
     </repository>
 </config>

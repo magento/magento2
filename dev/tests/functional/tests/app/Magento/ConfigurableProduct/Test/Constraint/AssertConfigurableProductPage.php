@@ -125,15 +125,23 @@ class AssertConfigurableProductPage extends AssertProductPage
     protected function getLowestConfigurablePrice()
     {
         $price = null;
-        $configurableOptions = $this->product->getConfigurableAttributesData();
-
-        foreach ($configurableOptions['matrix'] as $option) {
-            $price = $price === null ? $option['price'] : $price;
-            if ($price > $option['price']) {
-                $price = $option['price'];
+        $priceDataConfig = $this->product->getDataFieldConfig('price');
+        if (isset($priceDataConfig['source'])) {
+            $priceData = $priceDataConfig['source']->getPriceData();
+            if (isset($priceData['price_from'])) {
+                $price = $priceData['price_from'];
             }
         }
 
+        if (null === $price) {
+            $configurableOptions = $this->product->getConfigurableAttributesData();
+            foreach ($configurableOptions['matrix'] as $option) {
+                $price = $price === null ? $option['price'] : $price;
+                if ($price > $option['price']) {
+                    $price = $option['price'];
+                }
+            }
+        }
         return $price;
     }
 }
