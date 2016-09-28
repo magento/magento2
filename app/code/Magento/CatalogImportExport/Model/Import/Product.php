@@ -2388,19 +2388,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
         }
-
-        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $rowData['additional_attributes']);
-        foreach ($attributeNameValuePairs as $attributeNameValuePair) {
-            $separatorPosition = strpos($attributeNameValuePair, self::PAIR_NAME_VALUE_SEPARATOR);
-            if ($separatorPosition !== false) {
-                $key = substr($attributeNameValuePair, 0, $separatorPosition);
-                $value = substr(
-                    $attributeNameValuePair,
-                    $separatorPosition + strlen(self::PAIR_NAME_VALUE_SEPARATOR)
-                );
-                $rowData[$key] = $value === false ? '' : $value;
-            }
-        }
+        $rowData = array_merge($rowData, $this->parseAdditionalAttributes($rowData['additional_attributes']));
         return $rowData;
     }
 
@@ -2586,5 +2574,30 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->getIdentifierField();
         }
         return $this->productEntityIdentifierField;
+    }
+
+    /**
+     * Retrieves additional attributes as array code=>value
+     *
+     * @param string $additionalAttributes
+     * @return array
+     */
+    private function parseAdditionalAttributes($additionalAttributes)
+    {
+        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $additionalAttributes);
+        $preparedAttributes = [];
+        $code = '';
+        foreach ($attributeNameValuePairs as $attributeData) {
+            if (strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
+                if (!$code) {
+                    continue;
+                }
+                $preparedAttributes[$code] .= $this->getMultipleValueSeparator() . $attributeData;
+                continue;
+            }
+            list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
+            $preparedAttributes[$code] = $value;
+        }
+        return $preparedAttributes;
     }
 }
