@@ -99,9 +99,18 @@ define(
                     }
                 }, this);
 
-                domObserver.get('#' + this.getButtonId(), function () {
-                    paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
-                }.bind(this));
+                if (!paypalExpressCheckout.checkout.mageInit) {
+                    domObserver.get('#' + this.getButtonId(), function () {
+                        paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
+                        paypalExpressCheckout.checkout.mageInit = true;
+                        domObserver.off('#' + this.getButtonId());
+                    }.bind(this));
+                } else {
+                    domObserver.get('#' + this.getButtonId(), function () {
+                        $('#' + this.getButtonId()).on('click', this.clientConfig.click);
+                        domObserver.off('#' + this.getButtonId());
+                    }.bind(this));
+                }
 
                 return this;
             },
