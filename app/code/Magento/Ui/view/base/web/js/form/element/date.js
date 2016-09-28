@@ -134,11 +134,12 @@ define([
          * @param {String} shiftedValue
          */
         onShiftedValueChange: function (shiftedValue) {
-            var value;
+            var value,
+                formattedValue;
 
             if (shiftedValue) {
                 if (this.options.showsTime) {
-                    var formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
+                    formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
                     value = moment(shiftedValue, this.pickerDateTimeFormat);
