@@ -128,6 +128,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_attributeTypes = [];
 
     /**
+     * Attributes defined by user
+     *
+     * @var array
+     */
+    protected $userDefinedAttributes = [];
+
+    /**
      * Product collection
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
@@ -261,7 +268,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $dateAttrCodes = [
         'special_from_date',
-        'special_to_date'
+        'special_to_date',
+        'news_from_date',
+        'news_to_date',
+        'custom_design_from',
+        'custom_design_to'
     ];
 
     /**
@@ -910,20 +921,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
-                    if (in_array($code, $this->dateAttrCodes)) {
-                        $attrValue = $this->_localeDate->formatDateTime(
-                            new \DateTime($attrValue),
-                            \IntlDateFormatter::SHORT,
-                            \IntlDateFormatter::NONE,
-                            null,
-                            date_default_timezone_get()
-                        );
-                    } else if ($this->_attributeTypes[$code] === 'datetime') {
-                        $attrValue = $this->_localeDate->formatDateTime(
-                            new \DateTime($attrValue),
-                            \IntlDateFormatter::SHORT,
-                            \IntlDateFormatter::SHORT
-                        );
+                    if ($this->_attributeTypes[$code] === 'datetime') {
+                        if (
+                            in_array($code, $this->dateAttrCodes)
+                            || in_array($code, $this->userDefinedAttributes)
+                        ) {
+                            $attrValue = $this->_localeDate->formatDateTime(
+                                new \DateTime($attrValue),
+                                \IntlDateFormatter::SHORT,
+                                \IntlDateFormatter::NONE,
+                                null,
+                                date_default_timezone_get()
+                            );
+                        } else {
+                            $attrValue = $this->_localeDate->formatDateTime(
+                                new \DateTime($attrValue),
+                                \IntlDateFormatter::SHORT,
+                                \IntlDateFormatter::SHORT
+                            );
+                        }
                     }
 
                     if ($storeId != Store::DEFAULT_STORE_ID
@@ -1380,6 +1396,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
             $this->_attributeTypes[$attribute->getAttributeCode()] =
                 \Magento\ImportExport\Model\Import::getAttributeType($attribute);
+            if ($attribute->getIsUserDefined()) {
+                $this->userDefinedAttributes[] = $attribute->getAttributeCode();
+            }
         }
         return $this;
     }
