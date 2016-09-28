@@ -7,10 +7,9 @@ namespace Magento\Vault\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
-use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\Vault\Model\VaultManagementInterface;
 
 /**
  * Class ConfigProvider
@@ -39,14 +38,9 @@ final class TokensConfigProvider implements ConfigProviderInterface
     private $customerTokenManagement;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface
+     * @var VaultManagementInterface
      */
-    private $paymentMethodList;
-
-    /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory
-     */
-    private $paymentMethodInstanceFactory;
+    private $vaultService;
 
     /**
      * Constructor
@@ -112,7 +106,8 @@ final class TokensConfigProvider implements ConfigProviderInterface
     private function getComponentProviders()
     {
         $providers = [];
-        $vaultPaymentMethods = $this->getVaultPaymentMethodList();
+        $storeId = $this->storeManager->getStore()->getId();
+        $vaultPaymentMethods = $this->getVaultService()->getActivePaymentList($storeId);
 
         foreach ($vaultPaymentMethods as $method) {
             $providerCode = $method->getProviderCode();
@@ -141,60 +136,15 @@ final class TokensConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get list of active Vault payment methods.
-     *
-     * @return VaultPaymentInterface[]
-     */
-    private function getVaultPaymentMethodList()
-    {
-        $storeId = $this->storeManager->getStore()->getId();
-
-        $paymentMethods = array_map(
-            function (PaymentMethodInterface $paymentMethod) {
-                return $this->getPaymentMethodInstanceFactory()->create($paymentMethod);
-            },
-            $this->getPaymentMethodList()->getActiveList($storeId)
-        );
-
-        $availableMethods = array_filter(
-            $paymentMethods,
-            function (\Magento\Payment\Model\MethodInterface $methodInstance) {
-                return $methodInstance instanceof VaultPaymentInterface;
-            }
-        );
-
-        return $availableMethods;
-    }
-
-    /**
-     * Get payment method list.
-     *
-     * @return \Magento\Payment\Api\PaymentMethodListInterface
+     * Get instance of Vault management service
+     * @return VaultManagementInterface
      * @deprecated
      */
-    private function getPaymentMethodList()
+    private function getVaultService()
     {
-        if ($this->paymentMethodList === null) {
-            $this->paymentMethodList = ObjectManager::getInstance()->get(
-                \Magento\Payment\Api\PaymentMethodListInterface::class
-            );
+        if ($this->vaultService === null) {
+            $this->vaultService = ObjectManager::getInstance()->get(VaultManagementInterface::class);
         }
-        return $this->paymentMethodList;
-    }
-
-    /**
-     * Get payment method instance factory.
-     *
-     * @return \Magento\Payment\Model\Method\InstanceFactory
-     * @deprecated
-     */
-    private function getPaymentMethodInstanceFactory()
-    {
-        if ($this->paymentMethodInstanceFactory === null) {
-            $this->paymentMethodInstanceFactory = ObjectManager::getInstance()->get(
-                \Magento\Payment\Model\Method\InstanceFactory::class
-            );
-        }
-        return $this->paymentMethodInstanceFactory;
+        return $this->vaultService;
     }
 }

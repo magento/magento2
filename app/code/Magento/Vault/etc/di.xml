@@ -13,6 +13,7 @@
     <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
     <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
+    <preference for="Magento\Vault\Model\VaultManagementInterface" type="Magento\Vault\Model\VaultService" />
 
     <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
         <plugin name="PaymentVaultExtensionAttributeOperations" type="\Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
