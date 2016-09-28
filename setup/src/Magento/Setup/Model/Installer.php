@@ -899,7 +899,7 @@ class Installer
         $userConfig = new StoreConfigurationDataMapper();
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManagerProvider->get()->get(\Magento\Framework\App\State::class);
-        $appState->setAreaCode('setup');
+        $appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
         $configData = $userConfig->getConfigData($data);
         if (count($configData) === 0) {
             return;

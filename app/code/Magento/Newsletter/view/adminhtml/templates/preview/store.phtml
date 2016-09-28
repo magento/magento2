@@ -10,7 +10,7 @@
 
 <?php if ($websites = $block->getWebsites()): ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?php /* @escapeNotVerified */ echo __('Choose Store View:') ?></label>
+    <label class="label" for="store_switcher"><?php echo $block->escapeHtml(__('Choose Store View:')) ?></label>
     <div class="control">
         <select
             id="store_switcher"

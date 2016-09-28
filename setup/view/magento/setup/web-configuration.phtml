@@ -68,13 +68,17 @@ $hints = [
                 ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; fillBaseURL();"
                 ng-blur="addSlash()"
                 ng-change="populateHttps()"
+                ng-pattern="/^(https?:\/\/).*$/"
                 tooltip-placement="right"
                 tooltip-html-unsafe="<?php echo $hints['base_url']; ?>"
                 tooltip-trigger="focus"
                 tooltip-append-to-body="true"
                 >
             <div class="error-container">
-                <span ng-show="webconfig.base_url.$error.required || webconfig.base_url.$error.url">
+                <span ng-show="!webconfig.base_url.valid
+                                || webconfig.base_url.$error.required
+                                || webconfig.base_url.$error.url"
+                >
                     Please enter a valid base URL path. (ex: http://www.example.com/)
                 </span>
             </div>
@@ -189,10 +193,16 @@ $hints = [
                     ng-class="{'invalid': webconfig.https.$invalid && webconfig.submitted}"
                     ng-if="config.https.front || config.https.admin"
                     ng-focus=""
+                    ng-pattern="/^(https?:\/\/).*$/"
                     required
                     >
                 <div class="error-container">
-                    <span ng-show="webconfig.https.$error.required || webconfig.https.$error.url">Please enter a valid HTTPS base URL path. (ex: https://www.example.com/)</span>
+                    <span ng-show="!webconfig.https.$error.valid
+                                    || webconfig.https.$error.required
+                                    || webconfig.https.$error.url"
+                    >
+                        Please enter a valid HTTPS base URL path. (ex: https://www.example.com/)
+                    </span>
                 </div>
             </div>
         </div>
