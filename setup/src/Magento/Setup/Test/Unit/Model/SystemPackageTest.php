@@ -177,7 +177,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage System packages not found
+     * @expectedExceptionMessage We're sorry, no components are available
      */
     public function testGetPackageVersionGitCloned()
     {
@@ -206,7 +206,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage System package not found
+     * @expectedExceptionMessage We cannot retrieve information on
      */
     public function testGetPackageVersionsFailed()
     {

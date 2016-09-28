@@ -13,6 +13,7 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,6 +35,11 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param Context $context
@@ -60,6 +66,35 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
+     * Set scope config
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @return void
+     * @deprecated
+     */
+    public function setScopeConfig(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Get scope config
+     *
+     * @return ScopeConfigInterface
+     * @deprecated
+     */
+    private function getScopeConfig()
+    {
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\App\Config\ScopeConfigInterface'
+            );
+        } else {
+            return $this->scopeConfig;
+        }
+    }
+
+    /**
      * Login post action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -81,6 +116,14 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
                     $this->session->regenerateId();
+                    $redirectUrl = $this->accountRedirect->getRedirectCookie();
+                    if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectUrl) {
+                        $this->accountRedirect->clearRedirectCookie();
+                        $resultRedirect = $this->resultRedirectFactory->create();
+                        // URL is checked to be internal in $this->_redirect->success()
+                        $resultRedirect->setUrl($this->_redirect->success($redirectUrl));
+                        return $resultRedirect;
+                    }
                 } catch (EmailNotConfirmedException $e) {
                     $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
                     $message = __(

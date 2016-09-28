@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\Filesystem\Driver\File;
 use \Magento\Setup\Model\FilePermissions;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -32,6 +33,11 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
      */
     private $filePermissions;
 
+    /**
+     * @var File
+     */
+    private $driverFileMock;
+
     public function setUp()
     {
         $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
@@ -43,7 +49,15 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->directoryWriteMock));
         $this->directoryListMock = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
 
-        $this->filePermissions = new FilePermissions($this->filesystemMock, $this->directoryListMock);
+        $this->driverFileMock = $this->getMockBuilder(File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->filePermissions = new FilePermissions(
+            $this->filesystemMock,
+            $this->directoryListMock,
+            $this->driverFileMock
+        );
     }
 
     public function testGetInstallationWritableDirectories()

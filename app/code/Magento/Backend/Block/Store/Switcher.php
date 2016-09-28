@@ -155,11 +155,7 @@ class Switcher extends \Magento\Backend\Block\Template
     {
         $websites = $this->_storeManager->getWebsites();
         if ($websiteIds = $this->getWebsiteIds()) {
-            foreach (array_keys($websites) as $websiteId) {
-                if (!in_array($websiteId, $websiteIds)) {
-                    unset($websites[$websiteId]);
-                }
-            }
+            $websites = array_intersect_key($websites, array_flip($websiteIds));
         }
         return $websites;
     }
