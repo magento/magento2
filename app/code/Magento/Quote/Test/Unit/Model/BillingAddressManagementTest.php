@@ -41,6 +41,11 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     protected $addressRepository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingAssignmentMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -58,6 +63,19 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'addressRepository' => $this->addressRepository
             ]
+        );
+
+        $this->shippingAssignmentMock = $this->getMock(
+            \Magento\Quote\Model\ShippingAddressAssignment::class,
+            ['setAddress'],
+            [],
+            '',
+            false
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'shippingAddressAssignment',
+            $this->shippingAssignmentMock
         );
     }
 
@@ -111,6 +129,10 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('setBillingAddress')->with($address)->willReturnSelf();
         $quoteMock->expects($this->once())->method('setDataChanges')->with(1)->willReturnSelf();
 
+        $this->shippingAssignmentMock->expects($this->once())
+            ->method('setAddress')
+            ->with($quoteMock, $address, $useForShipping);
+
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $this->assertEquals($addressId, $this->model->assign($cartId, $address, $useForShipping));
     }
@@ -150,6 +172,10 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('removeAddress')->with($addressId)->willReturnSelf();
         $quoteMock->expects($this->once())->method('setBillingAddress')->with($address)->willReturnSelf();
         $quoteMock->expects($this->once())->method('setDataChanges')->with(1)->willReturnSelf();
+
+        $this->shippingAssignmentMock->expects($this->once())
+            ->method('setAddress')
+            ->with($quoteMock, $address, false);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
