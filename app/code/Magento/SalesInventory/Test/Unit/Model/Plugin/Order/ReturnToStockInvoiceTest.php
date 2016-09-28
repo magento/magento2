@@ -6,6 +6,7 @@
  */
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
 use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockInvoice;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
@@ -77,6 +78,11 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
      */
     private $extencionAttributesMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|StockConfigurationInterface
+     */
+    private $stockConfigurationMock;
+
     protected function setUp()
     {
         $this->returnProcessorMock = $this->getMockBuilder(ReturnProcessor::class)
@@ -110,12 +116,16 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->returnTOStock = new ReturnToStockInvoice(
             $this->returnProcessorMock,
             $this->creditmemoRepositoryMock,
             $this->orderRepositoryMock,
-            $this->invoiceRepositoryMock
+            $this->invoiceRepositoryMock,
+            $this->stockConfigurationMock
         );
     }
 
@@ -156,6 +166,10 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getOrderId')
             ->willReturn($orderId);
+
+        $this->stockConfigurationMock->expects($this->once())
+            ->method('isAutoReturnEnabled')
+            ->willReturn(false);
 
         $this->assertEquals(
             $this->returnTOStock->afterExecute(

@@ -35,11 +35,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StockConfigurationInterface
-     */
-    private $stockConfigurationMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|StockManagementInterface
      */
     private $stockManagementMock;
@@ -90,9 +85,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -132,7 +124,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->returnProcessor = new ReturnProcessor(
-            $this->stockConfigurationMock,
             $this->stockManagementMock,
             $this->stockIndexerProcessorMock,
             $this->priceIndexerMock,
@@ -151,10 +142,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
         $qty = 1;
         $storeId = 0;
         $webSiteId = 10;
-
-        $this->stockConfigurationMock->expects($this->once())
-            ->method('isAutoReturnEnabled')
-            ->willReturn(false);
 
         $this->creditmemoMock->expects($this->once())
             ->method('getItems')
