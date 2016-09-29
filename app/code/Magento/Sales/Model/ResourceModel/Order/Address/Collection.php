@@ -5,12 +5,15 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Address;
 
+use Magento\Sales\Api\Data\OrderAddressSearchResultInterface;
+use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
+
 /**
  * Flat sales order payment collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements OrderAddressSearchResultInterface
 {
     /**
      * Event prefix

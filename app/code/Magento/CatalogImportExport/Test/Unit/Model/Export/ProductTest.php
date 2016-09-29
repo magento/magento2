@@ -343,9 +343,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->attributeColFactory,
             $this->typeFactory,
             $this->linkTypeProvider,
-            $this->rowCustomizer,
-            $this->metadataPool
+            $this->rowCustomizer
         );
+        $this->setPropertyValue($this->product, 'metadataPool', $this->metadataPool);
 
         $this->object = new StubProduct();
     }
@@ -403,7 +403,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
 
         $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
@@ -434,7 +434,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
 
         $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);

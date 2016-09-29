@@ -6,10 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
-    <button type="button" data-role="all-tocart" title="<?php /* @escapeNotVerified */ echo __('Add All to Cart') ?>" class="action tocart">
-        <span><?php /* @escapeNotVerified */ echo __('Add All to Cart') ?></span>
+    <button type="button" data-role="all-tocart" title="<?php echo $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
+        <span><?php echo $block->escapeHtml(__('Add All to Cart')) ?></span>
     </button>
 <?php endif;?>

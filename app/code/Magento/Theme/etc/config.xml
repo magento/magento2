@@ -64,5 +64,10 @@ Disallow: /*SID=
                 </allowed_resources>
             </media_storage_configuration>
         </system>
+        <dev>
+            <static>
+                <sign>1</sign>
+            </static>
+        </dev>
     </default>
 </config>

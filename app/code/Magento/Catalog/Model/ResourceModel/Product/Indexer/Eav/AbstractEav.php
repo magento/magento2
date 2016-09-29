@@ -263,6 +263,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             'ca.is_filterable_in_search > 0',
             'ca.is_visible_in_advanced_search > 0',
             'ca.is_filterable > 0',
+            // Visibility is attribute that isn't used by search, but required to determine is product should be shown
+            "ea.attribute_code = 'visibility'"
         ];
 
         return implode(' OR ', $conditions);

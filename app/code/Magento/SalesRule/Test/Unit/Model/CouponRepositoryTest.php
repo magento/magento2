@@ -57,6 +57,11 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -92,6 +97,14 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->objectManager->getObject(
             \Magento\SalesRule\Model\CouponRepository::class,
             [
@@ -100,7 +113,8 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
                 'searchResultFactory' => $this->searchResultFactory,
                 'collectionFactory' => $this->collectionFactory,
                 'resourceModel' => $this->resource,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'collectionProcessor' => $this->collectionProcessor,
             ]
         );
     }
@@ -219,9 +233,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $collectionSize = 1;
-        $currentPage = 42;
-        $pageSize = 4;
-
+        $couponMock = $this->getMock(\Magento\SalesRule\Api\Data\CouponInterface::class);
         /**
          * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
          */
@@ -233,37 +245,18 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
-
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with($collectionMock, \Magento\SalesRule\Api\Data\CouponInterface::class);
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
-        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterMock->expects($this->once())->method('getField')->willReturn(
-            'coupon_id'
-        );
-        $filterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $collectionMock->expects($this->once())->method('addFieldToFilter')
-            ->with([0 => 'coupon_id'], [0 => ['eq' => 'value']]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
-        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with('sort_order', 'ASC');
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
-        $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
-        $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
+        $collectionMock->expects($this->once())->method('getItems')->willReturn([$couponMock]);
+        $this->searchResultsMock->expects($this->once())->method('setItems')->with([$couponMock]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
 
         $this->assertEquals($this->searchResultsMock, $this->model->getList($searchCriteriaMock));

@@ -4,16 +4,21 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
+
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @codeCoverageIgnore
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
+    /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
     /**
      * {@inheritdoc}
      */
@@ -22,34 +27,40 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $installer = $setup;
         $installer->startSetup();
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $connection = $installer->getConnection();
+            $connection = $installer->getConnection(self::$connectionName);
             //sales_bestsellers_aggregated_daily
             $connection->dropForeignKey(
-                $installer->getTable('sales_bestsellers_aggregated_daily'),
+                $installer->getTable('sales_bestsellers_aggregated_daily', self::$connectionName),
                 $installer->getFkName(
                     'sales_bestsellers_aggregated_daily',
                     'product_id',
                     'catalog_product_entity',
-                    'entity_id')
+                    'entity_id',
+                    self::$connectionName
+                )
             );
             //sales_bestsellers_aggregated_monthly
             $connection->dropForeignKey(
-                $installer->getTable('sales_bestsellers_aggregated_monthly'),
+                $installer->getTable('sales_bestsellers_aggregated_monthly', self::$connectionName),
                 $installer->getFkName(
                     'sales_bestsellers_aggregated_monthly',
                     'product_id',
                     'catalog_product_entity',
-                    'entity_id')
+                    'entity_id',
+                    self::$connectionName
+                )
             );
 
             //sales_bestsellers_aggregated_yearly
             $connection->dropForeignKey(
-                $installer->getTable('sales_bestsellers_aggregated_yearly'),
+                $installer->getTable('sales_bestsellers_aggregated_yearly', self::$connectionName),
                 $installer->getFkName(
                     'sales_bestsellers_aggregated_yearly',
                     'product_id',
                     'catalog_product_entity',
-                    'entity_id')
+                    'entity_id',
+                    self::$connectionName
+                )
             );
 
             $installer->endSetup();
@@ -66,9 +77,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addColumnBaseGrandTotal(SchemaSetupInterface $installer)
     {
-        $connection = $installer->getConnection();
+        $connection = $installer->getConnection(self::$connectionName);
         $connection->addColumn(
-            $installer->getTable('sales_invoice_grid'),
+            $installer->getTable('sales_invoice_grid', self::$connectionName),
             'base_grand_total',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -86,10 +97,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addIndexBaseGrandTotal(SchemaSetupInterface $installer)
     {
-        $connection = $installer->getConnection();
+        $connection = $installer->getConnection(self::$connectionName);
         $connection->addIndex(
-            $installer->getTable('sales_invoice_grid'),
-            $installer->getIdxName('sales_invoice_grid', ['base_grand_total']),
+            $installer->getTable('sales_invoice_grid', self::$connectionName),
+            $installer->getIdxName('sales_invoice_grid', ['base_grand_total'], '', self::$connectionName),
             ['base_grand_total']
         );
     }
