@@ -4,7 +4,6 @@
  */
 define(
     [
-        'ko',
         'underscore',
         'jquery',
         'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract',
@@ -15,7 +14,6 @@ define(
         'Magento_Customer/js/customer-data'
     ],
     function (
-        ko,
         _,
         $,
         Component,
@@ -27,11 +25,13 @@ define(
     ) {
         'use strict';
 
+        // State of PayPal module initialization
+        var clientInit = false;
+
         return Component.extend({
 
             defaults: {
                 template: 'Magento_Paypal/payment/paypal-express-in-context',
-                clientInit: ko.observable(false),
                 clientConfig: {
 
                     /**
@@ -104,10 +104,10 @@ define(
                     }
                 }, this);
 
-                if (!this.clientInit()) {
+                if (!clientInit) {
                     domObserver.get(selector, function () {
                         paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
-                        this.clientInit(true);
+                        clientInit = true;
                         domObserver.off(selector);
                     }.bind(this));
                 } else {
