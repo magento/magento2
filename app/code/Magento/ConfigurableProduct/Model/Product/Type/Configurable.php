@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
@@ -158,6 +159,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $catalogConfig;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -198,7 +204,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Cache\FrontendInterface $cache
+        \Magento\Framework\Cache\FrontendInterface $cache = null,
+        \Magento\Customer\Model\Session $customerSession = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -209,6 +216,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_scopeConfig = $scopeConfig;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->cache = $cache;
+        $this->customerSession = $customerSession;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -221,6 +229,30 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $productRepository
         );
 
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Framework\Cache\FrontendInterface
+     */
+    private function getCache()
+    {
+        if (null === $this->cache) {
+            $this->cache = ObjectManager::getInstance()->get(\Magento\Framework\Cache\FrontendInterface::class);
+        }
+        return $this->cache;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Customer\Model\Session
+     */
+    private function getCustomerSession()
+    {
+        if (null === $this->customerSession) {
+            $this->customerSession = ObjectManager::getInstance()->get(\Magento\Customer\Model\Session::class);
+        }
+        return $this->customerSession;
     }
 
     /**
@@ -383,8 +415,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         );
         if (!$product->hasData($this->_configurableAttributes)) {
             $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-            $cacheId =  __CLASS__ . $product->getData($metadata->getLinkField()) . '_' . $product->getStoreId();
-            $configurableAttributes = $this->cache->load($cacheId);
+            $productId = $product->getData($metadata->getLinkField());
+            $cacheId =  __CLASS__ . $productId . '_' . $product->getStoreId();
+            $configurableAttributes = $this->getCache()->load($cacheId);
             $configurableAttributes = $this->hasCacheData($configurableAttributes);
             if ($configurableAttributes) {
                 $configurableAttributes->setProductFilter($product);
@@ -392,10 +425,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $configurableAttributes = $this->getConfigurableAttributeCollection($product);
                 $this->extensionAttributesJoinProcessor->process($configurableAttributes);
                 $configurableAttributes->orderByPosition()->load();
-                $this->cache->save(
+                $this->getCache()->save(
                     serialize($configurableAttributes),
                     $cacheId,
-                    $product->getIdentities()
+                    array_merge($product->getIdentities(), [self::TYPE_CODE . '_' . $productId])
                 );
             }
             $product->setData($this->_configurableAttributes, $configurableAttributes);
@@ -410,8 +443,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected function hasCacheData($configurableAttributes)
     {
-        $configurableAttributes = unserialize($configurableAttributes);
-        if ($configurableAttributes && count($configurableAttributes)) {
+        $configurableAttributes = $configurableAttributes ?: unserialize($configurableAttributes);
+        if (is_array($configurableAttributes) && count($configurableAttributes)) {
             foreach ($configurableAttributes as $attribute) {
                 /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
                 if ($attribute->getData('options')) {
@@ -430,7 +463,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function resetConfigurableAttributes($product)
     {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $productId = $product->getData($metadata->getLinkField());
         $product->unsetData($this->_configurableAttributes);
+        $cacheId =  __CLASS__ . $productId . '_' . $product->getStoreId();
+        $this->getCache()->remove($cacheId);
+        $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::TYPE_CODE . '_' . $productId]);
+
         return $this;
     }
 
@@ -481,6 +520,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Retrieve subproducts identifiers
      *
+     * @deprecated
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
@@ -510,44 +550,78 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_usedProducts)) {
-            $usedProducts = [];
-            $collection = $this->getUsedProductCollection($product)
-                ->setFlag('has_stock_status_filter', true)
-                ->addAttributeToSelect('name')
-                ->addAttributeToSelect('price')
-                ->addAttributeToSelect('weight')
-                ->addAttributeToSelect('image')
-                ->addAttributeToSelect('thumbnail')
-                ->addAttributeToSelect('status')
-                ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
-                ->addFilterByRequiredOptions()
-                ->setStoreId($product->getStoreId());
+            $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $productId = $product->getData($metadata->getLinkField());
 
-            if (is_array($requiredAttributeIds)) {
-                foreach ($requiredAttributeIds as $attributeId) {
-                    $attribute = $this->getAttributeById($attributeId, $product);
-                    if (!is_null($attribute)) {
-                        $collection->addAttributeToFilter($attribute->getAttributeCode(), ['notnull' => 1]);
-                    }
+            $key = md5(
+                implode(
+                    '_',
+                    [
+                        __METHOD__,
+                        $productId,
+                        $product->getStoreId(),
+                        $this->getCustomerSession()->getCustomerGroupId(),
+                        json_encode($requiredAttributeIds)
+                    ]
+                )
+            );
+            $collection = $this->getUsedProductCollection($product);
+            $data = unserialize($this->getCache()->load($key));
+            if (!empty($data)) {
+                $usedProducts = [];
+                foreach ($data as $item) {
+                    $productItem = $collection->getNewEmptyItem()->setData($item);
+                    $usedProducts[] = $productItem;
                 }
-            }
+            } else {
+                $collection
+                    ->setFlag('has_stock_status_filter', true)
+                    ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
+                    ->addFilterByRequiredOptions()
+                    ->setStoreId($product->getStoreId());
 
-            foreach ($collection as $item) {
-                /** @var \Magento\Catalog\Model\Product $item */
-                $this->getGalleryReadHandler()->execute($item);
-                $usedProducts[] = $item;
-            }
+                $requiredAttributes = ['name', 'price', 'weight', 'image', 'thumbnail', 'status', 'media_gallery'];
+                foreach ($requiredAttributes as $attributeCode) {
+                    $collection->addAttributeToSelect($attributeCode);
+                }
+                foreach ($this->getUsedProductAttributes($product) as $usedProductAttribute) {
+                    $collection->addAttributeToSelect($usedProductAttribute->getAttributeCode());
+                }
+                $collection->addMediaGalleryData();
+                $collection->addTierPriceData();
+                $usedProducts = $collection->getItems();
 
+                $this->getCache()->save(
+                    serialize(array_map(
+                        function ($item) {
+                            return $item->getData();
+                        },
+                        $usedProducts
+                    )),
+                    $key,
+                    array_merge(
+                        $product->getIdentities(),
+                        [
+                            \Magento\Catalog\Model\Category::CACHE_TAG,
+                            \Magento\Catalog\Model\Product::CACHE_TAG,
+                            'price',
+                            self::TYPE_CODE . '_' . $productId
+                        ]
+                    )
+                );
+            }
             $product->setData($this->_usedProducts, $usedProducts);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
-        return $product->getData($this->_usedProducts);
+        $usedProducts =  $product->getData($this->_usedProducts);
+        return $usedProducts;
     }
 
     /**
      * Retrieve GalleryReadHandler
      *
      * @return GalleryReadHandler
+     * @deprecated
      */
     protected function getGalleryReadHandler()
     {
@@ -587,6 +661,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function beforeSave($product)
     {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $productId = $product->getData($metadata->getLinkField());
+
+        $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::TYPE_CODE . '_' . $productId]);
         parent::beforeSave($product);
 
         $product->canAffectOptions(false);
@@ -706,6 +784,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (is_array($productIds)) {
             $this->typeConfigurableFactory->create()->saveProducts($product, $productIds);
         }
+        $this->resetConfigurableAttributes($product);
+
+        return $this;
     }
 
     /**
@@ -772,7 +853,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 return $this->productRepository->getById($productLinkFieldId);
             }
 
-            foreach ($this->getUsedProducts($product) as $productObject) {
+            foreach ($productCollection as $productObject) {
                 $checkRes = true;
                 foreach ($attributesInfo as $attributeId => $attributeValue) {
                     $code = $this->getAttributeById($attributeId, $product)->getAttributeCode();
@@ -817,9 +898,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $value = $value->getSource()->getOptionText($attributeValue);
                     } else {
                         $value = '';
+                        $attributeValue = '';
                     }
 
-                    $attributes[] = ['label' => $label, 'value' => $value];
+                    $attributes[] = [
+                        'label' => $label,
+                        'value' => $value,
+                        'option_id' => $attributeId,
+                        'option_value' => $attributeValue
+                        ];
                 }
             }
         }
@@ -1150,11 +1237,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  int $attributeId
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAttributeById($attributeId, $product)
     {
-        $attribute = parent::getAttributeById($attributeId, $product);
-        return $attribute ?: $this->_eavAttributeFactory->create()->load($attributeId);
+        return $this->_eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeId);
     }
 
     /**

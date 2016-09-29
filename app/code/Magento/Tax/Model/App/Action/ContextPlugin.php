@@ -6,9 +6,6 @@
 
 namespace Magento\Tax\Model\App\Action;
 
-use Magento\Customer\Model\Context;
-use Magento\Customer\Model\GroupManagement;
-
 /**
  * Class ContextPlugin
  */
@@ -74,21 +71,19 @@ class ContextPlugin
 
     /**
      * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
+    public function beforeDispatch(
         \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
         if (!$this->customerSession->isLoggedIn() ||
             !$this->moduleManager->isEnabled('Magento_PageCache') ||
             !$this->cacheConfig->isEnabled() ||
             !$this->taxHelper->isCatalogPriceDisplayAffectedByTax()) {
-            return $proceed($request);
+            return;
         }
 
         $defaultBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
@@ -107,6 +102,5 @@ class ContextPlugin
                 0
             );
         }
-        return $proceed($request);
     }
 }

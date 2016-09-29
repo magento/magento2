@@ -25,6 +25,11 @@ class RiskDataHandler implements HandlerInterface
     const RISK_DATA_DECISION = 'riskDataDecision';
 
     /**
+     * Risk data Review status
+     */
+    private static $statusReview = 'Review';
+
+    /**
      * @var SubjectReader
      */
     private $subjectReader;
@@ -62,5 +67,10 @@ class RiskDataHandler implements HandlerInterface
 
         $payment->setAdditionalInformation(self::RISK_DATA_ID, $transaction->riskData->id);
         $payment->setAdditionalInformation(self::RISK_DATA_DECISION, $transaction->riskData->decision);
+
+        // mark payment as fraud
+        if ($transaction->riskData->decision === self::$statusReview) {
+            $payment->setIsFraudDetected(true);
+        }
     }
 }

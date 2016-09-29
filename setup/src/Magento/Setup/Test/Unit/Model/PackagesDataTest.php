@@ -13,6 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests Magento\Setup\Model\PackagesData
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PackagesDataTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,44 +22,9 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
      */
     private $packagesData;
 
-    /**
-     * @var ComposerInformation|MockObject
-     */
-    private $composerInformation;
-
     public function setUp()
     {
-        $this->composerInformation = $this->getMock(ComposerInformation::class, [], [], '', false);
-        $this->composerInformation->expects($this->any())->method('getInstalledMagentoPackages')->willReturn(
-            [
-                'magento/package-1' => [
-                    'name' => 'magento/package-1',
-                    'type' => 'magento2-module',
-                    'version'=> '1.0.0'
-                ],
-                'magento/package-2' => [
-                    'name' => 'magento/package-2',
-                    'type' => 'magento2-module',
-                    'version'=> '1.0.1'
-                ]
-            ]
-        );
-
-        $this->composerInformation->expects($this->any())->method('getRootRepositories')
-            ->willReturn(['repo1', 'repo2']);
-        $this->composerInformation->expects($this->any())->method('getPackagesTypes')
-            ->willReturn(['magento2-module']);
-        $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
-        $rootPackage->expects($this->any())
-            ->method('getRequires')
-            ->willReturn([
-                'magento/package-1' => '1.0.0',
-                'magento/package-2' => '1.0.1'
-            ]);
-        $this->composerInformation
-            ->expects($this->any())
-            ->method('getRootPackage')
-            ->willReturn($rootPackage);
+        $composerInformation = $this->getComposerInformation();
         $timeZoneProvider = $this->getMock(\Magento\Setup\Model\DateTime\TimeZoneProvider::class, [], [], '', false);
         $timeZone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
         $timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
@@ -110,17 +76,67 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
                 . '}, "magento\/package-3":{'
                 . '"1.0.0":{"name":"magento\/package-3","version":"1.0.0","vendor":"test","type":"magento2-module"},'
                 . '"1.0.1":{"name":"magento\/package-3","version":"1.0.1","vendor":"test","type":"magento2-module"},'
-                . '"1.0.2":{"name":"magento\/package-3","version":"1.0.2","vendor":"test","type":"magento2-module"}'
+                . '"1.0.2":{"name":"magento\/package-3","version":"1.0.2","vendor":"test","type":"magento2-module",'
+                . '"extra":{"x-magento-ext-title":"Package 3 title", "x-magento-ext-type":"Extension"}}'
                 . '}}}'
             );
 
+        $typeMapper = $this->getMockBuilder(\Magento\Setup\Model\Grid\TypeMapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeMapper->expects(static::any())
+            ->method('map')
+            ->willReturnMap([
+                [ComposerInformation::MODULE_PACKAGE_TYPE, \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE],
+            ]);
+
         $this->packagesData = new PackagesData(
-            $this->composerInformation,
+            $composerInformation,
             $timeZoneProvider,
             $packagesAuth,
             $filesystem,
-            $objectManagerProvider
+            $objectManagerProvider,
+            $typeMapper
         );
+    }
+
+    /**
+     * @return ComposerInformation|MockObject
+     */
+    private function getComposerInformation()
+    {
+        $composerInformation = $this->getMock(ComposerInformation::class, [], [], '', false);
+        $composerInformation->expects($this->any())->method('getInstalledMagentoPackages')->willReturn(
+            [
+                'magento/package-1' => [
+                    'name' => 'magento/package-1',
+                    'type' => 'magento2-module',
+                    'version'=> '1.0.0'
+                ],
+                'magento/package-2' => [
+                    'name' => 'magento/package-2',
+                    'type' => 'magento2-module',
+                    'version'=> '1.0.1'
+                ]
+            ]
+        );
+
+        $composerInformation->expects($this->any())->method('getRootRepositories')
+            ->willReturn(['repo1', 'repo2']);
+        $composerInformation->expects($this->any())->method('getPackagesTypes')
+            ->willReturn(['magento2-module']);
+        $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
+        $rootPackage->expects($this->any())
+            ->method('getRequires')
+            ->willReturn([
+                'magento/package-1' => '1.0.0',
+                'magento/package-2' => '1.0.1'
+            ]);
+        $composerInformation->expects($this->any())
+            ->method('getRootPackage')
+            ->willReturn($rootPackage);
+
+        return $composerInformation;
     }
 
     public function testSyncPackagesData()
@@ -161,6 +177,20 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         static::assertEquals(
             ['magento/package-3' => 'magento/package-1'],
             $this->packagesData->getMetaPackagesMap()
+        );
+    }
+
+    public function testAddPackageExtraInfo()
+    {
+        static::assertEquals(
+            [
+                'package_title' => 'Package 3 title',
+                'package_type' => 'Extension',
+                'name' => 'magento/package-3',
+                'version' => '1.0.2',
+                'package_link' => ''
+            ],
+            $this->packagesData->addPackageExtraInfo(['name' => 'magento/package-3', 'version' => '1.0.2'])
         );
     }
 }

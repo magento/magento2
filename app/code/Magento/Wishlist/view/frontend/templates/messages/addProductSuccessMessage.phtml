@@ -7,4 +7,5 @@
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 
-<?php /* @escapeVerified */ echo __('%1 has been added to your Wish List.', $block->escapeHtml($block->getData('product_name'))) ?> <?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getData('referer')));
+<?php
+echo $block->escapeHtml(__('%1 has been added to your Wish List.', $block->getData('product_name'))) ?> <?php echo $block->escapeHtml(__('Click <a href="%1">here</a> to continue shopping.', $block->getData('referer')), ['a']);

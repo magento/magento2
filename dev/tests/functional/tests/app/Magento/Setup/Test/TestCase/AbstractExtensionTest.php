@@ -79,14 +79,34 @@ abstract class AbstractExtensionTest extends Injectable
         AssertSuccessfulReadinessCheck $assertReadiness,
         BackupOptions $backupOptions
     ) {
+        $this->readinessCheck($assertReadiness);
+        $this->setupWizard->getReadiness()->clickNext();
+        $this->backup($backupOptions);
+        $this->setupWizard->getCreateBackup()->clickNext();
+    }
+
+    /**
+     * Perform Readiness check.
+     *
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     */
+    protected function readinessCheck(AssertSuccessfulReadinessCheck $assertReadiness)
+    {
         // Readiness Check
         $this->setupWizard->getReadiness()->clickReadinessCheck();
-        $assertReadiness->processAssert($this->setupWizard);
-        $this->setupWizard->getReadiness()->clickNext();
 
+        $assertReadiness->processAssert($this->setupWizard);
+    }
+
+    /**
+     * Perform Backup.
+     *
+     * @param BackupOptions $backupOptions
+     */
+    protected function backup(BackupOptions $backupOptions)
+    {
         // Create Backup page
         $this->setupWizard->getCreateBackup()->fill($backupOptions);
-        $this->setupWizard->getCreateBackup()->clickNext();
     }
 
     /**
@@ -142,5 +162,49 @@ abstract class AbstractExtensionTest extends Injectable
         if ($this->setupWizard->getExtensionsGrid()->findExtensionOnGrid($extension)) {
             $this->fail('Extension is not uninstalled!');
         }
+    }
+
+    /**
+     * @param Extension $extension
+     * @param BackupOptions $backupOptions
+     * @param AssertFindExtensionOnGrid $assertFindExtensionOnGrid
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck
+     * @param AssertSuccessMessage $assertSuccessMessage
+     */
+    protected function installExtension(
+        Extension $extension,
+        BackupOptions $backupOptions,
+        AssertFindExtensionOnGrid $assertFindExtensionOnGrid,
+        AssertSuccessfulReadinessCheck $assertReadiness,
+        AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck,
+        AssertSuccessMessage $assertSuccessMessage
+    ) {
+        // Open Extension Grid with extensions to install
+        $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
+        $this->setupWizard->getExtensionsGrid()->clickInstallButton();
+
+        // Find extension on grid and install
+        $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsInstallGrid(), $extension);
+        $this->setupWizard->getExtensionsInstallGrid()->install($extension);
+
+        $this->readinessCheckAndBackup($assertReadiness, $backupOptions);
+
+        // Install Extension
+        $assertExtensionAndVersionCheck->processAssert(
+            $this->setupWizard,
+            $extension,
+            AssertExtensionAndVersionCheck::TYPE_INSTALL
+        );
+        $this->setupWizard->getUpdaterExtension()->clickStartButton();
+        $assertSuccessMessage->processAssert(
+            $this->setupWizard,
+            $extension,
+            AssertSuccessMessage::TYPE_INSTALL
+        );
+
+        // Open Web Setup Wizard
+        $this->setupWizard->open();
     }
 }

@@ -25,16 +25,18 @@ class Form extends \Magento\Payment\Block\Form\Container
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param array $data
+     * @param array $additionalChecks
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
-        array $data = []
+        array $data = [],
+        array $additionalChecks = []
     ) {
         $this->_sessionQuote = $sessionQuote;
-        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data, $additionalChecks);
     }
 
     /**

@@ -124,7 +124,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(3, count($tierPriceCollection));
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
-                $this->assertContains($tierPrice->getData(), $this->expectedTierPrice[$sku]);
+                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getPercentageValue());
+                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
+                $tierPriceData = $tierPrice->getData();
+                unset($tierPriceData['extension_attributes']);
+                $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
             }
         }
     }
@@ -240,7 +244,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(3, count($tierPriceCollection));
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
-                $this->assertContains($tierPrice->getData(), $this->expectedTierPrice[$sku]);
+                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getPercentageValue());
+                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
+                $tierPriceData = $tierPrice->getData();
+                unset($tierPriceData['extension_attributes']);
+                $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
             }
         }
     }
