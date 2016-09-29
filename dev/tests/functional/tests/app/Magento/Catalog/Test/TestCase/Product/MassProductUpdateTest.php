@@ -62,11 +62,15 @@ class MassProductUpdateTest extends Injectable
     protected $configData;
 
     /**
+     * Factory for Test Steps.
+     *
      * @var TestStepFactory
      */
     private $testStepFactory;
 
     /**
+     * Factory for Fixtures.
+     *
      * @var FixtureFactory
      */
     private $fixtureFactory;
@@ -78,6 +82,7 @@ class MassProductUpdateTest extends Injectable
      * @param CatalogProductActionAttributeEdit $attributeMassActionPage
      * @param TestStepFactory $testStepFactory
      * @param FixtureFactory $fixtureFactory
+     * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
