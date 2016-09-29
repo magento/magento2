@@ -490,7 +490,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '4-1-radio' => 600.234,
             '4-2-radio' => 40000.00
         ];
-        foreach($options as $option) {
+        foreach ($options as $option) {
             foreach ($option->getValues() as $value) {
                 $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
             }
