@@ -257,7 +257,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $params = [
             \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
             'confirmation' => true,
-            'confirmationMessage' => 'Are you sure you want to remove all items from your Compare Products list?',
+            'confirmationMessage' => __('Are you sure you want to remove all items from your Compare Products list?'),
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }

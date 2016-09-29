@@ -88,7 +88,7 @@ class Sidebar extends ListCompare
         $this->_rootElement->find($this->clearAll)->click();
         $modalElement = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $modalElement]);
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $modalElement]);
         $modal->acceptAlert();
     }
 }

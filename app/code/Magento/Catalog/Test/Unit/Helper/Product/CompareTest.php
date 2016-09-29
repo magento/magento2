@@ -160,7 +160,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $postParams = [
             Action::PARAM_NAME_URL_ENCODED => '',
             'confirmation' => true,
-            'confirmationMessage' => 'Are you sure you want to remove all items from your Compare Products list?',
+            'confirmationMessage' => __('Are you sure you want to remove all items from your Compare Products list?'),
         ];
 
         //Verification
