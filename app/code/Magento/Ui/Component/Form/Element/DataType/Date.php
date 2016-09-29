@@ -32,8 +32,6 @@ class Date extends AbstractDataType
     protected $wrappedComponent;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param TimezoneInterface $localeDate
      * @param ResolverInterface $localeResolver
@@ -69,6 +67,11 @@ class Date extends AbstractDataType
                 )
             ))->getOffset();
         }
+
+        // Set date format pattern by current locale
+        $localeDateFormat = $this->localeDate->getDateFormat();
+        $config['options']['dateFormat'] = $localeDateFormat;
+        $config['outputDateFormat'] = $localeDateFormat;
 
         $this->setData('config', $config);
 
