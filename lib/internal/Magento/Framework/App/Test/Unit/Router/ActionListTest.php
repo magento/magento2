@@ -53,7 +53,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->objectManager->restoreObjectManager();
     }
