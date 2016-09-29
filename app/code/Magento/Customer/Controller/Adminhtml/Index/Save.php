@@ -244,10 +244,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
 
                 $isSubscribed = null;
                 if ($this->_authorization->isAllowed(null)) {
-                    $isSubscribed = $this->getRequest()->getPost('subscription');
+                    $isSubscribed = (bool)$this->getRequest()->getPost('subscription');
                 }
                 if ($isSubscribed !== null) {
-                    if ($isSubscribed !== 'false') {
+                    if ($isSubscribed !== false) {
                         $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
                     } else {
                         $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
