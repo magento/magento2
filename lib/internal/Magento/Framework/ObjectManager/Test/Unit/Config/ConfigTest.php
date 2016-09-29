@@ -5,10 +5,19 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
+use Magento\Framework\Json\JsonInterface;
 use \Magento\Framework\ObjectManager\Config\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManagerHelper;
+
+    protected function setUp()
+    {
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    }
+
     public function testGetArgumentsEmpty()
     {
         $config = new Config();
@@ -42,6 +51,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->once())->method('get')->will($this->returnValue(false));
 
         $config = new Config(null, $definitions);
+        $jsonMock = $this->getMock(JsonInterface::class);
+        $jsonMock->method('encode')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data, true);
+            });
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $config,
+            'json',
+            $jsonMock
+        );
         $config->setCache($cache);
 
         $this->_assertFooTypeArguments($config);

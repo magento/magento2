@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
@@ -73,6 +74,11 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * @var array
      */
     protected $_mergedArguments;
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * @param RelationsInterface $relations
@@ -267,10 +273,12 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
         if ($this->_cache) {
             if (!$this->_currentCacheKey) {
                 $this->_currentCacheKey = md5(
-                    serialize([$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes])
+                    $this->getJson()->encode(
+                        [$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes]
+                    )
                 );
             }
-            $key = md5($this->_currentCacheKey . serialize($configuration));
+            $key = md5($this->_currentCacheKey . $this->getJson()->encode($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
                 list(
@@ -322,5 +330,20 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     public function getPreferences()
     {
         return $this->_preferences;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }

@@ -6,6 +6,7 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
+use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
@@ -25,6 +26,11 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      * @var array
      */
     private $preferences;
+
+    /**
+     * @var JsonInterface
+     */
+    private $json;
 
     /**
      * @param array $data
@@ -72,7 +78,7 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         if (isset($this->arguments[$type])) {
             if (is_string($this->arguments[$type])) {
-                $this->arguments[$type] = unserialize($this->arguments[$type]);
+                $this->arguments[$type] = $this->getJson()->decode($this->arguments[$type]);
             }
             return $this->arguments[$type];
         } else {
@@ -152,5 +158,20 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     public function getPreferences()
     {
         return $this->preferences;
+    }
+
+    /**
+     * Get json encoder/decoder
+     *
+     * @return JsonInterface
+     * @deprecated
+     */
+    private function getJson()
+    {
+        if ($this->json === null) {
+            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(JsonInterface::class);
+        }
+        return $this->json;
     }
 }
