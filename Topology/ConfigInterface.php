@@ -18,11 +18,12 @@ interface ConfigInterface
      * Get exchange configuration by exchange name.
      *
      * @param string $name
+     * @param string $connection
      * @return ExchangeConfigItemInterface
      * @throws LocalizedException
      * @throws \LogicException
      */
-    public function getExchange($name);
+    public function getExchange($name, $connection);
 
     /**
      * Get list of all exchanges declared in the system.

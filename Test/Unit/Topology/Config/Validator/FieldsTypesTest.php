@@ -162,30 +162,6 @@ class FieldsTypesTest extends \PHPUnit_Framework_TestCase
                 ],
                 "Type of 'connection' field specified in configuration of 'ex01' exchange is invalid. Given 'boolean', 'string' was expected."
             ],
-            'invalid connection' => [
-                [
-                    'ex01' => [
-                        'name' => 'ex01',
-                        'type' => 'topic',
-                        'connection' => 'test',
-                        'durable' => true,
-                        'internal' => false,
-                        'autoDelete' => false,
-                        'arguments' => ['some' => 'argument'],
-                        'bindings' => [
-                            'bind01' => [
-                                'id' => 'bind01',
-                                'topic' => 'bind01',
-                                'destinationType' => 'queue',
-                                'destination' => 'bind01',
-                                'disabled' => false,
-                                'arguments' => ['some' => 'arguments'],
-                            ],
-                        ],
-                    ],
-                ],
-                "Value of 'connection' field specified in configuration of 'ex01' exchange is invalid. Given 'test', 'db or amqp' was expected."
-            ],
             'type durable' => [
                 [
                     'ex01' => [

@@ -7,12 +7,15 @@ namespace Magento\Framework\MessageQueue\Code\Generator;
 
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
-use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
+use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 
 /**
  * Code generator for remote services.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -30,9 +33,9 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     private $serviceMethodsMap;
 
     /**
-     * @var RemoteServiceReader
+     * @var ReflectionGenerator
      */
-    private $communicationRemoteServiceReader;
+    private $reflectionGenerator;
 
     /**
      * Initialize dependencies.
@@ -45,6 +48,8 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * @param Io $ioObject
      * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CommunicationConfig $communicationConfig,
@@ -58,7 +63,6 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     ) {
         $this->communicationConfig = $communicationConfig;
         $this->serviceMethodsMap = $serviceMethodsMap;
-        $this->communicationRemoteServiceReader = $communicationRemoteServiceReader;
         parent::__construct(
             $sourceClassName,
             $resultClassName,
@@ -148,10 +152,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                 $methodParameters[] = $parameter;
                 $topicParameters[] = "'{$parameterName}' => \${$parameterName}";
             }
-            $topicName = $this->communicationRemoteServiceReader->generateTopicName(
-                $this->getSourceClassName(),
-                $methodName
-            );
+            $topicName = $this->getReflectionGenerator()->generateTopicName($this->getSourceClassName(), $methodName);
             $topicConfig = $this->communicationConfig->getTopic($topicName);
             $methodBody = $topicConfig[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? 'return ' : '';
             $methodBody .= "\$this->publisher->publish(\n"
@@ -215,5 +216,21 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             $result = false;
         }
         return $result;
+    }
+
+    /**
+     * Get reflection generator.
+     *
+     * @return ReflectionGenerator
+     *
+     * @deprecated
+     */
+    private function getReflectionGenerator()
+    {
+        if ($this->reflectionGenerator === null) {
+            $this->reflectionGenerator = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ReflectionGenerator::class);
+        }
+        return $this->reflectionGenerator;
     }
 }

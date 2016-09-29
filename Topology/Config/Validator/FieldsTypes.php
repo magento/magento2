@@ -35,7 +35,7 @@ class FieldsTypes implements ValidatorInterface
         $fields = [
             'name' => ['type' => 'string', 'value' => null],
             'type' => ['type' => 'string', 'value' => ['topic']],
-            'connection' => ['type' => 'string', 'value' => ['db', 'amqp']],
+            'connection' => ['type' => 'string', 'value' => null],
             'durable' => ['type' => 'boolean', 'value' => null],
             'autoDelete' => ['type' => 'boolean', 'value' => null],
             'internal' => ['type' => 'boolean', 'value' => null],
