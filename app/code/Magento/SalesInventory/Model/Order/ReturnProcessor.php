@@ -82,12 +82,14 @@ class ReturnProcessor
      * @param CreditmemoInterface $creditmemo
      * @param OrderInterface $order
      * @param array $returnToStockItems
+     * @param bool $isAutoReturn
      * @return void
      */
     public function execute(
         CreditmemoInterface $creditmemo,
         OrderInterface $order,
-        array $returnToStockItems = []
+        array $returnToStockItems = [],
+        $isAutoReturn = False
     ) {
         $itemsToUpdate = [];
         foreach ($creditmemo->getItems() as $item) {
@@ -95,7 +97,7 @@ class ReturnProcessor
             $productId = $item->getProductId();
             $orderItem = $this->orderItemRepository->get($item->getOrderItemId());
             $parentItemId = $orderItem->getParentItemId();
-            if ($this->canReturnItem($item, $qty, $parentItemId, $returnToStockItems)) {
+            if ($isAutoReturn || $this->canReturnItem($item, $qty, $parentItemId, $returnToStockItems)) {
                 $parentItem = $parentItemId ? $this->getItemByOrderId($creditmemo, $parentItemId) : false;
                 $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
                 if (isset($itemsToUpdate[$productId])) {

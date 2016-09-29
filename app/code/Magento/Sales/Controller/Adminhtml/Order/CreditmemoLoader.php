@@ -217,9 +217,9 @@ class CreditmemoLoader extends DataObject
             foreach ($creditmemo->getAllItems() as $creditmemoItem) {
                 $orderItem = $creditmemoItem->getOrderItem();
                 $parentId = $orderItem->getParentItemId();
-                if (isset($backToStock[$orderItem->getId()])) {
+                if ($parentId && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
                     $creditmemoItem->setBackToStock(true);
-                } elseif ($orderItem->getParentItem() && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
+                } elseif (isset($backToStock[$orderItem->getId()])) {
                     $creditmemoItem->setBackToStock(true);
                 } elseif (empty($savedData)) {
                     $creditmemoItem->setBackToStock(
