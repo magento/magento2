@@ -18,8 +18,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     const SDK_URL = 'https://js.braintreegateway.com/v2/braintree.js';
-
     const CLIENT_TOKEN = 'token';
+    const MERCHANT_ACCOUNT_ID = '245345';
 
     /**
      * @var Config|MockObject
@@ -76,11 +76,17 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
+     * @dataProvider getClientTokenDataProvider
      */
-    public function testGetClientToken()
+    public function testGetClientToken($merchantAccountId, $params)
     {
+        $this->config->expects(static::once())
+            ->method('getMerchantAccountId')
+            ->willReturn($merchantAccountId);
+
         $this->braintreeAdapter->expects(static::once())
             ->method('generate')
+            ->with($params)
             ->willReturn(self::CLIENT_TOKEN);
 
         static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
@@ -137,6 +143,23 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getClientTokenDataProvider()
+    {
+        return [
+            [
+                'merchantAccountId' => '',
+                'params' => []
+            ],
+            [
+                'merchantAccountId' => self::MERCHANT_ACCOUNT_ID,
+                'params' => ['merchantAccountId' => self::MERCHANT_ACCOUNT_ID]
             ]
         ];
     }

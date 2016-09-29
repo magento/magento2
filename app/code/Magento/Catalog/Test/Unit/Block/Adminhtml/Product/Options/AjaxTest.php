@@ -53,7 +53,7 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $eventManager->expects($this->once())->method('dispatch')->will($this->returnValue(true));
+        $eventManager->expects($this->exactly(2))->method('dispatch')->will($this->returnValue(true));
 
         $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['getValue'])

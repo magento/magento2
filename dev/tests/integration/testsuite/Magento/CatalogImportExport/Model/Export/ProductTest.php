@@ -83,6 +83,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Option 4 ""!@#$%^&*', $exportData);
         $this->assertContains('test_option_code_2', $exportData);
         $this->assertContains('max_characters=10', $exportData);
+        $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
     }
 
     /**

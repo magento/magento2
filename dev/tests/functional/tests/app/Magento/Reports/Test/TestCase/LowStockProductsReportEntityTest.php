@@ -18,14 +18,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Open Reports > Low Stock.
  * 3. Perform appropriate assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-27193
  */
 class LowStockProductsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

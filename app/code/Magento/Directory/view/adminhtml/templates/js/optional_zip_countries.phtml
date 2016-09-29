@@ -5,14 +5,12 @@
  */
 
 // @codingStandardsIgnoreFile
-?>
-
-<?php
 /**
  * JS block for including Countries with Optional Zip
  *
  * @see \Magento\Backend\Block\Template
  */
+
 ?>
 <script>
 require([
@@ -21,7 +19,7 @@ require([
 ], function(){
 
 //<![CDATA[
-optionalZipCountries = <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
+optionalZipCountries = <?php /* @noEscape */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
 
 function onAddressCountryChanged (countryElement) {
     var zipElementId = countryElement.id.replace(/country_id/, 'postcode');

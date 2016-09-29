@@ -36,5 +36,5 @@ class ProductGrid extends Grid
      *
      * @var string
      */
-    protected $selectItem = 'tbody tr .col-in_category';
+    protected $selectItem = 'tbody tr .col-in_category input';
 }

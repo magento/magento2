@@ -100,7 +100,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             40,
             ['nullable' => true, 'default' => null],
-            'Prefix'
+            'Name Prefix'
         )->addColumn(
             'firstname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -124,7 +124,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             40,
             ['nullable' => true, 'default' => null],
-            'Suffix'
+            'Name Suffix'
         )->addColumn(
             'dob',
             \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
@@ -308,7 +308,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             40,
             ['nullable' => true, 'default' => null],
-            'Prefix'
+            'Name Prefix'
         )->addColumn(
             'region',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -332,7 +332,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             40,
             ['nullable' => true, 'default' => null],
-            'Suffix'
+            'Name Suffix'
         )->addColumn(
             'telephone',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,

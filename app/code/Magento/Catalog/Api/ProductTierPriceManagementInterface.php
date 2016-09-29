@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @deprecated use ScopedProductTierPriceManagementInterface instead
  */
 interface ProductTierPriceManagementInterface
 {
