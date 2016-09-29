@@ -89,7 +89,7 @@ class NotificationActionsTest extends \PHPUnit_Framework_TestCase
                 'actions' => [
                     'details' => [
                         'href' => '#',
-                        'label' => __('View Operation Details'),
+                        'label' => __('View Details'),
                         'callback' => [
                             [
                                 'provider' => 'notification_area.notification_area.modalContainer.modal.insertBulk',
@@ -120,7 +120,7 @@ class NotificationActionsTest extends \PHPUnit_Framework_TestCase
                 'actions' => [
                     'details' => [
                         'href' => '#',
-                        'label' => __('View Operation Details'),
+                        'label' => __('View Details'),
                         'callback' => [
                             [
                                 'provider' => 'notification_area.notification_area.modalContainer.modal.insertBulk',

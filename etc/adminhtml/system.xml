@@ -10,9 +10,9 @@
         <section id="system">
             <tab>advanced</tab>
             <group id="bulk" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="600">
-                <label>Bulk Operations</label>
+                <label>Bulk Actions</label>
                 <field id="lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Bulk Lifetime, Days</label>
+                    <label>Days Saved in Log</label>
                 </field>
             </group>
         </section>

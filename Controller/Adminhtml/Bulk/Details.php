@@ -56,7 +56,7 @@ class Details extends \Magento\Backend\App\Action
         $resultPage = $this->resultPageFactory->create();
         $resultPage->initLayout();
         $this->_setActiveMenu('Magento_Logging::system_magento_logging_events');
-        $resultPage->getConfig()->getTitle()->prepend(__('Operation Message #' . $bulkId));
+        $resultPage->getConfig()->getTitle()->prepend(__('Action Details - #' . $bulkId));
 
         return $resultPage;
     }

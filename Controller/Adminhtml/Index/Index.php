@@ -44,7 +44,7 @@ class Index extends \Magento\Backend\App\Action
         $resultPage = $this->resultPageFactory->create();
         $resultPage->initLayout();
         $this->_setActiveMenu('Magento_Logging::system_magento_logging_events');
-        $resultPage->getConfig()->getTitle()->prepend(__('Your Bulk Operations Log'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Bulk Actions Log'));
         return $resultPage;
     }
 }

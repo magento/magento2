@@ -12,7 +12,7 @@
                 <item name="component" xsi:type="string">Magento_AsynchronousOperations/js/grid/listing</item>
                 <item name="template" xsi:type="string">Magento_AsynchronousOperations/grid/listing</item>
                 <item name="link" xsi:type="url" path="bulk/index"/>
-                <item name="linkText" xsi:type="string" translate="true">Your Bulk Operations Log</item>
+                <item name="linkText" xsi:type="string" translate="true">Bulk Actions Log</item>
                 <item name="dismissAllText" xsi:type="string" translate="true">Dismiss All Completed Tasks</item>
                 <item name="dismissUrl" xsi:type="url" path="bulk/notification/dismiss"/>
             </item>
@@ -41,7 +41,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="ns" xsi:type="string">bulk_details_form_modal</item>
-                        <item name="titlePrefix" xsi:type="string" translate="true">Operation Message #</item>
+                        <item name="titlePrefix" xsi:type="string" translate="true">Action Details - #</item>
                         <item name="component" xsi:type="string">Magento_AsynchronousOperations/js/insert-form</item>
                         <item name="loading" xsi:type="boolean">false</item>
                         <item name="toolbarContainer" xsi:type="string">${ $.parentName }</item>

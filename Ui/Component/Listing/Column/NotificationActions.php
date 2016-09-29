@@ -45,7 +45,7 @@ class NotificationActions extends Column
                         ],
                     ],
                     'href' => '#',
-                    'label' => __('View Operation Details'),
+                    'label' => __('View Details'),
                 ];
 
                 if (isset($item['status'])

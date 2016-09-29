@@ -93,7 +93,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string"/>
-                    <item name="text" xsi:type="string" translate="true">Below are errors that occurred during the bulk operation and caused the records not to be updated.</item>
+                    <item name="text" xsi:type="string" translate="true">To retry, select the items and click “Retry”.</item>
                     <item name="template" xsi:type="string">ui/form/components/complex</item>
                 </item>
             </argument>
@@ -139,7 +139,7 @@
     <fieldset name="failed_operations">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Failed Items</item>
+                <item name="label" xsi:type="string" translate="true">Items That Can’t Be Updated.</item>
                 <item name="sortOrder" xsi:type="number">30</item>
             </item>
         </argument>
@@ -147,7 +147,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string"/>
-                    <item name="text" xsi:type="string" translate="true">Below are records that cannot be updated via the bulk operation.</item>
                     <item name="template" xsi:type="string">ui/form/components/complex</item>
                 </item>
             </argument>
