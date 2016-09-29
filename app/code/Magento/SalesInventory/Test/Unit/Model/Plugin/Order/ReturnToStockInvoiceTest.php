@@ -8,6 +8,7 @@ namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
 
 /**
  * Class ReturnToStockInvoiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
 {
