@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
- * 1. Enable payment method "Check/Money Order".
+ * 1. Enable payment method one of "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order".
  * 2. Enable shipping method one of "Flat Rate/Free Shipping".
  * 3. Create order.
  * 4. Create Invoice.
@@ -55,32 +55,22 @@ class CreateCreditMemoEntityTest extends Injectable
     ];
 
     /**
-     * Set up configuration.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return void
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $this->fixtureFactory = $fixtureFactory;
-
-        $setupConfigurationStep = $this->objectManager->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => 'checkmo, flatrate']
-        );
-        $setupConfigurationStep->run();
-    }
-
-    /**
      * Create credit memo.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param OrderInjectable $order
      * @param array $data
+     * @param string $configData
      * @return array
      */
-    public function test(OrderInjectable $order, array $data)
+    public function test(FixtureFactory $fixtureFactory, OrderInjectable $order, array $data, $configData)
     {
         // Preconditions
+        $this->fixtureFactory = $fixtureFactory;
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         $order->persist();
         $this->objectManager->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
 
