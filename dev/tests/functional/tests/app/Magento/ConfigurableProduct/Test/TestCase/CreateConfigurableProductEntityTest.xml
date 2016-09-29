@@ -110,7 +110,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation6" summary="Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)" ticketId="MAGETWO-13361">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_searchable_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
