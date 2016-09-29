@@ -245,15 +245,14 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDataWithMultidimensionalArray()
     {
-        $this->markTestSkipped('Need to revert changes from  MAGETWO-39106 and then modify this test.');
         $expected = [
             'key' => 'value',
-            'array' => 'value1',
+            'street' => 'value1',
         ];
 
         $key = [
             'key' => 'value',
-            'array' => [
+            'street' => [
                 'key1' => 'value1',
             ]
         ];
