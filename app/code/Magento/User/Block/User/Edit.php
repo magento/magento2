@@ -50,7 +50,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'label', __('Save User'));
         $this->buttonList->remove('delete');
 
-        $objId = $this->getRequest()->getParam($this->_objectId);
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
             $this->addButton(
@@ -59,10 +59,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     'label' => __('Delete User'),
                     'class' => 'delete',
                     'onclick' => sprintf(
-                        'deleteConfirm("%s", "%s", %s)',
+                        'deleteUserAccount("%s", "%s", %s)',
                         __('Are you sure you want to do this?'),
                         $this->getUrl('adminhtml/*/delete'),
-                        json_encode(['data' => ['user_id' => $objId]])
+                        $objId
                     ),
                 ]
             );

@@ -70,4 +70,13 @@ require([
 <?php endif; ?>
 
 });
+    function deleteUserAccount(message, url, objId) {
+        if (jQuery.validator.validateElement(jQuery('[name="current_password"]'))) {
+            postData = {'data' : {
+                'user_id': objId,
+                'current_password': jQuery('[name="current_password"]').val()
+            }}
+            deleteConfirm(message, url, postData);
+        }
+    }
 </script>
