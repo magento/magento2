@@ -5,6 +5,9 @@
  */
 namespace Magento\Vault\Setup;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -17,12 +20,17 @@ use Magento\Vault\Model\CreditCardTokenFactory;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
      * @inheritdoc
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        $connection = $setup->getConnection();
+        $connection = $this->getConnection();
 
         // data update for Vault module < 2.0.1
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
@@ -58,5 +66,24 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         $setup->endSetup();
+    }
+
+    /**
+     * Tries to get connection for scalable sales DB, otherwise returns default connection
+     * @return AdapterInterface
+     */
+    private function getConnection()
+    {
+        if ($this->connection === null) {
+            /** @var ResourceConnection $conn */
+            $conn = ObjectManager::getInstance()->get(ResourceConnection::class);
+            try {
+                $this->connection = $conn->getConnectionByName('sales');
+            } catch (\DomainException $e) {
+                $this->connection = $conn->getConnection();
+            }
+        }
+
+        return $this->connection;
     }
 }
