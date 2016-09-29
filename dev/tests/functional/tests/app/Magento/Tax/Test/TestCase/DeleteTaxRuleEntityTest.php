@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click on the "Delete Rule" button.
  * 5. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-20924
  */
 class DeleteTaxRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

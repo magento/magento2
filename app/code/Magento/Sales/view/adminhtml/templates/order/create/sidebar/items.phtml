@@ -66,7 +66,7 @@
                         <?php endif; ?>
 
                         <?php if ($block->canDisplayPrice()): ?>
-                            <td class="col-price"><?php /* @escapeNotVerified */ echo $block->convertPrice($_item->getPrice()) ?></td>
+                            <td class="col-price"><?php /* @noEscape */ echo $block->getItemPrice($_item) ?></td>
                         <?php endif; ?>
 
                         <?php if ($block->canRemoveItems()): ?>

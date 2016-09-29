@@ -371,7 +371,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
         $this->order = ['field' => $attribute, 'dir' => $dir];
-        if ($attribute != 'relevance') {
+        if ($attribute !== 'relevance') {
             parent::setOrder($attribute, $dir);
         }
         return $this;

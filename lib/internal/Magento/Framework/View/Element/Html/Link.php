@@ -22,6 +22,7 @@ class Link extends \Magento\Framework\View\Element\Template
         'title',
         'charset',
         'name',
+        'target',
         'hreflang',
         'rel',
         'rev',

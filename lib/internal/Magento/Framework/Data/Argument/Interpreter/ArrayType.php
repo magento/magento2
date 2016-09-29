@@ -39,9 +39,40 @@ class ArrayType implements InterpreterInterface
             throw new \InvalidArgumentException('Array items are expected.');
         }
         $result = [];
+        $items = $this->sortItems($items);
         foreach ($items as $itemKey => $itemData) {
             $result[$itemKey] = $this->itemInterpreter->evaluate($itemData);
         }
         return $result;
+    }
+
+    /**
+     * Sort items by sort order attribute.
+     *
+     * @param array $items
+     * @return array
+     */
+    private function sortItems($items)
+    {
+        uasort(
+            $items,
+            function ($firstItem, $secondItem) {
+                $firstValue = 0;
+                $secondValue = 0;
+                if (isset($firstItem['sortOrder'])) {
+                    $firstValue = intval($firstItem['sortOrder']);
+                }
+
+                if (isset($secondItem['sortOrder'])) {
+                    $secondValue = intval($secondItem['sortOrder']);
+                }
+
+                if ($firstValue == $secondValue) {
+                    return 0;
+                }
+                return $firstValue < $secondValue ? -1 : 1;
+            }
+        );
+        return $items;
     }
 }

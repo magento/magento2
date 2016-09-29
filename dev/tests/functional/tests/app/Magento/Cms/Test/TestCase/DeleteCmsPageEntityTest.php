@@ -22,14 +22,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Delete Page" button.
  * 5. Perform all assertions.
  *
- * @group CMS_Content_(PS)
+ * @group CMS_Content
  * @ZephyrId MAGETWO-23291
  */
 class DeleteCmsPageEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

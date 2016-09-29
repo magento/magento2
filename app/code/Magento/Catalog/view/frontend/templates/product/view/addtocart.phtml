@@ -40,6 +40,7 @@
     </div>
 </div>
 <?php endif; ?>
+<?php if ($block->isRedirectToCartEnabled()) : ?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
@@ -49,13 +50,11 @@
         }
     }
 </script>
-<?php if (!$block->isRedirectToCartEnabled()) : ?>
+<?php else : ?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
-            "catalogAddToCart": {
-                "bindSubmit": false
-            }
+            "Magento_Catalog/js/validate-product": {}
         }
     }
 </script>
