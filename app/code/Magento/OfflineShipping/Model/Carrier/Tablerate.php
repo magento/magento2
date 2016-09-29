@@ -151,25 +151,28 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $request->setPackageQty($oldQty);
 
         if (!empty($rate) && $rate['price'] >= 0) {
-            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
-            $method = $this->_resultMethodFactory->create();
-
-            $method->setCarrier('tablerate');
-            $method->setCarrierTitle($this->getConfigData('title'));
-
-            $method->setMethod('bestway');
-            $method->setMethodTitle($this->getConfigData('name'));
-
             if ($request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
                 $shippingPrice = 0;
             } else {
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($rate['price']);
             }
-
-            $method->setPrice($shippingPrice);
-            $method->setCost($rate['cost']);
-
+           $method = $this->getMethodObject($shippingPrice, $rate['cost']);
             $result->append($method);
+        } elseif (empty($rate) && $request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
+
+            /**
+             * was applied promotion rule for whole cart
+             * other shipping methods could be switched off at all
+             * we must show table rate method with 0$ price, if grand_total more, than min table condition_value
+             * free setPackageWeight() has already was taken into account
+             */
+            $request->setPackageValue($freePackageValue);
+            $request->setPackageQty($freeQty);
+            $rate = $this->getRate($request);
+            if (!empty($rate) && $rate['price'] >= 0) {
+                $method = $this->getMethodObject(0, 0);
+                $result->append($method);
+            }
         } else {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Error $error */
             $error = $this->_rateErrorFactory->create(
@@ -240,5 +243,28 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     public function getAllowedMethods()
     {
         return ['bestway' => $this->getConfigData('name')];
+    }
+
+    /**
+     * Get the method object based on the shipping price and cost
+     *
+     * @param int $shippingPrice
+     * @param int $cost
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
+     */
+    private function getMethodObject($shippingPrice, $cost)
+    {
+        /** @var  \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
+        $method = $this->_resultMethodFactory->create();
+
+        $method->setCarrier('tablerate');
+        $method->setCarrierTitle($this->getConfigData('title'));
+
+        $method->setMethod('bestway');
+        $method->setMethodTitle($this->getConfigData('name'));
+
+        $method->setPrice($shippingPrice);
+        $method->setCost($cost);
+        return $method;
     }
 }
