@@ -105,13 +105,13 @@ class PluginList extends Scoped implements InterceptionPluginList
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins'
     ) {
-    	$this->_omConfig = $omConfig;
-    	$this->_relations = $relations;
-    	$this->_definitions = $definitions;
-    	$this->_classDefinitions = $classDefinitions;
-    	$this->_scopePriorityScheme = $scopePriorityScheme;
-    	$this->_objectManager = $objectManager;
-    	    	
+        $this->_omConfig = $omConfig;
+        $this->_relations = $relations;
+        $this->_definitions = $definitions;
+        $this->_classDefinitions = $classDefinitions;
+        $this->_scopePriorityScheme = $scopePriorityScheme;
+        $this->_objectManager = $objectManager;
+
         parent::__construct($reader, $configScope, $cache, $cacheId);
     }
 

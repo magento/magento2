@@ -59,9 +59,9 @@ class Data implements \Magento\Framework\Config\DataInterface
         CacheInterface $cache,
         $cacheId
     ) {
-    	$this->_reader = $reader;
-    	$this->_cache = $cache;
-    	$this->_cacheId = $cacheId;
+        $this->_reader = $reader;
+        $this->_cache = $cache;
+        $this->_cacheId = $cacheId;
 
         $this->initData();
     }
