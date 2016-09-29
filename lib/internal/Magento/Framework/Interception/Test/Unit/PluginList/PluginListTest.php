@@ -228,7 +228,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ->willReturn($loggerMock);
         $loggerMock->expects($this->once())
             ->method('info')
-            ->with("Reference to not declared plugin with name 'simple_plugin'.");
+            ->with("Reference to undeclared plugin with name 'simple_plugin'.");
         $this->_configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->will($this->returnValue('frontend'));
