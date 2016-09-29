@@ -1210,7 +1210,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testExistingProductWithUrlKeys()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-48871');
         $products = [
             'simple1' => 'url-key1',
             'simple2' => 'url-key2',
