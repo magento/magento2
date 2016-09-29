@@ -10,6 +10,7 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
@@ -57,25 +58,31 @@ class CreateCreditMemoEntityTest extends Injectable
     /**
      * Create credit memo.
      *
+     * @param TestStepFactory $stepFactory
      * @param FixtureFactory $fixtureFactory
      * @param OrderInjectable $order
      * @param array $data
      * @param string $configData
      * @return array
      */
-    public function test(FixtureFactory $fixtureFactory, OrderInjectable $order, array $data, $configData)
-    {
+    public function test(
+        TestStepFactory $stepFactory,
+        FixtureFactory $fixtureFactory,
+        OrderInjectable $order,
+        array $data,
+        $configData
+    ) {
         // Preconditions
         $this->fixtureFactory = $fixtureFactory;
-        $this->objectManager->create(
+        $stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
         $order->persist();
-        $this->objectManager->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
+        $stepFactory->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
 
         // Steps
-        $createCreditMemoStep = $this->objectManager->create(
+        $createCreditMemoStep = $stepFactory->create(
             \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
             ['order' => $order, 'data' => $data]
         );
