@@ -2209,6 +2209,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $attribute->getAttributeId()
         );
 
+        $select->where('entity.entity_id IN (?)', array_map(function ($item) {
+            return $item->getId();
+        }, $this->getItems()));
+
         $mediaGalleries = [];
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
