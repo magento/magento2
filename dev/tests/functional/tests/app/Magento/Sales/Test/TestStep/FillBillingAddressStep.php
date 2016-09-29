@@ -23,7 +23,7 @@ class FillBillingAddressStep implements TestStepInterface
     protected $orderCreateIndex;
 
     /**
-     * Billing Address.
+     * Billing Address fixture.
      *
      * @var Address
      */
@@ -37,7 +37,7 @@ class FillBillingAddressStep implements TestStepInterface
     protected $saveAddress;
 
     /**
-     * Flag for set same as billing shipping address.
+     * Flag to set 'Same as billing address' for shipping address.
      *
      * @var string
      */

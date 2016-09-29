@@ -23,7 +23,7 @@ class FillShippingAddressStep implements TestStepInterface
     protected $orderCreateIndex;
 
     /**
-     * Shipping Address.
+     * Shipping Address fixture.
      *
      * @var Address
      */
