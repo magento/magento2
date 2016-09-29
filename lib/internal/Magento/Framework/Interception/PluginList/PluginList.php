@@ -105,13 +105,14 @@ class PluginList extends Scoped implements InterceptionPluginList
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins'
     ) {
+    	$this->_omConfig = $omConfig;
+    	$this->_relations = $relations;
+    	$this->_definitions = $definitions;
+    	$this->_classDefinitions = $classDefinitions;
+    	$this->_scopePriorityScheme = $scopePriorityScheme;
+    	$this->_objectManager = $objectManager;
+    	    	
         parent::__construct($reader, $configScope, $cache, $cacheId);
-        $this->_omConfig = $omConfig;
-        $this->_relations = $relations;
-        $this->_definitions = $definitions;
-        $this->_classDefinitions = $classDefinitions;
-        $this->_scopePriorityScheme = $scopePriorityScheme;
-        $this->_objectManager = $objectManager;
     }
 
     /**
@@ -251,7 +252,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     public function getNext($type, $method, $code = '__self')
     {
-        $this->_loadScopedData();
         if (!isset($this->_inherited[$type]) && !array_key_exists($type, $this->_inherited)) {
             $this->_inheritPlugins($type);
         }
@@ -265,7 +265,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _loadScopedData()
+    protected function initData()
     {
         $scope = $this->_configScope->getCurrentScope();
         if (false == isset($this->_loadedScopes[$scope])) {

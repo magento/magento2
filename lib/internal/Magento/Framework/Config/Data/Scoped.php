@@ -15,27 +15,6 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_configScope;
 
     /**
-     * Configuration reader
-     *
-     * @var \Magento\Framework\Config\ReaderInterface
-     */
-    protected $_reader;
-
-    /**
-     * Configuration cache
-     *
-     * @var \Magento\Framework\Config\CacheInterface
-     */
-    protected $_cache;
-
-    /**
-     * Cache tag
-     *
-     * @var string
-     */
-    protected $_cacheId;
-
-    /**
      * Scope priority loading scheme
      *
      * @var string[]
@@ -63,23 +42,9 @@ class Scoped extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId
     ) {
-        $this->_reader = $reader;
         $this->_configScope = $configScope;
-        $this->_cache = $cache;
-        $this->_cacheId = $cacheId;
-    }
-
-    /**
-     * Get config value by key
-     *
-     * @param string $path
-     * @param mixed $default
-     * @return array|mixed|null
-     */
-    public function get($path = null, $default = null)
-    {
-        $this->_loadScopedData();
-        return parent::get($path, $default);
+        
+        parent::__construct($reader, $cache, $cacheId);
     }
 
     /**
@@ -87,7 +52,7 @@ class Scoped extends \Magento\Framework\Config\Data
      *
      * @return void
      */
-    protected function _loadScopedData()
+    protected function initData()
     {
         $scope = $this->_configScope->getCurrentScope();
         if (false == isset($this->_loadedScopes[$scope])) {
