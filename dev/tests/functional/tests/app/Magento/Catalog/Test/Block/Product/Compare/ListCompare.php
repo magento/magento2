@@ -86,6 +86,14 @@ class ListCompare extends Block
      */
     protected $messageBlock = '#messages';
 
+
+    /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
     /**
      * Get product info.
      *
@@ -189,6 +197,10 @@ class ListCompare extends Block
     public function removeProduct($index = 1)
     {
         $this->_rootElement->find(sprintf($this->removeButton, $index), Locator::SELECTOR_XPATH)->click();
+        $modalElement = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $modalElement]);
+        $modal->acceptAlert();
     }
 
     /**
