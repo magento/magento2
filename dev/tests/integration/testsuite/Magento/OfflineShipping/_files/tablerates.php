@@ -21,8 +21,8 @@ $data =
         'cost' => 10
     ];
 $connection->query(
-    "INSERT INTO {$entityTable} (`website_id`,  `dest_country_id`, `dest_region_id`, `dest_zip`, `condition_name`, `condition_value`, `price`, `cost`)"
-    . " VALUES (:website_id,  :dest_country_id, :dest_region_id, :dest_zip, :condition_name, :condition_value, :price, :cost);",
+    "INSERT INTO {$entityTable} (`website_id`,  `dest_country_id`, `dest_region_id`, `dest_zip`, `condition_name`,"
+    . "`condition_value`, `price`, `cost`) VALUES (:website_id,  :dest_country_id, :dest_region_id, :dest_zip,"
+    . " :condition_name, :condition_value, :price, :cost);",
     $data
 );
-

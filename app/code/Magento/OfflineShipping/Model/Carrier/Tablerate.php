@@ -156,21 +156,21 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
             } else {
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($rate['price']);
             }
-           $method = $this->getMethodObject($shippingPrice, $rate['cost']);
+            $method = $this->createShippingMethod($shippingPrice, $rate['cost']);
             $result->append($method);
         } elseif (empty($rate) && $request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
 
             /**
-             * was applied promotion rule for whole cart
-             * other shipping methods could be switched off at all
-             * we must show table rate method with 0$ price, if grand_total more, than min table condition_value
-             * free setPackageWeight() has already was taken into account
+             * Promotion rule was applied for the whole cart.
+             *  In this case all other shipping methods could be omitted
+             * Table rate shipping method with 0$ price must be shown if grand total is more than minimal value.
+             * Free package weight has been already taken into account.
              */
             $request->setPackageValue($freePackageValue);
             $request->setPackageQty($freeQty);
             $rate = $this->getRate($request);
             if (!empty($rate) && $rate['price'] >= 0) {
-                $method = $this->getMethodObject(0, 0);
+                $method = $this->createShippingMethod(0, 0);
                 $result->append($method);
             }
         } else {
@@ -248,11 +248,11 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     /**
      * Get the method object based on the shipping price and cost
      *
-     * @param int $shippingPrice
-     * @param int $cost
+     * @param float $shippingPrice
+     * @param float $cost
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
      */
-    private function getMethodObject($shippingPrice, $cost)
+    private function createShippingMethod($shippingPrice, $cost)
     {
         /** @var  \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
         $method = $this->_resultMethodFactory->create();
