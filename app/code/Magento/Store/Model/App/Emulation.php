@@ -235,7 +235,7 @@ class Emulation extends \Magento\Framework\DataObject
      */
     protected function _restoreInitialLocale(
         $initialLocaleCode,
-        $initialArea = \Magento\Framework\App\Area::AREA_ADMIN
+        $initialArea = \Magento\Framework\App\Area::AREA_ADMINHTML
     ) {
         $this->_localeResolver->setLocale($initialLocaleCode);
         $this->_translate->setLocale($initialLocaleCode);

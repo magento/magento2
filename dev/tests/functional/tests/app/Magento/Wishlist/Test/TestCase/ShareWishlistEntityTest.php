@@ -26,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Share Wishlist" button.
  * 6. Perform all assertions.
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-23394
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,7 +35,6 @@ class ShareWishlistEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

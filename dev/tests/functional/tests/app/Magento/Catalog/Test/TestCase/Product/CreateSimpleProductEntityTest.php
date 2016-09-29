@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save Product.
  * 6. Perform appropriate assertions.
  *
- * @group Products_(CS)
+ * @group Products
  * @ZephyrId MAGETWO-23414
  */
 class CreateSimpleProductEntityTest extends Injectable
@@ -29,7 +29,6 @@ class CreateSimpleProductEntityTest extends Injectable
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

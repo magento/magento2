@@ -12,6 +12,8 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
+
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
     </type>
@@ -57,10 +59,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="configurableProductSaveOptions" type="\Magento\ConfigurableProduct\Model\Plugin\AroundProductRepositorySave"/>
-    </type>
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="configurable_identity" type="Magento\ConfigurableProduct\Plugin\Model\Product" />
+        <plugin name="configurableProductSaveOptions" sortOrder="10" type="Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Type">
         <plugin name="configurable_output" type="Magento\ConfigurableProduct\Model\Product\Type\Plugin" />
@@ -155,6 +154,13 @@
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
                 <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">\Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable</item>
             </argument>
         </arguments>
     </type>
