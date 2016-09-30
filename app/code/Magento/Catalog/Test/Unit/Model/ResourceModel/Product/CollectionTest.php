@@ -3,18 +3,18 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
- * Class CollectionTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -35,6 +35,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
@@ -113,14 +114,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->once())->method('getDefaultAttributes')->willReturn([]);
         $entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
-        $helper = new ObjectManager($this);
 
-        $this->prepareObjectManager([
-            [\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
+        $this->objectManager->mockObjectManager([
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class =>
                 $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-            ]
+
         ]);
-        $this->collection = $helper->getObject(
+        $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
                 'entityFactory' => $entityFactory,
@@ -148,6 +148,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($this->connectionMock);
     }
 
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
+    }
+
     public function testAddProductCategoriesFilter()
     {
         $condition = ['in' => [1,2]];
@@ -172,21 +177,5 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['e.entity_id IN (1,2)']
         )->willReturnSelf();
         $this->collection->addCategoriesFilter([$conditionType => $values]);
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

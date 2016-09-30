@@ -13,6 +13,11 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Quote\Api\CartItemRepositoryInterface
      */
     protected $repository;
@@ -68,6 +73,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->productRepositoryMock = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->itemDataFactoryMock =
@@ -100,11 +106,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->prepareObjectManager([
-            [
-                \Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor::class,
-                $this->optionsProcessorMock
-            ]
+        $this->objectManager->mockObjectManager([
+            \Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor::class => $this->optionsProcessorMock
         ]);
 
         $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
@@ -113,6 +116,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->itemDataFactoryMock,
             ['custom_options' => $this->customOptionProcessor]
         );
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -245,21 +253,5 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
 
         $this->assertTrue($this->repository->deleteById($cartId, $itemId));
-    }
-
-    /**
-     * @param array $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }
