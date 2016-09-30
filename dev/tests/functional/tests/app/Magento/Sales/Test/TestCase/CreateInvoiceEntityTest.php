@@ -12,7 +12,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
- * 1. Enable payment method one of "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order/Zero Subtotal Checkout".
+ * 1. Enable payment method: "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order/Zero Subtotal Checkout".
  * 2. Enable shipping method one of "Flat Rate/Free Shipping".
  * 3. Create order.
  *
@@ -34,25 +34,42 @@ class CreateInvoiceEntityTest extends Injectable
     /* end tags */
 
     /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    protected $stepFactory;
+
+    /**
+     * Prepare data.
+     *
+     * @param TestStepFactory $stepFactory
+     * @return void
+     */
+    public function __prepare(TestStepFactory $stepFactory)
+    {
+        $this->stepFactory = $stepFactory;
+    }
+
+    /**
      * Create invoice.
      *
      * @param OrderInjectable $order
-     * @param TestStepFactory $stepFactory
      * @param array $data
      * @param string $configData
      * @return array
      */
-    public function test(OrderInjectable $order, TestStepFactory $stepFactory, array $data, $configData)
+    public function test(OrderInjectable $order, array $data, $configData)
     {
         // Preconditions
-        $stepFactory->create(
+        $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
         $order->persist();
 
         // Steps
-        $result = $stepFactory->create(
+        $result = $this->stepFactory->create(
             \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
             ['order' => $order, 'data' => $data]
         )->run();
@@ -67,6 +84,6 @@ class CreateInvoiceEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
+        $this->stepFactory->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
     }
 }
