@@ -9,11 +9,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\Ui\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
-use Magento\Vault\Model\VaultManagementInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -47,9 +47,9 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $customerTokenManagement;
 
     /**
-     * @var VaultManagementInterface|MockObject
+     * @var PaymentMethodListInterface|MockObject
      */
-    private $vaultService;
+    private $vaultPaymentList;
 
     /**
      * @var ObjectManager
@@ -59,7 +59,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->vaultService = $this->getMock(VaultManagementInterface::class);
+        $this->vaultPaymentList = $this->getMock(PaymentMethodListInterface::class);
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
         $this->store = $this->getMock(StoreInterface::class);
@@ -96,8 +96,8 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->vaultService->expects(static::once())
-            ->method('getActivePaymentList')
+        $this->vaultPaymentList->expects(static::once())
+            ->method('getActiveList')
             ->with($storeId)
             ->willReturn([$this->vaultPayment]);
         
@@ -133,8 +133,8 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManager->setBackwardCompatibleProperty(
             $configProvider,
-            'vaultService',
-            $this->vaultService
+            'vaultPaymentList',
+            $this->vaultPaymentList
         );
 
         static::assertEquals($expectedConfig, $configProvider->getConfig());

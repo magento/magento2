@@ -9,7 +9,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Vault\Model\VaultManagementInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 
 class VaultConfigProvider implements ConfigProviderInterface
 {
@@ -31,9 +31,9 @@ class VaultConfigProvider implements ConfigProviderInterface
     private $session;
 
     /**
-     * @var VaultManagementInterface
+     * @var PaymentMethodListInterface
      */
-    private $vaultService;
+    private $vaultPaymentList;
 
     /**
      * VaultConfigProvider constructor.
@@ -57,7 +57,7 @@ class VaultConfigProvider implements ConfigProviderInterface
     {
         $availableMethods = [];
         $storeId = $this->storeManager->getStore()->getId();
-        $vaultPayments = $this->getVaultService()->getActivePaymentList($storeId);
+        $vaultPayments = $this->getVaultPaymentList()->getActiveList($storeId);
         $customerId = $this->session->getCustomerId();
 
         foreach ($vaultPayments as $method) {
@@ -72,15 +72,15 @@ class VaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get Vault service instance
-     * @return VaultManagementInterface
+     * Get vault payment list instance
+     * @return PaymentMethodListInterface
      * @deprecated
      */
-    private function getVaultService()
+    private function getVaultPaymentList()
     {
-        if ($this->vaultService === null) {
-            $this->vaultService = ObjectManager::getInstance()->get(VaultManagementInterface::class);
+        if ($this->vaultPaymentList === null) {
+            $this->vaultPaymentList = ObjectManager::getInstance()->get(PaymentMethodListInterface::class);
         }
-        return $this->vaultService;
+        return $this->vaultPaymentList;
     }
 }

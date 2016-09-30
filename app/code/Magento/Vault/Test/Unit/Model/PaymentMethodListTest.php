@@ -10,10 +10,10 @@ use Magento\Payment\Api\PaymentMethodListInterface;
 use Magento\Payment\Model\Method\InstanceFactory;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
-use Magento\Vault\Model\VaultService;
+use Magento\Vault\Model\PaymentMethodList;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class VaultServiceTest extends \PHPUnit_Framework_TestCase
+class PaymentMethodListTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PaymentMethodListInterface|MockObject
@@ -26,9 +26,9 @@ class VaultServiceTest extends \PHPUnit_Framework_TestCase
     private $instanceFactory;
 
     /**
-     * @var VaultService
+     * @var PaymentMethodList
      */
-    private $vaultService;
+    private $vaultPaymentList;
 
     protected function setUp()
     {
@@ -38,11 +38,11 @@ class VaultServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->vaultService = new VaultService($this->paymentMethodList, $this->instanceFactory);
+        $this->vaultPaymentList = new PaymentMethodList($this->paymentMethodList, $this->instanceFactory);
     }
 
     /**
-     * @covers \Magento\Vault\Model\VaultService::getActivePaymentList
+     * @covers \Magento\Vault\Model\PaymentMethodList::getActiveList
      */
     public function testGetActivePaymentList()
     {
@@ -67,7 +67,7 @@ class VaultServiceTest extends \PHPUnit_Framework_TestCase
                 [$paymentMethodInterface2, $vaultPayment]
             ]);
 
-        $vaultPayments = $this->vaultService->getActivePaymentList($storeId);
+        $vaultPayments = $this->vaultPaymentList->getActiveList($storeId);
         static::assertCount(1, $vaultPayments);
         static::assertInstanceOf(VaultPaymentInterface::class, $vaultPayment);
     }

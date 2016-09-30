@@ -9,8 +9,8 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
-use Magento\Vault\Model\VaultManagementInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -40,9 +40,9 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
-     * @var VaultManagementInterface|MockObject
+     * @var PaymentMethodListInterface|MockObject
      */
-    private $vaultService;
+    private $vaultPaymentList;
 
     /**
      * @var VaultConfigProvider
@@ -57,11 +57,15 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->vaultService = $this->getMock(VaultManagementInterface::class);
+        $this->vaultPaymentList = $this->getMock(PaymentMethodListInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);
-        $objectManager->setBackwardCompatibleProperty($this->vaultConfigProvider, 'vaultService', $this->vaultService);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->vaultConfigProvider,
+            'vaultPaymentList',
+            $this->vaultPaymentList
+        );
     }
 
     /**
@@ -92,8 +96,8 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->vaultService->expects(static::once())
-            ->method('getActivePaymentList')
+        $this->vaultPaymentList->expects(static::once())
+            ->method('getActiveList')
             ->willReturn([$this->vaultPayment]);
 
         $this->vaultPayment->expects(static::once())

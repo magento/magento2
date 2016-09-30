@@ -8,8 +8,8 @@ namespace Magento\Vault\Model\Ui;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
-use Magento\Vault\Model\VaultManagementInterface;
 
 /**
  * Class ConfigProvider
@@ -38,9 +38,9 @@ final class TokensConfigProvider implements ConfigProviderInterface
     private $customerTokenManagement;
 
     /**
-     * @var VaultManagementInterface
+     * @var PaymentMethodListInterface
      */
-    private $vaultService;
+    private $vaultPaymentList;
 
     /**
      * Constructor
@@ -107,7 +107,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
     {
         $providers = [];
         $storeId = $this->storeManager->getStore()->getId();
-        $vaultPaymentMethods = $this->getVaultService()->getActivePaymentList($storeId);
+        $vaultPaymentMethods = $this->getVaultPaymentList()->getActiveList($storeId);
 
         foreach ($vaultPaymentMethods as $method) {
             $providerCode = $method->getProviderCode();
@@ -136,15 +136,15 @@ final class TokensConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get instance of Vault management service
-     * @return VaultManagementInterface
+     * Get instance of vault payment list instance
+     * @return PaymentMethodListInterface
      * @deprecated
      */
-    private function getVaultService()
+    private function getVaultPaymentList()
     {
-        if ($this->vaultService === null) {
-            $this->vaultService = ObjectManager::getInstance()->get(VaultManagementInterface::class);
+        if ($this->vaultPaymentList === null) {
+            $this->vaultPaymentList = ObjectManager::getInstance()->get(PaymentMethodListInterface::class);
         }
-        return $this->vaultService;
+        return $this->vaultPaymentList;
     }
 }

@@ -9,11 +9,12 @@ use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Api\PaymentMethodListInterface;
 use Magento\Payment\Model\Method\InstanceFactory;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Vault\Api\PaymentMethodListInterface as VaultPaymentMethodListInterface;
 
 /**
- * Implementation of Vault Management
+ * Contains methods to retrieve configured vault payments
  */
-class VaultService implements VaultManagementInterface
+class PaymentMethodList implements VaultPaymentMethodListInterface
 {
     /**
      * @var InstanceFactory
@@ -26,7 +27,7 @@ class VaultService implements VaultManagementInterface
     private $paymentMethodList;
 
     /**
-     * Vault constructor.
+     * PaymentMethodList constructor.
      * @param PaymentMethodListInterface $paymentMethodList
      * @param InstanceFactory $instanceFactory
      */
@@ -39,13 +40,31 @@ class VaultService implements VaultManagementInterface
     /**
      * @inheritdoc
      */
-    public function getActivePaymentList($storeId)
+    public function getList($storeId)
+    {
+        return $this->filterList($this->paymentMethodList->getList($storeId));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getActiveList($storeId)
+    {
+        return $this->filterList($this->paymentMethodList->getActiveList($storeId));
+    }
+
+    /**
+     * Filter vault methods from payments
+     * @param PaymentMethodInterface[] $list
+     * @return VaultPaymentInterface[]
+     */
+    private function filterList(array $list)
     {
         $paymentMethods = array_map(
             function (PaymentMethodInterface $paymentMethod) {
                 return $this->instanceFactory->create($paymentMethod);
             },
-            $this->paymentMethodList->getActiveList($storeId)
+            $list
         );
 
         $availableMethods = array_filter(
@@ -54,7 +73,6 @@ class VaultService implements VaultManagementInterface
                 return $methodInstance instanceof VaultPaymentInterface;
             }
         );
-
         return $availableMethods;
     }
 }
