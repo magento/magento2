@@ -60,7 +60,6 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 
         $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
@@ -80,6 +79,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPlugin()
     {
+        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
         $this->_configScopeMock->expects($this->any())->method('getCurrentScope')->will($this->returnValue('backend'));
         $this->_model->getNext(\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class, 'getName');
         $this->_model->getNext(
@@ -131,6 +131,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlugins($expectedResult, $type, $method, $scopeCode, $code = '__self')
     {
+        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
         $this->_configScopeMock->expects(
             $this->any()
         )->method(
@@ -206,6 +207,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testInheritPluginsWithNonExistingClass()
     {
+        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
         $this->_configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->will($this->returnValue('frontend'));
@@ -215,10 +217,32 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
+     */
+    public function testInheritPluginsWithNotExistingPlugin()
+    {
+        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->_objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with(\Psr\Log\LoggerInterface::class)
+            ->willReturn($loggerMock);
+        $loggerMock->expects($this->once())
+            ->method('info')
+            ->with("Reference to undeclared plugin with name 'simple_plugin'.");
+        $this->_configScopeMock->expects($this->any())
+            ->method('getCurrentScope')
+            ->will($this->returnValue('frontend'));
+
+        $this->assertNull($this->_model->getNext('typeWithoutInstance', 'someMethod'));
+    }
+
+    /**
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
      * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
      */
     public function testLoadScopedDataCached()
     {
+        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
         $this->_configScopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
