@@ -64,7 +64,7 @@
             </field>
             <field name="qty" xsi:type="string">1</field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">120</item>
+                <item name="price" xsi:type="string">42</item>
                 <item name="qty" xsi:type="string">1</item>
                 <item name="subtotal" xsi:type="string">172</item>
             </field>
