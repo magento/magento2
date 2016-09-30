@@ -15,6 +15,7 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
  * Catalog inventory module observer
+ * @deprecated
  */
 class RefundOrderInventoryObserver implements ObserverInterface
 {
