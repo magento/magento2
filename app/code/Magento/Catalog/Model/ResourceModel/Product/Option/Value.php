@@ -35,7 +35,6 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\Locale\FormatInterface
-     * @deprecated
      */
     private $localeFormat;
 
