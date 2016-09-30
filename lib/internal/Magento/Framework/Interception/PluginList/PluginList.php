@@ -77,7 +77,6 @@ class PluginList extends Scoped implements InterceptionPluginList
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @deprecated
      */
     private $logger;
 
