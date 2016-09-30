@@ -89,7 +89,7 @@ class ReturnProcessor
         CreditmemoInterface $creditmemo,
         OrderInterface $order,
         array $returnToStockItems = [],
-        $isAutoReturn = False
+        $isAutoReturn = false
     ) {
         $itemsToUpdate = [];
         foreach ($creditmemo->getItems() as $item) {
