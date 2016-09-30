@@ -100,11 +100,12 @@ class RefundOrderInventoryObserver implements ObserverInterface
      */
     private function getOrderRepository()
     {
-        if ($this->orderRepository instanceof OrderRepository) {
-            return $this->orderRepository;
-        } else {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(OrderRepository::class);
+        if (!$this->orderRepository) {
+            $this->orderRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(OrderRepository::class);
+
         }
+        return $this->orderRepository;
     }
 
     /**
@@ -115,10 +116,9 @@ class RefundOrderInventoryObserver implements ObserverInterface
      */
     private function getReturnProcessor()
     {
-        if ($this->returnProcessor instanceof ReturnProcessor) {
-            return $this->returnProcessor;
-        } else {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(ReturnProcessor::class);
+        if (!$this->returnProcessor) {
+            $this->returnProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(ReturnProcessor::class);
         }
+        return $this->returnProcessor;
     }
 }
