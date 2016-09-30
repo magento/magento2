@@ -64,7 +64,6 @@ class ReadHandler implements AttributeInterface
      * @param AppResource $appResource
      * @param ScopeResolver $scopeResolver
      * @param AttributeCache $attributeCache
-     * @param LoggerInterface $logger
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -72,8 +71,7 @@ class ReadHandler implements AttributeInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AppResource $appResource,
         ScopeResolver $scopeResolver,
-        AttributeCache $attributeCache,
-        LoggerInterface $logger
+        AttributeCache $attributeCache
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
@@ -81,7 +79,20 @@ class ReadHandler implements AttributeInterface
         $this->appResource = $appResource;
         $this->scopeResolver = $scopeResolver;
         $this->attributeCache = $attributeCache;
-        $this->logger = $logger;
+    }
+
+    /**
+     * Get Logger
+     *
+     * @return LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if ($this->logger === null) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->create(LoggerInterface::class);
+        }
+        return $this->logger;
     }
 
     /**
@@ -174,7 +185,7 @@ class ReadHandler implements AttributeInterface
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {
-                    $this->logger->warning(
+                    $this->getLogger()->warning(
                         "Attempt to load value of nonexistent EAV attribute '{$attributeValue['attribute_id']}'
                         for entity type '$entityType'."
                     );
