@@ -77,7 +77,7 @@
             <data name="data/items_data/0/qty" xsi:type="string">1</data>
             <data name="data/form_data/do_shipment" xsi:type="string">No</data>
             <data name="data/form_data/comment_text" xsi:type="string">comments</data>
-            <data name="configData" xsi:type="string">zero_subtotal_checkout</data>
+            <data name="configData" xsi:type="string">zero_subtotal_checkout, freeshipping</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoicedAmountOnFrontend" />
         </variation>
