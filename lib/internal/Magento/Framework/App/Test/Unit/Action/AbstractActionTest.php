@@ -36,7 +36,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setRefererOrBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\RedirectFactory::class)
+        $this->redirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

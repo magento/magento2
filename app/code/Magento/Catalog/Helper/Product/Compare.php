@@ -228,10 +228,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataRemove($product)
     {
-        $listCleanUrl = $this->getEncodedUrl($this->_getUrl('catalog/product_compare'));
         $data = [
-            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $listCleanUrl,
-            'product' => $product->getId()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
+            'product' => $product->getId(),
         ];
         return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
     }
@@ -253,9 +252,8 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataClearList()
     {
-        $refererUrl = $this->_getRequest()->getServer('HTTP_REFERER');
         $params = [
-            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }

@@ -29,6 +29,7 @@ class CreateCmsPageEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

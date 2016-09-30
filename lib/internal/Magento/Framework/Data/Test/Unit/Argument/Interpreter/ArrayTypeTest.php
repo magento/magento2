@@ -87,6 +87,22 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
                     'key3' => '-value 3-',
                 ],
             ],
+            'sorted array items' => [
+                [
+                    'item' => [
+                        'key1' => ['value' => 'value 1', 'sortOrder' => 50],
+                        'key2' => ['value' => 'value 2'],
+                        'key3' => ['value' => 'value 3', 'sortOrder' => 10],
+                        'key4' => ['value' => 'value 4'],
+                    ],
+                ],
+                [
+                    'key2' => '-value 2-',
+                    'key4' => '-value 4-',
+                    'key3' => '-value 3-',
+                    'key1' => '-value 1-',
+                ],
+            ],
         ];
     }
 }

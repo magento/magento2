@@ -561,7 +561,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /** @var array */
     protected $productUrlSuffix = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @deprecated
+     */
     protected $productUrlKeys = [];
 
     /**
@@ -1508,6 +1511,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 $rowScope = $this->getRowScope($rowData);
 
+                if (empty($rowData[self::URL_KEY])) {
+                    $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
+                }
+
                 $rowSku = $rowData[self::COL_SKU];
 
                 if (null === $rowSku) {
@@ -2409,20 +2416,34 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
         }
-
-        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $rowData['additional_attributes']);
-        foreach ($attributeNameValuePairs as $attributeNameValuePair) {
-            $separatorPosition = strpos($attributeNameValuePair, self::PAIR_NAME_VALUE_SEPARATOR);
-            if ($separatorPosition !== false) {
-                $key = substr($attributeNameValuePair, 0, $separatorPosition);
-                $value = substr(
-                    $attributeNameValuePair,
-                    $separatorPosition + strlen(self::PAIR_NAME_VALUE_SEPARATOR)
-                );
-                $rowData[$key] = $value === false ? '' : $value;
-            }
-        }
+        $rowData = array_merge($rowData, $this->parseAdditionalAttributes($rowData['additional_attributes']));
         return $rowData;
+    }
+
+    /**
+     * Retrieves additional attributes as array code=>value.
+     *
+     * @param string $additionalAttributes
+     * @return array
+     */
+    private function parseAdditionalAttributes($additionalAttributes)
+    {
+        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $additionalAttributes);
+        $preparedAttributes = [];
+        $code = '';
+        foreach ($attributeNameValuePairs as $attributeData) {
+            //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
+            if (strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
+                if (!$code) {
+                    continue;
+                }
+                $preparedAttributes[$code] .= $this->getMultipleValueSeparator() . $attributeData;
+                continue;
+            }
+            list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
+            $preparedAttributes[$code] = $value;
+        }
+        return $preparedAttributes;
     }
 
     /**
@@ -2562,12 +2583,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
+            return $rowData[self::URL_KEY];
         }
-        $urlKey = !empty($this->productUrlKeys[$rowData[self::COL_SKU]])
-            ? $this->productUrlKeys[$rowData[self::COL_SKU]]
-            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
-        return $urlKey;
+
+        if (!empty($rowData[self::COL_NAME])) {
+            return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        }
+
+        return '';
     }
 
     /**

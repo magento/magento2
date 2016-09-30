@@ -9,9 +9,11 @@
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
+require dirname(dirname(__DIR__)) . '/Catalog/_files/product_text_attribute.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+/** @var \Magento\Catalog\Model\Product $productModel */
 $productModel = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $customOptions = [
@@ -52,6 +54,8 @@ $productModel->setTypeId(
     'simple'
 )->setPrice(
     10
+)->addData(
+    ['text_attribute' => '!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/']
 )->setTierPrice(
     [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
 )->setVisibility(
