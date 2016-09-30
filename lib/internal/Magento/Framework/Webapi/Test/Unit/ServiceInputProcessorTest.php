@@ -98,10 +98,10 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
+        $jsonMock = $this->getMock(JsonInterface::class);
         $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
             });
         $jsonMock->method('decode')
             ->willReturnCallback(function ($string) {
@@ -126,10 +126,11 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Reflection\NameFinder $nameFinder */
         $nameFinder = $objectManager->getObject(\Magento\Framework\Reflection\NameFinder::class);
-        $serviceInputProcessorReflection = new \ReflectionClass(get_class($this->serviceInputProcessor));
-        $typeResolverReflection = $serviceInputProcessorReflection->getProperty('nameFinder');
-        $typeResolverReflection->setAccessible(true);
-        $typeResolverReflection->setValue($this->serviceInputProcessor, $nameFinder);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->serviceInputProcessor,
+            'nameFinder',
+            $nameFinder
+        );
     }
 
     public function testSimpleProperties()

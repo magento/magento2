@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 class Compiled implements ConfigLoaderInterface
 {
-    const COMPILED_FILE_EXTENSION  = '.json';
+    const FILE_EXTENSION  = '.json';
 
     /**
      * Global config
@@ -47,7 +47,7 @@ class Compiled implements ConfigLoaderInterface
     public static function getFilePath($area)
     {
         $diPath = DirectoryList::getDefaultConfig()[DirectoryList::DI][DirectoryList::PATH];
-        return BP . $diPath . '/' . $area . self::COMPILED_FILE_EXTENSION;
+        return BP . $diPath . '/' . $area . self::FILE_EXTENSION;
     }
 
     /**

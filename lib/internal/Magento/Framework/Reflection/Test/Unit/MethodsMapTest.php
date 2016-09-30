@@ -20,6 +20,9 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $jsonMock;
+
     /**
      * Set up helper.
      */
@@ -48,19 +51,11 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $fieldNamerMock,
             ]
         );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+        $this->jsonMock = $this->getMock(JsonInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->object,
             'json',
-            $jsonMock
+            $this->jsonMock
         );
     }
 
@@ -91,6 +86,11 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodsMap()
     {
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
         $methodsMap = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertEquals(
             [
