@@ -237,4 +237,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver">
+        <arguments>
+            <argument name="defaultGenerator" xsi:type="object">\Magento\CatalogSearch\Model\Search\RequestGenerator\General</argument>
+            <argument name="generators" xsi:type="array">
+                <item name="decimal" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

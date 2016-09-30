@@ -46,7 +46,7 @@ class Item extends Sidebar
      *
      * @var string
      */
-    protected $price = '.product .price';
+    protected $price = '.minicart-price .price';
 
     /**
      * CSS selector for update button.
