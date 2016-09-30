@@ -37,7 +37,6 @@ class PaymentMethodListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Vault\Api\PaymentMethodListInterface::getList
      * @magentoDataFixture Magento/Braintree/_files/payments.php
      */
     public function testGetList()
@@ -58,7 +57,6 @@ class PaymentMethodListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Vault\Api\PaymentMethodListInterface::getActiveList
      * @magentoDataFixture Magento/Braintree/_files/payments.php
      */
     public function testGetActiveList()
@@ -67,6 +65,7 @@ class PaymentMethodListTest extends \PHPUnit_Framework_TestCase
 
         static::assertNotEmpty($vaultPayments);
         static::assertCount(1, $vaultPayments);
-        static::assertEquals(PayPalConfigProvider::PAYPAL_VAULT_CODE, $vaultPayments[0]->getCode());
+        $payment = array_pop($vaultPayments);
+        static::assertEquals(PayPalConfigProvider::PAYPAL_VAULT_CODE, $payment->getCode());
     }
 }

@@ -73,6 +73,6 @@ class PaymentMethodList implements VaultPaymentMethodListInterface
                 return $methodInstance instanceof VaultPaymentInterface;
             }
         );
-        return $availableMethods;
+        return array_values($availableMethods);
     }
 }

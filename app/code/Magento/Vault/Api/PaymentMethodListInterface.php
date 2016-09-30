@@ -16,7 +16,7 @@ interface PaymentMethodListInterface
 {
     /**
      * Get list of available vault payments
-     * @param $storeId
+     * @param int $storeId
      * @return VaultPaymentInterface[]
      */
     public function getList($storeId);
