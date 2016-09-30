@@ -6,6 +6,7 @@
 namespace Magento\Review\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Ui\DataProvider\Product\Form\Modifier\Review;
 
@@ -19,11 +20,23 @@ class ReviewTest extends AbstractModifierTest
      */
     protected $urlBuilderMock;
 
+    /**
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleManagerMock;
+
     protected function setUp()
     {
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
+        $this->moduleManager = $this->getMock(
+            'Magento\Framework\Module\Manager',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     protected function createModel()
@@ -31,13 +44,31 @@ class ReviewTest extends AbstractModifierTest
         return $this->objectManager->getObject(Review::class, [
             'locator' => $this->locatorMock,
             'urlBuilder' => $this->urlBuilderMock,
+            'moduleManager' => $this->moduleManager,
         ]);
     }
 
-    public function testModifyMetaToBeEmpty()
+    public function testModifyMetaToBeEmptyNoProductId()
     {
         $this->productMock->expects($this->once())
             ->method('getId')
+            ->willReturn(0);
+        $this->moduleManager->expects($this->never())
+            ->method('isOutputEnabled')
+            ->with('Magento_Review')
+            ->willReturn(1);
+
+        $this->assertSame([], $this->getModel()->modifyMeta([]));
+    }
+
+    public function testModifyMetaToBeEmptyModuleOutputDisabled()
+    {
+        $this->productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->moduleManager->expects($this->once())
+            ->method('isOutputEnabled')
+            ->with('Magento_Review')
             ->willReturn(0);
 
         $this->assertSame([], $this->getModel()->modifyMeta([]));
@@ -47,6 +78,10 @@ class ReviewTest extends AbstractModifierTest
     {
         $this->productMock->expects($this->once())
             ->method('getId')
+            ->willReturn(1);
+        $this->moduleManager->expects($this->once())
+            ->method('isOutputEnabled')
+            ->with('Magento_Review')
             ->willReturn(1);
 
         $this->assertArrayHasKey(Review::GROUP_REVIEW, $this->getModel()->modifyMeta([]));
