@@ -24,32 +24,32 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configScopeMock;
+    private $configScopeMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerMock;
+    private $readerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $omConfigMock;
+    private $omConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $definitionMock;
+    private $definitionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $relationsMock;
+    private $relationsMock;
 
     /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $jsonMock;
@@ -75,15 +75,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManager\RelationsInterface::class
         );
-        $this->jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $this->jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $this->jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+        $this->jsonMock = $this->getMock(JsonInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerHelper->mockObjectManager([JsonInterface::class => $this->jsonMock]);
     }
@@ -155,6 +147,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
         $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
 
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
+        $this->jsonMock->expects($this->never())->method('decode');
+
         $model = $this->objectManagerHelper->getObject(
             \Magento\Framework\Interception\Config\Config::class,
             [
@@ -193,6 +192,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($cacheId)
             ->will($this->returnValue(json_encode($interceptionData)));
+
+        $this->jsonMock->expects($this->never())->method('encode');
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
 
         $model = $this->objectManagerHelper->getObject(
             \Magento\Framework\Interception\Config\Config::class,

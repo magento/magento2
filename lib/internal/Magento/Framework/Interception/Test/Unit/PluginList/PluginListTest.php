@@ -25,17 +25,20 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Interception\PluginList\PluginList
      */
-    protected $object;
+    private $object;
 
     /**
      * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configScopeMock;
+    private $configScopeMock;
 
     /**
      * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
+
+    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $jsonMock;
 
     protected function setUp()
     {
@@ -77,19 +80,11 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
                 'cacheId' => 'interception'
             ]
         );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+        $this->jsonMock = $this->getMock(JsonInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'json',
-            $jsonMock
+            $this->jsonMock
         );
     }
 
@@ -105,7 +100,6 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash::class,
             'getName'
         );
-
         $this->assertEquals(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
             $this->object->getPlugin(
@@ -228,6 +222,26 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
         $this->object->getNext('SomeType', 'someMethod');
     }
 
+    public function testLoadScopedDataNotCached()
+    {
+        $this->configScopeMock->expects($this->exactly(2))
+            ->method('getCurrentScope')
+            ->will($this->returnValue('scope'));
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->willReturnCallback(
+                function ($data) {
+                    return json_encode($data);
+                }
+            );
+        $this->jsonMock->expects($this->never())
+            ->method('decode');
+        $this->cacheMock->expects($this->once())
+            ->method('save');
+
+        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+    }
+
     /**
      * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
      * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
@@ -240,6 +254,13 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $data = [['key'], ['key'], ['key']];
 
+        $this->jsonMock->expects($this->never())
+            ->method('encode');
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with('global|scope|interception')

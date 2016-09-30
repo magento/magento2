@@ -12,12 +12,17 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ObjectManager\ConfigCache
      */
-    protected $configCache;
+    private $configCache;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager\ConfigCache|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheFrontendMock;
+    private $cacheFrontendMock;
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
 
     protected function setUp()
     {
@@ -28,19 +33,11 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string);
-            });
+        $this->jsonMock = $this->getMock(JsonInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'json',
-            $jsonMock
+            $this->jsonMock
         );
     }
 
@@ -49,7 +46,10 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
         unset($this->configCache);
     }
 
-    public function testGet()
+    /**
+     * @dataProvider getDataProvider
+     */
+    public function testGet($loadData, $expectedResult)
     {
         $key = 'key';
         $this->cacheFrontendMock->expects(
@@ -59,15 +59,33 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
         )->with(
             'diConfig' . $key
         )->will(
-            $this->returnValue(false)
+            $this->returnValue($loadData)
         );
-        $this->assertEquals(false, $this->configCache->get($key));
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $this->assertEquals($expectedResult, $this->configCache->get($key));
+    }
+
+    public function getDataProvider()
+    {
+        return [
+            [false, false],
+            [json_encode(['some data']), ['some data']],
+        ];
     }
 
     public function testSave()
     {
         $key = 'key';
         $config = ['config'];
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
         $this->cacheFrontendMock->expects($this->once())->method('save')->with(json_encode($config), 'diConfig' . $key);
         $this->configCache->save($config, $key);
     }

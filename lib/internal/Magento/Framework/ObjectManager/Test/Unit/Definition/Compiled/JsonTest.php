@@ -17,7 +17,13 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
-    public function testGetParametersWithoutDefinition()
+    /**
+     * @param array $signatures
+     * @param array $definitions
+     * @param mixed $expected
+     * @dataProvider getParametersDataProvider
+     */
+    public function testGetParametersWithoutDefinition($signatures, $definitions, $expected)
     {
         $signatures = [];
         $definitions = ['wonderful' => null];
@@ -25,13 +31,21 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $model->getParameters('wonderful'));
     }
 
-    public function testGetParametersWithSignatureObject()
+    public function getParametersDataProvider()
     {
         $wonderfulSignature = new \stdClass();
-        $signatures = ['wonderfulClass' => $wonderfulSignature];
-        $definitions = ['wonderful' => 'wonderfulClass'];
-        $model = new \Magento\Framework\ObjectManager\Definition\Compiled\Json([$signatures, $definitions]);
-        $this->assertEquals($wonderfulSignature, $model->getParameters('wonderful'));
+        return [
+            [
+                [],
+                ['wonderful' => null],
+                null,
+            ],
+            [
+                ['wonderfulClass' => $wonderfulSignature],
+                ['wonderful' => 'wonderfulClass'],
+                $wonderfulSignature,
+            ]
+        ];
     }
 
     public function testGetParametersWithUnpacking()
@@ -41,11 +55,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $definitions = ['wonderful' => 'wonderfulClass'];
         $object = new \Magento\Framework\ObjectManager\Definition\Compiled\Json([$signatures, $definitions]);
         $jsonMock = $this->getMock(JsonInterface::class);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
-        $jsonMock->method('decode')
+        $jsonMock->expects($this->once())
+            ->method('decode')
             ->willReturnCallback(function ($data) {
                 return json_decode($data, true);
             });

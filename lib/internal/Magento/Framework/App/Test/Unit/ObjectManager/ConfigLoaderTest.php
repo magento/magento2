@@ -15,22 +15,27 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ObjectManager\ConfigLoader
      */
-    protected $object;
+    private $object;
 
     /**
      * @var \Magento\Framework\ObjectManager\Config\Reader\DomFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerFactoryMock;
+    private $readerFactoryMock;
 
     /**
      * @var \Magento\Framework\ObjectManager\Config\Reader\Dom|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerMock;
+    private $readerMock;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
+
+    /**
+     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
 
     protected function setUp()
     {
@@ -68,61 +73,11 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+        $this->jsonMock = $this->getMock(JsonInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'json',
-            $jsonMock
-        );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->object,
-            'json',
-            $jsonMock
-        );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->object,
-            'json',
-            $jsonMock
-        );
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $jsonMock->method('decode')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->object,
-            'json',
-            $jsonMock
+            $this->jsonMock
         );
     }
 
@@ -130,21 +85,26 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
      * @param $area
      * @dataProvider loadDataProvider
      */
-    public function testLoad($area)
+    public function testLoadNotCached($area)
     {
         $configData = ['some' => 'config', 'data' => 'value'];
 
-        $this->cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            $area . '::DiConfig'
-        )->will(
-            $this->returnValue(false)
-        );
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with($area . '::DiConfig')
+            ->will($this->returnValue(false));
 
+        $this->cacheMock->expects($this->once())
+            ->method('save')
+            ->with(json_encode($configData));
         $this->readerMock->expects($this->once())->method('read')->with($area)->will($this->returnValue($configData));
+
+        $this->jsonMock->expects($this->once())
+            ->method('encode')
+            ->willReturnCallback(function ($string) {
+                return json_encode($string);
+            });
+        $this->jsonMock->expects($this->never())->method('decode');
 
         $this->assertEquals($configData, $this->object->load($area));
     }
@@ -161,5 +121,24 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
             'adminhtml files' => ['adminhtml'],
             'any area files' => ['any']
         ];
+    }
+
+    public function testLoadCached()
+    {
+        $configData = ['some' => 'config', 'data' => 'value'];
+
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn(json_encode($configData));
+        $this->cacheMock->expects($this->never())
+            ->method('save');
+        $this->readerMock->expects($this->never())->method('read');
+        $this->jsonMock->expects($this->once())
+            ->method('decode')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $this->jsonMock->expects($this->never())->method('encode');
+        $this->assertEquals($configData, $this->object->load('testArea'));
     }
 }
