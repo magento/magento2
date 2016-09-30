@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -921,9 +922,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
-                    if ($this->_attributeTypes[$code] === 'datetime') {
-                        if (
-                            in_array($code, $this->dateAttrCodes)
+                    if ($this->_attributeTypes[$code] === Table::TYPE_DATETIME) {
+                        if (in_array($code, $this->dateAttrCodes)
                             || in_array($code, $this->userDefinedAttributes)
                         ) {
                             $attrValue = $this->_localeDate->formatDateTime(
