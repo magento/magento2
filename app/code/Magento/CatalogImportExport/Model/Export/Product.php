@@ -132,7 +132,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @var array
      */
-    protected $userDefinedAttributes = [];
+    private $userDefinedAttributes = [];
 
     /**
      * Product collection
