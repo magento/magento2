@@ -313,11 +313,6 @@
             <argument name="cacheFrontend" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Cache\Config\Reader">
-        <arguments>
-            <argument name="fileName" xsi:type="string">cache.xml</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Cache\Config\Data">
         <arguments>
             <argument name="cacheId" xsi:type="string">config_cache</argument>
