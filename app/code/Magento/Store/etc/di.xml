@@ -307,11 +307,6 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Router\Base">
-        <arguments>
-            <argument name="routerId" xsi:type="string">standard</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="defaultTimezonePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>

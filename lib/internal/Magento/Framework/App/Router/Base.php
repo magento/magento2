@@ -116,7 +116,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Framework\App\Router\PathConfigInterface $pathConfig
      *
@@ -131,7 +130,6 @@ class Base implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        $routerId,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
         \Magento\Framework\App\Router\PathConfigInterface $pathConfig
     ) {

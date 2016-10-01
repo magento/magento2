@@ -25,11 +25,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\App\Router">
-        <arguments>
-            <argument name="routerId" xsi:type="string">admin</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Model\Menu\Config">
         <arguments>
             <argument name="menuDirector" xsi:type="object">Magento\Backend\Model\Menu\Director\Director</argument>
