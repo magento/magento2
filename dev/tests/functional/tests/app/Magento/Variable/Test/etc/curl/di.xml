@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="\Magento\Variable\Test\Handler\SystemVariable\SystemVariableInterface" type="\Magento\Variable\Test\Handler\SystemVariable\Curl" />
+    <preference for="Magento\Variable\Test\Handler\SystemVariable\SystemVariableInterface" type="Magento\Variable\Test\Handler\SystemVariable\Curl" />
 </config>

@@ -16,7 +16,7 @@
     <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
 
     <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
-        <plugin name="PaymentVaultExtensionAttributeOperations" type="\Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
+        <plugin name="PaymentVaultExtensionAttributeOperations" type="Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
     </type>
 
     <!-- Payment Method configuration -->

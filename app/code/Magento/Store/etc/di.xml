@@ -84,7 +84,7 @@
     <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
-    <type name="\Magento\Framework\App\Action\AbstractAction">
+    <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
         <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
     </type>

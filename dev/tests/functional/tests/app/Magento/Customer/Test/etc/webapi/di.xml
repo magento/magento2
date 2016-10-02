@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Customer\Test\Handler\Customer\CustomerInterface" type="\Magento\Customer\Test\Handler\Customer\Webapi" />
+    <preference for="Magento\Customer\Test\Handler\Customer\CustomerInterface" type="Magento\Customer\Test\Handler\Customer\Webapi" />
 </config>

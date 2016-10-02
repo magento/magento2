@@ -57,7 +57,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Framework\Pricing\Render\PriceBox">
+    <type name="Magento\Framework\Pricing\Render\PriceBox">
         <plugin name="catalog_price_box_key" type="Magento\Catalog\Block\Category\Plugin\PriceBoxTags" />
     </type>
 </config>

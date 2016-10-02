@@ -77,14 +77,14 @@
             </argument>
         </arguments>
     </type>
-    <preference for="\Magento\Downloadable\Api\LinkRepositoryInterface" type="\Magento\Downloadable\Model\LinkRepository" />
-    <preference for="\Magento\Downloadable\Api\SampleRepositoryInterface" type="\Magento\Downloadable\Model\SampleRepository" />
-    <preference for="\Magento\Downloadable\Api\Data\LinkInterface" type="\Magento\Downloadable\Model\Link" />
-    <preference for="\Magento\Downloadable\Api\Data\SampleInterface" type="\Magento\Downloadable\Model\Sample" />
-    <preference for="\Magento\Downloadable\Api\Data\File\ContentInterface" type="\Magento\Downloadable\Model\File\Content" />
-    <preference for="\Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="\Magento\Downloadable\Model\File\ContentUploader" />
-    <preference for="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
-    <preference for="\Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="\Magento\Downloadable\Model\DownloadableOption" />
+    <preference for="Magento\Downloadable\Api\LinkRepositoryInterface" type="Magento\Downloadable\Model\LinkRepository" />
+    <preference for="Magento\Downloadable\Api\SampleRepositoryInterface" type="Magento\Downloadable\Model\SampleRepository" />
+    <preference for="Magento\Downloadable\Api\Data\LinkInterface" type="Magento\Downloadable\Model\Link" />
+    <preference for="Magento\Downloadable\Api\Data\SampleInterface" type="Magento\Downloadable\Model\Sample" />
+    <preference for="Magento\Downloadable\Api\Data\File\ContentInterface" type="Magento\Downloadable\Model\File\Content" />
+    <preference for="Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="Magento\Downloadable\Model\File\ContentUploader" />
+    <preference for="Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
+    <preference for="Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="Magento\Downloadable\Model\DownloadableOption" />
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">

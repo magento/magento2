@@ -38,6 +38,6 @@
         </arguments>
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
-        <plugin name="login_captcha" type="\Magento\Captcha\Model\Cart\ConfigPlugin" sortOrder="50" />
+        <plugin name="login_captcha" type="Magento\Captcha\Model\Cart\ConfigPlugin" sortOrder="50" />
     </type>
 </config>
