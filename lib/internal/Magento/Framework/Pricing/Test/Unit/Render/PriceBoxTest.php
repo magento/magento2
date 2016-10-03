@@ -241,4 +241,16 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->rendererPool, $this->model->getRendererPool());
     }
+
+    /**
+     * This tests the protected method getCacheLifeTime()
+     */
+    public function testCacheLifeTime()
+    {
+        $reflectionClass = new \ReflectionClass(get_class($this->model));
+        $methodReflection = $reflectionClass->getMethod('getCacheLifetime');
+        $methodReflection->setAccessible(true);
+        $cacheLifeTime = $methodReflection->invoke($this->model);
+        $this->assertNull($cacheLifeTime, 'Expected null cache lifetime');
+    }
 }
