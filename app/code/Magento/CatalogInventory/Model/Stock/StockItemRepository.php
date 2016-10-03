@@ -156,9 +156,9 @@ class StockItemRepository implements StockItemRepositoryInterface
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->getProductCollectionFactory()->create()
                 ->setFlag('has_stock_status_filter')
-                ->addIdFilter($stockItem->getProductId())
-                ->addFieldToSelect('type_id')
-                ->getFirstItem();
+                ->addIdFilter($stockItem->getProductId())
+                ->addFieldToSelect('type_id')
+                ->getFirstItem();
 
             if (!$product->getId()) {
                 return $stockItem;
