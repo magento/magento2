@@ -154,8 +154,11 @@ class StockItemRepository implements StockItemRepositoryInterface
     {
         try {
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->productFactory->create();
-            $product->load($stockItem->getProductId());
+            $product = $this->getProductCollectionFactory()->create()
+                ->setFlag('has_stock_status_filter')
+                ->addIdFilter($stockItem->getProductId())
+                ->addFieldToSelect('type_id')
+                ->getFirstItem();
 
             if (!$product->getId()) {
                 return $stockItem;
@@ -191,6 +194,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         }
         return $stockItem;
     }
+
 
     /**
      * @inheritdoc
