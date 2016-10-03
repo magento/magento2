@@ -13,7 +13,7 @@ use Magento\Indexer\Model\IndexerFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 
 /**
- * Upgrade registered themes
+ * Recurring data upgrade for indexer module
  */
 class RecurringData implements InstallDataInterface
 {
@@ -37,7 +37,6 @@ class RecurringData implements InstallDataInterface
         IndexerFactory $indexerFactory,
         ConfigInterface $configInterface
     ) {
-
         $this->indexerFactory = $indexerFactory;
         $this->configInterface = $configInterface;
     }
