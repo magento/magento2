@@ -158,7 +158,7 @@ abstract class AbstractFormContainers extends Form
 
     /**
      * Fill specified form with containers data.
-     * 
+     *
      * Input data in format
      * [[container => [field => [attribute_name => attribute_value, ..], ..], ..]
      * where container name can be empty if a field is not assigned to any container.
