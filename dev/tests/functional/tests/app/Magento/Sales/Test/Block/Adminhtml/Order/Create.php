@@ -165,7 +165,7 @@ class Create extends Block
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing\Method
      */
-    protected function getBillingMethodBlock()
+    public function getBillingMethodBlock()
     {
         return $this->blockFactory->create(
             \Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing\Method::class,
