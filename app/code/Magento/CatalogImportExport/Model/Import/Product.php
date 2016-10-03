@@ -217,7 +217,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $dateAttrCodes = [
         'special_from_date',
-        'special_to_date'
+        'special_to_date',
+        'news_from_date',
+        'news_to_date',
+        'custom_design_from',
+        'custom_design_to'
     ];
 
     /**
@@ -1699,7 +1703,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                     if (
                         'datetime' == $attribute->getBackendType()
-                        && in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                        && (
+                            in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                            || $attribute->getIsUserDefined()
+                        )
                     ) {
                         $attrValue = $this->dateTime->formatDate($attrValue, false);
                     } else if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
@@ -2523,7 +2530,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData = $this->_customFieldsMapping($rowData);
 
             $this->validateRow($rowData, $source->key());
-            
+
             $source->next();
         }
         $this->checkUrlKeyDuplicates();
