@@ -55,11 +55,19 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $fileParserMock = $this->getMock(\Magento\Framework\Xml\Parser::class, ['load', 'xmlToArray'], [], '', false);
-        $fileParserMock->expects($this->once())->method('xmlToArray')->willReturn(
+        $fileParserMock = $this->getMock(\Magento\Framework\Xml\Parser::class, ['getDom', 'xmlToArray'], [], '', false);
+        $fileParserMock->expects($this->exactly(2))->method('xmlToArray')->willReturn(
             ['config' => [ 'profile' => ['some_key' => 'some_value']]]
         );
-        $fileParserMock->expects($this->once())->method('load')->with('config.file')->willReturn($fileParserMock);
+
+        $domMock = $this->getMock(\DOMDocument::class, ['load', 'xinclude'], [], '', false);
+        $domMock->expects($this->once())->method('load')->with('config.file')->willReturn(
+            $fileParserMock->xmlToArray()
+        );
+        $domMock->expects($this->once())->method('xinclude');
+
+        $fileParserMock->expects($this->exactly(2))->method('getDom')->willReturn($domMock);
+
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
         $this->model->loadConfig('config.file');
         $this->assertSame('some_value', $this->model->getValue('some_key'));
