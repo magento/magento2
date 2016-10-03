@@ -168,7 +168,7 @@
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">10008</data>
+            <data name="product/data/price/value" xsi:type="string">10008.88</data>
             <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">58</data>
@@ -460,6 +460,28 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
             <data name="product/data/country_of_manufacture" xsi:type="string">Antarctica</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+        </variation>
+        <variation name="CreateSimpleProductEntityTestVariation28" summary="Create product with tier price for not logged in customer">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">667</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">not_logged_in</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
+        </variation>
+        <variation name="CreateSimpleProductEntityTestVariation29" summary="Create Simple Product and assign it to custom website">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">200.20</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">668</data>
+            <data name="product/data/website_ids/0/dataset" xsi:type="string">custom_store</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite" />
         </variation>
         <variation name="CreateSimpleProductEntityWithEmptySkuMaskTest1"  summary="Create Simple Product Entity With Empty Sku Mask" ticketId="MAGETWO-58951">
             <data name="configData" xsi:type="string">empty_product_mask_sku</data>

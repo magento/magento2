@@ -66,5 +66,16 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="not_logged_in">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">90</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">2</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">NOT_LOGGED_IN</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>
