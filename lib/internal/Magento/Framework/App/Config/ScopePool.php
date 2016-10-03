@@ -92,16 +92,18 @@ class ScopePool
     {
         $scopeCode = $this->_getScopeCode($scopeType, $scopeCode);
 
-        // Key by url to support dynamic {{base_url}} and port assignments
-        $host = $this->getRequest()->getHttpHost();
-        $port = $this->getRequest()->getServer('SERVER_PORT');
-        $path = $this->getRequest()->getBasePath();
-        $urlInfo = $host . $port . trim($path, '/');
-        $code = $scopeType . '|' . $scopeCode . '|' . $urlInfo;
+        $code = $scopeType . '|' . $scopeCode;
 
         if (!isset($this->_scopes[$code])) {
-            $cacheKey = $this->_cacheId . '|' . $code;
+            // Key by url to support dynamic {{base_url}} and port assignments
+            $host = $this->getRequest()->getHttpHost();
+            $port = $this->getRequest()->getServer('SERVER_PORT');
+            $path = $this->getRequest()->getBasePath();
+
+            $urlInfo = $host . $port . trim($path, '/');
+            $cacheKey = $this->_cacheId . '|' . $code . '|' . $urlInfo;
             $data = $this->_cache->load($cacheKey);
+
             if ($data) {
                 $data = unserialize($data);
             } else {

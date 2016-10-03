@@ -51,7 +51,6 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
      */
     public function testRemoveChild()
     {
-        $this->markTestSkipped('must be unskipped after fixing bug about wrong saving bundle option price');
         $productSku = 'bundle-product';
         $childSku = 'simple';
         $optionIds = $this->getProductOptions(3);

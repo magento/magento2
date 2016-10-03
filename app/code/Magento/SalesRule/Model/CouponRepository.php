@@ -163,15 +163,9 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         $this->extensionAttributesJoinProcessor->process($collection, $couponInterfaceName);
 
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $coupons = [];
-        /** @var \Magento\SalesRule\Model\Coupon $couponModel */
-        foreach ($collection->getItems() as $couponModel) {
-            $coupons[] = $couponModel->getData();
-        }
-
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
-        $searchResults->setItems($coupons);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
