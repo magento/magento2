@@ -17,7 +17,7 @@
                     echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>",
                 "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
-                    'Magento_Swatches') ?: 'replace'; ?>"
+                    'Magento_ConfigurableProduct') ?: 'replace'; ?>"
             }
         }
     }

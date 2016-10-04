@@ -255,9 +255,6 @@
     <vars module="Magento_ConfigurableProduct">
         <var name="gallery_switch_strategy">prepend</var>
     </vars>
-    <vars module="Magento_Swatches">
-        <var name="gallery_switch_strategy">prepend</var>
-    </vars>
 
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>

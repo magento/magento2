@@ -243,7 +243,14 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
-            //
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
             gallerySwitchStrategy: 'replace',
 
             // whether swatches are rendered in product list or on product page
@@ -293,11 +300,9 @@ define([
                     this.element.parents('.product-item-info');
 
             if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
@@ -1112,6 +1117,17 @@ define([
             }
 
             return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         }
     });
 
