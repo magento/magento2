@@ -244,7 +244,7 @@ define([
             mediaGalleryInitial: [{}],
 
             //
-            onlyMainImg: false,
+            gallerySwitchStrategy: 'replace',
 
             // whether swatches are rendered in product list or on product page
             inProductList: false
@@ -1016,26 +1016,27 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
-                updateImg,
-                imagesToUpdate,
+                initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
-                item;
+                imagesToUpdate,
+                isInitial;
 
             if (isProductViewExist) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.onlyMainImg) {
-                    updateImg = imagesToUpdate.filter(function (img) {
-                        return img.isMain;
-                    });
-                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
-                    gallery.updateDataByIndex(0, item);
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
 
-                    gallery.seek(1);
-                } else {
-                    gallery.updateData(imagesToUpdate);
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
                 }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

@@ -29,7 +29,7 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
-            onlyMainImg: false
+            gallerySwitchStrategy: 'replace'
         },
 
         /**
@@ -262,43 +262,30 @@ define([
                 initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
+            if (!galleryObject) {
+                return;
+            }
+
             if (this.options.spConfig.images[this.simpleProduct]) {
                 images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
             }
 
-            function updateGallery(imagesArr) {
-                var imgToUpdate,
-                    mainImg;
-
-                mainImg = imagesArr.filter(function (img) {
-                    return img.isMain;
+            if (images) {
+                images.forEach(function (img) {
+                    img.type = 'image';
                 });
 
-                imgToUpdate = mainImg.length ? mainImg[0] : imagesArr[0];
-                galleryObject.updateDataByIndex(0, imgToUpdate);
-                galleryObject.seek(1);
-            }
-
-            if (galleryObject) {
-                if (images) {
-                    images.map(function (img) {
-                        img.type = 'image';
-                    });
-
-                    if (this.options.onlyMainImg) {
-                        updateGallery(images);
-                    } else {
-                        galleryObject.updateData(images)
-                    }
-                } else {
-                    if (this.options.onlyMainImg) {
-                        updateGallery(initialImages);
-                    } else {
-                        galleryObject.updateData(this.options.mediaGalleryInitial);
-                        $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
-                    }
+                if (this.options.gallerySwitchStrategy === 'prepend') {
+                    images = images.concat(initialImages);
                 }
+
+                galleryObject.updateData(images);
+            } else {
+                galleryObject.updateData(initialImages);
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
+
+            galleryObject.first();
         },
 
         /**
