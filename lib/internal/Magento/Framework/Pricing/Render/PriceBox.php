@@ -86,7 +86,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
      */
     protected function getCacheLifetime()
     {
-        return parent::hasCacheLifetime()? parent::getCacheLifetime() : null;
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : null;
     }
     
     /**

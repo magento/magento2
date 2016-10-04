@@ -243,7 +243,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests the protected method getCacheLifeTime()
+     * This tests ensures that protected method getCacheLifeTime() returns a null value
      */
     public function testCacheLifeTime()
     {
