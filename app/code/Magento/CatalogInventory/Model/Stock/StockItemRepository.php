@@ -90,6 +90,9 @@ class StockItemRepository implements StockItemRepositoryInterface
      */
     protected $stockRegistryStorage;
 
+    /** @var  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    protected $productCollectionFactory;
+
     /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockStateProviderInterface $stockStateProvider
@@ -128,6 +131,20 @@ class StockItemRepository implements StockItemRepositoryInterface
         $this->localeDate = $localeDate;
         $this->indexProcessor = $indexProcessor;
         $this->dateTime = $dateTime;
+    }
+
+    /**
+     * @return  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
+    private function getProductCollectionFactory()
+    {
+        if ($this->productCollectionFactory === null) {
+            $this->productCollectionFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
+            );
+        }
+
+        return $this->productCollectionFactory;
     }
 
     /**
