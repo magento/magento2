@@ -161,6 +161,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->willReturn($metaId);
         $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
         $this->stepCheckSaveWithActiveProfile($metaData);
+        $this->meta->expects($this->once())->method('beforeLoad');
         $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 
@@ -177,7 +178,5 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($metaData);
         $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
-        $this->meta->expects($this->at(0))->method('setData')->with($metaData);
-        $this->meta->expects($this->at(2))->method('setData')->with('active_profile', $this->profile);
     }
 }

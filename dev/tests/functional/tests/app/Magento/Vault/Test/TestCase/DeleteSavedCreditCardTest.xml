@@ -35,12 +35,18 @@
                     <item name="creditCard" xsi:type="array">
                         <item name="dataset" xsi:type="string">visa_braintree</item>
                     </item>
+                    <item name="vault" xsi:type="array">
+                        <item name="method" xsi:type="string">braintree_cc_vault</item>
+                    </item>
                 </item>
                 <item name="3" xsi:type="array">
                     <item name="method" xsi:type="string">payflowpro</item>
                     <item name="creditCardClass" xsi:type="string">credit_card</item>
                     <item name="creditCard" xsi:type="array">
                         <item name="dataset" xsi:type="string">amex_default</item>
+                    </item>
+                    <item name="vault" xsi:type="array">
+                        <item name="method" xsi:type="string">payflowpro_cc_vault</item>
                     </item>
                 </item>
             </data>

@@ -186,7 +186,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
 
     protected function generalGetProductCollection()
     {
-        $this->eventManager->expects($this->once())->method('dispatch')
+        $this->eventManager->expects($this->exactly(2))->method('dispatch')
             ->will($this->returnValue(true));
         $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
             ->willReturn(false);
