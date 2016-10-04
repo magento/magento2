@@ -195,7 +195,6 @@ class StockItemRepository implements StockItemRepositoryInterface
         return $stockItem;
     }
 
-
     /**
      * @inheritdoc
      */

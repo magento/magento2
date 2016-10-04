@@ -188,6 +188,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         )->disableOriginalConstructor()->getMock();
 
+        $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
         $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
         $productCollection->expects($this->any())->method('addFieldToSelect')->willReturnSelf();
         $productCollection->expects($this->any())->method('getFirstItem')->willReturn($this->productMock);
