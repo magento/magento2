@@ -831,20 +831,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testStatusAfterLoad()
-    {
-        $this->resource->expects($this->once())->method('load')->with($this->model, 1, null);
-        $this->eventManagerMock->expects($this->exactly(4))->method('dispatch');
-        $this->model->load(1);
-        $this->assertEquals(
-            Status::STATUS_ENABLED,
-            $this->model->getData(\Magento\Catalog\Model\Product::STATUS)
-        );
-        $this->assertFalse($this->model->hasDataChanges());
-        $this->model->setStatus(Status::STATUS_DISABLED);
-        $this->assertTrue($this->model->hasDataChanges());
-    }
-
     /**
      * Test retrieving price Info
      */
@@ -1466,5 +1452,28 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->getTypeInstance();
         $this->model->setTypeId('typeId');
         $this->model->getTypeInstance();
+    }
+
+    public function testGetOptionById()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn($optionId);
+        $this->assertEquals($optionMock, $this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdWithWrongOptionId()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn(200);
+        $this->assertNull($this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdForProductWithoutOptions()
+    {
+        $this->assertNull($this->model->getOptionById(100));
     }
 }

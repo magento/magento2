@@ -93,7 +93,7 @@ class Context
      *
      * @param string $type
      * @param array $value
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
      */
     public function buildPathToLocaleDirectoryByContext($type, $value)
@@ -111,6 +111,7 @@ class Context
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));
         }
-        return $path . '/' . self::LOCALE_DIRECTORY . '/';
+
+        return (null === $path) ? null : $path . '/' . self::LOCALE_DIRECTORY . '/';
     }
 }

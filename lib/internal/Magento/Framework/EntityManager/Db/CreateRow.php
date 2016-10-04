@@ -50,11 +50,12 @@ class CreateRow
     {
         $output = [];
         foreach ($connection->describeTable($metadata->getEntityTable()) as $column) {
-
-            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP') {
+            $columnName = strtolower($column['COLUMN_NAME']);
+            if ($this->canNotSetTimeStamp($columnName, $column, $data)) {
                 continue;
             }
-            if (isset($data[strtolower($column['COLUMN_NAME'])])) {
+
+            if (isset($data[$columnName])) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
             } elseif ($column['DEFAULT'] === null) {
                 $output[strtolower($column['COLUMN_NAME'])] = null;
@@ -64,6 +65,18 @@ class CreateRow
             $output[$metadata->getIdentifierField()] = $metadata->generateIdentifier();
         }
         return $output;
+    }
+
+    /**
+     * @param string $columnName
+     * @param string $column
+     * @param array $data
+     * @return bool
+     */
+    private function canNotSetTimeStamp($columnName, $column, array $data)
+    {
+        return $column['DEFAULT'] == 'CURRENT_TIMESTAMP' && !isset($data[$columnName])
+        && empty($column['NULLABLE']);
     }
 
     /**

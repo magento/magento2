@@ -20,6 +20,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Class ProductTest
@@ -1050,9 +1051,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoAppIsolation enabled
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
-     * @param $errorsCount int
+     * @param $expectedErrors array
      */
-    public function testValidateUrlKeys($importFile, $errorsCount)
+    public function testValidateUrlKeys($importFile, $expectedErrors)
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem::class
@@ -1066,19 +1067,16 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'directory' => $directory
             ]
         );
+        /** @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface $errors */
         $errors = $this->_model->setParameters(
             ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == $errorsCount);
-        if ($errorsCount >= 1) {
-            $this->assertEquals(
-            "Specified URL key already exists",
-            $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
-            );
-        }
+        $this->assertEquals(
+            $expectedErrors[RowValidatorInterface::ERROR_DUPLICATE_URL_KEY],
+            count($errors->getErrorsByCode([RowValidatorInterface::ERROR_DUPLICATE_URL_KEY]))
+        );
     }
 
     /**
@@ -1087,9 +1085,24 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function validateUrlKeysDataProvider()
     {
         return [
-            ['products_to_check_valid_url_keys.csv', 0],
-            ['products_to_check_duplicated_url_keys.csv', 2],
-            ['products_to_check_duplicated_names.csv' , 1]
+            [
+                'products_to_check_valid_url_keys.csv',
+                 [
+                     RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 0
+                 ]
+            ],
+            [
+                'products_to_check_duplicated_url_keys.csv',
+                [
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 2
+                ]
+            ],
+            [
+                'products_to_check_duplicated_names.csv' ,
+                [
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 1
+                ]
+            ]
         ];
     }
 
@@ -1197,7 +1210,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testExistingProductWithUrlKeys()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-48871');
         $products = [
             'simple1' => 'url-key1',
             'simple2' => 'url-key2',
@@ -1226,6 +1238,42 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
+        foreach ($products as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithoutUrlKeys()
+    {
+        $products = [
+            'simple1' => 'simple-1',
+            'simple2' => 'simple-2',
+            'simple3' => 'simple-3'
+        ];
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_keys.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }

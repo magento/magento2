@@ -1909,10 +1909,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptionById($optionId)
     {
-        /** @var \Magento\Catalog\Model\Product\Option $option */
-        foreach ($this->getOptions() as $option) {
-            if ($option->getId() == $optionId) {
-                return $option;
+        if (is_array($this->getOptions())) {
+            /** @var \Magento\Catalog\Model\Product\Option $option */
+            foreach ($this->getOptions() as $option) {
+                if ($option->getId() == $optionId) {
+                    return $option;
+                }
             }
         }
 
@@ -2272,7 +2274,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        
+
         if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
@@ -2287,7 +2289,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * Check whether stock status changed
-     * 
+     *
      * @return bool
      */
     private function isStockStatusChanged()
@@ -2305,7 +2307,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             && ($stockItem->getIsInStock() != $stockData['is_in_stock'])
         );
     }
-    
+
     /**
      * Reload PriceInfo object
      *
