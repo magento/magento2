@@ -19,7 +19,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInRefundsGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundedGrandTotalOnFrontend" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductQtyDecreasedAfterCreditmemo" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariation2">
