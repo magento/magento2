@@ -66,13 +66,9 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $applicationFactory = $this->getMock(
-            \Magento\Framework\Composer\MagentoComposerApplicationFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $appFactory = $this->getMockBuilder(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $application = $this->getMock(\Magento\Composer\MagentoComposerApplication::class, [], [], '', false);
         $application->expects($this->any())
             ->method('runComposerCommand')
@@ -105,11 +101,11 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
                     'versions: 3.0.1'
                 ],
             ]);
-        $applicationFactory->expects($this->any())->method('create')->willReturn($application);
+        $appFactory->expects($this->any())->method('create')->willReturn($application);
         $objectManager->expects($this->any())
             ->method('get')
             ->with(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
-            ->willReturn($applicationFactory);
+            ->willReturn($appFactory);
         $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
 
         $directoryWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
