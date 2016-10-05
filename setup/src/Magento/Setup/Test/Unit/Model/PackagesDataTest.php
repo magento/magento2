@@ -55,12 +55,16 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->composerInformation = $this->getComposerInformation();
-        $this->timeZoneProvider = $this->getMock(\Magento\Setup\Model\DateTime\TimeZoneProvider::class, [], [], '', false);
+        $this->timeZoneProvider = $this->getMockBuilder(\Magento\Setup\Model\DateTime\TimeZoneProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $timeZone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
         $this->timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
         $this->packagesAuth = $this->getMock(\Magento\Setup\Model\PackagesAuth::class, [], [], '', false);
         $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $this->objectManagerProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $applicationFactory = $this->getMock(
             \Magento\Framework\Composer\MagentoComposerApplicationFactory::class,
