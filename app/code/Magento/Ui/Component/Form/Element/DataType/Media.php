@@ -5,9 +5,8 @@
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Media
@@ -20,23 +19,6 @@ class Media extends AbstractDataType
      * @var Repository
      */
     private $assetRepo;
-
-    /**
-     * @param ContextInterface $context
-     * @param Repository $assetRepo
-     * @param UiComponentInterface[] $components
-     * @param array $data
-     */
-    public function __construct(
-        ContextInterface $context,
-        Repository $assetRepo,
-        array $components = [],
-        array $data = []
-    ) {
-        $this->assetRepo = $assetRepo;
-
-        parent::__construct($context, $components, $data);
-    }
 
     /**
      * Get component name
@@ -57,10 +39,25 @@ class Media extends AbstractDataType
     {
         $config = $this->getData('config');
 
-        $config['placeholder'] = $this->assetRepo->getUrl('images/fam_bullet_disk.gif');
+        $config['placeholder'] = $this->getAssetRepo()->getUrl('images/fam_bullet_disk.gif');
 
         $this->setData('config', $config);
 
         parent::prepare();
+    }
+
+    /**
+     * Get Repository instance
+     *
+     * @return Repository
+     *
+     * @deprecated
+     */
+    private function getAssetRepo()
+    {
+        if ($this->assetRepo === null) {
+            $this->assetRepo = ObjectManager::getInstance()->get(Repository::class);
+        }
+        return $this->assetRepo;
     }
 }
