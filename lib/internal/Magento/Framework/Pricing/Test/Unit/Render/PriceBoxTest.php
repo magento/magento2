@@ -243,10 +243,10 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests ensures that protected method getCacheLifeTime() returns a null value when cacheLifeTime is not
+     * This tests ensures that protected method getCacheLifetime() returns a null value when cacheLifeTime is not
      * explicitly set in the parent block
      */
-    public function testCacheLifeTime()
+    public function testCacheLifetime()
     {
         $reflectionClass = new \ReflectionClass(get_class($this->model));
         $methodReflection = $reflectionClass->getMethod('getCacheLifetime');
