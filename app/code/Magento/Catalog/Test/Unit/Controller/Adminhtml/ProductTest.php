@@ -39,22 +39,21 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
      * @param array $objectManagerMap Object Manager mappings
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function initContext(array $additionalParams = [], $objectManagerMap = [])
+    protected function initContext(array $additionalParams = [], array $objectManagerMap = [])
     {
         $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
 
-        $objectManagerMap = array_merge(
-            [
-                [\Magento\Catalog\Model\Product::class, $productActionMock],
-                [ProductInterface::class, $productActionMock]
-            ],
-            $objectManagerMap
-        );
-
         $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+
+        if ($objectManagerMap) {
+            $this->objectManagerMock->expects($this->any())
+                ->method('get')
+                ->willReturnMap($objectManagerMap);
+        }
+
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->willReturnMap($objectManagerMap);
+            ->willReturn($productActionMock);
 
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->disableOriginalConstructor()->getMockForAbstractClass();
