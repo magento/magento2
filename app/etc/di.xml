@@ -1205,7 +1205,6 @@
         <arguments>
             <argument name="mappers" xsi:type="array">
                 <item name="mapper" xsi:type="object">Magento\Framework\EntityManager\Mapper</item>
-                <item name="customAttributesMapper" xsi:type="object">Magento\Framework\EntityManager\CustomAttributesMapper</item>
             </argument>
         </arguments>
     </type>
