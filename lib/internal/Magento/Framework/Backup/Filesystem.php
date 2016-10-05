@@ -316,7 +316,7 @@ class Filesystem extends AbstractBackup
         if (!$this->rollBackFtp) {
             $this->rollBackFtp = ObjectManager::getInstance()->create(
                 \Magento\Framework\Backup\Filesystem\Rollback\Ftp::class,
-                [$this]
+                ['snapshotObject' => $this]
             );
         }
 
@@ -332,7 +332,7 @@ class Filesystem extends AbstractBackup
         if (!$this->rollBackFs) {
             $this->rollBackFs = ObjectManager::getInstance()->create(
                 \Magento\Framework\Backup\Filesystem\Rollback\Fs::class,
-                [$this]
+                ['snapshotObject' => $this]
             );
         }
 
