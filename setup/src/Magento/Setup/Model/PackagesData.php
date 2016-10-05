@@ -491,12 +491,10 @@ class PackagesData
                 $packageVersions = array_reverse($packageVersions);
 
                 return array_keys($packageVersions);
-            } else {
-                return $this->getPackageAvailableVersionByComposerCommand($package);
             }
-        } else {
-            return $this->getPackageAvailableVersionByComposerCommand($package);
         }
+
+        return $this->getAvailableVersionsFromAllRepositories($package);
     }
 
     /**
@@ -506,7 +504,7 @@ class PackagesData
      * @return array
      * @exception \RuntimeException
      */
-    private function getPackageAvailableVersionByComposerCommand($package)
+    private function getAvailableVersionsFromAllRepositories($package)
     {
         $versionsPattern = '/^versions\s*\:\s(.+)$/m';
 
