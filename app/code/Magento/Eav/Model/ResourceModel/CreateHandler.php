@@ -19,6 +19,9 @@ use Magento\Framework\Model\Entity\ScopeResolver;
  */
 class CreateHandler implements AttributeInterface
 {
+    /** Name of ATTRIBUTE_SET_ID field */
+    const ATTRIBUTE_SET_ID = 'attribute_set_id';
+
     /**
      * @var AttributeRepository
      */
@@ -88,21 +91,35 @@ class CreateHandler implements AttributeInterface
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception
      */
-    protected function getAttributes($entityType)
+    protected function getAttributes($entityType, $attributeSetId = null)
     {
         /** @var AttributeCache $cache */
         $cache = $this->getAttributeCache();
-        if ($attributes = $cache->getAttributes($entityType)) {
+        $suffix = 'attribute_set_id-' . ($attributeSetId ?: 'all');
+        if ($attributes = $cache->getAttributes($entityType, $suffix)) {
             return $attributes;
         }
 
         $metadata = $this->metadataPool->getMetadata($entityType);
 
+        if ($attributeSetId === null) {
+            $criteria = $this->searchCriteriaBuilder->addFilter(self::ATTRIBUTE_SET_ID . '', null, 'neq')->create();
+        } else {
+            $criteria = $this->searchCriteriaBuilder->addFilter(self::ATTRIBUTE_SET_ID, $attributeSetId)->create();
+        }
+
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
+            $criteria
         );
-        return $searchResult->getItems();
+        $attributes = $searchResult->getItems();
+
+        $this->attributeCache->saveAttributes(
+            $entityType,
+            $attributes,
+            $suffix
+        );
+        return $attributes;
     }
 
     /**
@@ -120,8 +137,9 @@ class CreateHandler implements AttributeInterface
         if ($metadata->getEavEntityType()) {
             $processed = [];
             $entityLinkField = $metadata->getLinkField();
+            $attributeSetId = isset($entityData[self::ATTRIBUTE_SET_ID]) ? $entityData[self::ATTRIBUTE_SET_ID] : null;
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            foreach ($this->getAttributes($entityType) as $attribute) {
+            foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
                 }
