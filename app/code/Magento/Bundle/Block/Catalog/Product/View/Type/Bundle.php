@@ -78,10 +78,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     *
      * Returns the bundle product options
-     * Will return stored options data if the product options are already initialized
-     * In a case when $stripSelection parameter is true will reset stored bundle selections collection
+     * Will return cached options data if the product options are already initialized
+     * In a case when $stripSelection parameter is true will reload stored bundle selections collection from DB
      *
      * @param bool $stripSelection
      * @return array
