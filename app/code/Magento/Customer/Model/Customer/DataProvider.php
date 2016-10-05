@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -100,6 +101,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -169,6 +171,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Customer|Address $entity
      * @param array $entityData
+     * @return void
      */
     private function overrideFileUploaderData($entity, array &$entityData)
     {

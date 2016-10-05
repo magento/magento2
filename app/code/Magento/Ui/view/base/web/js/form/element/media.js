@@ -68,7 +68,7 @@ define([
         /**
          * Calls global image preview handler
          */
-        callPreviewHandler: function() {
+        callPreviewHandler: function () {
             imagePreview('image-' + this.uid);
         }
     });

@@ -364,10 +364,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $customerEmail = 'user1@example.com';
-
         $filename = '/filename.ext1';
         $viewUrl = 'viewUrl';
-
         $expectedData = [
             $customerId => [
                 'customer' => [
@@ -403,10 +401,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $customerMock->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => $customerEmail,
-                'img1' => $filename,
-            ]);
+            ->willReturn(['email' => $customerEmail, 'img1' => $filename]);
         $customerMock->expects($this->once())
             ->method('getAddresses')
             ->willReturn([]);
@@ -433,9 +428,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->fileProcessorFactory->expects($this->any())
             ->method('create')
-            ->with([
-                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            ])
+            ->with(['entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER])
             ->willReturn($this->fileProcessor);
 
         $this->fileProcessor->expects($this->once())
@@ -459,11 +452,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'eavConfig' => $this->getEavConfigMock()
             ]
         );
-
-        $reflection = new \ReflectionClass(get_class($dataProvider));
-        $reflectionProperty = $reflection->getProperty('fileProcessorFactory');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($dataProvider, $this->fileProcessorFactory);
+        $this->setBackwardCompatibleProperty($dataProvider, 'fileProcessorFactory', $this->fileProcessorFactory);
 
         $this->assertEquals($expectedData, $dataProvider->getData());
     }
@@ -544,11 +533,24 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $reflection = new \ReflectionClass(get_class($dataProvider));
-        $reflectionProperty = $reflection->getProperty('fileProcessorFactory');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($dataProvider, $this->fileProcessorFactory);
+        $this->setBackwardCompatibleProperty($dataProvider, 'fileProcessorFactory', $this->fileProcessorFactory);
 
         $this->assertEquals($expectedData, $dataProvider->getData());
+    }
+
+    /**
+     * Set mocked property
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param object $propertyValue
+     * @return void
+     */
+    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
     }
 }
