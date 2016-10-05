@@ -14,38 +14,39 @@ use \Magento\Eav\Model\Entity\AbstractEntity;
 use \Magento\Catalog\Model\ResourceModel\Product;
 use \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use \Magento\Framework\Locale\FormatInterface;
+use \Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\SalesRule\Model\Rule\Condition\Product */
+    /** @var SalesRuleProduct */
     protected $model;
 
-    /** @var \Magento\Rule\Model\Condition\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendHelperMock;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $configMock;
 
-    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $productFactoryMock;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $productRepositoryMock;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $productMock;
 
-    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $collectionMock;
 
-    /** @var \Magento\Framework\Locale\FormatInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormatInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $formatMock;
 
-    /** @var \Magento\Eav\Model\Entity\AttributeLoaderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AttributeLoaderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeLoaderInterfaceMock;
 
     /**
@@ -155,4 +156,3 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($url, $this->model->getValueElementChooserUrl());
     }
 }
-
