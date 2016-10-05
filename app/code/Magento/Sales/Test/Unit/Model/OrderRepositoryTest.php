@@ -118,7 +118,11 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $orderEntity = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
         $extensionAttributes = $this->getMock(
-            \Magento\Sales\Api\Data\OrderExtension::class, ['getShippingAssignments'], [], '', false
+            \Magento\Sales\Api\Data\OrderExtension::class,
+            ['getShippingAssignments'],
+            [],
+            '',
+            false
         );
         $shippingAssignment = $this->getMockBuilder(\Magento\Sales\Model\Order\ShippingAssignment::class)
             ->disableOriginalConstructor()

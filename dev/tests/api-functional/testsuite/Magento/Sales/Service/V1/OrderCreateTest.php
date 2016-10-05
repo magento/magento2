@@ -31,6 +31,9 @@ class OrderCreateTest extends WebapiAbstract
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function prepareOrder()
     {
         /** @var \Magento\Sales\Model\Order $orderBuilder */
@@ -99,7 +102,6 @@ class OrderCreateTest extends WebapiAbstract
 
         $this->addProductOption($orderItem);
 
-
         $order->setItems([$orderItem->getData()]);
         $order->setData('payment', $orderPayment->getData());
 
@@ -139,7 +141,9 @@ class OrderCreateTest extends WebapiAbstract
                     'shipping' => [
                         'address' => $address,
                         'method' => 'Flat Rate - Fixed'
-                    ]
+                    ],
+                    'items' => [$orderItem->getData()],
+                    'stock_id' => null,
                 ]
             ];
         return $orderData;
