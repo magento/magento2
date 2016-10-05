@@ -7,13 +7,48 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CancelCreatedOrderTest" summary="Cancel Created Order for Offline Payment Methods" ticketId="MAGETWO-28191">
-        <variation name="CancelCreatedOrderTestVariation1">
-            <data name="description" xsi:type="string">cancel order and check status on storefront</data>
+        <variation name="CancelCreatedOrderTestVariationWithCheckMoneyOrderPaymentMethod" summary="Cancel order with check/money order payment method and check status on storefront">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <data name="status" xsi:type="string">Canceled</data>
+            <data name="configData" xsi:type="string">checkmo</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
+        <variation name="CancelCreatedOrderTestVariationWithZeroSubtotalCheckout" summary="Cancel order with zero subtotal checkout payment method and check status on storefront">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">free</data>
+            <data name="order/data/shipping_method" xsi:type="string">freeshipping_freeshipping</data>
+            <data name="order/data/coupon_code/dataset" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="status" xsi:type="string">Canceled</data>
+            <data name="configData" xsi:type="string">zero_subtotal_checkout, freeshipping</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
+        <variation name="CancelCreatedOrderTestVariationWithBankTransferPaymentMethod" summary="Cancel order with bank transfer payment method and check status on storefront">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">banktransfer</data>
+            <data name="status" xsi:type="string">Canceled</data>
+            <data name="configData" xsi:type="string">banktransfer</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
+        <variation name="CancelCreatedOrderTestVariationWithCashOnDeliveryPaymentMethod" summary="Cancel order with cash on delivery payment method and check status on storefront">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">cashondelivery</data>
+            <data name="status" xsi:type="string">Canceled</data>
+            <data name="configData" xsi:type="string">cashondelivery</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
+        <variation name="CancelCreatedOrderTestVariationWithPurchaseOrderPaymentMethod" summary="Cancel order with purchase order payment method and check status on storefront">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/payment_auth_expiration/method" xsi:type="string">purchaseorder</data>
+            <data name="status" xsi:type="string">Canceled</data>
+            <data name="configData" xsi:type="string">purchaseorder</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
     </testCase>
