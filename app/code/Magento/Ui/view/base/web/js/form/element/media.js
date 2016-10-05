@@ -69,6 +69,7 @@ define([
          * Calls global image preview handler
          */
         callPreviewHandler: function () {
+
             /* eslint-disable no-undef */
             imagePreview('image-' + this.uid);
             /* eslint-enable no-undef */
