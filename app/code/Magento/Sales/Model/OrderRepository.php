@@ -150,8 +150,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $entity->getExtensionAttributes();
         if ($entity->getIsNotVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
             $shippingAssignments = $extensionAttributes->getShippingAssignments();
-            if (count($shippingAssignments) === 1) {
-                $shipping = $shippingAssignments[0]->getShipping();
+            if (!empty($shippingAssignments)) {
+                $shipping = array_shift($shippingAssignments)->getShipping();
                 $entity->setShippingAddress($shipping->getAddress());
                 $entity->setShippingMethod($shipping->getMethod());
             }
