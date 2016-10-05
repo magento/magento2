@@ -13,6 +13,11 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Catalog\Model\Product\Action;
 
+/**
+ * Class MassStatusTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
 {
     /**
