@@ -15,7 +15,7 @@ use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
- * Gets Ui component configuration for
+ * Gets Ui component configuration for Braintree PayPal Vault
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
