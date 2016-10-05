@@ -502,7 +502,7 @@ class PackagesData
     /**
      * Get available versions of package by "composer show" command
      *
-     * @param $package
+     * @param string $package
      * @return array
      * @exception \RuntimeException
      */
