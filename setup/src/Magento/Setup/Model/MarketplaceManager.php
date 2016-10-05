@@ -166,14 +166,18 @@ class MarketplaceManager
             }
             $packageNames = array_column($this->getComposerInformation()->getInstalledMagentoPackages(), 'name');
             $installPackages = [];
-            foreach ($packagesJsonData['packages'] as $package) {
-                $package = $this->unsetDevVersions($package);
-                if (!empty($package)) {
+            foreach ($packagesJsonData['packages'] as $packageName => $package) {
+                if (!empty($package) && is_array($package)) {
+                    $package = $this->unsetDevVersions($package);
                     ksort($package);
-                    $package = array_pop($package);
-                    if ($this->isNewUserPackage($package, $packageNames)) {
-                        $package['vendor'] = explode('/', $package['name'])[0];
-                        $installPackages[$package['name']] = $package;
+                    $packageValues = array_values($package);
+                    if ($this->isNewUserPackage($packageValues[0], $packageNames)) {
+                        $versions = array_reverse(array_keys($package));
+                        $installPackage = $packageValues[0];
+                        $installPackage['versions'] = $versions;
+                        $installPackage['name'] = $packageName;
+                        $installPackage['vendor'] = explode('/', $packageName)[0];
+                        $installPackages[$packageName] = $installPackage;
                     }
                 }
             }
@@ -364,6 +368,7 @@ class MarketplaceManager
                     $package['metapackage'] =
                         isset($metaPackageByPackage[$package['name']]) ? $metaPackageByPackage[$package['name']] : '';
                     $actualInstallackages[$package['name']] = $package;
+                    $actualInstallackages[$package['name']]['version'] = $package['versions'][0];
                 }
             }
             $installPackagesInfo['packages'] = $actualInstallackages;
