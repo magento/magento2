@@ -11,7 +11,6 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\Product\Action;
 
 class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
@@ -93,7 +92,8 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->disableOriginalConstructor()
             ->getMock();
 
-        $collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+        $collectionFactoryMock =
+            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

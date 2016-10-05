@@ -80,7 +80,7 @@ define([
             var cachedRequest = this.getRequest(params);
 
             // TODO: Fix this in MAGETWO-59322
-            if (params.filters && params.filters.store_id) {
+            if (params.filters && params.filters['store_id']) {
                 cachedRequest = false;
             }
 
