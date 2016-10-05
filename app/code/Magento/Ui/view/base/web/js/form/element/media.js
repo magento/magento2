@@ -72,6 +72,7 @@ define([
 
             /* eslint-disable no-undef */
             imagePreview('image-' + this.uid);
+
             /* eslint-enable no-undef */
         }
     });
