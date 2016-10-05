@@ -299,8 +299,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private function getFileProcessorFactory()
     {
         if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get('Magento\Customer\Model\FileProcessorFactory');
+            $this->fileProcessorFactory = ObjectManager::getInstance()->get(FileProcessorFactory::class);
         }
         return $this->fileProcessorFactory;
     }
