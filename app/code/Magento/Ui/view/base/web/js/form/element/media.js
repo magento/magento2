@@ -10,9 +10,16 @@ define([
 
     return Abstract.extend({
         defaults: {
+            deleteCheckbox: false,
             links: {
-                value: ''
-            }
+                value: '',
+                file: '${ $.provider }:${ $.dataScope }.file',
+                type: '${ $.provider }:${ $.dataScope }.type',
+                url: '${ $.provider }:${ $.dataScope }.url',
+                deleteCheckbox: '${ $.provider }:${ $.dataScope }.delete'
+            },
+            width: 22,
+            height: 22
         },
 
         /**
@@ -23,6 +30,19 @@ define([
         initialize: function () {
             this._super()
                 .initFormId();
+
+            return this;
+        },
+
+        /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initObservable: function () {
+            this._super();
+
+            this.observe('deleteCheckbox');
 
             return this;
         },
@@ -43,6 +63,13 @@ define([
             this.formId = namespace[0];
 
             return this;
+        },
+
+        /**
+         * Calls global image preview handler
+         */
+        callPreviewHandler: function() {
+            imagePreview('image-' + this.uid);
         }
     });
 });

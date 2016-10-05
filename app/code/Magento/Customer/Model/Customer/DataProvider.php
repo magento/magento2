@@ -5,10 +5,14 @@
  */
 namespace Magento\Customer\Model\Customer;
 
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -71,8 +75,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $eavValidationRules;
 
     /**
-     * Constructor
+     * @var FileProcessorFactory
+     */
+    private $fileProcessorFactory;
+
+    /**
+     * File types allowed for file uploader UI component
      *
+     * @var array
+     */
+    private $fileUploaderTypes = [
+        'image',
+        'file',
+    ];
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -80,6 +97,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param FilterPool $filterPool
+     * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
      */
@@ -91,6 +109,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         FilterPool $filterPool,
+        FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
         array $data = []
     ) {
@@ -100,6 +119,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
+        $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -122,6 +142,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Customer $customer */
         foreach ($items as $customer) {
             $result['customer'] = $customer->getData();
+
+            $this->overrideFileUploaderData($customer, $result['customer']);
+
             unset($result['address']);
 
             /** @var Address $address */
@@ -130,11 +153,76 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $address->load($addressId);
                 $result['address'][$addressId] = $address->getData();
                 $this->prepareAddressData($addressId, $result['address'], $result['customer']);
+
+                $this->overrideFileUploaderData($address, $result['address'][$addressId]);
             }
             $this->loadedData[$customer->getId()] = $result;
         }
 
         return $this->loadedData;
+    }
+
+    /**
+     * Override file uploader UI component data
+     *
+     * Overrides data for attributes with frontend_input equal to 'image' or 'file'.
+     *
+     * @param Customer|Address $entity
+     * @param array $entityData
+     */
+    private function overrideFileUploaderData($entity, array &$entityData)
+    {
+        $attributes = $entity->getAttributes();
+        foreach ($attributes as $attribute) {
+            /** @var Attribute $attribute */
+            if (in_array($attribute->getFrontendInput(), $this->fileUploaderTypes)) {
+                $entityData[$attribute->getAttributeCode()] = $this->getFileUploaderData(
+                    $entity->getEntityType(),
+                    $attribute,
+                    $entityData
+                );
+            }
+        }
+    }
+
+    /**
+     * Retrieve array of values required by file uploader UI component
+     *
+     * @param Type $entityType
+     * @param Attribute $attribute
+     * @param array $customerData
+     * @return array
+     */
+    private function getFileUploaderData(
+        Type $entityType,
+        Attribute $attribute,
+        array $customerData
+    ) {
+        $attributeCode = $attribute->getAttributeCode();
+
+        $file = isset($customerData[$attributeCode])
+            ? $customerData[$attributeCode]
+            : '';
+
+        /** @var FileProcessor $fileProcessor */
+        $fileProcessor = $this->getFileProcessorFactory()->create([
+            'entityTypeCode' => $entityType->getEntityTypeCode(),
+        ]);
+
+        if (!empty($file)
+            && $fileProcessor->isExist($file)
+        ) {
+            $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
+        }
+
+        if (!empty($file)) {
+            return [
+                'file' => $file,
+                'type' => $attribute->getFrontendInput(),
+                'url' => isset($viewUrl) ? $viewUrl : '',
+            ];
+        }
+        return [];
     }
 
     /**
@@ -196,5 +284,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($addresses[$addressId]['street'])) {
             $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
         }
+    }
+
+    /**
+     * Get FileProcessorFactory instance
+     *
+     * @return FileProcessorFactory
+     *
+     * @deprecated
+     */
+    private function getFileProcessorFactory()
+    {
+        if ($this->fileProcessorFactory === null) {
+            $this->fileProcessorFactory = ObjectManager::getInstance()
+                ->get('Magento\Customer\Model\FileProcessorFactory');
+        }
+        return $this->fileProcessorFactory;
     }
 }

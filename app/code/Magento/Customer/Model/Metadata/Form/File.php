@@ -128,7 +128,9 @@ class File extends AbstractData
             }
         }
 
-        if (!empty($extend['delete'])) {
+        if (!empty($extend['delete'])
+            && filter_var($extend['delete'], FILTER_VALIDATE_BOOLEAN)
+        ) {
             $value['delete'] = true;
         }
 
@@ -249,11 +251,11 @@ class File extends AbstractData
             return $this;
         }
 
-        $attribute = $this->getAttribute();
-        $original = $this->_value;
         $toDelete = false;
-        if ($original) {
-            if (!$attribute->isRequired() && !empty($value['delete'])) {
+        if ($this->_value) {
+            if (!$this->getAttribute()->isRequired()
+                && !empty($value['delete'])
+            ) {
                 $toDelete = true;
             }
             if (!empty($value['tmp_name'])) {
@@ -262,11 +264,11 @@ class File extends AbstractData
         }
 
         $mediaDir = $this->_fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $result = $original;
-        // unlink entity file
+        $result = $this->_value;
+
         if ($toDelete) {
             $result = '';
-            $mediaDir->delete($this->_entityTypeCode . $original);
+            $mediaDir->delete($this->_entityTypeCode . '/' . ltrim($this->_value, '/'));
         }
 
         if (!empty($value['tmp_name'])) {

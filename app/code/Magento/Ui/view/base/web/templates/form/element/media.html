@@ -4,6 +4,39 @@
  * See COPYING.txt for license details.
  */
 -->
+
+<!-- ko if: element.url -->
+    <!-- ko if: element.type == 'image' -->
+        <a data-bind="attr: {href: url}, click: callPreviewHandler">
+            <img data-bind="
+                attr: {
+                    id: 'image-' + uid,
+                    src: url,
+                    width: width + 'px',
+                    height: height + 'px',
+                    alt: $t('View Full Size'),
+                    title: $t('View Full Size')
+                }" />
+        </a>
+    <!-- /ko -->
+    <!-- ko if: element.type == 'file' -->
+        <div>
+            <a data-bind="attr: {href: url}">
+                <img data-bind="
+                    attr: {
+                        id: 'file-' + uid,
+                        src: placeholder,
+                        width: width + 'px',
+                        height: height + 'px',
+                        alt: $t('Download'),
+                        title: $t('Download')
+                    }" />
+            </a>
+            <a data-bind="attr: {href: url}, text: $t('Download')"></a>
+        </div>
+    <!-- /ko -->
+<!-- /ko -->
+
 <input class="admin__control-file" type="file" data-bind="
     value: value,
     hasFocus: focused,
@@ -16,3 +49,29 @@
         form: formId
     }"
 />
+
+<!-- ko if: element.url -->
+    <input class="admin__control-checkbox" type="checkbox" data-bind="
+        checked: deleteCheckbox,
+        attr: {
+            id: 'delete-' + uid,
+            name: inputName + '[delete]'
+        }"/>
+
+    <!-- ko if: element.type == 'image' -->
+        <label class="admin__field-label" data-bind="
+            attr: {
+                for: 'delete-' + uid
+            },
+            text: $t('Delete Image')">
+        </label>
+    <!-- /ko -->
+    <!-- ko if: element.type == 'file' -->
+        <label class="admin__field-label" data-bind="
+            attr: {
+                for: 'delete-' + uid
+            },
+            text: $t('Delete File')">
+        </label>
+    <!-- /ko -->
+<!-- /ko -->

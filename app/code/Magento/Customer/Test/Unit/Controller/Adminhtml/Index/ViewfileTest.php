@@ -169,7 +169,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([['file', null, null], ['image', null, $decodedFile]]);
 
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($fileName)->willReturn($path);
-        $this->directoryMock->expects($this->once())->method('stat')->with($path)->willReturn($stat);
+        $this->directoryMock->expects($this->once())->method('stat')->with($fileName)->willReturn($stat);
 
         $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
