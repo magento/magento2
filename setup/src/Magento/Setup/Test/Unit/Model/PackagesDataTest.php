@@ -233,7 +233,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Couldn't get available versions for package partner/package-4
      */
-    public function testGetPackagesForUPdateWithException()
+    public function testGetPackagesForUpdateWithException()
     {
         $requiredPackages = [
             'partner/package-4' => '4.0.4',
