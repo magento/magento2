@@ -17,6 +17,9 @@ use \Magento\Framework\Locale\FormatInterface;
 use \Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use \Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /** @var SalesRuleProduct */
