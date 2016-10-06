@@ -145,5 +145,19 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
+        <variation name="EditSimpleProductTestVariation11" summary="Update simple product with custom option">
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">245.00</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">200</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price</data>
+            <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
+            <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
+            <data name="product/data/weight" xsi:type="string">120.0000</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+        </variation>
     </testCase>
 </config>

@@ -146,6 +146,16 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
+        /** @var  \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
+        $extensionAttributes = $entity->getExtensionAttributes();
+        if ($entity->getIsNotVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+            $shippingAssignments = $extensionAttributes->getShippingAssignments();
+            if (!empty($shippingAssignments)) {
+                $shipping = array_shift($shippingAssignments)->getShipping();
+                $entity->setShippingAddress($shipping->getAddress());
+                $entity->setShippingMethod($shipping->getMethod());
+            }
+        }
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];
