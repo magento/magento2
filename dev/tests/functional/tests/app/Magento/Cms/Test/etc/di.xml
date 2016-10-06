@@ -66,6 +66,11 @@
             <argument name="severity" xsi:type="string">S3</argument>
         </arguments>
     </type>
+    <type name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
     <type name="Magento\Cms\Test\Constraint\AssertCmsPagePreview">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
