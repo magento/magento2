@@ -6,6 +6,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\SecurityViolationException;
 
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -40,6 +41,8 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
                 $messages = $exception->getMessage();
             }
             $this->_addSessionErrorMessages($messages);
+        } catch (SecurityViolationException $exception) {
+            $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Exception $exception) {
             $this->messageManager->addException(
                 $exception,
