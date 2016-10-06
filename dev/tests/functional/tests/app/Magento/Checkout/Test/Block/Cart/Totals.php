@@ -240,7 +240,7 @@ class Totals extends Block
      */
     public function isVisibleShippingPriceBlock()
     {
-        return  $this->_rootElement->find($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS)->isVisible();
+        return $this->_rootElement->find($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS)->isVisible();
     }
 
     /**
