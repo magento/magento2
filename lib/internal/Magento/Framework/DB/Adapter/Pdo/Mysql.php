@@ -187,7 +187,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * @var QueryGenerator
      */
-    private $queryGenerator;
+    protected $queryGenerator;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils|String $string
