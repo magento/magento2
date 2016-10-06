@@ -58,12 +58,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Product cache tag
      */
-    const CACHE_TAG = 'catalog_product';
+    const CACHE_TAG = 'cat_p';
 
     /**
      * Category product relation cache tag
      */
-    const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
+    const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
 
     /**
      * Product Store Id

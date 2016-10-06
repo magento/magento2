@@ -5,6 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
 
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
+
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,7 +19,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $rootDirectory;
 
@@ -22,14 +28,26 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected $coreFileStorageDatabase;
 
+    /**
+     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystemMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->rootDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isFile', 'isReadable', 'getAbsolutePath'])
-            ->getMockForAbstractClass();
+            ->getMock();
+
+        $this->rootDirectory = $this->getMockBuilder(ReadInterface::class)
+            ->getMock();
+
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA, DriverPool::FILE)
+            ->willReturn($this->rootDirectory);
 
         $this->coreFileStorageDatabase = $this->getMock(
             \Magento\MediaStorage\Helper\File\Storage\Database::class,
@@ -48,26 +66,27 @@ class FileTest extends \PHPUnit_Framework_TestCase
         return $this->objectManager->getObject(
             \Magento\Catalog\Model\Product\Option\Type\File::class,
             [
-                'saleableItem' => $this->rootDirectory,
-                'priceCurrency' => $this->coreFileStorageDatabase
+                'filesystem' => $this->filesystemMock,
+                'coreFileStorageDatabase' => $this->coreFileStorageDatabase
             ]
         );
     }
 
     public function testCopyQuoteToOrder()
     {
-        $optionMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
-        )->disableOriginalConstructor()->setMethods(['getValue'])->getMockForAbstractClass();
+        $optionMock = $this->getMockBuilder(OptionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
 
         $quotePath = '/quote/path/path/uploaded.file';
         $orderPath = '/order/path/path/uploaded.file';
 
         $optionMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(['quote_path' => $quotePath, 'order_path' => $orderPath]));
+            ->will($this->returnValue(serialize(['quote_path' => $quotePath, 'order_path' => $orderPath])));
 
-        $this->rootDirectory->expects($this->any())
+        $this->rootDirectory->expects($this->once())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
