@@ -217,7 +217,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $dateAttrCodes = [
         'special_from_date',
-        'special_to_date'
+        'special_to_date',
+        'news_from_date',
+        'news_to_date',
+        'custom_design_from',
+        'custom_design_to'
     ];
 
     /**
@@ -273,7 +277,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Specified URL key already exists',
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually'
     ];
 
     /**
@@ -1699,7 +1703,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                     if (
                         'datetime' == $attribute->getBackendType()
-                        && in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                        && (
+                            in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                            || $attribute->getIsUserDefined()
+                        )
                     ) {
                         $attrValue = $this->dateTime->formatDate($attrValue, false);
                     } else if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
@@ -2367,7 +2374,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->urlKeys[$storeId][$urlPath] = $rowData[self::COL_SKU];
                     $this->rowNumbers[$storeId][$urlPath] = $rowNum;
                 } else {
-                    $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
+                        $urlKey,
+                        $this->urlKeys[$storeId][$urlPath]
+                    );
+                    $this->addRowError(
+                        ValidatorInterface::ERROR_DUPLICATE_URL_KEY,
+                        $rowNum,
+                        $rowData[self::COL_NAME],
+                        $message
+                    );
                 }
             }
         }
@@ -2523,7 +2540,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData = $this->_customFieldsMapping($rowData);
 
             $this->validateRow($rowData, $source->key());
-            
+
             $source->next();
         }
         $this->checkUrlKeyDuplicates();

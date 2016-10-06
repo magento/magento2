@@ -206,7 +206,9 @@ class FixtureModel
         if (!is_readable($filename)) {
             throw new \Exception("Profile configuration file `{$filename}` is not readable or does not exists.");
         }
-        $this->config = $this->fileParser->load($filename)->xmlToArray();
+        $this->fileParser->getDom()->load($filename);
+        $this->fileParser->getDom()->xinclude();
+        $this->config = $this->fileParser->xmlToArray();
     }
 
     /**

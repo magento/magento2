@@ -20,6 +20,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Class ProductTest
@@ -387,8 +388,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             );
             $productAfterImport->load($productBeforeImport->getId());
             $this->assertEquals(
-                @strtotime($row['news_from_date']),
+                @strtotime(date('m/d/Y', @strtotime($row['news_from_date']))),
                 @strtotime($productAfterImport->getNewsFromDate())
+            );
+            $this->assertEquals(
+                @strtotime($row['news_to_date']),
+                @strtotime($productAfterImport->getNewsToDate())
             );
             unset($productAfterImport);
         }
@@ -1050,9 +1055,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoAppIsolation enabled
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
-     * @param $errorsCount int
+     * @param $expectedErrors array
      */
-    public function testValidateUrlKeys($importFile, $errorsCount)
+    public function testValidateUrlKeys($importFile, $expectedErrors)
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem::class
@@ -1066,19 +1071,16 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'directory' => $directory
             ]
         );
+        /** @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface $errors */
         $errors = $this->_model->setParameters(
             ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
-
-        $this->assertTrue($errors->getErrorsCount() == $errorsCount);
-        if ($errorsCount >= 1) {
-            $this->assertEquals(
-            "Specified URL key already exists",
-            $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
-            );
-        }
+        $this->assertEquals(
+            $expectedErrors[RowValidatorInterface::ERROR_DUPLICATE_URL_KEY],
+            count($errors->getErrorsByCode([RowValidatorInterface::ERROR_DUPLICATE_URL_KEY]))
+        );
     }
 
     /**
@@ -1087,9 +1089,24 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function validateUrlKeysDataProvider()
     {
         return [
-            ['products_to_check_valid_url_keys.csv', 0],
-            ['products_to_check_duplicated_url_keys.csv', 2],
-            ['products_to_check_duplicated_names.csv' , 1]
+            [
+                'products_to_check_valid_url_keys.csv',
+                 [
+                     RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 0
+                 ]
+            ],
+            [
+                'products_to_check_duplicated_url_keys.csv',
+                [
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 2
+                ]
+            ],
+            [
+                'products_to_check_duplicated_names.csv' ,
+                [
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 1
+                ]
+            ]
         ];
     }
 
