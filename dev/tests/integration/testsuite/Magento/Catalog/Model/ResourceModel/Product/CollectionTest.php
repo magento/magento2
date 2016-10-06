@@ -32,7 +32,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
@@ -100,5 +99,31 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $product = reset($items);
         $this->assertCount(2, $items);
         $this->assertEquals(15, $product->getPrice());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testAddTierPrice()
+    {
+        $this->assertEquals($this->collection->getFlag('tier_price_added'), false);
+
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get('simple');
+        $this->assertEquals(3, count($product->getTierPrices()));
+
+        $product->setTierPrices([]);
+        $this->assertEquals(0, count($product->getTierPrices()));
+
+        $this->collection->addTierPriceData();
+        $this->collection->load();
+
+        $items = $this->collection->getItems();
+        $product = reset($items);
+        $this->assertEquals(3, count($product->getTierPrices()));
     }
 }

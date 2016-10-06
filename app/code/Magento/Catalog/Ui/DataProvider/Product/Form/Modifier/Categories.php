@@ -7,6 +7,8 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\UrlInterface;
@@ -14,9 +16,16 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for categories field of product page
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Categories extends AbstractModifier
 {
+    /**#@+
+     * Category tree cache id
+     */
+    const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
+    /**#@-*/
+
     /**
      * @var CategoryCollectionFactory
      */
@@ -29,6 +38,7 @@ class Categories extends AbstractModifier
 
     /**
      * @var array
+     * @deprecated
      */
     protected $categoriesTrees = [];
 
@@ -46,6 +56,11 @@ class Categories extends AbstractModifier
      * @var ArrayManager
      */
     protected $arrayManager;
+
+    /**
+     * @var CacheInterface
+     */
+    private $cacheManager;
 
     /**
      * @param LocatorInterface $locator
@@ -66,6 +81,21 @@ class Categories extends AbstractModifier
         $this->dbHelper = $dbHelper;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+    }
+
+    /**
+     * Retrieve cache interface
+     *
+     * @return CacheInterface
+     * @deprecated
+     */
+    private function getCacheManager()
+    {
+        if (!$this->cacheManager) {
+            $this->cacheManager = ObjectManager::getInstance()
+                ->get(CacheInterface::class);
+        }
+        return $this->cacheManager;
     }
 
     /**
@@ -254,8 +284,9 @@ class Categories extends AbstractModifier
      */
     protected function getCategoriesTree($filter = null)
     {
-        if (isset($this->categoriesTrees[$filter])) {
-            return $this->categoriesTrees[$filter];
+        $categoryTree = $this->getCacheManager()->load(self::CATEGORY_TREE_ID . '_' . $filter);
+        if ($categoryTree) {
+            return unserialize($categoryTree);
         }
 
         $storeId = $this->locator->getStore()->getId();
@@ -307,9 +338,16 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
+        
+        $this->getCacheManager()->save(
+            serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
+            self::CATEGORY_TREE_ID . '_' . $filter,
+            [
+                \Magento\Catalog\Model\Category::CACHE_TAG,
+                \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
+            ]
+        );
 
-        $this->categoriesTrees[$filter] = $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
-
-        return $this->categoriesTrees[$filter];
+        return $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
     }
 }

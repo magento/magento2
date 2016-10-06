@@ -68,7 +68,6 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
         }
 
         $paymentModel->setAdditionalInformation(
-            Vault::TOKEN_METADATA_KEY,
             [
                 PaymentTokenInterface::CUSTOMER_ID => $customerId,
                 PaymentTokenInterface::PUBLIC_HASH => $tokenPublicHash

@@ -18,6 +18,10 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Model\VaultPaymentInterface;
 
+/**
+ * Class VaultTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class VaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -45,9 +49,10 @@ class VaultTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Token metadata should be defined
+     * @expectedExceptionMessage Customer and public hash should be defined
+     * @dataProvider tokenMetadataProvider
      */
-    public function testAuthorizeNoTokenMetadata()
+    public function testAuthorizeNoTokenMetadata($additionalInfo)
     {
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
@@ -55,11 +60,26 @@ class VaultTest extends \PHPUnit_Framework_TestCase
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
-            ->willReturn([]);
+            ->willReturn($additionalInfo);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
         $model->authorize($paymentModel, 0);
+    }
+
+    /**
+     * Get list of variations
+     * @return array
+     */
+    public function tokenMetadataProvider()
+    {
+        return [
+            ['additionalInfo' => []],
+            ['additionalInfo' => ['public_hash' => null]],
+            ['additionalInfo' => ['customer_id' => null]],
+            ['additionalInfo' => ['public_hash' => '1ds23', 'customer_id' => null]],
+            ['additionalInfo' => ['public_hash' => null, 'customer_id' => 1]],
+        ];
     }
 
     /**
@@ -80,10 +100,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
-                    Vault::TOKEN_METADATA_KEY => [
-                        PaymentTokenInterface::CUSTOMER_ID => $customerId,
-                        PaymentTokenInterface::PUBLIC_HASH => $publicHash
-                    ]
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
         $tokenManagement->expects(static::once())
@@ -127,10 +145,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
-                    Vault::TOKEN_METADATA_KEY => [
-                        PaymentTokenInterface::CUSTOMER_ID => $customerId,
-                        PaymentTokenInterface::PUBLIC_HASH => $publicHash
-                    ]
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
         $tokenManagement->expects(static::once())
