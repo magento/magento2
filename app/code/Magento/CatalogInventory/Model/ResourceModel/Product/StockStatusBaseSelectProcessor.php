@@ -24,18 +24,11 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $resource;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @param ResourceConnection $resource
-     * @param MetadataPool $metadataPool
      */
-    public function __construct(ResourceConnection $resource, MetadataPool $metadataPool)
+    public function __construct(ResourceConnection $resource)
     {
         $this->resource = $resource;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -46,7 +39,6 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      */
     public function process(Select $select)
     {
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $stockStatusTable = $this->resource->getTableName('cataloginventory_stock_status');
 
         /** @var Select $select */
