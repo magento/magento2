@@ -14,7 +14,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 3. Create products.
  * 4. Create and setup customer.
  *
- *  * Steps:
+ * Steps:
  * 1. Log in Storefront.
  * 2. Add products to the Shopping Cart.
  * 3. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
