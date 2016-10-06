@@ -221,7 +221,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $attributeId = 42;
         $itemId = 4242;
-        $mediaGalleriesMock = [['entity_id' => $itemId]];
+        $linkField = 'entity_id';
+        $mediaGalleriesMock = [[$linkField => $itemId]];
         $itemMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -244,9 +245,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
         $this->entityMock->expects($this->once())->method('getAttribute')->willReturn($attributeMock);
         $itemMock->expects($this->atLeastOnce())->method('getId')->willReturn($itemId);
-        $selectMock->expects($this->once())->method('where')->with('entity.entity_id IN (?)', [$itemId]);
+        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$itemId]);
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
-        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('entity_id');
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkField);
 
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
             [['entity_id' => $itemId]]
