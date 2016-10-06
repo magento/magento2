@@ -82,20 +82,20 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * $param bool $unexpectedValueExceptionThrown
-     * $param bool $fileSystemExceptionThrown
+     * $param bool $isUnexpectedValueExceptionThrown
+     * $param bool $isFileSystemExceptionThrown
      * @dataProvider getValueDefaultModeDataProvider
      */
     public function testGetValueDefaultMode(
-        $unexpectedValueExceptionThrown,
-        $fileSystemExceptionThrown = null
+        $isUnexpectedValueExceptionThrown,
+        $isFileSystemExceptionThrown = null
     ) {
         $versionType = 'integer';
         $this->appStateMock
             ->expects($this->once())
             ->method('getMode')
             ->willReturn(\Magento\Framework\App\State::MODE_DEFAULT);
-        if ($unexpectedValueExceptionThrown) {
+        if ($isUnexpectedValueExceptionThrown) {
             $storageException = new \UnexpectedValueException('Does not exist in the storage');
             $this->versionStorageMock
                 ->expects($this->once())
@@ -104,7 +104,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             $this->versionStorageMock->expects($this->once())
                 ->method('save')
                 ->with($this->isType($versionType));
-            if ($fileSystemExceptionThrown) {
+            if ($isFileSystemExceptionThrown) {
                 $fileSystemException = new FileSystemException(
                     new \Magento\Framework\Phrase('Can not load static content version')
                 );
@@ -144,17 +144,17 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $unexpectedValueExceptionThrown
+     * @param bool $isUnexpectedValueExceptionThrown
      * @dataProvider getValueProductionModeDataProvider
      */
     public function testGetValueProductionMode(
-        $unexpectedValueExceptionThrown
+        $isUnexpectedValueExceptionThrown
     ) {
         $this->appStateMock
             ->expects($this->once())
             ->method('getMode')
             ->willReturn(\Magento\Framework\App\State::MODE_PRODUCTION);
-        if ($unexpectedValueExceptionThrown) {
+        if ($isUnexpectedValueExceptionThrown) {
             $storageException = new \UnexpectedValueException('Does not exist in the storage');
             $this->versionStorageMock
                 ->expects($this->once())
