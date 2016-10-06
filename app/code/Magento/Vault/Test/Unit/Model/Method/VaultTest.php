@@ -8,6 +8,8 @@ namespace Magento\Vault\Test\Unit\Model\Method;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandManagerPoolInterface;
+use Magento\Payment\Gateway\Config\ValueHandlerInterface;
+use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
@@ -314,11 +316,17 @@ class VaultTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanUseInternal($configValue, $paymentValue, $expected)
     {
-        $config = $this->getMock(ConfigInterface::class);
+        $handlerPool = $this->getMock(ValueHandlerPoolInterface::class);
+        $handler = $this->getMock(ValueHandlerInterface::class);
 
-        $config->expects(static::once())
-            ->method('getValue')
-            ->with('can_use_internal', null)
+        $handlerPool->expects(static::once())
+            ->method('get')
+            ->with('can_use_internal')
+            ->willReturn($handler);
+
+        $handler->expects(static::once())
+            ->method('handle')
+            ->with(['field' => 'can_use_internal'], null)
             ->willReturn($configValue);
 
         $this->vaultProvider->expects(static::any())
@@ -327,8 +335,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class, [
-            'config' => $config,
-            'vaultProvider' => $this->vaultProvider
+            'vaultProvider' => $this->vaultProvider,
+            'valueHandlerPool' => $handlerPool,
         ]);
         static::assertEquals($expected, $model->canUseInternal());
     }
@@ -343,7 +351,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ['configValue' => true, 'paymentValue' => true, 'expected' => true],
             ['configValue' => true, 'paymentValue' => null, 'expected' => true],
             ['configValue' => true, 'paymentValue' => false, 'expected' => true],
-            ['configValue' => false, 'paymentValue' => true, 'expected' => true],
+            ['configValue' => false, 'paymentValue' => true, 'expected' => false],
             ['configValue' => false, 'paymentValue' => false, 'expected' => false],
             ['configValue' => null, 'paymentValue' => true, 'expected' => true],
             ['configValue' => null, 'paymentValue' => false, 'expected' => false],
