@@ -23,11 +23,6 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     private $resource;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataPool;
-
-    /**
      * @var Select|\PHPUnit_Framework_MockObject_MockObject
      */
     private $select;
@@ -40,31 +35,19 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
 
         $this->stockStatusBaseSelectProcessor =  (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
             [
                 'resource' => $this->resource,
-                'metadataPool' => $this->metadataPool,
             ]
         );
     }
 
     public function testProcess()
     {
-        $linkField = 'link_field';
         $tableName = 'table_name';
-
-        $metadata = $this->getMock(EntityMetadataInterface::class);
-        $metadata->expects($this->once())
-            ->method('getLinkField')
-            ->willReturn($linkField);
-        $this->metadataPool->expects($this->once())
-            ->method('getMetadata')
-            ->with(ProductInterface::class)
-            ->willReturn($metadata);
 
         $this->resource->expects($this->once())
             ->method('getTableName')
@@ -75,7 +58,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('join')
             ->with(
                 ['stock' => $tableName],
-                sprintf('stock.product_id = %s.%s', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
+                sprintf('stock.product_id = %s.entity_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
                 []
             )
             ->willReturnSelf();
