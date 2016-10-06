@@ -268,25 +268,25 @@ define([
          */
         _changeProductImage: function () {
             var images,
-                initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
+                initialImages = this.options.mediaGalleryInitial,
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
             if (!galleryObject) {
                 return;
             }
 
-            if (this.options.spConfig.images[this.simpleProduct]) {
-                images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
-            }
+            images = this.options.spConfig.images[this.simpleProduct];
 
             if (images) {
-                images.forEach(function (img) {
-                    img.type = 'image';
-                });
-
                 if (this.options.gallerySwitchStrategy === 'prepend') {
                     images = images.concat(initialImages);
                 }
+
+                images = $.extend(true, [], images);
+
+                images.forEach(function (img) {
+                    img.type = 'image';
+                });
 
                 galleryObject.updateData(images);
             } else {
