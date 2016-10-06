@@ -3,7 +3,8 @@
  * See COPYING.txt for license details.
  */
 require([
-    'jquery'
+    'jquery',
+    'mage/translate'
 ], function ($) {
     'use strict';
 

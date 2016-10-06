@@ -170,7 +170,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
                             'static'
                         )
                     ],
-                    'values' => ['is_active' => false],
+                    'values' => ['is_active' => 0],
                     'currentCurrencyCode' => 'GBP',
                     'baseCurrencyCode' => 'USD'
                 ],

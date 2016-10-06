@@ -65,7 +65,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     const TREE_ROOT_ID = 1;
 
-    const CACHE_TAG = 'catalog_category';
+    const CACHE_TAG = 'cat_c';
 
     /**#@+
      * Constants

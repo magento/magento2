@@ -708,13 +708,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         return [
             'no changes' => [
-                ['catalog_product_1'],
+                ['cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
             ],
             'new product' => $this->getNewProductProviderData(),
             'status and category change' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1', 2 => 'catalog_category_product_2'],
+                [0 => 'cat_p_1', 1 => 'cat_c_p_1', 2 => 'cat_c_p_2'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
                 [
                     'id' => 1,
@@ -726,18 +726,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'status change only' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_7'],
+                [0 => 'cat_p_1', 1 => 'cat_c_p_7'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 2],
             ],
             'status changed, category unassigned' => $this->getStatusAndCategoryChangesData(),
             'no status changes' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             ],
             'no stock status changes' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -749,7 +749,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no stock status data 1' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -760,7 +760,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no stock status data 2' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -780,7 +780,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getStatusAndCategoryChangesData()
     {
         return [
-            [0 => 'catalog_product_1', 1 => 'catalog_category_product_5'],
+            [0 => 'cat_p_1', 1 => 'cat_c_p_5'],
             ['id' => 1, 'name' => 'value', 'category_ids' => [5], 'status' => 2],
             [
                 'id' => 1,
@@ -799,7 +799,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getNewProductProviderData()
     {
         return [
-            ['catalog_product_1', 'catalog_category_product_1'],
+            ['cat_p_1', 'cat_c_p_1'],
             null,
             [
                 'id' => 1,
@@ -818,7 +818,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getStatusStockProviderData($extensionAttributesMock)
     {
         return [
-            [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+            [0 => 'cat_p_1', 1 => 'cat_c_p_1'],
             ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             [
                 'id' => 1,
@@ -829,20 +829,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
             ],
         ];
-    }
-
-    public function testStatusAfterLoad()
-    {
-        $this->resource->expects($this->once())->method('load')->with($this->model, 1, null);
-        $this->eventManagerMock->expects($this->exactly(4))->method('dispatch');
-        $this->model->load(1);
-        $this->assertEquals(
-            Status::STATUS_ENABLED,
-            $this->model->getData(\Magento\Catalog\Model\Product::STATUS)
-        );
-        $this->assertFalse($this->model->hasDataChanges());
-        $this->model->setStatus(Status::STATUS_DISABLED);
-        $this->assertTrue($this->model->hasDataChanges());
     }
 
     /**
@@ -1466,5 +1452,28 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->getTypeInstance();
         $this->model->setTypeId('typeId');
         $this->model->getTypeInstance();
+    }
+
+    public function testGetOptionById()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn($optionId);
+        $this->assertEquals($optionMock, $this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdWithWrongOptionId()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn(200);
+        $this->assertNull($this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdForProductWithoutOptions()
+    {
+        $this->assertNull($this->model->getOptionById(100));
     }
 }

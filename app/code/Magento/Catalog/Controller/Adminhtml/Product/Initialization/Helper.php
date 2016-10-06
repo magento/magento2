@@ -199,6 +199,9 @@ class Helper
             $customOptions = [];
             foreach ($options as $customOptionData) {
                 if (empty($customOptionData['is_delete'])) {
+                    if (empty($customOptionData['option_id'])) {
+                        $customOptionData['option_id'] = null;
+                    }
                     if (isset($customOptionData['values'])) {
                         $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
                             return empty($valueData['is_delete']);
@@ -206,7 +209,6 @@ class Helper
                     }
                     $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
-                    $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
                 }
             }
@@ -255,7 +257,7 @@ class Helper
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array) $links[$linkType] as $linkData) {
+                foreach ((array)$links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
                     }
@@ -321,9 +323,11 @@ class Helper
 
             if (isset($option['values']) && isset($overwriteOptions[$optionId]['values'])) {
                 foreach ($option['values'] as $valueIndex => $value) {
-                    $valueId = $value['option_type_id'];
-                    $value = $this->overwriteValue($valueId, $value, $overwriteOptions[$optionId]['values']);
-                    $option['values'][$valueIndex] = $value;
+                    if (isset($value['option_type_id'])) {
+                        $valueId = $value['option_type_id'];
+                        $value = $this->overwriteValue($valueId, $value, $overwriteOptions[$optionId]['values']);
+                        $option['values'][$valueIndex] = $value;
+                    }
                 }
             }
 
@@ -347,6 +351,9 @@ class Helper
             foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
                 if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
                     $option[$fieldName] = $option['default_' . $fieldName];
+                    if ('title' == $fieldName) {
+                        $option['is_delete_store_title'] = 1;
+                    }
                 }
             }
         }
