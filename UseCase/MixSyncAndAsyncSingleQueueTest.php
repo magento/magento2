@@ -22,6 +22,11 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
      */
     protected $messages = ['message1', 'message2', 'message3'];
 
+    /**
+     * @var int
+     */
+    protected $maxMessages = 4;
+
     public function testMixSyncAndAsyncSingleQueue()
     {
         $this->msgObject = $this->objectManager->create(\Magento\TestModuleAsyncAmqp\Model\AsyncTestData::class);

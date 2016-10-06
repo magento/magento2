@@ -34,6 +34,11 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
      */
     protected $logFilePath;
 
+    /**
+     * @var int|null
+     */
+    protected $maxMessages = null;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -41,6 +46,11 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
         $osInfo = $this->objectManager->get(\Magento\Framework\OsInfo::class);
         if ($osInfo->isWindows()) {
             $this->markTestSkipped("This test relies on *nix shell and should be skipped in Windows environment.");
+        }
+        foreach ($this->consumers as $consumer) {
+            foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
+                exec("kill {$consumerProcessId}");
+            }
         }
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
@@ -93,6 +103,9 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
         $binDirectory = realpath(TESTS_TEMP_DIR . '/../bin/');
         $magentoCli = $binDirectory . '/magento';
         $consumerStartCommand = "php {$magentoCli} queue:consumers:start -vvv " . $consumer;
+        if ($this->maxMessages) {
+            $consumerStartCommand .= " --max-messages={$this->maxMessages}";
+        }
         if ($withEnvVariables) {
             $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
             $params['MAGE_DIRS']['base']['path'] = BP;
