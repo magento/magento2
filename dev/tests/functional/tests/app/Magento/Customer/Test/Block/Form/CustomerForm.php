@@ -114,7 +114,7 @@ class CustomerForm extends Form
     /**
      * Set 'Change Email' checkbox value.
      *
-     * @param string $value
+     * @param boolean $value
      * @return void
      */
     public function setChangeEmail($value)
@@ -124,13 +124,13 @@ class CustomerForm extends Form
             $mapping['change_email']['selector'],
             $mapping['change_email']['strategy'],
             'checkbox'
-        )->setValue($value);
+        )->setValue($value ?  "Yes" : "No");
     }
 
     /**
      * Set 'Change Password' checkbox value.
      *
-     * @param string $value
+     * @param boolean $value
      * @return void
      */
     public function setChangePassword($value)
@@ -140,7 +140,7 @@ class CustomerForm extends Form
             $mapping['change_password']['selector'],
             $mapping['change_password']['strategy'],
             'checkbox'
-        )->setValue($value);
+        )->setValue($value ?  "Yes" : "No");
     }
 
     /**
