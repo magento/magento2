@@ -76,13 +76,13 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
                 []
             )->joinInner(
                 [BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS => $productTable],
-                sprintf('%s.%s = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
-                [$linkField]
+                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
+                ['entity_id']
             )->joinInner(
                 ['t' => $this->resource->getTableName('catalog_product_index_price')],
-                sprintf('t.entity_id = %s.%s', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
+                sprintf('t.entity_id = %s.entity_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
                 []
-            )->where("parent.{$linkField} = ?", $productId)
+            )->where('parent.entity_id = ?', $productId)
             ->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId())
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->order('t.min_price ' . Select::SQL_ASC)

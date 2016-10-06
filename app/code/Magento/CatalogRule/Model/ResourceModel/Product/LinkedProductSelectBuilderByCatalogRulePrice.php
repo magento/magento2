@@ -94,13 +94,13 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
                 []
             )->joinInner(
                 [BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS => $productTable],
-                sprintf('%s.%s = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
-                [$linkField]
+                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
+                ['entity_id']
             )->joinInner(
                 ['t' => $this->resource->getTableName('catalogrule_product_price')],
                 sprintf('t.product_id = %s.%s', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
                 []
-            )->where("parent.{$linkField} = ?", $productId)
+            )->where('parent.entity_id = ?', $productId)
             ->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId())
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)

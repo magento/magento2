@@ -85,13 +85,13 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
                 []
             )->joinInner(
                 [BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS => $productTable],
-                sprintf('%s.%s = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
-                [$linkField]
+                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
+                ['entity_id']
             )->joinInner(
                 ['t' => $priceAttribute->getBackendTable()],
                 sprintf('t.%s = %s.%1$s', $linkField, BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
                 []
-            )->where("parent.{$linkField} = ?", $productId)
+            )->where('parent.entity_id = ?', $productId)
             ->where('t.attribute_id = ?', $priceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->order('t.value ' . Select::SQL_ASC)

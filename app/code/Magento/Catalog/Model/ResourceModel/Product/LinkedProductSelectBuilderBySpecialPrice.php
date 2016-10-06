@@ -106,8 +106,8 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
                 []
             )->joinInner(
                 [BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS => $productTable],
-                sprintf('%s.%s = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
-                [$linkField]
+                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
+                ['entity_id']
             )->joinInner(
                 ['t' => $specialPriceAttribute->getBackendTable()],
                 sprintf('t.%s = %s.%1$s', $linkField, BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
@@ -126,7 +126,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
                     $specialPriceToDate->getAttributeId()
                 ),
                 ''
-            )->where("parent.{$linkField} = ?", $productId)
+            )->where('parent.entity_id = ?', $productId)
             ->where('t.attribute_id = ?', $specialPriceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->where(
