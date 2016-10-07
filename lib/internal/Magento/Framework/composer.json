@@ -20,7 +20,9 @@
         "ext-openssl": "*",
         "lib-libxml": "*",
         "ext-xsl": "*",
-        "symfony/process": "~2.1"
+        "symfony/process": "~2.1",
+        "zendframework/zend-stdlib": "~2.4.6",
+        "zendframework/zend-http": "~2.4.6"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
