@@ -239,7 +239,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->_product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
         $info = $this->_model->getSelectedAttributesInfo($this->_product);
-        $this->assertEquals([['label' => 'Test Configurable', 'value' => 'Option 1']], $info);
+        $this->assertEquals('Test Configurable', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
@@ -259,7 +260,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $attribute->getProductAttribute()->setStoreLabel('store label');
         $info = $this->_model->getSelectedAttributesInfo($this->_product);
-        $this->assertEquals([['label' => 'store label', 'value' => 'Option 1']], $info);
+        $this->assertEquals('store label', $info[0]['label']);
+        $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
@@ -302,10 +304,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $result = $this->_model->getOrderOptions($this->_product);
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
-        $this->assertEquals(
-            [['label' => 'Test Configurable', 'value' => 'Option 1']],
-            $result['attributes_info']
-        );
+        $this->assertEquals('Test Configurable', $result['attributes_info'][0]['label']);
+        $this->assertEquals('Option 1', $result['attributes_info'][0]['value']);
         $this->assertArrayHasKey('product_calculations', $result);
         $this->assertArrayHasKey('shipment_type', $result);
         $this->assertEquals(
