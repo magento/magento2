@@ -191,6 +191,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         _init: function () {
             if (this.options.jsonConfig != '' && this.options.jsonSwatchConfig != '') {
                 this._RenderControls();
+                $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
@@ -835,6 +836,30 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         },
 
         /**
+         * Emulate mouse click or selection change on all swatches that should be selected
+         * @param {Object} [selectedAttributes]
+         * @private
+         */
+        _EmulateSelectedByAttributeId: function (selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function (attributeId, optionId) {
+                var elem = this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
+                    parentInput = elem.parent();
+
+                if (elem.hasClass('selected')) {
+                    return;
+                }
+
+                if (parentInput.hasClass(this.options.classes.selectClass)) {
+                    parentInput.val(optionId);
+                    parentInput.trigger('change');
+                } else {
+                    elem.trigger('click');
+                }
+            }, this));
+        },
+
+        /**
          * Returns an array/object's length
          * @param obj
          * @returns {number}
@@ -851,4 +876,5 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             return size;
         }
     });
+    return $.custom.SwatchRenderer;
 });

@@ -716,6 +716,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
 
+                    if (count($selections->getItems()) !== count($selectionIds)) {
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('The options you selected are not available.')
+                        );
+                    }
+
                     // Check if added selections are still on sale
                     $this->checkSelectionsIsSale(
                         $selections,
@@ -887,12 +893,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setPositionOrder()
                 ->addFilterByRequiredOptions()
                 ->setSelectionIdsFilter($selectionIds);
-
-            if (count($usedSelections->getItems()) !== count($selectionIds)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The options you selected are not available.')
-                );
-            }
 
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
                 $websiteId = $this->_storeManager->getStore($storeId)
