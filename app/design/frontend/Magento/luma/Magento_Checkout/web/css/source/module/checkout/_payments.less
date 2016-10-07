@@ -25,6 +25,7 @@
     .checkout-payment-method {
         .step-title {
             margin-bottom: 0;
+            border-bottom: 0;
         }
 
         .payment-method {
@@ -39,6 +40,13 @@
                     display: block;
                 }
             }
+
+            & + .payment-method {
+                .payment-method-title {
+                    .lib-css(border-top, @checkout-payment-method-title__border);
+                }
+            }
+
         }
 
         .payment-method-content {
@@ -54,7 +62,6 @@
         }
 
         .payment-method-title {
-            .lib-css(border-top, @checkout-payment-method-title__border);
             .lib-css(padding, @checkout-payment-method-title__padding 0);
             margin: 0;
 
@@ -76,6 +83,14 @@
             .fieldset {
                 &:not(:last-child) {
                     margin: 0 0 @indent__base;
+                }
+            }
+        }
+
+        .payment-methods-list {
+            & + .payment-methods-list {
+                .step-title {
+                    margin: @indent__base 0 0;
                 }
             }
         }
