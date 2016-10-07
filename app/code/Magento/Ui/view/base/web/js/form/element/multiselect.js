@@ -31,7 +31,7 @@ define([
          * @inheritdoc
          */
         normalizeData: function (value) {
-            if (utils.isEmpty(value) || this.value().length == 0) {
+            if (utils.isEmpty(value) || (typeof value != 'undefined' && value.length == 0)) {
                 value = '';
             }
 
