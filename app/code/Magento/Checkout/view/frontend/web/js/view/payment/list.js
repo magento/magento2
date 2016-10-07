@@ -155,8 +155,6 @@ define([
                             displayArea: currentGroup.displayArea
                         }
                     )]);
-
-                    return true;
                 }
             }.bind(this));
         },
