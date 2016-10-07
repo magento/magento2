@@ -117,7 +117,7 @@ class RefundInvoice implements RefundInvoiceInterface
             $orderValidationResult,
             $creditmemoValidationResult,
             $invoiceValidationResult->getMessages(),
-            ...$itemsValidation
+            ...array_values($itemsValidation)
         );
     }
 }
