@@ -221,6 +221,10 @@ class FixtureModel
      */
     public function getValue($key, $default = null)
     {
-        return isset($this->config['config']['profile'][$key]) ? $this->config['config']['profile'][$key] : $default;
+        return isset($this->config['config']['profile'][$key]) ?
+            (
+                isset($this->config['config']['profile'][$key]['_value']) ?
+                    $this->config['config']['profile'][$key]['_value'] : $this->config['config']['profile'][$key]
+            ) : $default;
     }
 }

@@ -68,8 +68,8 @@
                 <set_scheduled>true</set_scheduled>
             </indexer>
         </indexers>
-        <xi:include href="searchTerms.xml" />
-        <xi:include href="searchConfig.xml" />
-        <xi:include href="attributeSets.xml" />
+        <xi:include href="../../config/searchTerms.xml" />
+        <xi:include href="../../config/searchConfig.xml" />
+        <xi:include href="../../config/attributeSets.xml" />
     </profile>
 </config>
