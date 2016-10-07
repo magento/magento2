@@ -63,7 +63,16 @@ class InvoiceRefundCreationArguments
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $validationResults = $proceed(
-            $invoice, $order, $creditmemo, $items, $isOnline, $notify, $appendComment, $comment, $arguments);
+            $invoice,
+            $order, 
+            $creditmemo, 
+            $items, 
+            $isOnline, 
+            $notify, 
+            $appendComment, 
+            $comment, 
+            $arguments
+        );
         if ($this->isReturnToStockItems($arguments)) {
             return $validationResults;
         }
