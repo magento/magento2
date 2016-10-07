@@ -58,7 +58,7 @@ class ReturnToStockOrder
 
     /**
      * @param RefundOrderInterface $refundService
-     * @param int $resultEntityId
+     * @param \Closure $proceed
      * @param int $orderId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
      * @param bool|null $notify
@@ -68,9 +68,9 @@ class ReturnToStockOrder
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(
+    public function aroundExecute(
         RefundOrderInterface $refundService,
-        $resultEntityId,
+        \Closure $proceed,
         $orderId,
         array $items = [],
         $notify = false,
@@ -78,6 +78,7 @@ class ReturnToStockOrder
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        $resultEntityId = $proceed($orderId, $items, $notify, $appendComment, $comment,$arguments);
         if ($this->stockConfiguration->isAutoReturnEnabled()) {
             return $resultEntityId;
         }
