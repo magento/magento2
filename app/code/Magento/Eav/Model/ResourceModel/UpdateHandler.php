@@ -67,6 +67,7 @@ class UpdateHandler implements AttributeInterface
      * @param AttributePersistor $attributePersistor
      * @param ReadSnapshot $readSnapshot
      * @param ScopeResolver $scopeResolver
+     * @param AttributeLoader $attributeLoader
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -87,15 +88,6 @@ class UpdateHandler implements AttributeInterface
     }
 
     /**
-     * @deprecated
-     * @return \Magento\Eav\Model\Entity\AttributeCache
-     */
-    private function getAttributeCache()
-    {
-        return ObjectManager::getInstance()->get(\Magento\Eav\Model\Entity\AttributeCache::class);
-    }
-
-    /**
      * @param string $entityType
      * @param int $attributeSetId
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
@@ -104,6 +96,7 @@ class UpdateHandler implements AttributeInterface
     {
         return $this->attributeLoader->getAttributes($entityType, $attributeSetId);
     }
+
     /**
      * @param string $entityType
      * @param array $entityData

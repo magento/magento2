@@ -102,7 +102,6 @@ class CreateHandler implements AttributeInterface
                 : null; // @todo verify is it normal to not have attributer_set_id
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
-                $ac[] = $attribute->getAttributeCode();
                 if ($attribute->isStatic()) {
                     continue;
                 }
