@@ -1248,22 +1248,56 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if ($entityRowsIn) {
             $this->_connection->insertMultiple($entityTable, $entityRowsIn);
 
-            $newProducts = $this->_connection->fetchPairs(
+            $newProducts = $this->_connection->fetchAll(
                 $this->_connection->select()->from(
                     $entityTable,
-                    ['sku', 'entity_id']
+                    array_merge(['sku', 'entity_id'], $this->getOldSkuFieldsForSelect())
                 )->where(
                     'sku IN (?)',
                     array_keys($entityRowsIn)
                 )
             );
-            foreach ($newProducts as $sku => $newId) {
+            foreach ($newProducts as $product) {
                 // fill up entity_id for new products
-                $this->skuProcessor->setNewSkuData($sku, 'entity_id', $newId);
+                $this->skuProcessor->setNewSkuData($product['sku'], 'entity_id', $product['entity_id']);
             }
+
+            $this->updateOldSku($newProducts);
         }
         return $this;
     }
+
+    /**
+     * Return additional data, needed to select.
+     * @return array
+     */
+    private function getOldSkuFieldsForSelect()
+    {
+        return ['type_id', 'attribute_set_id'];
+    }
+
+    /**
+     * Adds newly created products to _oldSku
+     * @param array $newProducts
+     * @return void
+     */
+    private function updateOldSku(array $newProducts)
+    {
+        $oldSkus = [];
+        foreach ($newProducts as $info) {
+            $typeId = $info['type_id'];
+            $sku = $info['sku'];
+            $oldSkus[$sku] = [
+                'type_id' => $typeId,
+                'attr_set_id' => $info['attribute_set_id'],
+                'supported_type' => isset($this->_productTypeModels[$typeId]),
+                'entity_id' => $info['entity_id']
+            ];
+        }
+
+        $this->_oldSku = array_replace($this->_oldSku, $oldSkus);
+    }
+
 
     /**
      * Retrieving images from all columns and rows

@@ -10,9 +10,11 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -90,17 +92,25 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->chain);
 
-        $themeList = $this->getMockForAbstractClass('Magento\Framework\View\Design\Theme\ListInterface');
-        $themeList->expects($this->any())
+        $themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $themeProvider->expects($this->any())
             ->method('getThemeByFullPath')
             ->with('frontend/magento_theme')
             ->willReturn($this->theme);
 
         $this->initFilesystem();
 
-        $this->object = new Source(
-            $this->filesystem, $this->preProcessorPool, $this->viewFileResolution, $themeList, $this->chainFactory
-        );
+        $this->object = (new ObjectManager($this))->getObject(Source::class, [
+            'filesystem' => $this->filesystem,
+            'preProcessorPool' => $this->preProcessorPool,
+            'fallback' => $this->viewFileResolution,
+            'chainFactory' => $this->chainFactory
+        ]);
+
+        $reflection = new \ReflectionClass(Source::class);
+        $reflectionProperty = $reflection->getProperty('themeProvider');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->object, $themeProvider);
     }
 
     /**

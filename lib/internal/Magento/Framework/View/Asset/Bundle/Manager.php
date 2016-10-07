@@ -18,6 +18,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Manager
 {
+    const BUNDLE_JS_DIR = 'js/bundle';
+
     const BUNDLE_PATH = '/js/bundle/bundle';
 
     const ASSET_TYPE_JS = 'js';
@@ -41,6 +43,7 @@ class Manager
 
     /** @var array */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+
     /**
      * @var Asset\Minification
      */
@@ -127,7 +130,7 @@ class Manager
         /** @var $asset LocalInterface */
         $filePathInfo = $this->splitPath($filePath);
         if ($filePathInfo && $this->compareModules($filePathInfo, $asset)) {
-            return $asset->getSourceFile() == $filePathInfo['excludedPath'];
+            return $asset->getFilePath() == $filePathInfo['excludedPath'];
         }
         return false;
     }
@@ -176,7 +179,7 @@ class Manager
      */
     public function addAsset(LocalInterface $asset)
     {
-        if (!($this->isValidAsset($asset))) {
+        if (!$this->isValidAsset($asset)) {
             return false;
         }
 
@@ -237,13 +240,8 @@ class Manager
             return false;
         }
 
-        if ($type == self::ASSET_TYPE_HTML) {
-            return $asset->getModule() !== '';
-        }
-
         return true;
     }
-
 
     /**
      * Flush bundle

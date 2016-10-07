@@ -170,9 +170,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             $this->composerInformationMock,
             $objectManagerProvider,
             $this->updatePackagesCacheMock,
-            $this->marketplaceManagerMock
+            $this->marketplaceManagerMock,
+            $timezoneProviderMock
         );
-        $this->controller->setTimezone($timezoneProviderMock->get());
     }
 
     public function testIndexAction()

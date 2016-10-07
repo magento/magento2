@@ -16,6 +16,8 @@ abstract class AbstractDataAssignObserver implements ObserverInterface
 
     const DATA_CODE = 'data';
 
+    const MODEL_CODE = 'payment_model';
+
     /**
      * Reads method argument
      *

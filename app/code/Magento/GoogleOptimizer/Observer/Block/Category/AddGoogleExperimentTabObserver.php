@@ -6,30 +6,31 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GoogleOptimizer\Observer\Block\Category;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\GoogleOptimizer\Helper\Data;
+use Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer;
 
 class AddGoogleExperimentTabObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\GoogleOptimizer\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @param \Magento\GoogleOptimizer\Helper\Data $helper
-     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param Data $helper
+     * @param LayoutInterface $layout
      */
-    public function __construct(\Magento\GoogleOptimizer\Helper\Data $helper, \Magento\Framework\View\LayoutInterface $layout)
+    public function __construct(Data $helper, LayoutInterface $layout)
     {
         $this->_helper = $helper;
         $this->_layout = $layout;
@@ -43,9 +44,10 @@ class AddGoogleExperimentTabObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        if ($this->_helper->isGoogleExperimentActive()) {
+        $storeId = $observer->getEvent()->getTabs()->getCategory()->getStoreId();
+        if ($this->_helper->isGoogleExperimentActive($storeId)) {
             $block = $this->_layout->createBlock(
-                'Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab\Googleoptimizer',
+                Googleoptimizer::class,
                 'google-experiment-form'
             );
 

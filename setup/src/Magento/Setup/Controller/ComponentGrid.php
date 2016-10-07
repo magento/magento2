@@ -63,12 +63,14 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
      * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
+     * @param TimezoneProvider $timezoneProvider
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache,
-        \Magento\Setup\Model\MarketplaceManager $marketplaceManager
+        \Magento\Setup\Model\MarketplaceManager $marketplaceManager,
+        \Magento\Setup\Model\DateTime\TimezoneProvider $timezoneProvider
     ) {
         $this->composerInformation = $composerInformation;
         $this->objectManager = $objectManagerProvider->get();
@@ -77,34 +79,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
-    }
-
-    /**
-     * Get timezone
-     *
-     * @return \Magento\Framework\Stdlib\DateTime\TimezoneInterface|null
-     */
-    private function getTimezone()
-    {
-        if ($this->timezone === null) {
-            $this->timezone = $this->objectManager->get('Magento\Setup\Model\DateTime\TimezoneProvider')->get();
-        }
-        return $this->timezone;
-    }
-
-    /**
-     * Set timezone
-     *
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @return void
-     * @throws \Exception
-     */
-    public function setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone)
-    {
-        if ($this->timezone !== null) {
-            throw new \Exception('timezone is already set');
-        }
-        $this->timezone = $timezone;
+        $this->timezone = $timezoneProvider->get();
     }
 
     /**
@@ -182,18 +157,18 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     public function syncAction()
     {
         $error = '';
+        $packagesForInstall = [];
+        $lastSyncData = [];
         try {
             $this->updatePackagesCache->syncPackagesForUpdate();
             $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
 
             $this->marketplaceManager->syncPackagesForInstall();
             $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
+            $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
         } catch (\Exception $e) {
             $error = $e->getMessage();
         }
-
-        $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
-
         return new \Zend\View\Model\JsonModel(
             [
                 'success' => true,
@@ -248,12 +223,12 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private function formatSyncDate($syncDate)
     {
         return [
-            'date' => $this->getTimezone()->formatDateTime(
+            'date' => $this->timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::MEDIUM,
                 \IntlDateFormatter::NONE
             ),
-            'time' => $this->getTimezone()->formatDateTime(
+            'time' => $this->timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::NONE,
                 \IntlDateFormatter::MEDIUM
