@@ -141,7 +141,7 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
                 [$tableName],
                 ['catalog_product_website']
             )
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
                 $tableName,
                 'catalog_product_website'
             );
@@ -184,12 +184,12 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     $temporaryTableName,
-                    "e.{$linkField} = ${temporaryTableName}.{$linkField}",
+                    "e.{$linkField} = {$temporaryTableName}.{$linkField}",
                     [$linkField]
                 ],
                 [
                     $temporaryValueTableName,
-                    "e.${linkField} = " . $temporaryValueTableName . ".${linkField}",
+                    "e.{$linkField} = " . $temporaryValueTableName . ".{$linkField}",
                     [$linkField]
                 ]
             )->willReturnSelf();
