@@ -23,7 +23,7 @@ interface ValidatorResultInterface
     public function hasMessages();
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMessages();
 }

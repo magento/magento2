@@ -30,7 +30,7 @@ class ValidatorResultMerger
      *
      * @param ValidatorResultInterface $first
      * @param ValidatorResultInterface $second
-     * @param \string[] $validatorMessages
+     * @param string[] $validatorMessages
      * @return ValidatorResultInterface
      */
     public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second, ... $validatorMessages)

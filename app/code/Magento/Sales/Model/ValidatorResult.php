@@ -11,7 +11,7 @@ namespace Magento\Sales\Model;
 class ValidatorResult implements ValidatorResultInterface
 {
     /**
-     * @var \string[]
+     * @var string[]
      */
     private $messages = [];
 
@@ -32,7 +32,7 @@ class ValidatorResult implements ValidatorResultInterface
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getMessages()
     {
