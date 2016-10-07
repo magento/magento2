@@ -26,4 +26,19 @@
     <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
     <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
     <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
+    <preference for="Magento\Checkout\Model\Cart\RequestInfoFilterInterface" type="Magento\Checkout\Model\Cart\RequestInfoFilterComposite"/>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="form_key" xsi:type="string">form_key</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilterComposite">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="filter" xsi:type="object">Magento\Checkout\Model\Cart\RequestInfoFilter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

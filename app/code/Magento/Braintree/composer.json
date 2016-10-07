@@ -22,7 +22,7 @@
         "magento/module-checkout-agreements": "100.0.*"
     },
     "type": "magento2-module",
-    "version": "100.0.6",
+    "version": "100.0.7",
     "license": [
         "proprietary"
     ],
