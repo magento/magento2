@@ -24,8 +24,8 @@
 & when (@media-common = true) {
     .checkout-payment-method {
         .step-title {
-            margin-bottom: 0;
             border-bottom: 0;
+            margin-bottom: 0;
         }
 
         .payment-method {
@@ -46,7 +46,6 @@
                     .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
-
         }
 
         .payment-method-content {
@@ -87,8 +86,8 @@
             }
         }
 
-        .payment-methods-list {
-            & + .payment-methods-list {
+        .payment-group {
+            & + .payment-group {
                 .step-title {
                     margin: @indent__base 0 0;
                 }
