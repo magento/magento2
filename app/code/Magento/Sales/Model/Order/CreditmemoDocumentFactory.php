@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order;
 
 /**
  * Class CreditmemoDocumentFactory
+ *
+ * @api
  */
 class CreditmemoDocumentFactory
 {
