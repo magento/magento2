@@ -10,7 +10,6 @@ use Magento\SalesInventory\Model\Plugin\Order\Validation\InvoiceRefundCreationAr
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
-use \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -106,30 +105,7 @@ class InvoiceRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /**
-         * @param InvoiceInterface $invoice
-         * @param OrderInterface $order
-         * @param CreditmemoInterface $creditmemo
-         * @param array $items
-         * @param bool $isOnline
-         * @param bool $notify
-         * @param bool $appendComment
-         * @param CreditmemoCommentCreationInterface|null $comment
-         * @param CreditmemoCreationArgumentsInterface|null $arguments
-         * @return ValidatorResultInterface
-         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-         */
-        $this->proceed = function (
-            InvoiceInterface $invoice,
-            OrderInterface $order,
-            CreditmemoInterface $creditmemo,
-            array $items = [],
-            $isOnline = false,
-            $notify = false,
-            $appendComment = false,
-            CreditmemoCommentCreationInterface $comment = null,
-            CreditmemoCreationArgumentsInterface $arguments = null
-        ) {
+        $this->proceed = function () {
             return $this->validateResultMock;
         };
         $this->plugin = new InvoiceRefundCreationArguments($this->returnValidatorMock);

@@ -8,7 +8,6 @@ namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
 
 /**
  * Class ReturnToStockInvoiceTest
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,26 +131,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $returnToStockItems = [1];
         $invoiceId = 98;
 
-        /**
-         * @param int $invoiceId
-         * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
-         * @param bool|null $isOnline
-         * @param bool|null $notify
-         * @param bool|null $appendComment
-         * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
-         * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
-         * @return int
-         * @suppressWarning(PHPMD.UnusedFormalParameter)
-         */
-        $this->proceed = function (
-            $invoiceId,
-            array $items = [],
-            $isOnline = false,
-            $notify = false,
-            $appendComment = false,
-            \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
-            \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
-        ) use ($creditmemoId) {
+        $this->proceed = function () use ($creditmemoId) {
             return $creditmemoId;
         };
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))

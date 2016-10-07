@@ -96,26 +96,7 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /**
-         * @param OrderInterface $order
-         * @param CreditmemoInterface $creditmemo
-         * @param array $items
-         * @param bool $notify
-         * @param bool $appendComment
-         * @param CreditmemoCommentCreationInterface|null $comment
-         * @param CreditmemoCreationArgumentsInterface|null $arguments
-         * @return ValidatorResultInterface
-         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-         */
-        $this->proceed = function (
-            OrderInterface $order,
-            CreditmemoInterface $creditmemo,
-            array $items = [],
-            $notify = false,
-            $appendComment = false,
-            CreditmemoCommentCreationInterface $comment = null,
-            CreditmemoCreationArgumentsInterface $arguments = null
-        ) {
+        $this->proceed = function () {
             return $this->validateResultMock;
         };
 
@@ -125,7 +106,7 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testAfterValidation($errorMessage)
+    public function testAroundValidation($errorMessage)
     {
         $returnToStockItems = [1];
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))

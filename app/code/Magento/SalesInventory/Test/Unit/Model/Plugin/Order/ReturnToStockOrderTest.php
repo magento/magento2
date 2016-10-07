@@ -12,7 +12,6 @@ use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
-use \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -115,31 +114,13 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterExecute()
+    public function testAroundExecute()
     {
         $orderId = 1;
         $creditmemoId = 99;
         $items = [];
         $returnToStockItems = [1];
-
-        /**
-         * @param int $orderId
-         * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
-         * @param bool|null $notify
-         * @param bool|null $appendComment
-         * @param CreditmemoCommentCreationInterface|null $comment
-         * @param CreditmemoCreationArgumentsInterface|null $arguments
-         * @return int
-         * @suppressWarning(PHPMD.UnusedFormalParameter)
-         */
-        $this->proceed = function (
-            $orderId,
-            array $items = [],
-            $notify = false,
-            $appendComment = false,
-            CreditmemoCommentCreationInterface $comment = null,
-            CreditmemoCreationArgumentsInterface $arguments = null
-        ) use ($creditmemoId) {
+        $this->proceed = function () use ($creditmemoId) {
             return $creditmemoId;
         };
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
