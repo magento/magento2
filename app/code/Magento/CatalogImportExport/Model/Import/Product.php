@@ -2487,6 +2487,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
+     *
      * @param string $values
      * @return array
      */
