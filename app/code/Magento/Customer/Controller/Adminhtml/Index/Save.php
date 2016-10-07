@@ -84,7 +84,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $result = $metadataForm->compactData($formData);
 
         // Re-initialize additional attributes
-        $formData = array_replace($formData, $result);
+        $formData = array_replace($result, $formData);
 
         // Unset unused attributes
         $formAttributes = $metadataForm->getAttributes();
