@@ -995,6 +995,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Wrap values with double quotes if "Fields Enclosure" option is enabled
+     *
      * @param string|array $value
      * @return string|array
      */

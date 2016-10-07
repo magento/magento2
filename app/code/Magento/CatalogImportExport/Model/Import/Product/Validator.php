@@ -72,6 +72,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Check if value is valid attribute option
+     *
      * @param string $attrCode
      * @param array $possibleOptions
      * @param string $value
