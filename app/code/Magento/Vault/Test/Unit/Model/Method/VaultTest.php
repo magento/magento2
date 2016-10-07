@@ -52,7 +52,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $additionalInfo
      * @expectedException \LogicException
-     * @expectedExceptionMessage Customer id and public hash should be defined
+     * @expectedExceptionMessage Public hash should be defined
      * @dataProvider additionalInfoDataProvider
      */
     public function testAuthorizeNoTokenMetadata(array $additionalInfo)
@@ -79,7 +79,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
         return [
             ['additionalInfo' => []],
             ['additionalInfo' => ['customer_id' => 1]],
-            ['additionalInfo' => ['public_hash' => 'df768aak12uf']],
+            ['additionalInfo' => ['public_hash' => null]],
         ];
     }
 
@@ -273,5 +273,33 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ['isAvailableProvider' => false, 'isActiveVault' => true, 'expected' => false],
             ['isAvailableProvider' => true, 'isActiveVault' => true, 'expected' => true],
         ];
+    }
+
+    /**
+     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     */
+    public function testIsAvailableWithoutQuote()
+    {
+        $quote = null;
+
+        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+
+        $vaultProvider->expects(static::once())
+            ->method('isAvailable')
+            ->with($quote)
+            ->willReturn(true);
+
+        $config->expects(static::once())
+            ->method('getValue')
+            ->with('active', $quote)
+            ->willReturn(false);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(Vault::class, [
+            'config' => $config,
+            'vaultProvider' => $vaultProvider
+        ]);
+        static::assertFalse($model->isAvailable($quote));
     }
 }

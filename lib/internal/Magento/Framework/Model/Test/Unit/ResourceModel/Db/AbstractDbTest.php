@@ -273,29 +273,19 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $abstractModelMock = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [$contextMock, $registryMock],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup']
-        );
-
-        $value = 'some_value';
-        $idFieldName = new \ReflectionProperty(
-            AbstractDb::class,
-            '_idFieldName'
-        );
-        $idFieldName->setAccessible(true);
-        $idFieldName->setValue($this->_model, 'field_value');
-
+        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('beforeLoad')->with('some_value', 'field_name');
+        $object->expects($this->once())->method('afterLoad')->willReturnSelf();
+        $object->expects($this->once())->method('setOrigData')->willReturnSelf();
+        $object->expects($this->once())->method('setHasDataChanges')->with(false)->willReturnSelf();
+        $result = $this->_model->load($object, 'some_value', 'field_name');
+        $this->assertEquals($this->_model, $result);
         $this->assertInstanceOf(
-            AbstractDb::class,
-            $this->_model->load($abstractModelMock, $value, $idFieldName)
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            $result
         );
     }
 
@@ -501,7 +491,6 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $connectionMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
         $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
-
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
             [

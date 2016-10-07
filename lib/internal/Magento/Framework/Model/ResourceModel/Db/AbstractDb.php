@@ -334,6 +334,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
+        $object->beforeLoad($value, $field);
         if ($field === null) {
             $field = $this->getIdFieldName();
         }
@@ -350,7 +351,10 @@ abstract class AbstractDb extends AbstractResource
 
         $this->unserializeFields($object);
         $this->_afterLoad($object);
-
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
+        
         return $this;
     }
 
