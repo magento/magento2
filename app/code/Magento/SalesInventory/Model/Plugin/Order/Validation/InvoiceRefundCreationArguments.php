@@ -35,7 +35,7 @@ class InvoiceRefundCreationArguments
 
     /**
      * @param RefundInvoiceInterface $refundInvoiceValidator
-     * @param ValidatorResultInterface $validationResults
+     * @param \Closure $proceed
      * @param InvoiceInterface $invoice
      * @param OrderInterface $order
      * @param CreditmemoInterface $creditmemo
@@ -49,9 +49,9 @@ class InvoiceRefundCreationArguments
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function afterValidate(
+    public function aroundValidate(
         RefundInvoiceInterface $refundInvoiceValidator,
-        ValidatorResultInterface $validationResults,
+        \Closure $proceed,
         InvoiceInterface $invoice,
         OrderInterface $order,
         CreditmemoInterface $creditmemo,
@@ -62,6 +62,8 @@ class InvoiceRefundCreationArguments
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        $validationResults = $proceed(
+            $invoice, $order, $creditmemo, $items, $isOnline, $notify, $appendComment, $comment, $arguments);
         if ($this->isReturnToStockItems($arguments)) {
             return $validationResults;
         }

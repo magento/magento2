@@ -59,7 +59,7 @@ class ReturnToStockInvoice
 
     /**
      * @param \Magento\Sales\Api\RefundInvoiceInterface $refundService
-     * @param int $resultEntityId
+     * @param \Closure $proceed
      * @param int $invoiceId
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
      * @param bool|null $isOnline
@@ -70,9 +70,9 @@ class ReturnToStockInvoice
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(
+    public function aroundExecute(
         \Magento\Sales\Api\RefundInvoiceInterface $refundService,
-        $resultEntityId,
+        $proceed,
         $invoiceId,
         array $items = [],
         $isOnline = false,
@@ -81,6 +81,7 @@ class ReturnToStockInvoice
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        $resultEntityId = $proceed($invoiceId, $items, $isOnline, $notify, $appendComment, $comment, $arguments);
         if ($this->stockConfiguration->isAutoReturnEnabled()) {
             return $resultEntityId;
         }
