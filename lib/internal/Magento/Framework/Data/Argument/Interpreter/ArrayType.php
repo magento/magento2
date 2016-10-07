@@ -54,25 +54,70 @@ class ArrayType implements InterpreterInterface
      */
     private function sortItems($items)
     {
-        uasort(
-            $items,
-            function ($firstItem, $secondItem) {
-                $firstValue = 0;
-                $secondValue = 0;
-                if (isset($firstItem['sortOrder'])) {
-                    $firstValue = intval($firstItem['sortOrder']);
-                }
-
-                if (isset($secondItem['sortOrder'])) {
-                    $secondValue = intval($secondItem['sortOrder']);
-                }
-
-                if ($firstValue == $secondValue) {
-                    return 0;
-                }
-                return $firstValue < $secondValue ? -1 : 1;
+        $sortOrderDefined = $this->isSortOrderDefined($items);
+        if ($sortOrderDefined) {
+            $indexedItems = [];
+            foreach ($items as $key => $item) {
+                $indexedItems[] = ['key' => $key, 'item' => $item];
             }
-        );
+            uksort(
+                $indexedItems,
+                function ($firstItemKey, $secondItemKey) use ($indexedItems) {
+                    return $this->compareItems($firstItemKey, $secondItemKey, $indexedItems);
+                }
+            );
+            // Convert array of sorted items back to initial format
+            $items = [];
+            foreach ($indexedItems as $indexedItem) {
+                $items[$indexedItem['key']] = $indexedItem['item'];
+            }
+        }
         return $items;
+    }
+
+    /**
+     * Compare sortOrder of item
+     *
+     * @param mixed $firstItemKey
+     * @param mixed $secondItemKey
+     * @param array $indexedItems
+     * @return int
+     */
+    private function compareItems($firstItemKey, $secondItemKey, $indexedItems)
+    {
+        $firstItem = $indexedItems[$firstItemKey]['item'];
+        $secondItem = $indexedItems[$secondItemKey]['item'];
+        $firstValue = 0;
+        $secondValue = 0;
+        if (isset($firstItem['sortOrder'])) {
+            $firstValue = intval($firstItem['sortOrder']);
+        }
+
+        if (isset($secondItem['sortOrder'])) {
+            $secondValue = intval($secondItem['sortOrder']);
+        }
+
+        if ($firstValue == $secondValue) {
+            // These keys reflect initial relative position of items.
+            // Allows stable sort for items with equal 'sortOrder'
+            return $firstItemKey < $secondItemKey ? -1 : 1;
+        }
+        return $firstValue < $secondValue ? -1 : 1;
+    }
+
+    /**
+     * Determine if a sort order exists for any of the items.
+     *
+     * @param array $items
+     * @return bool
+     */
+    private function isSortOrderDefined($items)
+    {
+        foreach ($items as $itemData) {
+            if (isset($itemData['sortOrder'])) {
+                return true;
+            }
+        }
+        return false;
     }
 }
