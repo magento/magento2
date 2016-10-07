@@ -72,7 +72,7 @@ class ReturnToStockInvoice
      */
     public function aroundExecute(
         \Magento\Sales\Api\RefundInvoiceInterface $refundService,
-        $proceed,
+        \Closure $proceed,
         $invoiceId,
         array $items = [],
         $isOnline = false,
