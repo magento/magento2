@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 
 /**
  * Class OrderRefundCreationArgumentsTest
@@ -95,14 +96,25 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        /**
+         * @param OrderInterface $order
+         * @param CreditmemoInterface $creditmemo
+         * @param array $items
+         * @param bool $notify
+         * @param bool $appendComment
+         * @param CreditmemoCommentCreationInterface|null $comment
+         * @param CreditmemoCreationArgumentsInterface|null $arguments
+         * @return ValidatorResultInterface
+         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+         */
         $this->proceed = function (
-            $order,
-            $creditmemo,
-            $items,
-            $notify,
-            $appendComment,
-            $comment,
-            $arguments
+            OrderInterface $order,
+            CreditmemoInterface $creditmemo,
+            array $items = [],
+            $notify = false,
+            $appendComment = false,
+            CreditmemoCommentCreationInterface $comment = null,
+            CreditmemoCreationArgumentsInterface $arguments = null
         ) {
             return $this->validateResultMock;
         };

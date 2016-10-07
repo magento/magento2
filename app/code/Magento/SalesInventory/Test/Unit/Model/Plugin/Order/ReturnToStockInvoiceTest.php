@@ -132,14 +132,25 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
         $returnToStockItems = [1];
         $invoiceId = 98;
 
+        /**
+         * @param int $invoiceId
+         * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
+         * @param bool|null $isOnline
+         * @param bool|null $notify
+         * @param bool|null $appendComment
+         * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
+         * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
+         * @return int
+         * @suppressWarning(PHPMD.UnusedFormalParameter)
+         */
         $this->proceed = function (
             $invoiceId,
-            $items,
-            $isOnline,
-            $notify,
-            $appendComment,
-            $comment,
-            $arguments
+            array $items = [],
+            $isOnline = false,
+            $notify = false,
+            $appendComment = false,
+            \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+            \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
         ) use ($creditmemoId) {
             return $creditmemoId;
         };

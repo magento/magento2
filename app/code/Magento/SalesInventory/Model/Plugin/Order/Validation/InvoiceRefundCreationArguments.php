@@ -14,7 +14,7 @@ use Magento\SalesInventory\Model\Order\ReturnValidator;
 use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
- * Class CreditmemoCreationArguments
+ * Class InvoiceRefundCreationArguments
  */
 class InvoiceRefundCreationArguments
 {
@@ -64,13 +64,13 @@ class InvoiceRefundCreationArguments
     ) {
         $validationResults = $proceed(
             $invoice,
-            $order, 
-            $creditmemo, 
-            $items, 
-            $isOnline, 
-            $notify, 
-            $appendComment, 
-            $comment, 
+            $order,
+            $creditmemo,
+            $items,
+            $isOnline,
+            $notify,
+            $appendComment,
+            $comment,
             $arguments
         );
         if ($this->isReturnToStockItems($arguments)) {

@@ -12,6 +12,7 @@ use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
+use \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -120,13 +121,24 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
         $creditmemoId = 99;
         $items = [];
         $returnToStockItems = [1];
+
+        /**
+         * @param int $orderId
+         * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
+         * @param bool|null $notify
+         * @param bool|null $appendComment
+         * @param CreditmemoCommentCreationInterface|null $comment
+         * @param CreditmemoCreationArgumentsInterface|null $arguments
+         * @return int
+         * @suppressWarning(PHPMD.UnusedFormalParameter)
+         */
         $this->proceed = function (
             $orderId,
-            $items,
-            $notify,
-            $appendComment,
-            $comment,
-            $arguments
+            array $items = [],
+            $notify = false,
+            $appendComment = false,
+            CreditmemoCommentCreationInterface $comment = null,
+            CreditmemoCreationArgumentsInterface $arguments = null
         ) use ($creditmemoId) {
             return $creditmemoId;
         };
