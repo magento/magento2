@@ -30,6 +30,13 @@ class FillBillingAddressStep implements TestStepInterface
     protected $billingAddress;
 
     /**
+     * Shipping Address fixture.
+     *
+     * @var Address
+     */
+    protected $shippingAddress;
+
+    /**
      * Save Address.
      *
      * @var string
@@ -46,17 +53,20 @@ class FillBillingAddressStep implements TestStepInterface
     /**
      * @param OrderCreateIndex $orderCreateIndex
      * @param Address $billingAddress
-     * @param string $saveAddress
+     * @param Address $shippingAddress [optional]
+     * @param string $saveAddress [optional]
      * @param bool $setShippingAddress [optional]
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
         Address $billingAddress,
+        Address $shippingAddress = null,
         $saveAddress = 'No',
         $setShippingAddress = true
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->billingAddress = $billingAddress;
+        $this->shippingAddress = $shippingAddress;
         $this->saveAddress = $saveAddress;
         $this->setShippingAddress = $setShippingAddress;
     }
@@ -68,6 +78,9 @@ class FillBillingAddressStep implements TestStepInterface
      */
     public function run()
     {
+        if ($this->shippingAddress !== null) {
+            $this->setShippingAddress = null;
+        }
         $this->orderCreateIndex->getCreateBlock()
             ->fillBillingAddress($this->billingAddress, $this->saveAddress, $this->setShippingAddress);
 
