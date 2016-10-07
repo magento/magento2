@@ -35,7 +35,7 @@ class OrderRefundCreationArguments
 
     /**
      * @param RefundOrderInterface $refundOrderValidator
-     * @param ValidatorResultInterface $validationResults
+     * @param \Closure $proceed
      * @param OrderInterface $order
      * @param CreditmemoInterface $creditmemo
      * @param array $items
@@ -46,9 +46,9 @@ class OrderRefundCreationArguments
      * @return ValidatorResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterValidate(
+    public function aroundValidate(
         RefundOrderInterface $refundOrderValidator,
-        ValidatorResultInterface $validationResults,
+        \Closure $proceed,
         OrderInterface $order,
         CreditmemoInterface $creditmemo,
         array $items = [],
@@ -57,6 +57,7 @@ class OrderRefundCreationArguments
         CreditmemoCommentCreationInterface $comment = null,
         CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        $validationResults = $proceed($order, $creditmemo, $items, $notify, $appendComment, $comment, $arguments);
         if ($this->isReturnToStockItems($arguments)) {
             return $validationResults;
         }
