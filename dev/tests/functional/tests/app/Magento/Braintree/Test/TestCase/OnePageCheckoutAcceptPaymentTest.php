@@ -16,7 +16,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 2. Go to Sales > Orders page.
  * 3. Open the placed order.
  * 4. Click Accept button.
- * 7. Perform assertions.
+ * 5. Perform assertions.
  *
  * @group Braintree
  * @ZephyrId MAGETWO-56023
