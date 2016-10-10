@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Paypal\Test\TestCase\CreatePayFlowOrderBackendNegativeTest" summary="Verify required fields validation for PayPal Payflow Pro credit card on admin order creation" ticketId="MAGETWO-58934">
         <variation name="CreatePayFlowOrderBackendNegativeTestPayflowProVariation1" summary="Verify required fields validation for credit card on admin order creation" ticketId="MAGETWO-58934">
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
