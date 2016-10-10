@@ -291,29 +291,28 @@ class Create extends Block
         $saveAddress = 'No',
         $setShippingAddress = true
     ) {
-        if ($setShippingAddress) {
+        if ($setShippingAddress !== false) {
             $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
         }
         $this->getBillingAddressBlock()->fill($billingAddress);
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
+        if ($setShippingAddress) {
+            $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
+            $this->getTemplateBlock()->waitLoader();
+        }
     }
 
     /**
      * Fill Shipping Address.
      *
-     * @param FixtureInterface $shippingAddress [optional]
+     * @param FixtureInterface $shippingAddress
      * @return void
      */
-    public function fillShippingAddress(FixtureInterface $shippingAddress = null)
+    public function fillShippingAddress(FixtureInterface $shippingAddress)
     {
-        if (!$shippingAddress) {
-            $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
-            $this->getTemplateBlock()->waitLoader();
-        } else {
-            $this->getShippingAddressBlock()->fill($shippingAddress);
-            $this->getTemplateBlock()->waitLoader();
-        }
+        $this->getShippingAddressBlock()->fill($shippingAddress);
+        $this->getTemplateBlock()->waitLoader();
     }
 
     /**
