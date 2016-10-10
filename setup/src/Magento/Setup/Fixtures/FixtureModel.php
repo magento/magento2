@@ -223,6 +223,8 @@ class FixtureModel
     {
         return isset($this->config['config']['profile'][$key]) ?
             (
+                // Work around for how attributes are handled in the XML parser when injected via xinclude due to the
+                // files existing outside of the current working directory.
                 isset($this->config['config']['profile'][$key]['_value']) ?
                     $this->config['config']['profile'][$key]['_value'] : $this->config['config']['profile'][$key]
             ) : $default;
