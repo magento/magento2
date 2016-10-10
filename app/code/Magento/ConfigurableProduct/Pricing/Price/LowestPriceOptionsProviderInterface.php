@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Retrieve list of products where each product contains lower price than others at least for one possible price type
+ * @api
  */
 interface LowestPriceOptionsProviderInterface
 {
