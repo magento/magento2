@@ -252,18 +252,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     }
 
     /**
-     * @return SortOrderBuilder
-     */
-    private function getSortOrderBuilder()
-    {
-        if (null === $this->sortOrderBuilder) {
-            $this->sortOrderBuilder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\SortOrderBuilder::class);
-        }
-        return $this->sortOrderBuilder;
-    }
-
-    /**
      * @return AttributeManagementInterface
      */
     private function getAttributeManagement()

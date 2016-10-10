@@ -22,6 +22,9 @@ use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Framework\Controller\Result\Json;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddAttributeToTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
