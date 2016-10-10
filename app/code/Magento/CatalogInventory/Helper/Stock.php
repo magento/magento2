@@ -154,7 +154,10 @@ class Stock
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $resource = $this->getStockStatusResource();
-            $resource->addStockDataToCollection($collection, !$isShowOutOfStock);
+            $resource->addStockDataToCollection(
+                $collection,
+                !$isShowOutOfStock && $collection->getFlag('require_stock_items')
+            );
             $collection->setFlag($stockFlag, true);
         }
     }

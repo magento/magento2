@@ -6,14 +6,10 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Store\Test\TestCase\UpdateStoreEntityTest" summary="Update Store View" ticketId="MAGETWO-27786">
-        <variation name="UpdateStoreEntityTestVariation1">
-            <data name="tag" xsi:type="string">severity:S2</data>
-            <data name="storeInitial/dataset" xsi:type="string">custom</data>
-            <data name="store/data/group_id/dataset" xsi:type="string">default</data>
-            <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>
-            <data name="store/data/code" xsi:type="string">storecode_updated%isolation%</data>
-            <data name="store/data/is_active" xsi:type="string">Enabled</data>
+    <testCase name="Magento\Store\Test\TestCase\MoveStoreToOtherGroupSameWebsiteTest" summary="Move Store View" ticketId="MAGETWO-54026">
+        <variation name="MoveStoreTestVariation1">
+            <data name="storeInitialA/dataset" xsi:type="string">custom_group_custom_store</data>
+            <data name="storeInitialB/dataset" xsi:type="string">custom_group_custom_store</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
