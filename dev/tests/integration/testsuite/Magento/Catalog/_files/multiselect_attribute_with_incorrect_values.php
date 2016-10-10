@@ -37,16 +37,14 @@ $attribute->setData(
         'backend_model' => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class,
         'option' => [
             'value' => [
-                'option_1' => ['Option 1'],
-                'option_2' => ['Option 2'],
-                'option_3' => ['Option 3'],
-                'option_4' => ['Option 4 "!@#$%^&*']
+                'option_1' => ['Opt|,=ion 1'],
+                'option_2' => ['Opt||,ion 2'],
+                'option_3' => ['Option 3 "!@#$%^&*, "|"']
             ],
             'order' => [
                 'option_1' => 1,
                 'option_2' => 2,
                 'option_3' => 3,
-                'option_4' => 4,
             ],
         ],
     ]
