@@ -278,15 +278,19 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getOptionsReadOnly')
             ->willReturn(false);
 
+        $firstExpectedCustomOption = clone $this->customOptionMock;
+        $firstExpectedCustomOption->setData($optionsData['option2']);
+        $secondExpectedCustomOption = clone $this->customOptionMock;
+        $secondExpectedCustomOption->setData($optionsData['option3']);
         $this->customOptionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnMap([
                 [
                     ['data' => $optionsData['option2']],
-                    (clone $this->customOptionMock)->setData($optionsData['option2'])
+                    $firstExpectedCustomOption
                 ], [
                     ['data' => $optionsData['option3']],
-                    (clone $this->customOptionMock)->setData($optionsData['option3'])
+                    $secondExpectedCustomOption
                 ]
             ]);
 
