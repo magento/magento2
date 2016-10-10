@@ -4,5 +4,6 @@
  * See COPYING.txt for license details.
  */
 return [
-    '/Test\/Unit/'
+    '/Test\/Unit/',
+    'lib/internal/Magento/Framework/DB/Adapter/Pdo/Mysql.php',
 ];
