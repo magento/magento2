@@ -221,6 +221,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue('sku' == $option2->getData('product_sku'));
     }
 
+    /**
+     * @return array
+     */
     public function initializeDataProvider()
     {
         return [
