@@ -73,6 +73,7 @@ class VariationHandler
     public function generateSimpleProducts($parentProduct, $productsData)
     {
         $generatedProductIds = [];
+        $this->attributes = null;
         $productsData = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
@@ -92,7 +93,6 @@ class VariationHandler
 
             $generatedProductIds[] = $newSimpleProduct->getId();
         }
-        $this->attributes = null;
         return $generatedProductIds;
     }
 
