@@ -108,6 +108,8 @@ class Save extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
         }
 
+        $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
+
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
@@ -129,10 +131,12 @@ class Save extends \Magento\Backend\App\Action
                 $shipment->setCustomerNote($data['comment_text']);
                 $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
-            $errorMessages = $this->getShipmentValidator()->validate($shipment, [QuantityValidator::class]);
-            if (!empty($errorMessages)) {
+            $validationResult = $this->getShipmentValidator()
+                ->validate($shipment, [QuantityValidator::class]);
+
+            if ($validationResult->hasMessages()) {
                 $this->messageManager->addError(
-                    __("Shipment Document Validation Error(s):\n" . implode("\n", $errorMessages))
+                    __("Shipment Document Validation Error(s):\n" . implode("\n", $validationResult->getMessages()))
                 );
                 $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
                 return;
@@ -141,7 +145,6 @@ class Save extends \Magento\Backend\App\Action
 
             $shipment->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $responseAjax = new \Magento\Framework\DataObject();
-            $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
 
             if ($isNeedCreateLabel) {
                 $this->labelGenerator->create($shipment, $this->_request);
