@@ -130,6 +130,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -221,6 +222,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Customer|Address $entity
      * @param array $entityData
+     * @return void
      */
     private function overrideFileUploaderData($entity, array &$entityData)
     {
@@ -244,6 +246,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Attribute $attribute
      * @param array $customerData
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getFileUploaderData(
         Type $entityType,
@@ -343,6 +346,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @param AbstractAttribute $attribute
      * @param array $config
+     * @return void
      */
     private function overrideFileUploaderMetadata(
         Type $entityType,
@@ -360,7 +364,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if (isset($config['validation']['file_extensions'])) {
                 $allowedExtensions = explode(',', $config['validation']['file_extensions']);
-                array_walk($allowedExtensions, function(&$value) { $value = strtolower(trim($value)); });
+                array_walk(
+                    $allowedExtensions,
+                    function (&$value) {
+                        $value = strtolower(trim($value));
+                    }
+                );
             }
 
             $allowedExtensions = implode(' ', $allowedExtensions);

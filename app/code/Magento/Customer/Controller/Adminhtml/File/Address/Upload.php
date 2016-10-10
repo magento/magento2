@@ -114,7 +114,7 @@ class Upload extends Action
      */
     private function convertFilesArray()
     {
-        foreach($_FILES['address'] as $itemKey => $item) {
+        foreach ($_FILES['address'] as $itemKey => $item) {
             foreach ($item as $value) {
                 if (is_array($value)) {
                     $_FILES['address'][$itemKey] = [

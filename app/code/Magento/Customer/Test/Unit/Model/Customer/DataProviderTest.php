@@ -367,6 +367,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         return [$attributeMock, $attributeBooleanMock];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetData()
     {
         $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
@@ -476,6 +479,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetDataWithCustomerFormData()
     {
         $customerId = 11;
@@ -589,6 +595,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetDataWithCustomAttributeImage()
     {
         $customerId = 1;
@@ -810,6 +819,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $dataProvider->getData());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetAttributesMetaWithCustomAttributeImage()
     {
         $maxFileSize = 1000;

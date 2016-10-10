@@ -16,6 +16,9 @@ use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileProcessor
 {
     /**

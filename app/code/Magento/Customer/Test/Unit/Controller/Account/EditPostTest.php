@@ -208,6 +208,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGeneralSave()
     {
         $customerId = 1;

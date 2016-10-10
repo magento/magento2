@@ -75,7 +75,6 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         return $model;
     }
 
-
     public function testGetStat()
     {
         $fileName = '/filename.ext1';

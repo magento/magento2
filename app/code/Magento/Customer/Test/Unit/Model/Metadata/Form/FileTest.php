@@ -14,6 +14,7 @@ use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 class FileTest extends AbstractFormTestCase
 {
     const ENTITY_TYPE = 0;
+
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\EncoderInterface */
     protected $urlEncode;
 
