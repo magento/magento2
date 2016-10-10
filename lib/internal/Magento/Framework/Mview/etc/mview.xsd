@@ -106,7 +106,7 @@
     <xs:simpleType name="subscriptionModelType">
         <xs:annotation>
             <xs:documentation>
-                Subscription model must be a valid PHP class or interface name.
+                DEPRECATED. Subscription model must be a valid PHP class or interface name.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">

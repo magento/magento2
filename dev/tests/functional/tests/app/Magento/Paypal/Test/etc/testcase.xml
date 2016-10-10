@@ -79,7 +79,8 @@
         <step name="selectStore" module="Magento_Sales" next="addProducts" />
         <step name="addProducts" module="Magento_Sales" next="fillAccountInformation" />
         <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="saveCreditCardOnBackend" />
         <step name="saveCreditCardOnBackend" module="Magento_Vault" next="submitOrderNegative" />
         <step name="submitOrderNegative" module="Magento_Sales" />
