@@ -25,7 +25,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure_not_triggered_due_threshold</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
@@ -48,7 +48,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure_uk</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
@@ -71,13 +71,13 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
-        <variation name="OnePageCheckoutBraintreeTestVariation4" summary="Checkout with Braintree for payment action Authorize and Capture" ticketId="MAGETWO-38420">
+        <variation name="OnePageCheckoutBraintreeTestVariation4" summary="Checkout with Braintree for payment action Authorize and Capture" ticketId="MAGETWO-59403">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
@@ -98,7 +98,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintree, braintree_sale</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />

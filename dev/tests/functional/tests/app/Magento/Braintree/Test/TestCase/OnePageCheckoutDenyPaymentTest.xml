@@ -21,7 +21,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintree,braintree_fraudprotection</data>
             <data name="status" xsi:type="string">Canceled</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertDenyPaymentSuccessMessagePresent" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertDenyPaymentMessageInCommentsHistory" />

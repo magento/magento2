@@ -23,7 +23,7 @@
             <data name="creditCardSave" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Vault\Test\Constraint\AssertStoredPaymentDeletedMessage" />
         </variation>
     </testCase>

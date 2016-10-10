@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Braintree\Test\Constraint\Assert3dSecureInfoIsPresent">
+    <type name="Magento\Paypal\Test\Constraint\Sandbox\AssertTotalPaypalReview">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
-    <type name="Magento\Braintree\Test\Constraint\AssertTransactionIsPresentInSettlementReport">
+    <type name="Magento\Paypal\Test\Constraint\AssertExpressCancelledMessage">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
