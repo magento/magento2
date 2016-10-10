@@ -48,6 +48,8 @@ class FillShippingAddressStep implements TestStepInterface
      */
     public function run()
     {
-        $this->orderCreateIndex->getCreateBlock()->fillShippingAddress($this->shippingAddress);
+        if ($this->shippingAddress !== null) {
+            $this->orderCreateIndex->getCreateBlock()->fillShippingAddress($this->shippingAddress);
+        }
     }
 }
