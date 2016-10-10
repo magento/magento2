@@ -115,7 +115,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             $attributeGroupSearchCriteria = $this->getSearchCriteriaBuilder()
                 ->addFilter('attribute_set_id', $attributeSet->getAttributeSetId())
                 ->addFilter('attribute_group_code', $groupCode)
-                ->addSortOrder($this->getSortOrderBuilder()->setAscendingDirection()->create())
                 ->setPageSize(1)
                 ->create();
 
