@@ -64,9 +64,29 @@ define([
         },
 
         ajaxSubmit: function(form) {
-            var self = this;
+            var self = this,
+                swatchAttributesValue = [],
+                urlHashParams = '';
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
+
+            $(form.prop("elements")).each(function(index, item){
+                item = $(item);
+                if (item.attr('name') && item.attr('name').search('super') != -1) {
+                    var r = /\[(\d+)\]/;
+                    var matches = r.exec(item.attr('name'));
+
+                    if (matches) {
+                        swatchAttributesValue.push(item.attr('data-attr-name') + '=' + item.val());
+                    }
+                }
+            });
+
+            console.log(form.serialize());
+            if (swatchAttributesValue.length > 0) {
+                urlHashParams = '#' + swatchAttributesValue.join('&');
+            }
+
 
             $.ajax({
                 url: form.attr('action'),
@@ -84,7 +104,7 @@ define([
                     }
 
                     if (res.backUrl) {
-                        window.location = res.backUrl;
+                        window.location = res.backUrl  + urlHashParams;
                         return;
                     }
                     if (res.messages) {

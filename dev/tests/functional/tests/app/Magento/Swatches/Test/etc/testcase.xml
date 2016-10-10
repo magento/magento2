@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+  <scenario name="AddConfigurableProductWithSwatchToShopingCartTest" firstStep="createConfigurableProductWithSwatchAttribute">
+    <step name="createConfigurableProductWithSwatchAttribute" module="Magento_Swatches" next="openProductInCatalog" />
+    <step name="openProductInCatalog" module="Magento_Swatches" next="categoryConfigureProduct" />
+    <step name="categoryConfigureProduct" module="Magento_Swatches" next="categoryAddToCartProduct" />
+    <step name="categoryAddToCartProduct" module="Magento_Swatches" />
+  </scenario>
+</config>
