@@ -415,6 +415,7 @@ class AdvancedPricing extends AbstractModifier
                             'enabled' => false,
                         ],
                         'disabled' => false,
+                        'required' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
@@ -492,7 +493,6 @@ class AdvancedPricing extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Field::NAME,
-                                        'component' => 'Magento_Catalog/js/form/element/price-input',
                                         'formElement' => Input::NAME,
                                         'dataType' => Price::NAME,
                                         'label' => __('Price'),

@@ -82,7 +82,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
 
     /**
      * Public method for retrieve Product Index model
-     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     public function getModel()
@@ -90,7 +90,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
         try {
             $model = $this->_indexFactory->get($this->_indexType);
         } catch (\InvalidArgumentException $e) {
-            new \Magento\Framework\Exception\LocalizedException(__('Index type is not valid'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Index type is not valid'));
         }
 
         return $model;

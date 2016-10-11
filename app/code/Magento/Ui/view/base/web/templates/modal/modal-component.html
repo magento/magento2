@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<div data-bind="css: modalClass, hasFocus: focused">
-    <!-- ko foreach: { data: elems, as: 'element' } -->
-        <!-- ko template: element.getTemplate() --><!-- /ko -->
-    <!-- /ko -->
+<div css="modalClass" hasFocus="focused">
+    <each if="state() || $data.modal" args="data: elems, as: 'element'" render=""/>
 </div>

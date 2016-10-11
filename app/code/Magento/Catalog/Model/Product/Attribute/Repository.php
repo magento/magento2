@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Eav\Api\Data\AttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -117,12 +118,17 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 throw NoSuchEntityException::singleField('attribute_code', $existingModel->getAttributeCode());
             }
 
+            // Attribute code must not be changed after attribute creation
+            $attribute->setAttributeCode($existingModel->getAttributeCode());
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
 
             if (is_array($attribute->getFrontendLabels())) {
-                $frontendLabel[0] = $existingModel->getDefaultFrontendLabel();
+                $defaultFrontendLabel = $attribute->getDefaultFrontendLabel();
+                $frontendLabel[0] = !empty($defaultFrontendLabel)
+                    ? $defaultFrontendLabel
+                    : $existingModel->getDefaultFrontendLabel();
                 foreach ($attribute->getFrontendLabels() as $item) {
                     $frontendLabel[$item->getStoreId()] = $item->getLabel();
                 }
@@ -176,8 +182,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setIsUserDefined(1);
         }
         $this->attributeResource->save($attribute);
-        foreach ($attribute->getOptions() as $option) {
-            $this->getOptionManagement()->add($attribute->getAttributeCode(), $option);
+
+        if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
+            foreach ($attribute->getOptions() as $option) {
+                $this->getOptionManagement()->add($attribute->getAttributeCode(), $option);
+            }
         }
         return $this->get($attribute->getAttributeCode());
     }

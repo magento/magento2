@@ -14,6 +14,85 @@ define([
 ], function (ko, utils, _, layout, uiCollection, registry, $t) {
     'use strict';
 
+    /**
+     * Checks value type and cast to boolean if needed
+     *
+     * @param {*} value
+     *
+     * @returns {Boolean|*} casted or origin value
+     */
+    function castValue(value) {
+        if (_.isUndefined(value) || value === '' || _.isNull(value)) {
+            return false;
+        }
+
+        return value;
+    }
+
+    /**
+     * Compares arrays.
+     *
+     * @param {Array} base - array as method bases its decision on first argument.
+     * @param {Array} current - second array
+     *
+     * @returns {Boolean} result - is current array equal to base array
+     */
+    function compareArrays(base, current) {
+        var index = 0,
+            length = base.length;
+
+        if (base.length !== current.length) {
+            return false;
+        }
+
+        /*eslint-disable max-depth, eqeqeq, no-use-before-define */
+        for (index; index < length; index++) {
+            if (_.isArray(base[index]) && _.isArray(current[index])) {
+                if (!compareArrays(base[index], current[index])) {
+                    return false;
+                }
+            } else if (typeof base[index] === 'object' && typeof current[index] === 'object') {
+                if (!compareObjects(base[index], current[index])) {
+                    return false;
+                }
+            } else if (castValue(base[index]) != castValue(current[index])) {
+                return false;
+            }
+        }/*eslint-enable max-depth, eqeqeq, no-use-before-define */
+
+        return true;
+    }
+
+    /**
+     * Compares objects. Compares only properties from origin object,
+     * if current object has more properties - they are not considered
+     *
+     * @param {Object} base - first object
+     * @param {Object} current - second object
+     *
+     * @returns {Boolean} result - is current object equal to base object
+     */
+    function compareObjects(base, current) {
+        var prop;
+
+        /*eslint-disable max-depth, eqeqeq*/
+        for (prop in base) {
+            if (_.isArray(base[prop]) && _.isArray(current[prop])) {
+                if (!compareArrays(base[prop], current[prop])) {
+                    return false;
+                }
+            } else if (typeof base[prop] === 'object' && typeof current[prop] === 'object') {
+                if (!compareObjects(base[prop], current[prop])) {
+                    return false;
+                }
+            } else if (castValue(base[prop]) != castValue(current[prop])) {
+                return false;
+            }
+        }/*eslint-enable max-depth, eqeqeq */
+
+        return true;
+    }
+
     return uiCollection.extend({
         defaults: {
             defaultRecord: false,
@@ -36,6 +115,11 @@ define([
             deleteValue: true,
             showSpinner: true,
             isDifferedFromDefault: false,
+            defaultState: [],
+            defaultPagesState: {},
+            pagesChanged: {},
+            hasInitialPagesState: {},
+            changed: false,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
                 name: '${ $.name }_dnd',
@@ -60,9 +144,10 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault parsePagesData',
+                recordData: 'setDifferedFromDefault parsePagesData setRecordDataToCache',
                 currentPage: 'changePage',
-                elems: 'checkSpinner'
+                elems: 'checkSpinner',
+                changed: 'updateTrigger'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
@@ -71,7 +156,16 @@ define([
             pageSize: 20,
             relatedData: [],
             currentPage: 1,
+            recordDataCache: [],
             startIndex: 0
+        },
+
+        /**
+         * Sets record data to cache
+         */
+        setRecordDataToCache: function (data) {
+            this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
+                data : this.recordDataCache;
         },
 
         /**
@@ -82,12 +176,48 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
+            _.bindAll(this,
+                'processingDeleteRecord',
+                'onChildrenUpdate',
+                'checkDefaultState',
+                'renderColumnsHeader',
+                'deleteHandler',
+                'setDefaultState'
+            );
+
             this._super()
                 .initChildren()
                 .initDnd()
-                .setColumnsHeaderListener()
                 .initDefaultRecord()
+                .setInitialProperty()
+                .setColumnsHeaderListener()
                 .checkSpinner();
+
+            this.on('recordData', this.checkDefaultState);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        bubble: function (event) {
+            if (event === 'deleteRecord' || event === 'update') {
+                return false;
+            }
+
+            return this._super();
+        },
+
+        /**
+         * Inits DND module
+         *
+         * @returns {Object} Chainable.
+         */
+        initDnd: function () {
+            if (this.dndConfig.enabled) {
+                layout([this.dndConfig]);
+            }
 
             return this;
         },
@@ -109,37 +239,252 @@ define([
                     'disabled',
                     'labels',
                     'showSpinner',
-                    'isDifferedFromDefault'
+                    'isDifferedFromDefault',
+                    'changed'
                 ]);
 
             return this;
         },
 
         /**
-         * Init DND module
+         * @inheritdoc
+         */
+        initElement: function (elem) {
+            this._super();
+            elem.on({
+                'deleteRecord': this.deleteHandler,
+                'update': this.onChildrenUpdate,
+                'addChild': this.setDefaultState
+            });
+
+            return this;
+        },
+
+        /**
+         * Handler for deleteRecord event
+         *
+         * @param {Number|String} index - element index
+         * @param {Number|String} id
+         */
+        deleteHandler: function (index, id) {
+            this.setDefaultState();
+            this.processingDeleteRecord(index, id);
+            this.pagesChanged[this.currentPage()] =
+                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.changed(_.some(this.pagesChanged));
+        },
+
+        /**
+         * Set initial property to records data
          *
          * @returns {Object} Chainable.
          */
-        initDnd: function () {
-            if (this.dndConfig.enabled) {
-                layout([this.dndConfig]);
+        setInitialProperty: function () {
+            if (_.isArray(this.recordData())) {
+                this.recordData.each(function (data, index) {
+                    this.source.set(this.dataScope + '.' + this.index + '.' + index + '.initialize', true);
+                }, this);
             }
 
             return this;
         },
 
         /**
-         * Check columnsHeaderAfterRender property,
+         * Handler for update event
+         *
+         * @param {Boolean} state
+         */
+        onChildrenUpdate: function (state) {
+            var changed,
+                dataScope,
+                changedElemDataScope;
+
+            if (state && !this.hasInitialPagesState[this.currentPage()]) {
+                this.setDefaultState();
+                changed = this.getChangedElems(this.elems());
+                dataScope = this.elems()[0].dataScope.split('.');
+                dataScope.splice(dataScope.length - 1, 1);
+                changed.forEach(function (elem) {
+                    changedElemDataScope = elem.dataScope.split('.');
+                    changedElemDataScope.splice(0, dataScope.length);
+                    changedElemDataScope[0] =
+                        (parseInt(changedElemDataScope[0], 10) - this.pageSize * (this.currentPage() - 1)).toString();
+                    this.setValueByPath(
+                        this.defaultPagesState[this.currentPage()],
+                        changedElemDataScope, elem.initialValue
+                    );
+                }, this);
+            }
+
+            if (this.defaultPagesState[this.currentPage()]) {
+                this.pagesChanged[this.currentPage()] =
+                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.changed(_.some(this.pagesChanged));
+            }
+        },
+
+        /**
+         * Set default dynamic-rows state
+         *
+         * @param {Array} data - defaultState data
+         */
+        setDefaultState: function (data) {
+            var componentData,
+                childItems;
+
+            if (!this.hasInitialPagesState[this.currentPage()]) {
+                childItems = this.getChildItems();
+                componentData = childItems.length ?
+                    utils.copy(childItems) :
+                    utils.copy(this.getChildItems(this.recordDataCache));
+                componentData.forEach(function (dataObj) {
+                    if (dataObj.hasOwnProperty('initialize')) {
+                        delete dataObj.initialize;
+                    }
+                });
+
+                this.hasInitialPagesState[this.currentPage()] = true;
+                this.defaultPagesState[this.currentPage()] = data ? data : this.arrayFilter(componentData);
+            }
+        },
+
+        /**
+         * Sets value to object by string path
+         *
+         * @param {Object} obj
+         * @param {Array|String} path
+         * @param {*} value
+         */
+        setValueByPath: function (obj, path, value) {
+            var prop;
+
+            if (_.isString(path)) {
+                path = path.split('.');
+            }
+
+            if (path.length - 1) {
+                prop = obj[path[0]];
+                path.splice(0, 1);
+                this.setValueByPath(prop, path, value);
+            } else if (path.length && obj) {
+                obj[path[0]] = value;
+            }
+        },
+
+        /**
+         * Returns elements which changed self state
+         *
+         * @param {Array} array - data array
+         * @param {Array} changed - array with changed elements
+         * @returns {Array} changed - array with changed elements
+         */
+        getChangedElems: function (array, changed) {
+            changed = changed || [];
+
+            array.forEach(function (elem) {
+                if (_.isFunction(elem.elems)) {
+                    this.getChangedElems(elem.elems(), changed);
+                } else if (_.isFunction(elem.hasChanged) && elem.hasChanged()) {
+                    changed.push(elem);
+                }
+            }, this);
+
+            return changed;
+        },
+
+        /**
+         * Checks columnsHeaderAfterRender property,
          * and set listener on elems if needed
          *
          * @returns {Object} Chainable.
          */
         setColumnsHeaderListener: function () {
             if (this.columnsHeaderAfterRender) {
-                this.on('recordData', this.renderColumnsHeader.bind(this));
+                this.on('recordData', this.renderColumnsHeader);
+
+                if (_.isArray(this.recordData()) && this.recordData().length) {
+                    this.renderColumnsHeader();
+                }
             }
 
             return this;
+        },
+
+        /**
+         * Checks whether component's state is default or not
+         */
+        checkDefaultState: function () {
+            var isRecordDataArray = _.isArray(this.recordData()),
+                initialize,
+                hasNotDefaultRecords = isRecordDataArray ? !!this.recordData().filter(function (data) {
+                    return !data.initialize;
+                }).length : false;
+
+            if (!this.hasInitialPagesState[this.currentPage()] && isRecordDataArray && hasNotDefaultRecords) {
+                this.hasInitialPagesState[this.currentPage()] = true;
+                this.defaultPagesState[this.currentPage()] = utils.copy(this.getChildItems().filter(function (data) {
+                    initialize = data.initialize;
+                    delete data.initialize;
+
+                    return initialize;
+                }));
+
+                this.pagesChanged[this.currentPage()] =
+                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.changed(_.some(this.pagesChanged));
+            } else if (this.hasInitialPagesState[this.currentPage()]) {
+                this.pagesChanged[this.currentPage()] =
+                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.changed(_.some(this.pagesChanged));
+            }
+        },
+
+        /**
+         * Filters out deleted items from array
+         *
+         * @param {Array} data
+         *
+         * @returns {Array} filtered array
+         */
+        arrayFilter: function (data) {
+            var prop;
+
+            /*eslint-disable no-loop-func*/
+            data.forEach(function (elem) {
+                for (prop in elem) {
+                    if (_.isArray(elem[prop])) {
+                        elem[prop] = _.filter(elem[prop], function (elemProp) {
+                            return elemProp[this.deleteProperty] !== this.deleteValue;
+                        }, this);
+
+                        elem[prop].forEach(function (elemProp) {
+                            if (_.isArray(elemProp)) {
+                                elem[prop] = this.arrayFilter(elemProp);
+                            }
+                        }, this);
+                    }
+                }
+            }, this);
+
+            /*eslint-enable no-loop-func*/
+
+            return data;
+        },
+
+        /**
+         * Triggers update event
+         *
+         * @param {Boolean} val
+         */
+        updateTrigger: function (val) {
+            this.trigger('update', val);
+        },
+
+        /**
+         * Returns component state
+         */
+        hasChanged: function () {
+            return this.changed();
         },
 
         /**
@@ -188,11 +533,11 @@ define([
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
                     data = this.createHeaderTemplate(cell.config);
-
                     cell.config.labelVisible = false;
                     _.extend(data, {
                         label: cell.config.label,
                         name: cell.name,
+                        required: !!cell.config.validation,
                         columnsHeaderClasses: cell.config.columnsHeaderClasses
                     });
 
@@ -269,7 +614,7 @@ define([
 
             this.relatedData = this.deleteProperty ?
                 _.filter(data, function (elem) {
-                    return elem[this.deleteProperty] !== this.deleteValue;
+                    return elem && elem[this.deleteProperty] !== this.deleteValue;
                 }, this) : data;
 
             pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
@@ -281,10 +626,26 @@ define([
          *
          * @returns {Array} data
          */
-        getChildItems: function () {
+        getChildItems: function (data, page) {
+            var dataRecord = data || this.relatedData,
+                startIndex;
+
             this.startIndex = (~~this.currentPage() - 1) * this.pageSize;
 
-            return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
+            startIndex = page || this.startIndex;
+
+            return dataRecord.slice(startIndex, this.startIndex + this.pageSize);
+        },
+
+        /**
+         * Get record count with filtered delete property.
+         *
+         * @returns {Number} count
+         */
+        getRecordCount: function () {
+            return _.filter(this.recordData(), function (record) {
+                return record && record[this.deleteProperty] !== this.deleteValue;
+            }, this).length;
         },
 
         /**
@@ -304,6 +665,8 @@ define([
          * @param {Number|String} prop - additional property to element
          */
         processingAddChild: function (ctx, index, prop) {
+            this.bubble('addChild', false);
+
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
                 this.clear();
                 this.pages(this.pages() + 1);

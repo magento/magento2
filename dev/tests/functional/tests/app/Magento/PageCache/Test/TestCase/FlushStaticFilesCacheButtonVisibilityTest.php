@@ -21,6 +21,7 @@ class FlushStaticFilesCacheButtonVisibilityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S2';
     /* end tags */
     
     /**

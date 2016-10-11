@@ -10,7 +10,8 @@ var config = {
             address:            'Magento_Customer/address',
             changeEmailPassword: 'Magento_Customer/change-email-password',
             passwordStrengthIndicator: 'Magento_Customer/js/password-strength-indicator',
-            zxcvbn: 'Magento_Customer/js/zxcvbn'
+            zxcvbn: 'Magento_Customer/js/zxcvbn',
+            addressValidation: 'Magento_Customer/js/addressValidation'
         }
     }
 };

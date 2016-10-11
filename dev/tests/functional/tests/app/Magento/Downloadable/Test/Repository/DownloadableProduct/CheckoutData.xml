@@ -73,8 +73,8 @@
                 </item>
             </field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">23</item>
-                <item name="subtotal" xsi:type="string">23</item>
+                <item name="price" xsi:type="string">25.43</item>
+                <item name="subtotal" xsi:type="string">25.43</item>
             </field>
         </dataset>
 
