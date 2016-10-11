@@ -17,6 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\DeployManager;
+use Magento\Framework\App\Cache;
+use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
 
 /**
  * Deploy static content command
@@ -380,6 +382,7 @@ class DeployStaticContentCommand extends Command
             }
         }
 
+        $this->mockCache();
         return $deployManager->deploy();
     }
 
@@ -440,5 +443,19 @@ class DeployStaticContentCommand extends Command
         }
 
         return [$deployableLanguages, $deployableAreaThemeMap, $requestedThemes];
+    }
+
+    /**
+     * Mock Cache class with dummy implementation
+     *
+     * @return void
+     */
+    private function mockCache()
+    {
+        $this->objectManager->configure([
+            'preferences' => [
+                Cache::class => DummyCache::class
+            ]
+        ]);
     }
 }
