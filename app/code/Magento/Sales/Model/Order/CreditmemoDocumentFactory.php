@@ -88,7 +88,7 @@ class CreditmemoDocumentFactory
     ) {
         $commentData = [
             'comment' => $comment->getComment(),
-            'is_visible_on_frontend' => $comment->getIsVisibleOnFront()
+            'is_visible_on_front' => $comment->getIsVisibleOnFront()
         ];
         $comment = $this->commentFactory->create(['data' => $commentData]);
         $comment->setParentId($creditmemo->getEntityId())

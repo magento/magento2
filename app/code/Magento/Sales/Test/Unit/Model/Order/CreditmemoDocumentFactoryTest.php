@@ -158,7 +158,7 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit_Framework_TestCase
                 [
                     'data' => [
                         'comment' => 'text',
-                        'is_visible_on_frontend' => null
+                        'is_visible_on_front' => null
                     ]
                 ]
             )
