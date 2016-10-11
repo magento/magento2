@@ -24,5 +24,5 @@ define([
                 window.deleteConfirm(params.message, params.url, postData);
             }
         });
-    }
+    };
 });
