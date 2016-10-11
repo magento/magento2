@@ -3,21 +3,25 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery"
-], function($){
+    'jquery'
+], function ($) {
     'use strict';
+
+    var postData;
 
     return function (params, elem) {
 
-        elem.on('click', function() {
-            if ($.validator.validateElement($('[name="current_password"]'))) {
-                var postData = {
-                    'data' : {
-                        'user_id': params.objId,
-                        'current_password': $('[name="current_password"]').val()
-                    }
+        elem.on('click', function () {
+
+            postData = {
+                'data': {
+                    'user_id': params.objId,
+                    'current_password': $('[name="current_password"]').val()
                 }
-                deleteConfirm(params.message, params.url, postData);
+            };
+
+            if ($.validator.validateElement($('[name="current_password"]'))) {
+                window.deleteConfirm(params.message, params.url, postData);
             }
         });
     }
