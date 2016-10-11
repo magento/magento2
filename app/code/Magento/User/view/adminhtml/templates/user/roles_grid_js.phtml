@@ -76,9 +76,9 @@ require([
     {
         "[data-role=delete-user]" : {
             "deleteUserAccount" : {
-                "message": "<?php /* @escapeNotVerified */ echo $editBlock->getDeleteMessage(); ?>",
-                "url": "<?php /* @escapeNotVerified */ echo $editBlock->getDeleteUrl(); ?>",
-                "objId": "<?php /* @escapeNotVerified */ echo $editBlock->getObjectId(); ?>"
+                "message": "<?php echo $editBlock->escapeHtml($editBlock->getDeleteMessage()) ?>",
+                "url": "<?php /* @noEscape */ echo $editBlock->getDeleteUrl(); ?>",
+                "objId": "<?php echo $editBlock->escapeHtml($editBlock->getObjectId()) ?>"
             }
         }
     }

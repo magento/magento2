@@ -77,6 +77,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Returns message that is displayed for admin when he deleted user from the system.
+     * To see this message admin must do the following:
+     * - open user for edition;
+     * - fill current password in section "Current User Identity Verification";
+     * - click "Delete User" at top left part of the page;
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getDeleteMessage()
@@ -85,7 +91,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Returns user deletion url
+     * Returns url that for user deletion.
+     * The following action is executed if admin navigates to this url
+     * Magento\User\Controller\Adminhtml\User\Delete::execute
      *
      * @return string
      */
@@ -95,6 +103,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Method is used to get id of user that admin edits.
+     * It can be used to determine either admin opens page for creation or edition of already created user
+     *
      * @return int
      */
     public function getObjectId()
