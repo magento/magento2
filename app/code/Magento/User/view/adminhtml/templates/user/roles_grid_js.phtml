@@ -14,7 +14,6 @@ require([
 ], function(){
 
 <?php $myBlock = $block->getLayout()->getBlock('user.roles.grid'); ?>
-<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
     var radioBoxes = $H({});
     var warning = false;
@@ -73,6 +72,7 @@ require([
 });
 </script>
 
+<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
 <?php if (is_object($editBlock)): ?>
     <script type="text/x-magento-init">
         {
