@@ -127,10 +127,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param FilterPool $filterPool
-     * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -140,7 +138,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         FilterPool $filterPool,
-        FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
         array $data = []
     ) {
@@ -150,7 +147,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
-        $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
