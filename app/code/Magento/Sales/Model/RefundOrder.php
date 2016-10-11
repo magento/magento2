@@ -149,6 +149,7 @@ class RefundOrder implements RefundOrderInterface
         $connection->beginTransaction();
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
+            $order->setCustomerNoteNotify($notify);
             $order = $this->paymentAdapter->refund($creditmemo, $order);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [])

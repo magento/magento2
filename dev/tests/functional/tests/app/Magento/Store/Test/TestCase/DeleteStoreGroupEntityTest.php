@@ -38,6 +38,7 @@ class DeleteStoreGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**

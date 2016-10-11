@@ -527,12 +527,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function load($modelId, $field = null)
     {
-        $this->_beforeLoad($modelId, $field);
         $this->_getResource()->load($this, $modelId, $field);
-        $this->_afterLoad();
-        $this->setOrigData();
-        $this->_hasDataChanges = false;
-        $this->updateStoredData();
         return $this;
     }
 
@@ -578,13 +573,24 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Process operation before object load
+     *
+     * @param string $identifier
+     * @param string|null $field
+     * @return void
+     */
+    public function beforeLoad($identifier, $field = null)
+    {
+        $this->_beforeLoad($identifier, $field);
+    }
+
+    /**
      * Object after load processing. Implemented as public interface for supporting objects after load in collections
      *
      * @return $this
      */
     public function afterLoad()
     {
-        $this->getResource()->afterLoad($this);
         $this->_afterLoad();
         $this->updateStoredData();
         return $this;

@@ -21,7 +21,7 @@
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
@@ -44,7 +44,7 @@
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_sale, braintree_paypal_skip_order_review</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
