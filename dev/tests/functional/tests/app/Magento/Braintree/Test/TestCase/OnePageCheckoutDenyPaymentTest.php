@@ -8,16 +8,25 @@ namespace Magento\Braintree\Test\TestCase;
 use Magento\Mtf\TestCase\Scenario;
 
 /**
- * Class OnePageCheckoutDenyPaymentTest
+ * Preconditions:
+ * 1. Order is placed with Braintree Credit Card from Storefront with Advanced Fraud Protection.
  *
- * This scenario places order via Braintree payment with
- * enabled Advanced Fraud protection and deny payment for placed order
+ * Steps:
+ * 1. Log in to Admin.
+ * 2. Go to Sales > Orders page.
+ * 3. Open the placed order.
+ * 4. Click Deny button.
+ * 5. Perform assertions.
+ *
+ * @group Braintree
+ * @ZephyrId MAGETWO-56024
  */
 class OnePageCheckoutDenyPaymentTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'acceptance_test, 3rd_party_test';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
