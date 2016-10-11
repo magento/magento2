@@ -25,7 +25,6 @@
         </dataset>
 
         <dataset name="default_subcategory">
-            <field name="id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
             <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
             <field name="parent_id" xsi:type="array">
