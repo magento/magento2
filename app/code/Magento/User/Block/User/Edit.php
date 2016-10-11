@@ -79,8 +79,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Returns message that is displayed for admin when he deletes user from the system.
      * To see this message admin must do the following:
-     * - open user for edition;
-     * - fill current password in section "Current User Identity Verification";
+     * - open user's account for editing;
+     * - type current user's password in the "Current User Identity Verification" field
      * - click "Delete User" at top left part of the page;
      *
      * @return \Magento\Framework\Phrase
@@ -91,9 +91,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Returns url that for user deletion.
-     * The following action is executed if admin navigates to returned url
-     * Magento\User\Controller\Adminhtml\User\Delete::execute
+     * Returns the URL that is used for user deletion.
+     * The following Action is executed if admin navigates to returned url
+     * Magento\User\Controller\Adminhtml\User\Delete
      *
      * @return string
      */
@@ -103,8 +103,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Method is used to get id of user that admin edits.
-     * It can be used to determine either admin opens page for creation or edition of already created user
+     * This method is used to get the ID of the user who's account the Admin is editing.
+     * It can be used to determine the reason Admin opens the page:
+     * to create a new user account OR to edit the previously created user account
      *
      * @return int
      */
