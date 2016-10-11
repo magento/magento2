@@ -26,17 +26,25 @@ class ValidatorResultMerger
     }
 
     /**
-     * Merge two validator results and additional messages
+     * Merges two validator results and additional messages.
      *
      * @param ValidatorResultInterface $first
      * @param ValidatorResultInterface $second
+     * @param array $others
+     *
      * @return ValidatorResultInterface
      */
-    public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second)
+    public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second, array $others = [])
     {
-        $messages = array_merge($first->getMessages(), $second->getMessages(), ...array_slice(func_get_args(), 2));
+        $messages = array_merge($first->getMessages(), $second->getMessages());
 
+        foreach ($others as $messagesBunch) {
+            $messages = array_merge($messages, $messagesBunch);
+        }
+
+        /** @var ValidatorResultInterface $result */
         $result = $this->validatorResultInterfaceFactory->create();
+
         foreach ($messages as $message) {
             $result->addMessage($message);
         }

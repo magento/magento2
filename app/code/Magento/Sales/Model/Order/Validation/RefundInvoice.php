@@ -116,8 +116,10 @@ class RefundInvoice implements RefundInvoiceInterface
         return $this->validatorResultMerger->merge(
             $orderValidationResult,
             $creditmemoValidationResult,
-            $invoiceValidationResult->getMessages(),
-            ...array_values($itemsValidation)
+            array_merge(
+                [$invoiceValidationResult->getMessages()],
+                $itemsValidation
+            )
         );
     }
 }

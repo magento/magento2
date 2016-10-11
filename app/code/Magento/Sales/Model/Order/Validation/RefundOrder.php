@@ -98,7 +98,7 @@ class RefundOrder implements RefundOrderInterface
         return $this->validatorResultMerger->merge(
             $orderValidationResult,
             $creditmemoValidationResult,
-            ...array_values($itemsValidation)
+            $itemsValidation
         );
     }
 }
