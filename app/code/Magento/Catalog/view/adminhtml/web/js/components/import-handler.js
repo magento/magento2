@@ -57,12 +57,12 @@ define([
             var string = this.mask || '',
                 nonEmptyValueFlag = false;
 
-            if (!this.allowImport) {
-                return;
-            }
-
             if (placeholder) {
                 this.values[placeholder] = component.getPreview() || '';
+            }
+
+            if (!this.allowImport) {
+                return;
             }
 
             _.each(this.values, function (propertyValue, propertyName) {
@@ -104,7 +104,7 @@ define([
                 this.allowImport = true;
 
                 if (this.autoImportIfEmpty) {
-                    this.updateValue(false, null);
+                    this.updateValue(null, null);
                 }
             } else {
                 this.allowImport = false;
