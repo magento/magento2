@@ -180,6 +180,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                 'width' => '100%',
                 'height' => '500px',
                 'plugins' => [],
+                'add_directives' => true,
             ]
         );
 
