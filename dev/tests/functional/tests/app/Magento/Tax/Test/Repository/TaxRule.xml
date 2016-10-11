@@ -32,7 +32,7 @@
             <field name="code" xsi:type="string">Tax Rule %isolation%</field>
             <field name="tax_rate" xsi:type="array">
                 <item name="dataset" xsi:type="array">
-                    <item name="0" xsi:type="string">US-CA-Rate_1</item>
+                    <item name="0" xsi:type="string">us_ca_rate_8_25_no_zip</item>
                     <item name="1" xsi:type="string">us_ny_rate_8_1</item>
                 </item>
             </field>
