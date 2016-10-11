@@ -14,6 +14,7 @@ require([
 ], function(){
 
 <?php $myBlock = $block->getLayout()->getBlock('user.roles.grid'); ?>
+<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
     var radioBoxes = $H({});
     var warning = false;
@@ -70,13 +71,15 @@ require([
 <?php endif; ?>
 
 });
-    function deleteUserAccount(message, url, objId) {
-        if (jQuery.validator.validateElement(jQuery('[name="current_password"]'))) {
-            postData = {'data' : {
-                'user_id': objId,
-                'current_password': jQuery('[name="current_password"]').val()
-            }}
-            deleteConfirm(message, url, postData);
+</script>
+<script type="text/x-magento-init">
+    {
+        "[data-role=delete-user]" : {
+            "deleteUserAccount" : {
+                "message": "<?php /* @escapeNotVerified */ echo $editBlock->getDeleteMessage(); ?>",
+                "url": "<?php /* @escapeNotVerified */ echo $editBlock->getDeleteUrl(); ?>",
+                "objId": "<?php /* @escapeNotVerified */ echo $editBlock->getObjectId(); ?>"
+            }
         }
     }
 </script>

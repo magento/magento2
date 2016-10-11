@@ -58,12 +58,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Delete User'),
                     'class' => 'delete',
-                    'onclick' => sprintf(
-                        'deleteUserAccount("%s", "%s", %s)',
-                        __('Are you sure you want to do this?'),
-                        $this->getUrl('adminhtml/*/delete'),
-                        $objId
-                    ),
+                    'data_attribute' => [
+                        'role' => 'delete-user'
+                    ]
                 ]
             );
 
@@ -77,6 +74,32 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
         }
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getDeleteMessage()
+    {
+        return __('Are you sure you want to do this?');
+    }
+
+    /**
+     * Returns user deletion url
+     *
+     * @return string
+     */
+    public function getDeleteUrl()
+    {
+        return $this->getUrl('adminhtml/*/delete');
+    }
+
+    /**
+     * @return int
+     */
+    public function getObjectId()
+    {
+        return (int)$this->getRequest()->getParam($this->_objectId);
     }
 
     /**
