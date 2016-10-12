@@ -43,6 +43,7 @@ define([
                 registry.get(this.queryTemplate + placeholder, function (component) {
                     this.values[placeholder] = component.getPreview();
                     component.on('value', this.updateValue.bind(this, placeholder, component));
+                    component.valueUpdate = 'keyup';
                 }.bind(this));
             }, this);
         },
@@ -100,7 +101,13 @@ define([
         userChanges: function () {
             this._super();
 
-            if (this.value() === '') {
+            /**
+             *  As userChanges is called before updateValue,
+             *  we forced to get value from component by reference
+             */
+            var actualValue = arguments[1].currentTarget.value;
+
+            if (actualValue === '') {
                 this.allowImport = true;
 
                 if (this.autoImportIfEmpty) {
