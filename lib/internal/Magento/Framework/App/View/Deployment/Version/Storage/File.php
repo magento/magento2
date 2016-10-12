@@ -40,15 +40,10 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
      */
     public function load()
     {
-        try {
+        if ($this->directory->isReadable($this->fileName)) {
             return $this->directory->readFile($this->fileName);
-        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \UnexpectedValueException(
-                'Unable to retrieve deployment version of static files from the file system.',
-                0,
-                $e
-            );
         }
+        return false;
     }
 
     /**
