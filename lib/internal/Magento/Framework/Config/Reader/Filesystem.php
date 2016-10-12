@@ -142,8 +142,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
         $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $fileList[0]);
         foreach ($fileList as $key => $content) {
             try {
-                    $configMerger->merge($content);
-                }
+                    $configMerger->merge($content);    
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
