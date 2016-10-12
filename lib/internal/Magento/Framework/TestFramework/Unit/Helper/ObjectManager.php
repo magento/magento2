@@ -313,4 +313,20 @@ class ObjectManager
             return $object;
         }
     }
+
+    /**
+     * Set mocked property
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param object $propertyValue
+     * @return void
+     */
+    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
+    }
 }

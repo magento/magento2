@@ -12,7 +12,13 @@ use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use \Magento\Framework\App\ObjectManager;
 
+/**
+ * Class UpdateItemQty
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateItemQty extends Action
 {
     /**
@@ -29,6 +35,11 @@ class UpdateItemQty extends Action
      * @var Data
      */
     protected $jsonHelper;
+
+    /**
+     * @var Validator
+     */
+    private $formKeyValidator;
 
     /**
      * @param Context $context
@@ -50,6 +61,8 @@ class UpdateItemQty extends Action
     }
 
     /**
+     * Executes the main action of the controller
+     *
      * @return $this
      */
     public function execute()
@@ -58,6 +71,9 @@ class UpdateItemQty extends Action
         $itemQty = (int)$this->getRequest()->getParam('item_qty');
 
         try {
+            if (!$this->getFormKeyValidator()->validate($this->getRequest())) {
+                throw new LocalizedException(__('We can\'t update the shopping cart.'));
+            }
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->updateQuoteItem($itemId, $itemQty);
             return $this->jsonResponse();
@@ -80,5 +96,19 @@ class UpdateItemQty extends Action
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
         );
+    }
+
+    /**
+     * Getter for FormKeyValidator
+     *
+     * @deprecated
+     * @return Validator
+     */
+    private function getFormKeyValidator()
+    {
+        if ($this->formKeyValidator === null) {
+            $this->formKeyValidator = ObjectManager::getInstance()->get(Validator::class);
+        }
+        return $this->formKeyValidator;
     }
 }
