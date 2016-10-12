@@ -7,7 +7,8 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
-use Magento\Framework\DataObject\IdentityInterface as IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Indexer\CacheContext;
 
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
@@ -22,6 +23,11 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    protected $cacheContext;
 
     /**
      * @param IndexBuilder $indexBuilder
@@ -121,4 +127,19 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @return void
      */
     abstract protected function doExecuteRow($id);
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
+    }
 }
