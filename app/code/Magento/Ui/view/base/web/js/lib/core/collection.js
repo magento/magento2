@@ -269,14 +269,12 @@ define([
             _.each(grouped, this.updateRegion, this);
 
             _.each(this.regions, function (items) {
-                var shouldBeEmpty = items.every(function (item) {
-                    return !~_elems.indexOf(item);
-                });
+                var hasObsoleteComponents = items().length && !_.intersection(_elems, items()).length;
 
-                if (shouldBeEmpty && items().length) {
+                if (hasObsoleteComponents) {
                     items.removeAll();
                 }
-            }, this);
+            });
 
             this.elems(_elems);
 
