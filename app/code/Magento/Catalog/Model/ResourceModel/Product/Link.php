@@ -97,10 +97,10 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Is product has links
+     * Check if product has links.
      *
-     * @param int $parentId
-     * @return int
+     * @param int $parentId ID of product
+     * @return bool
      */
     public function hasProductLinks($parentId)
     {

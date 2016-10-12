@@ -11,7 +11,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class load and cache attributes from some attribute set
+ * Сlass responsible for loading and caching of attributes related to the given attribute set.
+ *
+ * Can be used to improve performance of services that mostly read attribute data.
  */
 class AttributeLoader
 {

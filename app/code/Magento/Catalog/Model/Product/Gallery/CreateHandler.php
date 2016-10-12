@@ -58,7 +58,9 @@ class CreateHandler implements ExtensionInterface
      */
     protected $fileStorageDb;
 
-    /** @var  array */
+    /**
+     * @var array
+     */
     private $mediaAttributeCodes;
 
     /**

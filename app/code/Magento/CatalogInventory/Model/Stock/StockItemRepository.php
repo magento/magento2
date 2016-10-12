@@ -134,6 +134,7 @@ class StockItemRepository implements StockItemRepositoryInterface
     }
 
     /**
+     * @deprecated
      * @return  \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     private function getProductCollectionFactory()
