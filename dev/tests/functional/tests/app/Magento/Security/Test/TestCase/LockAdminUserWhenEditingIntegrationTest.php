@@ -13,7 +13,6 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\AdminAuthLogin;
 
-
 /**
  * Preconditions:
  * 1. Create admin user.
