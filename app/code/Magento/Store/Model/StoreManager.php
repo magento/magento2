@@ -150,7 +150,7 @@ class StoreManager implements
     public function getStore($storeId = null)
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
-            if (null === $this->currentStoreId) {
+            if (!$this->currentStoreId) {
                 \Magento\Framework\Profiler::start('store.resolve');
                 $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
                 \Magento\Framework\Profiler::stop('store.resolve');

@@ -11,6 +11,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBuilderInterface
 {
     /**

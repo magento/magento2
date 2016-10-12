@@ -58,7 +58,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $lowestPriceChildProduct->setStatus(Status::STATUS_DISABLED);
         // update in global scope
         $currentStoreId = $this->storeManager->getStore()->getId();
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+        $this->storeManager->setCurrentStore(Store::ADMIN_CODE);
         $this->productRepository->save($lowestPriceChildProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 

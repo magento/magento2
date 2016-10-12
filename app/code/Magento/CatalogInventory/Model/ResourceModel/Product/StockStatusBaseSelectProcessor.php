@@ -6,12 +6,10 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Product;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class StockStatusBaseSelectProcessor
