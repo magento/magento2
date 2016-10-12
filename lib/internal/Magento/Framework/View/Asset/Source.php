@@ -9,6 +9,8 @@ namespace Magento\Framework\View\Asset;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * A service for preprocessing content of assets
@@ -44,8 +46,14 @@ class Source
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
+     * @deprecated
      */
     private $themeList;
+
+    /**
+     * @var ThemeProviderInterface
+     */
+    private $themeProvider;
 
     /**
      * @var ChainFactoryInterface
@@ -189,7 +197,9 @@ class Source
         LocalInterface $asset,
         \Magento\Framework\View\Asset\File\FallbackContext $context
     ) {
-        $themeModel = $this->themeList->getThemeByFullPath($context->getAreaCode() . '/' . $context->getThemePath());
+        $themeModel = $this->getThemeProvider()->getThemeByFullPath(
+            $context->getAreaCode() . '/' . $context->getThemePath()
+        );
         $sourceFile = $this->fallback->getFile(
             $context->getAreaCode(),
             $themeModel,
@@ -198,6 +208,19 @@ class Source
             $asset->getModule()
         );
         return $sourceFile;
+    }
+
+    /**
+     * @return ThemeProviderInterface
+     * @deprecated
+     */
+    private function getThemeProvider()
+    {
+        if (null === $this->themeProvider) {
+            $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);
+        }
+
+        return $this->themeProvider;
     }
 
     /**

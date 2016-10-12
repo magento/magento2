@@ -2171,6 +2171,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addMediaGalleryData()
     {
+
         if ($this->getFlag('media_gallery_added')) {
             return $this;
         }
@@ -2186,7 +2187,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getStoreId(),
             $attribute->getAttributeId()
         );
-        
+
+        $select->where('entity.entity_id IN (?)', array_map(function ($item) {
+            return $item->getId();
+        }, $this->getItems()));
+
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row['entity_id']][] = $row;
         }

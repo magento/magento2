@@ -27,7 +27,8 @@ define([
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
-            mediaGalleryInitial: null
+            mediaGalleryInitial: null,
+            slyOldPriceSelector: '.sly-old-price'
         },
 
         /**
@@ -52,6 +53,8 @@ define([
 
             // Setup/configure values to inputs
             this._configureForValues();
+
+            $(this.element).trigger('configurable.initialized');
         },
 
         /**
@@ -245,6 +248,7 @@ define([
                 this._resetChildren(element);
             }
             this._reloadPrice();
+            this._displayRegularPriceBlock(this.simpleProduct);
             this._changeProductImage();
         },
 
@@ -410,7 +414,7 @@ define([
         },
 
         /**
-         * Returns pracies for configured products
+         * Returns prices for configured products
          *
          * @param {*} config - Products configuration
          * @returns {*}
@@ -453,6 +457,23 @@ define([
                 undefined :
                 _.first(config.allowedProducts);
 
+        },
+
+        /**
+         * Show or hide regular price block
+         *
+         * @param {*} optionId
+         * @private
+         */
+        _displayRegularPriceBlock: function (optionId) {
+            if (typeof optionId != 'undefined'
+                && this.options.spConfig.optionPrices[optionId].oldPrice.amount
+                != this.options.spConfig.optionPrices[optionId].finalPrice.amount
+            ) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
         }
 
     });
