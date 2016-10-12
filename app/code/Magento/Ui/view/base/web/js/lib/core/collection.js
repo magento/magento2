@@ -268,6 +268,16 @@ define([
 
             _.each(grouped, this.updateRegion, this);
 
+            _.each(this.regions, function (items) {
+                var shouldBeEmpty = items.every(function (item) {
+                    return !~_elems.indexOf(item);
+                });
+
+                if (shouldBeEmpty && items().length) {
+                    items.removeAll();
+                }
+            }, this);
+
             this.elems(_elems);
 
             return this;

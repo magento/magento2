@@ -11,8 +11,9 @@ define([
     'Magento_Checkout/js/model/payment/renderer-list',
     'uiLayout',
     'Magento_Checkout/js/model/checkout-data-resolver',
-    'mage/translate'
-], function (_, ko, utils, Component, paymentMethods, rendererList, layout, checkoutDataResolver, $t) {
+    'mage/translate',
+    'uiRegistry'
+], function (_, ko, utils, Component, paymentMethods, rendererList, layout, checkoutDataResolver, $t, registry) {
     'use strict';
 
     return Component.extend({
@@ -22,9 +23,6 @@ define([
             configDefaultGroup: {
                 name: 'methodGroup',
                 component: 'Magento_Checkout/js/model/payment/method-group'
-            },
-            modules: {
-                defaultGroup: '${ $.configDefaultGroup.name }'
             },
             paymentGroupsList: [],
             defaultGroupTitle: $t('Select a new payment method')
@@ -129,33 +127,35 @@ define([
             var isRendererForMethod = false,
                 currentGroup;
 
-            _.find(rendererList(), function (renderer) {
+            registry.get(this.configDefaultGroup.name, function (defaultGroup) {
+                _.each(rendererList(), function (renderer) {
 
-                if (renderer.hasOwnProperty('typeComparatorCallback') &&
-                    typeof renderer.typeComparatorCallback == 'function'
-                ) {
-                    isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
-                } else {
-                    isRendererForMethod = renderer.type === paymentMethodData.method;
-                }
+                    if (renderer.hasOwnProperty('typeComparatorCallback') &&
+                        typeof renderer.typeComparatorCallback == 'function'
+                    ) {
+                        isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
+                    } else {
+                        isRendererForMethod = renderer.type === paymentMethodData.method;
+                    }
 
-                if (isRendererForMethod) {
-                    currentGroup = renderer.group ? renderer.group : this.defaultGroup();
+                    if (isRendererForMethod) {
+                        currentGroup = renderer.group ? renderer.group : defaultGroup;
 
-                    this.collectPaymentGroups(currentGroup);
+                        this.collectPaymentGroups(currentGroup);
 
-                    layout([
-                        this.createComponent(
-                        {
-                            config: renderer.config,
-                            component: renderer.component,
-                            name: renderer.type,
-                            method: paymentMethodData.method,
-                            item: paymentMethodData,
-                            displayArea: currentGroup.displayArea
-                        }
-                    )]);
-                }
+                        layout([
+                            this.createComponent(
+                                {
+                                    config: renderer.config,
+                                    component: renderer.component,
+                                    name: renderer.type,
+                                    method: paymentMethodData.method,
+                                    item: paymentMethodData,
+                                    displayArea: currentGroup.displayArea
+                                }
+                            )]);
+                    }
+                }.bind(this));
             }.bind(this));
         },
 
