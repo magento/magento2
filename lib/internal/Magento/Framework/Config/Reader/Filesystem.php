@@ -139,12 +139,9 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected function _readFiles($fileList)
     {
         /** @var \Magento\Framework\Config\Dom $configMerger */
-        $configMerger = null;
+        $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $fileList[0]);
         foreach ($fileList as $key => $content) {
             try {
-                if (!$configMerger) {
-                    $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $content);
-                } else {
                     $configMerger->merge($content);
                 }
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
