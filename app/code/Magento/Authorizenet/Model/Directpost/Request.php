@@ -123,7 +123,7 @@ class Request extends AuthorizenetRequest
                 ->setXCity(strval($billing->getCity()))
                 ->setXState(strval($billing->getRegion()))
                 ->setXZip(strval($billing->getPostcode()))
-                ->setXCountry(strval($billing->getCountry()))
+                ->setXCountry(strval($billing->getCountryId()))
                 ->setXPhone(strval($billing->getTelephone()))
                 ->setXFax(strval($billing->getFax()))
                 ->setXCustId(strval($billing->getCustomerId()))
@@ -151,7 +151,7 @@ class Request extends AuthorizenetRequest
             )->setXShipToZip(
                 strval($shipping->getPostcode())
             )->setXShipToCountry(
-                strval($shipping->getCountry())
+                strval($shipping->getCountryId())
             );
         }
 
