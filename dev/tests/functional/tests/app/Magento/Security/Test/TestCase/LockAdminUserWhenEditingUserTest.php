@@ -74,6 +74,7 @@ class LockAdminUserWhenEditingUserTest extends Injectable
         $this->userEditPage = $userEdit;
         $this->adminAuthLogin = $adminAuthLogin;
     }
+
     /**
      * Runs Lock admin user when editing existing role test.
      *
@@ -116,6 +117,7 @@ class LockAdminUserWhenEditingUserTest extends Injectable
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();
     }
+
     /**
      * Clean data after running test.
      *
