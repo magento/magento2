@@ -754,7 +754,10 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
-            'add_widgets' => false
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
         ];
 
         return $meta;
