@@ -36,7 +36,7 @@ $fileExtensions = explode(',', isset($options['file-extensions']) ? $options['fi
 
 $mainline = 'mainline_' . (string)rand(0, 9999);
 $repo = getRepo($options, $mainline);
-$branches = $repo->getBranches();
+$branches = $repo->getBranches('--remotes');
 generateBranchesList($options['output-file'], $branches, $options['branch']);
 $changes = retrieveChangesAcrossForks($mainline, $repo, $options['branch']);
 $changedFiles = getChangedFiles($changes, $fileExtensions);
@@ -73,7 +73,7 @@ function generateBranchesList($outputFile, $branches, $branchName)
     $branchesList = fopen($branchOutputFile, 'w');
     fwrite($branchesList, $branchName . PHP_EOL);
     foreach ($branches as $branch) {
-        fwrite($branchesList, substr(strrchr($branch, '/'),1) . PHP_EOL);
+        fwrite($branchesList, substr(strrchr($branch, '/'), 1) . PHP_EOL);
     }
     fclose($branchesList);
 }
@@ -105,7 +105,7 @@ function getChangedFiles(array $changes, array $fileExtensions)
  *
  * @param array $options
  * @param string $mainline
- * @return array
+ * @return GitRepo
  * @throws Exception
  */
 function getRepo($options, $mainline)
@@ -227,11 +227,12 @@ class GitRepo
     /**
      * Returns branches
      *
-     * @return array
+     * @param string $source
+     * @return array|mixed
      */
-    public function getBranches()
+    public function getBranches($source = '--all')
     {
-        $result = $this->call(sprintf('branch -r'));
+        $result = $this->call(sprintf('branch ' . $source));
 
         return is_array($result) ? $result : [];
     }
