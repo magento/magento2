@@ -50,7 +50,7 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
                 //get all version branches
                 preg_match_all('|^(\d+\.\d+)|m', file_get_contents($branchesFile), $matches);
 
-                //check is this a develop or latest release branch
+                //check is this the latest release branch
                 self::$actualBranch = ($branchName == max($matches[0]));
             }
         }
