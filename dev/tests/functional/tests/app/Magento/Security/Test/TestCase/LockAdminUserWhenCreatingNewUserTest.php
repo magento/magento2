@@ -20,8 +20,8 @@ use Magento\Backend\Test\Page\AdminAuthLogin;
  *
  * Steps:
  * 1. Log in to backend as admin user.
- * 2. Navigate to System > User Roles.
- * 3. Start to create new User Role.
+ * 2. Navigate to System > All Users.
+ * 3. Click on Add New User.
  * 4. Fill in all data according to data set (password is incorrect).
  * 5. Perform action 4 specified number of times.
  * 6. "You have entered an invalid password for current user." appears after each attempt.
@@ -91,7 +91,7 @@ class LockAdminUserWhenCreatingNewUserTest extends Injectable
         $attempts,
         User $customAdmin,
         User $user,
-        $configData = null
+        $configData
     ) {
         $this->configData = $configData;
 
@@ -110,7 +110,6 @@ class LockAdminUserWhenCreatingNewUserTest extends Injectable
         $this->userIndexPage->getPageActions()->addNew();
         for ($i = 0; $i < $attempts; $i++) {
             $this->userEditPage->getUserForm()->fill($user);
-            sleep(3);
             $this->userEditPage->getPageActions()->save();
         }
 
