@@ -369,6 +369,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'addFilterByRequiredOptions',
                 'setStoreId',
                 'addPriceData',
+                'addTierPriceData',
                 'getIterator',
                 'load',
             ]
@@ -378,6 +379,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productCollection->expects($this->any())->method('setProductFilter')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('addPriceData')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('addTierPriceData')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('addFilterByRequiredOptions')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('setStoreId')->with(5)->will($this->returnValue([]));
         $productCollection->expects($this->any())->method('getIterator')->willReturn(

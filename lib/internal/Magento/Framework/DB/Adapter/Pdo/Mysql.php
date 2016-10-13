@@ -23,6 +23,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -188,6 +189,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @var LoggerInterface
      */
     protected $logger;
+
+    /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
 
     /**
      * @param StringUtils $string
@@ -3338,55 +3344,30 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
+     * @deprecated
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
-        $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
-        if (empty($fromSelect)) {
-            throw new LocalizedException(
-                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
-            );
-        }
-
-        $tableName = [];
-        $correlationName = '';
-        foreach ($fromSelect as $correlationName => $formPart) {
-            if ($formPart['joinType'] == \Magento\Framework\DB\Select::FROM) {
-                $tableName = $formPart['tableName'];
-                break;
-            }
-        }
-
-        $selectRange = $this->select()
-            ->from(
-                $tableName,
-                [
-                    new \Zend_Db_Expr('MIN(' . $this->quoteIdentifier($rangeField) . ') AS min'),
-                    new \Zend_Db_Expr('MAX(' . $this->quoteIdentifier($rangeField) . ') AS max'),
-                ]
-            );
-
-        $rangeResult = $this->fetchRow($selectRange);
-        $min = $rangeResult['min'];
-        $max = $rangeResult['max'];
-
+        $iterator = $this->getQueryGenerator()->generate($rangeField, $select, $stepCount);
         $queries = [];
-        while ($min <= $max) {
-            $partialSelect = clone $select;
-            $partialSelect->where(
-                $this->quoteIdentifier($correlationName) . '.'
-                . $this->quoteIdentifier($rangeField) . ' >= ?',
-                $min
-            )
-                ->where(
-                    $this->quoteIdentifier($correlationName) . '.'
-                    . $this->quoteIdentifier($rangeField) . ' < ?',
-                    $min + $stepCount
-                );
-            $queries[] = $partialSelect;
-            $min += $stepCount;
+        foreach ($iterator as $query) {
+            $queries[] = $query;
         }
         return $queries;
+    }
+
+    /**
+     * Get query generator
+     *
+     * @return QueryGenerator
+     * @deprecated
+     */
+    private function getQueryGenerator()
+    {
+        if ($this->queryGenerator === null) {
+            $this->queryGenerator = \Magento\Framework\App\ObjectManager::getInstance()->create(QueryGenerator::class);
+        }
+        return $this->queryGenerator;
     }
 
     /**
