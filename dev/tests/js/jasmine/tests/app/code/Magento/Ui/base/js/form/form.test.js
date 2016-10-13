@@ -67,26 +67,26 @@ define([
                 expect(type).toEqual('object');
             });
         });
-        describe('"initProperties" method', function () {
+        describe('"initConfig" method', function () {
             it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('initProperties')).toBeDefined();
+                expect(obj.hasOwnProperty('initConfig')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.initProperties;
+                var type = typeof obj.initConfig;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called without arguments', function () {
-                expect(obj.initProperties()).toBeDefined();
+                expect(obj.initConfig()).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.initProperties();
+                var type = typeof obj.initConfig();
 
                 expect(type).toEqual('object');
             });
-            it('Check this.selector property (is modify in initProperties method)', function () {
+            it('Check this.selector property (is modify in initConfig method)', function () {
                 obj.selector = null;
-                obj.initProperties();
+                obj.initConfig();
                 expect(typeof obj.selector).toEqual('string');
             });
         });
