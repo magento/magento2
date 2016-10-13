@@ -159,30 +159,6 @@ define([
                 stickyObj.adjustOffset();
                 expect(stickyObj.adjustOffset).toHaveBeenCalled();
             });
-            it('check "checkPos" method', function () {
-                stickyObj.toolbarNode = {
-                    find: jasmine.createSpy().and.callFake(function () {
-                        return {
-                            css: jasmine.createSpy()
-                        };
-                    })
-                };
-
-                stickyObj.listingNode = {
-                    find: jasmine.createSpy().and.callFake(function () {
-                        return {
-                            css: jasmine.createSpy()
-                        };
-                    })
-                };
-
-                stickyObj.visible = false;
-                stickyObj.getMustBeSticky = function(){
-                    return false;
-                };
-
-                expect(stickyObj.checkPos()).toEqual(false);
-            })
         });
     })
 });
