@@ -25,6 +25,11 @@ class Price implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     protected $_productPriceIndexerFull;
 
     /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    private $cacheContext;
+
+    /**
      * @param Price\Action\Row $productPriceIndexerRow
      * @param Price\Action\Rows $productPriceIndexerRows
      * @param Price\Action\Full $productPriceIndexerFull
