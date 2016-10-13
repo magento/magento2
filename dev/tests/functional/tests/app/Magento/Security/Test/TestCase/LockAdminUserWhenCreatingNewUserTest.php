@@ -27,7 +27,7 @@ use Magento\Backend\Test\Page\AdminAuthLogin;
  * 6. "You have entered an invalid password for current user." appears after each attempt.
  * 7. Perform all assertions.
  *
- * @ZephyrId MAGETWO-49036
+ * @ZephyrId MAGETWO-49034
  */
 class LockAdminUserWhenCreatingNewUserTest extends Injectable
 {
