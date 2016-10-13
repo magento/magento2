@@ -8,6 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
@@ -166,6 +167,9 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
 
+        $statusAttribute = $this->_getAttribute(ProductInterface::STATUS);
+        $linkField = $metadata->getLinkField();
+
         $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             []
@@ -186,6 +190,16 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             []
         )->where(
             'le.required_options=0'
+        )->join(
+            ['product_status' => $this->getTable($statusAttribute->getBackend()->getTable())],
+            sprintf(
+                'le.entity_id = product_status.%s AND product_status.attribute_id = %s',
+                $linkField,
+                $statusAttribute->getAttributeId()
+            ),
+            []
+        )->where(
+            'product_status.value=' . ProductStatus::STATUS_ENABLED
         )->group(
             ['parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
