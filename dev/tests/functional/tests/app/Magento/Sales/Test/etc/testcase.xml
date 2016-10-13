@@ -11,7 +11,8 @@
         <step name="createOrder" module="Magento_Sales" next="openOrder" />
         <step name="openOrder" module="Magento_Sales" next="reorder" />
         <step name="reorder" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
@@ -28,7 +29,8 @@
         <step name="addProducts" module="Magento_Sales" next="updateProductsData" />
         <step name="updateProductsData" module="Magento_Sales" next="fillAccountInformation" />
         <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
@@ -41,7 +43,8 @@
         <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />
         <step name="selectStore" module="Magento_Sales" next="addProducts" />
         <step name="addProducts" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" next="openSalesOrderOnFrontendForGuest" />
@@ -60,7 +63,8 @@
         <step name="addProducts" module="Magento_Sales" next="updateProductsData" />
         <step name="updateProductsData" module="Magento_Sales" next="fillAccountInformation" />
         <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" next="createInvoice" />

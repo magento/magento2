@@ -16,21 +16,21 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
 <div class="product-reviews-summary short<?php echo !$rating ? ' no-rating' : ''?>">
     <?php if ($rating):?>
     <div class="rating-summary">
-        <span class="label"><span><?php /* @escapeNotVerified */ echo __('Rating') ?>:</span></span>
+        <span class="label"><span><?php echo $block->escapeHtml(__('Rating')) ?>:</span></span>
         <div class="rating-result" title="<?php echo $block->escapeHtmlAttr($rating); ?>%">
             <span style="width:<?php echo $block->escapeHtmlAttr($rating); ?>%"><span><?php echo $block->escapeHtml($rating); ?>%</span></span>
         </div>
     </div>
     <?php endif;?>
     <div class="reviews-actions">
-        <a class="action view" href="<?php echo $block->escapeUrl($url) ?>"><?php echo $block->escapeHtml($block->getReviewsCount()) ?>&nbsp;<span><?php /* @escapeNotVerified */ echo($block->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
+        <a class="action view" href="<?php echo $block->escapeUrl($url) ?>"><?php echo $block->escapeHtml($block->getReviewsCount()) ?>&nbsp;<span><?php echo($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span></a>
     </div>
 </div>
 <?php elseif ($block->getDisplayIfEmpty()): ?>
 <div class="product-reviews-summary short empty">
     <div class="reviews-actions">
         <a class="action add" href="<?php echo $block->escapeUrl($urlForm); ?>">
-            <?php /* @escapeNotVerified */ echo __('Be the first to review this product') ?>
+            <?php echo $block->escapeHtml(__('Be the first to review this product')) ?>
         </a>
     </div>
 </div>

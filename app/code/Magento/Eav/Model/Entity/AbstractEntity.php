@@ -13,7 +13,8 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
-use Magento\Framework\App\ResourceConnection\Config;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -950,6 +951,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Load object base row data
          */
+        $object->beforeLoad($entityId);
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 
@@ -962,11 +964,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->loadAttributesMetadata($attributes);
 
         $this->_loadModelAttributes($object);
-
-        $object->setOrigData();
-
         $this->_afterLoad($object);
-
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }
@@ -1108,6 +1109,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param  \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
+     * @throws AlreadyExistsException
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -1147,6 +1149,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
+        } catch (DuplicateException $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw new AlreadyExistsException(__('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);

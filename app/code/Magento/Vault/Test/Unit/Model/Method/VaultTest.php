@@ -50,10 +50,12 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $additionalInfo
      * @expectedException \LogicException
-     * @expectedExceptionMessage Token metadata should be defined
+     * @expectedExceptionMessage Public hash should be defined
+     * @dataProvider additionalInfoDataProvider
      */
-    public function testAuthorizeNoTokenMetadata()
+    public function testAuthorizeNoTokenMetadata(array $additionalInfo)
     {
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
@@ -61,11 +63,24 @@ class VaultTest extends \PHPUnit_Framework_TestCase
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
-            ->willReturn([]);
+            ->willReturn($additionalInfo);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
         $model->authorize($paymentModel, 0);
+    }
+
+    /**
+     * Get list of additional information variations
+     * @return array
+     */
+    public function additionalInfoDataProvider()
+    {
+        return [
+            ['additionalInfo' => []],
+            ['additionalInfo' => ['customer_id' => 1]],
+            ['additionalInfo' => ['public_hash' => null]],
+        ];
     }
 
     /**
@@ -86,10 +101,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
-                    Vault::TOKEN_METADATA_KEY => [
-                        PaymentTokenInterface::CUSTOMER_ID => $customerId,
-                        PaymentTokenInterface::PUBLIC_HASH => $publicHash
-                    ]
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
         $tokenManagement->expects(static::once())
@@ -133,10 +146,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getAdditionalInformation')
             ->willReturn(
                 [
-                    Vault::TOKEN_METADATA_KEY => [
-                        PaymentTokenInterface::CUSTOMER_ID => $customerId,
-                        PaymentTokenInterface::PUBLIC_HASH => $publicHash
-                    ]
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
                 ]
             );
         $tokenManagement->expects(static::once())
@@ -262,5 +273,33 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ['isAvailableProvider' => false, 'isActiveVault' => true, 'expected' => false],
             ['isAvailableProvider' => true, 'isActiveVault' => true, 'expected' => true],
         ];
+    }
+
+    /**
+     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     */
+    public function testIsAvailableWithoutQuote()
+    {
+        $quote = null;
+
+        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+
+        $vaultProvider->expects(static::once())
+            ->method('isAvailable')
+            ->with($quote)
+            ->willReturn(true);
+
+        $config->expects(static::once())
+            ->method('getValue')
+            ->with('active', $quote)
+            ->willReturn(false);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(Vault::class, [
+            'config' => $config,
+            'vaultProvider' => $vaultProvider
+        ]);
+        static::assertFalse($model->isAvailable($quote));
     }
 }

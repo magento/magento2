@@ -42,7 +42,7 @@ class PaymentsPro extends Block
             '_payflow',
         'Enable PayPal Credit' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_enable_' .
             'express_checkout_bml_payflow',
-        'Vault enabled' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_payflowpro_cc_vault' .
+        'Vault Enabled' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_payflowpro_cc_vault' .
             '_active'
     ];
 

@@ -28,14 +28,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save Web Site" button
  * 6. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27690
  */
 class UpdateWebsiteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
