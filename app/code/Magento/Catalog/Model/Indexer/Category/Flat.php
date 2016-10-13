@@ -63,7 +63,7 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
             $action->reindex($ids, true);
         }
         $action->reindex($ids);
-        $this->getCacheContext()->registerTags([\Magento\Catalog\Model\Category::CACHE_TAG]);
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
     }
 
     /**
@@ -74,6 +74,7 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
     public function executeFull()
     {
         $this->fullActionFactory->create()->reindexAll();
+        $this->getCacheContext()->registerTags([\Magento\Catalog\Model\Category::CACHE_TAG]);
     }
 
     /**

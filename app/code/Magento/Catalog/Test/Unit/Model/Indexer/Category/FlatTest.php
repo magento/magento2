@@ -96,10 +96,6 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
         $this->rowsMock->expects($this->never())->method('create');
 
-        $this->cacheContextMock->expects($this->once())
-            ->method('registerEntities')
-            ->with(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
-
         $this->model->execute([1, 2, 3]);
     }
 
