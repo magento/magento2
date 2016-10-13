@@ -713,6 +713,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
+        $isCategoryInformationExist = false;
+        $index = null;
+        foreach($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'category_ids') {
+                $isCategoryInformationExist = true;
+                $index = $key;
+            }
+        }
+        $this->assertTrue($isCategoryInformationExist, 'Category information wasn\'t set');
+        $this->assertEquals([2], $response['items'][0]['custom_attributes'][$index]['value']);
     }
 
     /**
