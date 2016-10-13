@@ -362,7 +362,7 @@ class CustomOptions extends AbstractModifier
                         'collapsibleHeader' => true,
                         'sortOrder' => $sortOrder,
                         'dataProvider' => static::CUSTOM_OPTIONS_LISTING,
-                        'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                        'imports' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                     ],
                 ],
             ],
@@ -478,7 +478,7 @@ class CustomOptions extends AbstractModifier
                                 'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'realTimeLink' => true,
                                 'behaviourType' => 'edit',
-                                'externalFilterMode' => true,
+                                'externalFilterMode' => false,
                                 'currentProductId' => $this->locator->getProduct()->getId(),
                                 'dataLinks' => [
                                     'imports' => false,

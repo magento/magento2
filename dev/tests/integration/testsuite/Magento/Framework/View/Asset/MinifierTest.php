@@ -235,13 +235,13 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        /** @var \Magento\Deploy\Model\Deployer $deployer */
+        /** @var \Magento\Deploy\Model\Deploy\LocaleDeploy $deployer */
         $deployer = $this->objectManager->create(
-            \Magento\Deploy\Model\Deployer::class,
+            \Magento\Deploy\Model\Deploy\LocaleDeploy::class,
             ['filesUtil' => $filesUtil, 'output' => $output]
         );
 
-        $deployer->deploy($omFactory, ['en_US'], ['frontend' => ['FrameworkViewMinifier/default']]);
+        $deployer->deploy('frontend', 'FrameworkViewMinifier/default', 'en_US', []);
 
         $this->assertFileExists($fileToBePublished);
         $this->assertEquals(
