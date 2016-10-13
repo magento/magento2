@@ -52,12 +52,19 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->setPassword($password);
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
-            $user->save();
-            /** Send password reset email notification only when password was changed */
-            if ($password !== '') {
-                $user->sendPasswordResetNotificationEmail();
+            $errors = $user->validate();
+            if ($errors !== true && !empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->messageManager->addError($error);
+                }
+            } else {
+                $user->save();
+                /** Send password reset email notification only when password was changed */
+                if ($password !== '') {
+                    $user->sendPasswordResetNotificationEmail();
+                }
+                $this->messageManager->addSuccess(__('You saved the account.'));
             }
-            $this->messageManager->addSuccess(__('You saved the account.'));
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {

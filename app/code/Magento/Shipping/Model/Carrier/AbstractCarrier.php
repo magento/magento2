@@ -16,6 +16,8 @@ use Magento\Shipping\Model\Shipment\Request;
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
+    const DEBUG_KEYS_MASK = '****';
+
     /**
      * Carrier's code
      *

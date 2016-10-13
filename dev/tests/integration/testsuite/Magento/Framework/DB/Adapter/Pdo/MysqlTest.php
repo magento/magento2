@@ -11,7 +11,7 @@
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -131,5 +131,94 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             $this->_connection = $coreResource->getConnection();
         }
         return $this->_connection;
+    }
+
+    /**
+     * Test multi-queries
+     * @dataProvider providerSqlInjections
+     * @param $sql
+     * @param bool $pdoMultiQueryValue
+     */
+    public function testMultiQueryConnect($sql, $pdoMultiQueryValue = false)
+    {
+        $connection = $this->_getCustomConnection($pdoMultiQueryValue);
+        $isError = false;
+
+        if (!$connection instanceof \Magento\Framework\DB\Adapter\Pdo\Mysql) {
+            $this->markTestSkipped('This test is for \Magento\Framework\DB\Adapter\Pdo\Mysql');
+        }
+
+        $connection->closeConnection();
+        try {
+            $connection->query($sql);
+        } catch (\Exception $exception) {
+            if ($exception instanceof \Zend_Db_Statement_Exception) {
+                $isError = true;
+            }
+            if ($exception instanceof \Magento\Framework\Exception\LocalizedException
+                && $exception->getMessage() == "Cannot execute multiple queries"
+            ) {
+                $isError = true;
+            }
+        }
+
+        $this->assertTrue($isError);
+        $connection->closeConnection();
+    }
+
+    /**
+     * @return array
+     */
+    public function providerSqlInjections()
+    {
+        return [
+            //MAGETWO-56542
+            ["select MD5(\";(/*\n//*/\");DELETE FROM some_other_table #)", false],
+            [urlencode("select MD5(\";(/*\n//*/\");DELETE FROM some_other_table #)"), false],
+
+            ["select 1; DELETE FROM some_other_table ;", true],
+            [urlencode("select 1; DELETE FROM some_other_table ;"), true],
+
+            ["select MD5(\";(/*\n//*/\");DELETE FROM some_other_table #)", true],
+            [urlencode("select MD5(\";(/*\n//*/\");DELETE FROM some_other_table #)"), true],
+
+        ];
+    }
+
+    /**
+     * @param bool $pdoMultiQueryValue
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected function _getCustomConnection($pdoMultiQueryValue)
+    {
+        $connectionFactory = new \Magento\Framework\App\ResourceConnection\ConnectionFactory(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        );
+
+        $dbInstance = \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        $dbConfig = [
+            'host' => $dbInstance->getHost(),
+            'username' => $dbInstance->getUser(),
+            'password' => $dbInstance->getPassword(),
+            'dbname' => $dbInstance->getSchema(),
+            'active' => true,
+            'driver_options' => [\PDO::MYSQL_ATTR_MULTI_STATEMENTS => $pdoMultiQueryValue]
+        ];
+        $connection = $connectionFactory->create($dbConfig);
+        return $connection;
+    }
+
+    public function testSimpleSelect()
+    {
+        $select = new  Select($this->_getConnection());
+        $select->from("test")
+            ->where("1=?", 1)
+            ->group("field")
+            ->order("field " . Select::SQL_DESC);
+
+        $this->assertEquals("SELECT `test`.* FROM `test` WHERE (1=1) GROUP BY `field` ORDER BY `field` DESC", $select->assemble());
     }
 }

@@ -42,13 +42,6 @@ $currencySymbol = $block->getCurrencySymbol();
                         </div>
                     <!-- /ko -->
                 </div>
-                <div class="admin__data-grid-header">
-                    <div class="admin__data-grid-header-row row row-gutter">
-                        <div class="col-xs-12">
-                            <!-- ko template: { name: "ui/grid/paging/paging", data: paging } --><!-- /ko -->
-                        </div>
-                    </div>
-                </div>
                 <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
                     <table class="data-grid">
                         <thead>
@@ -83,12 +76,12 @@ $currencySymbol = $block->getCurrencySymbol();
                         </thead>
                         <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
                             <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 },
-                                attr: { 'data-row-number': variation.variationKey }">
+                                attr: { 'data-row-number': $index() }">
                                 <td class="col-image" data-column="image">
                                     <div class="actions split actions-image-uploader">
                                         <div class="action-upload action split" data-action="upload-image">
                                             <!-- ko if: $parent.isShowPreviewImage(variation) -->
-                                                <img data-bind='attr: {src: $parent.getVariationImage(variation)}' class="variation"
+                                                <img data-bind='attr: {src: variation.images.preview}' class="variation"
                                                      data-role="image"/>
                                             <!-- /ko -->
                                             <!-- ko if: variation.editable-->
@@ -126,39 +119,27 @@ $currencySymbol = $block->getCurrencySymbol();
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
                                         <input type="text" class="required-entry" data-bind="
-                                            attr: {
-                                                id: $parent.getRowId(variation, 'name'),
-                                                name: $parent.getVariationRowName(variation, 'name')
-                                            },
-                                            value: variation.name
-                                        "/>
+                                            attr: {id: $parent.getRowId(variation, 'name'),
+                                            name: $parent.getVariationRowName(variation, 'name'),
+                                             value: variation.sku}"/>
                                         <input type="hidden" data-bind="
-                                            attr: {
-                                                id: $parent.getRowId(variation, 'configurable_attribute'),
-                                                name: $parent.getVariationRowName(variation, 'configurable_attribute')
-                                            },
-                                            value: variation.attribute
-                                        "/>
+                                            attr: {id: $parent.getRowId(variation, 'configurable_attribute'),
+                                            name: $parent.getVariationRowName(variation, 'configurable_attribute'),
+                                            value: variation.attribute}"/>
                                     <!-- /ko -->
                                     <input type="hidden" data-role="status" data-bind="
-                                        attr: {
-                                            name: $parent.getVariationRowName(variation, 'status')
-                                        },
-                                        value: variation.status
-                                    "/>
+                                        attr: {name: $parent.getVariationRowName(variation, 'status'),
+                                        value: variation.status}"/>
                                 </td>
                                 <td class="col-sku" data-column="sku">
                                     <!-- ko ifnot: variation.editable -->
                                         <!-- ko text: variation.sku --><!--/ko-->
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
-                                        <input type="text" class="required-entry" data-bind="
-                                            attr: {
-                                                id: $parent.getRowId(variation, 'sku'),
-                                                name: $parent.getVariationRowName(variation, 'sku')
-                                            },
-                                            value: variation.sku
-                                        "/>
+                                        <input type="text" class="required-entry"
+                                               data-bind="attr: {id: $parent.getRowId(variation, 'sku'),
+                                                name: $parent.getVariationRowName(variation, 'sku'),
+                                                value: variation.sku}"/>
                                     <!-- /ko -->
                                 </td>
                                 <td class="col-price" data-column="price">
@@ -167,16 +148,12 @@ $currencySymbol = $block->getCurrencySymbol();
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
                                         <div class="addon">
-                                            <input type="text" id="" class="required-entry validate-zero-or-greater" data-bind="
-                                                attr: {
-                                                    id: $parent.getRowId(variation, 'price'),
-                                                    name: $parent.getVariationRowName(variation, 'price')
-                                                },
-                                                value: variation.price,
-                                                event: {
-                                                    keyup: validatePrice()
-                                                }
-                                            "/>
+                                            <input type="text"
+                                                   id=""
+                                                   class="required-entry validate-zero-or-greater"
+                                                   data-bind="attr: {id: $parent.getRowId(variation, 'price'),
+                                                    name: $parent.getVariationRowName(variation, 'price'),
+                                                     value: variation.price}"/>
                                             <label class="addafter"
                                                    data-bind="attr: {for: $parent.getRowId(variation, 'price')">
                                                 <strong data-bind="text: $parent.getCurrencySymbol()"></strong>
@@ -189,13 +166,11 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <!-- ko text: variation.quantity --><!--/ko-->
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
-                                        <input type="text" class="validate-zero-or-greater" data-bind="
-                                            attr: {
-                                                id: $parent.getRowId(variation, 'qty'),
-                                                name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty')
-                                            },
-                                            value: variation.quantity
-                                        "/>
+                                        <input type="text"
+                                               class="validate-zero-or-greater"
+                                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'),
+                                                name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'),
+                                                value: variation.quantity}"/>
                                     <!-- /ko -->
                                 </td>
                                 <td class="col-weight" data-column="weight">
@@ -203,13 +178,11 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <!-- ko text: variation.weight --><!--/ko-->
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
-                                        <input type="text" class="validate-zero-or-greater" data-bind="
-                                            attr: {
-                                                id: $parent.getRowId(variation, 'weight'),
-                                                name: $parent.getVariationRowName(variation, 'weight')
-                                            },
-                                            value: variation.weight
-                                        "/>
+                                        <input type="text" class="validate-zero-or-greater"
+                                               data-bind="
+                                                   attr: {id: $parent.getRowId(variation, 'weight'),
+                                                   name: $parent.getVariationRowName(variation, 'weight'),
+                                                   value: variation.weight}"/>
                                     <!-- /ko -->
                                 </td>
                                 <!-- ko foreach: variation.options -->
@@ -254,9 +227,6 @@ $currencySymbol = $block->getCurrencySymbol();
                                 </td>
                             </tr>
                         </tbody>
-                        <input type="hidden" name="configurable-matrix-serialized" data-bind="value: productMatrixSerialized"/>
-                        <input type="hidden" name="associated_product_ids_serialized" data-bind="value: associatedProductsSerialized"/>
-                        <input type="hidden" name="configurations_serialized" data-bind="value: configurationsSerialized"/>
                     </table>
                 </div>
             </div>

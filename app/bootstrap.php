@@ -35,6 +35,17 @@ $umaskFile = BP . '/magento_umask';
 $mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
 umask($mask);
 
+if (empty($_SERVER['ENABLE_IIS_REWRITES']) || ($_SERVER['ENABLE_IIS_REWRITES'] != 1)) {
+    /*
+     * Unset headers used by IIS URL rewrites.
+     */
+    unset($_SERVER['HTTP_X_REWRITE_URL']);
+    unset($_SERVER['HTTP_X_ORIGINAL_URL']);
+    unset($_SERVER['IIS_WasUrlRewritten']);
+    unset($_SERVER['UNENCODED_URL']);
+    unset($_SERVER['ORIG_PATH_INFO']);
+}
+
 if (!empty($_SERVER['MAGE_PROFILER'])
     && isset($_SERVER['HTTP_ACCEPT'])
     && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') !== false
