@@ -81,6 +81,6 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      */
     public function getData()
     {
-        return  $this->_configVariables;
+        return $this->_configVariables;
     }
 }
