@@ -18,7 +18,7 @@
             </data>
             <data name="payment/method" xsi:type="string">paypal_express</data>
             <data name="configData" xsi:type="string">paypal_express_in_context, paypal_express, freeshipping</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Paypal\Test\Constraint\AssertExpressCancelledMessage" />
         </variation>
     </testCase>
