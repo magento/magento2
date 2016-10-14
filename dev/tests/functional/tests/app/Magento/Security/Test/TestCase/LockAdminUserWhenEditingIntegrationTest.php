@@ -34,6 +34,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
@@ -95,7 +96,7 @@ class LockAdminUserWhenEditingIntegrationTest extends Injectable
         Integration $integration,
         $attempts,
         User $customAdmin,
-        $configData = null
+        $configData
     ) {
         $this->configData = $configData;
 

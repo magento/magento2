@@ -9,6 +9,7 @@
     <testCase name="Magento\Security\Test\TestCase\LockAdminUserWhenEditingIntegrationTest" summary="Lock admin user after entering incorrect password while editing integration">
         <variation name="LockAdminUserWhenCreatingNewIntegrationTestVariation1">
             <data name="configData" xsi:type="string">user_lockout_failures</data>
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="customAdmin/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <data name="initintegration/dataset" xsi:type="string">default_active</data>
             <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>
