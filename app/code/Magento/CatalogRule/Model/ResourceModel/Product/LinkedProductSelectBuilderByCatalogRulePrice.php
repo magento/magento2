@@ -79,7 +79,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build($productId, $limit = 1)
     {
         $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);
@@ -105,7 +105,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)
             ->order('t.rule_price ' . Select::SQL_ASC)
-            ->limit(1);
+            ->limit($limit)];
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
         return [$priceSelect];

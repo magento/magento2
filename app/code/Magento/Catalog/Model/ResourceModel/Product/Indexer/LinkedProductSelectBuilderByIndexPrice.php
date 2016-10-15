@@ -63,7 +63,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build($productId, $limit = 1)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
@@ -86,7 +86,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
             ->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId())
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->order('t.min_price ' . Select::SQL_ASC)
-            ->limit(1);
+            ->limit($limit)];
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
         return [$priceSelect];

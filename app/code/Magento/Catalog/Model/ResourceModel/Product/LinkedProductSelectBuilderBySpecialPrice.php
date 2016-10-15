@@ -90,7 +90,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build($productId, $limit = 1)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->resource->getConnection();
@@ -139,9 +139,8 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
                 'special_to.value IS NULL OR ' . $connection->getDatePartSql('special_to.value') .' >= ?',
                 $currentDate
             )->order('t.value ' . Select::SQL_ASC)
-            ->limit(1);
+            ->limit($limit);
         $specialPrice = $this->baseSelectProcessor->process($specialPrice);
-
         $specialPriceDefault = clone $specialPrice;
         $specialPriceDefault->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
         $select[] = $specialPriceDefault;
