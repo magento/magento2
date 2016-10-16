@@ -2,7 +2,7 @@
     "name": "magento/module-cron",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
         "magento/module-store": "100.1.*",
         "magento/framework": "100.1.*"
     },
@@ -10,7 +10,7 @@
         "magento/module-config": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.0",
+    "version": "100.1.1",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
