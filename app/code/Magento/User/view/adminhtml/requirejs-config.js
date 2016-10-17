@@ -6,7 +6,8 @@
 var config = {
     map: {
         '*': {
-            rolesTree: 'Magento_User/js/roles-tree'
+            rolesTree: 'Magento_User/js/roles-tree',
+            deleteUserAccount: 'Magento_User/js/delete-user-account'
         }
     } 
 };
