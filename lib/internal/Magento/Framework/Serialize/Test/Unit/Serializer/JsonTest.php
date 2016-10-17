@@ -3,15 +3,14 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Serialize\Test\Unit;
+namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Json;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\Json
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $json;
 
@@ -22,11 +21,11 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|bool|array|\stdClass $value
+     * @param null|bool|array $value
      * @param int $objectDecodeType
-     * @dataProvider encodeDecodeDataProvider
+     * @dataProvider serializeUnserializeDataProvider
      */
-    public function testEncodeDecode($value)
+    public function testSerializeUnserialize($value)
     {
         $this->assertEquals(
             $this->json->unserialize($this->json->serialize($value)),
@@ -34,10 +33,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function encodeDecodeDataProvider()
+    public function serializeUnserializeDataProvider()
     {
-        $object = new \stdClass();
-        $object->a = 'b';
         return [
             [''],
             [null],
