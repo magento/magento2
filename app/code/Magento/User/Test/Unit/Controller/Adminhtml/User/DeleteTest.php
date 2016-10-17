@@ -6,15 +6,11 @@
 
 namespace Magento\User\Test\Unit\Controller\Adminhtml\User;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
-use Magento\Backend\Model\Auth\Session as Session;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Test class for \Magento\User\Controller\Adminhtml\User\Delete testing
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteTest extends \PHPUnit_Framework_TestCase
 {
@@ -97,21 +93,15 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new ObjectManagerHelper($this);
-        $context = $objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->controller = $objectManager->getObject(
+            \Magento\User\Controller\Adminhtml\User\Delete::class,
             [
                 'request'        => $this->requestMock,
                 'response'       => $this->responseMock,
                 'objectManager'  => $this->objectManagerMock,
                 'messageManager' => $this->messageManagerMock,
-            ]
-        );
-
-        $this->controller = $objectManager->getObject(
-            \Magento\User\Controller\Adminhtml\User\Delete::class,
-            [
-                'context'      => $context,
                 'userFactory'  => $this->userFactoryMock,
             ]
         );
@@ -146,7 +136,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->willReturnMap([
                 ['user_id', $userId],
-                [UserEdit::CURRENT_USER_PASSWORD_FIELD, $currentUserPassword],
+                [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, $currentUserPassword],
             ]);
 
         $userMock = clone $currentUserMock;
@@ -185,7 +175,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
                 ->method('getPost')
                 ->willReturnMap([
                     ['user_id', $userId],
-                    [UserEdit::CURRENT_USER_PASSWORD_FIELD, ''],
+                    [\Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD, ''],
                 ]);
 
             $this->controller->execute();
