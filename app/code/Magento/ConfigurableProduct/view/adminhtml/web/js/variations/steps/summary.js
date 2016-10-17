@@ -100,20 +100,20 @@ define([
                 }
                 images = getSectionValue('images', options);
                 sku = productSku + _.reduce(options, function (memo, option) {
-                    return memo + '-' + option.label;
-                }, '');
+                        return memo + '-' + option.label;
+                    }, '');
                 quantity = getSectionValue('quantity', options);
 
-                if (!quantity && productId) {
+                if (!quantity && productId && product) {
                     quantity = product.quantity;
                 }
                 price = getSectionValue('price', options);
 
                 if (!price) {
-                    price = productId ? product.price : productPrice;
+                    price = productId && product ? product.price : productPrice;
                 }
 
-                if (productId && !images.file) {
+                if (productId && !images.file && product) {
                     images = product.images;
                 }
                 variation = {
@@ -127,7 +127,7 @@ define([
                     editable: true
                 };
 
-                if (productId) {
+                if (productId && product) {
                     variation.sku = product.sku;
                     variation.weight = product.weight;
                     gridExisting.push(this.prepareRowForGrid(variation));
@@ -139,11 +139,13 @@ define([
             }, this);
 
             _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
-                gridDeleted.push(this.prepareRowForGrid(
-                    _.findWhere(this.variationsComponent().variations, {
-                        productId: productId
-                    })
-                ));
+                var variationToDelete = _.findWhere(this.variationsComponent().variations, {
+                    productId: productId
+                });
+
+                if (variationToDelete) {
+                    gridDeleted.push(this.prepareRowForGrid(variationToDelete));
+                }
             }.bind(this));
 
             this.variationsExisting = gridExisting;

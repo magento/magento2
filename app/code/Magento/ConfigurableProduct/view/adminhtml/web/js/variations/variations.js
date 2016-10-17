@@ -90,8 +90,6 @@ define([
                         Math.floor(this.variations.indexOf(validationError) / pagingObservables.pageSize() + 1)
                     );
                     $('[data-form="edit-product"]').validation('isValid');
-
-                    return;
                 }
 
                 this.productMatrixSerialized(JSON.stringify(variations));
@@ -317,6 +315,8 @@ define([
         prepareVariations: function () {
             var mappedVariations = {},
                 configurations = {};
+
+            this.associatedProducts = _.intersection(this.variations.pluck('productId'), this.associatedProducts);
 
             _.each(this.variations, function (variation) {
                 var attributes;
