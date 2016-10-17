@@ -21,6 +21,11 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     const FILTER_ELEMENT_SKIP = 'skip_attr';
 
     /**
+     * Allow multiple values wrapping in double quotes for additional attributes.
+     */
+    const FIELDS_ENCLOSURE = 'fields_enclosure';
+
+    /**
      * Filter fields types.
      */
     const FILTER_TYPE_SELECT = 'select';

@@ -97,6 +97,30 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Check if product has links.
+     *
+     * @param int $parentId ID of product
+     * @return bool
+     */
+    public function hasProductLinks($parentId)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            ['count' => new \Zend_Db_Expr('COUNT(*)')]
+        )->where(
+            'product_id = :product_id'
+        ) ;
+
+        return $connection->fetchOne(
+            $select,
+            [
+                'product_id' => $parentId
+            ]
+        ) > 0;
+    }
+
+    /**
      * Save Product Links process
      *
      * @param int $parentId
