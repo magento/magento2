@@ -117,33 +117,6 @@ define([
 
                 expect(type).toEqual('function');
             });
-            it('Check call method "this.validate" inner save method', function () {
-                obj.validate = jasmine.createSpy();
-                obj.source.get = jasmine.createSpy().and.callFake(function () {
-                    return true;
-                });
-                obj.save();
-                expect(obj.validate).toHaveBeenCalled();
-            });
-            it('Check call method "this.source.get" inner save method', function () {
-                obj.validate = jasmine.createSpy();
-                obj.source.get = jasmine.createSpy().and.callFake(function () {
-                    return true;
-                });
-                obj.save();
-                expect(obj.source.get).toHaveBeenCalled();
-            });
-            it('Check call method "this.submit" inner save method', function () {
-                obj.validate = jasmine.createSpy();
-                obj.source.get = jasmine.createSpy().and.callFake(function () {
-                    return false;
-                });
-                obj.submit = jasmine.createSpy().and.callFake(function () {
-                    return true;
-                });
-                obj.save();
-                expect(obj.source.get).toHaveBeenCalled();
-            });
         });
         describe('"submit" method', function () {
             it('Check for defined ', function () {

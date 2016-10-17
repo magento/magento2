@@ -18,6 +18,7 @@ define([
     describe('Magento_Ui/js/form/element/ui-select', function () {
 
         var obj = new Constr({
+            name: 'uiSelect',
             dataScope: '',
             provider: 'provider'
         });
@@ -184,10 +185,6 @@ define([
                 var type = typeof obj.isHovered();
 
                 expect(type).toEqual('boolean');
-            });
-            it('Must return false if "hoverElIndex" does not equal value', function () {
-                obj.hoverElIndex(1);
-                expect(obj.isHovered(2)).toEqual(false);
             });
         });
         describe('"toggleListVisible" method', function () {
