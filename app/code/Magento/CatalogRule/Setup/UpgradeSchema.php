@@ -26,6 +26,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->removeSubProductDiscounts($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $tables = [
+                'catalogrule_product',
+                'catalogrule_product_price',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    ['type' => 'integer']
+                );
+            }
+        }
+
         $setup->endSetup();
     }
 
