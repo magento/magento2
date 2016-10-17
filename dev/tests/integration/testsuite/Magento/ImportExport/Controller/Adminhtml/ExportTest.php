@@ -84,6 +84,6 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $body = $this->getResponse()->getBody();
         $this->assertSelectCount('fieldset#base_fieldset', 1, $body);
-        $this->assertSelectCount('fieldset#base_fieldset div.field', 2, $body);
+        $this->assertSelectCount('fieldset#base_fieldset div.field', 3, $body);
     }
 }
