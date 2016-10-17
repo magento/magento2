@@ -10,7 +10,6 @@ use Magento\Framework\App\Request\Http as Request;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
-use Magento\Backend\App\Action\Context;
 
 /**
  * Class UploadTest
@@ -52,10 +51,8 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new DataObject()));
 
         $model = $this->objectManager->getObject(Model::class, [
-            'context' => $this->objectManager->getObject(Context::class, [
-                'request' => $request,
-                'resultFactory' => $resultFactory
-            ]),
+            'request' => $request,
+            'resultFactory' => $resultFactory,
             'imageUploader' => $uploader
         ]);
 

@@ -19,11 +19,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     private $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $resultRawFactoryMock;
-
-    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resultJsonFactoryMock;
@@ -32,16 +27,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $layoutFactoryMock;
-
-    /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $contextMock;
-
-    /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $titleMock;
 
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -57,11 +42,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $eventManagerMock;
-
-    /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $responseMock;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -87,32 +67,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->contextMock = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
-                'getTitle',
-                'getRequest',
-                'getObjectManager',
-                'getEventManager',
-                'getResponse',
-                'getMessageManager',
-                'getResultRedirectFactory'
-            ],
-            [],
-            '',
-            false
-        );
         $this->resultRedirectFactoryMock = $this->getMock(
             \Magento\Backend\Model\View\Result\RedirectFactory::class,
             ['create'],
-            [],
-            '',
-            false
-        );
-        $this->resultRawFactoryMock = $this->getMock(
-            \Magento\Framework\Controller\Result\RawFactory::class,
-            [],
             [],
             '',
             false
@@ -152,12 +109,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             true,
             ['dispatch']
         );
-        $this->responseMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ResponseInterface::class,
-            [],
-            '',
-            false
-        );
         $this->messageManagerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class,
             [],
@@ -168,23 +119,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['addSuccess', 'getMessages']
         );
 
-        $this->contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())->method('getEventManager')->willReturn($this->eventManagerMock);
-        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
-        $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
-        $this->contextMock->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($this->resultRedirectFactoryMock);
-
         $this->save = $this->objectManager->getObject(
             \Magento\Catalog\Controller\Adminhtml\Category\Save::class,
             [
-                'context' => $this->contextMock,
-                'resultRawFactory' => $this->resultRawFactoryMock,
+                'request' => $this->requestMock,
+                'eventManager' => $this->eventManagerMock,
+                'messageManager' => $this->messageManagerMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
-                'layoutFactory' => $this->layoutFactoryMock
+                'layoutFactory' => $this->layoutFactoryMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }

@@ -13,8 +13,6 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
-    const ADDITIONAL_DATA_PREFIX = '_additional_data_';
-
     /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
@@ -47,6 +45,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @var \Magento\Catalog\Model\ImageUploader
      */
     private $imageUploader;
+
+    /**
+     * @var string
+     */
+    private $additionalData = '_additional_data_';
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -92,7 +95,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $value = $object->getData($attributeName);
 
         if ($imageName = $this->getUploadedImageName($value)) {
-            $object->setData(self::ADDITIONAL_DATA_PREFIX . $attributeName, $value);
+            $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } else if (!is_string($value)) {
             $object->setData($attributeName, '');
@@ -124,7 +127,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        $value = $object->getData(self::ADDITIONAL_DATA_PREFIX . $this->getAttribute()->getName());
+        $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
         if ($imageName = $this->getUploadedImageName($value)) {
             try {

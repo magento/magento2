@@ -23,21 +23,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     private $category;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $context;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $eventManager;
-
-    /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cacheManager;
-
-    /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     private $registry;
@@ -140,22 +125,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->context = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager'],
-            [],
-            '',
-            false
-        );
-
-        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->context->expects($this->any())->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManager));
-        $this->cacheManager = $this->getMock(\Magento\Framework\App\CacheInterface::class);
-        $this->context->expects($this->any())->method('getCacheManager')
-            ->will($this->returnValue($this->cacheManager));
-
         $this->registry = $this->getMock(\Magento\Framework\Registry::class);
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->categoryTreeResource = $this->getMock(
@@ -366,7 +335,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         return $this->objectManager->getObject(
             \Magento\Catalog\Model\Category::class,
             [
-                'context' => $this->context,
                 'registry' => $this->registry,
                 'storeManager' => $this->storeManager,
                 'categoryTreeResource' => $this->categoryTreeResource,
