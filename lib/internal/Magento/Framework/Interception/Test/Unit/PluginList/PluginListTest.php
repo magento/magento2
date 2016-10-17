@@ -40,10 +40,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $jsonMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManagerMock;
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $loggerMock;
 
     protected function setUp()
     {
@@ -64,8 +62,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
@@ -79,7 +77,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
                 'relations' => new \Magento\Framework\ObjectManager\Relations\Runtime(),
                 'omConfig' => $omConfigMock,
                 'definitions' => new \Magento\Framework\Interception\Definition\Runtime(),
-                'objectManager' => $this->objectManagerMock,
+                'objectManager' => $objectManagerMock,
                 'classDefinitions' => $definitions,
                 'scopePriorityScheme' => ['global'],
                 'cacheId' => 'interception'
@@ -90,6 +88,13 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             $this->object,
             'json',
             $this->jsonMock
+        );
+
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->object,
+            'logger',
+            $this->loggerMock
         );
     }
 
@@ -253,12 +258,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testInheritPluginsWithNotExistingPlugin()
     {
-        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Psr\Log\LoggerInterface::class)
-            ->willReturn($loggerMock);
-        $loggerMock->expects($this->once())
+        $this->loggerMock->expects($this->once())
             ->method('info')
             ->with("Reference to undeclared plugin with name 'simple_plugin'.");
         $this->configScopeMock->expects($this->any())
