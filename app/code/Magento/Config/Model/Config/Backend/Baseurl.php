@@ -197,7 +197,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function validateUrl($value) {
+    private function validateUrl($value)
+    {
         if (!filter_var($value, FILTER_VALIDATE_URL)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Domain Name can contain only letters, digits and hyphen.')
@@ -212,7 +213,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function validateSchemes($value) {
+    private function validateSchemes($value)
+    {
         if (!in_array($value, $this->allowedSchemes)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('You can use only following schemes: %1', implode(', ', $this->allowedSchemes))

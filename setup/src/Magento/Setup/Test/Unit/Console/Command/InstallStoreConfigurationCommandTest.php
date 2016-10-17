@@ -11,8 +11,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\Installer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
-use Magento\Framework\Url\Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -102,13 +104,6 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidData(array $option, $error)
     {
-        $url= $this->getMock(\Magento\Framework\Url\Validator::class, [], [], '', false);
-        $url->expects($this->any())->method('isValid')->will($this->returnValue(false));
-        if (!isset($option['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE])) {
-            $url->expects($this->any())->method('getMessages')->will($this->returnValue([
-                Validator::INVALID_URL => 'Invalid URL.'
-            ]));
-        }
         $localeLists= $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $localeLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
         $timezoneLists= $this->getMock(\Magento\Framework\Validator\Timezone::class, [], [], '', false);
@@ -117,10 +112,6 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $currencyLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
 
         $returnValueMapOM = [
-            [
-                \Magento\Framework\Url\Validator::class,
-                $url
-            ],
             [
                 \Magento\Framework\Validator\Locale::class,
                 $localeLists
