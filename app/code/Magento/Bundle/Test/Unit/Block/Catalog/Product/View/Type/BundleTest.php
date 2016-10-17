@@ -19,9 +19,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $bundleProductPriceFactory;
 
-    /** @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject */
-    private $context;
-
     /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
     private $jsonEncoder;
 
@@ -50,9 +47,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->context = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -75,12 +69,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context->expects($this->any())
-            ->method('getEventManager')
-            ->willReturn($this->eventManager);
-        $this->context->expects($this->any())
-            ->method('getRegistry')
-            ->willReturn($registry);
         $this->jsonEncoder = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -91,7 +79,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->bundleBlock = $objectHelper->getObject(
             \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle::class,
             [
-                'context' => $this->context,
+                'registry' => $registry,
+                'eventManager' => $this->eventManager,
                 'jsonEncoder' => $this->jsonEncoder,
                 'productPrice' => $this->bundleProductPriceFactory,
                 'catalogProduct' => $this->catalogProduct
@@ -105,7 +94,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getType'])
             ->disableOriginalConstructor()
             ->getMock();
-        $option->expects($this->exactly(2))->method('getType')->willReturn('checkbox');
+        $option->expects($this->any())->method('getType')->willReturn('checkbox');
 
         $layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->setMethods(['getChildName', 'getBlock'])
@@ -126,7 +115,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getType'])
             ->disableOriginalConstructor()
             ->getMock();
-        $option->expects($this->exactly(1))->method('getType')->willReturn('checkbox');
+        $option->expects($this->once())->method('getType')->willReturn('checkbox');
 
         $optionBlock = $this->getMockBuilder(
             \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox::class
