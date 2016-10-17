@@ -13,6 +13,11 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     protected $_mergeService;
 
     /**
+     * @var array
+     */
+    private $allowedSchemes = ['http', 'https'];
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -186,6 +191,36 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     }
 
     /**
+     * Check that URL contains allowed symbols
+     *
+     * @param string $value
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateUrl($value) {
+        if (!filter_var($value, FILTER_VALIDATE_URL)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Domain Name can contain only letters, digits and hyphen.')
+            );
+        }
+    }
+
+    /**
+     * Check that scheme there is in list of allowed schemes
+     *
+     * @param string $value
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateSchemes($value) {
+        if (!in_array($value, $this->allowedSchemes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('You can use only following schemes: %1', implode(', ', $this->allowedSchemes))
+            );
+        }
+    }
+
+    /**
      * Whether the provided value can be considered as a fully qualified URL
      *
      * @param string $value
@@ -194,7 +229,14 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     private function _isFullyQualifiedUrl($value)
     {
         $url = parse_url($value);
-        return isset($url['scheme']) && isset($url['host']) && preg_match('/\/$/', $value);
+
+        $result = isset($url['scheme']) && isset($url['host']) && preg_match('/\/$/', $value);
+        if ($result) {
+            $this->validateSchemes($url['scheme']);
+            $this->validateUrl($value);
+        }
+
+        return $result;
     }
 
     /**

@@ -20,7 +20,6 @@ use Magento\Store\Model\Store;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\Validator\Timezone;
 use Magento\Framework\Validator\Currency;
-use Magento\Framework\Url\Validator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -180,15 +179,12 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             }
             switch ($key) {
                 case StoreConfigurationDataMapper::KEY_BASE_URL:
-                    /** @var Validator $url */
                     if (strcmp($value, '{{base_url}}') == 0) {
                         break;
                     }
-                    $url = $this->objectManager->get(\Magento\Framework\Url\Validator::class);
-                    if (!$url->isValid($value)) {
-                        $errorMsgs = $url->getMessages();
-                        $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL
-                            . '\': ' . $errorMsgs[Validator::INVALID_URL] .'</error>';
+                    $errorMsg = $this->validateUrl($value, StoreConfigurationDataMapper::KEY_BASE_URL);
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_LANGUAGE:
@@ -229,18 +225,11 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     break;
                 case StoreConfigurationDataMapper::KEY_BASE_URL_SECURE:
                     try {
-                        /** @var Validator $url */
-                        $url = $this->objectManager->get(\Magento\Framework\Url\Validator::class);
-                        $errorMsgs = '';
-                        if (!$url->isValid($value)) {
-                            $errorMsgs = $url->getMessages();
-                            if (!empty($errorMsgs)) {
-                                $errors[] = '<error>' . 'Command option \''
-                                    . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
-                                    . '\': ' . $errorMsgs[Validator::INVALID_URL] .'</error>';
-                            }
+                        $errorMsg = $this->validateUrl($value, StoreConfigurationDataMapper::KEY_BASE_URL_SECURE);
+                        if ($errorMsg !== '') {
+                            $errors[] = $errorMsg;
                         }
-                        if (empty($errorMsgs) && strpos($value, 'https:') === false) {
+                        if (empty($errorMsg) && strpos($value, 'https:') === false) {
                             throw new LocalizedException(new \Magento\Framework\Phrase("Invalid secure URL."));
                         }
                     } catch (LocalizedException $e) {
@@ -308,6 +297,28 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             $errorMsg = '<error>' . 'Command option \'' . $type . '\': Invalid value. To see possible values, '
                 . "run command 'bin/magento info:" . $type . ':list\'.</error>';
         }
+        return $errorMsg;
+    }
+
+    /**
+     * Validate URL
+     *
+     * @param string $url
+     * @param string $option
+     * @return string
+     */
+    private function validateUrl($url, $option)
+    {
+        $errorMsg = '';
+
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            $errorMsg = sprintf(
+                '<error>Command option \'%s\': Invalid URL \'%s\'.</error>',
+                $option,
+                $url
+            );
+        }
+
         return $errorMsg;
     }
 }

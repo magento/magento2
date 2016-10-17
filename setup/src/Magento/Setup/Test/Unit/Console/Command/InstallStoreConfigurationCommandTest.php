@@ -155,7 +155,12 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['--' . StoreConfigurationDataMapper::KEY_BASE_URL => 'sampleUrl'],
-                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL . '\': Invalid URL.'
+                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL . '\': Invalid URL \'sampleUrl\'.'
+            ],
+            [
+                ['--' . StoreConfigurationDataMapper::KEY_BASE_URL => 'http://example.com_test'],
+                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL
+                    . '\': Invalid URL \'http://example.com_test\'.'
             ],
             [
                 ['--' . StoreConfigurationDataMapper::KEY_LANGUAGE => 'sampleLanguage'],
@@ -188,6 +193,11 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
                 . '\': Invalid secure URL.'
             ],
             [
+                ['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://sample.com_test'],
+                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
+                . '\': Invalid URL \'https://sample.com_test\'.'
+            ],
+            [
                 ['--' . StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => 'invalidValue'],
                 'Command option \'' . StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN
                 . '\': Invalid value. Possible values (0|1).'
@@ -197,6 +207,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
                 'Command option \'' . StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY
                 . '\': Invalid value. Possible values (0|1).'
             ],
+
         ];
     }
 }
