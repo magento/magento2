@@ -16,6 +16,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -33,6 +34,11 @@ class Content extends \Magento\Backend\Block\Widget
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    private $imageHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -128,12 +134,18 @@ class Content extends \Magento\Backend\Block\Widget
             is_array($value['images']) &&
             count($value['images'])
         ) {
-            $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
-                $fileHandler = $directory->stat($this->_mediaConfig->getMediaPath($image['file']));
-                $image['size'] = $fileHandler['size'];
+                try {
+                    $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
+                    $image['size'] = $fileHandler['size'];
+                } catch (FileSystemException $e) {
+                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
+                    $image['size'] = 0;
+                    $this->_logger->warning($e);
+                }
             }
             return $this->_jsonEncoder->encode($images);
         }
@@ -226,5 +238,18 @@ class Content extends \Magento\Backend\Block\Widget
     public function getImageTypesJson()
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
+    }
+
+    /**
+     * @return \Magento\Catalog\Helper\Image
+     * @deprecated
+     */
+    private function getImageHelper()
+    {
+        if ($this->imageHelper === null) {
+            $this->imageHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Helper\Image');
+        }
+        return $this->imageHelper;
     }
 }
