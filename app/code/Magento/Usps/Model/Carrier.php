@@ -427,9 +427,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $service = $r->getService();
             }
 
-            if (preg_match('/(FLAT RATE ENVELOPE|FLAT RATE BOX)$/', $r->getContainer())) {
+            if (
+                strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+                strpos($r->getContainer(), 'FLAT RATE BOX') !== false
+            ) {
                 $service = 'Priority';
             }
+
             $package->addChild('Service', $service);
 
             // no matter Letter, Flat or Parcel, use Parcel
