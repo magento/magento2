@@ -117,6 +117,8 @@ Done,Done
 "Please select attribute(s).","Please select attribute(s)."
 "Generate Products","Generate Products"
 "Configurable Product Image","Configurable Product Image"
+"Parent product does not have configurable product options","Parent product does not have configurable product options"
+"Child product does not have attribute value %1","Child product does not have attribute value %1"
 Select...,Select...
 Status,Status
 ID,ID
