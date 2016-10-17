@@ -52,6 +52,7 @@
                 <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Method if Not Applicable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <frontend_class>shipping-skip-hide</frontend_class>
                 </field>
                 <field id="specificerrmsg" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Displayed Error Message</label>
@@ -146,6 +147,7 @@
                 <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Method if Not Applicable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <frontend_class>shipping-skip-hide</frontend_class>
                 </field>
                 <field id="specificerrmsg" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Displayed Error Message</label>
