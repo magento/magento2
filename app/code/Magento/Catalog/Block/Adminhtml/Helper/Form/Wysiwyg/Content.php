@@ -14,6 +14,12 @@ namespace Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
 
+/**
+ * Class Content
+ *
+ * @deprecated
+ * @see \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
+ */
 class Content extends Generic
 {
     /**
