@@ -12,6 +12,11 @@ namespace Magento\Checkout\Test\Unit\Model;
 class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $paymentMethodManagementMock;
@@ -103,6 +108,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentMethodManagementMock = $this->getMock(\Magento\Quote\Api\PaymentMethodManagementInterface::class);
         $this->paymentDetailsFactoryMock = $this->getMock(
             \Magento\Checkout\Model\PaymentDetailsFactory::class,
@@ -175,10 +181,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingFactoryMock =
             $this->getMock(\Magento\Quote\Model\ShippingFactory::class, ['create'], [], '', false);
 
-        $this->prepareObjectManager([
-            [\Magento\Quote\Model\ShippingAssignmentFactory::class, $this->shippingAssignmentFactoryMock],
-            [\Magento\Quote\Api\Data\CartExtensionFactory::class, $this->cartExtensionFactoryMock],
-            [\Magento\Quote\Model\ShippingFactory::class, $this->shippingFactoryMock],
+        $this->objectManager->mockObjectManager([
+            \Magento\Quote\Model\ShippingAssignmentFactory::class => $this->shippingAssignmentFactoryMock,
+            \Magento\Quote\Api\Data\CartExtensionFactory::class => $this->cartExtensionFactoryMock,
+            \Magento\Quote\Model\ShippingFactory::class => $this->shippingFactoryMock,
         ]);
 
         $this->model = new \Magento\Checkout\Model\ShippingInformationManagement(
@@ -192,6 +198,11 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             $this->scopeConfigMock,
             $this->totalsCollectorMock
         );
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -456,21 +467,5 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             $paymentDetailsMock,
             $this->model->saveAddressInformation($cartId, $addressInformationMock)
         );
-    }
-
-    /**
-     * @param array $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

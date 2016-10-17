@@ -3,11 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Test\Unit\Model;
 
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\SalesRule\Model\Rule
      */
@@ -30,7 +34,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->coupon = $this->getMockBuilder(\Magento\SalesRule\Model\Coupon::class)
             ->disableOriginalConstructor()
@@ -57,18 +61,14 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->prepareObjectManager([
-            [
-                \Magento\Framework\Api\ExtensionAttributesFactory::class,
-                $this->getMock(\Magento\Framework\Api\ExtensionAttributesFactory::class, [], [], '', false)
-            ],
-            [
-                \Magento\Framework\Api\AttributeValueFactory::class,
+        $this->objectManager->mockObjectManager([
+            \Magento\Framework\Api\ExtensionAttributesFactory::class =>
+                $this->getMock(\Magento\Framework\Api\ExtensionAttributesFactory::class, [], [], '', false),
+            \Magento\Framework\Api\AttributeValueFactory::class =>
                 $this->getMock(\Magento\Framework\Api\AttributeValueFactory::class, [], [], '', false)
-            ],
         ]);
 
-        $this->model = $objectManager->getObject(
+        $this->model = $this->objectManager->getObject(
             \Magento\SalesRule\Model\Rule::class,
             [
                 'couponFactory' => $couponFactory,
@@ -76,6 +76,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 'condProdCombineF' => $this->condProdCombineFactoryMock,
             ]
         );
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     public function testLoadCouponCode()
@@ -178,21 +183,5 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->model->setId(100);
         $expectedResult = 'form_namerule_actions_fieldset_100';
         $this->assertEquals($expectedResult, $this->model->getActionsFieldSetId($formName));
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

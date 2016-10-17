@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
 use Magento\SalesRule\Api\Data\RuleInterface;
@@ -13,6 +12,11 @@ use Magento\SalesRule\Api\Data\RuleInterface;
  */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule
      */
@@ -60,7 +64,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->rule = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -135,14 +139,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->prepareObjectManager([
-            [
-                \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class,
-                $associatedEntitiesMap
-            ],
+        $this->objectManager->mockObjectManager([
+            \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class => $associatedEntitiesMap
         ]);
 
-        $this->model = $objectManager->getObject(
+        $this->model = $this->objectManager->getObject(
             \Magento\SalesRule\Model\ResourceModel\Rule::class,
             [
                 'context' => $context,
@@ -150,6 +151,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 'entityManager' => $this->entityManager,
             ]
         );
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -183,21 +189,5 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

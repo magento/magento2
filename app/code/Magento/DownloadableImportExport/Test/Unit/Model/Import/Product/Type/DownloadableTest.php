@@ -710,8 +710,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ->getMock(\Magento\Framework\EntityManager\MetadataPool::class, ['getLinkField'], [], '', false);
         $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
 
-        $this->prepareObjectManager([
-            [\Magento\Framework\EntityManager\MetadataPool::class, $metadataPoolMock],
+        $this->objectManagerHelper->mockObjectManager([
+            \Magento\Framework\EntityManager\MetadataPool::class => $metadataPoolMock
         ]);
 
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
@@ -734,6 +734,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->setExpectedException('\Exception');
         $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
         $this->downloadableModelMock->saveData();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->objectManagerHelper->restoreObjectManager();
     }
 
     /**
@@ -869,21 +875,5 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }
