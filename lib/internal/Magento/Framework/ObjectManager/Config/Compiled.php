@@ -153,4 +153,14 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         return $this->preferences;
     }
+
+    /**
+     * Returns list on preferences
+     *
+     * @return array
+     */
+    public function getAllArguments()
+    {
+        return $this->arguments;
+    }
 }
