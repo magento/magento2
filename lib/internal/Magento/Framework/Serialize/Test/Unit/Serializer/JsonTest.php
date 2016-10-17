@@ -22,7 +22,6 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param null|bool|array $value
-     * @param int $objectDecodeType
      * @dataProvider serializeUnserializeDataProvider
      */
     public function testSerializeUnserialize($value)
@@ -37,6 +36,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [''],
+            ['string'],
             [null],
             [false],
             [['a' => 'b']],
