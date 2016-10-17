@@ -82,6 +82,30 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
+     * Filter category data
+     *
+     * @deprecated
+     * @param array $rawData
+     * @return array
+     */
+    protected function _filterCategoryPostData(array $rawData)
+    {
+        $data = $rawData;
+        if (isset($data['image']) && is_array($data['image'])) {
+            if (!empty($data['image']['delete'])) {
+                $data['image'] = null;
+            } else {
+                if (isset($data['image'][0]['name']) && isset($data['image'][0]['tmp_name'])) {
+                    $data['image'] = $data['image'][0]['name'];
+                } else {
+                    unset($data['image']);
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Category save
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -239,7 +263,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param array $data
      * @return array
      */
-    public function imagePreprocessing(array $data)
+    public function imagePreprocessing($data)
     {
         $entityType = $this->eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE);
 
