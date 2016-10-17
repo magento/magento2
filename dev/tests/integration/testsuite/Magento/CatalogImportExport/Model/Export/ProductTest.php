@@ -227,7 +227,34 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains('""Option 2""', $exportData);
         $this->assertContains('""Option 3""', $exportData);
-        $this->assertContains('""Option 4 """"!@#$%^&*"""', $exportData);
-        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;"""', $exportData);
+        $this->assertContains('""Option 4 """"!@#$%^&*""', $exportData);
+        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
+    }
+
+    /**
+     * Verify that "category ids" filter correctly applies to export result
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_categories.php
+     */
+    public function testCategoryIdsFilter()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $this->model->setParameters([
+            \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
+                'category_ids' => '2,13'
+            ]
+        ]);
+
+        $exportData = $this->model->export();
+
+        $this->assertContains('Simple Product', $exportData);
+        $this->assertContains('Simple Product Three', $exportData);
+        $this->assertNotContains('Simple Product Two', $exportData);
+        $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
     }
 }
