@@ -79,19 +79,23 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn(ConfigurableProduct::TYPE_CODE);
         $associatedProductIds = ['key' => 'value'];
+        $associatedProductIdsSerialized = json_encode($associatedProductIds);
         $generatedProductIds = ['key_one' => 'value_one'];
         $expectedArray = ['key' => 'value', 'key_one' => 'value_one'];
         $attributes = ['key' => 'value'];
         $postValue = 'postValue';
+        $variationsMatrix = ['variationKey' => 'variationValue'];
+        $variationsMatrixSerialized = json_encode($variationsMatrix);
+
         $postValueMap = [
             ['new-variations-attribute-set-id', null, $postValue],
-            ['associated_product_ids', [], $associatedProductIds],
+            ['associated_product_ids_serialized', '[]', $associatedProductIdsSerialized],
             ['affect_configurable_product_attributes', null, $postValue],
         ];
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($postValueMap));
 
         $paramValueMap = [
-            ['variations-matrix', [], $postValue],
+            ['configurable-matrix-serialized', '[]', $variationsMatrixSerialized],
             ['attributes', null, $attributes],
         ];
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
@@ -110,7 +114,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'generateSimpleProducts'
         )->with(
             $this->productMock,
-            $postValue
+            $variationsMatrix
         )->will(
             $this->returnValue($generatedProductIds)
         );
@@ -123,16 +127,17 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn(ConfigurableProduct::TYPE_CODE);
         $associatedProductIds = ['key' => 'value'];
+        $associatedProductIdsSerialized = json_encode($associatedProductIds);
         $attributes = ['key' => 'value'];
         $postValue = 'postValue';
         $valueMap = [
             ['new-variations-attribute-set-id', null, $postValue],
-            ['associated_product_ids', [], $associatedProductIds],
+            ['associated_product_ids_serialized', '[]', $associatedProductIdsSerialized],
             ['affect_configurable_product_attributes', null, $postValue],
         ];
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
         $paramValueMap = [
-            ['variations-matrix', [], []],
+            ['variations-matrix', '[]', '[]'],
             ['attributes', null, $attributes],
         ];
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
