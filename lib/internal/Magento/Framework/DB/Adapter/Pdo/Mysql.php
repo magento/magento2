@@ -14,6 +14,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\ExpressionConverter;
@@ -232,6 +233,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             1205 => LockWaitException::class,
             // SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock
             1213 => DeadlockException::class,
+            // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry
+            1062 => DuplicateException::class,
         ];
         try {
             parent::__construct($config);
@@ -465,7 +468,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
-     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _query($sql, $bind = [])

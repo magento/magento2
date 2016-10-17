@@ -12,9 +12,9 @@
 // @codingStandardsIgnoreFile
 
 define(
-'USAGE',
-<<<USAGE
-    php -f get_github_changes.php --
+    'USAGE',
+    <<<USAGE
+        php -f get_github_changes.php --
     --output-file="<output_file>"
     --base-path="<base_path>"
     --repo="<main_repo>"
@@ -36,6 +36,8 @@ $fileExtensions = explode(',', isset($options['file-extensions']) ? $options['fi
 
 $mainline = 'mainline_' . (string)rand(0, 9999);
 $repo = getRepo($options, $mainline);
+$branches = $repo->getBranches('--remotes');
+generateBranchesList($options['output-file'], $branches, $options['branch']);
 $changes = retrieveChangesAcrossForks($mainline, $repo, $options['branch']);
 $changedFiles = getChangedFiles($changes, $fileExtensions);
 generateChangedFilesList($options['output-file'], $changedFiles);
@@ -55,6 +57,25 @@ function generateChangedFilesList($outputFile, $changedFiles)
         fwrite($changedFilesList, $file . PHP_EOL);
     }
     fclose($changedFilesList);
+}
+
+/**
+ * Generates a file containing origin branches
+ *
+ * @param string $outputFile
+ * @param array $branches
+ * @param string $branchName
+ * @return void
+ */
+function generateBranchesList($outputFile, $branches, $branchName)
+{
+    $branchOutputFile = str_replace('changed_files', 'branches', $outputFile);
+    $branchesList = fopen($branchOutputFile, 'w');
+    fwrite($branchesList, $branchName . PHP_EOL);
+    foreach ($branches as $branch) {
+        fwrite($branchesList, substr(strrchr($branch, '/'), 1) . PHP_EOL);
+    }
+    fclose($branchesList);
 }
 
 /**
@@ -84,7 +105,7 @@ function getChangedFiles(array $changes, array $fileExtensions)
  *
  * @param array $options
  * @param string $mainline
- * @return array
+ * @return GitRepo
  * @throws Exception
  */
 function getRepo($options, $mainline)
@@ -201,6 +222,19 @@ class GitRepo
         }
 
         $this->call(sprintf('fetch %s', $remoteAlias));
+    }
+
+    /**
+     * Returns branches
+     *
+     * @param string $source
+     * @return array|mixed
+     */
+    public function getBranches($source = '--all')
+    {
+        $result = $this->call(sprintf('branch ' . $source));
+
+        return is_array($result) ? $result : [];
     }
 
     /**

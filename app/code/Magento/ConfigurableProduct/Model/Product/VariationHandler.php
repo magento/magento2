@@ -29,6 +29,9 @@ class VariationHandler
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
 
+    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[] */
+    private $attributes;
+
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      * @deprecated
@@ -70,6 +73,7 @@ class VariationHandler
     public function generateSimpleProducts($parentProduct, $productsData)
     {
         $generatedProductIds = [];
+        $this->attributes = null;
         $productsData = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
@@ -160,7 +164,10 @@ class VariationHandler
             $parentProduct->getNewVariationsAttributeSetId()
         );
 
-        foreach ($product->getTypeInstance()->getSetAttributes($product) as $attribute) {
+        if ($this->attributes === null) {
+            $this->attributes = $product->getTypeInstance()->getSetAttributes($product);
+        }
+        foreach ($this->attributes as $attribute) {
             if ($attribute->getIsUnique() ||
                 $attribute->getAttributeCode() == 'url_key' ||
                 $attribute->getFrontend()->getInputType() == 'gallery' ||
