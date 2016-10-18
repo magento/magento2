@@ -3,9 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml;
+namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml\PayPal;
 
-use Magento\Braintree\Model\Ui\Adminhtml\TokenUiComponentProvider;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Ui\Adminhtml\PayPal\TokenUiComponentProvider;
 use Magento\Framework\UrlInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
@@ -13,11 +14,10 @@ use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class TokenUiComponentProviderTest
+ * Contains methods to test PayPal token Ui component provider
  */
 class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var TokenUiComponentInterfaceFactory|MockObject
      */
@@ -27,6 +27,11 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
      * @var UrlInterface|MockObject
      */
     private $urlBuilder;
+
+    /**
+     * @var Config|MockObject
+     */
+    private $config;
 
     /**
      * @var TokenUiComponentProvider
@@ -42,40 +47,52 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->urlBuilder = $this->getMock(UrlInterface::class);
 
+        $this->config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPayPalIcon'])
+            ->getMock();
+
         $this->tokenUiComponentProvider = new TokenUiComponentProvider(
             $this->componentFactory,
-            $this->urlBuilder
+            $this->urlBuilder,
+            $this->config
         );
     }
 
     /**
-     * @covers \Magento\Braintree\Model\Ui\Adminhtml\TokenUiComponentProvider::getComponentForToken
+     * @covers \Magento\Braintree\Model\Ui\Adminhtml\PayPal\TokenUiComponentProvider::getComponentForToken
      */
     public function testGetComponentForToken()
     {
         $nonceUrl = 'https://payment/adminhtml/nonce/url';
-        $type = 'VI';
-        $maskedCC = '1111';
-        $expirationDate = '12/2015';
+        $payerEmail = 'john.doe@test.com';
+        $icon = [
+            'url' => 'https://payment/adminhtml/icon.png',
+            'width' => 48,
+            'height' => 32
+        ];
 
         $expected = [
             'code' => 'vault',
             'nonceUrl' => $nonceUrl,
             'details' => [
-                'type' => $type,
-                'maskedCC' => $maskedCC,
-                'expirationDate' => $expirationDate
+                'payerEmail' => $payerEmail,
+                'icon' => $icon
             ],
             'template' => 'vault.phtml'
         ];
 
+        $this->config->expects(static::once())
+            ->method('getPayPalIcon')
+            ->willReturn($icon);
+
         $paymentToken = $this->getMock(PaymentTokenInterface::class);
         $paymentToken->expects(static::once())
             ->method('getTokenDetails')
-            ->willReturn('{"type":"VI","maskedCC":"1111","expirationDate":"12\/2015"}');
+            ->willReturn('{"payerEmail":" ' . $payerEmail . '"}');
         $paymentToken->expects(static::once())
             ->method('getPublicHash')
-            ->willReturn('37du7ir5ed');
+            ->willReturn('cmk32dl21l');
 
         $this->urlBuilder->expects(static::once())
             ->method('getUrl')

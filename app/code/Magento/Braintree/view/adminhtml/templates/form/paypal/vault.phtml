@@ -8,7 +8,7 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /** @var \Magento\Framework\View\Element\Template $block */
 $details = $block->getData(TokenUiComponentProviderInterface::COMPONENT_DETAILS);
-$icon = $block->getData('icons')[$details['type']];
+$icon = $details['icon'];
 $id = $block->escapeHtml($block->getData('id'));
 ?>
 <div data-mage-init='{
@@ -25,9 +25,6 @@ $id = $block->escapeHtml($block->getData('id'));
              width="<?php echo $block->escapeHtml($icon['width']); ?>"
              height="<?php echo $block->escapeHtml($icon['height']); ?>"
              class="payment-icon" >
-        <span><?php echo $block->escapeHtml(__('ending'));?></span>
-        <span><?php echo $block->escapeHtml($details['maskedCC']); ?></span>
-        (<span><?php echo $block->escapeHtml(__('expires'));?></span>:
-        <span><?php echo $block->escapeHtml($details['expirationDate']); ?></span>)
+        <span><?php echo $block->escapeHtml($details['payerEmail']); ?></span>
     </div>
 </div>

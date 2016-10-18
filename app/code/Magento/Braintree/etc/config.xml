@@ -71,7 +71,8 @@
             </braintree_cc_vault>
             <braintree_paypal_vault>
                 <model>BraintreePayPalVaultFacade</model>
-                <title>Vault Token (Braintree PayPal)</title>
+                <title>Stored Accounts (Braintree PayPal)</title>
+                <can_use_internal>1</can_use_internal>
             </braintree_paypal_vault>
         </payment>
     </default>
