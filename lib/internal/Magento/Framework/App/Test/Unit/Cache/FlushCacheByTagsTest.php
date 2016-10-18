@@ -19,6 +19,11 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     private $frontendPool;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Resolver
+     */
+    private $tagResolver;
+
+    /**
      * @var \Magento\Framework\App\Cache\FlushCacheByTags
      */
     private $plugin;
@@ -27,10 +32,13 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);
         $this->frontendPool = $this->getMock(\Magento\Framework\App\Cache\Type\FrontendPool::class, [], [], '', false);
+        $this->tagResolver = $this->getMock(\Magento\Framework\App\Cache\Tag\Resolver::class, [], [], '', false);
+
         $this->plugin = new \Magento\Framework\App\Cache\FlushCacheByTags(
             $this->frontendPool,
             $this->cacheState,
-            ['test']
+            ['test'],
+            $this->tagResolver
         );
 
     }
