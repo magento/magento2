@@ -22,10 +22,9 @@ class CallbackInvoker
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
-            $message = $queue->dequeue();
-            if ($message === null) {
-                break;
-            }
+            do {
+                $message = $queue->dequeue();
+            } while ($message === null && (sleep(1) === 0));
             $callback($message);
         }
     }
