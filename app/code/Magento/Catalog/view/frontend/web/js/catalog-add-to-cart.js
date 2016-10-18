@@ -64,29 +64,9 @@ define([
         },
 
         ajaxSubmit: function(form) {
-            var self = this,
-                swatchAttributesValue = [],
-                urlHashParams = '';
+            var self = this;
             $(self.options.minicartSelector).trigger('contentLoading');
             self.disableAddToCartButton(form);
-
-            $(form.prop("elements")).each(function(index, item){
-                item = $(item);
-                if (item.attr('name') && item.attr('name').search('super') != -1) {
-                    var r = /\[(\d+)\]/;
-                    var matches = r.exec(item.attr('name'));
-
-                    if (matches) {
-                        swatchAttributesValue.push(item.attr('data-attr-name') + '=' + item.val());
-                    }
-                }
-            });
-
-            console.log(form.serialize());
-            if (swatchAttributesValue.length > 0) {
-                urlHashParams = '#' + swatchAttributesValue.join('&');
-            }
-
 
             $.ajax({
                 url: form.attr('action'),
@@ -104,7 +84,18 @@ define([
                     }
 
                     if (res.backUrl) {
-                        window.location = res.backUrl  + urlHashParams;
+                        var eventData = {
+                            'form': form,
+                            'redirectParameters': []
+                        }
+                        // trigger global event, so other modules will be able add parameters to redirect url
+                        $('body').trigger('catalogCategoryAddToCartRedirect', eventData);
+                        if (eventData.redirectParameters.length > 0) {
+                            var parameters = res.backUrl.split('#');
+                            parameters.push(eventData.redirectParameters.join('&'));
+                            res.backUrl = parameters.join('#');
+                        }
+                        window.location = res.backUrl;
                         return;
                     }
                     if (res.messages) {

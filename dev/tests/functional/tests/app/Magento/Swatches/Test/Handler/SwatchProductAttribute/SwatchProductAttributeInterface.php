@@ -13,4 +13,5 @@ use Magento\Mtf\Handler\HandlerInterface;
  */
 interface SwatchProductAttributeInterface extends HandlerInterface
 {
+    //
 }

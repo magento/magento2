@@ -636,6 +636,13 @@ define([
             $input.trigger('change');
         },
 
+        /**
+         * Get human readable attribute code (eg. size, color) by it ID from configuration
+         *
+         * @param attributeId
+         * @returns {*}
+         * @private
+         */
         _getAttributeCodeById: function (attributeId) {
             var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
             return attribute ? attribute.code : attributeId;

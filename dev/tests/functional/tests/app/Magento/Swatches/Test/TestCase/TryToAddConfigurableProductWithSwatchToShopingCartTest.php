@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Scenario;
  * @group Configurable_Product
  * @ZephyrId TODO: add zephyr id
  */
-class AddConfigurableProductWithSwatchToShopingCartTest extends Scenario
+class TryToAddConfigurableProductWithSwatchToShopingCartTest extends Scenario
 {
     /**
      * Runs add configurable product with swatches attributes test.

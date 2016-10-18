@@ -6,10 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
-  <scenario name="AddConfigurableProductWithSwatchToShopingCartTest" firstStep="createConfigurableProductWithSwatchAttribute">
-    <step name="createConfigurableProductWithSwatchAttribute" module="Magento_Swatches" next="openProductInCatalog" />
-    <step name="openProductInCatalog" module="Magento_Swatches" next="categoryConfigureProduct" />
-    <step name="categoryConfigureProduct" module="Magento_Swatches" next="categoryAddToCartProduct" />
-    <step name="categoryAddToCartProduct" module="Magento_Swatches" />
-  </scenario>
+    <scenario name="AddConfigurableProductWithSwatchToShopingCartTest" firstStep="createProduct">
+        <step name="createProduct" module="Magento_Catalog" next="addProductToCartFromCatalogCategoryPage" />
+        <step name="addProductToCartFromCatalogCategoryPage" module="Magento_Swatches" />
+    </scenario>
+    <scenario name="TryToAddConfigurableProductWithSwatchToShopingCartTest" firstStep="createProduct">
+        <step name="createProduct" module="Magento_Catalog" />
+    </scenario>
 </config>

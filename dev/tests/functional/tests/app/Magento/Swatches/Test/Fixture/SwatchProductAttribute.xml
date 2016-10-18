@@ -10,7 +10,7 @@
              module="Magento_Swatches"
              handler_interface="Magento\Swatches\Test\Handler\SwatchProductAttribute\SwatchProductAttributeInterface"
              repository_class="Magento\Swatches\Test\Repository\SwatchProductAttribute"
-             class="Magento\Swatches\Test\Fixture\CatalogProductAttribute"
+             class="Magento\Swatches\Test\Fixture\SwatchesProductAttribute"
              extends="\Magento\Catalog\Test\Fixture\CatalogProductAttribute">
     </fixture>
 </config>

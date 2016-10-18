@@ -12,6 +12,5 @@
             class="Magento\Swatches\Test\Fixture\ConfigurableProduct"
             extends="\Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct"
             >
-<!--        <field name="configurable_attributes_data" is_required="0" group="variations" source="Magento\Swatches\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\ConfigurableAttributesData" />-->
     </fixture>
 </config>
