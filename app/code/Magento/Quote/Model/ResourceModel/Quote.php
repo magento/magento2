@@ -173,7 +173,8 @@ class Quote extends AbstractDb
     }
 
     /**
-     * Check is order increment id use in sales/order table
+     * Check if order increment ID is already used.
+     * Method can be used to avoid collisions of order IDs.
      *
      * @param int $orderIncrementId
      * @return bool

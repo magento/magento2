@@ -6,7 +6,6 @@
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
-
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
