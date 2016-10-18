@@ -17,6 +17,7 @@ use Magento\Translation\Model\Source\InitialTranslationSource;
 /**
  * @covers \Magento\Translation\Model\Source\InitialTranslationSource
  * @package Magento\Translation\Test\Unit\Model\Source
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InitialTranslationSourceTest extends \PHPUnit_Framework_TestCase
 {

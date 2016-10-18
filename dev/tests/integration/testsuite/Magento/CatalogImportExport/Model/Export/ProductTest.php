@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
-use Magento\Framework\App\Config;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php

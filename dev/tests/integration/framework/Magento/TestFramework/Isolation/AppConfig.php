@@ -4,6 +4,7 @@
  */
 
 namespace Magento\TestFramework\Isolation;
+
 use Magento\TestFramework\App\Config;
 use Magento\TestFramework\ObjectManager;
 
@@ -23,6 +24,8 @@ class AppConfig
      * Assumption: this is done once right before executing very first test suite.
      * It is assumed that deployment configuration is valid at this point
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param \PHPUnit_Framework_TestCase $test
      * @return void
      */
     public function startTest(\PHPUnit_Framework_TestCase $test)
@@ -47,6 +50,7 @@ class AppConfig
     /**Clean memorized and cached setting values
      * Checks if deployment configuration has been changed by a test
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param \PHPUnit_Framework_TestCase $test
      * @return void
      */

@@ -18,6 +18,11 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * @covers \Magento\Framework\App\DeploymentConfig\Writer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\Framework\App\Test\Unit\DeploymentConfig
+ */
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Writer */

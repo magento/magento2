@@ -51,8 +51,7 @@ class Scopes implements ConfigTypeInterface
         ConfigSourceInterface $source,
         FrontendInterface $cache,
         $cachingNestedLevel = 1
-    )
-    {
+    ) {
         $this->source = $source;
         $this->cache = $cache;
         $this->cachingNestedLevel = $cachingNestedLevel;

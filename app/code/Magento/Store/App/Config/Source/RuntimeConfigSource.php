@@ -15,6 +15,7 @@ use Magento\Store\Model\StoreFactory;
 
 /**
  * Class RuntimeConfigSource
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuntimeConfigSource implements ConfigSourceInterface
 {

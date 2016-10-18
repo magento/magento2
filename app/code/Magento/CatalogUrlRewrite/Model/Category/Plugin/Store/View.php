@@ -18,6 +18,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  *
  * @see \Magento\Store\Model\ResourceModel\Store
  * @package Magento\CatalogUrlRewrite\Model\Category\Plugin\Store
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View
 {

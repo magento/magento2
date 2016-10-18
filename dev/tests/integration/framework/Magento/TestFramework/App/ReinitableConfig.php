@@ -16,6 +16,7 @@ class ReinitableConfig extends MutableScopeConfig implements ReinitableConfigInt
      * @var Config
      */
     private $testAppConfig;
+
     /**
      * {@inheritdoc}
      */

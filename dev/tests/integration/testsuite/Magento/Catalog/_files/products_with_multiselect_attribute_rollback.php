@@ -11,7 +11,8 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product */
-$productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product')
+$productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Model\Product')
     ->getCollection();
 
 foreach ($productCollection as $product) {
