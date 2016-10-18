@@ -1330,7 +1330,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute_with_incorrect_values.php
-     * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/text_attribute.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
