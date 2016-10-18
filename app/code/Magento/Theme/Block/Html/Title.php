@@ -34,7 +34,7 @@ class Title extends \Magento\Framework\View\Element\Template
         if (!empty($this->pageTitle)) {
             return $this->pageTitle;
         }
-        return $this->pageConfig->getTitle()->getShort();
+        return __($this->pageConfig->getTitle()->getShort());
     }
 
     /**
@@ -45,9 +45,9 @@ class Title extends \Magento\Framework\View\Element\Template
     public function getPageHeading()
     {
         if (!empty($this->pageTitle)) {
-            return $this->pageTitle;
+            return __($this->pageTitle);
         }
-        return $this->pageConfig->getTitle()->getShortHeading();
+        return __($this->pageConfig->getTitle()->getShortHeading());
     }
 
     /**

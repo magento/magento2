@@ -36,7 +36,7 @@ define([
                 this.validation['required-entry'] = false;
                 this.required(false);
             } else {
-                if (!option['is_region_required']) {
+                if (option && !option['is_region_required']) {
                     this.error(false);
                     this.validation = _.omit(this.validation, 'required-entry');
                 } else {
@@ -56,16 +56,20 @@ define([
          */
         filter: function (value, field) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
+                option;
+
+            if (country) {
                 option = country.indexedOptions[value];
 
-            this._super(value, field);
+                this._super(value, field);
 
-            if (option && option['is_region_visible'] === false) {
-                // hide select and corresponding text input field if region must not be shown for selected country
-                this.setVisible(false);
+                if (option && option['is_region_visible'] === false) {
+                    // hide select and corresponding text input field if region must not be shown for selected country
+                    this.setVisible(false);
 
-                if (this.customEntry) {
-                    this.toggleInput(false);
+                    if (this.customEntry) {
+                        this.toggleInput(false);
+                    }
                 }
             }
         }

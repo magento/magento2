@@ -389,7 +389,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $store
         );
         if ($fileName) {
-            $uploadDir = \Magento\Config\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
+            $uploadDir = \Magento\Email\Model\Design\Backend\Logo::UPLOAD_DIR;
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->storeManager->getStore()->getBaseUrl(
@@ -663,13 +663,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Save current design config and replace with design config from specified store
      * Event is not dispatched.
      *
-     * @param int|string $storeId
+     * @param null|bool|int|string $storeId
      * @param string $area
      * @return void
      */
     public function emulateDesign($storeId, $area = self::DEFAULT_DESIGN_AREA)
     {
-        if ($storeId) {
+        if ($storeId !== null && $storeId !== false) {
             // save current design settings
             $this->emulatedDesignConfig = clone $this->getDesignConfig();
             if (

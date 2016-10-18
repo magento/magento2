@@ -45,7 +45,6 @@ None,None
 " is required."," is required."
 FedEx,FedEx
 "Enabled for Checkout","Enabled for Checkout"
-"Enabled for RMA","Enabled for RMA"
 Title,Title
 "Account ID","Account ID"
 "Please make sure to use only digits here. No dashes are allowed.","Please make sure to use only digits here. No dashes are allowed."

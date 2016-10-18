@@ -53,7 +53,9 @@ abstract class AbstractOptionsField extends AbstractElement
             } else {
                 $options = array_values($this->options);
             }
-            $options = $this->convertOptionsValueToString($options);
+            if (empty($config['rawOptions'])) {
+                $options = $this->convertOptionsValueToString($options);
+            }
             $config['options'] = array_values(array_merge_recursive($config['options'], $options));
         }
         $this->setData('config', (array)$config);

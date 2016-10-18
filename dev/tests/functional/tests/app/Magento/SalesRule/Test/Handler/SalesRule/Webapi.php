@@ -42,7 +42,7 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
 
     /**
      * List fields that only relate to coupon.
-     * 
+     *
      * @var array
      */
     protected $couponFields = [
@@ -218,7 +218,7 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
             'coupon' => array_filter([
                 'rule_id' => $ruleId,
                 'code' => $this->fixture->getCouponCode(),
-                'type' => $this->data['coupon_type'],
+                'type' => $this->mappingData['coupon_type'][$this->fixture->getCouponType()],
                 'usage_limit' => isset($this->data['uses_per_coupon'])
                     ? $this->data['uses_per_coupon']
                     : null,

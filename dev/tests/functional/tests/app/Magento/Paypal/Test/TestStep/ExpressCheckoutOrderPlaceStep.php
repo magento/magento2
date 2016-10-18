@@ -87,7 +87,7 @@ class ExpressCheckoutOrderPlaceStep implements TestStepInterface
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
-        array $products,
+        array $products = [],
         array $shipping = [],
         array $prices = []
     ) {

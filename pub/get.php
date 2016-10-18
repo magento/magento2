@@ -45,13 +45,13 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
         // Serve file if it's materialized
         if ($mediaDirectory) {
             if (!$isAllowed($relativePath, $allowedResources)) {
-                header('HTTP/1.0 404 Not Found');
+                require_once 'errors/404.php';
                 exit;
             }
             $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
             if (is_readable($mediaAbsPath)) {
                 if (is_dir($mediaAbsPath)) {
-                    header('HTTP/1.0 404 Not Found');
+                    require_once 'errors/404.php';
                     exit;
                 }
                 $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
@@ -74,7 +74,7 @@ if (empty($mediaDirectory)) {
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
 /** @var \Magento\MediaStorage\App\Media $app */
 $app = $bootstrap->createApplication(
-    'Magento\MediaStorage\App\Media',
+    \Magento\MediaStorage\App\Media::class,
     [
         'mediaDirectory' => $mediaDirectory,
         'configCacheFile' => $configCacheFile,

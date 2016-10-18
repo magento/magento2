@@ -11,5 +11,8 @@ namespace Magento\Framework\Exception;
  */
 class ConfigurationMismatchException extends LocalizedException
 {
+    /**
+     * @deprecated
+     */
     const AUTHENTICATION_ERROR = 'Configuration mismatch detected.';
 }

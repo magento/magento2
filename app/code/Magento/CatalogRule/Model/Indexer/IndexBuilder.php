@@ -159,7 +159,9 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Catalog rule indexing failed. See details in exception log.")
+            );
         }
     }
 
@@ -193,7 +195,9 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Catalog rule indexing failed. See details in exception log.")
+            );
         }
     }
 
@@ -724,7 +728,7 @@ class IndexBuilder
     private function roundTime($timeStamp)
     {
         if (is_numeric($timeStamp) && $timeStamp != 0) {
-            $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00'));
+            $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00', $timeStamp));
         }
 
         return $timeStamp;
@@ -737,7 +741,7 @@ class IndexBuilder
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

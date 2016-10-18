@@ -134,7 +134,7 @@ class Button extends Template implements ControlInterface
             if ($attributeValue === null || $attributeValue == '') {
                 continue;
             }
-            $html .= $attributeKey . '="' . $this->escapeHtml($attributeValue) . '" ';
+            $html .= $attributeKey . '="' . $this->escapeHtmlAttr($attributeValue, false) . '" ';
         }
 
         return $html;

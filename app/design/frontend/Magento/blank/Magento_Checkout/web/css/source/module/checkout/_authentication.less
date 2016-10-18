@@ -100,8 +100,8 @@
                     .lib-css(margin, -(@block-auth__or-label__size/2 + 1px) 0 0 -(@block-auth__or-label__size / 2));
                     .lib-css(min-width, @block-auth__or-label__size);
                     background: @color-white;
-                    border-radius: 50%;
                     border: 1px solid @color-gray-light5;
+                    border-radius: 50%;
                     box-sizing: border-box;
                     color: @color-gray-light5;
                     content: attr(data-label);
@@ -127,17 +127,22 @@
     .authentication-dropdown {
         .lib-css(background-color, @block-auth__dropdown__background-color);
         .lib-css(border, @block-auth__border);
+        -webkit-transform: scale(1,0);
+        -webkit-transform-origin: 0 0;
+        -webkit-transition: -webkit-transform linear .1s, visibility 0s linear .1s;
         position: absolute;
         text-align: left;
         top: 100%;
-        transform-origin: 0 0;
         transform: scale(1,0);
+        transform-origin: 0 0;
         transition: transform linear .1s, visibility 0s linear .1s;
         visibility: hidden;
         width: 100%;
 
         &._show {
             .lib-css(z-index, @dropdown-list__z-index);
+            -webkit-transform: scale(1,1);
+            -webkit-transition: -webkit-transform linear .1s, visibility 0s linear 0s;
             transform: scale(1,1);
             transition: transform linear .1s, visibility 0s linear 0s;
             visibility: visible;

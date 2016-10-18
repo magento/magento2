@@ -48,7 +48,10 @@ class Collection extends AbstractCollection implements ShipmentSearchResultInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Shipment', 'Magento\Sales\Model\ResourceModel\Order\Shipment');
+        $this->_init(
+            \Magento\Sales\Model\Order\Shipment::class,
+            \Magento\Sales\Model\ResourceModel\Order\Shipment::class
+        );
     }
 
     /**

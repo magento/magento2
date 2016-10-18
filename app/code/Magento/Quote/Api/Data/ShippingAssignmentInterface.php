@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 
 /**
  * Interface ShippingAssignmentInterface
+ * @api
  */
 interface ShippingAssignmentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

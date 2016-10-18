@@ -58,7 +58,9 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
         /** @var $option \Magento\Quote\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        $option = $this->_objectManager->create(
+            \Magento\Quote\Model\Quote\Item\Option::class
+        )->load($quoteItemOptionId);
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
 
@@ -76,13 +78,12 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         $productOption = null;
         if ($optionId) {
             /** @var $productOption \Magento\Catalog\Model\Product\Option */
-            $productOption = $this->_objectManager->create('Magento\Catalog\Model\Product\Option')->load($optionId);
+            $productOption = $this->_objectManager->create(
+                \Magento\Catalog\Model\Product\Option::class
+            )->load($optionId);
         }
-        if (!$productOption ||
-            !$productOption->getId() ||
-            $productOption->getProductId() != $option->getProductId() ||
-            $productOption->getType() != 'file'
-        ) {
+
+        if (!$productOption || !$productOption->getId() || $productOption->getType() != 'file') {
             return $resultForward->forward('noroute');
         }
 

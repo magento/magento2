@@ -90,13 +90,24 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'swatch_image' => 'simple2_swatch_image',
                 'small_image' => 'simple2_small_image',
                 'thumbnail' => 'simple2_thumbnail',
-                'image' => 'simple2_image'
+                'image' => 'simple2_image',
+                'was_changed' => true,
             ],
             [
                 'newProduct' => false,
                 'id' => 'product3',
-                'qty' => '3'
-            ]
+                'qty' => '3',
+                'was_changed' => true,
+            ],
+            [
+                'newProduct' => false,
+                'id' => 'product4',
+                'status' => 'simple4_status',
+                'sku' => 'simple2_sku',
+                'name' => 'simple2_name',
+                'price' => '3.33',
+                'weight' => '5.55',
+            ],
         ];
         $configurations = [
             'product2' => [
@@ -118,8 +129,8 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var Product[]|\PHPUnit_Framework_MockObject_MockObject[] $productMocks */
         $productMocks = [
-            'product2' => $this->getProductMock($configurations['product2'], true),
-            'product3' => $this->getProductMock($configurations['product3'])
+            'product2' => $this->getProductMock($configurations['product2'], true, true),
+            'product3' => $this->getProductMock($configurations['product3'], false, true),
         ];
 
         $this->requestMock->expects(static::any())
@@ -127,7 +138,7 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['store', 0, 0],
-                    ['configurable-matrix', [], $configurableMatrix]
+                    ['configurable-matrix-serialized', '[]', json_encode($configurableMatrix)]
                 ]
             );
         $this->variationHandlerMock->expects(static::once())
@@ -161,26 +172,27 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
      * @param bool $hasDataChanges
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getProductMock(array $expectedData = null, $hasDataChanges = false)
+    protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        if ($expectedData !== null) {
-            $productMock->expects(static::once())
-                ->method('addData')
-                ->with($expectedData)
+        if ($wasChanged !== false) {
+            if ($expectedData !== null) {
+                $productMock->expects(static::once())
+                    ->method('addData')
+                    ->with($expectedData)
+                    ->willReturnSelf();
+            }
+
+            $productMock->expects(static::any())
+                ->method('hasDataChanges')
+                ->willReturn($hasDataChanges);
+            $productMock->expects($hasDataChanges ? static::once() : static::never())
+                ->method('save')
                 ->willReturnSelf();
         }
-
-        $productMock->expects(static::any())
-            ->method('hasDataChanges')
-            ->willReturn($hasDataChanges);
-        $productMock->expects($hasDataChanges ? static::once() : static::never())
-            ->method('save')
-            ->willReturnSelf();
-
         return $productMock;
     }
 }

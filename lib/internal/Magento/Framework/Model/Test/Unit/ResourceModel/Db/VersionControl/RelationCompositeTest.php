@@ -33,7 +33,7 @@ class RelationCompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->modelMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $this->modelMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -41,14 +41,14 @@ class RelationCompositeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->relationProcessorMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $this->relationProcessorMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->relationProcessorMock = $this->getMockBuilder(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface'
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->entityRelationComposite = new \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite(

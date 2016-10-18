@@ -98,12 +98,23 @@ class MetadataPool
 
     /**
      * @param string $entityType
+     * @return HydratorInterface
      * @deprecated
-     * @return EntityHydratorInterface
      */
     public function getHydrator($entityType)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         return $objectManager->get(HydratorPool::class)->getHydrator($entityType);
+    }
+
+    /**
+     * Check if entity type configuration was set to metadata
+     *
+     * @param string $entityType
+     * @return bool
+     */
+    public function hasConfiguration($entityType)
+    {
+        return isset($this->metadata[$entityType]);
     }
 }

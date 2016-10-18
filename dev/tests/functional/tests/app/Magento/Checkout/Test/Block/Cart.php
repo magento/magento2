@@ -129,7 +129,7 @@ class Cart extends Block
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(
-                'Magento\Checkout\Test\Block\Cart\CartItem',
+                '\\' . get_class($this) . '\CartItem',
                 ['element' => $cartItemBlock]
             );
         }
@@ -152,12 +152,14 @@ class Cart extends Block
     /**
      * Click "Check out with Braintree PayPal" button.
      *
-     * @return void
+     * @return string
      */
     public function braintreePaypalCheckout()
     {
+        $currentWindow = $this->browser->getCurrentWindow();
         $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
             ->click();
+        return $currentWindow;
     }
 
     /**

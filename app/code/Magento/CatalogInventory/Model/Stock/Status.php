@@ -74,10 +74,11 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Status');
+        $this->_init(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class);
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @return int
      */
@@ -99,7 +100,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getStockId()
     {
-        return $this->getData(self::KEY_WEBSITE_ID);
+        return $this->getData(self::KEY_STOCK_ID);
     }
 
     /**
@@ -128,6 +129,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param int $productId
      * @return $this

@@ -123,7 +123,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
     }
 
     /**

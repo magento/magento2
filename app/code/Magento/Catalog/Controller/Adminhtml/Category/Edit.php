@@ -80,16 +80,16 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         /**
-         * Check if we have data in session (if during category save was exception)
+         * Check if there are data in session (if there was an exception on saving category)
          */
-        $data = $this->_getSession()->getCategoryData(true);
-        if (isset($data['general'])) {
-            if (isset($data['general']['image']['delete'])) {
-                $data['general']['image'] = null;
+        $categoryData = $this->_getSession()->getCategoryData(true);
+        if (is_array($categoryData)) {
+            if (isset($categoryData['image']['delete'])) {
+                $categoryData['image'] = null;
             } else {
-                unset($data['general']['image']);
+                unset($categoryData['image']);
             }
-            $category->addData($data['general']);
+            $category->addData($categoryData);
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
@@ -99,9 +99,10 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
             return $this->ajaxRequestResponse($category, $resultPage);
         }
 
+        $resultPageTitle = $categoryId ? $category->getName() . ' (ID: ' . $categoryId . ')' : __('Categories');
         $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
         $resultPage->getConfig()->getTitle()->prepend(__('Categories'));
-        $resultPage->getConfig()->getTitle()->prepend($categoryId ? $category->getName() : __('Categories'));
+        $resultPage->getConfig()->getTitle()->prepend($resultPageTitle);
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 
         $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
@@ -119,7 +120,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         if (null === $this->storeManager) {
             $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Store\Model\StoreManagerInterface');
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
         }
         return $this->storeManager;
     }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Quote\Api\Data\PaymentInterface;
+
 /**
  * Quote payment information
  *
@@ -34,7 +36,7 @@ namespace Magento\Quote\Model\Quote;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\Data\PaymentInterface
+class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 {
     /**
      * @var string
@@ -59,6 +61,11 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     protected $methodSpecificationFactory;
 
     /**
+     * @var array
+     */
+    private $additionalChecks;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -69,6 +76,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param array $additionalChecks
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -81,9 +89,11 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        array $additionalChecks = []
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
+        $this->additionalChecks = $additionalChecks;
         parent::__construct(
             $context,
             $registry,
@@ -104,7 +114,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Payment');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Payment::class);
     }
 
     /**
@@ -143,6 +153,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function importData(array $data)
     {
+        $data = $this->convertPaymentData($data);
         $data = new \Magento\Framework\DataObject($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
@@ -159,7 +170,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
          */
         $quote->collectTotals();
 
-        $methodSpecification = $this->methodSpecificationFactory->create($data->getChecks());
+        $checks = array_merge($data->getChecks(), $this->additionalChecks);
+        $methodSpecification = $this->methodSpecificationFactory->create($checks);
         if (!$method->isAvailable($quote) || !$methodSpecification->isApplicable($method, $quote)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The requested Payment Method is not available.')
@@ -167,11 +179,43 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         }
 
         $method->assignData($data);
+
         /*
          * validating the payment data
          */
         $method->validate();
         return $this;
+    }
+
+    /**
+     * Converts request to payment data
+     *
+     * @param array $rawData
+     * @return array
+     */
+    private function convertPaymentData(array $rawData)
+    {
+        $paymentData = [
+            PaymentInterface::KEY_METHOD => null,
+            PaymentInterface::KEY_PO_NUMBER => null,
+            PaymentInterface::KEY_ADDITIONAL_DATA => [],
+            'checks' => []
+        ];
+
+        foreach (array_keys($rawData) as $requestKey) {
+            if (!array_key_exists($requestKey, $paymentData)) {
+                $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA][$requestKey] = $rawData[$requestKey];
+            } elseif ($requestKey === PaymentInterface::KEY_ADDITIONAL_DATA) {
+                $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA] = array_merge(
+                    $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA],
+                    (array) $rawData[$requestKey]
+                );
+            } else {
+                $paymentData[$requestKey] = $rawData[$requestKey];
+            }
+        }
+
+        return $paymentData;
     }
 
     /**
@@ -223,7 +267,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getMethodInstance()
     {
         $method = parent::getMethodInstance();
-        $method->setStore($this->getQuote()->getStore()->getStoreId());
+        $method->setStore($this->getQuote()->getStoreId());
         return $method;
     }
 

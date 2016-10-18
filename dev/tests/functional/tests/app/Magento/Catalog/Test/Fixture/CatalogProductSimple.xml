@@ -64,7 +64,7 @@
         <field name="tax_class_id" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\TaxClass" />
         <field name="thumbnail" is_required="0" />
         <field name="thumbnail_label" is_required="0" />
-        <field name="tier_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
+        <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\Product\TierPrice" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
         <field name="updated_at" is_required="1" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
@@ -75,7 +75,7 @@
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
         <field name="custom_attribute" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="is_returnable" is_required="0" group="product-details" />
         <field name="news_from_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="news_to_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />

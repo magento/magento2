@@ -41,13 +41,12 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param ProductInterface $entity
      * @param array $arguments
      * @return ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
         if ($entity->getTypeId() !== Configurable::TYPE_CODE) {
             return $entity;

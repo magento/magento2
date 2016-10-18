@@ -24,12 +24,12 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Purchaseorder';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Purchaseorder::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\OfflinePayments\Block\Info\Purchaseorder';
+    protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Purchaseorder::class;
 
     /**
      * Availability option
@@ -47,10 +47,6 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
-        if (!$data instanceof \Magento\Framework\DataObject) {
-            $data = new \Magento\Framework\DataObject($data);
-        }
-
         $this->getInfoInstance()->setPoNumber($data->getPoNumber());
         return $this;
     }

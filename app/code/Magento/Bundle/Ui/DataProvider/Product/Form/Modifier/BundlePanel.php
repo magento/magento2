@@ -246,7 +246,7 @@ class BundlePanel extends AbstractModifier
                                     [
                                         'targetName' => 'product_form.product_form.'
                                             . self::CODE_BUNDLE_DATA . '.' . self::CODE_BUNDLE_OPTIONS,
-                                        'actionName' => 'addChild',
+                                        'actionName' => 'processingAddChild',
                                     ]
                                 ],
                             ],
@@ -272,7 +272,6 @@ class BundlePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'label' => '',
                         'additionalClasses' => 'admin__field-wide',
-                        'itemTemplate' => 'record',
                         'collapsibleHeader' => true,
                         'columnsHeader' => false,
                         'deleteProperty' => false,
@@ -304,6 +303,7 @@ class BundlePanel extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => 'fieldset',
+                                        'collapsible' => true,
                                         'label' => '',
                                         'opened' => true,
                                     ],
@@ -324,22 +324,25 @@ class BundlePanel extends AbstractModifier
                                                 'additionalClasses' => 'admin__field-wide',
                                                 'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
                                                 'template' => 'ui/dynamic-rows/templates/default',
-                                                'renderDefaultRecord' => true,
                                                 'columnsHeader' => false,
                                                 'columnsHeaderAfterRender' => true,
-                                                'recordTemplate' => 'record',
                                                 'provider' => 'product_form.product_form_data_source',
                                                 'dataProvider' => '${ $.dataScope }' . '.bundle_button_proxy',
+                                                'identificationDRProperty' => 'product_id',
+                                                'identificationProperty' => 'product_id',
                                                 'map' => [
-                                                    'id' => 'entity_id',
                                                     'product_id' => 'entity_id',
                                                     'name' => 'name',
                                                     'sku' => 'sku',
                                                     'price' => 'price',
+                                                    'delete' => '',
+                                                    'selection_can_change_qty' => '',
+                                                    'selection_id' => '',
+                                                    'selection_price_type' => '',
+                                                    'selection_price_value' => '',
+                                                    'selection_qty' => '',
                                                 ],
-                                                'links' => [
-                                                    'insertData' => '${ $.provider }:${ $.dataProvider }'
-                                                ],
+                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                                                 'source' => 'product',
                                                 'addButton' => false,
                                             ],
@@ -578,15 +581,12 @@ class BundlePanel extends AbstractModifier
                                 'parentSelections' => 'bundle_selections',
                                 'changer' => 'option_info.type',
                                 'dataType' => Form\Element\DataType\Boolean::NAME,
-                                'label' => __('Default'),
+                                'label' => __('Is Default'),
                                 'dataScope' => 'is_default',
                                 'prefer' => 'radio',
                                 'value' => '0',
                                 'sortOrder' => 50,
-                                'valueMap' => [
-                                    'false' => '0',
-                                    'true' => '1'
-                                ]
+                                'valueMap' => ['false' => '0', 'true' => '1']
                             ],
                         ],
                     ],
@@ -637,7 +637,8 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'required-entry' => true,
-                                    'validate-zero-or-greater' => true
+                                    'validate-number' => true,
+                                    'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
                                     'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'

@@ -15,6 +15,7 @@ class DataFactory
 {
     const AREA_FRONTEND = 'frontend';
     const AREA_BACKEND = 'adminhtml';
+
     /**
      * @var ObjectManagerInterface
      */
@@ -24,8 +25,8 @@ class DataFactory
      * @var array
      */
     protected $helperMap = [
-        self::AREA_FRONTEND => 'Magento\Authorizenet\Helper\Data',
-        self::AREA_BACKEND => 'Magento\Authorizenet\Helper\Backend\Data'
+        self::AREA_FRONTEND => \Magento\Authorizenet\Helper\Data::class,
+        self::AREA_BACKEND => \Magento\Authorizenet\Helper\Backend\Data::class
     ];
 
     /**

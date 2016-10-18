@@ -5,9 +5,10 @@
  */
 namespace Magento\Cms\Model\ResourceModel\Block\Relation\Store;
 
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
@@ -37,15 +38,14 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param array $arguments
      * @return object
      * @throws \Exception
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
-        $entityMetadata = $this->metadataPool->getMetadata($entityType);
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
         $linkField = $entityMetadata->getLinkField();
 
         $connection = $entityMetadata->getEntityConnection();

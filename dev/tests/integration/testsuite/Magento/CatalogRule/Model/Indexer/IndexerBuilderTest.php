@@ -36,9 +36,11 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->indexerBuilder = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Indexer\IndexBuilder');
-        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
-        $this->product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+        $this->indexerBuilder = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class
+        );
+        $this->resourceRule = Bootstrap::getObjectManager()->get(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+        $this->product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Product::class);
     }
 
     /**
@@ -99,11 +101,10 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->indexerBuilder->reindexFull();
 
-        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->product->getId()));
-        $this->assertEquals(
-            9.8,
-            $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->productSecond->getId())
-        );
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->product->getId());
+        $this->assertEquals(9.8, $rulePrice);
+        $rulePrice = $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->productSecond->getId());
+        $this->assertEquals(9.8, $rulePrice);
         $this->assertFalse($this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $this->productThird->getId()));
     }
 
@@ -113,7 +114,7 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
         $product->load($product->getId());
         $this->product = $product;
 
-        $this->product->setData('test_attribute', 'test_attribute_value')->save();
+        $this->product->setStoreId(0)->setData('test_attribute', 'test_attribute_value')->save();
         $this->productSecond = clone $this->product;
         $this->productSecond->setId(null)->setUrlKey('product-second')->save();
         $this->productThird = clone $this->product;

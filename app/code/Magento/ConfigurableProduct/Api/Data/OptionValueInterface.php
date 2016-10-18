@@ -6,6 +6,10 @@
  */
 namespace Magento\ConfigurableProduct\Api\Data;
 
+/**
+ * Interface OptionValueInterface
+ * @api
+ */
 interface OptionValueInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**

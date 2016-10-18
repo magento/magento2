@@ -4,77 +4,75 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-//
-//    Newsletter subscription
-//--------------------------------------
-.block.newsletter {
-    margin-bottom: 40px;
+    //  Newsletter subscription
+    .block.newsletter {
+        margin-bottom: @indent__xl;
 
-    .form.subscribe {
-        display: table;
-        width: 100%;
-    }
+        .form.subscribe {
+            display: table;
+            width: 100%;
+        }
 
-    .fieldset {
-        display: table-cell;
-        margin: 0;
-        padding: 0;
-        vertical-align: top;
-    }
+        .fieldset {
+            display: table-cell;
+            margin: 0;
+            padding: 0;
+            vertical-align: top;
+        }
 
-    .field {
-        margin: 0;
+        .field {
+            margin: 0;
 
-        .control {
-            .lib-icon-font(
+            .control {
+                .lib-icon-font(
                 @icon-envelope,
                 @_icon-font-size: 35px,
                 @_icon-font-line-height: 33px,
                 @_icon-font-color: @form-element-input-placeholder__color
-            );
-            display: block;
+                );
+                display: block;
 
-            &:before {
-                position: absolute;
+                &:before {
+                    position: absolute;
+                }
             }
         }
-    }
 
-    input {
-        padding-left: 35px;
-    }
+        input {
+            padding-left: 35px;
+        }
 
-    .title {
-        display: none;
-    }
+        .title {
+            display: none;
+        }
 
-    .label {
-        &:extend(.abs-visually-hidden all);
-    }
+        .label {
+            &:extend(.abs-visually-hidden all);
+        }
 
-    .actions {
-        display: table-cell;
-        vertical-align: top;
-        width: 1%;
-    }
+        .actions {
+            display: table-cell;
+            vertical-align: top;
+            width: 1%;
+        }
 
-    .action.subscribe {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        margin-left: -1px;
+        .action.subscribe {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            margin-left: -1px;
+        }
     }
-}
-
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block.newsletter {
         width: 32%;

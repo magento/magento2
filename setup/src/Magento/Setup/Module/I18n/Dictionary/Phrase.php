@@ -272,9 +272,10 @@ class Phrase
         if (count($matches[0])) {
             $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
         }
-        /* Remove all occurrences of escaped double quote because it is not desirable in csv file.
+        /* Remove all occurrences of escaped quotes because it is not desirable in csv file.
            Translation for such phrases will use translation for phrase without escaped quote. */
         $string = str_replace('\"', '"', $string);
+        $string = str_replace("\\'", "'", $string);
         return $string;
     }
 }

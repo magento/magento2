@@ -111,6 +111,26 @@ define([
         },
 
         /**
+         * Gets first item index on current page.
+         *
+         * @returns {Number}
+         */
+        getFirstItemIndex: function () {
+            return this.pageSize * (this.current - 1) + 1;
+        },
+
+        /**
+         * Gets last item index on current page.
+         *
+         * @returns {Number}
+         */
+        getLastItemIndex: function () {
+            var lastItem = this.getFirstItemIndex() + this.pageSize - 1;
+
+            return this.totalRecords < lastItem ? this.totalRecords : lastItem;
+        },
+
+        /**
          * Sets cursor to the provied value.
          *
          * @param {(Number|String)} value - New value of the cursor.

@@ -11,6 +11,8 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Driver
+ *
+ * @api
  */
 interface DriverInterface
 {

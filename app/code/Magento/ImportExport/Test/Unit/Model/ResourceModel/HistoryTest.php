@@ -28,21 +28,21 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->historyResourceModel = $this->getMock(
-            'Magento\ImportExport\Model\ResourceModel\History',
+            \Magento\ImportExport\Model\ResourceModel\History::class,
             ['getConnection', 'getMainTable', 'getIdFieldName'],
             [],
             '',
             false
         );
         $dbAdapterMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'fetchOne'],
             [],
             '',
             false
         );
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['from', 'order', 'where', 'limit'],
             [],
             '',

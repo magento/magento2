@@ -27,14 +27,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Fill in data according to data set
  * 5. Perform all assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-24768
  */
 class UpdateAdminUserRoleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -91,9 +90,6 @@ class UpdateAdminUserRoleEntityTest extends Injectable
         Role $role,
         User $user
     ) {
-        $this->markTestIncomplete(
-            "MAGETWO-50406: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
-        );
 
         // Preconditions
         $roleInit->persist();

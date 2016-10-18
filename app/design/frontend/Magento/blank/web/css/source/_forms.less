@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @form-field__vertical-indent__desktop: 29px;
 @form-calendar-icon__color: @primary__color;
 
@@ -11,7 +15,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .fieldset {
         .lib-form-fieldset();
         &:last-child {
@@ -89,8 +92,13 @@
         }
     }
 
+    .field-error,
     div.mage-error[generated] {
         margin-top: 7px;
+    }
+
+    .field-error {
+        .lib-form-validation-note();
     }
 
     .field .tooltip {
@@ -106,8 +114,8 @@
         display: block;
     }
 
-    .hasDatepicker {
-        + .ui-datepicker-trigger {
+    ._has-datepicker {
+        ~ .ui-datepicker-trigger {
             .lib-button-reset();
             .lib-icon-font(
             @_icon-font-content: @icon-calendar,

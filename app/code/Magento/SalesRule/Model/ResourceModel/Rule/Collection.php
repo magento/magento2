@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
 use Magento\Quote\Model\Quote\Address;
@@ -39,8 +37,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier
-     * @param array $associatedEntitiesMap
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -50,15 +46,12 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
-        \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier,
-        array $associatedEntitiesMap = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
-        $this->dateApplier = $dateApplier;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
     /**
@@ -68,7 +61,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      */
     protected function _construct()
     {
-        $this->_init('Magento\SalesRule\Model\Rule', 'Magento\SalesRule\Model\ResourceModel\Rule');
+        $this->_init(\Magento\SalesRule\Model\Rule::class, \Magento\SalesRule\Model\ResourceModel\Rule::class);
         $this->_map['fields']['rule_id'] = 'main_table.rule_id';
     }
 
@@ -158,11 +151,12 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                     ['code']
                 );
 
+                $noCouponWhereCondition = $connection->quoteInto(
+                    'main_table.coupon_type = ? ',
+                    \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
+                );
+
                 $orWhereConditions = [
-                    $connection->quoteInto(
-                        'main_table.coupon_type = ? ',
-                        \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
-                    ),
                     $connection->quoteInto(
                         '(main_table.coupon_type = ? AND rule_coupons.type = 0)',
                         \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
@@ -191,7 +185,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 $orWhereCondition = implode(' OR ', $orWhereConditions);
                 $andWhereCondition = implode(' AND ', $andWhereConditions);
 
-                $select->where('(' . $orWhereCondition . ') AND ' . $andWhereCondition);
+                $select->where(
+                    $noCouponWhereCondition . ' OR ((' . $orWhereCondition . ') AND ' . $andWhereCondition . ')'
+                );
             } else {
                 $this->addFieldToFilter(
                     'main_table.coupon_type',
@@ -219,7 +215,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     public function addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now = null)
     {
         if (!$this->getFlag('website_group_date_filter')) {
-            if (is_null($now)) {
+            if ($now === null) {
                 $now = $this->_date->date()->format('Y-m-d');
             }
 
@@ -242,7 +238,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 []
             );
 
-            $this->dateApplier->applyDate($this->getSelect(), $now);
+            $this->getDateApplier()->applyDate($this->getSelect(), $now);
 
             $this->addIsActiveFilter();
 
@@ -282,7 +278,11 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $field = $this->_getMappedField('actions_serialized');
         $aCond = $this->_getConditionSql($field, ['like' => $match]);
 
-        $this->getSelect()->where(sprintf('(%s OR %s)', $cCond, $aCond), null, \Magento\Framework\DB\Select::TYPE_CONDITION);
+        $this->getSelect()->where(
+            sprintf('(%s OR %s)', $cCond, $aCond),
+            null,
+            \Magento\Framework\DB\Select::TYPE_CONDITION
+        );
 
         return $this;
     }
@@ -320,5 +320,33 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
             );
         }
         return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return DateApplier
+     * @deprecated
+     */
+    private function getDateApplier()
+    {
+        if (null === $this->dateApplier) {
+            $this->dateApplier = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\DateApplier::class);
+        }
+
+        return $this->dateApplier;
     }
 }

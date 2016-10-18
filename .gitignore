@@ -6,6 +6,7 @@
 atlassian*
 /nbproject
 /sitemap
+/sitemap.xml
 /.idea
 /.gitattributes
 /app/config_sandbox
@@ -22,6 +23,8 @@ atlassian*
 /lib/internal/flex/varien/.settings
 /node_modules
 /.grunt
+/Gruntfile.js
+/package.json
 
 /pub/media/*.*
 !/pub/media/.htaccess

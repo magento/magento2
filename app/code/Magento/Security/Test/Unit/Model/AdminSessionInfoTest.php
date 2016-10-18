@@ -49,7 +49,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Security\Model\AdminSessionInfo',
+            \Magento\Security\Model\AdminSessionInfo::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'dateTime' => $this->dateTimeMock,
@@ -128,8 +128,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     public function testGetFormattedIp()
     {
         $formattedIp = '127.0.0.1';
-        $longIp = 2130706433;
-        $this->model->setIp($longIp);
+        $this->model->setIp($formattedIp);
         $this->assertEquals($formattedIp, $this->model->getFormattedIp());
     }
 
@@ -148,7 +147,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     public function testSetIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {
         $this->assertInstanceOf(
-            '\Magento\Security\Model\AdminSessionInfo',
+            \Magento\Security\Model\AdminSessionInfo::class,
             $this->model->setIsOtherSessionsTerminated($isOtherSessionsTerminated)
         );
     }

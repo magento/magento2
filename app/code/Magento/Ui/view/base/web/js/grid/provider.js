@@ -25,7 +25,8 @@ define([
                 updateUrl: '${ $.update_url }'
             },
             listens: {
-                params: 'onParamsChange'
+                params: 'onParamsChange',
+                requestConfig: 'updateRequestConfig'
             }
         },
 
@@ -41,6 +42,10 @@ define([
             this._super()
                 .initStorage()
                 .clearData();
+
+            // Load data when there will
+            // be no more pending assets.
+            resolver(this.reload, this);
 
             return this;
         },
@@ -121,9 +126,11 @@ define([
          * Handles changes of 'params' object.
          */
         onParamsChange: function () {
-            this.firstLoad ?
-                resolver(this.reload, this) :
+            // It's necessary to make a reload only
+            // after the initial loading has been made.
+            if (!this.firstLoad) {
                 this.reload();
+            }
         },
 
         /**
@@ -149,6 +156,17 @@ define([
 
             this.setData(data)
                 .trigger('reloaded');
+        },
+
+        /**
+         * Updates storage's request configuration
+         *
+         * @param {Object} requestConfig
+         */
+        updateRequestConfig: function (requestConfig) {
+            if (this.storage()) {
+                _.extend(this.storage().requestConfig, requestConfig);
+            }
         }
     });
 });

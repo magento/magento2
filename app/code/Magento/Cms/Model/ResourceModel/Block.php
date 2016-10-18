@@ -134,7 +134,7 @@ class Block extends AbstractDb
     {
         $blockId = $this->getBlockId($object, $value, $field);
         if ($blockId) {
-            $this->entityManager->load($object, $blockId, BlockInterface::class, []);
+            $this->entityManager->load($object, $blockId);
         }
         return $this;
     }
@@ -242,7 +242,7 @@ class Block extends AbstractDb
      */
     public function save(AbstractModel $object)
     {
-        $this->entityManager->save($object, BlockInterface::class, []);
+        $this->entityManager->save($object);
         return $this;
     }
 
@@ -251,7 +251,7 @@ class Block extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete($object, BlockInterface::class, []);
+        $this->entityManager->delete($object);
         return $this;
     }
 }

@@ -24,7 +24,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
             return;
         }
 
-        $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions();
+        $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions() ?: [];
         $duplicatedBundleOptions = [];
         foreach ($bundleOptions as $key => $bundleOption) {
             $duplicatedBundleOptions[$key] = clone $bundleOption;

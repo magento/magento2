@@ -48,6 +48,11 @@ class Select extends \Zend_Db_Select
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
     /**
+     * @var Select\SelectRenderer
+     */
+    private $selectRenderer;
+
+    /**
      * Class constructor
      * Add straight join support
      *

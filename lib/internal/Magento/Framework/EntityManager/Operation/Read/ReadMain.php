@@ -6,12 +6,18 @@
 
 namespace Magento\Framework\EntityManager\Operation\Read;
 
+use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Db\ReadRow;
 
 class ReadMain
 {
+    /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
     /**
      * @var MetadataPool
      */
@@ -28,30 +34,31 @@ class ReadMain
     private $readRow;
 
     /**
-     * ReadMain constructor.
-     *
+     * @param TypeResolver $typeResolver
      * @param MetadataPool $metadataPool
      * @param HydratorPool $hydratorPool
      * @param ReadRow $readRow
      */
     public function __construct(
+        TypeResolver $typeResolver,
         MetadataPool $metadataPool,
         HydratorPool $hydratorPool,
         ReadRow $readRow
     ) {
+        $this->typeResolver = $typeResolver;
         $this->metadataPool = $metadataPool;
         $this->hydratorPool = $hydratorPool;
         $this->readRow = $readRow;
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param string $identifier
      * @return object
      */
-    public function execute($entityType, $entity, $identifier)
+    public function execute($entity, $identifier)
     {
+        $entityType = $this->typeResolver->resolve($entity);
         $hydrator = $this->hydratorPool->getHydrator($entityType);
         $entityData = $this->readRow->execute($entityType, $identifier);
         $entity = $hydrator->hydrate($entity, $entityData);

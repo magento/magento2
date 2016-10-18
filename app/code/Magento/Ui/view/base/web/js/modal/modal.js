@@ -42,6 +42,7 @@ define([
      */
     $.widget('mage.modal', {
         options: {
+            id: null,
             type: 'popup',
             title: '',
             subTitle: '',
@@ -121,6 +122,7 @@ define([
                 'closeModal'
             );
 
+            this.options.id = this.uuid;
             this.options.transitionEvent = transitionEvent;
             this._createWrapper();
             this._renderModal();
@@ -221,8 +223,8 @@ define([
             this._createOverlay();
             this._setActive();
             this._setKeyListener();
-            this.modal.one(this.options.transitionEvent, _.bind(this._trigger, this, 'opened'));
             this.modal.one(this.options.transitionEvent, _.bind(this._setFocus, this, 'end', 'opened'));
+            this.modal.one(this.options.transitionEvent, _.bind(this._trigger, this, 'opened'));
             this.modal.addClass(this.options.modalVisibleClass);
 
             if (!this.options.transitionEvent) {

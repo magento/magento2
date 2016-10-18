@@ -37,17 +37,18 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->logger = $this->getMockBuilder(
-            'Magento\Payment\Model\Method\Logger'
+            \Magento\Payment\Model\Method\Logger::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientFactory = $this->getMockBuilder(
-            'Magento\Framework\Webapi\Soap\ClientFactory'
+            \Magento\Framework\Webapi\Soap\ClientFactory::class
         )->getMock();
         $this->converter = $this->getMockBuilder(
-            'Magento\Payment\Gateway\Http\ConverterInterface'
+            \Magento\Payment\Gateway\Http\ConverterInterface::class
         )->getMockForAbstractClass();
-        $this->client = $this->getMockBuilder('\SoapClient')
+        $this->client = $this->getMockBuilder(\SoapClient::class)
+            ->setMethods(['__setSoapHeaders', '__soapCall', '__getLastRequest'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -137,7 +138,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     private function getTransferObject()
     {
         $transferObject = $this->getMockBuilder(
-            'Magento\Payment\Gateway\Http\TransferInterface'
+            \Magento\Payment\Gateway\Http\TransferInterface::class
         )->getMock();
 
         $transferObject->expects(static::any())

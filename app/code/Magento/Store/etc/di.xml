@@ -12,6 +12,7 @@
     <preference for="Magento\Store\Api\Data\StoreInterface" type="Magento\Store\Model\Store"/>
     <preference for="Magento\Store\Api\Data\GroupInterface" type="Magento\Store\Model\Group"/>
     <preference for="Magento\Store\Api\Data\WebsiteInterface" type="Magento\Store\Model\Website"/>
+    <preference for="Magento\Store\Api\StoreWebsiteRelationInterface" type="Magento\Store\Model\StoreManager"/>
     <preference for="Magento\Store\Api\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
@@ -123,6 +124,12 @@
     <type name="Magento\Store\Model\StoreResolver">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
+            <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
+        <arguments>
             <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
             <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
         </arguments>

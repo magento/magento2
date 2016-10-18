@@ -7,6 +7,7 @@ namespace Magento\Quote\Api;
 
 /**
  * Bundled API to collect totals for cart based on shipping/payment methods and additional data.
+ * @api
  */
 interface GuestCartTotalManagementInterface
 {

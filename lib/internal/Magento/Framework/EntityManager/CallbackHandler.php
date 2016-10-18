@@ -25,7 +25,7 @@ class CallbackHandler
     protected $logger;
 
     /**
-     * CommitCallback constructor.
+     * CallbackHandler constructor.
      *
      * @param MetadataPool $metadataPool
      * @param LoggerInterface $logger

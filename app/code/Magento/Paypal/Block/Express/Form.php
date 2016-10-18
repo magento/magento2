@@ -121,7 +121,7 @@ class Form extends \Magento\Payment\Block\Form
     protected function _getMarkTemplate()
     {
         /** @var $mark Template */
-        $mark = $this->_layout->createBlock('Magento\Framework\View\Element\Template');
+        $mark = $this->_layout->createBlock(\Magento\Framework\View\Element\Template::class);
         $mark->setTemplate('Magento_Paypal::payment/mark.phtml');
         return $mark;
     }

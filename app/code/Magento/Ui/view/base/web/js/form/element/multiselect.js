@@ -19,28 +19,6 @@ define([
         /**
          * @inheritdoc
          */
-        initConfig: function () {
-            this._super();
-
-            this.value = this.normalizeData(this.value);
-
-            return this;
-        },
-
-        /**
-         * @inheritdoc
-         */
-        initLinks: function () {
-            var scope = this.source.get(this.dataScope);
-
-            this.multipleScopeValue = _.isArray(scope) ? utils.copy(scope) : undefined;
-
-            return this._super();
-        },
-
-        /**
-         * @inheritdoc
-         */
         setInitialValue: function () {
             this._super();
 
@@ -64,11 +42,14 @@ define([
          * @inheritdoc
          */
         getInitialValue: function () {
-            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
+            var values = [
+                    this.normalizeData(this.source.get(this.dataScope)),
+                    this.normalizeData(this.default)
+                ],
                 value;
 
             values.some(function (v) {
-                return _.isArray(v) && (value = utils.copy(v));
+                return _.isArray(v) && (value = utils.copy(v)) && !_.isEmpty(v);
             });
 
             return value;

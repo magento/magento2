@@ -10,7 +10,7 @@
 @data-tooltip__background-color: @color-white;
 @data-tooltip__border-color: #007dbd;
 @data-tooltip__border-width: 1px;
-@data-tooltip__box-shadow: 2px 2px 8px 0 rgba(0,0,0,0.3);
+@data-tooltip__box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, .3);
 @data-tooltip__z-index: @overlay__z-index - 1;
 
 @data-tooltip-tail__height: 22px;
@@ -20,6 +20,7 @@
 //
 //  Tooltip
 //  _____________________________________________
+
 .data-tooltip-trigger {
     cursor: pointer;
 }
@@ -61,8 +62,8 @@
         .data-tooltip-tail {
             display: block;
             left: -(@data-tooltip-tail__height / 2 - @data-tooltip__border-width);
-            top: 50%;
             margin-top: -@data-tooltip-tail__width / 2;
+            top: 50%;
         }
     }
 

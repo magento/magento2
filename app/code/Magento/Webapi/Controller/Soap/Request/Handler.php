@@ -110,7 +110,7 @@ class Handler
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
                 __(
-                    AuthorizationException::NOT_AUTHORIZED,
+                    'Consumer is not authorized to access %resources',
                     ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );

@@ -15,7 +15,7 @@ class DateTimeProvider
     /**
      * Timezone provider
      *
-     * @var TimezoneProvider
+     * @var TimeZoneProvider
      */
     private $tzProvider;
 
@@ -36,10 +36,10 @@ class DateTimeProvider
     /**
      * Init
      *
-     * @param TimezoneProvider $tzProvider
+     * @param TimeZoneProvider $tzProvider
      * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(TimezoneProvider $tzProvider, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(TimeZoneProvider $tzProvider, ObjectManagerProvider $objectManagerProvider)
     {
         $this->tzProvider = $tzProvider;
         $this->objectManagerProvider = $objectManagerProvider;
@@ -54,7 +54,7 @@ class DateTimeProvider
     {
         if (!$this->dateTime) {
             $this->dateTime = $this->objectManagerProvider->get()->create(
-                'Magento\Framework\Stdlib\DateTime\DateTime',
+                \Magento\Framework\Stdlib\DateTime\DateTime::class,
                 ['localeDate' => $this->tzProvider->get()]
             );
         }

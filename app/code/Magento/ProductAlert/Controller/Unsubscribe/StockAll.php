@@ -16,10 +16,10 @@ class StockAll extends UnsubscribeController
     public function execute()
     {
         try {
-            $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
+            $this->_objectManager->create(\Magento\ProductAlert\Model\Stock::class)
                 ->deleteCustomer(
                     $this->customerSession->getCustomerId(),
-                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                         ->getStore()
                         ->getWebsiteId()
                 );

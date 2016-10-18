@@ -393,7 +393,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if (!$regionId) {
             if (is_numeric($region)) {
                 $this->setData('region_id', $region);
-                //@TODO method unsRegion() is neither defined in abstract model nor in it's children
                 $this->unsRegion();
             } else {
                 $regionModel = $this->_createRegionInstance()->loadByCode(
@@ -532,7 +531,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         if ($addressId) {
             $addressDataObject->setId($addressId);
@@ -628,5 +627,14 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected function _createCountryInstance()
     {
         return $this->_countryFactory->create();
+    }
+
+    /**
+     * Unset Region from address
+     * @return $this
+     */
+    public function unsRegion()
+    {
+        return $this->unsetData("region");
     }
 }

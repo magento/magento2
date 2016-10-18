@@ -27,14 +27,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save Store" button
  * 6. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27568
  */
 class UpdateStoreGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
@@ -75,9 +75,6 @@ class UpdateStoreGroupEntityTest extends Injectable
      */
     public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup)
     {
-        $this->markTestIncomplete(
-            "MAGETWO-50405: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
-        );
 
         //Preconditions
         $storeGroupOrigin->persist();

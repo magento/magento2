@@ -30,15 +30,19 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_expectedFields = ['base_fieldset' => ['entity' => 'entity', 'file_format' => 'file_format']];
+    protected $_expectedFields = ['base_fieldset' => [
+        'entity' => 'entity',
+        'file_format' => 'file_format',
+        'fields_enclosure' => 'fields_enclosure'
+    ]];
 
     protected function setUp()
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\ImportExport\Block\Adminhtml\Export\Edit\Form'
+            \Magento\ImportExport\Block\Adminhtml\Export\Edit\Form::class
         );
     }
 

@@ -7,7 +7,7 @@
 namespace Magento\Framework\View\Result;
 
 use Magento\Framework;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\View;
 
 /**
@@ -23,6 +23,8 @@ use Magento\Framework\View;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ *
+ * @api
  */
 class Page extends Layout
 {
@@ -217,10 +219,9 @@ class Page extends Layout
     }
 
     /**
-     * @param ResponseInterface $response
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         $this->pageConfig->publicBuild();
         if ($this->getPageLayout()) {

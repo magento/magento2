@@ -58,12 +58,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Product cache tag
      */
-    const CACHE_TAG = 'catalog_product';
+    const CACHE_TAG = 'cat_p';
 
     /**
      * Category product relation cache tag
      */
-    const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
+    const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
 
     /**
      * Product Store Id
@@ -141,11 +141,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var Product\Option
      */
     protected $optionInstance;
-
-    /**
-     * @var bool
-     */
-    protected $optionsInitialized = false;
 
     /**
      * @var array
@@ -306,11 +301,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var int
      */
     protected $_productIdCached;
-
-    /**
-     * @var \Magento\Framework\App\State
-     */
-    private $appState;
 
     /**
      * List of attributes in ProductInterface
@@ -477,7 +467,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product::class);
     }
 
     /**
@@ -936,8 +926,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         // Resize images for catalog product and save results to image cache
         /** @var Product\Image\Cache $imageCache */
-        $imageCache = $this->imageCacheFactory->create();
-        $imageCache->generate($this);
+        if (!$this->_appState->isAreaCodeEmulated()) {
+            $imageCache = $this->imageCacheFactory->create();
+            $imageCache->generate($this);
+        }
 
         return $result;
     }
@@ -1476,7 +1468,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasData('media_gallery_images') && is_array($this->getMediaGallery('images'))) {
             $images = $this->_collectionFactory->create();
             foreach ($this->getMediaGallery('images') as $image) {
-                if ((isset($image['disabled']) && $image['disabled']) || empty($image['value_id'])) {
+                if ((isset($image['disabled']) && $image['disabled'])
+                    || empty($image['value_id'])
+                    || $images->getItemById($image['value_id']) != null
+                ) {
                     continue;
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
@@ -1806,7 +1801,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $this->dataObjectHelper->populateWithArray(
                     $stockItem,
                     $data['stock_item'],
-                    '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+                    \Magento\CatalogInventory\Api\Data\StockItemInterface::class
                 );
                 $stockItem->setProduct($this);
                 $this->setStockItem($stockItem);
@@ -1901,6 +1896,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $options = (array)$this->getData('options');
         $options[] = $option;
+        $option->setProduct($this);
         $this->setData('options', $options);
         return $this;
     }
@@ -1913,10 +1909,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptionById($optionId)
     {
-        /** @var \Magento\Catalog\Model\Product\Option $option */
-        foreach ($this->getOptions() as $option) {
-            if ($option->getId() == $optionId) {
-                return $option;
+        if (is_array($this->getOptions())) {
+            /** @var \Magento\Catalog\Model\Product\Option $option */
+            foreach ($this->getOptions() as $option) {
+                if ($option->getId() == $optionId) {
+                    return $option;
+                }
             }
         }
 
@@ -2276,15 +2274,38 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getOrigData('status') != $this->getData('status')) {
+
+        if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getAppState()->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
+        if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
         }
+
         return array_unique($identities);
+    }
+
+    /**
+     * Check whether stock status changed
+     *
+     * @return bool
+     */
+    private function isStockStatusChanged()
+    {
+        $stockItem = null;
+        $extendedAttributes = $this->getExtensionAttributes();
+        if ($extendedAttributes !== null) {
+            $stockItem = $extendedAttributes->getStockItem();
+        }
+        $stockData = $this->getStockData();
+        return (
+            (is_array($stockData))
+            && array_key_exists('is_in_stock', $stockData)
+            && (null !== $stockItem)
+            && ($stockItem->getIsInStock() != $stockData['is_in_stock'])
+        );
     }
 
     /**
@@ -2481,7 +2502,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (!$extensionAttributes) {
-            return $this->extensionAttributesFactory->create('Magento\Catalog\Api\Data\ProductInterface');
+            return $this->extensionAttributesFactory->create(\Magento\Catalog\Api\Data\ProductInterface::class);
         }
         return $extensionAttributes;
     }
@@ -2571,29 +2592,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get application state
-     *
-     * @deprecated
-     * @return \Magento\Framework\App\State
-     */
-    private function getAppState()
-    {
-        if (!$this->appState instanceof \Magento\Framework\App\State) {
-            $this->appState = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\State::class
-            );
-        }
-        return $this->appState;
-    }
-
-    /**
      * @return ProductLinkRepositoryInterface
      */
     private function getLinkRepository()
     {
         if (null === $this->linkRepository) {
             $this->linkRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductLinkRepositoryInterface');
+                ->get(\Magento\Catalog\Api\ProductLinkRepositoryInterface::class);
         }
         return $this->linkRepository;
     }
@@ -2605,7 +2610,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if (null === $this->mediaGalleryProcessor) {
             $this->mediaGalleryProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Gallery\Processor');
+                ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
     }

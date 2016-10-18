@@ -7,9 +7,10 @@ define([
     'jquery',
     'underscore',
     'mage/template',
+    "matchMedia",
     'jquery/ui',
     'mage/translate'
-], function ($, _, mageTemplate) {
+], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
 
     /**
@@ -38,7 +39,8 @@ define([
                     '</span>' +
                 '</li>',
             submitBtn: 'button[type="submit"]',
-            searchLabel: '[data-role=minisearch-label]'
+            searchLabel: '[data-role=minisearch-label]',
+            isExpandable: null
         },
 
         _create: function () {
@@ -50,6 +52,7 @@ define([
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
             this.searchLabel = $(this.options.searchLabel);
+            this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
 
@@ -57,11 +60,32 @@ define([
 
             this.element.attr('autocomplete', this.options.autocomplete);
 
+            mediaCheck({
+                media: '(max-width: 768px)',
+                entry: function () {
+                    this.isExpandable = true;
+                }.bind(this),
+                exit: function () {
+                    this.isExpandable = false;
+                    this.element.removeAttr('aria-expanded');
+                }.bind(this)
+            });
+
+            this.searchLabel.on('click', function (e) {
+                // allow input to lose its' focus when clicking on label
+                if (this.isExpandable && this.isActive()) {
+                    e.preventDefault();
+                }
+            }.bind(this));
+
             this.element.on('blur', $.proxy(function () {
+                if (!this.searchLabel.hasClass('active')) {
+                    return;
+                }
 
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {
-                        this.searchLabel.removeClass('active');
+                        this.setActiveState(false);
                     }
                     this.autoComplete.hide();
                     this._updateAriaHasPopup(false);
@@ -70,9 +94,7 @@ define([
 
             this.element.trigger('blur');
 
-            this.element.on('focus', $.proxy(function () {
-                this.searchLabel.addClass('active');
-            }, this));
+            this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
@@ -81,6 +103,29 @@ define([
                 this._updateAriaHasPopup(false);
             }, this));
         },
+
+        /**
+         * Checks if search field is active.
+         *
+         * @returns {Boolean}
+         */
+        isActive: function () {
+            return this.searchLabel.hasClass('active');
+        },
+
+        /**
+         * Sets state of the search field to provided value.
+         *
+         * @param {Boolean} isActive
+         */
+        setActiveState: function (isActive) {
+            this.searchLabel.toggleClass('active', isActive);
+
+            if (this.isExpandable) {
+                this.element.attr('aria-expanded', isActive);
+            }
+        },
+
         /**
          * @private
          * @return {Element} The first element in the suggestion list.

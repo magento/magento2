@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * @api
+ */
 class ActionFactory
 {
     /**
@@ -31,7 +34,7 @@ class ActionFactory
      */
     public function create($actionName)
     {
-        if (!is_subclass_of($actionName, '\Magento\Framework\App\ActionInterface')) {
+        if (!is_subclass_of($actionName, \Magento\Framework\App\ActionInterface::class)) {
             throw new \InvalidArgumentException('Invalid action name provided');
         }
         return $this->_objectManager->create($actionName);

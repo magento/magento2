@@ -14,17 +14,20 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
+        $grandTotal = $total->getGrandTotal();
+        $baseGrandTotal = $total->getBaseGrandTotal();
         $totals = array_sum($total->getAllTotalAmounts());
         $baseTotals = array_sum($total->getAllBaseTotalAmounts());
 
-        $total->setGrandTotal($totals);
-        $total->setBaseGrandTotal($baseTotals);
+        $total->setGrandTotal($grandTotal + $totals);
+        $total->setBaseGrandTotal($baseGrandTotal + $baseTotals);
         return $this;
     }
 
@@ -34,6 +37,7 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

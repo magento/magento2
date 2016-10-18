@@ -36,11 +36,13 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\CustomerTokenService');
-        $this->accountManagement = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\AccountManagementInterface'
+        $this->tokenService = Bootstrap::getObjectManager()->get(
+            \Magento\Integration\Model\CustomerTokenService::class
         );
-        $this->tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
+        $this->accountManagement = Bootstrap::getObjectManager()->get(
+            \Magento\Customer\Api\AccountManagementInterface::class
+        );
+        $this->tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
     }
 
     /**
@@ -100,7 +102,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function assertInputExceptionMessages($e)
     {
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $e->getMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $e->getMessage());
         $errors = $e->getErrors();
         $this->assertCount(2, $errors);
         $this->assertEquals('username is a required field.', $errors[0]->getLogMessage());

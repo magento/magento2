@@ -3,9 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -50,6 +50,16 @@ class UpdateHandler implements AttributeInterface
     private $scopeResolver;
 
     /**
+     * @var ReadHandler
+     */
+    private $readHandler;
+
+    /**
+     * @var AttributeLoader
+     */
+    private $attributeLoader;
+
+    /**
      * UpdateHandler constructor.
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
@@ -57,6 +67,7 @@ class UpdateHandler implements AttributeInterface
      * @param AttributePersistor $attributePersistor
      * @param ReadSnapshot $readSnapshot
      * @param ScopeResolver $scopeResolver
+     * @param AttributeLoader $attributeLoader
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -64,7 +75,8 @@ class UpdateHandler implements AttributeInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributePersistor $attributePersistor,
         ReadSnapshot $readSnapshot,
-        ScopeResolver $scopeResolver
+        ScopeResolver $scopeResolver,
+        AttributeLoader $attributeLoader = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
@@ -72,22 +84,17 @@ class UpdateHandler implements AttributeInterface
         $this->attributePersistor = $attributePersistor;
         $this->readSnapshot = $readSnapshot;
         $this->scopeResolver = $scopeResolver;
+        $this->attributeLoader = $attributeLoader ?: ObjectManager::getInstance()->get(AttributeLoader::class);
     }
 
     /**
      * @param string $entityType
+     * @param int $attributeSetId
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
-     * @throws \Exception
      */
-    protected function getAttributes($entityType)
+    protected function getAttributes($entityType, $attributeSetId = null)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-
-        $searchResult = $this->attributeRepository->getList(
-            $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
-        );
-        return $searchResult->getItems();
+        return $this->attributeLoader->getAttributes($entityType, $attributeSetId);
     }
 
     /**
@@ -99,6 +106,7 @@ class UpdateHandler implements AttributeInterface
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
@@ -112,16 +120,19 @@ class UpdateHandler implements AttributeInterface
                     $entityDataForSnapshot[$scope->getIdentifier()] = $entityData[$scope->getIdentifier()];
                 }
             }
+            $attributeSetId = isset($entityData[AttributeLoader::ATTRIBUTE_SET_ID])
+                ? $entityData[AttributeLoader::ATTRIBUTE_SET_ID]
+                : null; // @todo verify is it normal to not have attributer_set_id
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
-            $processed = [];
-            foreach ($this->getAttributes($entityType) as $attribute) {
+            foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
                 }
                 /**
                  * Only scalar values can be stored in generic tables
                  */
-                if (isset($data[$attribute->getAttributeCode()]) && !is_scalar($data[$attribute->getAttributeCode()])) {
+                if (isset($entityData[$attribute->getAttributeCode()])
+                    && !is_scalar($entityData[$attribute->getAttributeCode()])) {
                     continue;
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()])
@@ -146,7 +157,6 @@ class UpdateHandler implements AttributeInterface
                         $attribute->getAttributeCode(),
                         $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
@@ -160,11 +170,25 @@ class UpdateHandler implements AttributeInterface
                         $attribute->getAttributeCode(),
                         $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
             }
             $this->attributePersistor->flush($entityType, $context);
         }
-        return $entityData;
+        return $this->getReadHandler()->execute($entityType, $entityData, $arguments);
+    }
+
+    /**
+     * Get read handler
+     *
+     * @deprecated
+     *
+     * @return ReadHandler
+     */
+    protected function getReadHandler()
+    {
+        if (!$this->readHandler) {
+            $this->readHandler = ObjectManager::getInstance()->get(ReadHandler::class);
+        }
+        return $this->readHandler;
     }
 }

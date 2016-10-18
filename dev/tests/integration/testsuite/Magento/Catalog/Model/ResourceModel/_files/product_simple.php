@@ -7,10 +7,9 @@ use Magento\Customer\Model\Group;
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(2)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Products')
@@ -32,6 +31,12 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
                 'cust_group' => Group::CUST_GROUP_ALL,
                 'price_qty'  => 21,
                 'price'      => 81,
+            ],
+            [
+                'website_id' => 0,
+                'cust_group' => Group::CUST_GROUP_ALL,
+                'price_qty'  => 30,
+                'percentage_value' => 50,
             ],
         ]
     )

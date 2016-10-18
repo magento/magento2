@@ -122,6 +122,7 @@ class Websites extends AbstractModifier
                                     'collapsible' => true,
                                     'componentType' => Form\Fieldset::NAME,
                                     'dataScope' => self::DATA_SCOPE_PRODUCT,
+                                    'disabled' => false,
                                     'sortOrder' => $this->getNextGroupSortOrder(
                                         $meta,
                                         'search-engine-optimization',
@@ -153,8 +154,8 @@ class Websites extends AbstractModifier
         $tooltip = [
             'link' => 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
             'description' => __(
-                'If your Magento site has multiple views, ' .
-                'you can set the scope to apply to a specific view.'
+                'If your Magento installation has multiple websites, ' .
+                'you can edit the scope to use the product on specific sites.'
             ),
         ];
         $sortOrder = 0;

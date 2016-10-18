@@ -17,10 +17,8 @@ if ($block->isOrPositionBefore()) {
     $labelPosition = ' after';
 }
 $shortcutHtmlId = $block->escapeHtml($block->getShortcutHtmlId());
-$confirmationUrl = '';
 $isInCatalogProduct = false;
-if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
-    $confirmationUrl = $block->escapeUrl($block->getConfirmationUrl());
+if ($block->getIsInCatalogProduct()) {
     $isInCatalogProduct = $block->getIsInCatalogProduct();
 }
 ?>
@@ -29,8 +27,6 @@ if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
         <?php /* @noEscape */ echo $shortcutHtmlId; ?>"
      data-mage-init='{
      "paypalCheckout": {
-                "confirmMessage": "<?php /* @noEscape */ echo $block->escapeJsQuote($block->getConfirmationMessage()); ?>",
-                "confirmUrl": "<?php /* @noEscape */ echo !empty($confirmationUrl) ? $confirmationUrl : false; ?>",
                 "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false;?>",
                 "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
             }

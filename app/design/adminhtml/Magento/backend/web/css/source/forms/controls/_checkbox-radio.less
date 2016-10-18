@@ -11,7 +11,7 @@
 .admin__control-radio,
 .admin__control-checkbox {
     cursor: pointer;
-    opacity: 0.01; // hack for successful selenium tests
+    opacity: .01; // hack for successful selenium tests
     overflow: hidden;
     position: absolute;
     vertical-align: top;
@@ -190,10 +190,10 @@
 //  ToDo UI: Delete with old scope
 //  ---------------------------------------------
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
     &.admin__control-checkbox {
-        position: absolute;
         margin: 0;
+        position: absolute;
     }
 }

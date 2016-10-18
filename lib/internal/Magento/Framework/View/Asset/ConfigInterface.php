@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * View asset configuration interface
+ *
+ * @api
  */
 interface ConfigInterface
 {

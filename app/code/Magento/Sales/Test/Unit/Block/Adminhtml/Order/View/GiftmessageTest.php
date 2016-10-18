@@ -14,7 +14,7 @@ class GiftmessageTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage */
         $block = $this->getMock(
-            'Magento\Sales\Block\Adminhtml\Order\View\Giftmessage',
+            \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage::class,
             ['getChildBlock', 'getChildHtml'],
             [],
             '',

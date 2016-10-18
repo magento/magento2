@@ -33,6 +33,6 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             'active' => true,
         ];
         $connection = $this->model->create($dbConfig);
-        $this->assertInstanceOf('\Magento\Framework\DB\Adapter\AdapterInterface', $connection);
+        $this->assertInstanceOf(\Magento\Framework\DB\Adapter\AdapterInterface::class, $connection);
     }
 }

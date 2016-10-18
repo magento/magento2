@@ -7,6 +7,7 @@ namespace Magento\Framework\View;
 
 /**
  * Interface LayoutInterface
+ * @api
  */
 interface LayoutInterface
 {

@@ -8,8 +8,10 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Phrase;
 
 /**
  * Deployment configuration writer
@@ -110,7 +112,13 @@ class Writer
                 }
 
                 $contents = $this->formatter->format($config);
-                $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                try {
+                    $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                } catch (FileSystemException $e) {
+                    throw new FileSystemException(
+                        new Phrase('Deployment config file %1 is not writable.', [$paths[$fileKey]])
+                    );
+                }
                 if (function_exists('opcache_invalidate')) {
                     opcache_invalidate(
                         $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])

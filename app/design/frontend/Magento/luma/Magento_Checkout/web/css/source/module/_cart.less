@@ -625,6 +625,16 @@
         border: 0;
         box-sizing: border-box;
         padding-right: 4%;
+
+        .block {
+            .title {
+                &:after {
+                    display: inline;
+                    margin-left: @indent__s;
+                    position: static;
+                }
+            }
+        }
     }
 
     //  Empty cart

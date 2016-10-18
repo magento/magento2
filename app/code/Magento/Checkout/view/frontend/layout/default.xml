@@ -56,6 +56,7 @@
                         </item>
                     </argument>
                 </arguments>
+                <container name="minicart.addons" label="Mini-cart promotion block"/>
             </block>
         </referenceContainer>
     </body>

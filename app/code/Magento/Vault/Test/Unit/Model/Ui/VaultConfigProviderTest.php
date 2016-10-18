@@ -6,64 +6,109 @@
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
 use Magento\Customer\Model\Session;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Class VaultConfigProviderTest
+ */
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param int $id
-     * @param bool $isVaultEnabled
-     *
+     * @var VaultPaymentInterface|MockObject
+     */
+    private $vaultPayment;
+
+    /**
+     * @var Session|MockObject
+     */
+    private $session;
+
+    /**
+     * @var StoreInterface|MockObject
+     */
+    private $store;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var PaymentMethodListInterface|MockObject
+     */
+    private $vaultPaymentList;
+
+    /**
+     * @var VaultConfigProvider
+     */
+    private $vaultConfigProvider;
+
+    protected function setUp()
+    {
+        $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->vaultPaymentList = $this->getMock(PaymentMethodListInterface::class);
+
+        $objectManager = new ObjectManager($this);
+        $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->vaultConfigProvider,
+            'vaultPaymentList',
+            $this->vaultPaymentList
+        );
+    }
+
+    /**
+     * @param int $customerId
+     * @param bool $vaultEnabled
      * @dataProvider customerIdProvider
      */
     public function testGetConfig($customerId, $vaultEnabled)
     {
         $storeId = 1;
-        $paymentProviderCode = 'concrete_vault_provider';
+        $vaultPaymentCode = 'vault_payment';
 
         $expectedConfiguration = [
-            VaultPaymentInterface::CODE => [
-                'vault_provider_code' => $paymentProviderCode,
-                'is_enabled' => $vaultEnabled
+            'vault' => [
+                $vaultPaymentCode => [
+                    'is_enabled' => $vaultEnabled
+                ],
             ]
         ];
 
-        $vaultMethod = $this->getMock(VaultPaymentInterface::class);
-        $storeManager = $this->getMock(StoreManagerInterface::class);
-        $store = $this->getMock(StoreInterface::class);
-
-        $session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $session->expects(static::once())
+        $this->session->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $storeManager->expects(static::once())
+        $this->storeManager->expects(static::once())
             ->method('getStore')
-            ->with(null)
-            ->willReturn($store);
-        $store->expects(static::once())
+            ->willReturn($this->store);
+        $this->store->expects(static::once())
             ->method('getId')
             ->willReturn($storeId);
-        $vaultMethod->expects($customerId !== null ? static::once() : static::never())
+
+        $this->vaultPaymentList->expects(static::once())
+            ->method('getActiveList')
+            ->willReturn([$this->vaultPayment]);
+
+        $this->vaultPayment->expects(static::once())
+            ->method('getCode')
+            ->willReturn($vaultPaymentCode);
+        $this->vaultPayment->expects($customerId !== null ? static::once() : static::never())
             ->method('isActive')
             ->with($storeId)
             ->willReturn($vaultEnabled);
-        $vaultMethod->expects(static::once())
-            ->method('getProviderCode')
-            ->with($storeId)
-            ->willReturn($paymentProviderCode);
 
-        $vaultCards = new VaultConfigProvider($storeManager, $vaultMethod, $session);
-
-        static::assertEquals(
-            $expectedConfiguration,
-            $vaultCards->getConfig()
-        );
+        static::assertEquals($expectedConfiguration, $this->vaultConfigProvider->getConfig());
     }
 
     /**

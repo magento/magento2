@@ -6,30 +6,35 @@
 namespace Magento\Setup\Test\Unit\Model\DateTime;
 
 use Magento\Setup\Model\DateTime\DateTimeProvider;
-use Magento\Setup\Model\DateTime\TimezoneProvider;
+use Magento\Setup\Model\DateTime\TimeZoneProvider;
 use Magento\Setup\Model\ObjectManagerProvider;
 
 class DateTimeProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
-        $dateTime = $this->getMock('\Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
-        /** @var TimezoneProvider|\PHPUnit_Framework_MockObject_MockObject $timeZoneProvider */
-        $timeZoneProvider = $this->getMock('\Magento\Setup\Model\DateTime\TimezoneProvider', [], [], '', false);
-        $timeZone = $this->getMock('\Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
+        $dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, [], [], '', false);
+        /** @var TimeZoneProvider|\PHPUnit_Framework_MockObject_MockObject $timeZoneProvider */
+        $timeZoneProvider = $this->getMock(\Magento\Setup\Model\DateTime\TimeZoneProvider::class, [], [], '', false);
+        $timeZone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
         $timeZoneProvider->expects($this->any())
             ->method('get')
             ->willReturn($timeZone);
-        $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface', [], '', false);
+        $objectManager = $this->getMockForAbstractClass(
+            \Magento\Framework\ObjectManagerInterface::class,
+            [],
+            '',
+            false
+        );
         $objectManager->expects($this->once())
             ->method('create')
             ->with(
-                'Magento\Framework\Stdlib\DateTime\DateTime',
+                \Magento\Framework\Stdlib\DateTime\DateTime::class,
                 ['localeDate' => $timeZone]
             )
             ->willReturn($dateTime);
         /** @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject $objectManagerProvider */
-        $objectManagerProvider = $this->getMock('\Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->willReturn($objectManager);

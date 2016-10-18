@@ -123,7 +123,7 @@ class IndexBuilder implements IndexBuilderInterface
             ScopeInterface::SCOPE_STORE
         );
         if ($isShowOutOfStock === false) {
-            $select->joinLeft(
+            $select->joinInner(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
                 . $this->resource->getConnection()->quoteInto(
@@ -147,7 +147,7 @@ class IndexBuilder implements IndexBuilderInterface
     {
         if ($this->stockConfiguration === null) {
             $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
         }
         return $this->stockConfiguration;
     }

@@ -40,7 +40,7 @@ class Items extends Block
     {
         $productBlock = sprintf($this->itemBlock, $product->getName());
         return $this->blockFactory->create(
-            'Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product',
+            \Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product::class,
             ['element' => $this->_rootElement->find($productBlock, Locator::SELECTOR_XPATH)]
         );
     }

@@ -14,6 +14,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\StockDataFilter
+     * @deprecated
      */
     protected $stockFilter;
 
@@ -26,11 +27,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
-
-    /**
-     * @var Initialization\Helper
-     */
-    protected $initializationHelper;
 
     /**
      * @param Action\Context $context
@@ -64,20 +60,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         $product = $this->productBuilder->build($this->getRequest());
-
-        $productData = $this->getRequest()->getPost('product');
-        if (!$productData) {
-            $sessionData = $this->_session->getProductData(true);
-            if (!empty($sessionData['product'])) {
-                $productData = $sessionData['product'];
-            }
-        }
-        if ($productData) {
-            $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
-            $productData['stock_data'] = $this->stockFilter->filter($stockData);
-            $product = $this->getInitializationHelper()->initializeFromData($product, $productData);
-        }
-
         $this->_eventManager->dispatch('catalog_product_new_action', ['product' => $product]);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
@@ -97,17 +79,5 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         return $resultPage;
-    }
-
-    /**
-     * @return Initialization\Helper
-     * @deprecated
-     */
-    protected function getInitializationHelper()
-    {
-        if (null === $this->initializationHelper) {
-            $this->initializationHelper = ObjectManager::getInstance()->get(Initialization\Helper::class);
-        }
-        return $this->initializationHelper;
     }
 }

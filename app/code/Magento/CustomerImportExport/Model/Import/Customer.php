@@ -16,7 +16,7 @@ class Customer extends AbstractCustomer
     /**
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**#@+
      * Permanent column names
@@ -365,15 +365,11 @@ class Customer extends AbstractCustomer
 
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
-            $entityRow['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
+            $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
 
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
-            if ($newCustomer && !strlen($value)) {
-                continue;
-            }
-
             $attributeParameters = $this->_attributes[$attributeCode];
             if ('select' == $attributeParameters['type']) {
                 $value = isset($attributeParameters['options'][strtolower($value)])

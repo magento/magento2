@@ -8,6 +8,7 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Info;
@@ -106,6 +107,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected $orderRepository;
 
     /**
+     * @var OrderStateResolverInterface
+     */
+    private $orderStateResolver;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -169,7 +175,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Payment::class);
     }
 
     /**
@@ -692,7 +698,12 @@ class Payment extends Info implements OrderPaymentInterface
         }
         $message = $message = $this->prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $this->setOrderStateProcessing($message);
+        $orderState = $this->getOrderStateResolver()->getStateForOrder($this->getOrder());
+        $this->getOrder()
+            ->addStatusHistoryComment(
+                $message,
+                $this->getOrder()->getConfig()->getStateDefaultStatus($orderState)
+            )->setIsCustomerNotified($creditmemo->getOrder()->getCustomerNoteNotify());
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
             ['payment' => $this, 'creditmemo' => $creditmemo]
@@ -759,7 +770,7 @@ class Payment extends Info implements OrderPaymentInterface
             true
         )->setAutomaticallyCreated(
             true
-        )->register()->addComment(
+        )->addComment(
             __('The credit memo has been created automatically.')
         );
         $creditmemo->save();
@@ -1388,6 +1399,19 @@ class Payment extends Info implements OrderPaymentInterface
         return false;
     }
 
+    /**
+     * @deprecated
+     * @return OrderStateResolverInterface
+     */
+    private function getOrderStateResolver()
+    {
+        if ($this->orderStateResolver === null) {
+            $this->orderStateResolver = ObjectManager::getInstance()->get(OrderStateResolverInterface::class);
+        }
+
+        return$this->orderStateResolver;
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * Returns account_status
@@ -1703,6 +1727,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
+     * @deprecated unused
      */
     public function getCcSsIssue()
     {
@@ -1713,6 +1738,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
+     * @deprecated unused
      */
     public function getCcSsStartMonth()
     {
@@ -1723,6 +1749,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
+     * @deprecated unused
      */
     public function getCcSsStartYear()
     {
@@ -2087,6 +2114,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated unused
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2175,6 +2203,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2279,6 +2308,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated unused
      */
     public function setCcSsIssue($ccSsIssue)
     {

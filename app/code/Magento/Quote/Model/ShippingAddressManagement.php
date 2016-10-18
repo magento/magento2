@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface as Logger;
@@ -52,6 +53,11 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     protected $totalsCollector;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     */
+    private $minimumAmountErrorMessage;
+
+    /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteAddressValidator $addressValidator
      * @param Logger $logger
@@ -97,6 +103,10 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
+        if ($customerAddressId === null) {
+            $address->setCustomerAddressId(null);
+        }
+
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
@@ -106,19 +116,16 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setSameAsBilling($sameAsBilling);
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
+
+        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
+            throw new InputException($this->getMinimumAmountErrorMessage()->getMessage());
+        }
+
         try {
             $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please check input data.'));
-        }
-
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->scopeConfig->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $quote->getStoreId()
-            ));
         }
         return $quote->getShippingAddress()->getId();
     }
@@ -137,5 +144,20 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
+    }
+
+    /**
+     * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @deprecated
+     */
+    private function getMinimumAmountErrorMessage()
+    {
+        if ($this->minimumAmountErrorMessage === null) {
+            $objectManager = ObjectManager::getInstance();
+            $this->minimumAmountErrorMessage = $objectManager->get(
+                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
+            );
+        }
+        return $this->minimumAmountErrorMessage;
     }
 }

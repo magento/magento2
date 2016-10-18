@@ -70,7 +70,7 @@ class Checkout
      *
      * @var string
      */
-    protected $_apiType = 'Magento\Paypal\Model\Api\Nvp';
+    protected $_apiType = \Magento\Paypal\Model\Api\Nvp::class;
 
     /**
      * Payment method type
@@ -655,7 +655,7 @@ class Checkout
             && !$quote->isVirtual();
         if ($portBillingFromShipping) {
             $billingAddress = clone $shippingAddress;
-            $billingAddress->unsAddressId()->unsAddressType();
+            $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
             $data = $billingAddress->getData();
             $data['save_in_address_book'] = 0;
             $quote->getBillingAddress()->addData($data);

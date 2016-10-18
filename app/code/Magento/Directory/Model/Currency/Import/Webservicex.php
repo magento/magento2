@@ -72,7 +72,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
             )->getBody();
 
             $xml = simplexml_load_string($response, null, LIBXML_NOERROR);
-            if (!$xml) {
+            if (!$xml || (isset($xml[0]) && $xml[0] == -1)) {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
                 return null;
             }
@@ -97,7 +97,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     {
         if ($this->httpClientFactory === null) {
             $this->httpClientFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\HTTP\ZendClientFactory');
+                ->get(\Magento\Framework\HTTP\ZendClientFactory::class);
         }
         return $this->httpClientFactory;
     }

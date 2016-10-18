@@ -19,8 +19,8 @@
 
                 .lib-css(background-color, @toolbar-element-background);
                 .lib-css(box-shadow, @_shadow);
-                border-radius: 3px;
                 border: 1px solid @border-color__base;
+                border-radius: 3px;
                 font-weight: 400;
                 left: 0;
                 line-height: 16px;
@@ -119,7 +119,7 @@
                 font-weight: @font-weight__semibold;
                 margin: 0;
                 overflow: hidden;
-                padding: @indent__s 30px+@indent__s 0 @indent__s;
+                padding: @indent__s @indent__s + 30px 0 @indent__s;
                 position: relative;
                 text-transform: uppercase;
                 word-break: break-all;
@@ -155,8 +155,8 @@
                 padding: @indent__s;
 
                 .item {
-                    margin: @indent__s 0;
                     line-height: 1.5em;
+                    margin: @indent__s 0;
                 }
 
                 a {
@@ -326,8 +326,8 @@
 
             &:after {
                 .lib-css(color, @text__color__muted);
-                content:' (' attr(data-count) ')';
-                font-size:.9em;
+                content: ' (' attr(data-count) ')';
+                font-size: .9em;
             }
         }
 
@@ -511,8 +511,8 @@
                     z-index: 2;
 
                     .item {
+                        margin: 0;
                         padding: @indent__xs;
-                        margin:0;
 
                         a {
                             margin-left: 0;

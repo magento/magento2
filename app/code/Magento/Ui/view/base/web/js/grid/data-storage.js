@@ -15,6 +15,11 @@ define([
             cacheRequests: true,
             cachedRequestDelay: 50,
             indexField: 'entity_id',
+            requestConfig: {
+                url: '${ $.updateUrl }',
+                method: 'GET',
+                dataType: 'json'
+            },
             data: {}
         },
 
@@ -74,6 +79,10 @@ define([
         getData: function (params, options) {
             var cachedRequest = this.getRequest(params);
 
+            if (params && params.filters && params.filters['store_id']) {
+                cachedRequest = false;
+            }
+
             options = options || {};
 
             return !options.refresh && cachedRequest ?
@@ -103,16 +112,12 @@ define([
          * @returns {jQueryPromise}
          */
         requestData: function (params) {
-            var query   = utils.copy(params),
+            var query = utils.copy(params),
                 handler = this.onRequestComplete.bind(this, query),
                 request;
 
-            request = $.ajax({
-                url: this.updateUrl,
-                method: 'GET',
-                data: query,
-                dataType: 'json'
-            }).done(handler);
+            this.requestConfig.data = query;
+            request = $.ajax(this.requestConfig).done(handler);
 
             return request;
         },
@@ -137,9 +142,9 @@ define([
          * @returns {jQueryPromise}
          */
         getRequestData: function (request) {
-            var defer   = $.Deferred(),
+            var defer = $.Deferred(),
                 resolve = defer.resolve.bind(defer),
-                delay   = this.cachedRequestDelay,
+                delay = this.cachedRequestDelay,
                 result;
 
             result = {
@@ -170,9 +175,9 @@ define([
             }
 
             this._requests.push({
-                ids:            this.getIds(data.items),
-                params:         params,
-                totalRecords:   data.totalRecords
+                ids: this.getIds(data.items),
+                params: params,
+                totalRecords: data.totalRecords
             });
 
             return this;

@@ -164,7 +164,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Attribute');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Attribute::class);
     }
 
     /**
@@ -193,7 +193,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         }
         if ($this->getFrontendInput() == 'price') {
             if (!$this->getBackendModel()) {
-                $this->setBackendModel('Magento\Catalog\Model\Product\Attribute\Backend\Price');
+                $this->setBackendModel(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class);
             }
         }
         if ($this->getFrontendInput() == 'textarea') {
@@ -351,14 +351,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getApplyTo()
     {
-        if ($this->getData(self::APPLY_TO)) {
-            if (is_array($this->getData(self::APPLY_TO))) {
-                return $this->getData(self::APPLY_TO);
-            }
-            return explode(',', $this->getData(self::APPLY_TO));
-        } else {
-            return [];
+        $applyTo = $this->_getData(self::APPLY_TO) ?: [];
+        if (!is_array($applyTo)) {
+            $applyTo = explode(',', $applyTo);
         }
+        return $applyTo;
     }
 
     /**
@@ -405,7 +402,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function _getDefaultSourceModel()
     {
-        return 'Magento\Eav\Model\Entity\Attribute\Source\Table';
+        return \Magento\Eav\Model\Entity\Attribute\Source\Table::class;
     }
 
     /**
@@ -824,6 +821,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function __sleep()
     {
+        $this->unsetData('entity_type');
         return array_diff(
             parent::__sleep(),
             ['_indexerEavProcessor', '_productFlatIndexerProcessor', '_productFlatIndexerHelper', 'attrLockValidator']

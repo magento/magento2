@@ -56,7 +56,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -219,7 +219,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             if (!is_array($products)) {
                 $products = [$products];
             }
-            $this->getSelect()->where('links.product_id IN (?)', $products);
+            $identifierField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
+            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
             $this->_hasLinkFilter = true;
         }
 
@@ -258,6 +259,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         if ($this->getLinkModel()) {
             $this->_joinLinks();
+            $this->joinProductsToLinks();
         }
         return parent::_beforeLoad();
     }
@@ -423,12 +425,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @deprecated
      */
-    protected function getMetadataPool()
+    private function getMetadataPool()
     {
         if (!$this->metadataPool) {
             $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Join Product To Links
+     * @return void
+     */
+    private function joinProductsToLinks()
+    {
+        if ($this->_hasLinkFilter) {
+            $metaDataPool = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $linkField = $metaDataPool->getLinkField();
+            $entityTable = $metaDataPool->getEntityTable();
+            $this->getSelect()
+                ->join(['product_entity_table' => $entityTable], "links.product_id = product_entity_table.$linkField", []);
+        }
     }
 }

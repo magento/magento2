@@ -36,7 +36,7 @@ class Details extends \Magento\Backend\Block\Widget\Form\Container
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->addChild('form', 'Magento\Paypal\Block\Adminhtml\Settlement\Details\Form');
+        $this->addChild('form', \Magento\Paypal\Block\Adminhtml\Settlement\Details\Form::class);
         return $this;
     }
 }

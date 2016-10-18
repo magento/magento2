@@ -7,6 +7,8 @@ namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
+use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -17,6 +19,11 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 
     /** @var UrlPersistInterface */
     protected $urlPersist;
+
+    /**
+     * @var UrlRewriteBunchReplacer
+     */
+    private $urlRewriteBunchReplacer;
 
     /** @var UrlRewriteHandler */
     protected $urlRewriteHandler;
@@ -37,6 +44,21 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
     }
 
     /**
+     * Retrieve Url Rewrite Replacer based on bunches
+     *
+     * @deprecated
+     * @return UrlRewriteBunchReplacer
+     */
+    private function getUrlRewriteBunchReplacer()
+    {
+        if (!$this->urlRewriteBunchReplacer) {
+            $this->urlRewriteBunchReplacer = ObjectManager::getInstance()->get(UrlRewriteBunchReplacer::class);
+        }
+
+        return $this->urlRewriteBunchReplacer;
+    }
+
+    /**
      * Generate urls for UrlRewrite and save it in storage
      *
      * @param \Magento\Framework\Event\Observer $observer
@@ -49,12 +71,16 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         if ($category->getParentId() == Category::TREE_ROOT_ID) {
             return;
         }
-        if ($category->dataHasChangedFor('url_key') || $category->getIsChangedProductList()) {
+        if ($category->dataHasChangedFor('url_key')
+            || $category->dataHasChangedFor('is_anchor')
+            || $category->getIsChangedProductList()
+        ) {
             $urlRewrites = array_merge(
                 $this->categoryUrlRewriteGenerator->generate($category),
                 $this->urlRewriteHandler->generateProductUrlRewrites($category)
             );
-            $this->urlPersist->replace($urlRewrites);
+
+            $this->getUrlRewriteBunchReplacer()->doBunchReplace($urlRewrites);
         }
     }
 }

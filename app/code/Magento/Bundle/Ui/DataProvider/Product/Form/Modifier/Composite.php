@@ -120,10 +120,11 @@ class Composite extends AbstractModifier
                         'is_default' => ($productLink->getIsDefault()) ? '1' : '0',
                         'selection_price_value' => $productLink->getPrice(),
                         'selection_price_type' => $productLink->getPriceType(),
-                        'selection_qty' => (bool)$integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
+                        'selection_qty' => $integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
                         'selection_can_change_qty' => $productLink->getCanChangeQuantity(),
                         'selection_qty_is_integer' => (bool)$integerQty,
                         'position' => $productLink->getPosition(),
+                        'delete' => '',
                     ];
                 }
                 $data[$modelId][BundlePanel::CODE_BUNDLE_OPTIONS][BundlePanel::CODE_BUNDLE_OPTIONS][] = [

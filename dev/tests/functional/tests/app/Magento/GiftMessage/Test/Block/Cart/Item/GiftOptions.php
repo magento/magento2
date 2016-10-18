@@ -33,7 +33,7 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $allowGiftOptions = '//a[contains(@class,"action-gift")][ancestor::tbody[contains(.,"%s")]]';
+    protected $allowGiftOptions = '//*[contains(@class,"action-gift")][ancestor::tbody[contains(.,"%s")]]';
 
     /**
      * Selector for apply Gift Message button on order
@@ -90,13 +90,13 @@ class GiftOptions extends Form
         /** @var \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm $giftMessageForm */
         if ($giftMessage->getAllowGiftOptionsForItems() === 'Yes') {
             foreach ($products as $product) {
-                if ($product->getProductHasWeight() == 'Yes') {
+                if ($product->getProductHasWeight() == 'This item has weight') {
                     $this->_rootElement->find(
                         sprintf($this->allowGiftOptions, $product->getName()),
                         Locator::SELECTOR_XPATH
                     )->click();
                     $giftMessageForm = $this->blockFactory->create(
-                        'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
+                        \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm::class,
                         ['element' => $this->_rootElement->find($this->giftMessageItemForm)]
                     );
                     $giftMessage = $giftMessage->getItems()[0];

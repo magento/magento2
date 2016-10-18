@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Braintree\Test\TestCase\SaveUseDeleteVaultForPaypalBraintreeTest" summary="Saves vault for PayPal Braintree on checkout, uses it during checkout, deletes it from My Account">
+        <variation name="SaveUseDeleteVaultForPaypalBraintreeTestVariation1" summary="Saves vault for PayPal Braintree on checkout, uses it during checkout, deletes it from My Account" ticketId="MAGETWO-54838, MAGETWO-54843, MAGETWO-54844">
+            <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">15.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">braintree_paypal</data>
+            <data name="vault/method" xsi:type="string">braintree_paypal_vault</data>
+            <data name="creditCardSave" xsi:type="string">Yes</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_use_vault</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <constraint name="Magento\Vault\Test\Constraint\AssertStoredPaymentDeletedMessage" />
+        </variation>
+    </testCase>
+</config>

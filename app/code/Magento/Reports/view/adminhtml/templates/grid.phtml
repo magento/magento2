@@ -48,12 +48,12 @@ $numColumns = sizeof($block->getColumns());
                                 <span id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('period_date_to_advice')?>"></span>
                             </span>
 
-                            <span class="field-row">
+                            <span class="field-row admin__control-filter">
                                  <label for="<?php /* @escapeNotVerified */ echo $block->getSuffixId('report_period')?>"
                                         class="admin__control-support-text">
                                      <span><?php /* @escapeNotVerified */ echo __('Show By') ?>:</span>
                                  </label>
-                                <select name="report_period" id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('report_period')?>" class="select">
+                                <select name="report_period" id="<?php /* @escapeNotVerified */ echo $block->getSuffixId('report_period')?>" class="admin__control-select">
                                     <?php foreach ($block->getPeriods() as $_value => $_label): ?>
                                         <option value="<?php /* @escapeNotVerified */ echo $_value ?>" <?php if ($block->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?php /* @escapeNotVerified */ echo $_label ?></option>
                                     <?php endforeach; ?>

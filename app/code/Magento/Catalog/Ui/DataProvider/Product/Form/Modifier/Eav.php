@@ -30,6 +30,7 @@ use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Class Eav
@@ -160,6 +161,11 @@ class Eav extends AbstractModifier
      * @var array
      */
     private $prevSetAttributes;
+
+    /**
+     * @var CurrencyInterface
+     */
+    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -308,9 +314,7 @@ class Eav extends AbstractModifier
             ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER),
             $attributeContainer,
             [
-                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
-                // TODO: Eliminate this in scope of MAGETWO-51364
-                'scopeLabel' => $this->getScopeLabel($attribute),
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER
             ]
         );
 
@@ -353,9 +357,11 @@ class Eav extends AbstractModifier
 
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
+                    if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
+                        $attributeValue = $this->formatPrice($attributeValue);
+                    }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
-
             }
         }
 
@@ -371,6 +377,7 @@ class Eav extends AbstractModifier
     private function resolvePersistentData(array $data)
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
+        $this->dataPersistor->clear('catalog_product');
         $productId = $this->locator->getProduct()->getId();
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
@@ -516,6 +523,16 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Check is product already new or we trying to create one
+     *
+     * @return bool
+     */
+    private function isProductExists()
+    {
+        return (bool) $this->locator->getProduct()->getId();
+    }
+
+    /**
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
@@ -524,6 +541,7 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @api
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
@@ -536,7 +554,7 @@ class Eav extends AbstractModifier
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote(),
-            'default' => $attribute->getDefaultValue(),
+            'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
@@ -736,7 +754,10 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
-            'add_widgets' => false
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
         ];
 
         return $meta;
@@ -863,5 +884,39 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }

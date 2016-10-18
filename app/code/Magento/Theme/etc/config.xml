@@ -60,8 +60,14 @@ Disallow: /*SID=
             <media_storage_configuration>
                 <allowed_resources>
                     <site_favicons>favicon</site_favicons>
+                    <site_logos>logo</site_logos>
                 </allowed_resources>
             </media_storage_configuration>
         </system>
+        <dev>
+            <static>
+                <sign>1</sign>
+            </static>
+        </dev>
     </default>
 </config>

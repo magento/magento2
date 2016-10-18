@@ -13,6 +13,7 @@ define([
         actionsListOpened: false,
         thumbnailUrl: '',
         thumbnail: null,
+        smallImage: null,
         defaults: {
             fileInputName: ''
         },
@@ -23,7 +24,7 @@ define([
          * @returns {Object} Chainable.
          */
         initObservable: function () {
-            this._super().observe(['processedFile', 'actionsListOpened', 'thumbnailUrl', 'thumbnail']);
+            this._super().observe(['processedFile', 'actionsListOpened', 'thumbnailUrl', 'thumbnail', 'smallImage']);
 
             return this;
         },
@@ -89,6 +90,9 @@ define([
         deleteImage: function () {
             this.processedFile({});
             this.value(null);
+            this.thumbnail(null);
+            this.thumbnailUrl(null);
+            this.smallImage(null);
 
             return this;
         }

@@ -22,6 +22,9 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     const SCHEME_HTTPS = 'https';
     /**#@-*/
 
+    // Configuration path for SSL Offload http header
+    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+
     /**
      * @var string
      */
@@ -85,6 +88,18 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     protected $converter;
 
+    /**
+     * @var \Magento\Framework\App\Config
+     */
+    protected $appConfig;
+    
+    /**
+     * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
+     *
+     * @var string
+     */
+    protected $sslOffloadHeader;
+    
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -364,7 +379,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getScheme()
     {
-        return ($this->getServer('HTTPS') == 'on') ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
+        return $this->isSecure() ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
     }
 
     /**
@@ -396,7 +411,79 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function isSecure()
     {
-        return ($this->getScheme() == self::SCHEME_HTTPS);
+        if ($this->immediateRequestSecure()) {
+            return true;
+        }
+      
+        return $this->initialRequestSecure($this->SslOffloadHeader());
+    }
+
+    /***
+     * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
+     *
+     * @return string
+     */
+    private function SslOffloadHeader()
+    {
+        // Lets read from db only one time okay.
+        if ($this->sslOffloadHeader === null) {
+
+            // @todo: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
+            // installed MAGETWO-31756
+            // Check if a proxy sent a header indicating an initial secure request
+            $this->sslOffloadHeader = trim(
+                (string)$this->getAppConfig()->getValue(
+                    self::XML_PATH_OFFLOADER_HEADER,
+                    \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                )
+            );
+        }
+
+        return $this->sslOffloadHeader;
+    }
+
+    /**
+     * Create an instance of Magento\Framework\App\Config
+     *
+     * @return \Magento\Framework\App\Config
+     * @deprecated
+     */
+    private function getAppConfig()
+    {
+        if ($this->appConfig == null) {
+            $this->appConfig =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config::class);
+        }
+        return $this->appConfig;
+    }
+
+    /**
+     * Checks if the immediate request is delivered over HTTPS
+     *
+     * @return bool
+     */
+    protected function immediateRequestSecure()
+    {
+        $https = $this->getServer('HTTPS');
+        $headerServerPort = $this->getServer('SERVER_PORT');
+        return (!empty($https) && $https != 'off') || $headerServerPort == 443;
+    }
+
+    /**
+     * In case there is a proxy server, checks if the initial request to the proxy was delivered over HTTPS
+     *
+     * @param string $offLoaderHeader
+     * @return bool
+     */
+    protected function initialRequestSecure($offLoaderHeader)
+    {
+        // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
+        $offLoaderHeader = str_replace('-', '_', strtoupper($offLoaderHeader));
+        // Some webservers do not append HTTP_
+        $header = $this->getServer($offLoaderHeader);
+        // Apache appends HTTP_
+        $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
+        return !empty($offLoaderHeader) && ($header === 'https' || $httpHeader === 'https');
     }
 
     /**

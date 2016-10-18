@@ -71,7 +71,6 @@
             <argument name="backendHelper" xsi:type="object">Magento\Backend\Helper\Data\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\Acl"/>
     <preference for="Magento\Framework\Acl\AclResource\ProviderInterface" type="Magento\Framework\Acl\AclResource\Provider"/>
     <type name="Magento\Framework\Acl\AclResource\Config\Reader\Filesystem">
@@ -149,7 +148,7 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Quote\Storage</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cacheEnableCommand" xsi:type="object">Magento\Backend\Console\Command\CacheEnableCommand</item>

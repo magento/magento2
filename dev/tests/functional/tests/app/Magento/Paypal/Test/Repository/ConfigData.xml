@@ -278,19 +278,19 @@
             </field>
         </dataset>
         <dataset name="payflowpro_use_vault">
-            <field name="payment/vault/vault_payment" xsi:type="array">
+            <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/payflowpro_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">PayflowPro</item>
-                <item name="value" xsi:type="string">payflowpro</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
         <dataset name="payflowpro_use_vault_rollback">
-            <field name="payment/vault/vault_payment" xsi:type="array">
+            <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/payflowpro_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Select vault provider</item>
-                <item name="value" xsi:type="string">null</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
     </repository>

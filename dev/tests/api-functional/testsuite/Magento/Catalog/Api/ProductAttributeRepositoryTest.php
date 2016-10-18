@@ -7,12 +7,18 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products/attributes';
+
+    /**
+     * @var array
+     */
+    private $createdAttributes = [];
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
@@ -79,7 +85,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
      */
     public function testCreate()
     {
-        $attributeCode = 'label_attr_code3df4tr3';
+        $attributeCode = uniqid('label_attr_code');
         $attribute = $this->createAttribute($attributeCode);
 
         $expectedData = [
@@ -127,7 +133,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
      */
     public function testUpdate()
     {
-        $attributeCode = 'label_attr_code3df4tr3';
+        $attributeCode = uniqid('label_attr_code');
         $attribute = $this->createAttribute($attributeCode);
 
         //Make sure that 'Blue' is set as default
@@ -135,8 +141,10 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeData = [
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'default_frontend_label' => 'default_label_new',
                 'frontend_labels' => [
-                    ['store_id' => 0, 'label' => 'front_lbl_new'],
+                    ['store_id' => 1, 'label' => 'front_lbl_new'],
                 ],
                 "options" => [
                     //Update existing
@@ -176,7 +184,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
-        $this->assertEquals('front_lbl_new', $result['default_frontend_label']);
+        $this->assertEquals('default_label_new', $result['default_frontend_label']);
         //New option set as default
         $this->assertEquals($result['options'][3]['value'], $result['default_value']);
         $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
@@ -185,22 +193,22 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
      */
-    public function testUpdateNotExistingOption()
+    public function testUpdateWithNewOption()
     {
-        $attributeCode = 'label_attr_code3df4tr3';
+        $attributeCode = uniqid('label_attr_code');
         $attribute = $this->createAttribute($attributeCode);
-        $expectedMessage = 'Attribute %1 does not contain option with Id %2';
 
         $attributeData = [
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
                 'is_required' => true,
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
                 ],
                 "options" => [
                     [
-                        "value" => 1,
+                        "value" => 'option',
                         "label" => "New Label",
                         "store_labels" => [
                             [
@@ -214,20 +222,8 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             ]
         ];
 
-        try {
-            $this->updateAttribute($attributeCode, $attributeData);
-            $this->fail("Expected exception");
-        } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expectedMessage,
-                $e->getMessage(),
-                "SoapFault does not contain expected message."
-            );
-        } catch (\Exception $e) {
-            $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals([$attributeCode, 1], $errorObj['parameters']);
-        }
+        $output = $this->updateAttribute($attributeCode, $attributeData);
+        $this->assertEquals(4, count($output['options']));
     }
 
     /**
@@ -344,7 +340,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        return $this->_webApiCall($serviceInfo, $attributeData);
+        $attribute = $this->_webApiCall($serviceInfo, $attributeData);
+        if (isset($attribute['attribute_id']) && $attribute['attribute_id']) {
+            $this->createdAttributes[] = $attributeCode;
+        }
+        return $attribute;
     }
 
     /**
@@ -413,5 +413,12 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             ],
         ];
         return $this->_webApiCall($serviceInfo, $attributeData);
+    }
+
+    protected function tearDown()
+    {
+        foreach ($this->createdAttributes as $attributeCode) {
+            $this->deleteAttribute($attributeCode);
+        }
     }
 }

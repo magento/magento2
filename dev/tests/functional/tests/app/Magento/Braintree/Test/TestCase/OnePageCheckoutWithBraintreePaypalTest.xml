@@ -9,7 +9,7 @@
     <testCase name="Magento\Braintree\Test\TestCase\OnePageCheckoutWithBraintreePaypalTest" summary="One page checkout with Braintree PayPal.">
         <variation name="OnePageCheckoutWithBraintreePaypalTestVariation1" summary="Registered Checkout with Braintree PayPal from Storefront" ticketId="MAGETWO-47805">
             <data name="description" xsi:type="string">Registered Checkout with Braintree PayPal from Storefront</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
@@ -19,9 +19,9 @@
                 <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
-            <data name="configData" xsi:type="string">braintree, braintree_paypal</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
@@ -29,7 +29,7 @@
         </variation>
         <variation name="OnePageCheckoutWithBraintreePaypalTestVariation2" summary="Registered Checkout with Braintree PayPal from Storefront with payment action Authorize and Capture" ticketId="MAGETWO-47810">
             <data name="description" xsi:type="string">Registered Checkout with Braintree PayPal from Storefront with payment action Authorize and Capture</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
@@ -42,9 +42,9 @@
                 <item name="0" xsi:type="string">15.00</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
-            <data name="configData" xsi:type="string">braintree, braintree_paypal_sale</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_sale, braintree_paypal_skip_order_review</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />

@@ -21,6 +21,11 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     const FILTER_ELEMENT_SKIP = 'skip_attr';
 
     /**
+     * Allow multiple values wrapping in double quotes for additional attributes.
+     */
+    const FIELDS_ENCLOSURE = 'fields_enclosure';
+
+    /**
      * Filter fields types.
      */
     const FILTER_TYPE_SELECT = 'select';
@@ -107,9 +112,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.',
-                            'Magento\ImportExport\Model\Export\Entity\AbstractEntity',
-                            'Magento\ImportExport\Model\Export\AbstractEntity'
+                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Export\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Export\AbstractEntity::class
                         )
                     );
                 }
@@ -151,8 +154,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 if (!$this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The adapter object must be an instance of %1.',
-                            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter'
+                            'The adapter object must be an instance of %1.', \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class
                         )
                     );
                 }
@@ -238,6 +240,9 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             return self::FILTER_TYPE_INPUT;
         }
         $columns = $attribute->getFlatColumns();
+        if (empty($columns)) {
+            return self::FILTER_TYPE_INPUT;
+        }
         switch ($columns[$attribute->getAttributeCode()]['type']) {
             case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
             case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:

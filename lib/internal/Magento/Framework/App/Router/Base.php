@@ -7,9 +7,6 @@
  */
 namespace Magento\Framework\App\Router;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\Store\Model\ScopeInterface;
-
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -24,7 +21,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     /**
      * @var string
      */
-    protected $actionInterface = '\Magento\Framework\App\ActionInterface';
+    protected $actionInterface = \Magento\Framework\App\ActionInterface::class;
 
     /**
      * @var array

@@ -2,13 +2,13 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "100.0.2",
+    "version": "100.2.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.5.22|~5.6.0|~7.0.0",
+        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
@@ -20,7 +20,9 @@
         "ext-openssl": "*",
         "lib-libxml": "*",
         "ext-xsl": "*",
-        "symfony/process": "~2.1"
+        "symfony/process": "~2.1",
+        "zendframework/zend-stdlib": "~2.4.6",
+        "zendframework/zend-http": "~2.4.6"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"

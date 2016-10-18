@@ -8,14 +8,18 @@
  */
 define([
     'jquery',
-    'Magento_Customer/js/zxcvbn'
-], function ($, zxcvbn) {
+    'Magento_Customer/js/zxcvbn',
+    'mage/translate',
+    'mage/validation'
+], function ($, zxcvbn, $t) {
     'use strict';
 
     $.widget('mage.passwordStrengthIndicator', {
         options: {
-            defaultClassName: 'password-strength-meter-',
-            passwordSrengthMeterId: 'password-strength-meter'
+            cache: {},
+            passwordSelector: '[type=password]',
+            passwordStrengthMeterSelector: '[data-role=password-strength-meter]',
+            passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]'
         },
 
         /**
@@ -23,6 +27,9 @@ define([
          * @private
          */
         _create: function () {
+            this.options.cache.input = $(this.options.passwordSelector, this.element);
+            this.options.cache.meter = $(this.options.passwordStrengthMeterSelector, this.element);
+            this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
             this._bind();
         },
 
@@ -31,10 +38,10 @@ define([
          * @private
          */
         _bind: function () {
-            this._on({
-                'change input[type="password"]': this._calculateStrength,
-                'keyup input[type="password"]': this._calculateStrength,
-                'paste input[type="password"]': this._calculateStrength
+            this._on(this.options.cache.input, {
+                'change': this._calculateStrength,
+                'keyup': this._calculateStrength,
+                'paste': this._calculateStrength
             });
         },
 
@@ -44,20 +51,63 @@ define([
          */
         _calculateStrength: function () {
             var password = this._getPassword(),
-                score = zxcvbn(password).score,
-                className = this._getClassName(score);
+                isEmpty = password.length === 0,
+                zxcvbnScore = zxcvbn(password).score,
+                displayScore,
+                isValid;
 
-            this._displayStrength(className);
+            // Display score is based on combination of whether password is empty, valid, and zxcvbn strength
+            if (isEmpty) {
+                displayScore = 0;
+            } else {
+                isValid  = $.validator.validateSingleElement(this.options.cache.input);
+                displayScore = isValid ? zxcvbnScore : 1;
+            }
+
+            // Update label
+            this._displayStrength(displayScore);
         },
 
         /**
          * Display strength
-         * @param {String} className
+         * @param {Number} displayScore
          * @private
          */
-        _displayStrength: function (className) {
-            this.element.find('#' + this.options.passwordSrengthMeterId).removeClass();
-            this.element.find('#' + this.options.passwordSrengthMeterId).addClass(className);
+        _displayStrength: function (displayScore) {
+            var strengthLabel = '',
+                className = 'password-';
+
+            switch (displayScore) {
+                case 0:
+                    strengthLabel = $t('No Password');
+                    className += 'none';
+                    break;
+
+                case 1:
+                    strengthLabel = $t('Weak');
+                    className += 'weak';
+                    break;
+
+                case 2:
+                    strengthLabel = $t('Medium');
+                    className += 'medium';
+                    break;
+
+                case 3:
+                    strengthLabel = $t('Strong');
+                    className += 'strong';
+                    break;
+
+                case 4:
+                    strengthLabel = $t('Very Strong');
+                    className += 'very-strong';
+                    break;
+            }
+
+            this.options.cache.meter
+                .removeClass()
+                .addClass(className);
+            this.options.cache.label.text(strengthLabel);
         },
 
         /**
@@ -66,17 +116,7 @@ define([
          * @private
          */
         _getPassword: function () {
-            return this.element.find('input[type="password"]').val();
-        },
-
-        /**
-         * Get class name for score
-         * @param {int} score
-         * @returns {String}
-         * @private
-         */
-        _getClassName: function (score) {
-            return this.options.defaultClassName + score;
+            return this.options.cache.input.val();
         }
     });
 

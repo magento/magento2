@@ -10,6 +10,7 @@ use Magento\Framework\Event;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Class DataAssignObserverTest
@@ -30,8 +31,10 @@ class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
         $paymentInfoModel = $this->getMock(InfoInterface::class);
         $dataObject = new DataObject(
             [
-                'payment_method_nonce' => self::PAYMENT_METHOD_NONCE,
-                'device_data' => self::DEVICE_DATA,
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    'payment_method_nonce' => self::PAYMENT_METHOD_NONCE,
+                    'device_data' => self::DEVICE_DATA
+                ]
             ]
         );
         $observerContainer->expects(static::atLeastOnce())

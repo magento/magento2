@@ -41,7 +41,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
         $this->_config = $config;
         $this->_factory = $factory;
         $this->_sharedInstances = &$sharedInstances;
-        $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
+        $this->_sharedInstances[\Magento\Framework\ObjectManagerInterface::class] = $this;
     }
 
     /**
@@ -75,6 +75,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 
     /**
      * Configure di instance
+     * Note: All arguments should be pre-processed (sort order, translations, etc) before passing to method configure.
      *
      * @param array $configuration
      * @return void

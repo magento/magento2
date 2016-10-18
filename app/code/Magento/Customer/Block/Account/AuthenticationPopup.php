@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Block\Account;
 
+use Magento\Customer\Model\Form;
+use Magento\Store\Model\ScopeInterface;
+
 class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -40,10 +43,24 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     public function getConfig()
     {
         return [
-            'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
-            'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
-            'baseUrl' => $this->getBaseUrl()
+            'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
+            'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
+            'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
+            'baseUrl' => $this->escapeUrl($this->getBaseUrl())
         ];
+    }
+
+    /**
+     * Is autocomplete enabled for storefront
+     *
+     * @return string
+     */
+    private function isAutocompleteEnabled()
+    {
+        return $this->_scopeConfig->getValue(
+            Form::XML_PATH_ENABLE_AUTOCOMPLETE,
+            ScopeInterface::SCOPE_STORE
+        ) ? 'on' : 'off';
     }
 
     /**

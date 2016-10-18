@@ -15,6 +15,8 @@ use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config implements ConfigInterface
 {
@@ -76,9 +78,6 @@ class Config implements ConfigInterface
     /** @var string */
     protected $lifetimePath;
 
-    /** @var string */
-    private $saveHandlerName;
-
     /** @var \Magento\Framework\ValidatorFactory */
     protected $_validatorFactory;
 
@@ -109,20 +108,6 @@ class Config implements ConfigInterface
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
         $this->lifetimePath = $lifetimePath;
-
-        /**
-         * Session handler
-         *
-         * Save handler may be set to custom value in deployment config, which will override everything else.
-         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
-         */
-        $defaultSaveHandler = $this->getStorageOption('session.save_handler')
-            ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $deploymentConfig->get(
-            self::PARAM_SESSION_SAVE_METHOD,
-            $defaultSaveHandler
-        );
-        $this->setSaveHandler($saveMethod);
 
         /**
          * Session path
@@ -161,6 +146,11 @@ class Config implements ConfigInterface
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
         );
+
+        $secureURL = $this->_scopeConfig->getValue('web/secure/base_url', $this->_scopeType);
+        $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
+        $isFullySecuredURL = $secureURL == $unsecureURL;
+        $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
     }
 
     /**
@@ -272,38 +262,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setSaveHandler($saveHandler)
-    {
-        $this->setSaveHandlerName($saveHandler);
-        if ($saveHandler === 'db' || $saveHandler === 'redis') {
-            $saveHandler = 'user';
-        }
-        $this->setOption('session.save_handler', $saveHandler);
-        return $this;
-    }
-
-    /**
-     * Set save handler name
-     *
-     * @param string $saveHandlerName
-     * @return void
-     */
-    private function setSaveHandlerName($saveHandlerName)
-    {
-        $this->saveHandlerName = $saveHandlerName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSaveHandlerName()
-    {
-        return $this->saveHandlerName;
-    }
-
-    /**
      * Set session.save_path
      *
      * @param string $savePath
@@ -336,7 +294,7 @@ class Config implements ConfigInterface
     {
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookieLifetimeValidator'
+            \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
         );
         if ($validator->isValid($cookieLifetime)) {
             $this->setOption('session.cookie_lifetime', (int)$cookieLifetime);
@@ -369,7 +327,7 @@ class Config implements ConfigInterface
         $cookiePath = (string)$cookiePath;
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookiePathValidator'
+            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
         );
         if ($validator->isValid($cookiePath)) {
             $this->setOption('session.cookie_path', $cookiePath);
@@ -401,7 +359,7 @@ class Config implements ConfigInterface
     {
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookieDomainValidator'
+            \Magento\Framework\Session\Config\Validator\CookieDomainValidator::class
         );
         if ($validator->isValid($cookieDomain)) {
             $this->setOption('session.cookie_domain', $cookieDomain);

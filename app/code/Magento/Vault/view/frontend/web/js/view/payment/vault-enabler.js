@@ -56,8 +56,8 @@ define(
              * @returns {Boolean}
              */
             isVaultEnabled: function () {
-                return window.checkoutConfig.vault['is_enabled'] === true &&
-                    window.checkoutConfig.vault['vault_provider_code'] === this.paymentCode;
+                return typeof window.checkoutConfig.vault[this.paymentCode] !== 'undefined' &&
+                    window.checkoutConfig.vault[this.paymentCode]['is_enabled'] === true;
             }
         });
     }

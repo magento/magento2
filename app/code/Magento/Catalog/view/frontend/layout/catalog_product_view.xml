@@ -30,7 +30,7 @@
         </referenceBlock>
         <referenceContainer name="content">
             <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
-                <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price" after="product.info.review">
+                <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price">
                     <container name="product.info.stock.sku" label="Product auxiliary info" htmlTag="div" htmlClass="product-info-stock-sku">
                         <container name="product.info.type" before="-"/>
                         <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
@@ -44,7 +44,7 @@
                         </block>
                     </container>
                     <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" after="product.info.stock.sku" />
-                    <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
+                    <block class="Magento\Catalog\Pricing\Render" name="product.price.final">
                         <arguments>
                             <argument name="price_render" xsi:type="string">product.price.render.default</argument>
                             <argument name="price_type_code" xsi:type="string">final_price</argument>
@@ -81,8 +81,11 @@
                     </block>
                 </block>
                 <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint">
-                    <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links" after="product.info.overview">
-                        <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
+                    <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links">
+                        <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml">
+                            <block class="Magento\Catalog\Block\Product\View\AddTo\Compare" name="view.addto.compare" after="view.addto.wishlist"
+                                   template="Magento_Catalog::product/view/addto/compare.phtml" />
+                        </block>
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="product/view/mailto.phtml"/>
                     </container>
                 </container>
@@ -98,7 +101,33 @@
                 </block>
             </container>
             <container name="product.info.media" htmlTag="div" htmlClass="product media" after="product.info.main">
+                <block class="Magento\Framework\View\Element\Template" name="skip_gallery_after.target" before="skip_gallery_before.wrapper" template="Magento_Theme::html/skiptarget.phtml">
+                    <arguments>
+                        <argument name="target_id" xsi:type="string">gallery-prev-area</argument>
+                    </arguments>
+                </block>
+                <container name="skip_gallery_before.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">
+                    <block class="Magento\Framework\View\Element\Template" before="product.info.media.image" name="skip_gallery_before" template="Magento_Theme::html/skip.phtml">
+                        <arguments>
+                            <argument name="target" xsi:type="string">gallery-next-area</argument>
+                            <argument name="label" translate="true" xsi:type="string">Skip to the end of the images gallery</argument>
+                        </arguments>
+                    </block>
+                </container>
                 <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/gallery.phtml"/>
+                <container name="skip_gallery_after.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">
+                    <block class="Magento\Framework\View\Element\Template" after="product.info.media.image" name="skip_gallery_after" template="Magento_Theme::html/skip.phtml">
+                        <arguments>
+                            <argument name="target" xsi:type="string">gallery-prev-area</argument>
+                            <argument name="label" translate="true" xsi:type="string">Skip to the beginning of the images gallery</argument>
+                        </arguments>
+                    </block>
+                </container>
+                <block class="Magento\Framework\View\Element\Template" name="skip_gallery_before.target" after="skip_gallery_after.wrapper" template="Magento_Theme::html/skiptarget.phtml">
+                    <arguments>
+                        <argument name="target_id" xsi:type="string">gallery-next-area</argument>
+                    </arguments>
+                </block>
             </container>
             <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="product/view/details.phtml" after="product.info.media">
                 <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" template="product/view/attribute.phtml" group="detailed_info">
@@ -129,11 +158,21 @@
                 <arguments>
                     <argument name="type" xsi:type="string">related</argument>
                 </arguments>
+                <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="related.product.addto" as="addto">
+                    <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
+                           name="related.product.addto.compare" as="compare"
+                           template="Magento_Catalog::product/list/addto/compare.phtml"/>
+                </block>
             </block>
             <block class="Magento\Catalog\Block\Product\ProductList\Upsell" name="product.info.upsell" template="Magento_Catalog::product/list/items.phtml">
                 <arguments>
                     <argument name="type" xsi:type="string">upsell</argument>
                 </arguments>
+                <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="upsell.product.addto" as="addto">
+                    <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
+                           name="upsell.product.addto.compare" as="compare"
+                           template="Magento_Catalog::product/list/addto/compare.phtml"/>
+                </block>
             </block>
             <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.additional" as="product_additional_data"/>
         </referenceContainer>

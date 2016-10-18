@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesRule\Test\TestCase\OnePageCheckoutWithDiscountTest" summary="Checkout with Braintree credit card on Storefront with discount applied during checkout">
+        <variation name="OnePageCheckoutWithDiscountTestVariation1" summary="Checkout with Braintree credit card on Storefront with discount applied during checkout" ticketId="MAGETWO-55319">
+            <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">10.00</item>
+            </data>
+            <data name="creditCardSave" xsi:type="string">Yes</data>
+            <data name="configData" xsi:type="string">braintree, braintree_use_vault</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+        </variation>
+    </testCase>
+</config>

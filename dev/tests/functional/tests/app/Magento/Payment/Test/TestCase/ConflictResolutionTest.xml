@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Payment\Test\TestCase\ConflictResolutionTest" summary="Conflict resolution for US"
+              ticketId="MAGETWO-55707, MAGETWO-38531">
+        <variation name="ConflictResolutionTestVariation1">
+            <data name="countryCode" xsi:type="string">US</data>
+            <data name="sections" xsi:type="array">
+                <item name="recommended_solutions" xsi:type="array">
+                    <item name="PayPal Express Checkout" xsi:type="string">PayPal Express Checkout</item>
+                    <item name="Braintree" xsi:type="string">Braintree</item>
+                </item>
+                <item name="other_paypal_payment_solutions" xsi:type="array">
+                    <item name="paypal_group_all_in_one" xsi:type="array">
+                        <item name="Payments Advanced (Includes Express Checkout)" xsi:type="string">Payments Advanced
+                            (Includes Express Checkout)
+                        </item>
+                        <item name="Payments Pro (Includes Express Checkout)" xsi:type="string">Payments Pro (Includes
+                            Express Checkout)
+                        </item>
+                        <item name="Payments Standard" xsi:type="string">Payments Standard</item>
+                    </item>
+                    <item name="paypal_payment_gateways" xsi:type="array">
+                        <item name="Payflow Pro (Includes Express Checkout)" xsi:type="string"/>
+                        <item name="Payflow Link (Includes Express Checkout)" xsi:type="string"/>
+                    </item>
+                </item>
+                <item name="other_payment_methods" xsi:type="array">
+                    <item name="Check / Money Order" xsi:type="string"/>
+                    <item name="Bank Transfer Payment" xsi:type="string"/>
+                    <item name="Cash On Delivery Payment" xsi:type="string"/>
+                    <item name="Zero Subtotal Checkout" xsi:type="string"/>
+                    <item name="Purchase Order" xsi:type="string"/>
+                    <item name="Authorize.net Direct Post" xsi:type="string"/>
+                </item>
+            </data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
+        </variation>
+    </testCase>
+</config>
