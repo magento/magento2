@@ -293,7 +293,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->isObjectNew(true);
 
         $repository->save($model);
-        $this->assertNull($model->getImage());
+        $this->assertEmpty($model->getImage());
     }
 
     /**
