@@ -94,6 +94,7 @@ class DeployStaticContentCommand extends Command
      * @param ObjectManagerFactory $objectManagerFactory
      * @param Locale $validator
      * @param ObjectManagerInterface $objectManager
+     * @param ConfigInterface $config
      * @throws \LogicException When the command name is empty
      */
     public function __construct(
