@@ -65,10 +65,11 @@ define([
          * @override
          */
         initObservable: function () {
-            var pagingObservables = {
-                current: ko.getObservable(this.paging, 'current'),
-                pageSize: ko.getObservable(this.paging, 'pageSize')
-            };
+            var $form = $('[data-form="edit-product"]'),
+                pagingObservables = {
+                    current: ko.getObservable(this.paging, 'current'),
+                    pageSize: ko.getObservable(this.paging, 'pageSize')
+                };
 
             this._super().observe('actions opened attributes productMatrix');
             this.paging.totalRecords = this.variations.length;
@@ -81,20 +82,20 @@ define([
                 }, this);
             }, this);
 
-            $('#save-split-button, #save-split-button .item').click(function () {
+            $form.change(function () {
                 var variations = this.prepareVariations(),
                     validationError = this.validateVariationPrices(this.variations) || false;
+
+                this.productMatrixSerialized(JSON.stringify(variations));
+                this.associatedProductsSerialized(JSON.stringify(this.associatedProducts));
+                this.configurationsSerialized(JSON.stringify(this.configurations));
 
                 if (validationError) {
                     pagingObservables.current(
                         Math.floor(this.variations.indexOf(validationError) / pagingObservables.pageSize() + 1)
                     );
-                    $('[data-form="edit-product"]').validation('isValid');
+                    $form.validation('isValid');
                 }
-
-                this.productMatrixSerialized(JSON.stringify(variations));
-                this.associatedProductsSerialized(JSON.stringify(this.associatedProducts));
-                this.configurationsSerialized(JSON.stringify(this.configurations));
             }.bind(this));
 
             return this;
