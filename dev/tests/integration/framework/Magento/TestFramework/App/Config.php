@@ -23,6 +23,11 @@ class Config extends \Magento\Framework\App\Config
     private $data;
 
     /**
+     * @var ScopeCodeResolver
+     */
+    private $scopeCodeResolver;
+
+    /**
      * Initialize data object with all settings data
      *
      * @param array $data
@@ -41,7 +46,11 @@ class Config extends \Magento\Framework\App\Config
      */
     private function getScopeCodeResolver()
     {
-        return ObjectManager::getInstance()->get(ScopeCodeResolver::class);
+        if (!$this->scopeCodeResolver) {
+            $this->scopeCodeResolver = ObjectManager::getInstance()->get(ScopeCodeResolver::class);
+        }
+
+        return $this->scopeCodeResolver;
     }
 
     /**
@@ -109,6 +118,7 @@ class Config extends \Magento\Framework\App\Config
     public function clean()
     {
         $this->data = null;
+        $this->scopeCodeResolver = null;
         parent::clean();
     }
 
