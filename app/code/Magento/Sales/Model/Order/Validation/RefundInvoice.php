@@ -99,11 +99,13 @@ class RefundInvoice implements RefundInvoiceInterface
 
         $itemsValidation = [];
         foreach ($items as $item) {
-            $itemsValidation[] = $this->itemCreationValidator->validate(
+            $itemValidation = $this->itemCreationValidator->validate(
                 $item,
                 [CreationQuantityValidator::class],
                 $order
             )->getMessages();
+
+            $itemsValidation = array_merge($itemsValidation, $itemValidation);
         }
 
         $invoiceValidationResult = $this->invoiceValidator->validate(
@@ -116,10 +118,8 @@ class RefundInvoice implements RefundInvoiceInterface
         return $this->validatorResultMerger->merge(
             $orderValidationResult,
             $creditmemoValidationResult,
-            array_merge(
-                [$invoiceValidationResult->getMessages()],
-                $itemsValidation
-            )
+            $invoiceValidationResult->getMessages(),
+            $itemsValidation
         );
     }
 }

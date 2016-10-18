@@ -30,15 +30,14 @@ class ValidatorResultMerger
      *
      * @param ValidatorResultInterface $first
      * @param ValidatorResultInterface $second
-     * @param array $others
      *
      * @return ValidatorResultInterface
      */
-    public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second, array $others = [])
+    public function merge(ValidatorResultInterface $first, ValidatorResultInterface $second)
     {
         $messages = array_merge($first->getMessages(), $second->getMessages());
 
-        foreach ($others as $messagesBunch) {
+        foreach (array_slice(func_get_args(), 2) as $messagesBunch) {
             $messages = array_merge($messages, $messagesBunch);
         }
 

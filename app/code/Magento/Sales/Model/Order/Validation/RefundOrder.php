@@ -88,11 +88,13 @@ class RefundOrder implements RefundOrderInterface
 
         $itemsValidation = [];
         foreach ($items as $item) {
-            $itemsValidation[] = $this->itemCreationValidator->validate(
+            $itemValidation = $this->itemCreationValidator->validate(
                 $item,
                 [CreationQuantityValidator::class],
                 $order
             )->getMessages();
+
+            $itemsValidation = array_merge($itemsValidation, $itemValidation);
         }
 
         return $this->validatorResultMerger->merge(
