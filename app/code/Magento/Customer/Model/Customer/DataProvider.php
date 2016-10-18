@@ -5,14 +5,18 @@
  */
 namespace Magento\Customer\Model\Customer;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
+use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -24,6 +28,11 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
+    /**
+     * Maximum file size allowed for file_uploader UI component
+     */
+    const MAX_FILE_SIZE = 2097152;
+
     /**
      * @var Collection
      */
@@ -215,14 +224,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (!empty($file)
             && $fileProcessor->isExist($file)
         ) {
+            $stat = $fileProcessor->getStat($file);
             $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
+        }
+
+        $fileName = $file;
+        if (strrpos($fileName, '/') !== false) {
+            $fileName = substr($fileName, strrpos($fileName, '/') + 1);
         }
 
         if (!empty($file)) {
             return [
                 'file' => $file,
-                'type' => $attribute->getFrontendInput(),
+                'size' => isset($stat) ? $stat['size'] : 0,
                 'url' => isset($viewUrl) ? $viewUrl : '',
+                'name' => $fileName,
             ];
         }
         return [];
@@ -239,7 +255,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
-        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        /* @var AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
@@ -260,8 +276,98 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (!empty($rules)) {
                 $meta[$code]['validation'] = $rules;
             }
+
+            $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]);
         }
         return $meta;
+    }
+
+    /**
+     * Override file uploader UI component metadata
+     *
+     * Overrides metadata for attributes with frontend_input equal to 'image' or 'file'.
+     *
+     * @param Type $entityType
+     * @param AbstractAttribute $attribute
+     * @param array $config
+     */
+    private function overrideFileUploaderMetadata(
+        Type $entityType,
+        AbstractAttribute $attribute,
+        array &$config
+    ) {
+        if (in_array($attribute->getFrontendInput(), $this->fileUploaderTypes)) {
+            $maxFileSize = self::MAX_FILE_SIZE;
+
+            if (isset($config['validation']['max_file_size'])) {
+                $maxFileSize = (int)$config['validation']['max_file_size'];
+            }
+
+            $allowedExtensions = [];
+
+            if (isset($config['validation']['file_extensions'])) {
+                $allowedExtensions = explode(',', $config['validation']['file_extensions']);
+                array_walk($allowedExtensions, function(&$value) { $value = strtolower(trim($value)); });
+            }
+
+            $allowedExtensions = implode(' ', $allowedExtensions);
+
+            $entityTypeCode = $entityType->getEntityTypeCode();
+            $url = $this->getFileUploadUrl($entityTypeCode);
+
+            $config = [
+                'formElement' => 'fileUploader',
+                'componentType' => 'fileUploader',
+                'maxFileSize' => $maxFileSize,
+                'allowedExtensions' => $allowedExtensions,
+                'uploaderConfig' => [
+                    'url' => $url,
+                ],
+                'label' => $this->getMetadataValue($config, 'label'),
+                'sortOrder' => $this->getMetadataValue($config, 'sortOrder'),
+                'required' => $this->getMetadataValue($config, 'required'),
+                'visible' => $this->getMetadataValue($config, 'visible'),
+                'validation' => $this->getMetadataValue($config, 'validation'),
+            ];
+        }
+    }
+
+    /**
+     * Retrieve metadata value
+     *
+     * @param array $config
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    private function getMetadataValue($config, $name, $default = null)
+    {
+        $value = isset($config[$name]) ? $config[$name] : $default;
+        return $value;
+    }
+
+    /**
+     * Retrieve URL to file upload
+     *
+     * @param string $entityTypeCode
+     * @return string
+     */
+    private function getFileUploadUrl($entityTypeCode)
+    {
+        switch ($entityTypeCode) {
+            case CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER:
+                $url = 'customer/file/customer_upload';
+                break;
+
+            case AddressMetadataInterface::ENTITY_TYPE_ADDRESS:
+                $url = 'customer/file/address_upload';
+                break;
+
+            default:
+                $url = '';
+                break;
+        }
+        return $url;
     }
 
     /**
