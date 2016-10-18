@@ -114,7 +114,8 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
                     if (strpos($path, $directory) === 0) {
                         if (preg_match($fileExtensions, $path)) {
                             foreach ($blackListFiles as $blackListFile) {
-                                if (preg_match($blackListFile, $path)) {
+                                $blackListFile = preg_quote($blackListFile, '#');
+                                if (preg_match('#' . $blackListFile . '#', $path)) {
                                     return false;
                                 }
                             }
