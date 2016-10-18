@@ -55,7 +55,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                     UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]);
             }
-            if (!in_array($product->getOrigData('visibility'), $product->getVisibleInSiteVisibilities())) {
+            if (in_array($product->getData('visibility'), $product->getVisibleInSiteVisibilities())) {
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }
