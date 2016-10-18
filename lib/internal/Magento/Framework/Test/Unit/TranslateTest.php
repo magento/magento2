@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use \Magento\Framework\Translate;
 
 /**
@@ -107,19 +107,19 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             $this->packDictionary
         );
 
-        $jsonMock = $this->getMock(JsonInterface::class);
-        $jsonMock->method('encode')
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
             });
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
         $objectManager->setBackwardCompatibleProperty(
             $this->translate,
-            'json',
-            $jsonMock
+            'serializer',
+            $serializerMock
         );
     }
 

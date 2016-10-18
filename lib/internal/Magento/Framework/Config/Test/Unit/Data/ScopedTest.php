@@ -33,9 +33,9 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     protected $_cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -44,8 +44,10 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
 
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
 
         $this->_model = new \Magento\Framework\Config\Data\Scoped(
             $this->_readerMock,
@@ -134,7 +136,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($testValue)
         );
 
-        $this->jsonMock->method('encode')
+        $this->serializerMock->method('serialize')
             ->with($testValue)
             ->willReturn($jsonString);
 
@@ -164,7 +166,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('adminhtml')
         );
 
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->with($jsonString)
             ->willReturn($testValue);
 

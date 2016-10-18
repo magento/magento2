@@ -31,9 +31,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -116,7 +116,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->fileIteratorFactoryMock = $this->getMock(
             \Magento\Framework\Config\FileIteratorFactory::class,
             [],
@@ -126,8 +126,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager->setBackwardCompatibleProperty(
             $this->factory,
-            'json',
-            $this->jsonMock
+            'serializer',
+            $this->serializerMock
         );
         $objectManager->setBackwardCompatibleProperty(
             $this->factory,
@@ -178,8 +178,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('save')
             ->with($this->jsonString);
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($this->data)
             ->willReturn($this->jsonString);
         $this->factory->getValidatorConfig();
@@ -195,8 +195,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getConfigurationFiles');
         $this->cacheMock->expects($this->never())
             ->method('save');
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->with($this->jsonString)
             ->willReturn($this->data);
         $this->fileIteratorFactoryMock->method('create')

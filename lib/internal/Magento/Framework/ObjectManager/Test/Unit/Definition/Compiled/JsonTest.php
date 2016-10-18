@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Definition\Compiled;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,10 +25,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParametersWithoutDefinition($signatures, $definitions, $expected)
     {
-        $signatures = [];
-        $definitions = ['wonderful' => null];
         $model = new \Magento\Framework\ObjectManager\Definition\Compiled\Json([$signatures, $definitions]);
-        $this->assertEquals(null, $model->getParameters('wonderful'));
+        $this->assertEquals($expected, $model->getParameters('wonderful'));
     }
 
     public function getParametersDataProvider()
@@ -54,16 +52,16 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $signatures = ['wonderfulClass' => json_encode($checkString)];
         $definitions = ['wonderful' => 'wonderfulClass'];
         $object = new \Magento\Framework\ObjectManager\Definition\Compiled\Json([$signatures, $definitions]);
-        $jsonMock = $this->getMock(JsonInterface::class);
-        $jsonMock->expects($this->once())
-            ->method('decode')
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturnCallback(function ($data) {
                 return json_decode($data, true);
             });
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $object,
-            'json',
-            $jsonMock
+            'serializer',
+            $serializerMock
         );
         $this->assertEquals($checkString, $object->getParameters('wonderful'));
     }

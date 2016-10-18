@@ -52,10 +52,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
 
-        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $jsonMock]);
+        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $serializerMock]
+        );
 
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturn($jobs);
 
         $configData = new \Magento\Cron\Model\Config\Data($reader, $cache, $dbReader, 'test_cache_id');

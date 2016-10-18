@@ -60,11 +60,13 @@ class InitialTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with('initial_config')
             ->willReturn(json_encode($this->data));
-        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $jsonMock->method('decode')
+        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock->method('unserialize')
             ->willReturn($this->data);
 
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $jsonMock]);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $serializerMock]
+        );
 
         $this->config = new \Magento\Framework\App\Config\Initial(
             $this->readerMock,

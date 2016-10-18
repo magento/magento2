@@ -43,9 +43,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $indexers = ['indexer1' => [], 'indexer3' => []];
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -67,8 +67,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
     }
 
     protected function tearDown()
@@ -85,7 +87,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with($this->cacheId)
             ->willReturn($jsonString);
 
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->with($jsonString)
             ->willReturn($this->indexers);
 

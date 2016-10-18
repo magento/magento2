@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\Route;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Config implements ConfigInterface
 {
@@ -42,9 +42,9 @@ class Config implements ConfigInterface
     protected $_routes;
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param Config\Reader $reader
@@ -80,7 +80,7 @@ class Config implements ConfigInterface
             return $this->_routes[$scope];
         }
         $cacheId = $scope . '::' . $this->_cacheId;
-        $cachedRoutes = $this->getJson()->decode($this->_cache->load($cacheId));
+        $cachedRoutes = $this->getSerializer()->unserialize($this->_cache->load($cacheId));
         if (is_array($cachedRoutes)) {
             $this->_routes[$scope] = $cachedRoutes;
             return $cachedRoutes;
@@ -88,7 +88,8 @@ class Config implements ConfigInterface
 
         $routers = $this->_reader->read($scope);
         $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'];
-        $this->_cache->save($this->getJson()->encode($routes), $cacheId);
+        $routesData = $this->getSerializer()->serialize($routes);
+        $this->_cache->save($routesData, $cacheId);
         $this->_routes[$scope] = $routes;
         return $routes;
     }
@@ -142,17 +143,17 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

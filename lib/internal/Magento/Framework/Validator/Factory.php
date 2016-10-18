@@ -48,9 +48,9 @@ class Factory
     private $cache;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @var \Magento\Framework\Config\FileIteratorFactory
@@ -83,9 +83,9 @@ class Factory
             $this->_configFiles = $this->cache->load(self::CACHE_KEY);
             if (!$this->_configFiles) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save($this->getJson()->encode($this->_configFiles->toArray()), self::CACHE_KEY);
+                $this->cache->save($this->getSerializer()->serialize($this->_configFiles->toArray()), self::CACHE_KEY);
             } else {
-                $filesArray = $this->getJson()->decode($this->_configFiles);
+                $filesArray = $this->getSerializer()->unserialize($this->_configFiles);
                 $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($filesArray));
             }
         }
@@ -156,18 +156,18 @@ class Factory
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return \Magento\Framework\Json\JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Json\JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 
     /**

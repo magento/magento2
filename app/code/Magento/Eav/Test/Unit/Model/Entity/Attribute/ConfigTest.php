@@ -37,7 +37,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_cacheId;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_attribute;
 
@@ -65,11 +65,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($this->_cacheId)
             ->willReturn('');
 
-        $jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturn([]);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $jsonMock]);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $serializerMock]
+        );
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
             $this->_readerMock,
             $this->_cacheMock,

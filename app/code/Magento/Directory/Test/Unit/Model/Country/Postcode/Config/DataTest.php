@@ -23,9 +23,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -44,8 +44,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
     }
 
     public function testGet()
@@ -54,8 +56,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn(json_encode($expected));
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturn($expected);
         $configData = new \Magento\Directory\Model\Country\Postcode\Config\Data($this->readerMock, $this->cacheMock);
         $this->assertEquals($expected, $configData->get());

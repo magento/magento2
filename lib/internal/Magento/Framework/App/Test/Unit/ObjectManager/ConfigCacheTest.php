@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigCacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +20,9 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     private $cacheFrontendMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -33,11 +33,11 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->jsonMock = $this->getMock(JsonInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
-            'json',
-            $this->jsonMock
+            'serializer',
+            $this->serializerMock
         );
     }
 
@@ -61,8 +61,8 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($loadData)
         );
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
@@ -81,8 +81,8 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     {
         $key = 'key';
         $config = ['config'];
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
             });

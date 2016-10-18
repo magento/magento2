@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Interception\Test\Unit\PluginList;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -37,8 +37,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     private $cacheMock;
 
-    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $jsonMock;
+    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
 
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $loggerMock;
@@ -83,11 +83,11 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
                 'cacheId' => 'interception'
             ]
         );
-        $this->jsonMock = $this->getMock(JsonInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
-            'json',
-            $this->jsonMock
+            'serializer',
+            $this->serializerMock
         );
 
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
@@ -237,15 +237,15 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
         $this->configScopeMock->expects($this->exactly(2))
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturnCallback(
                 function ($data) {
                     return json_encode($data);
                 }
             );
-        $this->jsonMock->expects($this->never())
-            ->method('decode');
+        $this->serializerMock->expects($this->never())
+            ->method('unserialize');
         $this->cacheMock->expects($this->once())
             ->method('save');
 
@@ -280,10 +280,10 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $data = [['key'], ['key'], ['key']];
 
-        $this->jsonMock->expects($this->never())
-            ->method('encode');
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->never())
+            ->method('serialize');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });

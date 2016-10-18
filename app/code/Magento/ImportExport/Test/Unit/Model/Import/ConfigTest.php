@@ -23,9 +23,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_configScopeMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $jsonMock;
+    private $serializerMock;
 
     /**
      * @var string
@@ -48,8 +48,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
     }
 
     public function tearDown()

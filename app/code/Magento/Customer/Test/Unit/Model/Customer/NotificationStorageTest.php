@@ -21,9 +21,9 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -33,8 +33,8 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
             NotificationStorage::class,
             ['cache' => $this->cacheMock]
         );
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $objectManager->setBackwardCompatibleProperty($this->notificationStorage, 'json', $this->jsonMock);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->notificationStorage, 'serializer', $this->serializerMock);
     }
 
     public function testAdd()
@@ -46,8 +46,8 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
             'notification_type' => $notificationType
         ];
         $jsonString = json_encode($data);
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data)
             ->willReturn($jsonString);
         $this->cacheMock->expects($this->once())

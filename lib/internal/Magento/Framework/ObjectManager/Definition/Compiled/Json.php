@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Definition\Compiled;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Json extends \Magento\Framework\ObjectManager\Definition\Compiled
 {
@@ -15,9 +15,9 @@ class Json extends \Magento\Framework\ObjectManager\Definition\Compiled
     const MODE_NAME  = 'json';
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * Unpack signature
@@ -27,21 +27,21 @@ class Json extends \Magento\Framework\ObjectManager\Definition\Compiled
      */
     protected function _unpack($signature)
     {
-        return $this->getJson()->decode($signature);
+        return $this->getSerializer()->unserialize($signature);
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

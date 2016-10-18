@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -65,9 +65,9 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $cacheId;
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    protected $json;
+    protected $serializer;
 
     /**
      * Constructor
@@ -96,9 +96,9 @@ class Data implements \Magento\Framework\Config\DataInterface
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
-            $this->cache->save($this->getJson()->encode($data), $this->cacheId, $this->cacheTags);
+            $this->cache->save($this->getSerializer()->serialize($data), $this->cacheId, $this->cacheTags);
         } else {
-            $data = $this->getJson()->decode($data);
+            $data = $this->getSerializer()->unserialize($data);
         }
 
         $this->merge($data);
@@ -149,17 +149,17 @@ class Data implements \Magento\Framework\Config\DataInterface
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    protected function getJson()
+    protected function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

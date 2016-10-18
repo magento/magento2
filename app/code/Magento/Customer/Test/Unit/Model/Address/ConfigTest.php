@@ -43,9 +43,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
@@ -99,16 +99,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->once())
             ->method('save')
             ->with(
-                \Zend_Json::encode($fixtureConfigData),
+                json_encode($fixtureConfigData),
                 $this->_cacheId
             );
 
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
 
-        $this->jsonMock->method('encode')
+        $this->serializerMock->method('serialize')
             ->willReturn(json_encode($fixtureConfigData));
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->willReturn($fixtureConfigData);
 
         $this->_model = new \Magento\Customer\Model\Address\Config(

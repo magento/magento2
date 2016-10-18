@@ -109,9 +109,9 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $packDictionary;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\View\DesignInterface $viewDesign
@@ -479,7 +479,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     {
         $data = $this->_cache->load($this->getCacheId());
         if ($data) {
-            $data = $this->getJson()->decode($data);
+            $data = $this->getSerializer()->unserialize($data);
         }
         return $data;
     }
@@ -491,22 +491,22 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _saveCache()
     {
-        $this->_cache->save($this->getJson()->encode($this->getData()), $this->getCacheId(true), [], false);
+        $this->_cache->save($this->getSerializer()->serialize($this->getData()), $this->getCacheId(true), [], false);
         return $this;
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return \Magento\Framework\Json\JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Json\JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(Serialize\SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

@@ -8,7 +8,7 @@
 namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Initial
 {
@@ -32,9 +32,9 @@ class Initial
     protected $_metadata = [];
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\App\Config\Initial\Reader $reader
@@ -47,9 +47,9 @@ class Initial
         $data = $cache->load(self::CACHE_ID);
         if (!$data) {
             $data = $reader->read();
-            $cache->save($this->getJson()->encode($data), self::CACHE_ID);
+            $cache->save($this->getSerializer()->serialize($data), self::CACHE_ID);
         } else {
-            $data = $this->getJson()->decode($data);
+            $data = $this->getSerializer()->unserialize($data);
         }
         $this->_data = $data['data'];
         $this->_metadata = $data['metadata'];
@@ -84,17 +84,17 @@ class Initial
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }
