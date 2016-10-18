@@ -72,7 +72,8 @@ $product->setTypeId(Type::TYPE_SIMPLE)
             'is_in_stock'               => 1,
         ]
     )->setCanSaveCustomOptions(true)
-    ->setHasOptions(true);
+    ->setHasOptions(true)
+    ->setCustomAttribute('test_configurable', 42);
 
 $oldOptions = [
     [

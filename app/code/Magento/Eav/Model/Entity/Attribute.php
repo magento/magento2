@@ -77,6 +77,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $dateTimeFormatter;
 
     /**
+     * @var \Magento\Framework\Intl\NumberFormatterFactory
+     */
+    private $numberFormatterFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -217,6 +222,23 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
+     * Get number formatter factory
+     *
+     * @return \Magento\Framework\Intl\NumberFormatterFactory
+     *
+     * @deprecated
+     */
+    private function getNumberFormatterFactory()
+    {
+        if ($this->numberFormatterFactory === null) {
+            $this->numberFormatterFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Intl\NumberFormatterFactory::class
+            );
+        }
+        return $this->numberFormatterFactory;
+    }
+
+    /**
      * Prepare data for save
      *
      * @return $this
@@ -256,7 +278,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $hasDefaultValue = (string)$defaultValue != '';
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
-            $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
+            $numberFormatter = $this->getNumberFormatterFactory()
+                ->create($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
             $defaultValue = $numberFormatter->parse($defaultValue);
             if ($defaultValue === false) {
                 throw new LocalizedException(__('Invalid default decimal value'));
