@@ -2,7 +2,7 @@
     "name": "magento/module-cms",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
         "magento/module-store": "100.1.*",
         "magento/module-theme": "100.1.*",
         "magento/module-widget": "100.1.*",
@@ -18,7 +18,7 @@
         "magento/module-cms-sample-data": "Sample Data version:100.1.*"
     },
     "type": "magento2-module",
-    "version": "101.0.1",
+    "version": "101.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

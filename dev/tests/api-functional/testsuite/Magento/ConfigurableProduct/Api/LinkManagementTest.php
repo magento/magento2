@@ -6,11 +6,33 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Eav\Model\AttributeRepository;
+
 class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'configurableProductLinkManagementV1';
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/configurable-products';
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
+
+    /**
+     * Execute per test initialization
+     */
+    public function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->attributeRepository = $this->objectManager->get('Magento\Eav\Model\AttributeRepository');
+    }
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
@@ -40,8 +62,8 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/delete_association.php
      */
     public function testAddChild()
@@ -61,6 +83,146 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         ];
         $res = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'childSku' => $childSku]);
         $this->assertTrue($res);
+    }
+
+    /**
+     * Test case to cover bug MAGETWO-58401
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     */
+    public function testAddChildFullRestCreation()
+    {
+        $this->createConfigurableProduct();
+        $attribute = $this->attributeRepository->get('catalog_product', 'test_configurable');
+        $attributeValues = $attribute->getOptions();
+        $this->addOptionToConfigurableProduct($attribute->getAttributeId(), $attributeValues[1]->getValue());
+        $this->createSimpleProduct($attributeValues[1]->getValue());
+
+        $requestData = [
+            'sku' => 'configurable-product-sku',
+            'childSku' => 'simple-product-sku'
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/configurable-product-sku/child',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'AddChild'
+            ]
+        ];
+        $res = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertTrue($res);
+
+        // clean up products
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/configurable-product-sku',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE
+            ],
+            'soap' => [
+                'service' => 'catalogProductRepositoryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'catalogProductRepositoryV1DeleteById',
+            ],
+        ];
+        $this->_webApiCall($serviceInfo, ['sku' => 'configurable-product-sku']);
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/simple-product-sku',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE
+            ],
+            'soap' => [
+                'service' => 'catalogProductRepositoryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'catalogProductRepositoryV1DeleteById',
+            ],
+        ];
+        $this->_webApiCall($serviceInfo, ['sku' => 'simple-product-sku']);
+    }
+
+    protected function createConfigurableProduct()
+    {
+        $requestData = [
+            'product' => [
+                'sku' => 'configurable-product-sku',
+                'name' => 'configurable-product',
+                'type_id' => 'configurable',
+                'price' => 50,
+                'attribute_set_id' => 4,
+            ]
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => 'catalogProductRepositoryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'catalogProductRepositoryV1Save',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    protected function addOptionToConfigurableProduct($attributeId, $attributeValue)
+    {
+        $requestData = [
+            'sku' => 'configurable-product-sku',
+            'option' => [
+                'attribute_id' => $attributeId,
+                'label' => 'color',
+                'position' => 0,
+                'is_use_default' => true,
+                'values' => [
+                    ['value_index' => $attributeValue],
+                ]
+            ]
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/configurable-products/configurable-product-sku/options',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => 'configurableProductOptionRepositoryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'configurableProductOptionRepositoryV1Save',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    protected function createSimpleProduct($attributeValue)
+    {
+        $requestData = [
+            'product' => [
+                'sku' => 'simple-product-sku',
+                'name' => 'simple-product',
+                'type_id' => 'simple',
+                'attribute_set_id' => 4,
+                'price' => 3.62,
+                'status' => 1,
+                'visibility' => 4,
+                'custom_attributes' => [
+                    ['attribute_code' => 'test_configurable', 'value' => $attributeValue],
+                ]
+            ]
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => 'catalogProductRepositoryV1',
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'catalogProductRepositoryV1Save',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**

@@ -12,6 +12,7 @@
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ResourceConnection;
+use Zend_Db_Statement_Exception;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
