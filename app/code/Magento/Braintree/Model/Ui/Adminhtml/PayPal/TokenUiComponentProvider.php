@@ -3,9 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Model\Ui\Adminhtml;
+namespace Magento\Braintree\Model\Ui\Adminhtml\PayPal;
 
+use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Braintree\Model\Ui\PayPal\ConfigProvider as PayPalConfigProvider;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -13,7 +15,7 @@ use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
- * Class TokenProvider
+ * Gets Ui component configuration for Braintree PayPal Vault
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
@@ -24,20 +26,28 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     private $componentFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @param TokenUiComponentInterfaceFactory $componentFactory
      * @param UrlInterface $urlBuilder
+     * @param Config $config
      */
     public function __construct(
         TokenUiComponentInterfaceFactory $componentFactory,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        Config $config
     ) {
         $this->componentFactory = $componentFactory;
         $this->urlBuilder = $urlBuilder;
+        $this->config = $config;
     }
 
     /**
@@ -46,14 +56,15 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
         $data = json_decode($paymentToken->getTokenDetails() ?: '{}', true);
+        $data['icon'] = $this->config->getPayPalIcon();
         $component = $this->componentFactory->create(
             [
                 'config' => [
-                    'code' => ConfigProvider::CC_VAULT_CODE,
+                    'code' => PayPalConfigProvider::PAYPAL_VAULT_CODE,
                     'nonceUrl' => $this->getNonceRetrieveUrl(),
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $data,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),
-                    'template' => 'Magento_Braintree::form/vault.phtml'
+                    'template' => 'Magento_Braintree::form/paypal/vault.phtml'
                 ],
                 'name' => Template::class
             ]

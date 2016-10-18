@@ -56,23 +56,6 @@ define([
                 expect(obj.observe).toHaveBeenCalled();
             });
         });
-        describe('"onUniqueUpdate" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('onUniqueUpdate')).toBeDefined();
-            });
-            it('Check method type', function () {
-                var type = typeof obj.onUniqueUpdate;
-
-                expect(type).toEqual('function');
-            });
-            it('Check called "this.trigger" inner onUniqueUpdate method', function () {
-                obj.trigger = jasmine.createSpy().and.callFake(function () {
-                    return obj;
-                });
-                obj.onUniqueUpdate();
-                expect(obj.trigger).toHaveBeenCalled();
-            });
-        });
         describe('"activate" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('activate')).toBeDefined();
