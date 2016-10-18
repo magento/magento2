@@ -130,6 +130,10 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
     {
         $one = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $two = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $one->expects($this->never())
+            ->method('getSourceFile');
+        $two->expects($this->never())
+            ->method('getSourceFile');
 
         $this->assetSource->expects($this->exactly(2))
             ->method('findSource')
