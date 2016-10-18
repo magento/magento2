@@ -227,6 +227,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @param string $value
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _isFullyQualifiedUrl($value)
     {

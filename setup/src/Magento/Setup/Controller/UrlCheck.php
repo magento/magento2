@@ -21,18 +21,19 @@ class UrlCheck extends AbstractActionController
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $result = ['successUrl' => false, 'successSecureUrl' => true];
 
+        $hasBaseUrl = isset($params['address']['actual_base_url']);
+        $hasSecureBaseUrl = isset($params['https']['text']);
+        $hasSecureAdminUrl = !empty($params['https']['admin']);
+        $hasSecureFrontUrl = !empty($params['https']['front']);
+
         // Validating of Base URL
-        if (isset($params['address']['actual_base_url'])
-            && filter_var($params['address']['actual_base_url'], FILTER_VALIDATE_URL)
-        ) {
+        if ($hasBaseUrl && filter_var($params['address']['actual_base_url'], FILTER_VALIDATE_URL)) {
             $result['successUrl'] = true;
         }
 
         // Validating of Secure Base URL
-        if (!empty($params['https']['admin']) || !empty($params['https']['front'])) {
-            if (!(isset($params['https']['text'])
-                && filter_var($params['https']['text'], FILTER_VALIDATE_URL))
-            ) {
+        if ($hasSecureAdminUrl || $hasSecureFrontUrl) {
+            if (!($hasSecureBaseUrl && filter_var($params['https']['text'], FILTER_VALIDATE_URL))) {
                 $result['successSecureUrl'] = false;
             }
         }
