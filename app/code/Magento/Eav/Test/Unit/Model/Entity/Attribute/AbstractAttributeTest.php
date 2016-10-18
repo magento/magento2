@@ -207,7 +207,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $backendModelMock->expects($this->any())->method('getType')->willReturn($attributeType);
-        $model->expects($this->once())->method('getBackend')->willReturn($backendModelMock);
+        $model->expects($this->any())->method('getBackend')->willReturn($backendModelMock);
         $this->assertEquals($isEmpty, $model->isValueEmpty($value));
     }
 
