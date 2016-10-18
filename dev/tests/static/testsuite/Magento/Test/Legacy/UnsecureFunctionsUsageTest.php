@@ -64,7 +64,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
                 if ($regexp) {
                     $matches = preg_grep(
                         $regexp,
-                        file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                        file($fileName)
                     );
                     if (!empty($matches)) {
                         foreach (array_keys($matches) as $line) {
@@ -161,7 +161,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         }
         $regexArray = [];
         foreach ($functions as $function) {
-            $regexArray[] = '\b' . $function . '\b\(';
+            $regexArray[] = '(?<!function |[^\s])\b' . $function . '\b\(';
         }
         return '/' . implode('|', $regexArray) . '/i';
     }

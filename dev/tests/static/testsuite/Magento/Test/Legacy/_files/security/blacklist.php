@@ -6,5 +6,4 @@
 return [
     'Test/Unit',
     'lib/internal/Magento/Framework/DB/Adapter/Pdo/Mysql.php',
-    'lib/internal/Magento/Framework/Serialize/SerializerInterface.php',
 ];
