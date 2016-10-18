@@ -6,6 +6,8 @@
 namespace Magento\Cms\Test\Unit\Model\Template;
 
 /**
+ * Work with catalog(store, website) urls
+ *
  * @covers \Magento\Cms\Model\Template\Filter
  */
 class FilterTest extends \PHPUnit_Framework_TestCase

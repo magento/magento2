@@ -7,7 +7,13 @@ namespace Magento\Framework\App\Test\Unit\Config;
 
 use Magento\Framework\App\Config\Scope\ReaderInterface;
 use Magento\Framework\App\Config\Scope\ReaderPoolInterface;
+use Magento\Framework\App\Config\ScopeCodeResolver;
 
+/**
+ * Class ScopePoolTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ScopePoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -29,6 +35,11 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cache;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeCodeResolver;
 
     /**
      * @var \Magento\Framework\App\Config\ScopePool
@@ -79,6 +90,14 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
         $requestMock->expects($this->any())
             ->method('getBasePath')
             ->willReturn('baseUrl');
+
+        $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $reflection = new \ReflectionClass(get_class($this->_object));
+        $reflectionProperty = $reflection->getProperty('scopeCodeResolver');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->_object, $this->scopeCodeResolver);
     }
 
     /**
@@ -93,6 +112,10 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
     {
         $scopeCode = $scope instanceof \Magento\Framework\App\ScopeInterface ? $scope->getCode() : $scope;
         $cacheKey = "test_cache_id|{$scopeType}|{$scopeCode}|baseUrl";
+
+        $this->scopeCodeResolver->expects($this->atLeastOnce())
+            ->method('resolve')
+            ->willReturn($scopeCode);
 
         $this->_readerPool->expects(
             $this->any()
@@ -155,6 +178,9 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
 
     public function testClean()
     {
+        $this->scopeCodeResolver->expects($this->never())
+            ->method('resolve')
+            ->willReturnArgument(1);
         $this->_cache->expects(
             $this->once()
         )->method(

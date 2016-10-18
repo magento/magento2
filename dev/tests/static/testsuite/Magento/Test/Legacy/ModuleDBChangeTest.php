@@ -15,11 +15,6 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected static $changedFilesPattern = __DIR__ . '/../_files/changed_files*';
-
-    /**
-     * @var string
-     */
     protected static $changedFileList = '';
 
     /**
@@ -27,7 +22,7 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        foreach (glob(self::$changedFilesPattern) as $changedFile) {
+        foreach (glob(__DIR__ . '/../_files/changed_files*') as $changedFile) {
             self::$changedFileList .= file_get_contents($changedFile) . PHP_EOL;
         }
     }

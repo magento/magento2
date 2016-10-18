@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 
 namespace Magento\User\Model\ResourceModel;
@@ -35,13 +34,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * Users table
-     *
-     * @var string
-     */
-    protected $_usersTable;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -61,7 +53,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
-        $this->_usersTable = $this->getTable('admin_user');
     }
 
     /**
@@ -473,7 +464,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (sizeof($users) > 0) {
             $bind = ['reload_acl_flag' => 1];
             $where = ['user_id IN(?)' => $users];
-            $rowsCount = $connection->update($this->_usersTable, $bind, $where);
+            $rowsCount = $connection->update($this->getTable('admin_user'), $bind, $where);
         }
 
         return $rowsCount > 0;

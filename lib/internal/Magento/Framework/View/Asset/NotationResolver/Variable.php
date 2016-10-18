@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 
 namespace Magento\Framework\View\Asset\NotationResolver;
@@ -58,18 +57,21 @@ class Variable
     }
 
     /**
-     * Retrieves the value of a given placeholder
+     * Process placeholder
      *
      * @param string $placeholder
      * @return string
      */
     public function getPlaceholderValue($placeholder)
     {
+        /** @var \Magento\Framework\View\Asset\File\FallbackContext $context */
         $context = $this->assetRepo->getStaticViewFileContext();
 
         switch ($placeholder) {
             case self::VAR_BASE_URL_PATH:
-                return $context->getBaseUrl() . $context->getPath();
+                return '{{' . self::VAR_BASE_URL_PATH . '}}' . $context->getAreaCode() .
+                    ($context->getThemePath() ? '/' . $context->getThemePath() . '/' : '') .
+                    '{{locale}}';
             default:
                 return '';
         }

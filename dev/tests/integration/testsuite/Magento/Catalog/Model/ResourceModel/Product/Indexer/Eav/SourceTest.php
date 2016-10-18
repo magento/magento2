@@ -11,6 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class SourceTest
+ * @magentoAppIsolation enabled
  */
 class SourceTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Preferences for classes like in di.xml (for integration tests)
+ *
+ * @copyright {}
  */
 
 return [
@@ -19,5 +20,6 @@ return [
     'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',
     'Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface' =>
         'Magento\TestFramework\Db\ConnectionAdapter',
-    'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File'
+    'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File',
+    \Magento\Framework\App\Config\ScopeConfigInterface::class => \Magento\TestFramework\App\Config::class,
 ];

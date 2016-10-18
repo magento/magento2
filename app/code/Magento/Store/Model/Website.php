@@ -652,7 +652,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**

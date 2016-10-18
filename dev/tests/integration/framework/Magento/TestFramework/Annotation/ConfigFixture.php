@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 
 /**
@@ -11,6 +10,11 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Handler which works with magentoConfigFixture annotations
+ *
+ * @package Magento\TestFramework\Annotation
+ */
 class ConfigFixture
 {
     /**

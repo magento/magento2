@@ -1,7 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Create customer and attach it to custom website with code newwebsite
+ *
+ * @copyright {}
  */
 
 // @codingStandardsIgnoreFile
@@ -13,7 +14,9 @@ $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $website->setName('new Website')->setCode('newwebsite')->save();
 
 $websiteId = $website->getId();
-
+$storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Store\Model\StoreManager::class);
+$storeManager->reinitStores();
 $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(

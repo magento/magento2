@@ -2,8 +2,7 @@
 /**
  * Resource configuration. Uses application configuration to retrieve resource connection information.
  *
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 namespace Magento\Framework\App\ResourceConnection;
 
@@ -17,6 +16,16 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * @var array
      */
     protected $_connectionNames = [];
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var bool
+     */
+    private $initialized = false;
 
     /**
      * @param Config\Reader $reader
@@ -34,14 +43,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
         $cacheId = 'resourcesCache'
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
-
-        $resource = $deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_RESOURCE);
-        foreach ($resource as $resourceName => $resourceData) {
-            if (!isset($resourceData['connection'])) {
-                throw new \InvalidArgumentException('Invalid initial resource configuration');
-            }
-            $this->_connectionNames[$resourceName] = $resourceData['connection'];
-        }
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -52,6 +54,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      */
     public function getConnectionName($resourceName)
     {
+        $this->initConnections();
         $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
 
         $resourceName = preg_replace("/_setup$/", '', $resourceName);
@@ -79,5 +82,24 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
         }
 
         return $connectionName;
+    }
+
+    /**
+     * Initialise connections
+     *
+     * @return void
+     */
+    private function initConnections()
+    {
+        if (!$this->initialized) {
+            $this->initialized = true;
+            $resource = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_RESOURCE) ?: [];
+            foreach ($resource as $resourceName => $resourceData) {
+                if (!isset($resourceData['connection'])) {
+                    throw new \InvalidArgumentException('Invalid initial resource configuration');
+                }
+                $this->_connectionNames[$resourceName] = $resourceData['connection'];
+            }
+        }
     }
 }

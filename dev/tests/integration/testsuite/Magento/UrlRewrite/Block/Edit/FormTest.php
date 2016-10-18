@@ -146,6 +146,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * Test fields disabled status
      * @dataProvider fieldsStateDataProvider
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store general/single_store_mode/enabled 0
      */
     public function testReadonlyFields($urlRewrite, $fields)
     {

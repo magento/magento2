@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
+use Magento\Framework\App\Config;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,6 +69,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     * @magentoDbIsolationEnabled
      */
     public function testExport()
     {
@@ -88,6 +92,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     * @magentoDbIsolationEnabled
      */
     public function testExportWithProductLinks()
     {
@@ -101,7 +106,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
-     *
+     * 
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
@@ -163,7 +170,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verifies if exception processing works properly
-     *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
     public function testExceptionInGetExportData()

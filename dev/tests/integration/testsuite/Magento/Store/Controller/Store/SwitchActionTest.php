@@ -21,7 +21,7 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
      */
     public function testExecuteWithCustomDefaultStore()
     {
-
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
         $defaultStoreCode = 'default';
         $modifiedDefaultCode = 'modified_default_code';
         $this->changeStoreCode($defaultStoreCode, $modifiedDefaultCode);

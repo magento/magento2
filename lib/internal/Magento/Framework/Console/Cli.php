@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 namespace Magento\Framework\Console;
 
@@ -135,7 +134,7 @@ class Cli extends SymfonyApplication
                 $commands = array_merge($commands, $setupCommandList->getCommands());
             }
 
-            if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            if (count($objectManager->get(\Magento\Framework\App\DeploymentConfig::class)->get('modules'))) {
                 /** @var \Magento\Framework\Console\CommandListInterface */
                 $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());

@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 
 /**
@@ -9,6 +8,11 @@
  */
 namespace Magento\Config\Model\Config;
 
+/**
+ * Class which can read config by paths
+ *
+ * @package Magento\Config\Model\Config
+ */
 class Loader
 {
     /**

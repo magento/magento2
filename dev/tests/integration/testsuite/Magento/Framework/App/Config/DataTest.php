@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Config;
+use Magento\Framework\App\ObjectManager;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     const SAMPLE_CONFIG_PATH = 'web/unsecure/base_url';
@@ -45,6 +48,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\CacheInterface')
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+        $appConfig = ObjectManager::getInstance()->get(Config::class);
+        $appConfig->clean();
     }
 
     protected function setUp()

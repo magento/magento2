@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 namespace Magento\Store\Model;
 
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\App\Config\Type\Scopes;
 
 /**
+ * Service contract, which manage scopes
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StoreManager implements \Magento\Store\Model\StoreManagerInterface
@@ -194,9 +196,12 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
             $website = $websiteId;
         } elseif ($websiteId === true) {
             $website = $this->websiteRepository->getDefault();
-        } else {
+        } elseif (is_numeric($websiteId)) {
             $website = $this->websiteRepository->getById($websiteId);
+        } else {
+            $website = $this->websiteRepository->get($websiteId);
         }
+
         return $website;
     }
 
@@ -224,6 +229,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     public function reinitStores()
     {
+        $this->scopeConfig->clean();
         $this->currentStoreId = null;
         $this->storeRepository->clean();
         $this->websiteRepository->clean();

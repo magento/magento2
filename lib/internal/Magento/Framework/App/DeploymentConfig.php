@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 
 namespace Magento\Framework\App;
@@ -112,6 +111,17 @@ class DeploymentConfig
     public function resetData()
     {
         $this->data = null;
+    }
+
+    /**
+     * Check if data from deploy files is avaiable
+     *
+     * @return bool
+     */
+    public function isDbAvailable()
+    {
+        $this->load();
+        return isset($this->data['db']);
     }
 
     /**

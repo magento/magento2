@@ -34,24 +34,13 @@
     </type>
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
-            <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
+            <argument name="readerPool" xsi:type="object">Magento\Framework\Config\ReaderPool\Proxy</argument>
         <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\Template\File\Validator">
         <arguments>
             <argument name="scope" xsi:type="string">store</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Store\Model\Config\Reader\Website">
-        <arguments>
-            <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Store\Model\Config\Reader\Store">
-        <arguments>
-            <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Store">
@@ -69,18 +58,7 @@
         <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Config\Reader\ReaderPool">
-        <arguments>
-            <argument name="readers" xsi:type="array">
-                <item name="default" xsi:type="object">Magento\Store\Model\Config\Reader\DefaultReader</item>
-                <item name="website" xsi:type="object">Magento\Store\Model\Config\Reader\Website</item>
-                <item name="websites" xsi:type="object">Magento\Store\Model\Config\Reader\Website</item>
-                <item name="store" xsi:type="object">Magento\Store\Model\Config\Reader\Store</item>
-                <item name="stores" xsi:type="object">Magento\Store\Model\Config\Reader\Store</item>
-            </argument>
-        </arguments>
-    </type>
-    <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
+    <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Framework\Config\ReaderPool"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
     <type name="\Magento\Framework\App\Action\AbstractAction">
@@ -163,7 +141,7 @@
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Store\Model\Config\Processor\Placeholder">
+    <type name="Magento\Store\Model\Config\Placeholder">
         <arguments>
             <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
             <argument name="urlPaths" xsi:type="array">
@@ -341,6 +319,122 @@
                 <item name="upgrade-insecure-requests" xsi:type="object">Magento\Store\Model\HeaderProvider\UpgradeInsecure</item>
                 <item name="x-content-type-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XContentTypeOptions</item>
                 <item name="x-xss-protection" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XssProtection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Config\ReaderPool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="default" xsi:type="object">DefaultScopeReader</item>
+                <item name="website" xsi:type="object">WebsiteScopeReader</item>
+                <item name="websites" xsi:type="object">WebsiteScopeReader</item>
+                <item name="store" xsi:type="object">StoreScopeReader</item>
+                <item name="stores" xsi:type="object">StoreScopeReader</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DefaultScopeReader" type="Magento\Framework\Config\Reader">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="defaultInitialSource" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\Store\Model\Config\Reader\Source\Initial\DefaultScope</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="defaultDynamicSource" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\Store\Model\Config\Reader\Source\Dynamic\DefaultScope</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="WebsiteScopeReader" type="Magento\Framework\Config\Reader">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="websiteInitialSource" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\Store\Model\Config\Reader\Source\Initial\Website</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="websiteDynamicSource" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\Store\Model\Config\Reader\Source\Dynamic\Website</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="StoreScopeReader" type="Magento\Framework\Config\Reader">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="storeInitialSource" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\Store\Model\Config\Reader\Source\Initial\Store</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="storeDynamicSource" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\Store\Model\Config\Reader\Source\Dynamic\Store</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="systemConfigPostProcessorComposite" type="Magento\Framework\App\Config\PostProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="placeholder" xsi:type="object">Magento\Store\Model\Config\Processor\Placeholder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="scopes" xsi:type="object">Magento\Store\App\Config\Type\Scopes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\App\Config\Type\Scopes">
+        <arguments>
+            <argument name="source" xsi:type="object">scopesConfigSourceAggregatedProxy</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <virtualType name="scopesConfigSourceAggregatedProxy" type="Magento\Framework\App\Config\ConfigSourceAggregated\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">scopesConfigSourceAggregated</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="scopesConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">scopesConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+                <item name="runtime" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Store\App\Config\Source\RuntimeConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="scopesConfigInitialDataProvider" type="Magento\Framework\App\Config\InitialConfigSource">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
+            <argument name="configType" xsi:type="const">Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE</argument>
+            <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="scopes" xsi:type="array">
+                    <item name="source" xsi:type="object">scopesConfigSourceAggregated</item>
+                    <item name="namespace" xsi:type="const">Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE</item>
+                </item>
             </argument>
         </arguments>
     </type>
