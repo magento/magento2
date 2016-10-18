@@ -135,7 +135,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPost'
         )->with(
-            'configurable-matrix-serialized', '[]'
+            'configurable-matrix-serialized',
+            '[]'
         )->will(
             $this->returnValue($matrix)
         );
@@ -181,7 +182,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPost'
         )->with(
-            'configurable-matrix-serialized', '[]'
+            'configurable-matrix-serialized',
+            '[]'
         )->will(
             $this->returnValue($matrix)
         );
@@ -208,7 +210,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPost'
         )->with(
-            'configurable-matrix-serialized', '[]'
+            'configurable-matrix-serialized',
+            '[]'
         )->will(
             $this->returnValue('[]')
         );
@@ -250,7 +253,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPost'
         )->with(
-            'configurable-matrix-serialized', '[]'
+            'configurable-matrix-serialized',
+            '[]'
         )->will(
             $this->returnValue($encodedMatrix)
         );
