@@ -97,6 +97,16 @@ class ConfigTesting implements ConfigInterface
     }
 
     /**
+     * Returns entire arguments keyed by type
+     *
+     * @return array
+     */
+    public function getAllArguments()
+    {
+        return [];
+    }
+
+    /**
      * Extend configuration
      *
      * @param array $configuration
