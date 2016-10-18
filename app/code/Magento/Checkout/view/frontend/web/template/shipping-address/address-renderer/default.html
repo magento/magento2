@@ -13,6 +13,11 @@
     <!-- ko if: (address().telephone) -->
     <a data-bind="text: address().telephone, attr: {'href': 'tel:' + address().telephone}"></a>
     <!-- /ko --><br/>
+    <!-- ko foreach: { data: address().customAttributes, as: 'element' } -->
+        <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
+            <!-- ko text: element[attribute].value --><!-- /ko -->
+        <!-- /ko -->
+    <!-- /ko -->
     <!-- ko if: (address().isEditable()) -->
     <button type="button"
             class="action edit-address-link"
