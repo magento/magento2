@@ -131,12 +131,7 @@ class Helper
                 $productData[$field] = [];
             }
         }
-
-        foreach ($productData['website_ids'] as $websiteId => $checkboxValue) {
-            if (!$checkboxValue) {
-                unset($productData['website_ids'][$websiteId]);
-            }
-        }
+        $productData['website_ids'] = $this->filterWebsiteIds($productData['website_ids']);
 
         $wasLockedMedia = false;
         if ($product->isLockedAttribute('media')) {
@@ -421,5 +416,24 @@ class Helper
                 ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
         }
         return $this->dateTimeFilter;
+    }
+
+    /**
+     * Remove ids of non selected websites from $websiteIds array and return filtered data
+     * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
+     * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
+     *
+     * @param array $websiteIds
+     * @return array
+     */
+    private function filterWebsiteIds($websiteIds)
+    {
+        if (!$this->storeManager->isSingleStoreMode()) {
+            $websiteIds = array_filter((array)$websiteIds);
+        } else {
+            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+        }
+
+        return $websiteIds;
     }
 }

@@ -161,7 +161,6 @@ define([
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
             },
-            hoverElIndex: null,
             separator: 'optgroup',
             listens: {
                 listVisible: 'cleanHoveredElement',
@@ -295,7 +294,6 @@ define([
             this._super();
             this.observe([
                 'listVisible',
-                'hoverElIndex',
                 'placeholder',
                 'multiselectFocus',
                 'options',
@@ -539,7 +537,7 @@ define([
         },
 
         /**
-         * Clean hoverElIndex variable
+         * Clean hoveredElement variable
          *
          * @returns {Object} Chainable
          */
