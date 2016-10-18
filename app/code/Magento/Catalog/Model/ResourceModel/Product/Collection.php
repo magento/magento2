@@ -2182,12 +2182,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $mediaGalleries = [];
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $items = $this->getItems();
+
+        $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
+            return $item->getId();
+        }, $items));
 
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row[$linkField]][] = $row;
         }
 
-        foreach ($this->getItems() as $item) {
+        foreach ($items as $item) {
             $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
             $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
         }
