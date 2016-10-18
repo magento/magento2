@@ -138,8 +138,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_cacheMock->expects($this->once())
-            ->method('save');
-//            ->with(json_encode($routes), 'scope::RoutesConfig');
+            ->method('save')
+            ->with(json_encode($routes), 'scope::RoutesConfig');
 
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
 
