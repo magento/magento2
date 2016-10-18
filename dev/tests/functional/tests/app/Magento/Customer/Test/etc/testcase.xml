@@ -13,7 +13,8 @@
     <step name="createProducts" module="Magento_Catalog" next="addProducts"/>
     <step name="addProducts" module="Magento_Sales" next="updateProductsData"/>
     <step name="updateProductsData" module="Magento_Sales" next="fillBillingAddress"/>
-    <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder"/>
+    <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress"/>
+    <step name="fillShippingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder"/>
     <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder"/>
     <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder"/>
     <step name="submitOrder" module="Magento_Sales"/>

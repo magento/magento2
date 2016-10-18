@@ -49,6 +49,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
         $component = $this->componentFactory->create(
             [
                 'config' => [
+                    'code' => ConfigProvider::CC_VAULT_CODE,
                     'nonceUrl' => $this->getNonceRetrieveUrl(),
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $data,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),

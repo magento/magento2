@@ -51,4 +51,26 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         return parent::validate($product);
     }
+
+    /**
+     * Retrieve value element chooser URL
+     *
+     * @return string
+     */
+    public function getValueElementChooserUrl()
+    {
+        $url = false;
+        switch ($this->getAttribute()) {
+            case 'sku':
+            case 'category_ids':
+                $url = 'sales_rule/promo_widget/chooser/attribute/' . $this->getAttribute();
+                if ($this->getJsFormObject()) {
+                    $url .= '/form/' . $this->getJsFormObject();
+                }
+                break;
+            default:
+                break;
+        }
+        return $url !== false ? $this->_backendData->getUrl($url) : '';
+    }
 }

@@ -101,6 +101,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
             }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the attribute set.'));
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $hasError = true;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $hasError = true;

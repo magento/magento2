@@ -32,7 +32,7 @@ define([
                 customerData.set('messages', {});
             }
 
-            $.cookieStorage.setConf({path: '/', expires: -1}).set('mage-messages', null);
+            $.cookieStorage.set('mage-messages', '');
         }
     });
 });

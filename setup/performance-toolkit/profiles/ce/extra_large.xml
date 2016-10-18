@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config>
+<config xmlns:xi="http://www.w3.org/2001/XInclude">
     <profile>
         <websites>5</websites> <!-- Number of websites to generate -->
         <store_groups>5</store_groups> <!--Number of stores-->
@@ -68,5 +68,8 @@
                 <set_scheduled>true</set_scheduled>
             </indexer>
         </indexers>
+        <xi:include href="../../config/searchTerms.xml" />
+        <xi:include href="../../config/searchConfig.xml" />
+        <xi:include href="../../config/attributeSets.xml" />
     </profile>
 </config>

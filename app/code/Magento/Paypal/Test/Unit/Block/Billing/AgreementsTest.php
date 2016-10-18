@@ -235,9 +235,14 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         $this->eventManager
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
+        $transport = new \Magento\Framework\DataObject(['html' => '']);
+        $this->eventManager
+            ->expects($this->at(1))
+            ->method('dispatch')
+            ->with('view_block_abstract_to_html_after', ['block' => $this->block, 'transport' => $transport]);
         $this->scopeConfig
             ->expects($this->once())
             ->method('getValue')

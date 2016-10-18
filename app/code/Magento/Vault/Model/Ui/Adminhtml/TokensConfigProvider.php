@@ -221,9 +221,11 @@ final class TokensConfigProvider
      */
     private function getPaymentTokenEntityId()
     {
-        return $this->getPaymentTokenManagement()
-            ->getByPaymentId($this->getOrderPaymentEntityId())
-            ->getEntityId();
+        $paymentToken = $this->getPaymentTokenManagement()->getByPaymentId($this->getOrderPaymentEntityId());
+        if ($paymentToken === null) {
+            throw new NoSuchEntityException(__('No available payment tokens for specified order payment.'));
+        }
+        return $paymentToken->getEntityId();
     }
 
     /**
