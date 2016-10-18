@@ -2,7 +2,8 @@
 /**
  * Create fixture store with code test
  *
- * @copyright {}
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /** @var $store \Magento\Store\Model\Store */

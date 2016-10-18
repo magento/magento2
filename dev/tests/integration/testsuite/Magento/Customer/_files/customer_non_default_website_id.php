@@ -2,7 +2,8 @@
 /**
  * Create customer and attach it to custom website with code newwebsite
  *
- * @copyright {}
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile

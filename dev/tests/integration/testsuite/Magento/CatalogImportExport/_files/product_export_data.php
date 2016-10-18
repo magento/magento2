@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright {}
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /** Create category */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
