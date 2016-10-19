@@ -10,17 +10,16 @@ interface SerializerInterface
     /**
      * Serialize data into string
      *
-     * @param array|string $data
+     * @param string|int|float|bool|array|null $data
      * @return string|bool
      */
     public function serialize($data);
 
     /**
-     * Unserialize the given string into array
+     * Unserialize the given string
      *
      * @param string $string
-     * @param int $objectDecodeType
-     * @return array
+     * @return string|int|float|bool|array|null
      */
     public function unserialize($string);
 }
