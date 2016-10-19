@@ -110,7 +110,11 @@ class BundleQtyValueTest extends \PHPUnit_Framework_TestCase
                 ->willReturn(2);
         }
 
-        $resultQty = $this->bundleQtyValue->get($this->creditmemoItemMock, $this->creditmemoMock, $this->parentOrderItemMock, $priceType);
+        $resultQty = $this->bundleQtyValue->get(
+            $this->creditmemoItemMock,
+            $this->creditmemoMock,
+            $this->parentOrderItemMock, $priceType
+        );
         $this->assertEquals($resultQty, $result);
     }
 

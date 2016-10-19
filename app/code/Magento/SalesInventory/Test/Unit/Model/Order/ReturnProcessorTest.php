@@ -51,11 +51,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
     private $priceIndexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoRepositoryInterface
-     */
-    private $creditmemoRepositoryMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|StoreManagerInterface
      */
     private $storeManagerMock;

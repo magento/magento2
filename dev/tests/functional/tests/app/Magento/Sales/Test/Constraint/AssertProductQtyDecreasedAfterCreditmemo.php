@@ -41,8 +41,11 @@ class AssertProductQtyDecreasedAfterCreditmemo extends AbstractConstraint
      * AssertFirstProductForm constructor.
      * @param ObjectManager $objectManager
      */
-    public function __construct(ObjectManager $objectManager, EventManagerInterface $eventManager, FixtureFactory $fixtureFactory)
-    {
+    public function __construct(
+        ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
+        FixtureFactory $fixtureFactory
+    ) {
         $this->fixtureFactory = $fixtureFactory;
         parent::__construct($objectManager, $eventManager);
     }

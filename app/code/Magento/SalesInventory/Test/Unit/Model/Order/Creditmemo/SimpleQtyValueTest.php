@@ -20,10 +20,8 @@ class SimpleQtyValueTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|CreditmemoItemInterface */
     private $creditmemoItemMock;
 
-
     /** @var  \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface */
     private $creditmemoMock;
-
 
     public function setUp()
     {
