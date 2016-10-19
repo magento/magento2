@@ -99,6 +99,7 @@ class Wishlist extends Block
     public function clickUpdateWishlist()
     {
         $this->waitFormToLoad();
+        $this->_rootElement->hover();
         $this->_rootElement->find($this->updateButton)->click();
     }
 
