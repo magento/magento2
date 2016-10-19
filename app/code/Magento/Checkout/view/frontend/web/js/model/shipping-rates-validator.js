@@ -176,7 +176,7 @@ define(
                     address;
 
                 if (this.validateAddressData(addressFlat)) {
-                    addressFlat = $.extend(true, {}, quote.shippingAddress(), addressFlat);
+                    addressFlat = uiRegistry.get('checkoutProvider').shippingAddress;
                     address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                     selectShippingAddress(address);
                 }
