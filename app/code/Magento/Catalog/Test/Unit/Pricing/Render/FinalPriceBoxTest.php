@@ -88,7 +88,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $context = $objectManager->getObject('Magento\Framework\View\Element\Template\Context',
+        $context = $objectManager->getObject(
+            'Magento\Framework\View\Element\Template\Context',
             [
                 'storeManager' => $storeManagerMock,
                 'logger' => $this->loggerMock
