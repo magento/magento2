@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\App\View\Deployment;
 
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\FileSystemException;
+
 /**
  * Deployment version of static files
  */
@@ -25,6 +28,11 @@ class Version
      * @var string
      */
     private $cachedValue;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param \Magento\Framework\App\State $appState
@@ -59,23 +67,49 @@ class Version
      */
     protected function readValue($appMode)
     {
-        switch ($appMode) {
-            case \Magento\Framework\App\State::MODE_DEFAULT:
-                try {
-                    $result = $this->versionStorage->load();
-                } catch (\UnexpectedValueException $e) {
-                    $result = (new \DateTime())->getTimestamp();
-                    $this->versionStorage->save($result);
-                }
-                break;
-
-            case \Magento\Framework\App\State::MODE_DEVELOPER:
-                $result = (new \DateTime())->getTimestamp();
-                break;
-
-            default:
+        if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
+            $result = $this->generateVersion();
+        } else {
+            try {
                 $result = $this->versionStorage->load();
+            } catch (\UnexpectedValueException $e) {
+                $result = $this->generateVersion();
+                if ($appMode == \Magento\Framework\App\State::MODE_DEFAULT) {
+                    try {
+                        $this->versionStorage->save($result);
+                    } catch (FileSystemException $e) {
+                        $this->getLogger()->critical('Can not save static content version.');
+                    }
+                } else {
+                    $this->getLogger()->critical('Can not load static content version.');
+                }
+            }
         }
         return $result;
+    }
+
+    /**
+     * Generate version of static content
+     *
+     * @return int
+     */
+    private function generateVersion()
+    {
+        return time();
+    }
+
+    /**
+     * Get logger
+     *
+     * @return LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if ($this->logger == null) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }

@@ -55,6 +55,11 @@ class UpdateHandler implements AttributeInterface
     private $readHandler;
 
     /**
+     * @var AttributeLoader
+     */
+    private $attributeLoader;
+
+    /**
      * UpdateHandler constructor.
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
@@ -62,6 +67,7 @@ class UpdateHandler implements AttributeInterface
      * @param AttributePersistor $attributePersistor
      * @param ReadSnapshot $readSnapshot
      * @param ScopeResolver $scopeResolver
+     * @param AttributeLoader $attributeLoader
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -69,7 +75,8 @@ class UpdateHandler implements AttributeInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributePersistor $attributePersistor,
         ReadSnapshot $readSnapshot,
-        ScopeResolver $scopeResolver
+        ScopeResolver $scopeResolver,
+        AttributeLoader $attributeLoader = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
@@ -77,22 +84,17 @@ class UpdateHandler implements AttributeInterface
         $this->attributePersistor = $attributePersistor;
         $this->readSnapshot = $readSnapshot;
         $this->scopeResolver = $scopeResolver;
+        $this->attributeLoader = $attributeLoader ?: ObjectManager::getInstance()->get(AttributeLoader::class);
     }
 
     /**
      * @param string $entityType
+     * @param int $attributeSetId
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
-     * @throws \Exception
      */
-    protected function getAttributes($entityType)
+    protected function getAttributes($entityType, $attributeSetId = null)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-
-        $searchResult = $this->attributeRepository->getList(
-            $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
-        );
-        return $searchResult->getItems();
+        return $this->attributeLoader->getAttributes($entityType, $attributeSetId);
     }
 
     /**
@@ -118,8 +120,11 @@ class UpdateHandler implements AttributeInterface
                     $entityDataForSnapshot[$scope->getIdentifier()] = $entityData[$scope->getIdentifier()];
                 }
             }
+            $attributeSetId = isset($entityData[AttributeLoader::ATTRIBUTE_SET_ID])
+                ? $entityData[AttributeLoader::ATTRIBUTE_SET_ID]
+                : null; // @todo verify is it normal to not have attributer_set_id
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
-            foreach ($this->getAttributes($entityType) as $attribute) {
+            foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
                 }

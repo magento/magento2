@@ -26,7 +26,7 @@
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
             <data name="data/form_data/do_shipment" xsi:type="string">No</data>
             <data name="data/form_data/comment_text" xsi:type="string">comments</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
@@ -51,7 +51,7 @@
             <data name="data/items_data/0/qty" xsi:type="string">1</data>
             <data name="data/form_data/do_shipment" xsi:type="string">No</data>
             <data name="data/form_data/comment_text" xsi:type="string">comments</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
