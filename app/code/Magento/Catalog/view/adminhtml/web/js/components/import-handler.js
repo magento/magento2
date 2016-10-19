@@ -99,13 +99,14 @@ define([
          *  and disallow/allow import value
          */
         userChanges: function () {
-            this._super();
 
             /**
              *  As userChanges is called before updateValue,
              *  we forced to get value from component by reference
              */
             var actualValue = arguments[1].currentTarget.value;
+
+            this._super();
 
             if (actualValue === '') {
                 this.allowImport = true;
