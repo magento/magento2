@@ -13,5 +13,13 @@ use Magento\Mtf\Block\Form;
  */
 class Shipping extends Form
 {
-    //
+    /**
+     * Returns form's required elements
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getRequiredFields()
+    {
+        return $this->_rootElement->getElements("div .field._required");
+    }
 }
