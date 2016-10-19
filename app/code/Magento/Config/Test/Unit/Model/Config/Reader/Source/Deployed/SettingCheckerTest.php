@@ -9,6 +9,7 @@ use Magento\Config\Model\Config\Reader;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Test class for checking settings that defined in config file
@@ -17,11 +18,6 @@ use Magento\Framework\App\Config;
  */
 class SettingCheckerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $scopeCodeResolver;
-
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -34,14 +30,11 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->config = $this->getMockBuilder(Config::class)
+        $this->config = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->checker = new SettingChecker($this->scopeCodeResolver, $this->config);
+        $this->checker = new SettingChecker($this->config);
     }
 
     public function testIsDefined()
@@ -50,10 +43,6 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
         $scope = 'website';
         $scopeCode = 'myWebsite';
 
-        $this->scopeCodeResolver->expects($this->once())
-            ->method('resolve')
-            ->with($scope, $scopeCode)
-            ->willReturn($scopeCode);
         $this->config->expects($this->once())
             ->method('get')
             ->willReturn([
@@ -65,6 +54,6 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
 
             ]);
 
-        $this->assertTrue($this->checker->isReadOnly($path, $scope, $scopeCode));
+        $this->assertTrue($this->checker->isReadOnly($path, $scope));
     }
 }

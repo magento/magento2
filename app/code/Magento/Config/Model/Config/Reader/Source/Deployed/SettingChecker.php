@@ -6,7 +6,6 @@
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
 use Magento\Config\Model\Config\Reader;
-use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
@@ -15,24 +14,16 @@ use Magento\Framework\App\DeploymentConfig;
 class SettingChecker
 {
     /**
-     * @var ScopeCodeResolver
-     */
-    private $scopeCodeResolver;
-
-    /**
      * @var DeploymentConfig
      */
     private $config;
 
     /**
-     * @param ScopeCodeResolver $scopeCodeResolver
      * @param DeploymentConfig $config
      */
     public function __construct(
-        ScopeCodeResolver $scopeCodeResolver,
         DeploymentConfig $config
     ) {
-        $this->scopeCodeResolver = $scopeCodeResolver;
         $this->config = $config;
     }
 
