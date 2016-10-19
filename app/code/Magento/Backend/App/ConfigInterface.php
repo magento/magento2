@@ -24,6 +24,17 @@ interface ConfigInterface
     public function getValue($path);
 
     /**
+     * Set config value
+     *
+     * @deprecated
+     * @param string $path
+     * @param mixed $value
+     * @return void
+     * @api
+     */
+    public function setValue($path, $value);
+
+    /**
      * Retrieve config flag
      *
      * Path should looks like keys imploded by "/". For example scopes/stores/admin

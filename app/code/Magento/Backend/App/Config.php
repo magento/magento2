@@ -24,6 +24,11 @@ class Config implements ConfigInterface
     protected $appConfig;
 
     /**
+     * @var array
+     */
+    private $data;
+
+    /**
      * @param \Magento\Framework\App\Config $appConfig
      * @return void
      */
@@ -37,11 +42,23 @@ class Config implements ConfigInterface
      */
     public function getValue($path)
     {
+        if (isset($this->data[$path])) {
+            return $this->data[$path];
+        }
+
         $configPath = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         if ($path) {
             $configPath .= '/' . $path;
         }
         return $this->appConfig->get(System::CONFIG_TYPE, $configPath);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setValue($path, $value)
+    {
+        $this->data[$path] = $value;
     }
 
     /**
