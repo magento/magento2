@@ -19,6 +19,8 @@ use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
  * Class RefundInvoice
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundInvoice implements RefundInvoiceInterface
 {
