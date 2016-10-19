@@ -9,12 +9,16 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $context;
+
     /** @var \Magento\Catalog\Controller\Product */
     protected $action;
+
     /** @var \Magento\Framework\View\Layout  */
     protected $layout;
+
     /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $session;
+
     /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
 
