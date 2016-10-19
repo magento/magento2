@@ -11,9 +11,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ImageProcessor
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageProcessor implements ImageProcessorInterface
 {
@@ -45,7 +47,7 @@ class ImageProcessor implements ImageProcessorInterface
     private $dataObjectHelper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -63,14 +65,14 @@ class ImageProcessor implements ImageProcessorInterface
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param Uploader $uploader
      */
     public function __construct(
         Filesystem $fileSystem,
         ImageContentValidatorInterface $contentValidator,
         DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         Uploader $uploader
     ) {
         $this->filesystem = $fileSystem;
@@ -92,7 +94,7 @@ class ImageProcessor implements ImageProcessorInterface
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
             $dataObjectWithCustomAttributes->getCustomAttributes(),
-            '\Magento\Framework\Api\Data\ImageContentInterface'
+            ImageContentInterface::class
         );
 
         // Return if no images to process

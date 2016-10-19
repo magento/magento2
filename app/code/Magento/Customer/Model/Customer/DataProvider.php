@@ -16,7 +16,6 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
-use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -216,24 +215,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ? $customerData[$attributeCode]
             : '';
 
-        /** @var FileProcessor $fileProcessor */
-        $fileProcessor = $this->getFileProcessorFactory()->create([
-            'entityTypeCode' => $entityType->getEntityTypeCode(),
-        ]);
-
-        if (!empty($file)
-            && $fileProcessor->isExist($file)
-        ) {
-            $stat = $fileProcessor->getStat($file);
-            $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
-        }
-
-        $fileName = $file;
-        if (strrpos($fileName, '/') !== false) {
-            $fileName = substr($fileName, strrpos($fileName, '/') + 1);
-        }
-
         if (!empty($file)) {
+            /** @var FileProcessor $fileProcessor */
+            $fileProcessor = $this->getFileProcessorFactory()->create([
+                'entityTypeCode' => $entityType->getEntityTypeCode(),
+            ]);
+
+            if ($fileProcessor->isExist($file)) {
+                $stat = $fileProcessor->getStat($file);
+                $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
+            }
+
+            $fileName = $file;
+            if (strrpos($fileName, '/') !== false) {
+                $fileName = substr($fileName, strrpos($fileName, '/') + 1);
+            }
+
             return [
                 [
                     'file' => $file,
@@ -243,6 +240,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ],
             ];
         }
+
         return [];
     }
 
@@ -292,6 +290,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @param AbstractAttribute $attribute
      * @param array $config
+     * @return void
      */
     private function overrideFileUploaderMetadata(
         Type $entityType,
@@ -309,7 +308,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if (isset($config['validation']['file_extensions'])) {
                 $allowedExtensions = explode(',', $config['validation']['file_extensions']);
-                array_walk($allowedExtensions, function(&$value) { $value = strtolower(trim($value)); });
+                array_walk($allowedExtensions, function (&$value) {
+                    $value = strtolower(trim($value));
+                });
             }
 
             $allowedExtensions = implode(' ', $allowedExtensions);
