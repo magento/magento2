@@ -35,11 +35,6 @@ class ReturnProcessor
     private $storeManager;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * @var \Magento\Sales\Api\OrderItemRepositoryInterface
      */
     private $orderItemRepository;
@@ -50,12 +45,13 @@ class ReturnProcessor
     private $qtyValuePool;
 
     /**
-     * ReturnToStockPlugin constructor.
+     * ReturnProcessor constructor.
      * @param \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexer
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
+     * @param QtyValuePool $qtyValuePool
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement,

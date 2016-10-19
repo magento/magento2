@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesInventory\Model\Order\Creditmemo\QtyValuePool;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\SalesInventory\Model\Order\ReturnProcessor;
@@ -60,11 +61,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderRepositoryInterface
-     */
-    private $orderRepositoryMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemRepositoryInterface
      */
     private $orderItemRepositoryMock;
@@ -83,6 +79,9 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|StoreInterface */
     private $storeMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|QtyValuePool */
+    private $qtyValuePoolMock;
+
     public function setUp()
     {
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
@@ -95,13 +94,10 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
         $this->priceIndexerMock = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->creditmemoRepositoryMock = $this->getMockBuilder(CreditmemoRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
+        $this->orderItemRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
@@ -123,14 +119,17 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->qtyValuePoolMock = $this->getMockBuilder(QtyValuePool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->returnProcessor = new ReturnProcessor(
             $this->stockManagementMock,
             $this->stockIndexerProcessorMock,
             $this->priceIndexerMock,
-            $this->creditmemoRepositoryMock,
             $this->storeManagerMock,
-            $this->orderRepositoryMock,
-            $this->orderItemRepositoryMock
+            $this->orderItemRepositoryMock,
+            $this->qtyValuePoolMock
         );
     }
 
@@ -139,6 +138,7 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
         $orderItemId = 99;
         $productId = 50;
         $returnToStockItems = [$orderItemId];
+        $parentItemId = 52;
         $qty = 1;
         $storeId = 0;
         $webSiteId = 10;
@@ -146,10 +146,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->creditmemoItemMock]);
-
-        $this->creditmemoItemMock->expects($this->once())
-            ->method('getQty')
-            ->willReturn($qty);
 
         $this->creditmemoItemMock->expects($this->exactly(2))
             ->method('getOrderItemId')
@@ -189,6 +185,15 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
         $this->priceIndexerMock->expects($this->once())
             ->method('reindexList')
             ->with([$productId]);
+
+        $this->orderItemMock->expects($this->once())
+            ->method('getParentItemId')
+            ->willReturn($parentItemId);
+
+        $this->qtyValuePoolMock->expects($this->once())
+            ->method('get')
+            ->with($this->creditmemoItemMock, $this->creditmemoMock, $parentItemId)
+            ->willReturn($qty);
 
         $this->returnProcessor->execute($this->creditmemoMock, $this->orderMock, $returnToStockItems);
     }

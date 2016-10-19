@@ -20,6 +20,7 @@ class BundleQtyValue implements QtyValueInterface
      * @var CreditmemoItemRepositoryInterface
      */
     private $creditmemoItemRepository;
+
     /**
      * @var OrderItemRepositoryInterface
      */

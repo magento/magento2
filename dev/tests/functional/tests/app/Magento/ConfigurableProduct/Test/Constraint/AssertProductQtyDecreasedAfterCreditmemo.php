@@ -41,12 +41,14 @@ class AssertProductQtyDecreasedAfterCreditmemo extends AbstractConstraint
      * AssertFirstProductForm constructor.
      * @param ObjectManager $objectManager
      */
-    public function __construct(ObjectManager $objectManager, EventManagerInterface $eventManager, FixtureFactory $fixtureFactory)
-    {
+    public function __construct(
+        ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
+        FixtureFactory $fixtureFactory
+    ) {
         $this->fixtureFactory = $fixtureFactory;
         parent::__construct($objectManager, $eventManager);
     }
-
 
     /**
      * Assert form data equals fixture data
@@ -98,7 +100,6 @@ class AssertProductQtyDecreasedAfterCreditmemo extends AbstractConstraint
         $optionProduct = $productData['configurable_attributes_data']['matrix'][$productKey];
         $optionProduct['qty'] -= ($checkoutDataQty - $data['items_data'][$index]['qty']);
         $productData = $optionProduct;
-
 
         $productData = array_diff_key($productData, array_flip($this->skipFields));
 

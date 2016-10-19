@@ -141,10 +141,14 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->objectManagerHelper->setBackwardCompatibleProperty(
-            $this->observer, 'orderRepository', $this->orderRepositoryMock
+            $this->observer,
+            'orderRepository',
+            $this->orderRepositoryMock
         );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
-            $this->observer, 'returnProcessor', $this->returnProcessorMock
+            $this->observer,
+            'returnProcessor',
+            $this->returnProcessorMock
         );
     }
 

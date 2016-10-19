@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesInventory\Model\Order\Creditmemo;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -12,16 +11,22 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 
+/**
+ * Class QtyValuePool
+ * @package Magento\SalesInventory\Model\Order\Creditmemo
+ */
 class QtyValuePool
 {
     /**
      * @var QtyValueInterface[]
      */
     private $qtyValues;
+
     /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
     /**
      * @var OrderItemRepositoryInterface
      */
@@ -53,9 +58,8 @@ class QtyValuePool
     public function get(CreditmemoItemInterface $creditmemoItem, CreditmemoInterface $creditmemo, $parentItemId = null)
     {
         $parentOrderItem = $parentItemId ? $this->orderItemRepository->get($parentItemId) : null;
-        $product = $parentOrderItem
-            ? $this->productRepository->getById($parentOrderItem->getProductId())
-            : $this->productRepository->getById($creditmemoItem->getProductId());
+        $productId = $parentOrderItem  ? $parentOrderItem->getProductId() : $creditmemoItem->getProductId();
+        $product =  $this->productRepository->getById($productId);
 
         if (!isset($this->qtyValues[$product->getTypeId()])) {
             $this->qtyValues[$product->getTypeId()] = $this->qtyValues[
