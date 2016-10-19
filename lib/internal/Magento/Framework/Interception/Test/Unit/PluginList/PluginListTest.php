@@ -238,12 +238,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
         $this->serializerMock->expects($this->once())
-            ->method('serialize')
-            ->willReturnCallback(
-                function ($data) {
-                    return json_encode($data);
-                }
-            );
+            ->method('serialize');
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
         $this->cacheMock->expects($this->once())
@@ -279,18 +274,17 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('scope'));
 
         $data = [['key'], ['key'], ['key']];
+        $serializedData = '[["key"],["key"],["key"]]';
 
         $this->serializerMock->expects($this->never())
             ->method('serialize');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+            ->willReturn($data);
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with('global|scope|interception')
-            ->will($this->returnValue(json_encode($data)));
+            ->willReturn($serializedData);
 
         $this->assertEquals(null, $this->object->getNext('Type', 'method'));
     }

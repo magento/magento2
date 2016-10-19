@@ -87,10 +87,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
     public function testGetMethodsMap()
     {
         $this->serializerMock->expects($this->once())
-            ->method('serialize')
-            ->willReturnCallback(function ($data) {
-                return json_encode($data);
-            });
+            ->method('serialize');
         $methodsMap = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertEquals(
             [

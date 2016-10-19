@@ -63,9 +63,8 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
         );
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+            ->with($loadData)
+            ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->configCache->get($key));
     }
 
@@ -73,7 +72,7 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [false, false],
-            [json_encode(['some data']), ['some data']],
+            ['["some data"]', ['some data']],
         ];
     }
 
@@ -83,10 +82,8 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
         $config = ['config'];
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->willReturnCallback(function ($data) {
-                return json_encode($data);
-            });
-        $this->cacheFrontendMock->expects($this->once())->method('save')->with(json_encode($config), 'diConfig' . $key);
+            ->willReturn('["config"]');
+        $this->cacheFrontendMock->expects($this->once())->method('save')->with('["config"]', 'diConfig' . $key);
         $this->configCache->save($config, $key);
     }
 }

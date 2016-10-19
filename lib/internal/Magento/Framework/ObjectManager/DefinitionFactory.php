@@ -13,7 +13,6 @@ namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
-use Magento\Framework\ObjectManager\Definition\Compiled\Json;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
 
@@ -40,6 +39,7 @@ class DefinitionFactory
      * Format of definitions
      *
      * @var string
+     * @deprecated
      */
     protected $_definitionFormat;
 
@@ -55,9 +55,7 @@ class DefinitionFactory
      *
      * @var array
      */
-    protected static $definitionClasses = [
-        Json::MODE_NAME => \Magento\Framework\ObjectManager\Definition\Compiled\Json::class,
-    ];
+    protected static $definitionClasses = \Magento\Framework\ObjectManager\Definition\Compiled::class;
 
     /**
      * @var \Magento\Framework\Code\Generator
@@ -70,8 +68,12 @@ class DefinitionFactory
      * @param string $generationDir
      * @param string  $definitionFormat
      */
-    public function __construct(DriverInterface $filesystemDriver, $definitionDir, $generationDir, $definitionFormat)
-    {
+    public function __construct(
+        DriverInterface $filesystemDriver,
+        $definitionDir,
+        $generationDir,
+        $definitionFormat = null
+    ) {
         $this->_filesystemDriver = $filesystemDriver;
         $this->_definitionDir = $definitionDir;
         $this->_generationDir = $generationDir;
@@ -90,7 +92,7 @@ class DefinitionFactory
             if (is_string($definitions)) {
                 $definitions = $this->_unpack($definitions);
             }
-            $definitionModel = self::$definitionClasses[$this->_definitionFormat];
+            $definitionModel = self::$definitionClasses;
             $result = new $definitionModel($definitions);
         } else {
             $autoloader = new \Magento\Framework\Code\Generator\Autoloader($this->getCodeGenerator());
@@ -108,7 +110,7 @@ class DefinitionFactory
      */
     public function createPluginDefinition()
     {
-        $path = $this->_definitionDir . '/' . \Magento\Framework\Interception\Definition\Compiled::FILE_NAME;
+        $path = $this->_definitionDir . '/plugins.json';
         if ($this->_filesystemDriver->isReadable($path)) {
             return new \Magento\Framework\Interception\Definition\Compiled(
                 $this->_unpack($this->_filesystemDriver->fileGetContents($path))
@@ -125,7 +127,7 @@ class DefinitionFactory
      */
     public function createRelations()
     {
-        $path = $this->_definitionDir . '/' . \Magento\Framework\ObjectManager\Relations\Compiled::FILE_NAME;
+        $path = $this->_definitionDir . '/relations.json';
         if ($this->_filesystemDriver->isReadable($path)) {
             return new \Magento\Framework\ObjectManager\Relations\Compiled(
                 $this->_unpack($this->_filesystemDriver->fileGetContents($path))
@@ -139,10 +141,11 @@ class DefinitionFactory
      * Gets supported definition formats
      *
      * @return array
+     * @deprecated
      */
     public static function getSupportedFormats()
     {
-        return array_keys(self::$definitionClasses);
+        return [];
     }
 
     /**

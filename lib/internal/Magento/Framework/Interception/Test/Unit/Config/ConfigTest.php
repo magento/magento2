@@ -148,10 +148,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
 
         $this->serializerMock->expects($this->once())
-            ->method('serialize')
-            ->willReturnCallback(function ($data) {
-                return json_encode($data);
-            });
+            ->method('serialize');
+
         $this->serializerMock->expects($this->never())->method('unserialize');
 
         $model = $this->objectManagerHelper->getObject(
@@ -188,17 +186,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         $this->readerMock->expects($this->never())->method('read');
         $this->cacheMock->expects($this->never())->method('save');
+        $serializedValue = '{"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer":true,'
+            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\Item":true,'
+            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\Item\\Enhanced":true,'
+            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer\\Enhanced":true,'
+            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer\\Proxy":true,'
+            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemProxy":false,'
+            . '"virtual_custom_item":true}';
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with($cacheId)
-            ->will($this->returnValue(json_encode($interceptionData)));
+            ->will($this->returnValue($serializedValue));
 
         $this->serializerMock->expects($this->never())->method('serialize');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+            ->with($serializedValue)
+            ->willReturn($interceptionData);
 
         $model = $this->objectManagerHelper->getObject(
             \Magento\Framework\Interception\Config\Config::class,

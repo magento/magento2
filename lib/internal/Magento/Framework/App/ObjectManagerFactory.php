@@ -10,7 +10,6 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\ObjectManager\Definition\Compiled\Json;
 use Magento\Framework\App\ObjectManager\Environment;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Code\GeneratedFiles;
@@ -23,6 +22,7 @@ class ObjectManagerFactory
 {
     /**
      * Path to definitions format in deployment configuration
+     * @deprecated
      */
     const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
 
@@ -118,8 +118,7 @@ class ObjectManagerFactory
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
             $this->directoryList->getPath(DirectoryList::DI),
-            $this->directoryList->getPath(DirectoryList::GENERATION),
-            $deploymentConfig->get(self::CONFIG_PATH_DEFINITION_FORMAT, Json::MODE_NAME)
+            $this->directoryList->getPath(DirectoryList::GENERATION)
         );
 
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));

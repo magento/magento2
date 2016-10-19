@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\ObjectManager\Test\Unit;
 
-use Magento\Framework\ObjectManager\Definition\Compiled\Json;
+use Magento\Framework\ObjectManager\Definition\Compiled;
 
 class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sampleContent = json_encode([1, 2, 3]);
+        $this->sampleContent = '[1,2,3]';
         $this->filesystemDriverMock = $this->getMock(
             \Magento\Framework\Filesystem\Driver\File::class,
             [],
@@ -38,15 +38,14 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->filesystemDriverMock,
             'DefinitionDir',
-            'GenerationDir',
-            Json::MODE_NAME
+            'GenerationDir'
         );
     }
 
     public function testCreateClassDefinitionFromString()
     {
         $this->assertInstanceOf(
-            \Magento\Framework\ObjectManager\Definition\Compiled\Json::class,
+            \Magento\Framework\ObjectManager\Definition\Compiled::class,
             $this->model->createClassDefinition($this->sampleContent)
         );
     }

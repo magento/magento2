@@ -5,33 +5,64 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Definition;
 
-use \Magento\Framework\ObjectManager\Definition\Compiled;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetParametersWithUndefinedDefinition()
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManagerHelper;
+
+    protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $undefinedDefinitionSignature = new \stdClass();
-        $className = 'undefinedDefinition';
-        $readerMock = $this->getMock(
-            \Magento\Framework\Code\Reader\ClassReader::class,
-            ['getConstructor'],
-            [],
-            '',
-            false
-        );
-        $readerMock->expects($this->once())
-            ->method('getConstructor')
-            ->with($className)
-            ->willReturn($undefinedDefinitionSignature);
-        $model = $objectManager->getObject(
-            \Magento\Framework\ObjectManager\Test\Unit\Definition\CompiledStub::class,
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    }
+
+    /**
+     * @param array $signatures
+     * @param array $definitions
+     * @param mixed $expected
+     * @dataProvider getParametersDataProvider
+     */
+    public function testGetParametersWithoutDefinition($signatures, $definitions, $expected)
+    {
+        $model = new \Magento\Framework\ObjectManager\Definition\Compiled([$signatures, $definitions]);
+        $this->assertEquals($expected, $model->getParameters('wonderful'));
+    }
+
+    public function getParametersDataProvider()
+    {
+        $wonderfulSignature = new \stdClass();
+        return [
             [
-                'definitions' => [[], []],
-                'reader' => $readerMock
+                [],
+                ['wonderful' => null],
+                null,
+            ],
+            [
+                ['wonderfulClass' => $wonderfulSignature],
+                ['wonderful' => 'wonderfulClass'],
+                $wonderfulSignature,
             ]
+        ];
+    }
+
+    public function testGetParametersWithUnpacking()
+    {
+        $checkString = 'code to pack';
+        $signatures = ['wonderfulClass' => json_encode($checkString)];
+        $definitions = ['wonderful' => 'wonderfulClass'];
+        $object = new \Magento\Framework\ObjectManager\Definition\Compiled([$signatures, $definitions]);
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturnCallback(function ($data) {
+                return json_decode($data, true);
+            });
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $object,
+            'serializer',
+            $serializerMock
         );
-        $this->assertEquals($undefinedDefinitionSignature, $model->getParameters($className));
+        $this->assertEquals($checkString, $object->getParameters('wonderful'));
     }
 }

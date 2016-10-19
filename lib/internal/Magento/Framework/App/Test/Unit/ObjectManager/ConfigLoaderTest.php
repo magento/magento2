@@ -88,6 +88,7 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadNotCached($area)
     {
         $configData = ['some' => 'config', 'data' => 'value'];
+        $serializedConfigData = '{"some":"config","data":"value"}';
 
         $this->cacheMock->expects($this->once())
             ->method('load')
@@ -96,14 +97,13 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->cacheMock->expects($this->once())
             ->method('save')
-            ->with(json_encode($configData));
+            ->with($serializedConfigData);
         $this->readerMock->expects($this->once())->method('read')->with($area)->will($this->returnValue($configData));
 
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
+            ->willReturn($serializedConfigData);
+
         $this->serializerMock->expects($this->never())->method('unserialize');
 
         $this->assertEquals($configData, $this->object->load($area));
@@ -126,18 +126,18 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadCached()
     {
         $configData = ['some' => 'config', 'data' => 'value'];
+        $serializedConfigData = '{"some":"config","data":"value"}';
 
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn(json_encode($configData));
+            ->willReturn($serializedConfigData);
         $this->cacheMock->expects($this->never())
             ->method('save');
         $this->readerMock->expects($this->never())->method('read');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+            ->with($serializedConfigData)
+            ->willReturn($configData);
         $this->serializerMock->expects($this->never())->method('serialize');
         $this->assertEquals($configData, $this->object->load('testArea'));
     }

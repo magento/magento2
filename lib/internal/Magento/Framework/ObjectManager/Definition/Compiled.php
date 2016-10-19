@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
  * Compiled class definitions. Should be used for maximum performance in production.
  */
-abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionInterface
+class Compiled implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
     /**
      * Class definitions
@@ -21,6 +23,16 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
      * @var \Magento\Framework\Code\Reader\ClassReaderInterface
      */
     protected $reader ;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var array
+     */
+    private $_signatures;
 
     /**
      * @param array $definitions
@@ -38,7 +50,10 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
      * @param string $signature
      * @return mixed
      */
-    abstract protected function _unpack($signature);
+    protected function _unpack($signature)
+    {
+        return $this->getSerializer()->unserialize($signature);
+    }
 
     /**
      * Get list of method parameters
@@ -81,5 +96,20 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
     public function getClasses()
     {
         return array_keys($this->_definitions);
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }
