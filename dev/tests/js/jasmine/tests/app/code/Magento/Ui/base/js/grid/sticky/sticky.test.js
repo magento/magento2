@@ -135,10 +135,13 @@ define([
                 stickyObj.resetToTop();
                 expect(stickyObj.resetToTop).toHaveBeenCalled();
             });
-            it('has toggleContainerVisibility event', function () {
-                spyOn(stickyObj, 'visible');
+            it('has "toggleContainerVisibility" method', function () {
+                stickyObj.visible = false;
                 stickyObj.toggleContainerVisibility();
-                expect(stickyObj.visible).toHaveBeenCalled();
+                expect(stickyObj.visible).toEqual(true);
+                stickyObj.visible = true;
+                stickyObj.toggleContainerVisibility();
+                expect(stickyObj.visible).toEqual(false);
             });
             it('has adjustContainerElemsWidth event', function () {
                 stickyObj.resizeContainer = function(){
@@ -156,17 +159,6 @@ define([
                 stickyObj.adjustOffset();
                 expect(stickyObj.adjustOffset).toHaveBeenCalled();
             });
-            it('has checkPos event', function () {
-                stickyObj.visible = function(){
-                    return false;
-                };
-                stickyObj.getMustBeSticky = function(){
-                    return false;
-                };
-
-                data = stickyObj.checkPos();
-                expect(data).toBeDefined();
-            })
         });
     })
 });
