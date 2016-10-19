@@ -13,6 +13,11 @@ namespace Magento\Backend\Test\Unit\Model\Session;
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
@@ -105,6 +110,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
@@ -227,9 +233,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->prepareObjectManager([
-            [\Magento\Quote\Api\CartManagementInterface::class, $this->cartManagementMock]
+        $this->objectManager->mockObjectManager([
+            \Magento\Quote\Api\CartManagementInterface::class => $this->cartManagementMock
         ]);
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -415,20 +426,5 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'customer ids different' => [66, null, 'once'],
             'customer ids same' => [66, 66, 'never'],
         ];
-    }
-
-    /**
-     * @param array $map
-     * @deprecated
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

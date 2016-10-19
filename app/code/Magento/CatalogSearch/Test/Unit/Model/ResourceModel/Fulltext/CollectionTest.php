@@ -15,6 +15,11 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class CollectionTest extends BaseCollectionTest
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $temporaryStorage;
@@ -64,20 +69,17 @@ class CollectionTest extends BaseCollectionTest
      */
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
         $this->universalFactory = $this->getUniversalFactory();
         $this->scopeConfig = $this->getScopeConfig();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
 
-        $this->prepareObjectManager(
+        $this->objectManager->mockObjectManager(
             [
-                [
-                    \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
+                \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class =>
                     $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-                ],
             ]
         );
 
@@ -92,7 +94,7 @@ class CollectionTest extends BaseCollectionTest
             ->method('create')
             ->willReturn($this->temporaryStorage);
 
-        $this->model = $helper->getObject(
+        $this->model = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             [
                 'storeManager' => $this->storeManager,
@@ -108,6 +110,11 @@ class CollectionTest extends BaseCollectionTest
         $this->model->setSearchCriteriaBuilder($this->criteriaBuilder);
         $this->model->setSearch($this->search);
         $this->model->setFilterBuilder($this->filterBuilder);
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**
@@ -206,22 +213,6 @@ class CollectionTest extends BaseCollectionTest
                 ->willReturnSelf();
         }
         return $filterBuilder;
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 
     protected function createFilter()
