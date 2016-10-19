@@ -38,11 +38,11 @@ class CreateSimpleProductEntityByAttributeMaskSkuTest extends Injectable
      * @var bool
      */
     private $flushCache;
+
     /**
      * @var \Magento\Mtf\Fixture\FixtureFactory
      */
     private $fixtureFactory;
-
 
     /**
      * Run create product simple entity by attribute mask SKU test.
@@ -88,7 +88,6 @@ class CreateSimpleProductEntityByAttributeMaskSkuTest extends Injectable
         return ['product' => $productSimple];
     }
 
-
     /**
      * Obtains product sku based on attributes define in Stores > Configuration->Catalog > Catalog > Mask for SKU
      *
@@ -108,14 +107,14 @@ class CreateSimpleProductEntityByAttributeMaskSkuTest extends Injectable
         $attributesInPattern = [];
         $count = preg_match_all('/{{(\w+)}}/', $skuMask, $matches);
         if ($count > 0 && is_array($matches[0])) {
-            foreach($matches[1] as $attributeName) {
+            foreach ($matches[1] as $attributeName) {
                 if (array_key_exists($attributeName, $productData)) {
                     $attributesInPattern[$attributeName] = $productData[$attributeName];
                 }
             }
         }
-        foreach($attributesInPattern as $attributeName => $attributeValue) {
-            $skuMask = str_replace('{{'. $attributeName .'}}', $attributeValue, $skuMask);
+        foreach ($attributesInPattern as $attributeName => $attributeValue) {
+            $skuMask = str_replace('{{' . $attributeName . '}}', $attributeValue, $skuMask);
         }
         return $skuMask;
     }
