@@ -5,13 +5,15 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 
-use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  ConfigurableOptionsProviderInterface */
-    private $cofigurableOptionProvider;
+    /**
+     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $lowestPriceOptionsProvider;
 
     /**
      * @var \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
@@ -19,12 +21,12 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
     protected $resolver;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $configurable;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
      */
     protected $priceResolver;
 
@@ -36,8 +38,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
         $className = \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
-        $this->cofigurableOptionProvider = $this->getMockBuilder(ConfigurableOptionsProviderInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->lowestPriceOptionsProvider = $this->getMock(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
@@ -45,7 +46,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
             [
                 'priceResolver' => $this->priceResolver,
                 'configurable' => $this->configurable,
-                'configurableOptionsProvider' => $this->cofigurableOptionProvider,
+                'lowestPriceOptionsProvider' => $this->lowestPriceOptionsProvider,
             ]
         );
     }
@@ -63,7 +64,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 
         $product->expects($this->once())->method('getSku')->willReturn('Kiwi');
 
-        $this->cofigurableOptionProvider->expects($this->once())->method('getProducts')->willReturn([]);
+        $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn([]);
 
         $this->resolver->resolvePrice($product);
     }
@@ -83,8 +84,11 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 
         $product->expects($this->never())->method('getSku');
 
-        $this->cofigurableOptionProvider->expects($this->once())->method('getProducts')->willReturn([$product]);
-        $this->priceResolver->expects($this->atLeastOnce())->method('resolvePrice')->willReturn($price);
+        $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn([$product]);
+        $this->priceResolver->expects($this->once())
+            ->method('resolvePrice')
+            ->with($product)
+            ->willReturn($price);
 
         $this->assertEquals($expectedValue, $this->resolver->resolvePrice($product));
     }

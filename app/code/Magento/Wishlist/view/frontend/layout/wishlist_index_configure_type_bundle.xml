@@ -22,7 +22,7 @@
                        template="Magento_Catalog::product/view/addto.phtml" cacheable="false">
                     <block class="Magento\Wishlist\Block\Item\Configure" name="view.addto.wishlist.bundle" after="view.addto.requisition"
                            template="item/configure/addto/wishlist.phtml" />
-                    <block class="Magento\Catalog\Block\Product\View\Addto\Compare" name="view.addto.compare.bundle" after="view.addto.wishlist"
+                    <block class="Magento\Catalog\Block\Product\View\AddTo\Compare" name="view.addto.compare.bundle" after="view.addto.wishlist"
                            template="Magento_Catalog::product/view/addto/compare.phtml" />
                 </block>
             </block>
