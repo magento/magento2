@@ -373,7 +373,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getScopeId());
+        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),

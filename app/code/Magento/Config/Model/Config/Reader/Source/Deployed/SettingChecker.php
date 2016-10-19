@@ -5,11 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\App\Config\Type\System;
 use Magento\Config\Model\Config\Reader;
 use Magento\Framework\App\Config\ScopeCodeResolver;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class for checking settings that defined in config file
@@ -22,17 +20,17 @@ class SettingChecker
     private $scopeCodeResolver;
 
     /**
-     * @var Config
+     * @var DeploymentConfig
      */
     private $config;
 
     /**
      * @param ScopeCodeResolver $scopeCodeResolver
-     * @param Config $config
+     * @param DeploymentConfig $config
      */
     public function __construct(
         ScopeCodeResolver $scopeCodeResolver,
-        Config $config
+        DeploymentConfig $config
     ) {
         $this->scopeCodeResolver = $scopeCodeResolver;
         $this->config = $config;
@@ -43,15 +41,11 @@ class SettingChecker
      *
      * @param string $path
      * @param string $scope
-     * @param string|null $scopeCode
      * @return boolean
      */
-    public function isReadOnly($path, $scope, $scopeCode = null)
+    public function isReadOnly($path, $scope)
     {
-        $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
-        $config = $this->config->get(System::CONFIG_TYPE);
-        return $scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            ? isset($config[ScopeConfigInterface::SCOPE_TYPE_DEFAULT][$path])
-            : isset($config[$scope][$scopeCode][$path]);
+        $config = $this->config->get('system/' . $scope . "/" . $path);
+        return $config !== null;
     }
 }
