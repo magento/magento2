@@ -276,6 +276,7 @@ class FileTest extends AbstractFormTestCase
                 ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'],
                 ['uploaded' => false],
             ],
+            'isValid' => [true, ['tmp_name' => 'tempName_0001.txt', 'name' => 'realFileName.txt']],
         ];
     }
 
@@ -300,7 +301,12 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
-        $this->assertSame('value', $model->compactValue([]));
+        $this->fileProcessorMock->expects($this->once())
+            ->method('removeUploadedFile')
+            ->with('value')
+            ->willReturnSelf();
+
+        $this->assertSame([], $model->compactValue([]));
     }
 
     public function testCompactValueDelete()
@@ -446,6 +452,77 @@ class FileTest extends AbstractFormTestCase
         $this->assertEquals($value, $model->compactValue($value));
     }
 
+    public function testCompactValueUiComponent()
+    {
+        $value = [
+            'file' => 'filename',
+        ];
+
+        $model = $this->initialize([
+            'value' => null,
+            'isAjax' => false,
+            'entityTypeCode' => self::ENTITY_TYPE,
+        ]);
+
+        $this->fileProcessorMock->expects($this->once())
+            ->method('moveTemporaryFile')
+            ->with($value['file'])
+            ->willReturn(true);
+
+        $this->assertTrue($model->compactValue($value));
+    }
+
+    public function testCompactValueRemoveUiComponentValue()
+    {
+        $value = 'value';
+
+        $model = $this->initialize([
+            'value' => $value,
+            'isAjax' => false,
+            'entityTypeCode' => self::ENTITY_TYPE,
+        ]);
+
+        $this->fileProcessorMock->expects($this->once())
+            ->method('removeUploadedFile')
+            ->with($value)
+            ->willReturnSelf();
+
+        $this->assertEquals([], $model->compactValue([]));
+    }
+
+    public function testExtractValueFileUploaderUIComponent()
+    {
+        $attributeCode = 'img1';
+        $requestScope = 'customer';
+        $fileName = 'filename.ext1';
+
+        $this->attributeMetadataMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with($requestScope)
+            ->willReturn([
+                $attributeCode => [
+                    [
+                        'file' => $fileName,
+                    ],
+                ],
+            ]);
+
+        $model = $this->initialize([
+            'value' => 'value',
+            'isAjax' => false,
+            'entityTypeCode' => self::ENTITY_TYPE,
+        ]);
+
+        $model->setRequestScope($requestScope);
+        $result = $model->extractValue($this->requestMock);
+
+        $this->assertEquals(['file' => $fileName], $result);
+    }
+
     public function testCompactValueInputField()
     {
         $value = [
@@ -565,6 +642,11 @@ class FileTest extends AbstractFormTestCase
             $this->fileSystemMock,
             $this->uploaderFactoryMock
         );
+
+        $reflection = new \ReflectionClass(get_class($model));
+        $reflectionProperty = $reflection->getProperty('fileProcessor');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($model, $this->fileProcessorMock);
 
         return $model;
     }

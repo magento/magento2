@@ -162,6 +162,9 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $imageContent->expects($this->any())
             ->method('getName')
             ->willReturn('testFileName');
+        $imageContent->expects($this->any())
+            ->method('getType')
+            ->willReturn('image/jpg');
 
         $imageDataObject = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
             ->disableOriginalConstructor()
@@ -201,6 +204,9 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $imageContent->expects($this->any())
             ->method('getName')
             ->willReturn('testFileName');
+        $imageContent->expects($this->any())
+            ->method('getType')
+            ->willReturn('image/jpg');
 
         $imageDataObject = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
             ->disableOriginalConstructor()

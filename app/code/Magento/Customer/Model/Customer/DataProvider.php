@@ -235,10 +235,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         if (!empty($file)) {
             return [
-                'file' => $file,
-                'size' => isset($stat) ? $stat['size'] : 0,
-                'url' => isset($viewUrl) ? $viewUrl : '',
-                'name' => $fileName,
+                [
+                    'file' => $file,
+                    'size' => isset($stat) ? $stat['size'] : 0,
+                    'url' => isset($viewUrl) ? $viewUrl : '',
+                    'name' => $fileName,
+                ],
             ];
         }
         return [];

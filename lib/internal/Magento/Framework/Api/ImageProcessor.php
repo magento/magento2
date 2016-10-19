@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
@@ -103,7 +104,7 @@ class ImageProcessor implements ImageProcessorInterface
         /** @var $imageDataObject \Magento\Framework\Api\AttributeValue */
         foreach ($imageDataObjects as $imageDataObject) {
 
-            /** @var $imageContent \Magento\Framework\Api\Data\ImageContentInterface */
+            /** @var $imageContent ImageContentInterface */
             $imageContent = $imageDataObject->getValue();
 
             $filename = $this->processImageContent($entityType, $imageContent);

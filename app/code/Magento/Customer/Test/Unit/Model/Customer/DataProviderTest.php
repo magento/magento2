@@ -10,7 +10,6 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
@@ -102,6 +101,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
                 'eavConfig' => $this->getEavConfigMock()
             ]
+        );
+
+        $this->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
         );
 
         $meta = $dataProvider->getMeta();
@@ -334,6 +339,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'eavConfig' => $this->getEavConfigMock()
             ]
         );
+
+        $this->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
         $this->assertEquals(
             [
                 '' => [
@@ -364,16 +376,21 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $customerEmail = 'user1@example.com';
+
         $filename = '/filename.ext1';
         $viewUrl = 'viewUrl';
+
         $expectedData = [
             $customerId => [
                 'customer' => [
                     'email' => $customerEmail,
                     'img1' => [
-                        'file' => $filename,
-                        'type' => 'image',
-                        'url' => $viewUrl,
+                        [
+                            'file' => $filename,
+                            'size' => 1,
+                            'url' => $viewUrl,
+                            'name' => 'filename.ext1',
+                        ],
                     ],
                 ],
             ],
@@ -401,7 +418,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $customerMock->expects($this->once())
             ->method('getData')
-            ->willReturn(['email' => $customerEmail, 'img1' => $filename]);
+            ->willReturn([
+                'email' => $customerEmail,
+                'img1' => $filename,
+            ]);
         $customerMock->expects($this->once())
             ->method('getAddresses')
             ->willReturn([]);
@@ -435,6 +455,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with($filename)
             ->willReturn(true);
+        $this->fileProcessor->expects($this->once())
+            ->method('getStat')
+            ->with($filename)
+            ->willReturn(['size' => 1]);
         $this->fileProcessor->expects($this->once())
             ->method('getViewUrl')
             ->with('/filename.ext1', 'image')
@@ -536,6 +560,145 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->setBackwardCompatibleProperty($dataProvider, 'fileProcessorFactory', $this->fileProcessorFactory);
 
         $this->assertEquals($expectedData, $dataProvider->getData());
+    }
+
+    public function testGetAttributesMetaWithCustomAttributeImage()
+    {
+        $maxFileSize = 1000;
+        $allowedExtension = 'ext1 ext2';
+
+        $attributeCode = 'img1';
+
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->with('*');
+
+        $this->customerCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods([
+                'getAttributeCode',
+                'getFrontendInput',
+                'getDataUsingMethod',
+            ])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+        $attributeMock->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn('image');
+        $attributeMock->expects($this->any())
+            ->method('getDataUsingMethod')
+            ->willReturnCallback(
+                function ($origName) {
+                    return $origName;
+                }
+            );
+
+        $typeCustomerMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeCustomerMock->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn([$attributeMock]);
+        $typeCustomerMock->expects($this->once())
+            ->method('getEntityTypeCode')
+            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $typeAddressMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeAddressMock->expects($this->once())
+            ->method('getAttributeCollection')
+            ->willReturn([]);
+
+        $this->eavConfigMock->expects($this->at(0))
+            ->method('getEntityType')
+            ->with('customer')
+            ->willReturn($typeCustomerMock);
+        $this->eavConfigMock->expects($this->at(1))
+            ->method('getEntityType')
+            ->with('customer_address')
+            ->willReturn($typeAddressMock);
+
+        $this->eavValidationRulesMock->expects($this->once())
+            ->method('build')
+            ->with($attributeMock, [
+                'dataType' => 'frontend_input',
+                'formElement' => 'frontend_input',
+                'visible' => 'is_visible',
+                'required' => 'is_required',
+                'sortOrder' => 'sort_order',
+                'notice' => 'note',
+                'default' => 'default_value',
+                'size' => 'multiline_count',
+                'label' => __('frontend_label'),
+            ])
+            ->willReturn([
+                'max_file_size' => $maxFileSize,
+                'file_extensions' => 'ext1, eXt2 ', // Added spaces and upper-cases
+            ]);
+
+        $this->fileProcessorFactory->expects($this->any())
+            ->method('create')
+            ->with([
+                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            ])
+            ->willReturn($this->fileProcessor);
+
+        $objectManager = new ObjectManager($this);
+        $dataProvider = $objectManager->getObject(
+            '\Magento\Customer\Model\Customer\DataProvider',
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->customerCollectionFactoryMock,
+                'eavConfig' => $this->eavConfigMock,
+                'fileProcessorFactory' => $this->fileProcessorFactory,
+            ]
+        );
+
+        $result = $dataProvider->getMeta();
+
+        $this->assertNotEmpty($result);
+
+        $expected = [
+            'customer' => [
+                'fields' => [
+                    $attributeCode => [
+                        'formElement' => 'fileUploader',
+                        'componentType' => 'fileUploader',
+                        'maxFileSize' => $maxFileSize,
+                        'allowedExtensions' => $allowedExtension,
+                        'uploaderConfig' => [
+                            'url' => 'customer/file/customer_upload',
+                        ],
+                        'sortOrder' => 'sort_order',
+                        'required' => 'is_required',
+                        'visible' => 'is_visible',
+                        'validation' => [
+                            'max_file_size' => $maxFileSize,
+                            'file_extensions' => 'ext1, eXt2 ',
+                        ],
+                        'label' => __('frontend_label'),
+                    ],
+                ],
+            ],
+            'address' => [
+                'fields' => [],
+            ],
+        ];
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
