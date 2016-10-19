@@ -125,4 +125,17 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $stockData = $object->getStockData();
         $this->assertEquals(0, $stockData['qty']);
     }
+
+    public function testBeforeSaveNoStockData()
+    {
+        $object = new \Magento\Framework\DataObject(
+            [
+                self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 0]
+            ]
+        );
+
+        $this->model->beforeSave($object);
+        $this->assertNull($object->getStockData());
+        $this->assertNull($object->getData(self::ATTRIBUTE_NAME));
+    }
 }
