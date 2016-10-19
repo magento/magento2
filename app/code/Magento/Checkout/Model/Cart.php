@@ -261,7 +261,11 @@ class Cart extends DataObject implements CartInterface
         if ($orderItem->getParentItem() === null) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
-                $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId);
+                /**
+                 * We need to reload product in this place, because products
+                 * with the same id may have different sets of order attributes.
+                 */
+                $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId, true);
             } catch (NoSuchEntityException $e) {
                 return $this;
             }
