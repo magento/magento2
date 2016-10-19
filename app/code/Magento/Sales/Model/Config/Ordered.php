@@ -70,6 +70,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
+
     /**
      * @var SerializerInterface
      */
