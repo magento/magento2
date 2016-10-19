@@ -5,17 +5,16 @@
  */
 namespace Magento\Vault\Model\Method;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\ConfigFactoryInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -275,7 +274,12 @@ final class Vault implements VaultPaymentInterface
      */
     public function canUseInternal()
     {
-        return $this->getVaultProvider()->canUseInternal();
+        $isInternalAllowed = $this->getConfiguredValue('can_use_internal');
+        // if config has't been specified for Vault, need to check payment provider option
+        if ($isInternalAllowed === null) {
+            return $this->getVaultProvider()->canUseInternal();
+        }
+        return (bool) $isInternalAllowed;
     }
 
     /**

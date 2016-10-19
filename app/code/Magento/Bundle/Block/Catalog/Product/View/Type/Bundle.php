@@ -78,9 +78,14 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Returns the bundle product options
+     * Will return cached options data if the product options are already initialized
+     * In a case when $stripSelection parameter is true will reload stored bundle selections collection from DB
+     *
+     * @param bool $stripSelection
      * @return array
      */
-    public function getOptions()
+    public function getOptions($stripSelection = false)
     {
         if (!$this->options) {
             $product = $this->getProduct();
@@ -96,7 +101,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
             $this->options = $optionCollection->appendSelections(
                 $selectionCollection,
-                false,
+                $stripSelection,
                 $this->catalogProduct->getSkipSaleableCheck()
             );
         }
