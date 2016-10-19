@@ -11,9 +11,19 @@ define(
         '../model/address-converter',
         '../action/select-shipping-address',
         './postcode-validator',
-        'mage/translate'
+        'mage/translate',
+        'Magento_Checkout/js/model/quote'
     ],
-    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, $t) {
+    function (
+        $,
+        ko,
+        shippingRatesValidationRules,
+        addressConverter,
+        selectShippingAddress,
+        postcodeValidator,
+        $t,
+        quote
+    ) {
         'use strict';
 
         var checkoutConfig = window.checkoutConfig,
@@ -30,7 +40,7 @@ define(
              * @param {Object} validator
              */
             registerValidator: function (carrier, validator) {
-                if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
+                if (checkoutConfig.activeCarriers.indexOf(carrier) !== -1) {
                     validators.push(validator);
                 }
             },
@@ -131,6 +141,7 @@ define(
                     address;
 
                 if (this.validateAddressData(addressFlat)) {
+                    addressFlat = $.extend(true, {}, quote.shippingAddress(), addressFlat);
                     address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                     selectShippingAddress(address);
                 }

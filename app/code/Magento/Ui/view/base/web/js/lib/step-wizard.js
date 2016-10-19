@@ -184,15 +184,9 @@ define([
             this.selectedStep(this.wizard.prev());
         },
         open: function () {
-            var $form = $('[data-form=edit-product]');
-
-            if (!$form.valid()) {
-                $form.data('validator').focusInvalid();
-            } else {
-                this.selectedStep(this.stepsNames.first());
-                this.wizard = new Wizard(this.steps);
-                $('[data-role=step-wizard-dialog]').trigger('openModal');
-            }
+            this.selectedStep(this.stepsNames.first());
+            this.wizard = new Wizard(this.steps);
+            $('[data-role=step-wizard-dialog]').trigger('openModal');
         },
         close: function () {
             $('[data-role=step-wizard-dialog]').trigger('closeModal');
