@@ -45,7 +45,7 @@ class Filesystem implements WriterInterface
         $this->initialize();
 
         file_put_contents(
-            \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::getFilePath($key),
+            $this->directoryList->getPath(DirectoryList::DI) . '/' . $key  . '.json',
             $this->getSerializer()->serialize($config)
         );
     }

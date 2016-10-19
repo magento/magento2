@@ -11,6 +11,11 @@ namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
     protected $model;
@@ -74,16 +79,27 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(
-                \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
-                [
-                    'universalFactory' => $universalFactory,
-                    'storeManager' => $storeManager,
-                    'eavConfig' => $eavConfig,
-                    'fetchStrategy' => $fetchStrategy
-                ]
-            );
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager->mockObjectManager([
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class => $productLimitationMock
+        ]);
+        $this->model = $this->objectManager->getObject(
+            \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
+            [
+                'universalFactory' => $universalFactory,
+                'storeManager' => $storeManager,
+                'eavConfig' => $eavConfig,
+                'fetchStrategy' => $fetchStrategy
+            ]
+        );
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->restoreObjectManager();
     }
 
     /**

@@ -117,6 +117,7 @@ class ConfigGenerator
      * @param array $data
      * @return ConfigData
      * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createDefinitionsConfig(array $data)
     {
