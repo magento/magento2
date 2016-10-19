@@ -1438,11 +1438,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @param bool $expectedResult
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
      * @dataProvider validateRowDataProvider
      */
     public function testValidateRow(array $row, $behavior, $expectedResult)
     {
-        $this->_model->setParameters(['behavior' => $behavior]);
+        $this->_model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
         $this->assertSame($expectedResult, $this->_model->validateRow($row, 1));
     }
 
@@ -1453,18 +1455,18 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         return [
             [
-                'row' => ['sku' => '24-MB01'],
+                'row' => ['sku' => 'simple products'],
                 'behavior' => null,
                 'expectedResult' => true,
             ],
             [
-                'row' => ['sku' => '24-MB01-absent'],
+                'row' => ['sku' => 'simple products absent'],
                 'behavior' => null,
                 'expectedResult' => false,
             ],
             [
                 'row' => [
-                    'sku' => '24-MB01-absent',
+                    'sku' => 'simple products absent',
                     'name' => 'Test',
                     'product_type' => 'simple',
                     '_attribute_set' => 'Default',
@@ -1474,18 +1476,18 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'expectedResult' => true,
             ],
             [
-                'row' => ['sku' => '24-MB01'],
+                'row' => ['sku' => 'simple products'],
                 'behavior' => Import::BEHAVIOR_ADD_UPDATE,
                 'expectedResult' => true,
             ],
             [
-                'row' => ['sku' => '24-MB01-absent'],
+                'row' => ['sku' => 'simple products absent'],
                 'behavior' => Import::BEHAVIOR_ADD_UPDATE,
                 'expectedResult' => false,
             ],
             [
                 'row' => [
-                    'sku' => '24-MB01-absent',
+                    'sku' => 'simple products absent',
                     'name' => 'Test',
                     'product_type' => 'simple',
                     '_attribute_set' => 'Default',
@@ -1495,24 +1497,46 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'expectedResult' => true,
             ],
             [
-                'row' => ['sku' => '24-MB01'],
+                'row' => ['sku' => 'simple products'],
                 'behavior' => Import::BEHAVIOR_DELETE,
                 'expectedResult' => true,
             ],
             [
-                'row' => ['sku' => '24-MB01-absent'],
+                'row' => ['sku' => 'simple products absent'],
                 'behavior' => Import::BEHAVIOR_DELETE,
                 'expectedResult' => false,
             ],
             [
-                'row' => ['sku' => '24-MB01'],
+                'row' => ['sku' => 'simple products'],
                 'behavior' => Import::BEHAVIOR_REPLACE,
                 'expectedResult' => false,
             ],
             [
-                'row' => ['sku' => '24-MB01-absent'],
+                'row' => ['sku' => 'simple products absent'],
                 'behavior' => Import::BEHAVIOR_REPLACE,
                 'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => 'simple products absent',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => 'simple products',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => true,
             ],
         ];
     }
