@@ -29,6 +29,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $collection;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $galleryResourceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -98,18 +108,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $entityMock = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
+        $this->entityMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->galleryResourceMock = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media::class
+        )->disableOriginalConstructor()->getMock();
 
         $storeManager->expects($this->any())->method('getId')->willReturn(1);
         $storeManager->expects($this->any())->method('getStore')->willReturnSelf();
         $universalFactory->expects($this->exactly(1))->method('create')->willReturnOnConsecutiveCalls(
-            $entityMock
+            $this->entityMock
         );
-        $entityMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
-        $entityMock->expects($this->once())->method('getDefaultAttributes')->willReturn([]);
-        $entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
+        $this->entityMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
+        $this->entityMock->expects($this->once())->method('getDefaultAttributes')->willReturn([]);
+        $this->entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
         $helper = new ObjectManager($this);
         $this->collection = $helper->getObject(
@@ -138,6 +152,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->collection->setConnection($this->connectionMock);
+
+        $reflection = new \ReflectionClass(get_class($this->collection));
+        $reflectionProperty = $reflection->getProperty('mediaGalleryResource');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->collection, $this->galleryResourceMock);
     }
 
     public function testAddProductCategoriesFilter()
@@ -164,5 +183,43 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['e.entity_id IN (1,2)']
         )->willReturnSelf();
         $this->collection->addCategoriesFilter([$conditionType => $values]);
+    }
+
+    public function testAddMediaGalleryData()
+    {
+        $attributeId = 42;
+        $itemId = 4242;
+        $mediaGalleriesMock = [['entity_id' => $itemId]];
+        $itemMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $backendMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Attribute\Backend\Media::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->collection->addItem($itemMock);
+        $reflection = new \ReflectionClass(get_class($this->collection));
+        $reflectionProperty = $reflection->getProperty('_isCollectionLoaded');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->collection, true);
+
+        $this->galleryResourceMock->expects($this->once())->method('createBatchBaseSelect')->willReturn($selectMock);
+        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
+        $this->entityMock->expects($this->once())->method('getAttribute')->willReturn($attributeMock);
+        $itemMock->expects($this->atLeastOnce())->method('getId')->willReturn($itemId);
+        $selectMock->expects($this->once())->method('where')->with('entity.entity_id IN (?)', [$itemId]);
+
+        $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
+            [['entity_id' => $itemId]]
+        );
+        $attributeMock->expects($this->once())->method('getBackend')->willReturn($backendMock);
+        $backendMock->expects($this->once())->method('addMediaDataToProduct')->with($itemMock, $mediaGalleriesMock);
+
+        $this->assertSame($this->collection, $this->collection->addMediaGalleryData());
     }
 }

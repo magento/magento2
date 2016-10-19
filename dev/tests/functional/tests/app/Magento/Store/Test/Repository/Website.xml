@@ -8,21 +8,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Store\Test\Repository\Website">
         <dataset name="default">
+            <field name="website_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">Main Website</field>
             <field name="code" xsi:type="string">base</field>
-            <field name="website_id" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="all_websites">
+            <field name="website_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">All Websites</field>
-            <field name="website_id" xsi:type="string">0</field>
         </dataset>
 
         <dataset name="main_website">
+            <field name="website_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">Main Website</field>
             <field name="code" xsi:type="string">base</field>
             <field name="sort_order" xsi:type="string">0</field>
-            <field name="website_id" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="custom_website">
