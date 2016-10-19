@@ -188,6 +188,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $setCondition,
         $setRemoveCondition
     ) {
+        if ($literal == 'referenceBlock' && $remove == 'false') {
+            $this->scheduledStructure->expects($this->once())
+                ->method('unsetElementFromListToRemove')
+                ->with($literal);
+        }
+
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
 
