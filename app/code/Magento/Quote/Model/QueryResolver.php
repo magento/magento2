@@ -38,6 +38,7 @@ class QueryResolver
      * @var array
      */
     private $cacheTags = [];
+
     /**
      * @var SerializerInterface
      */
