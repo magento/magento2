@@ -8,9 +8,23 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
+use Magento\Framework\Url\SimpleValidator;
 
 class UrlCheck extends AbstractActionController
 {
+    /**
+     * @var SimpleValidator
+     */
+    private $simpleUrlValidator;
+
+    /**
+     * @param SimpleValidator $simpleUrlValidator
+     */
+    public function __construct(SimpleValidator $simpleUrlValidator)
+    {
+        $this->simpleUrlValidator = $simpleUrlValidator;
+    }
+
     /**
      * Validate URL
      *
@@ -27,13 +41,13 @@ class UrlCheck extends AbstractActionController
         $hasSecureFrontUrl = !empty($params['https']['front']);
 
         // Validating of Base URL
-        if ($hasBaseUrl && filter_var($params['address']['actual_base_url'], FILTER_VALIDATE_URL)) {
+        if ($hasBaseUrl && $this->simpleUrlValidator->isValid($params['address']['actual_base_url'])) {
             $result['successUrl'] = true;
         }
 
         // Validating of Secure Base URL
         if ($hasSecureAdminUrl || $hasSecureFrontUrl) {
-            if (!($hasSecureBaseUrl && filter_var($params['https']['text'], FILTER_VALIDATE_URL))) {
+            if (!($hasSecureBaseUrl && $this->simpleUrlValidator->isValid($params['https']['text']))) {
                 $result['successSecureUrl'] = false;
             }
         }

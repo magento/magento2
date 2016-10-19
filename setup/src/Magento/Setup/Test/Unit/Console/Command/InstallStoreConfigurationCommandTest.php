@@ -11,6 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\Installer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
+use Magento\Framework\Url\ExtendedValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -104,6 +105,11 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidData(array $option, $error)
     {
+        $isSecureUrl = isset($option['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE]);
+        $validator = $this->getMock(\Magento\Framework\Url\SimpleValidator::class, [], [], '', false);
+        $validator->expects($this->any())->method('isValid')->willReturn($isSecureUrl);
+        $validator->expects($this->any())->method('getAllowedSchemes')->willReturn(['http', 'https']);
+
         $localeLists= $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $localeLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
         $timezoneLists= $this->getMock(\Magento\Framework\Validator\Timezone::class, [], [], '', false);
@@ -112,6 +118,10 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $currencyLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
 
         $returnValueMapOM = [
+            [
+                \Magento\Framework\Url\SimpleValidator::class,
+                $validator
+            ],
             [
                 \Magento\Framework\Validator\Locale::class,
                 $localeLists
@@ -135,7 +145,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create');
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($option);
-        $this->assertEquals($error . PHP_EOL, $commandTester->getDisplay());
+        $this->assertContains($error, $commandTester->getDisplay());
     }
 
     /**
@@ -182,11 +192,6 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
                 ['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'http://www.sample.com'],
                 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
                 . '\': Invalid secure URL.'
-            ],
-            [
-                ['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://sample.com_test'],
-                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
-                . '\': Invalid URL \'https://sample.com_test\'.'
             ],
             [
                 ['--' . StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => 'invalidValue'],

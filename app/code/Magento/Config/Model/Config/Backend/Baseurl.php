@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\Url\SimpleValidator;
+use Magento\Framework\App\ObjectManager;
+
 class Baseurl extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -13,9 +16,9 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     protected $_mergeService;
 
     /**
-     * @var array
+     * @var SimpleValidator
      */
-    private $allowedSchemes = ['http', 'https'];
+    private $simpleUrlValidator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -191,38 +194,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * Check that URL contains allowed symbols
-     *
-     * @param string $value
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function validateUrl($value)
-    {
-        if (!filter_var($value, FILTER_VALIDATE_URL)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Domain Name can contain only letters, digits and hyphen.')
-            );
-        }
-    }
-
-    /**
-     * Check that scheme there is in list of allowed schemes
-     *
-     * @param string $value
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function validateSchemes($value)
-    {
-        if (!in_array($value, $this->allowedSchemes)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('You can use only following schemes: %1', implode(', ', $this->allowedSchemes))
-            );
-        }
-    }
-
-    /**
      * Whether the provided value can be considered as a fully qualified URL
      *
      * @param string $value
@@ -233,13 +204,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     {
         $url = parse_url($value);
 
-        $result = isset($url['scheme']) && isset($url['host']) && preg_match('/\/$/', $value);
-        if ($result) {
-            $this->validateSchemes($url['scheme']);
-            $this->validateUrl($value);
-        }
-
-        return $result;
+        return isset($url['scheme']) && isset($url['host']) && preg_match('/\/$/', $value)
+            && $this->getSimpleUrlValidator()->isValid($value);
     }
 
     /**
@@ -260,5 +226,19 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             }
         }
         return parent::afterSave();
+    }
+
+    /**
+     * Get link interface factory
+     *
+     * @deprecated
+     * @return SimpleValidator
+     */
+    private function getSimpleUrlValidator()
+    {
+        if (!$this->simpleUrlValidator) {
+            $this->simpleUrlValidator = ObjectManager::getInstance()->get(SimpleValidator::class);
+        }
+        return $this->simpleUrlValidator;
     }
 }
