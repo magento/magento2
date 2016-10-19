@@ -1431,4 +1431,89 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertEquals(implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
             $product2->getData('multiselect_attribute'));
     }
+
+    /**
+     * @param array $row
+     * @param string|null $behavior
+     * @param bool $expectedResult
+     * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
+     * @dataProvider validateRowDataProvider
+     */
+    public function testValidateRow(array $row, $behavior, $expectedResult)
+    {
+        $this->_model->setParameters(['behavior' => $behavior]);
+        $this->assertSame($expectedResult, $this->_model->validateRow($row, 1));
+    }
+
+    /**
+     * @return array
+     */
+    public function validateRowDataProvider()
+    {
+        return [
+            [
+                'row' => ['sku' => '24-MB01'],
+                'behavior' => null,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => '24-MB01-absent'],
+                'behavior' => null,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => '24-MB01-absent',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => null,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => '24-MB01'],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => '24-MB01-absent'],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => '24-MB01-absent',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => '24-MB01'],
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => '24-MB01-absent'],
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => ['sku' => '24-MB01'],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => ['sku' => '24-MB01-absent'],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => false,
+            ],
+        ];
+    }
 }
