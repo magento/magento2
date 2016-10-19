@@ -78,8 +78,7 @@ class CreateSimpleProductEntityByAttributeMaskSkuTest extends Injectable
         $newProductPage->getProductForm()->fill($product);
         $newProductPage->getFormPageActions()->save();
 
-        $data = $product->getData();
-        $skuMask = $data['data']['sku'] = $this->prepareSkuByMask($product);
+        $skuMask = $this->prepareSkuByMask($product);
 
         $productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
