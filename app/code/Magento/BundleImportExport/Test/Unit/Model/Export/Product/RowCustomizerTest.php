@@ -176,7 +176,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $preparedData = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
         $attributes = 'attribute=1,sku_type=1,attribute2="Text",price_type=1,price_view=1,weight_type=1,'
-            . 'values=values,shipment_type=1,attribute3=One,Two,Three';
+            . 'values=values,attribute3=One,Two,Three';
         $dataRow = [
             'sku' => 'sku1',
             'additional_attributes' => $attributes

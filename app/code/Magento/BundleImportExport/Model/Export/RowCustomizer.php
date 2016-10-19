@@ -9,9 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
-use Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Model\Import as ImportModel;
-use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class RowCustomizer
@@ -309,7 +307,7 @@ class RowCustomizer implements RowCustomizerInterface
     {
         $filteredAttributes = [];
         foreach ($additionalAttributes as $code => $value) {
-            if (!in_array('bundle_' . $code, $this->getBundleColumns())) {
+            if (!in_array('bundle_' . $code, $this->bundleColumns)) {
                 $filteredAttributes[] = $code . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
             }
         }
