@@ -59,4 +59,14 @@ class Shipping extends Form
             ['element' => $this->browser->find($this->addressModalBlock, Locator::SELECTOR_XPATH)]
         );
     }
+
+    /**
+     * Returns form's required elements
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getRequiredFields()
+    {
+        return $this->_rootElement->getElements("div .field._required");
+    }
 }
