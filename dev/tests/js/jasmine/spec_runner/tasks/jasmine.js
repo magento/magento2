@@ -22,13 +22,18 @@ function init(config) {
     _.each(themes, function (themeData, themeName) {
         var specs,
             configs,
-            render;
+            render,
+            filter;
 
         _.extend(themeData, { root: root });
 
+        filter = new RegExp(config.filter);
+
         render  = renderTemplate.bind(null, themeData);
         specs   = files.specs.map(render);
-        specs   = expand(specs).map(cutJsExtension);
+        specs   = expand(specs).map(cutJsExtension).filter(function(spec) {
+            return filter.test(spec);
+        });
         configs = files.requirejsConfigs.map(render);
 
         tasks[themeName] = {

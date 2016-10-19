@@ -8,7 +8,7 @@
      * This node is replaced by formatted theme configuration by 'dev/tests/jasmine/spec_runner' module
      */
     "themes": "dev/tools/grunt/configs/themes",
-    
+
     "files": {
         /**
          * Path to RequireJS library. Relative to "server.base" config.
@@ -40,6 +40,10 @@
             "<%= root %>/tests/lib/**/*.test.js",
             "<%= root %>/tests/app/code/**/base/**/*.test.js",
             "<%= root %>/tests/app/code/**/<%= area %>/**/*.test.js",
+            "app/code/**/Test/Js/base/**/*.test.js",
+            "app/code/**/Test/Js/<%= area %>/**/*.test.js",
+            "vendor/*/module-**/Test/Js/base/**/*.test.js",
+            "vendor/*/module-**/Test/Js/<%= area %>/**/*.test.js",
             "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.test.js"
         ]
     },
@@ -56,6 +60,8 @@
         "serveAsIs": [
             "^\/_SpecRunner.html",
             "^\/dev\/tests",
+            "^\/app\/code\/.+\/Test\/Js",
+            "^\/vendor\/.+\/Test\/Js",
             "^\/.grunt",
             "^\/pub\/static"
         ],

@@ -53,7 +53,10 @@ function init(grunt, options) {
     tasks = Object.keys(themes);
 
     config.themes = themes;
-
+    
+    config.filter = grunt.option('filter');
+    config.filter && grunt.option('filter', null);
+    
     enableTasks(grunt, config);
 }
 
