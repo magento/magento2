@@ -34,9 +34,9 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
     private $_cache;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     /**
      * @var \Magento\Framework\App\Config\ScopePool
@@ -61,8 +61,8 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
                 'cacheId' => 'test_cache_id'
             ]
         );
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $objectManager->setBackwardCompatibleProperty($this->_object, 'json', $this->jsonMock);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->_object, 'serializer', $this->serializerMock);
 
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -114,7 +114,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             ->with('testScope')
             ->willReturn($data);
         $jsonString = json_encode($data);
-        $this->jsonMock->method('encode')
+        $this->serializerMock->method('serialize')
             ->with($data)
             ->willReturn($jsonString);
         $this->_cache->expects($this->once())
@@ -168,7 +168,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($cacheKey)
             ->willReturn($cachedData);
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->willReturn($data);
         $configData = $this->getMock(\Magento\Framework\App\Config\Data::class, [], [], '', false);
         $this->_dataFactory->expects($this->once())

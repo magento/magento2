@@ -36,9 +36,9 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     protected $_countryFactory;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * Construct
@@ -66,30 +66,30 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     {
         $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         if ($cache = $this->_configCacheType->load($cacheKey)) {
-            $options = $this->getJson()->decode($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             /** @var \Magento\Directory\Model\Country $country */
             $country = $this->_countryFactory->create();
             /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
             $collection = $country->getResourceCollection();
             $options = $collection->load()->toOptionArray();
-            $this->_configCacheType->save($this->getJson()->encode($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         return $options;
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return \Magento\Framework\Json\JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Json\JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

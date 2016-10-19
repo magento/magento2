@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -47,9 +47,9 @@ class MethodsMap
     private $fieldNamer;
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -101,11 +101,11 @@ class MethodsMap
         if (!isset($this->serviceInterfaceMethodsMap[$key])) {
             $methodMap = $this->cache->load($key);
             if ($methodMap) {
-                $this->serviceInterfaceMethodsMap[$key] = $this->getJson()->decode($methodMap);
+                $this->serviceInterfaceMethodsMap[$key] = $this->getSerializer()->unserialize($methodMap);
             } else {
                 $methodMap = $this->getMethodMapViaReflection($interfaceName);
                 $this->serviceInterfaceMethodsMap[$key] = $methodMap;
-                $this->cache->save($this->getJson()->encode($this->serviceInterfaceMethodsMap[$key]), $key);
+                $this->cache->save($this->getSerializer()->serialize($this->serviceInterfaceMethodsMap[$key]), $key);
             }
         }
         return $this->serviceInterfaceMethodsMap[$key];
@@ -123,7 +123,7 @@ class MethodsMap
         $cacheId = self::SERVICE_METHOD_PARAMS_CACHE_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
         $params = $this->cache->load($cacheId);
         if ($params !== false) {
-            return $this->getJson()->decode($params);
+            return $this->getSerializer()->unserialize($params);
         }
         $serviceClass = new ClassReflection($serviceClassName);
         /** @var MethodReflection $serviceMethod */
@@ -139,7 +139,7 @@ class MethodsMap
                 self::METHOD_META_DEFAULT_VALUE => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
             ];
         }
-        $this->cache->save($this->getJson()->encode($params), $cacheId, [ReflectionCache::CACHE_TAG]);
+        $this->cache->save($this->getSerializer()->serialize($params), $cacheId, [ReflectionCache::CACHE_TAG]);
         return $params;
     }
 
@@ -225,17 +225,17 @@ class MethodsMap
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

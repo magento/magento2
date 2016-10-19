@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
@@ -28,9 +28,9 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     private $preferences;
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param array $data
@@ -78,7 +78,7 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         if (isset($this->arguments[$type])) {
             if (is_string($this->arguments[$type])) {
-                $this->arguments[$type] = $this->getJson()->decode($this->arguments[$type]);
+                $this->arguments[$type] = $this->getSerializer()->unserialize($this->arguments[$type]);
             }
             return $this->arguments[$type];
         } else {
@@ -161,17 +161,17 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

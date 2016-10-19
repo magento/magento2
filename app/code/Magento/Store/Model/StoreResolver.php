@@ -5,7 +5,7 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
@@ -50,9 +50,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $request;
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
@@ -121,10 +121,10 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
         $cacheData = $this->cache->load($cacheKey);
         if ($cacheData) {
-            $storesData = $this->getJson()->decode($cacheData);
+            $storesData = $this->getSerializer()->unserialize($cacheData);
         } else {
             $storesData = $this->readStoresData();
-            $this->cache->save($this->getJson()->encode($storesData), $cacheKey, [self::CACHE_TAG]);
+            $this->cache->save($this->getSerializer()->serialize($storesData), $cacheKey, [self::CACHE_TAG]);
         }
         return $storesData;
     }
@@ -177,17 +177,17 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

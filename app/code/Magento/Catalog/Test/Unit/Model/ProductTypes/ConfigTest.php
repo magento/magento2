@@ -23,9 +23,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -43,8 +43,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
     }
 
     protected function tearDown()
@@ -63,7 +65,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn(json_encode($value));
 
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->willReturn($value);
         $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
         $this->assertEquals($expected, $this->config->getType('global'));
@@ -83,7 +85,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn(json_encode('"types":["Expected Data"]]'));
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->willReturn(['types' => $expected]);
         $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
         $this->assertEquals($expected, $this->config->getAll());
@@ -94,7 +96,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn('');
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->willReturn([]);
         $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
 

@@ -11,7 +11,7 @@ use Magento\Directory\Model\ResourceModel\Country\Collection as CountryCollectio
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -78,19 +78,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
+        $serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
+        $serializerMock->method('serialize')
             ->willReturnCallback(function ($string) {
                 return json_encode($string);
             });
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
-            'json',
-            $jsonMock
+            'serializer',
+            $serializerMock
         );
     }
 
@@ -181,7 +181,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->cacheTypeConfigMock->expects($this->once())
             ->method('save')
-            ->with(\Zend_Json::encode($options), 'DIRECTORY_COUNTRY_SELECT_STORE_' . $storeCode)
+            ->with(json_encode($options), 'DIRECTORY_COUNTRY_SELECT_STORE_' . $storeCode)
             ->willReturnSelf();
 
         $this->scopeConfigMock->expects($this->once())

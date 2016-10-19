@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\ObjectManager;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -34,9 +34,9 @@ class ConfigLoader implements ConfigLoaderInterface
     protected $_cache;
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -73,9 +73,9 @@ class ConfigLoader implements ConfigLoaderInterface
 
         if (!$data) {
             $data = $this->_getReader()->read($area);
-            $this->_cache->save($this->getJson()->encode($data), $cacheId);
+            $this->_cache->save($this->getSerializer()->serialize($data), $cacheId);
         } else {
-            $data = $this->getJson()->decode($data);
+            $data = $this->getSerializer()->unserialize($data);
         }
 
         return $data;
@@ -84,15 +84,15 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * Get json encoder/decoder
      *
-     * @return JsonInterface
+     * @return SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,19 +46,19 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $jsonMock = $this->getMock(JsonInterface::class, [], [], '', false);
-        $jsonMock->method('encode')
+        $serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
+        $serializerMock->method('serialize')
             ->willReturnCallback(function ($string) {
                 return json_encode($string);
             });
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
-            'json',
-            $jsonMock
+            'serializer',
+            $serializerMock
         );
     }
 

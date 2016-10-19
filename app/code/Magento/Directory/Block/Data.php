@@ -36,9 +36,9 @@ class Data extends \Magento\Framework\View\Element\Template
     protected $directoryHelper;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -118,12 +118,12 @@ class Data extends \Magento\Framework\View\Element\Template
         $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = $this->getJson()->decode($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             $options = $this->getCountryCollection()
                 ->setForegroundCountries($this->getTopDestinations())
                 ->toOptionArray();
-            $this->_configCacheType->save($this->getJson()->encode($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Select::class
@@ -168,10 +168,10 @@ class Data extends \Magento\Framework\View\Element\Template
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
-            $options = $this->getJson()->decode($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             $options = $this->getRegionCollection()->toOptionArray();
-            $this->_configCacheType->save($this->getJson()->encode($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Select::class
@@ -234,17 +234,17 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return \Magento\Framework\Json\JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Json\JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

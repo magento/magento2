@@ -6,7 +6,7 @@
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class NotificationStorage
 {
@@ -22,9 +22,9 @@ class NotificationStorage
      */
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * NotificationStorage constructor.
@@ -45,7 +45,7 @@ class NotificationStorage
     public function add($notificationType, $customerId)
     {
         $this->cache->save(
-            $this->getJson()->encode([
+            $this->getSerializer()->serialize([
                 'customer_id' => $customerId,
                 'notification_type' => $notificationType
             ]),
@@ -90,17 +90,17 @@ class NotificationStorage
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

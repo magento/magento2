@@ -6,7 +6,7 @@
 // @codingStandardsIgnoreFile
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -51,8 +51,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $relationsMock;
 
-    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $jsonMock;
+    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManagerHelper;
@@ -75,9 +75,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManager\RelationsInterface::class
         );
-        $this->jsonMock = $this->getMock(JsonInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->objectManagerHelper->mockObjectManager([JsonInterface::class => $this->jsonMock]);
+        $this->objectManagerHelper->mockObjectManager([SerializerInterface::class => $this->serializerMock]);
     }
 
     protected function tearDown()
@@ -147,12 +147,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
         $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
 
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
             });
-        $this->jsonMock->expects($this->never())->method('decode');
+        $this->serializerMock->expects($this->never())->method('unserialize');
 
         $model = $this->objectManagerHelper->getObject(
             \Magento\Framework\Interception\Config\Config::class,
@@ -193,9 +193,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($cacheId)
             ->will($this->returnValue(json_encode($interceptionData)));
 
-        $this->jsonMock->expects($this->never())->method('encode');
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->never())->method('serialize');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });

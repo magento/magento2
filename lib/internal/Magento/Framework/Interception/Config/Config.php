@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Interception\Config;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
@@ -73,9 +73,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     protected $_scopeList;
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Config\ReaderInterface $reader
@@ -105,7 +105,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
 
         $intercepted = $this->_cache->load($this->_cacheId);
         if ($intercepted !== false) {
-            $this->_intercepted = $this->getJson()->decode($intercepted);
+            $this->_intercepted = $this->getSerializer()->unserialize($intercepted);
         } else {
             $this->initialize($this->_classDefinitions->getClasses());
         }
@@ -136,7 +136,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
-        $this->_cache->save($this->getJson()->encode($this->_intercepted), $this->_cacheId);
+        $this->_cache->save($this->getSerializer()->serialize($this->_intercepted), $this->_cacheId);
     }
 
     /**
@@ -184,17 +184,17 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

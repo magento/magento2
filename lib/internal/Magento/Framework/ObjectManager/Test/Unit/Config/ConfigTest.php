@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use \Magento\Framework\ObjectManager\Config\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -51,15 +51,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->once())->method('get')->will($this->returnValue(false));
 
         $config = new Config(null, $definitions);
-        $jsonMock = $this->getMock(JsonInterface::class);
-        $jsonMock->method('encode')
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data, true);
             });
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $config,
-            'json',
-            $jsonMock
+            'serializer',
+            $serializerMock
         );
         $config->setCache($cache);
 

@@ -23,9 +23,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private $_cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -36,8 +36,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMockBuilder(
             \Magento\Framework\App\Cache\Type\Config::class
         )->disableOriginalConstructor()->getMock();
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager(
+            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+        );
     }
 
     protected function tearDown()
@@ -51,7 +53,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load');
 
-        $this->jsonMock->method('decode')
+        $this->serializerMock->method('unserialize')
             ->willReturn($expected);
 
         $configData = new \Magento\Sales\Model\Config\Data($this->_readerMock, $this->_cacheMock);

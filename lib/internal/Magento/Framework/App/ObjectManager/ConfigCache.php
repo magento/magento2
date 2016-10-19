@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\ObjectManager;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterface
 {
@@ -24,9 +24,9 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
     protected $_prefix = 'diConfig';
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Cache\FrontendInterface $cacheFrontend
@@ -44,7 +44,7 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      */
     public function get($key)
     {
-        return $this->getJson()->decode($this->_cacheFrontend->load($this->_prefix . $key));
+        return $this->getSerializer()->unserialize($this->_cacheFrontend->load($this->_prefix . $key));
     }
 
     /**
@@ -56,21 +56,21 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      */
     public function save(array $config, $key)
     {
-        $this->_cacheFrontend->save($this->getJson()->encode($config), $this->_prefix . $key);
+        $this->_cacheFrontend->save($this->getSerializer()->serialize($config), $this->_prefix . $key);
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

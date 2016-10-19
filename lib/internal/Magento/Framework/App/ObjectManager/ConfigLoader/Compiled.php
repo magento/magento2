@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Json\JsonInterface;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 class Compiled implements ConfigLoaderInterface
@@ -22,9 +21,9 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
-     * @var JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * {inheritdoc}
@@ -34,7 +33,7 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $this->configCache[$area] = $this->getJson()->decode(\file_get_contents(self::getFilePath($area)));
+        $this->configCache[$area] = $this->getSerializer()->unserialize(\file_get_contents(self::getFilePath($area)));
         return $this->configCache[$area];
     }
 
@@ -51,16 +50,16 @@ class Compiled implements ConfigLoaderInterface
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = new \Magento\Framework\Json\Json();
+        if ($this->serializer === null) {
+            $this->serializer = new \Magento\Framework\Serialize\Serializer\Json();
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

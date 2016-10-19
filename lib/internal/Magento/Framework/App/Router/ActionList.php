@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\App\Router;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
 class ActionList
@@ -37,9 +37,9 @@ class ActionList
     ];
 
     /**
-     * @var JsonInterface
+     * @var SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -60,9 +60,9 @@ class ActionList
         $data = $cache->load($cacheKey);
         if (!$data) {
             $this->actions = $moduleReader->getActionFiles();
-            $cache->save($this->getJson()->encode($this->actions), $cacheKey);
+            $cache->save($this->getSerializer()->serialize($this->actions), $cacheKey);
         } else {
-            $this->actions = $this->getJson()->decode($data);
+            $this->actions = $this->getSerializer()->unserialize($data);
         }
     }
 
@@ -100,17 +100,17 @@ class ActionList
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

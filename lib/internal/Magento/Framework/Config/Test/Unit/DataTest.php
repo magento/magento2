@@ -26,17 +26,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
-        $this->objectManager->mockObjectManager([\Magento\Framework\Json\JsonInterface::class => $this->jsonMock]);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->objectManager->mockObjectManager([\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]);
     }
 
     protected function tearDown()
@@ -54,8 +54,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->once())
             ->method('read')
             ->willReturn($data);
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data);
         $config = new \Magento\Framework\Config\Data(
             $this->readerMock,
@@ -78,8 +78,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($jsonString);
         $this->readerMock->expects($this->never())
             ->method('read');
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->with($jsonString)
             ->willReturn($data);
         $config = new \Magento\Framework\Config\Data(
@@ -98,8 +98,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn($jsonString);
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->with($jsonString)
             ->willReturn([]);
         $this->cacheMock->expects($this->once())

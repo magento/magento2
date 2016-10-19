@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 
@@ -20,8 +20,8 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
-    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $jsonMock;
+    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
 
     /**
      * Set up helper.
@@ -51,11 +51,11 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $fieldNamerMock,
             ]
         );
-        $this->jsonMock = $this->getMock(JsonInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->object,
-            'json',
-            $this->jsonMock
+            'serializer',
+            $this->serializerMock
         );
     }
 
@@ -86,8 +86,8 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodsMap()
     {
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
             });

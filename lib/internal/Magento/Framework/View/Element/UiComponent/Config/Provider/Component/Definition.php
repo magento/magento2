@@ -40,9 +40,9 @@ class Definition
     protected $componentData;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * Constructor
@@ -61,9 +61,9 @@ class Definition
         $cachedData = $this->cache->load(static::CACHE_ID);
         if ($cachedData === false) {
             $data = $uiReader->read();
-            $this->cache->save($this->getJson()->encode($data), static::CACHE_ID);
+            $this->cache->save($this->getSerializer()->serialize($data), static::CACHE_ID);
         } else {
-            $data = $this->getJson()->decode($cachedData);
+            $data = $this->getSerializer()->unserialize($cachedData);
         }
         $this->prepareComponentData($data);
     }
@@ -116,17 +116,17 @@ class Definition
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return \Magento\Framework\Json\JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Json\JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->jsonMock = $this->getMock(\Magento\Framework\Json\JsonInterface::class);
+        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->willReturn($jsonString);
-        $this->jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->with($jsonString)
             ->willReturn($this->resourcesConfig);
 
@@ -85,7 +85,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $deploymentConfigMock,
             'cacheId'
         );
-        $objectManager->setBackwardCompatibleProperty($this->config, 'json', $this->jsonMock);
+        $objectManager->setBackwardCompatibleProperty($this->config, 'serializer', $serializerMock);
     }
 
     /**

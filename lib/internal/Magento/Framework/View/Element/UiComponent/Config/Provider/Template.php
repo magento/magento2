@@ -56,9 +56,9 @@ class Template
     protected $cachedTemplates = [];
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    private $json;
+    private $serializer;
 
     /**
      * Constructor
@@ -83,7 +83,9 @@ class Template
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
 
         $cachedTemplates = $this->cache->load(static::CACHE_ID);
-        $this->cachedTemplates = $cachedTemplates === false ? [] : $this->getJson()->decode($cachedTemplates);
+        $this->cachedTemplates = $cachedTemplates === false ? [] : $this->getSerializer()->unserialize(
+            $cachedTemplates
+        );
     }
 
     /**
@@ -106,23 +108,23 @@ class Template
                 'domMerger' => $this->domMerger
             ]
         )->getContent();
-        $this->cache->save($this->getJson()->encode($this->cachedTemplates), static::CACHE_ID);
+        $this->cache->save($this->getSerializer()->serialize($this->cachedTemplates), static::CACHE_ID);
 
         return $this->cachedTemplates[$hash];
     }
 
     /**
-     * Get json encoder/decoder
+     * Get serializer
      *
-     * @return \Magento\Framework\Json\JsonInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getJson()
+    private function getSerializer()
     {
-        if ($this->json === null) {
-            $this->json = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Json\JsonInterface::class);
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
-        return $this->json;
+        return $this->serializer;
     }
 }

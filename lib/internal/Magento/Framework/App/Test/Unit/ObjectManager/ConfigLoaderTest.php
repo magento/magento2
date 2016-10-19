@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,9 +33,9 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Json\JsonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $jsonMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -73,11 +73,11 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $this->jsonMock = $this->getMock(JsonInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
-            'json',
-            $this->jsonMock
+            'serializer',
+            $this->serializerMock
         );
     }
 
@@ -99,12 +99,12 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
             ->with(json_encode($configData));
         $this->readerMock->expects($this->once())->method('read')->with($area)->will($this->returnValue($configData));
 
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturnCallback(function ($string) {
                 return json_encode($string);
             });
-        $this->jsonMock->expects($this->never())->method('decode');
+        $this->serializerMock->expects($this->never())->method('unserialize');
 
         $this->assertEquals($configData, $this->object->load($area));
     }
@@ -133,12 +133,12 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->never())
             ->method('save');
         $this->readerMock->expects($this->never())->method('read');
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
-        $this->jsonMock->expects($this->never())->method('encode');
+        $this->serializerMock->expects($this->never())->method('serialize');
         $this->assertEquals($configData, $this->object->load('testArea'));
     }
 }

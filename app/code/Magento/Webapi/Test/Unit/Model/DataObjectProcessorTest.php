@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi\Test\Unit\Model;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Webapi\Model\Config as ModelConfig;
 
@@ -32,19 +32,19 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
         );
-        $jsonMock = $this->getMock(JsonInterface::class);
-        $jsonMock->method('encode')
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
             });
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
         $objectManager->setBackwardCompatibleProperty(
             $methodsMapProcessor,
-            'json',
-            $jsonMock
+            'serializer',
+            $serializerMock
         );
         $this->dataObjectProcessor = $objectManager->getObject(
             \Magento\Framework\Reflection\DataObjectProcessor::class,

@@ -51,13 +51,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'areaList' => $this->_areaList
             ]
         );
-        $jsonMock = $this->getMock(\Magento\Framework\Json\Json::class, [], [], '', false);
-        $objectManager->setBackwardCompatibleProperty($this->_config, 'json', $jsonMock);
-        $jsonMock->method('encode')
+        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->_config, 'serializer', $serializerMock);
+        $serializerMock->method('serialize')
             ->willReturnCallback(function ($string) {
                 return json_encode($string);
             });
-        $jsonMock->method('decode')
+        $serializerMock->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });

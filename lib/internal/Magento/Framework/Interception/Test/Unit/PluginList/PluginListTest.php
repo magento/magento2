@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Interception\Test\Unit\PluginList;
 
-use Magento\Framework\Json\JsonInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -37,13 +37,11 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     private $cacheMock;
 
-    /** @var JsonInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $jsonMock;
+    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManagerMock;
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $loggerMock;
 
     protected function setUp()
     {
@@ -64,8 +62,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
@@ -79,17 +77,24 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
                 'relations' => new \Magento\Framework\ObjectManager\Relations\Runtime(),
                 'omConfig' => $omConfigMock,
                 'definitions' => new \Magento\Framework\Interception\Definition\Runtime(),
-                'objectManager' => $this->objectManagerMock,
+                'objectManager' => $objectManagerMock,
                 'classDefinitions' => $definitions,
                 'scopePriorityScheme' => ['global'],
                 'cacheId' => 'interception'
             ]
         );
-        $this->jsonMock = $this->getMock(JsonInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
-            'json',
-            $this->jsonMock
+            'serializer',
+            $this->serializerMock
+        );
+
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->object,
+            'logger',
+            $this->loggerMock
         );
     }
 
@@ -232,15 +237,15 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
         $this->configScopeMock->expects($this->exactly(2))
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
-        $this->jsonMock->expects($this->once())
-            ->method('encode')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturnCallback(
                 function ($data) {
                     return json_encode($data);
                 }
             );
-        $this->jsonMock->expects($this->never())
-            ->method('decode');
+        $this->serializerMock->expects($this->never())
+            ->method('unserialize');
         $this->cacheMock->expects($this->once())
             ->method('save');
 
@@ -253,12 +258,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testInheritPluginsWithNotExistingPlugin()
     {
-        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Psr\Log\LoggerInterface::class)
-            ->willReturn($loggerMock);
-        $loggerMock->expects($this->once())
+        $this->loggerMock->expects($this->once())
             ->method('info')
             ->with("Reference to undeclared plugin with name 'simple_plugin'.");
         $this->configScopeMock->expects($this->any())
@@ -280,10 +280,10 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $data = [['key'], ['key'], ['key']];
 
-        $this->jsonMock->expects($this->never())
-            ->method('encode');
-        $this->jsonMock->expects($this->once())
-            ->method('decode')
+        $this->serializerMock->expects($this->never())
+            ->method('serialize');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturnCallback(function ($string) {
                 return json_decode($string, true);
             });
