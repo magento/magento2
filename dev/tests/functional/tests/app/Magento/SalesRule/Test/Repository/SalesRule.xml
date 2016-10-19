@@ -279,5 +279,24 @@
             <field name="stop_rules_processing" xsi:type="string">No</field>
             <field name="simple_free_shipping" xsi:type="string">No</field>
         </dataset>
+        <dataset name="rule_with_freeshipping_by_weight">
+            <field name="name" xsi:type="string">Cart price rule with free shipping by weight</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="coupon_type" xsi:type="string">No Coupon</field>
+            <field name="sort_order" xsi:type="string">1</field>
+            <field name="is_rss" xsi:type="string">Yes</field>
+            <field name="conditions_serialized" xsi:type="string">[Total Weight|is|1]</field>
+            <field name="simple_action" xsi:type="string">Percent of product price discount</field>
+            <field name="discount_amount" xsi:type="string">0</field>
+            <field name="apply_to_shipping" xsi:type="string">No</field>
+            <field name="stop_rules_processing" xsi:type="string">No</field>
+            <field name="simple_free_shipping" xsi:type="string">For matching items only</field>
+        </dataset>
     </repository>
 </config>

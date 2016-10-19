@@ -28,18 +28,6 @@ define([
             group.elems.push({id:1}, {id:1});
             expect(group.elems()).not.toEqual([]);
         });
-        it('Check for reset elements.', function () {
-            var elem = {
-                value: false,
-                reset: function() {
-                    this.value = true;
-                }
-            };
-
-            group.elems.push(elem);
-            expect(group.reset()).toBe(group);
-            expect(group.elems.first().value).toBe(true);
-        });
         it('Check for clear elements.', function () {
             var elem = {
                 value: 'text',
