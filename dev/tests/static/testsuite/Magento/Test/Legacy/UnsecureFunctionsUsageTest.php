@@ -159,10 +159,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         if (empty($functions)) {
             return '';
         }
-        $regexArray = [];
-        foreach ($functions as $function) {
-            $regexArray[] = '(?<!function |[^\s])\b' . $function . '\b\(';
-        }
-        return '/' . implode('|', $regexArray) . '/i';
+        return '/(?<!function |[^\s])\b(' . join('|', $functions) . ')\s*\(/i';
     }
 }
