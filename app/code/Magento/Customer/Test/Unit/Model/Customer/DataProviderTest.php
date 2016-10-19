@@ -536,7 +536,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $maxFileSize = 1000;
         $allowedExtension = 'ext1 ext2';
-
         $attributeCode = 'img1';
 
         $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
@@ -618,18 +617,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->fileProcessorFactory->expects($this->any())
             ->method('create')
-            ->with([
-                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            ])
+            ->with(['entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER])
             ->willReturn($this->fileProcessor);
 
         $dataProvider = $this->getDataProvider();
         $result = $dataProvider->getMeta();
-
         $this->assertNotEmpty($result);
 
         $expected = $this->getExpected($attributeCode, $maxFileSize, $allowedExtension);
-
         $this->assertEquals($expected, $result);
     }
 

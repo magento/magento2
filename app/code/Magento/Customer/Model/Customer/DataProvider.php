@@ -226,22 +226,31 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
             }
 
-            $fileName = $file;
-            if (strrpos($fileName, '/') !== false) {
-                $fileName = substr($fileName, strrpos($fileName, '/') + 1);
-            }
-
             return [
                 [
                     'file' => $file,
                     'size' => isset($stat) ? $stat['size'] : 0,
                     'url' => isset($viewUrl) ? $viewUrl : '',
-                    'name' => $fileName,
+                    'name' => $this->normalizeFileName($file),
                 ],
             ];
         }
 
         return [];
+    }
+
+    /**
+     * Normalize file name
+     *
+     * @param string $file
+     * @return string
+     */
+    private function normalizeFileName($file)
+    {
+        if (strrpos($file, '/') !== false) {
+            $file = substr($file, strrpos($file, '/') + 1);
+        }
+        return $file;
     }
 
     /**
