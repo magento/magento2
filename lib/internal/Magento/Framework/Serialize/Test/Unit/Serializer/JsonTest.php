@@ -22,7 +22,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|bool|array $value
+     * @param string|int|float|bool|array|null $value
+     * @param string $expected
      * @dataProvider serializeDataProvider
      */
     public function testSerialize($value, $expected)
@@ -49,7 +50,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|bool|array $value
+     * @param string $value
+     * @param string|int|float|bool|array|null $expected
      * @dataProvider unserializeDataProvider
      */
     public function testUnserialize($value, $expected)
