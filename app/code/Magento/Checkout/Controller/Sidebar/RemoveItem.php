@@ -13,7 +13,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\View\Result\PageFactory;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class RemoveItem
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RemoveItem extends Action
 {
     /**
@@ -35,6 +41,11 @@ class RemoveItem extends Action
      * @var PageFactory
      */
     protected $resultPageFactory;
+
+    /**
+     * @var Validator
+     */
+    private $formKeyValidator;
 
     /**
      * @param Context $context
@@ -59,12 +70,17 @@ class RemoveItem extends Action
     }
 
     /**
+     * Executes the main action of the controller
+     *
      * @return $this
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
         try {
+            if (!$this->getFormKeyValidator()->validate($this->getRequest())) {
+                throw new LocalizedException(__('We can\'t remove the item.'));
+            }
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->removeQuoteItem($itemId);
             return $this->jsonResponse();
@@ -89,5 +105,19 @@ class RemoveItem extends Action
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($response)
         );
+    }
+
+    /**
+     * Getter for FormKeyValidator
+     *
+     * @deprecated
+     * @return Validator
+     */
+    private function getFormKeyValidator()
+    {
+        if ($this->formKeyValidator === null) {
+            $this->formKeyValidator = ObjectManager::getInstance()->get(Validator::class);
+        }
+        return $this->formKeyValidator;
     }
 }

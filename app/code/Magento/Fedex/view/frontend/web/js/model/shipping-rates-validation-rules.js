@@ -15,6 +15,9 @@ define(
                     },
                     'country_id': {
                         'required': true
+                    },
+                    'city': {
+                        'required': true
                     }
                 };
             }

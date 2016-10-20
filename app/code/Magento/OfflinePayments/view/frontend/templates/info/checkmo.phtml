@@ -11,7 +11,7 @@
 ?>
 <dl class="payment-method checkmemo">
     <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
-    <?php if ($block->getInfo()->getAdditionalData()): ?>
+    <?php if ($block->getInfo()->getAdditionalInformation()): ?>
         <?php if ($block->getPayableTo()): ?>
             <dd class="content">
                 <strong><?php echo $block->escapeHtml(__('Make Check payable to')) ?></strong>

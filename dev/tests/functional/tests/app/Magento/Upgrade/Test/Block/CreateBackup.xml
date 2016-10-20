@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <optionsCode>
+            <selector>#optionsCode</selector>
+            <input>checkboxwithlabel</input>
+        </optionsCode>
+        <optionsMedia>
+            <selector>#optionsMedia</selector>
+            <input>checkboxwithlabel</input>
+        </optionsMedia>
+        <optionsDb>
+            <selector>#optionsDb</selector>
+            <input>checkboxwithlabel</input>
+        </optionsDb>
+    </fields>
+</mapping>

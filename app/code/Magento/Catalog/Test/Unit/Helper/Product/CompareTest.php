@@ -107,18 +107,13 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         //Data
         $productId = 1;
         $removeUrl = 'catalog/product_compare/remove';
-        $compareListUrl = 'catalog/product_compare';
         $postParams = [
-            Action::PARAM_NAME_URL_ENCODED => strtr(base64_encode($compareListUrl), '+/=', '-_,'),
+            Action::PARAM_NAME_URL_ENCODED => '',
             'product' => $productId
         ];
 
         //Verification
-        $this->urlBuilder->expects($this->at(0))
-            ->method('getUrl')
-            ->with($compareListUrl)
-            ->will($this->returnValue($compareListUrl));
-        $this->urlBuilder->expects($this->at(1))
+        $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($removeUrl)
             ->will($this->returnValue($removeUrl));
@@ -153,18 +148,12 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     public function testGetPostDataClearList()
     {
         //Data
-        $refererUrl = 'home/';
         $clearUrl = 'catalog/product_compare/clear';
         $postParams = [
-            Action::PARAM_NAME_URL_ENCODED => strtr(base64_encode($refererUrl), '+/=', '-_,')
+            Action::PARAM_NAME_URL_ENCODED => ''
         ];
 
         //Verification
-        $this->request->expects($this->once())
-            ->method('getServer')
-            ->with('HTTP_REFERER')
-            ->will($this->returnValue($refererUrl));
-
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($clearUrl)
