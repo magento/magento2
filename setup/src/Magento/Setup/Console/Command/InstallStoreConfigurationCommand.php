@@ -20,6 +20,7 @@ use Magento\Store\Model\Store;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\Validator\Timezone;
 use Magento\Framework\Validator\Currency;
+use Magento\Framework\Validator\Url;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -182,7 +183,11 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     if (strcmp($value, '{{base_url}}') == 0) {
                         break;
                     }
-                    $errorMsg = $this->validateUrl($value, StoreConfigurationDataMapper::KEY_BASE_URL);
+                    $errorMsg = $this->validateUrl(
+                        $value,
+                        StoreConfigurationDataMapper::KEY_BASE_URL,
+                        ['http', 'https']
+                    );
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
@@ -225,12 +230,13 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     break;
                 case StoreConfigurationDataMapper::KEY_BASE_URL_SECURE:
                     try {
-                        $errorMsg = $this->validateUrl($value, StoreConfigurationDataMapper::KEY_BASE_URL_SECURE);
+                        $errorMsg = $this->validateUrl(
+                            $value,
+                            StoreConfigurationDataMapper::KEY_BASE_URL_SECURE,
+                            ['https']
+                        );
                         if ($errorMsg !== '') {
                             $errors[] = $errorMsg;
-                        }
-                        if (empty($errorMsg) && strpos($value, 'https:') !== 0) {
-                            throw new LocalizedException(new \Magento\Framework\Phrase("Invalid secure URL."));
                         }
                     } catch (LocalizedException $e) {
                         $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
@@ -305,16 +311,17 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      *
      * @param string $url
      * @param string $option
+     * @param array $allowedSchemes
      * @return string
      */
-    private function validateUrl($url, $option)
+    private function validateUrl($url, $option, array $allowedSchemes)
     {
-        /** @var \Magento\Framework\Url\SimpleValidator $validator */
-        $validator = $this->objectManager->get(\Magento\Framework\Url\SimpleValidator::class);
+        /** @var Url $validator */
+        $validator = $this->objectManager->get(Url::class);
 
         $errorMsg = '';
 
-        if (!$validator->isValid($url)) {
+        if (!$validator->isValid($url, $allowedSchemes)) {
             $errorTemplate = '<error>Command option \'%s\': Invalid URL \'%s\'.'
                 . ' Domain Name should contain only letters, digits and hyphen.'
                 . ' And you should use only following schemes: \'%s\'.</error>';
@@ -322,7 +329,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                 $errorTemplate,
                 $option,
                 $url,
-                implode(', ', $validator->getAllowedSchemes())
+                implode(', ', $allowedSchemes)
             );
         }
 

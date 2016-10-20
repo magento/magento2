@@ -3,20 +3,20 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Url\Test\Unit;
+namespace Magento\Framework\Validator\Test\Unit;
 
-use Magento\Framework\Url\SimpleValidator;
+use Magento\Framework\Validator\Url as UrlValidator;
 
-class SimpleValidatorTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SimpleValidator
+     * @var UrlValidator
      */
     private $validator;
 
     protected function setUp()
     {
-        $this->validator = new SimpleValidator();
+        $this->validator = new UrlValidator();
     }
 
     /**
@@ -27,8 +27,7 @@ class SimpleValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValid(array $allowedSchemes, $url, $expectedResult)
     {
-        $this->validator->setAllowedSchemes($allowedSchemes);
-        $this->assertSame($expectedResult, $this->validator->isValid($url));
+        $this->assertSame($expectedResult, $this->validator->isValid($url, $allowedSchemes));
     }
 
     /**
@@ -43,7 +42,17 @@ class SimpleValidatorTest extends \PHPUnit_Framework_TestCase
                 'expectedResult' => true,
             ],
             [
+                'allowedSchemes' => ['http'],
+                'url' => 'http://example.com',
+                'expectedResult' => true,
+            ],
+            [
                 'allowedSchemes' => [],
+                'url' => 'https://example.com',
+                'expectedResult' => true,
+            ],
+            [
+                'allowedSchemes' => ['https'],
                 'url' => 'https://example.com',
                 'expectedResult' => true,
             ],
@@ -55,16 +64,11 @@ class SimpleValidatorTest extends \PHPUnit_Framework_TestCase
             [
                 'allowedSchemes' => [],
                 'url' => 'ftp://example.com',
-                'expectedResult' => false,
-            ],
-            [
-                'allowedSchemes' => ['ftp'],
-                'url' => 'ftp://example.com',
                 'expectedResult' => true,
             ],
             [
                 'allowedSchemes' => ['ftp'],
-                'url' => 'ftp://example.com_test',
+                'url' => 'ftp://example.com',
                 'expectedResult' => true,
             ],
         ];

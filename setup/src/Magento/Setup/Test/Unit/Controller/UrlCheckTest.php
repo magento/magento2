@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 use Magento\Setup\Controller\UrlCheck;
 use Zend\Stdlib\RequestInterface;
 use Zend\View\Model\JsonModel;
-use Magento\Framework\Url\SimpleValidator;
+use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class UrlCheckTest extends \PHPUnit_Framework_TestCase
@@ -23,16 +23,25 @@ class UrlCheckTest extends \PHPUnit_Framework_TestCase
         /** @var ObjectManagerHelper $objectManagerHelper */
         $objectManagerHelper = new ObjectManagerHelper($this);
 
+        $allowedSchemes = ['http', 'https'];
         $returnMap = [];
         if (isset($requestJson['address']['actual_base_url'])) {
-            $returnMap[] = [$requestJson['address']['actual_base_url'], $expectedResult['successUrl']];
+            $returnMap[] = [
+                $requestJson['address']['actual_base_url'],
+                $allowedSchemes,
+                $expectedResult['successUrl'],
+            ];
         }
         if (isset($requestJson['https']['text'])) {
-            $returnMap[] = [$requestJson['https']['text'], $expectedResult['successSecureUrl']];
+            $returnMap[] = [
+                $requestJson['https']['text'],
+                $allowedSchemes,
+                $expectedResult['successSecureUrl'],
+            ];
         }
 
-        /** @var SimpleValidator|\PHPUnit_Framework_MockObject_MockObject $validator */
-        $validator = $this->getMockBuilder(SimpleValidator::class)
+        /** @var UrlValidator|\PHPUnit_Framework_MockObject_MockObject $validator */
+        $validator = $this->getMockBuilder(UrlValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $validator->expects($this->any())
@@ -48,7 +57,7 @@ class UrlCheckTest extends \PHPUnit_Framework_TestCase
 
         $controller = $objectManagerHelper->getObject(
             UrlCheck::class,
-            ['simpleUrlValidator' => $validator]
+            ['urlValidator' => $validator]
         );
         $objectManagerHelper->setBackwardCompatibleProperty($controller, 'request', $requestMock);
 

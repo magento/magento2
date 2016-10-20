@@ -8,21 +8,21 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
-use Magento\Framework\Url\SimpleValidator;
+use Magento\Framework\Validator\Url as UrlValidator;
 
 class UrlCheck extends AbstractActionController
 {
     /**
-     * @var SimpleValidator
+     * @var UrlValidator
      */
-    private $simpleUrlValidator;
+    private $urlValidator;
 
     /**
-     * @param SimpleValidator $simpleUrlValidator
+     * @param UrlValidator $urlValidator
      */
-    public function __construct(SimpleValidator $simpleUrlValidator)
+    public function __construct(UrlValidator $urlValidator)
     {
-        $this->simpleUrlValidator = $simpleUrlValidator;
+        $this->urlValidator = $urlValidator;
     }
 
     /**
@@ -39,15 +39,16 @@ class UrlCheck extends AbstractActionController
         $hasSecureBaseUrl = isset($params['https']['text']);
         $hasSecureAdminUrl = !empty($params['https']['admin']);
         $hasSecureFrontUrl = !empty($params['https']['front']);
+        $schemes = ['http', 'https'];
 
         // Validating of Base URL
-        if ($hasBaseUrl && $this->simpleUrlValidator->isValid($params['address']['actual_base_url'])) {
+        if ($hasBaseUrl && $this->urlValidator->isValid($params['address']['actual_base_url'], $schemes)) {
             $result['successUrl'] = true;
         }
 
         // Validating of Secure Base URL
         if ($hasSecureAdminUrl || $hasSecureFrontUrl) {
-            if (!($hasSecureBaseUrl && $this->simpleUrlValidator->isValid($params['https']['text']))) {
+            if (!($hasSecureBaseUrl && $this->urlValidator->isValid($params['https']['text'], $schemes))) {
                 $result['successSecureUrl'] = false;
             }
         }
