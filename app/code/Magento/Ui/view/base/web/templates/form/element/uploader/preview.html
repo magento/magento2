@@ -1,0 +1,59 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="file-uploader-summary">
+    <div class="file-uploader-preview">
+        <a data-bind="{
+            attr: {
+                href: $parent.getFilePreview($file)
+            }
+        }" target="_blank">
+            <img data-bind="{
+                    event: {
+                        load: $parent.onPreviewLoad.bind($parent)
+                    },
+                    attr: {
+                        src: $parent.getFilePreview($file),
+                        alt: $file.name
+                    }
+                }"
+                 class="preview-image"
+                 tabindex="0"
+            >
+        </a>
+
+        <div class="actions">
+            <button data-bind="{
+                    attr: {title: $t('Delete image')},
+                    click: $parent.removeFile.bind($parent, $file)
+                }"
+                type="button"
+                class="action-remove"
+                data-role="delete-button"
+            >
+                <span data-bind="{
+                    text: $t('Delete image')
+                }"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="file-uploader-filename" data-bind="{
+        text: $file.name
+    }"> </div>
+    <div class="file-uploader-meta">
+        <span data-bind="{
+            text: $file.previewWidth
+        }"></span>
+        x
+        <span data-bind="{
+            text: $file.previewHeight
+        }"></span>
+        <span data-bind="{
+            text: $parent.formatSize($file.size)
+        }"></span>
+    </div>
+</div>
