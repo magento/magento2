@@ -5,6 +5,8 @@
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -82,10 +84,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $productLimitationMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
+        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
+        $this->mockObjectManager(
+            [
+                ProductLimitationFactory::class => $productLimitationFactoryMock,
+            ]
+        );
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->objectManager->mockObjectManager([
-            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class => $productLimitationMock
-        ]);
         $this->model = $this->objectManager->getObject(
             \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
             [
@@ -99,7 +106,28 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**

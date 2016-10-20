@@ -43,23 +43,22 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         $this->_readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->objectManager->mockObjectManager(
-            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
-        );
 
-        $this->_model = new \Magento\Framework\Config\Data\Scoped(
-            $this->_readerMock,
-            $this->_configScopeMock,
-            $this->_cacheMock,
-            'tag'
+        $this->_model = $this->objectManager->getObject(
+            \Magento\Framework\Config\Data\Scoped::class,
+            [
+                'reader' => $this->_readerMock,
+                'configScope' => $this->_configScopeMock,
+                'cache' => $this->_cacheMock,
+                'cacheId' => 'tag',
+            ]
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->objectManager->restoreObjectManager();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->_model,
+            'serializer',
+            $this->serializerMock
+        );
     }
 
     /**

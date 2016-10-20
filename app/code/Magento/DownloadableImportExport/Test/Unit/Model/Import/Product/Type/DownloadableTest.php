@@ -710,7 +710,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ->getMock(\Magento\Framework\EntityManager\MetadataPool::class, ['getLinkField'], [], '', false);
         $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
 
-        $this->objectManagerHelper->mockObjectManager([
+        $this->mockObjectManager([
             \Magento\Framework\EntityManager\MetadataPool::class => $metadataPoolMock
         ]);
 
@@ -739,7 +739,28 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected function tearDown()
     {
         parent::tearDown();
-        $this->objectManagerHelper->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**

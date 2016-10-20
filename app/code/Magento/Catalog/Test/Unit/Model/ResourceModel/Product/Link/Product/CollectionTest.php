@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
+use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -131,10 +134,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->timezoneInterfaceMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->sessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
         $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->objectManager->mockObjectManager([
-            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class =>
-                $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-        ]);
+        $productLimitationFactory = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactory->method('create')
+            ->willReturn($this->getMock(ProductLimitation::class));
+        $this->mockObjectManager([ProductLimitationFactory::class => $productLimitationFactory]);
 
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
@@ -163,7 +166,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
     }
 
     public function testSetProduct()
@@ -175,5 +180,24 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

@@ -30,7 +30,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager->mockObjectManager([
+        $this->mockObjectManager([
             \Magento\Framework\Api\ExtensionAttributesFactory::class =>
                 $this->getMock(\Magento\Framework\Api\ExtensionAttributesFactory::class, [], [], '', false),
             \Magento\Framework\Api\AttributeValueFactory::class =>
@@ -47,7 +47,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
     }
 
     public function testGetConditionsInstance()
@@ -63,5 +65,24 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testGetActionsInstance()
     {
         $this->assertNull($this->rule->getActionsInstance());
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

@@ -261,6 +261,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $metadataPool;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory
+     */
+    private $productLimitationFiltersFactory;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -316,7 +321,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $this->_productLimitationFilters = $this->createLimitationFilters();
+        $this->_productLimitationFilters = $this->getProductLimitationFactory()->create();
         parent::__construct(
             $entityFactory,
             $logger,
@@ -2336,11 +2341,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * @return Collection\ProductLimitation
+     * @deprecated
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory
      */
-    private function createLimitationFilters()
+    private function getProductLimitationFactory()
     {
-        return \Magento\Framework\App\ObjectManager::getInstance()
-                ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class);
+        if (null === $this->productLimitationFiltersFactory) {
+            $this->productLimitationFiltersFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class
+            );
+        }
+        return $this->productLimitationFiltersFactory;
     }
 }

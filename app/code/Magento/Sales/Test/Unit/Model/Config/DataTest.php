@@ -8,11 +8,6 @@ namespace Magento\Sales\Test\Unit\Model\Config;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $_readerMock;
@@ -29,7 +24,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_readerMock = $this->getMockBuilder(
             \Magento\Sales\Model\Config\Reader::class
         )->disableOriginalConstructor()->getMock();
@@ -37,14 +31,35 @@ class DataTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Cache\Type\Config::class
         )->disableOriginalConstructor()->getMock();
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->objectManager->mockObjectManager(
+        $this->mockObjectManager(
             [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
         );
     }
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGet()

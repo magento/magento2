@@ -28,7 +28,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $serializerMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\Config
      */
     private $config;
 
@@ -44,14 +44,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->objectManager->mockObjectManager(
+        $this->mockObjectManager(
             [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
         );
     }
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
     }
 
     /**
@@ -67,7 +69,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->serializerMock->method('unserialize')
             ->willReturn($value);
-        $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
+
+        $this->config = $this->objectManager->getObject(
+            \Magento\Catalog\Model\ProductTypes\Config::class,
+            [
+                'reader' => $this->readerMock,
+                'cache' => $this->cacheMock,
+                'cacheId' => 'cache_id',
+            ]
+        );
         $this->assertEquals($expected, $this->config->getType('global'));
     }
 
@@ -87,7 +97,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn(json_encode('"types":["Expected Data"]]'));
         $this->serializerMock->method('unserialize')
             ->willReturn(['types' => $expected]);
-        $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
+
+        $this->config = $this->objectManager->getObject(
+            \Magento\Catalog\Model\ProductTypes\Config::class,
+            [
+                'reader' => $this->readerMock,
+                'cache' => $this->cacheMock,
+                'cacheId' => 'cache_id',
+            ]
+        );
         $this->assertEquals($expected, $this->config->getAll());
     }
 
@@ -98,8 +116,34 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn('');
         $this->serializerMock->method('unserialize')
             ->willReturn([]);
-        $this->config = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock, $this->cacheMock, 'cache_id');
 
+        $this->config = $this->objectManager->getObject(
+            \Magento\Catalog\Model\ProductTypes\Config::class,
+            [
+                'reader' => $this->readerMock,
+                'cache' => $this->cacheMock,
+                'cacheId' => 'cache_id',
+            ]
+        );
         $this->assertEquals(false, $this->config->isProductSet('typeId'));
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

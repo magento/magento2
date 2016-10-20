@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -76,10 +77,15 @@ class CollectionTest extends BaseCollectionTest
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
 
-        $this->objectManager->mockObjectManager(
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
+        $this->mockObjectManager(
             [
-                \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class =>
-                    $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
+                ProductLimitationFactory::class => $productLimitationFactoryMock,
             ]
         );
 
@@ -114,7 +120,9 @@ class CollectionTest extends BaseCollectionTest
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
     }
 
     /**
@@ -221,5 +229,24 @@ class CollectionTest extends BaseCollectionTest
             ->disableOriginalConstructor()
             ->getMock();
         return $filter;
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

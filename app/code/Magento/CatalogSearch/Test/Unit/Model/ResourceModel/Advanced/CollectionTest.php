@@ -7,6 +7,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
+use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
@@ -70,10 +71,17 @@ class CollectionTest extends BaseCollectionTest
         );
         $this->search = $this->getMock(\Magento\Search\Api\SearchInterface::class, [], [], '', false);
 
-        $this->objectManager->mockObjectManager([
-            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class =>
-                $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-        ]);
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
+        $this->mockObjectManager(
+            [
+                ProductLimitationFactory::class => $productLimitationFactoryMock,
+            ]
+        );
 
         $this->advancedCollection = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
@@ -91,7 +99,9 @@ class CollectionTest extends BaseCollectionTest
 
     protected function tearDown()
     {
-        $this->objectManager->restoreObjectManager();
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
     }
 
     public function testLoadWithFilterNoFilters()
@@ -156,5 +166,24 @@ class CollectionTest extends BaseCollectionTest
             ->disableOriginalConstructor()
             ->getMock();
         return $criteriaBuilder;
+    }
+
+    /**
+     * Mock application object manager to return configured dependencies.
+     *
+     * @param array $dependencies
+     * @return void
+     */
+    private function mockObjectManager($dependencies)
+    {
+        $dependencyMap = [];
+        foreach ($dependencies as $type => $instance) {
+            $dependencyMap[] = [$type, $instance];
+        }
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($dependencyMap));
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

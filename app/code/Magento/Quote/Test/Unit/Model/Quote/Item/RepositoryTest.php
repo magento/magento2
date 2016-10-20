@@ -106,9 +106,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManager->mockObjectManager([
-            \Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor::class => $this->optionsProcessorMock
-        ]);
 
         $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
             $this->quoteRepositoryMock,
@@ -116,11 +113,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->itemDataFactoryMock,
             ['custom_options' => $this->customOptionProcessor]
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->objectManager->restoreObjectManager();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->repository,
+            'cartItemOptionsProcessor',
+            $this->optionsProcessorMock
+        );
     }
 
     /**

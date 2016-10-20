@@ -98,11 +98,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cartManagementMock;
-
-    /**
      * Set up
      *
      * @return void
@@ -203,13 +198,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteFactory::class, ['create'], [], '', false);
-        $this->cartManagementMock = $this->getMock(
-            \Magento\Quote\Api\CartManagementInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->quote = $this->getMock(
             \Magento\Backend\Model\Session\Quote::class,
@@ -232,15 +220,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'quoteFactory' => $this->quoteFactoryMock
             ]
         );
-
-        $this->objectManager->mockObjectManager([
-            \Magento\Quote\Api\CartManagementInterface::class => $this->cartManagementMock
-        ]);
-    }
-
-    protected function tearDown()
-    {
-        $this->objectManager->restoreObjectManager();
     }
 
     /**

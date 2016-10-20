@@ -104,10 +104,6 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManager->mockObjectManager([
-            \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
-                => $this->amountErrorMessageMock
-        ]);
 
         $this->service = $this->objectManager->getObject(
             \Magento\Quote\Model\ShippingAddressManagement::class,
@@ -120,11 +116,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
                 'addressRepository' => $this->addressRepository
             ]
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->objectManager->restoreObjectManager();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->service,
+            'minimumAmountErrorMessage',
+            $this->amountErrorMessageMock
+        );
     }
 
     /**

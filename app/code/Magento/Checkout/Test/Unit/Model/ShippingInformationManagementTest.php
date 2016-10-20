@@ -181,12 +181,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingFactoryMock =
             $this->getMock(\Magento\Quote\Model\ShippingFactory::class, ['create'], [], '', false);
 
-        $this->objectManager->mockObjectManager([
-            \Magento\Quote\Model\ShippingAssignmentFactory::class => $this->shippingAssignmentFactoryMock,
-            \Magento\Quote\Api\Data\CartExtensionFactory::class => $this->cartExtensionFactoryMock,
-            \Magento\Quote\Model\ShippingFactory::class => $this->shippingFactoryMock,
-        ]);
-
         $this->model = new \Magento\Checkout\Model\ShippingInformationManagement(
             $this->paymentMethodManagementMock,
             $this->paymentDetailsFactoryMock,
@@ -198,11 +192,21 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             $this->scopeConfigMock,
             $this->totalsCollectorMock
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->objectManager->restoreObjectManager();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'shippingAssignmentFactory',
+            $this->shippingAssignmentFactoryMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'cartExtensionFactory',
+            $this->cartExtensionFactoryMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'shippingFactory',
+            $this->shippingFactoryMock
+        );
     }
 
     /**
