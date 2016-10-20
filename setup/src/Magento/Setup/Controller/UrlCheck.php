@@ -52,6 +52,6 @@ class UrlCheck extends AbstractActionController
             }
         }
 
-        return new JsonModel(array_merge($result));
+        return new JsonModel($result);
     }
 }
