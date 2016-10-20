@@ -5,10 +5,11 @@
  */
 namespace Magento\Customer\Controller\Section;
 
+use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Escaper;
 
 /**
  * Customer section controller
@@ -31,15 +32,20 @@ class Load extends \Magento\Framework\App\Action\Action
     protected $sectionPool;
 
     /**
+     * @var  Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier
+     * @param Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
-        \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier,
+        Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool
     ) {
         parent::__construct($context);
@@ -60,7 +66,7 @@ class Load extends \Magento\Framework\App\Action\Action
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
             $updateSectionId = $this->getRequest()->getParam('update_section_id');
-            if ('false' == $updateSectionId) {
+            if ('false' === $updateSectionId) {
                 $updateSectionId = false;
             }
             $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$updateSectionId);
@@ -70,9 +76,21 @@ class Load extends \Magento\Framework\App\Action\Action
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
-            $response = ['message' => $e->getMessage()];
+            $response = ['message' => $this->getEscaper()->escapeHtml($e->getMessage())];
         }
 
         return $resultJson->setData($response);
+    }
+
+    /**
+     * @deprecated
+     * @return Escaper
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper == null) {
+            $this->escaper = $this->_objectManager->get(Escaper::class);
+        }
+        return $this->escaper;
     }
 }

@@ -5,13 +5,15 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Invoice item interface.
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
  */
-interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -225,13 +227,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getName();
 
     /**
-     * Gets the order item ID for the invoice item.
-     *
-     * @return int Order item ID.
-     */
-    public function getOrderItemId();
-
-    /**
      * Gets the parent ID for the invoice item.
      *
      * @return int|null Parent ID.
@@ -258,13 +253,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return int|null Product ID.
      */
     public function getProductId();
-
-    /**
-     * Gets the quantity for the invoice item.
-     *
-     * @return float Quantity.
-     */
-    public function getQty();
 
     /**
      * Gets the row total for the invoice item.
@@ -375,14 +363,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setBasePriceInclTax($amount);
 
     /**
-     * Sets the quantity for the invoice item.
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty);
-
-    /**
      * Sets the base cost for the invoice item.
      *
      * @param float $baseCost
@@ -421,14 +401,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setProductId($id);
-
-    /**
-     * Sets the order item ID for the invoice item.
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setOrderItemId($id);
 
     /**
      * Sets the additional data for the invoice item.
