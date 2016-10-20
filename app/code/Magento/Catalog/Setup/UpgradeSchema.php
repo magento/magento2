@@ -36,6 +36,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $this->addPercentageValueColumn($setup);
         }
+
+        if (version_compare($context->getVersion(), '2.1.1', '<')) {
+            $tables = [
+                'catalog_product_index_price_cfg_opt_agr_idx',
+                'catalog_product_index_price_cfg_opt_agr_tmp',
+                'catalog_product_index_price_cfg_opt_idx',
+                'catalog_product_index_price_cfg_opt_tmp',
+                'catalog_product_index_price_final_idx',
+                'catalog_product_index_price_final_tmp',
+                'catalog_product_index_price_idx',
+                'catalog_product_index_price_opt_agr_idx',
+                'catalog_product_index_price_opt_agr_tmp',
+                'catalog_product_index_price_opt_idx',
+                'catalog_product_index_price_opt_tmp',
+                'catalog_product_index_price_tmp',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    ['type' => 'integer', 'nullable' => false]
+                );
+            }
+        }
+
         $setup->endSetup();
     }
 
