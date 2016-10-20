@@ -58,6 +58,17 @@ class CreditmemoFactory
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
             if ($orderItem->isDummy()) {
                 $qty = 1;
+                if (isset($data['qtys'][$orderItem->getParentItemId()])) {
+                    $productOptions = $orderItem->getProductOptions();
+                    if (isset($productOptions['bundle_selection_attributes'])) {
+                        $bundleSelectionAttributes = unserialize(
+                            $productOptions['bundle_selection_attributes']
+                        );
+                        if ($bundleSelectionAttributes) {
+                            $qty = $bundleSelectionAttributes['qty'] * $data['qtys'][$orderItem->getParentItemId()];
+                        }
+                    }
+                }
                 $orderItem->setLockedDoShip(true);
             } else {
                 if (isset($qtys[$orderItem->getId()])) {
@@ -133,6 +144,17 @@ class CreditmemoFactory
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
             if ($orderItem->isDummy()) {
                 $qty = 1;
+                if (isset($data['qtys'][$orderItem->getParentItemId()])) {
+                    $productOptions = $orderItem->getProductOptions();
+                    if (isset($productOptions['bundle_selection_attributes'])) {
+                        $bundleSelectionAttributes = unserialize(
+                            $productOptions['bundle_selection_attributes']
+                        );
+                        if ($bundleSelectionAttributes) {
+                            $qty = $bundleSelectionAttributes['qty'] * $data['qtys'][$orderItem->getParentItemId()];
+                        }
+                    }
+                }
             } else {
                 if (isset($qtys[$orderItem->getId()])) {
                     $qty = (double)$qtys[$orderItem->getId()];

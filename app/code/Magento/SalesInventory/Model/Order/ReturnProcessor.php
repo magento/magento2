@@ -6,6 +6,7 @@
 namespace Magento\SalesInventory\Model\Order;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesInventory\Model\Order\Creditmemo\QtyValuePool;
 
@@ -87,7 +88,7 @@ class ReturnProcessor
             $productId = $item->getProductId();
             $orderItem = $this->orderItemRepository->get($item->getOrderItemId());
             $parentItemId = $orderItem->getParentItemId();
-            $qty = $this->qtyValuePool->get($item, $creditmemo, $parentItemId);
+            $qty = $item->getQty();
             if ($isAutoReturn || $this->canReturnItem($item, $qty, $parentItemId, $returnToStockItems)) {
                 if (isset($itemsToUpdate[$productId])) {
                     $itemsToUpdate[$productId] += $qty;
