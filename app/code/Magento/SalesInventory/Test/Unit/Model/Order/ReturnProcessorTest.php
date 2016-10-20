@@ -74,9 +74,6 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|StoreInterface */
     private $storeMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|QtyValuePool */
-    private $qtyValuePoolMock;
-
     public function setUp()
     {
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
@@ -114,17 +111,12 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->qtyValuePoolMock = $this->getMockBuilder(QtyValuePool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->returnProcessor = new ReturnProcessor(
             $this->stockManagementMock,
             $this->stockIndexerProcessorMock,
             $this->priceIndexerMock,
             $this->storeManagerMock,
-            $this->orderItemRepositoryMock,
-            $this->qtyValuePoolMock
+            $this->orderItemRepositoryMock
         );
     }
 
@@ -185,9 +177,8 @@ class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getParentItemId')
             ->willReturn($parentItemId);
 
-        $this->qtyValuePoolMock->expects($this->once())
-            ->method('get')
-            ->with($this->creditmemoItemMock, $this->creditmemoMock, $parentItemId)
+        $this->creditmemoItemMock->expects($this->once())
+            ->method('getQty')
             ->willReturn($qty);
 
         $this->returnProcessor->execute($this->creditmemoMock, $this->orderMock, $returnToStockItems);
