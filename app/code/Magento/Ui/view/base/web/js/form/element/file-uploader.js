@@ -16,8 +16,8 @@ define([
     /**
      * Constructor to creating valid validation format
      *
-     * @param {(String|Object)} rule - One or many validation rules.
-     * @param {Boolean} passed.
+     * @param {String|Object} rule - One or many validation rules.
+     * @param {Boolean} passed
      * @param {String} msg - ErrorMessage
      */
     var ValidationResult = function (rule, passed, msg) {
