@@ -202,10 +202,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      */
     private function _isFullyQualifiedUrl($value)
     {
-        $url = parse_url($value);
-
-        return isset($url['scheme']) && isset($url['host']) && preg_match('/\/$/', $value)
-            && $this->getSimpleUrlValidator()->isValid($value);
+        return preg_match('/\/$/', $value) && $this->getSimpleUrlValidator()->isValid($value);
     }
 
     /**
@@ -229,7 +226,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * Get link interface factory
+     * Get Simple URL Validator
      *
      * @deprecated
      * @return SimpleValidator
