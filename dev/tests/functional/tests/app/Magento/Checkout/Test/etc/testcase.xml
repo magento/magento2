@@ -22,4 +22,10 @@
         <step name="placeOrder" module="Magento_Checkout" next="createCustomerAccount" />
         <step name="createCustomerAccount" module="Magento_Checkout" />
     </scenario>
+    <scenario name="OnePageCheckoutJsValidationTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="ProceedToCheckout" />
+        <step name="ProceedToCheckout" module="Magento_Checkout" />
+    </scenario>
 </config>
