@@ -16,11 +16,10 @@ use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\Store;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\Validator\Timezone;
-use Magento\Framework\Validator\Currency;
-use Magento\Framework\Validator\Url;
+use Magento\Framework\Validator\Locale as LocaleValidator;
+use Magento\Framework\Validator\Timezone as TimezoneValidator;
+use Magento\Framework\Validator\Currency as CurrencyValidator;
+use Magento\Framework\Validator\Url as UrlValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -43,8 +42,29 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * Object Manager
      *
      * @var ObjectManagerInterface
+     * @deprecated
      */
     private $objectManager;
+
+    /**
+     * @var LocaleValidator
+     */
+    private $localeValidator;
+
+    /**
+     * @var TimezoneValidator
+     */
+    private $timezoneValidator;
+
+    /**
+     * @var CurrencyValidator
+     */
+    private $currencyValidator;
+
+    /**
+     * @var UrlValidator
+     */
+    private $urlValidator;
 
     /**
      * Inject dependencies
@@ -52,15 +72,27 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param LocaleValidator $localeValidator,
+     * @param TimezoneValidator $timezoneValidator,
+     * @param CurrencyValidator $currencyValidator,
+     * @param UrlValidator $urlValidator
      */
     public function __construct(
         InstallerFactory $installerFactory,
         DeploymentConfig $deploymentConfig,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        LocaleValidator $localeValidator,
+        TimezoneValidator $timezoneValidator,
+        CurrencyValidator $currencyValidator,
+        UrlValidator $urlValidator
     ) {
         $this->installerFactory = $installerFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManager = $objectManagerProvider->get();
+        $this->localeValidator = $localeValidator;
+        $this->timezoneValidator = $timezoneValidator;
+        $this->currencyValidator = $currencyValidator;
+        $this->urlValidator = $urlValidator;
         parent::__construct();
     }
 
@@ -193,25 +225,31 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_LANGUAGE:
-                    /** @var Locale $lists */
-                    $lists = $this->objectManager->get(\Magento\Framework\Validator\Locale::class);
-                    $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_LANGUAGE);
+                    $errorMsg = $this->validateCodes(
+                        $this->localeValidator,
+                        $value,
+                        StoreConfigurationDataMapper::KEY_LANGUAGE
+                    );
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_TIMEZONE:
-                    /** @var Timezone $lists */
-                    $lists = $this->objectManager->get(\Magento\Framework\Validator\Timezone::class);
-                    $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_TIMEZONE);
+                    $errorMsg = $this->validateCodes(
+                        $this->timezoneValidator,
+                        $value,
+                        StoreConfigurationDataMapper::KEY_TIMEZONE
+                    );
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_CURRENCY:
-                    /** @var Currency $lists */
-                    $lists = $this->objectManager->get(\Magento\Framework\Validator\Currency::class);
-                    $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_CURRENCY);
+                    $errorMsg = $this->validateCodes(
+                        $this->currencyValidator,
+                        $value,
+                        StoreConfigurationDataMapper::KEY_CURRENCY
+                    );
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
@@ -291,7 +329,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     /**
      * Validate codes for languages, currencies or timezones
      *
-     * @param Locale|Timezone|Currency  $lists
+     * @param LocaleValidator|TimezoneValidator|CurrencyValidator  $lists
      * @param string  $code
      * @param string  $type
      * @return string
@@ -316,12 +354,9 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      */
     private function validateUrl($url, $option, array $allowedSchemes)
     {
-        /** @var Url $validator */
-        $validator = $this->objectManager->get(Url::class);
-
         $errorMsg = '';
 
-        if (!$validator->isValid($url, $allowedSchemes)) {
+        if (!$this->urlValidator->isValid($url, $allowedSchemes)) {
             $errorTemplate = '<error>Command option \'%s\': Invalid URL \'%s\'.'
                 . ' Domain Name should contain only letters, digits and hyphen.'
                 . ' And you should use only following schemes: \'%s\'.</error>';

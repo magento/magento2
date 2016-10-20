@@ -12,6 +12,9 @@ use Magento\Setup\Model\Installer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Framework\Validator\Locale as LocaleValidator;
+use Magento\Framework\Validator\Timezone as TimezoneValidator;
+use Magento\Framework\Validator\Currency as CurrencyValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,12 +42,37 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
+     * @var LocaleValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $localeValidatorMock;
+
+    /**
+     * @var TimezoneValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $timezoneValidatorMock;
+
+    /**
+     * @var CurrencyValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $currencyValidatorMock;
+
+    /**
+     * @var UrlValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlValidatorMock;
+
+    /**
      * @var InstallStoreConfigurationCommand
      */
     private $command;
 
     protected function setUp()
     {
+        $this->urlValidatorMock = $this->getMock(UrlValidator::class, [], [], '', false);
+        $this->localeValidatorMock = $this->getMock(LocaleValidator::class, [], [], '', false);
+        $this->timezoneValidatorMock = $this->getMock(TimezoneValidator::class, [], [], '', false);
+        $this->currencyValidatorMock = $this->getMock(CurrencyValidator::class, [], [], '', false);
+
         $this->installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
         $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $this->installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
@@ -65,7 +93,11 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = new InstallStoreConfigurationCommand(
             $this->installerFactory,
             $this->deploymentConfig,
-            $objectManagerProvider
+            $objectManagerProvider,
+            $this->localeValidatorMock,
+            $this->timezoneValidatorMock,
+            $this->currencyValidatorMock,
+            $this->urlValidatorMock
         );
     }
 
@@ -105,38 +137,11 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidData(array $option, $error)
     {
-        $validator = $this->getMock(UrlValidator::class, [], [], '', false);
-        $validator->expects($this->any())->method('isValid')->willReturn(false);
-        $validator->expects($this->any())->method('getAllowedSchemes')->willReturn(['http', 'https']);
+        $this->localeValidatorMock->expects($this->any())->method('isValid')->willReturn(false);
+        $this->timezoneValidatorMock->expects($this->any())->method('isValid')->willReturn(false);
+        $this->currencyValidatorMock->expects($this->any())->method('isValid')->willReturn(false);
+        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(false);
 
-        $localeLists= $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
-        $localeLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
-        $timezoneLists= $this->getMock(\Magento\Framework\Validator\Timezone::class, [], [], '', false);
-        $timezoneLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
-        $currencyLists= $this->getMock(\Magento\Framework\Validator\Currency::class, [], [], '', false);
-        $currencyLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
-
-        $returnValueMapOM = [
-            [
-                UrlValidator::class,
-                $validator
-            ],
-            [
-                \Magento\Framework\Validator\Locale::class,
-                $localeLists
-            ],
-            [
-                \Magento\Framework\Validator\Timezone::class,
-                $timezoneLists
-            ],
-            [
-                \Magento\Framework\Validator\Currency::class,
-                $currencyLists
-            ],
-        ];
-        $this->objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($returnValueMapOM));
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(true));

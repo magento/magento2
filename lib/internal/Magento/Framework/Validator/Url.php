@@ -25,7 +25,7 @@ class Url
             $isValid = false;
         }
 
-        if (!empty($allowedSchemes)) {
+        if ($isValid && !empty($allowedSchemes)) {
             $url = parse_url($value);
             if (empty($url['scheme']) || !in_array($url['scheme'], $allowedSchemes)) {
                 $isValid = false;
