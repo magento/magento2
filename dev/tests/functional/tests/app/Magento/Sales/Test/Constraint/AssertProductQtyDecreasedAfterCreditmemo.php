@@ -50,7 +50,6 @@ class AssertProductQtyDecreasedAfterCreditmemo extends AbstractConstraint
         parent::__construct($objectManager, $eventManager);
     }
 
-
     /**
      * Assert form data equals fixture data
      *
