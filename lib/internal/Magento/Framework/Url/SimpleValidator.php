@@ -16,12 +16,15 @@ class SimpleValidator
      * Set allowed Schemes
      *
      * @param array $allowedSchemes
+     * @return $this
      */
     public function setAllowedSchemes(array $allowedSchemes)
     {
         if (!empty($allowedSchemes)) {
             $this->allowedSchemes = $allowedSchemes;
         }
+
+        return $this;
     }
 
     /**
