@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
