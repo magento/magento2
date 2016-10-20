@@ -81,7 +81,7 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class => $config,
             \Magento\Framework\ObjectManager\DefinitionInterface::class          => $definitions,
             \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions,
-            \Magento\Framework\Serialize\SerializerInterface::class                         => $json,
+            \Magento\Framework\Serialize\SerializerInterface::class              => $json,
         ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,
