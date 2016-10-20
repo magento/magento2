@@ -21,15 +21,12 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
      */
     public function getValue()
     {
-        $result = 0.;
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $this->getProduct()->getCustomOption('simple_product');
-        if ($customOption) {
-            /** @var \Magento\Framework\Pricing\PriceInfoInterface $priceInfo */
-            $priceInfo = $customOption->getProduct()->getPriceInfo();
-            $result = $priceInfo->getPrice(self::PRICE_CODE)->getValue();
-        }
-        return max(0, $result);
+        $product = $customOption ? $customOption->getProduct() : $this->getProduct();
+        $price = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
+
+        return max(0, $price);
     }
 
     /**

@@ -49,9 +49,6 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
                 'getCustomOption',
             ])
             ->getMockForAbstractClass();
-        $this->saleableItem->expects($this->once())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
 
         $this->calculator = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\CalculatorInterface::class)
             ->getMockForAbstractClass();
@@ -109,11 +106,28 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueWithNoCustomOption()
     {
+        $priceValue = 100;
+
+        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+            ->getMockForAbstractClass();
+        $priceMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($priceValue);
+
         $this->saleableItem->expects($this->once())
             ->method('getCustomOption')
             ->with('simple_product')
             ->willReturn(null);
 
-        $this->assertEquals(0, $this->model->getValue());
+        $this->saleableItem->expects($this->once())
+            ->method('getPriceInfo')
+            ->willReturn($this->priceInfoMock);
+
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with(ConfigurableProduct::PRICE_CODE)
+            ->willReturn($priceMock);
+
+        $this->assertEquals(100, $this->model->getValue());
     }
 }
