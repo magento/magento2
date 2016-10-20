@@ -327,15 +327,12 @@ class RowCustomizer implements RowCustomizerInterface
         $code = '';
         foreach ($attributeNameValuePairs as $attributeData) {
             //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
-            if (strpos($attributeData, ImportProductModel::PAIR_NAME_VALUE_SEPARATOR) === false) {
-                if (!$code) {
-                    continue;
-                }
+            if (strpos($attributeData, ImportProductModel::PAIR_NAME_VALUE_SEPARATOR) === false && $code) {
                 $preparedAttributes[$code] .= ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . $attributeData;
-                continue;
+            } else {
+                list($code, $value) = explode(ImportProductModel::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
+                $preparedAttributes[$code] = $value;
             }
-            list($code, $value) = explode(ImportProductModel::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
-            $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
     }
