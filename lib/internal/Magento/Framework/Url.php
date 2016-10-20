@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework;
 
 /**
@@ -1068,7 +1066,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $key = 'use_session_id_for_url_' . (int)$secure;
         if (is_null($this->getData($key))) {
             $httpHost = $this->_request->getHttpHost();
-            $urlHost = parse_url($this->_getScope()->getBaseUrl(UrlInterface::URL_TYPE_LINK, $secure), PHP_URL_HOST);
+            $urlHost = parse_url(
+                $this->_getScope()->getBaseUrl(UrlInterface::URL_TYPE_LINK, $secure),
+                PHP_URL_HOST
+            );
 
             if ($httpHost != $urlHost) {
                 $this->setData($key, true);
@@ -1090,7 +1091,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $referer = parse_url($this->_request->getServer('HTTP_REFERER'), PHP_URL_HOST);
         foreach ($this->_scopeResolver->getScopes() as $scope) {
             $scopeDomains[] = parse_url($scope->getBaseUrl(), PHP_URL_HOST);
-            $scopeDomains[] = parse_url($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true), PHP_URL_HOST);
+            $scopeDomains[] = parse_url(
+                $scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true),
+                PHP_URL_HOST
+            );
         }
         $scopeDomains = array_unique($scopeDomains);
         if (empty($referer) || in_array($referer, $scopeDomains)) {

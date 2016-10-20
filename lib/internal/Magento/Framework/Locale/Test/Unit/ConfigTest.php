@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Locale\Test\Unit;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase

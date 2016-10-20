@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Filter\Input;
 
 class MaliciousCode implements \Zend_Filter_Interface

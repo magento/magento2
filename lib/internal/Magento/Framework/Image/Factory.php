@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Image;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -26,8 +24,10 @@ class Factory
      * @param ObjectManagerInterface $objectManager
      * @param AdapterFactory $adapterFactory
      */
-    public function __construct(ObjectManagerInterface $objectManager, AdapterFactory $adapterFactory)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        AdapterFactory $adapterFactory
+    ) {
         $this->objectManager = $objectManager;
         $this->adapterFactory = $adapterFactory;
     }

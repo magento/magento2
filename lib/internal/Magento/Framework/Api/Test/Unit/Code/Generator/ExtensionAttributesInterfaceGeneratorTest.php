@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;

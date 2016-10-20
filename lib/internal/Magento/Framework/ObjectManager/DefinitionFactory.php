@@ -7,8 +7,6 @@
  *
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\Api\Code\Generator\Mapper as MapperGenerator;
@@ -78,8 +76,12 @@ class DefinitionFactory
      * @param string $generationDir
      * @param string  $definitionFormat
      */
-    public function __construct(DriverInterface $filesystemDriver, $definitionDir, $generationDir, $definitionFormat)
-    {
+    public function __construct(
+        DriverInterface $filesystemDriver,
+        $definitionDir,
+        $generationDir,
+        $definitionFormat
+    ) {
         $this->_filesystemDriver = $filesystemDriver;
         $this->_definitionDir = $definitionDir;
         $this->_generationDir = $generationDir;

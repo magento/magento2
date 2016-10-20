@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Event\Invoker;
 
 use Magento\Framework\Event\Observer;
@@ -33,8 +31,10 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
      * @param \Magento\Framework\Event\ObserverFactory $observerFactory
      * @param \Magento\Framework\App\State $appState
      */
-    public function __construct(\Magento\Framework\Event\ObserverFactory $observerFactory, \Magento\Framework\App\State $appState)
-    {
+    public function __construct(
+        \Magento\Framework\Event\ObserverFactory $observerFactory,
+        \Magento\Framework\App\State $appState
+    ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;
     }

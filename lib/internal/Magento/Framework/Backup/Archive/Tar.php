@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Extended version of \Magento\Framework\Archive\Tar that supports filtering
  *
@@ -41,7 +39,10 @@ class Tar extends \Magento\Framework\Archive\Tar
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_skipFiles);
+        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter(
+            $filesystemIterator,
+            $this->_skipFiles
+        );
 
         foreach ($iterator as $item) {
             $this->_setCurrentFile($item->getPathname());

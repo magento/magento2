@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 class ConfigDomMock extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,8 +13,13 @@ class ConfigDomMock extends \PHPUnit_Framework_TestCase
      * @param $perFileSchema
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct($initialContents, $validationState, $idAttributes, $typeAttribute, $perFileSchema)
-    {
+    public function __construct(
+        $initialContents,
+        $validationState,
+        $idAttributes,
+        $typeAttribute,
+        $perFileSchema
+    ) {
         $this->assertEquals('first content item', $initialContents);
         $this->assertEquals('xsi:type', $typeAttribute);
     }

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\Test\Unit\View;
 
 use \Magento\Framework\Mview\View\Subscription;
@@ -39,7 +37,14 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $this->connectionMock = $this->getMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->resourceMock = $this->getMock(
             \Magento\Framework\App\ResourceConnection::class,
             [],

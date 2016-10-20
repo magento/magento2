@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
 class ModuleDependencyTest extends \PHPUnit_Framework_TestCase

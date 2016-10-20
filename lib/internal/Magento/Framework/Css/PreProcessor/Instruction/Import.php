@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Css\PreProcessor\Instruction;
 
 use Magento\Framework\View\Asset\LocalInterface;

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Interception\Test\Unit\Code;
 
 use \Magento\Framework\Interception\Code\InterfaceValidator;

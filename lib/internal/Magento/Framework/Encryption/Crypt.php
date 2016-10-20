@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Encryption;
 
 /**
@@ -47,8 +45,12 @@ class Crypt
      *                                 FALSE fills initial vector with zero bytes to not use it.
      * @throws \Exception
      */
-    public function __construct($key, $cipher = MCRYPT_BLOWFISH, $mode = MCRYPT_MODE_ECB, $initVector = false)
-    {
+    public function __construct(
+        $key,
+        $cipher = MCRYPT_BLOWFISH,
+        $mode = MCRYPT_MODE_ECB,
+        $initVector = false
+    ) {
         $this->_cipher = $cipher;
         $this->_mode = $mode;
         $this->_handle = mcrypt_module_open($cipher, '', $mode, '');
@@ -72,7 +74,10 @@ class Crypt
                 $initVector = str_repeat("\0", $initVectorSize);
             } elseif (!is_string($initVector) || strlen($initVector) != $initVectorSize) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase('Init vector must be a string of %1 bytes.', [$initVectorSize])
+                    new \Magento\Framework\Phrase(
+                        'Init vector must be a string of %1 bytes.',
+                        [$initVectorSize]
+                    )
                 );
             }
             $this->_initVector = $initVector;

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
 Tables declaration:
 
@@ -148,7 +146,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     {
         if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
             $this->_options['infinite_loop_flag'] = true;
-            $select = $this->_getConnection()->select()->from($this->_getDataTable(), 'data')->where('id=:cache_id');
+            $select = $this->_getConnection()->select()->from(
+                $this->_getDataTable(),
+                'data'
+            )->where('id=:cache_id');
 
             if (!$doNotTestCacheValidity) {
                 $select->where('expire_time=0 OR expire_time>?', time());

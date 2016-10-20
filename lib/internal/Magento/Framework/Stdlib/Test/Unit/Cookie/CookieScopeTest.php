@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
