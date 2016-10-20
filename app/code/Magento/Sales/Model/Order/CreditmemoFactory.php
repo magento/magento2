@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
 
 /**
@@ -59,15 +58,7 @@ class CreditmemoFactory
             if ($orderItem->isDummy()) {
                 $qty = 1;
                 if (isset($data['qtys'][$orderItem->getParentItemId()])) {
-                    $productOptions = $orderItem->getProductOptions();
-                    if (isset($productOptions['bundle_selection_attributes'])) {
-                        $bundleSelectionAttributes = unserialize(
-                            $productOptions['bundle_selection_attributes']
-                        );
-                        if ($bundleSelectionAttributes) {
-                            $qty = $bundleSelectionAttributes['qty'] * $data['qtys'][$orderItem->getParentItemId()];
-                        }
-                    }
+                    $qty = $this->calculateProductOptions($orderItem, $data['qtys']);
                 }
                 $orderItem->setLockedDoShip(true);
             } else {
@@ -145,15 +136,7 @@ class CreditmemoFactory
             if ($orderItem->isDummy()) {
                 $qty = 1;
                 if (isset($data['qtys'][$orderItem->getParentItemId()])) {
-                    $productOptions = $orderItem->getProductOptions();
-                    if (isset($productOptions['bundle_selection_attributes'])) {
-                        $bundleSelectionAttributes = unserialize(
-                            $productOptions['bundle_selection_attributes']
-                        );
-                        if ($bundleSelectionAttributes) {
-                            $qty = $bundleSelectionAttributes['qty'] * $data['qtys'][$orderItem->getParentItemId()];
-                        }
-                    }
+                    $qty = $this->calculateProductOptions($orderItem, $data['qtys']);
                 }
             } else {
                 if (isset($qtys[$orderItem->getId()])) {
@@ -266,5 +249,25 @@ class CreditmemoFactory
         if (isset($data['adjustment_negative'])) {
             $creditmemo->setAdjustmentNegative($data['adjustment_negative']);
         }
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
+     * @param array $qtys
+     * @return int
+     */
+    private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $qtys)
+    {
+        $qty = 1;
+        $productOptions = $orderItem->getProductOptions();
+        if (isset($productOptions['bundle_selection_attributes'])) {
+            $bundleSelectionAttributes = unserialize(
+                $productOptions['bundle_selection_attributes']
+            );
+            if ($bundleSelectionAttributes) {
+                $qty = $bundleSelectionAttributes['qty'] * $qtys[$orderItem->getParentItemId()];
+            }
+        }
+        return $qty;
     }
 }
