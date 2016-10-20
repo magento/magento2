@@ -86,44 +86,46 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodsMap()
     {
+        $data = [
+            'getMethodReturnType' => [
+                'type' => 'string',
+                'isRequired' => true,
+                'description' => null,
+                'parameterCount' => 2,
+            ],
+            'getMethodsMap' => [
+                'type' => 'array',
+                'isRequired' => true,
+                'description' => "<pre> Service methods' reflection data stored in cache as 'methodName' => "
+                    . "'returnType' ex. [ 'create' => '\Magento\Customer\Api\Data\Customer', 'validatePassword' "
+                    . "=> 'boolean' ] </pre>",
+                'parameterCount' => 1,
+            ],
+            'getMethodParams' => [
+                'type' => 'array',
+                'isRequired' => true,
+                'description' => null,
+                'parameterCount' => 2
+            ],
+            'isMethodValidForDataField' => [
+                'type' => 'bool',
+                'isRequired' => true,
+                'description' => null,
+                'parameterCount' => 2,
+            ],
+            'isMethodReturnValueRequired' => [
+                'type' => 'bool',
+                'isRequired' => true,
+                'description' => null,
+                'parameterCount' => 2,
+            ],
+        ];
         $this->serializerMock->expects($this->once())
-            ->method('serialize');
+            ->method('serialize')
+            ->with($data);
         $methodsMap = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertEquals(
-            [
-                'getMethodReturnType' => [
-                    'type' => 'string',
-                    'isRequired' => true,
-                    'description' => null,
-                    'parameterCount' => 2,
-                ],
-                'getMethodsMap' => [
-                    'type' => 'array',
-                    'isRequired' => true,
-                    'description' => "<pre> Service methods' reflection data stored in cache as 'methodName' => "
-                        . "'returnType' ex. [ 'create' => '\Magento\Customer\Api\Data\Customer', 'validatePassword' "
-                        . "=> 'boolean' ] </pre>",
-                    'parameterCount' => 1,
-                ],
-                'getMethodParams' => [
-                    'type' => 'array',
-                    'isRequired' => true,
-                    'description' => null,
-                    'parameterCount' => 2
-                ],
-                'isMethodValidForDataField' => [
-                    'type' => 'bool',
-                    'isRequired' => true,
-                    'description' => null,
-                    'parameterCount' => 2,
-                ],
-                'isMethodReturnValueRequired' => [
-                    'type' => 'bool',
-                    'isRequired' => true,
-                    'description' => null,
-                    'parameterCount' => 2,
-                ],
-            ],
+            $data,
             $methodsMap
         );
     }
