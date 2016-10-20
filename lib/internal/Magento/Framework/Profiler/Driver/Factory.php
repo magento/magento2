@@ -63,7 +63,7 @@ class Factory
         if (!$driver instanceof DriverInterface) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Driver class \"%s\" must implement \Magento\Framework\Profiler\DriverInterface.", 
+                    "Driver class \"%s\" must implement \Magento\Framework\Profiler\DriverInterface.",
                     get_class($driver)
                 )
             );
