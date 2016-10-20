@@ -161,6 +161,7 @@ app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/attr
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/bulk.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/select_attributes.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/summary.js
+app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/variations.js
 app/code/Magento/ConfigurableProduct/view/frontend/requirejs-config.js
 app/code/Magento/ConfigurableProduct/view/frontend/web/js/configurable.js
 app/code/Magento/Cookie/view/adminhtml/requirejs-config.js
@@ -730,6 +731,7 @@ vendor/magento/module-configurable-product/view/adminhtml/web/js/variations/step
 vendor/magento/module-configurable-product/view/adminhtml/web/js/variations/steps/bulk.js
 vendor/magento/module-configurable-product/view/adminhtml/web/js/variations/steps/select_attributes.js
 vendor/magento/module-configurable-product/view/adminhtml/web/js/variations/steps/summary.js
+vendor/magento/module-configurable-product/view/adminhtml/web/js/variations/variations.js
 vendor/magento/module-configurable-product/view/frontend/requirejs-config.js
 vendor/magento/module-configurable-product/view/frontend/web/js/configurable.js
 vendor/magento/module-cookie/-view/adminhtml/requirejs-config.js

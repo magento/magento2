@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Upgrade\Test\TestCase\UpgradeSystemTest" summary="System Upgrade" ticketId="MAGETWO-45592">
+        <variation name="PerformSystemUpgrade">
+            <data name="description" xsi:type="string">System Upgrade Page</data>
+            <data name="upgrade/upgradeVersion" xsi:type="string">{version}</data>
+            <data name="upgrade/package" xsi:type="string">{package}</data>
+            <data name="upgrade/needAuthentication" xsi:type="string">No</data>
+            <data name="upgrade/publicKey" xsi:type="string">{publicKey}</data>
+            <data name="upgrade/privateKey" xsi:type="string">{privateKey}</data>
+            <data name="upgrade/optionsCode" xsi:type="string">No</data>
+            <data name="upgrade/optionsMedia" xsi:type="string">No</data>
+            <data name="upgrade/optionsDb" xsi:type="string">No</data>
+            <data name="upgrade/otherComponents" xsi:type="string">{otherComponents}</data>
+        </variation>
+    </testCase>
+</config>
