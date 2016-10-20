@@ -205,6 +205,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     public function validate(InputInterface $input)
     {
         $errors = [];
+        $errorMsg = '';
         $options = $input->getOptions();
         foreach ($options as $key => $value) {
             if (!$value) {
@@ -220,9 +221,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                         StoreConfigurationDataMapper::KEY_BASE_URL,
                         ['http', 'https']
                     );
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
+
                     break;
                 case StoreConfigurationDataMapper::KEY_LANGUAGE:
                     $errorMsg = $this->validateCodes(
@@ -230,9 +229,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                         $value,
                         StoreConfigurationDataMapper::KEY_LANGUAGE
                     );
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_TIMEZONE:
                     $errorMsg = $this->validateCodes(
@@ -240,9 +236,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                         $value,
                         StoreConfigurationDataMapper::KEY_TIMEZONE
                     );
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_CURRENCY:
                     $errorMsg = $this->validateCodes(
@@ -250,61 +243,38 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                         $value,
                         StoreConfigurationDataMapper::KEY_CURRENCY
                     );
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_USE_SEF_URL:
                     $errorMsg = $this->validateBinaryValue($value, StoreConfigurationDataMapper::KEY_USE_SEF_URL);
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_IS_SECURE:
                     $errorMsg = $this->validateBinaryValue($value, StoreConfigurationDataMapper::KEY_IS_SECURE);
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_BASE_URL_SECURE:
-                    try {
-                        $errorMsg = $this->validateUrl(
-                            $value,
-                            StoreConfigurationDataMapper::KEY_BASE_URL_SECURE,
-                            ['https']
-                        );
-                        if ($errorMsg !== '') {
-                            $errors[] = $errorMsg;
-                        }
-                    } catch (LocalizedException $e) {
-                        $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
-                            . '\': ' . $e->getLogMessage() .'</error>';
-                    }
+                    $errorMsg = $this->validateUrl(
+                        $value,
+                        StoreConfigurationDataMapper::KEY_BASE_URL_SECURE,
+                        ['https']
+                    );
                     break;
                 case StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN:
                     $errorMsg = $this->validateBinaryValue($value, StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN);
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY:
                     $errorMsg = $this->validateBinaryValue(
                         $value,
                         StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY
                     );
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
                 case StoreConfigurationDataMapper::KEY_JS_LOGGING:
                     $errorMsg = $this->validateBinaryValue(
                         $value,
                         StoreConfigurationDataMapper::KEY_JS_LOGGING
                     );
-                    if ($errorMsg !== '') {
-                        $errors[] = $errorMsg;
-                    }
                     break;
+            }
+            if ($errorMsg !== '') {
+                $errors[] = $errorMsg;
             }
         }
         return $errors;
