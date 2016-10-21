@@ -18,7 +18,7 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
 {
     /**
      * {@inheritdoc}
-    */
+     */
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
