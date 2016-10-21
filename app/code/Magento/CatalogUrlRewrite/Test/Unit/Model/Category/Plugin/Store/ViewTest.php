@@ -137,6 +137,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterSave()
     {
+        $origStoreMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $reflectionStore = new \ReflectionClass($this->plugin);
+        $origStore = $reflectionStore->getProperty('origStore');
+        $origStore->setAccessible(true);
+        $origStore->setValue($this->plugin, $origStoreMock);
+        $origStoreMock->expects($this->atLeastOnce())
+            ->method('isObjectNew')
+            ->willReturn(true);
+
         $this->abstractModelMock->expects($this->any())
             ->method('isObjectNew')
             ->willReturn(true);

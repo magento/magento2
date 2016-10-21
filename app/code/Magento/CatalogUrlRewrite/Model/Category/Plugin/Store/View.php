@@ -1,10 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright {}
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -18,7 +18,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  *
  * @see \Magento\Store\Model\ResourceModel\Store
  * @package Magento\CatalogUrlRewrite\Model\Category\Plugin\Store
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View
 {
@@ -64,15 +63,13 @@ class View
     }
 
     /**
-     * Perform updating url for categories and products assigned to the store view
-     *
-     * @param \Magento\Store\Model\ResourceModel\Store $subject
+     * @param \Magento\Store\Model\ResourceModel\Store $object
      * @param AbstractModel $store
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
-        \Magento\Store\Model\ResourceModel\Store $subject,
+        \Magento\Store\Model\ResourceModel\Store $object,
         AbstractModel $store
     ) {
         $this->origStore = $store;
@@ -94,6 +91,10 @@ class View
             if (!$this->origStore->isObjectNew()) {
                 $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $this->origStore->getId()]);
             }
+
+            $this->urlPersist->replace(
+                $this->generateCategoryUrls($this->origStore->getRootCategoryId(), $this->origStore->getId())
+            );
 
             $this->urlPersist->replace(
                 $this->generateProductUrls(
@@ -125,7 +126,6 @@ class View
             ->addCategoryIds()
             ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addWebsiteFilter($websiteIds);
-
         foreach ($collection as $product) {
             $product->setStoreId($storeId);
             /** @var \Magento\Catalog\Model\Product $product */
@@ -134,7 +134,6 @@ class View
                 $this->productUrlRewriteGenerator->generate($product)
             );
         }
-
         return $urls;
     }
 
@@ -155,7 +154,6 @@ class View
                 $this->categoryUrlRewriteGenerator->generate($category)
             );
         }
-
         return $urls;
     }
 
