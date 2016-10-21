@@ -118,7 +118,8 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      * @param array $data
      * @return array
      */
-    protected function changeStructureOfTheData(array $data) {
+    protected function changeStructureOfTheData(array $data)
+    {
         return $data;
     }
 }

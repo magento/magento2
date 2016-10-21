@@ -17,22 +17,17 @@ use Magento\Mtf\Client\BrowserInterface;
 class AssertSwatchConfigurableProductPage extends AssertProductPage
 {
    /**
-     * Assert that configurable product with swatches displays correctly.
-     *
-     * @param BrowserInterface $browser
-     * @param CatalogProductView $catalogProductView
-     * @param FixtureInterface  $product
-     */
+    * {@inheritdoc}
+    */
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         FixtureInterface $product
-    )
-    {
+    ) {
         $this->product = $product;
         $this->productView = $catalogProductView->getProductViewWithSwatchesBlock();
         $this->objectManager->create(
-            \Magento\Swatches\Test\TestStep\AddProductToCartFromCatalogCategoryPageStep ::class,
+            \Magento\Swatches\Test\TestStep\AddProductToCartFromCatalogCategoryPageStep::class,
             [
                 'product' => $product
             ]

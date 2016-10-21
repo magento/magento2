@@ -27,7 +27,8 @@ class ProductItem extends CatalogProductItem
      * @param \Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct $product
      * @return void
      */
-    public function fillData(\Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct $product) {
+    public function fillData(\Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct $product)
+    {
         $checkoutData = $product->getCheckoutData();
         $options = $checkoutData['options']['configurable_options'];
         $confAttrData = $product->getDataFieldConfig('configurable_attributes_data');
@@ -52,7 +53,8 @@ class ProductItem extends CatalogProductItem
      *
      * @param $optionId
      */
-    private function clickOnSwatch($optionId) {
+    private function clickOnSwatch($optionId)
+    {
         $selector = sprintf($this->swatchSelector, $optionId);
         $this->_rootElement->find($selector, Locator::SELECTOR_CSS)->click();
     }

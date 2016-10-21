@@ -46,7 +46,6 @@ class AddProductToCartFromCatalogCategoryPageStep implements TestStepInterface
      */
     private $cmsIndex;
 
-
     /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
@@ -59,8 +58,7 @@ class AddProductToCartFromCatalogCategoryPageStep implements TestStepInterface
         CmsIndex $cmsIndex,
         CatalogCategoryView $categoryView,
         InjectableFixture $product
-    )
-    {
+    ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->cmsIndex = $cmsIndex;
         $this->categoryView = $categoryView;

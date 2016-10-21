@@ -36,7 +36,8 @@ class Curl extends CatalogProductAttributeCurl implements SwatchProductAttribute
      * @param array $data
      * @return array
      */
-    protected function changeStructureOfTheData(array $data) {
+    protected function changeStructureOfTheData(array $data)
+    {
         $data = parent::changeStructureOfTheData($data);
         $data['optiontext'] = $data['option'];
         $data['swatchtext'] = [

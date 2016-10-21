@@ -10,7 +10,8 @@ require([
     $('body').on('catalogCategoryAddToCartRedirect', function (event, data) {
         $(data.form).find('[name*="super"]').each(function (index, item) {
             var $item = $(item);
+
             data.redirectParameters.push($item.attr('data-attr-name') + '=' + $item.val());
         });
-    })
+    });
 });
