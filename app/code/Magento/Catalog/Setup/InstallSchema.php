@@ -18,6 +18,7 @@ class InstallSchema implements InstallSchemaInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Db_Exception
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -2429,7 +2430,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('catalog_product_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(

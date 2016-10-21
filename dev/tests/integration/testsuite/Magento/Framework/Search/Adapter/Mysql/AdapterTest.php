@@ -414,6 +414,37 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedRecordsCount, $queryResponse->count());
     }
 
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testAdvancedSearchCompositeProductWithOutOfStockOption()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        $selectOptions = $this->objectManager
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->setAttributeFilter($attribute->getId());
+
+        $firstOption = $selectOptions->getFirstItem();
+        $firstOptionId = $firstOption->getId();
+        $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(0, $queryResponse->count());
+
+        $secondOption = $selectOptions->getLastItem();
+        $secondOptionId = $secondOption->getId();
+        $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
+    }
+
     public function dateDataProvider()
     {
         return [

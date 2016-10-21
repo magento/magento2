@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -18,9 +19,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class PreprocessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Search\TableMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $tableMapper;
+    private $aliasResolver;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
@@ -141,7 +142,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->tableMapper = $this->getMockBuilder(\Magento\CatalogSearch\Model\Search\TableMapper::class)
+        $this->aliasResolver = $this->getMockBuilder(AliasResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
@@ -164,7 +165,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 'resource' => $resource,
                 'attributePrefix' => 'attr_',
                 'metadataPool' => $this->metadataPoolMock,
-                'tableMapper' => $this->tableMapper,
+                'aliasResolver' => $this->aliasResolver,
             ]
         );
     }
@@ -234,7 +235,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
         $this->attribute->method('getAttributeCode')
             ->willReturn('static_attribute');
-        $this->tableMapper->expects($this->once())->method('getMappingAlias')
+        $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('attr_table_alias');
         $this->filter->expects($this->exactly(3))
             ->method('getField')
@@ -272,7 +273,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
 
-        $this->tableMapper->expects($this->once())->method('getMappingAlias')
+        $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('termAttrAlias');
 
         $this->filter->expects($this->exactly(3))

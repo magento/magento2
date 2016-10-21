@@ -263,6 +263,7 @@
               <xs:enumeration value="count" />
               <xs:enumeration value="min" />
               <xs:enumeration value="max" />
+              <xs:enumeration value="avg" />
             </xs:restriction>
           </xs:simpleType>
         </xs:attribute>
