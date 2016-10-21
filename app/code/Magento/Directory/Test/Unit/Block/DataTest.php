@@ -80,13 +80,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
         $serializerMock->method('serialize')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
+            ->willReturn('serializedData');
         $serializerMock->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+            ->willReturn(['unserializedData']);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
             'serializer',
