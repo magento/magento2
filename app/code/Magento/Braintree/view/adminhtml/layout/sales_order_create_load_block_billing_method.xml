@@ -18,6 +18,10 @@
                 <argument name="method" xsi:type="string">braintree_cc_vault</argument>
                 <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
             </action>
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">braintree_paypal_vault</argument>
+                <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
+            </action>
         </referenceBlock>
     </body>
 </page>

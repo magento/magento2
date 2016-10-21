@@ -632,42 +632,48 @@ class Payment extends Info implements OrderPaymentInterface
             $this->transactionManager->generateTransactionId($this, Transaction::TYPE_REFUND)
         );
 
-        // call refund from gateway if required
         $isOnline = false;
         $gateway = $this->getMethodInstance();
         $invoice = null;
-        if ($gateway->canRefund() && $creditmemo->getDoTransaction()) {
+        if ($gateway->canRefund()) {
             $this->setCreditmemo($creditmemo);
-            $invoice = $creditmemo->getInvoice();
-            if ($invoice) {
-                $isOnline = true;
-                $captureTxn = $this->transactionRepository->getByTransactionId(
-                    $invoice->getTransactionId(),
-                    $this->getId(),
-                    $this->getOrder()->getId()
-                );
-                if ($captureTxn) {
-                    $this->setTransactionIdsForRefund($captureTxn);
-                }
-                $this->setShouldCloseParentTransaction(true);
-                // TODO: implement multiple refunds per capture
-                try {
-                    $gateway->setStore(
-                        $this->getOrder()->getStoreId()
+            if ($creditmemo->getDoTransaction()) {
+                $invoice = $creditmemo->getInvoice();
+                if ($invoice) {
+                    $isOnline = true;
+                    $captureTxn = $this->transactionRepository->getByTransactionId(
+                        $invoice->getTransactionId(),
+                        $this->getId(),
+                        $this->getOrder()->getId()
                     );
-                    $this->setRefundTransactionId($invoice->getTransactionId());
-                    $gateway->refund($this, $baseAmountToRefund);
-
-                    $creditmemo->setTransactionId($this->getLastTransId());
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    if (!$captureTxn) {
-                        throw new \Magento\Framework\Exception\LocalizedException(
-                            __('If the invoice was created offline, try creating an offline credit memo.'),
-                            $e
-                        );
+                    if ($captureTxn) {
+                        $this->setTransactionIdsForRefund($captureTxn);
                     }
-                    throw $e;
+                    $this->setShouldCloseParentTransaction(true);
+                    // TODO: implement multiple refunds per capture
+                    try {
+                        $gateway->setStore(
+                            $this->getOrder()->getStoreId()
+                        );
+                        $this->setRefundTransactionId($invoice->getTransactionId());
+                        $gateway->refund($this, $baseAmountToRefund);
+
+                        $creditmemo->setTransactionId($this->getLastTransId());
+                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                        if (!$captureTxn) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('If the invoice was created offline, try creating an offline credit memo.'),
+                                $e
+                            );
+                        }
+                        throw $e;
+                    }
                 }
+            } else if ($gateway->isOffline()) {
+                $gateway->setStore(
+                    $this->getOrder()->getStoreId()
+                );
+                $gateway->refund($this, $baseAmountToRefund);
             }
         }
 

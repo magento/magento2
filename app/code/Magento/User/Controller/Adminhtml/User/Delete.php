@@ -6,6 +6,9 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
+use Magento\Framework\Exception\AuthenticationException;
+
 class Delete extends \Magento\User\Controller\Adminhtml\User
 {
     /**
@@ -13,8 +16,10 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
      */
     public function execute()
     {
+        /** @var \Magento\User\Model\User */
         $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
         $userId = (int)$this->getRequest()->getPost('user_id');
+
         if ($userId) {
             if ($currentUser->getId() == $userId) {
                 $this->messageManager->addError(__('You cannot delete your own account.'));
@@ -22,6 +27,11 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                 return;
             }
             try {
+                $currentUserPassword = (string)$this->getRequest()->getPost(UserEdit::CURRENT_USER_PASSWORD_FIELD);
+                if (empty($currentUserPassword)) {
+                    throw new AuthenticationException(__('You have entered an invalid password for current user.'));
+                }
+                $currentUser->performIdentityCheck($currentUserPassword);
                 /** @var \Magento\User\Model\User $model */
                 $model = $this->_userFactory->create();
                 $model->setId($userId);
