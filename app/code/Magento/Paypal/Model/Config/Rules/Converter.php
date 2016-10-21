@@ -85,7 +85,7 @@ class Converter implements ConverterInterface
             if ($this->hasNodeElement($child)) {
                 $result = [
                     'name' => $child->getAttribute('name'),
-                    'message' => __($child->getAttribute('message')),
+                    'message' => __($child->getAttribute('message'))->__toString(),
                     'event' => $child->getAttribute('event'),
                     'argument' => $this->createArgument($child),
                 ];
