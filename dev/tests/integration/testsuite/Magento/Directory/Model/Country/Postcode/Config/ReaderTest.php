@@ -29,7 +29,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('pattern_2', $result['NL']);
 
         $this->assertEquals('test1', $result['NL']['pattern_1']['example']);
-        $this->assertEquals('^[0-9]{4}[a-zA-Z]{2}$', $result['NL']['pattern_1']['pattern']);
+        $this->assertEquals('^[0-9]{4}\s[a-zA-Z]{2}$', $result['NL']['pattern_1']['pattern']);
 
         $this->assertEquals('test2', $result['NL']['pattern_2']['example']);
         $this->assertEquals('^[0-5]{4}[a-z]{2}$', $result['NL']['pattern_2']['pattern']);
