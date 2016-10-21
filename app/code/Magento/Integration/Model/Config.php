@@ -15,7 +15,7 @@ use Magento\Integration\Model\Cache\Type;
  * This is a parent class for storing information about Integrations.
  * @deprecated
  */
-class Config
+class Config extends ConsolidatedConfig
 {
     const CACHE_ID = 'integration';
 

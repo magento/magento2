@@ -52,7 +52,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->with($serializedPartners)
             ->willReturn($partners);
 
-
         $this->assertSame($partners, $this->cacheHelper->loadPartnersFromCache());
     }
 
