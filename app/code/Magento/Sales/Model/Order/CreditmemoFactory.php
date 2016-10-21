@@ -23,6 +23,11 @@ class CreditmemoFactory
     protected $taxConfig;
 
     /**
+     * @var \Magento\Framework\Unserialize\Unserialize
+     */
+    protected $unserialize;
+
+    /**
      * Factory constructor
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
@@ -261,13 +266,27 @@ class CreditmemoFactory
         $qty = 1;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
-            $bundleSelectionAttributes = unserialize(
-                $productOptions['bundle_selection_attributes']
-            );
+            $bundleSelectionAttributes = $this->getUnserialize()
+                ->unserialize($productOptions['bundle_selection_attributes']);
             if ($bundleSelectionAttributes) {
                 $qty = $bundleSelectionAttributes['qty'] * $qtys[$orderItem->getParentItemId()];
             }
         }
         return $qty;
+    }
+
+    /**
+     * Get Unserialize
+     *
+     * @return \Magento\Framework\Unserialize\Unserialize
+     * @deprecated
+     */
+    private function getUnserialize()
+    {
+        if (!$this->unserialize) {
+            $this->unserialize = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Unserialize\Unserialize::class);
+        }
+        return $this->unserialize;
     }
 }
