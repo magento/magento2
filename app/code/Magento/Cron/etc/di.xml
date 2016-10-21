@@ -10,7 +10,7 @@
     <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
     <type name="Magento\Cron\Model\Config\Reader\Db">
         <arguments>
-            <argument name="defaultReader" xsi:type="object">Magento\Store\Model\Config\Reader\DefaultReader</argument>
+            <argument name="defaultReader" xsi:type="object">DefaultScopeReader</argument>
         </arguments>
     </type>
     <type name="Magento\Config\Model\Config\Structure\Converter">

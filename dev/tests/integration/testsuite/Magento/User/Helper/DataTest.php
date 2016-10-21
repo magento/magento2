@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $configModel \Magento\Backend\App\ConfigInterface */
         $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\App\ConfigInterface::class
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         );
         $this->assertEquals(
             2,

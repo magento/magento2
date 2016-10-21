@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Config\Reader;
+namespace Magento\Framework\Config;
 
 class ReaderPool implements \Magento\Framework\App\Config\Scope\ReaderPoolInterface
 {

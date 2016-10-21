@@ -6,8 +6,12 @@
 namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Phrase;
 
+/**
+ * Class TranslateCachingTest
+ * @package Magento\Framework
+ * @magentoAppIsolation enabled
+ */
 class TranslateCachingTest extends \PHPUnit_Framework_TestCase
 {
     /**

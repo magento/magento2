@@ -18,6 +18,11 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * @covers \Magento\Framework\App\DeploymentConfig\Writer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\Framework\App\Test\Unit\DeploymentConfig
+ */
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Writer */
@@ -76,8 +81,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testSaveConfig()
     {
         $configFiles = [
-            ConfigFilePool::APP_CONFIG => 'test_conf.php',
-            'test_key' => 'test2_conf.php'
+            ConfigFilePool::APP_CONFIG => 'config.php'
         ];
 
         $testSetExisting = [
@@ -119,7 +123,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('config.php', []);
 
         $this->object->saveConfig($testSetUpdate);
     }
@@ -127,8 +131,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testSaveConfigOverride()
     {
         $configFiles = [
-            ConfigFilePool::APP_CONFIG => 'test_conf.php',
-            'test_key' => 'test2_conf.php'
+            ConfigFilePool::APP_CONFIG => 'config.php'
         ];
 
         $testSetExisting = [
@@ -169,7 +172,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('config.php', []);
 
         $this->object->saveConfig($testSetUpdate, true);
     }

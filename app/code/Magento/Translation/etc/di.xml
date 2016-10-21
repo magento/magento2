@@ -70,7 +70,6 @@
             </argument>
         </arguments>
     </type>
-
     <virtualType name="AssetPreProcessorPool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
@@ -87,11 +86,33 @@
             </argument>
         </arguments>
     </virtualType>
-
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="uninstall_language" xsi:type="object">Magento\Translation\Console\Command\UninstallLanguageCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\App\Config\Type\Translation">
+        <arguments>
+            <argument name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource\Proxy</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="i18n" xsi:type="object">Magento\Translation\App\Config\Type\Translation</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="i18n" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource</item>
+                    <item name="namespace" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</item>
+                </item>
             </argument>
         </arguments>
     </type>

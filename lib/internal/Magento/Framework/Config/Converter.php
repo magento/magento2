@@ -7,6 +7,11 @@ namespace Magento\Framework\Config;
 
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
+/**
+ * Class Converter convert xml to appropriate array
+ *
+ * @package Magento\Framework\Config
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

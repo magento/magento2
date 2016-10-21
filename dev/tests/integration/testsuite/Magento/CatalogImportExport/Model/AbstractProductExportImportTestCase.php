@@ -6,9 +6,12 @@
 namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Abstract class for testing product export and import scenarios
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
@@ -64,6 +67,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $this->productResource = $this->objectManager->create(
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
+        $appConfig = $this->objectManager->get(Config::class);
+        $appConfig->clean();
     }
 
     protected function tearDown()

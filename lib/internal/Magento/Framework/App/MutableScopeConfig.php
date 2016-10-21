@@ -11,6 +11,9 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * @inheritdoc
+ */
 class MutableScopeConfig extends Config implements MutableScopeConfigInterface
 {
     /**

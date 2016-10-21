@@ -8,6 +8,15 @@
 
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Framework\App\DeploymentConfig;
+
+/**
+ * Test System config form block
+ *
+ * @package Magento\Config\Test\Unit\Block\System\Config
+ */
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -178,6 +187,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_objectBuilder = $this->getMockBuilder(\Magento\Config\Block\System\Config\Form::class)
             ->setConstructorArgs($objectArguments)
             ->setMethods(['something']);
+        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $deploymentConfigMock->expects($this->any())
+            ->method('get')
+            ->willReturn([]);
+
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                [DeploymentConfig::class, $deploymentConfigMock]
+            ]);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->object = $helper->getObject(\Magento\Config\Block\System\Config\Form::class, $data);
         $this->object->setData('scope_id', 1);
     }
@@ -549,10 +572,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'field_config' => 'fieldData',
             'scope' => 'stores',
             'scope_id' => 1,
-            'scope_label' => '[GLOBAL]',
+            'scope_label' => __('[GLOBAL]'),
             'can_use_default_value' => false,
             'can_use_website_value' => false,
             'can_restore_to_default' => false,
+            'disabled' => false,
+            'is_disable_inheritance' => false
         ];
 
         $formFieldMock->expects($this->once())->method('setRenderer')->with($fieldRendererMock);
@@ -570,6 +595,18 @@ class FormTest extends \PHPUnit_Framework_TestCase
         );
 
         $fieldMock->expects($this->once())->method('populateInput');
+
+
+        $settingChecker = $this->getMockBuilder(SettingChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $settingChecker->expects($this->once())
+            ->method('isReadOnly')
+            ->willReturn(false);
+        $reflection = new \ReflectionClass(get_class($this->object));
+        $reflectionProperty = $reflection->getProperty('settingChecker');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->object, $settingChecker);
 
         $this->object->initFields($fieldsetMock, $groupMock, $sectionMock, $fieldPrefix, $labelPrefix);
     }
