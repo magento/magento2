@@ -58,7 +58,7 @@ class Compiled implements ConfigLoaderInterface
     private function getSerializer()
     {
         if (null === $this->serializer) {
-            $this->serializer = new \Magento\Framework\Serialize\Serializer\Serialize();
+            $this->serializer = new Serialize();
         }
         return $this->serializer;
     }
