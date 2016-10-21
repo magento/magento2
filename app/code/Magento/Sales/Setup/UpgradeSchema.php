@@ -69,6 +69,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addColumnBaseGrandTotal($installer);
             $this->addIndexBaseGrandTotal($installer);
         }
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+            $tables = [
+                'sales_invoice_grid',
+                'sales_order',
+                'sales_shipment_grid',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    ['type' => 'integer']
+                );
+            }
+        }
     }
 
     /**
