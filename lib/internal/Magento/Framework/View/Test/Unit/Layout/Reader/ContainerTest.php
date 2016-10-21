@@ -102,6 +102,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->with($contextMock, $elementCurrent)
             ->willReturnSelf();
 
+        if ($elementCurrent->getAttribute('remove') == 'false') {
+            $scheduledStructureMock->expects($this->once())
+                ->method('unsetElementFromListToRemove')
+                ->with($elementCurrent->getAttribute('name'));
+        }
+        
         $this->container->interpret($contextMock, $elementCurrent);
     }
 

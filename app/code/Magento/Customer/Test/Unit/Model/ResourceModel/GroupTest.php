@@ -9,6 +9,7 @@
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -36,6 +37,16 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $relationProcessorMock;
 
+    /**
+     * @var Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $snapshotMock;
+
+    /**
+     * Setting up dependencies.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
@@ -67,10 +78,18 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->snapshotMock = $this->getMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $transactionManagerMock = $this->getMock(
             \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class
         );
-        $transactionManagerMock->expects($this->once())
+        $transactionManagerMock->expects($this->any())
             ->method('start')
             ->willReturn($this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class));
         $contextMock->expects($this->once())
@@ -86,10 +105,62 @@ class GroupTest extends \PHPUnit_Framework_TestCase
                 'context' => $contextMock,
                 'groupManagement' => $this->groupManagement,
                 'customersFactory' => $this->customersFactory,
+                'entitySnapshot' => $this->snapshotMock
             ]
         );
     }
 
+    /**
+     * Test for save() method when we try to save entity with system's reserved ID.
+     * 
+     * @return void
+     */
+    public function testSaveWithReservedId()
+    {
+        $expectedId = 55;
+        $this->snapshotMock->expects($this->once())->method('isModified')->willReturn(true);
+        $this->snapshotMock->expects($this->once())->method('registerSnapshot')->willReturnSelf();
+
+        $this->groupModel->expects($this->any())->method('getId')
+            ->willReturn(\Magento\Customer\Model\Group::CUST_GROUP_ALL);
+        $this->groupModel->expects($this->any())->method('getData')
+            ->willReturn([]);
+        $this->groupModel->expects($this->any())->method('isSaveAllowed')
+            ->willReturn(true);
+        $this->groupModel->expects($this->any())->method('getStoredData')
+            ->willReturn([]);
+        $this->groupModel->expects($this->once())->method('setId')
+            ->with($expectedId);
+
+        $dbAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'lastInsertId',
+                    'describeTable',
+                    'update',
+                    'select'
+                ]
+            )
+            ->getMockForAbstractClass();
+        $dbAdapter->expects($this->any())->method('describeTable')->willReturn([]);
+        $dbAdapter->expects($this->any())->method('update')->willReturnSelf();
+        $dbAdapter->expects($this->once())->method('lastInsertId')->willReturn($expectedId);
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dbAdapter->expects($this->any())->method('select')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
+
+        $this->groupResourceModel->save($this->groupModel);
+    }
+
+    /**
+     * Test for delete() method when we try to save entity with system's reserved ID.
+     *
+     * @return void
+     */
     public function testDelete()
     {
         $dbAdapter = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
