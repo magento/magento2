@@ -197,5 +197,5 @@ Magento/Framework/View/File/Collector/Override
 Magento/Framework/MessageQueue/Consumer/Config/ConsumerConfigItem
 Magento/Framework/MessageQueue/Publisher/Config/PublisherConfigItem
 Magento/Framework/MessageQueue/Topology/Config/ExchangeConfigItem
-Magento/Integration/Model/Config
-Magento/Integration/Model/IntegrationConfig
+IntegrationConfig.php
+*Test.php

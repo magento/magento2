@@ -56,8 +56,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function canRun()
     {
-        $vendorDir = require BP . '/app/etc/vendor_path.php';
-        exec('php ' . BP . '/' . $vendorDir . '/bin/phpcpd --version', $output, $exitCode);
+        exec($this->getCommand() . ' --version', $output, $exitCode);
         return $exitCode === 0;
     }
 
@@ -71,22 +70,37 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function run(array $whiteList)
     {
-        $blackListStr = ' ';
+        $blacklistedDirs = [];
+        $blacklistedFileNames = [];
         foreach ($this->blacklist as $file) {
             $file = escapeshellarg(trim($file));
             if (!$file) {
                 continue;
             }
-            $blackListStr .= '--exclude ' . $file . ' ';
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+            if ($ext != '') {
+                $blacklistedFileNames[] = $file;
+            } else {
+                $blacklistedDirs[] = '--exclude ' . $file . ' ';
+            }
         }
 
-        $vendorDir = require BP . '/app/etc/vendor_path.php';
-        $command = 'php ' . BP . '/' . $vendorDir . '/bin/phpcpd' . ' --log-pmd ' . escapeshellarg(
-                $this->reportFile
-            ) . ' --names-exclude "*Test.php" --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
-
+        $command = $this->getCommand() . ' --log-pmd ' . escapeshellarg($this->reportFile)
+            . ' --names-exclude ' . join(',', $blacklistedFileNames) . ' --min-lines 13 ' . join(' ', $blacklistedDirs)
+            . ' ' . implode(' ', $whiteList);
         exec($command, $output, $exitCode);
 
         return !(bool)$exitCode;
+    }
+
+    /**
+     * Get PHPCPD command
+     *
+     * @return string
+     */
+    private function getCommand()
+    {
+        $vendorDir = require BP . '/app/etc/vendor_path.php';
+        return 'php ' . BP . '/' . $vendorDir . '/bin/phpcpd';
     }
 }
