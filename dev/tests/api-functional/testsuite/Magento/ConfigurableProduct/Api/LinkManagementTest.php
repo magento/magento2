@@ -74,7 +74,8 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * Test case to cover bug MAGETWO-58401
+     * Test the full flow of creating a configurable product and adding a child via REST
+     *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      */
     public function testAddChildFullRestCreation()
