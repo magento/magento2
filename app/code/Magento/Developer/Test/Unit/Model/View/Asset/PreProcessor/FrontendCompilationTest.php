@@ -190,38 +190,6 @@ class FrontendCompilationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run test for process method (content not empty)
-     */
-    public function testProcessContentNotEmpty()
-    {
-        $chainMock = $this->getChainMock();
-        $assetMock = $this->getAssetMock();
-
-        $chainMock->expects(self::once())
-            ->method('getContent')
-            ->willReturn('test-content');
-
-        $chainMock->expects(self::never())
-            ->method('getAsset')
-            ->willReturn($assetMock);
-
-        $this->lockerProcessMock->expects(self::never())
-            ->method('lockProcess');
-        $this->lockerProcessMock->expects(self::never())
-            ->method('unlockProcess');
-
-        $frontendCompilation = new FrontendCompilation(
-            $this->assetSourceMock,
-            $this->assetBuilderMock,
-            $this->alternativeSourceMock,
-            $this->lockerProcessMock,
-            'lock'
-        );
-
-        $frontendCompilation->process($chainMock);
-    }
-
-    /**
      * @return Chain|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getChainMock()
