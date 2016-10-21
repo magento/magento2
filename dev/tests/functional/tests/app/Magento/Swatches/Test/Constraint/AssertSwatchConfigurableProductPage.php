@@ -16,8 +16,8 @@ use Magento\Mtf\Client\BrowserInterface;
  */
 class AssertSwatchConfigurableProductPage extends AssertProductPage
 {
-   /**
-    * {@inheritdoc}
+    /**
+     * {@inheritdoc}
     */
     public function processAssert(
         BrowserInterface $browser,
