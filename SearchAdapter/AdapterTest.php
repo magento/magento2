@@ -271,6 +271,18 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     }
 
     /**
+     * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     */
+    public function testAdvancedSearchCompositeProductWithOutOfStockOption()
+    {
+        $this->markTestSkipped('Filter of composite products with Out of Stock child not supported till MAGETWO-59305');
+        parent::testAdvancedSearchCompositeProductWithOutOfStockOption();
+    }
+
+    /**
      * Perform full reindex
      *
      * @return void
