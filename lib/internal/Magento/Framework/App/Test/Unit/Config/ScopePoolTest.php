@@ -113,14 +113,14 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             ->method('read')
             ->with('testScope')
             ->willReturn($data);
-        $jsonString = json_encode($data);
+        $serializedData = 'serialized data';
         $this->serializerMock->method('serialize')
             ->with($data)
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
         $this->_cache->expects($this->once())
             ->method('save')
             ->with(
-                $jsonString,
+                $serializedData,
                 $cacheKey,
                 [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
             );

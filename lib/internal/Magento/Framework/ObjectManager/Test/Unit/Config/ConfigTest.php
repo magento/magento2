@@ -52,10 +52,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $config = new Config(null, $definitions);
         $serializerMock = $this->getMock(SerializerInterface::class);
-        $serializerMock->method('serialize')
-            ->willReturnCallback(function ($data) {
-                return json_encode($data, true);
-            });
+        $serializerMock->expects($this->exactly(2))
+            ->method('serialize');
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $config,
             'serializer',

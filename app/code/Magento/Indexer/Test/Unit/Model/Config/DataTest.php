@@ -95,15 +95,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorWithCache()
     {
-        $jsonString = json_encode($this->indexers);
+        $serializedData = 'serialized data';
         $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
         $this->cache->expects($this->once())
             ->method('load')
             ->with($this->cacheId)
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
 
         $this->serializerMock->method('unserialize')
-            ->with($jsonString)
+            ->with($serializedData)
             ->willReturn($this->indexers);
 
         $this->stateCollection->expects($this->never())->method('getItems');

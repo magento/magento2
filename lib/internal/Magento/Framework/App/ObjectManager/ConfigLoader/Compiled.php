@@ -19,11 +19,6 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * {inheritdoc}
      */
     public function load($area)
@@ -31,7 +26,7 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $this->configCache[$area] = $this->getSerializer()->unserialize(\file_get_contents(self::getFilePath($area)));
+        $this->configCache[$area] = unserialize(\file_get_contents(self::getFilePath($area)));
         return $this->configCache[$area];
     }
 
@@ -44,20 +39,6 @@ class Compiled implements ConfigLoaderInterface
     public static function getFilePath($area)
     {
         $diPath = DirectoryList::getDefaultConfig()[DirectoryList::DI][DirectoryList::PATH];
-        return BP . $diPath . '/' . $area . '.json';
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = new \Magento\Framework\Serialize\Serializer\Json();
-        }
-        return $this->serializer;
+        return BP . '/' . $diPath . '/' . $area . '.json';
     }
 }

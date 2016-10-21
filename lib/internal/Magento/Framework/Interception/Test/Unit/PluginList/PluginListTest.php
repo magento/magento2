@@ -274,7 +274,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('scope'));
 
         $data = [['key'], ['key'], ['key']];
-        $serializedData = '[["key"],["key"],["key"]]';
+        $serializedData = 'serialized data';
 
         $this->serializerMock->expects($this->never())
             ->method('serialize');

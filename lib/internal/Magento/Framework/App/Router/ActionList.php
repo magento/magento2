@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Router;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
 class ActionList
@@ -102,14 +103,13 @@ class ActionList
     /**
      * Get serializer
      *
-     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @return SerializerInterface
      * @deprecated
      */
     private function getSerializer()
     {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
         }
         return $this->serializer;
     }

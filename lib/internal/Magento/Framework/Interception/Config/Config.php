@@ -8,6 +8,7 @@
 namespace Magento\Framework\Interception\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
@@ -193,7 +194,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     {
         if ($this->serializer === null) {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
+                ->get(Serialize::class);
         }
         return $this->serializer;
     }

@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Unserialize;
 
+/**
+ * @deprecated
+ */
 class Unserialize
 {
     /**

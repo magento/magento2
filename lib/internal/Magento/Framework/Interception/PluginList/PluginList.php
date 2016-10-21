@@ -17,6 +17,8 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -375,7 +377,7 @@ class PluginList extends Scoped implements InterceptionPluginList
     }
 
     /**
-     * Returns logger instance
+     * Get logger
      *
      * @deprecated
      * @return \Psr\Log\LoggerInterface
@@ -386,5 +388,19 @@ class PluginList extends Scoped implements InterceptionPluginList
             $this->logger = $this->_objectManager->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    protected function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
+        }
+        return $this->serializer;
     }
 }

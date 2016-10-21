@@ -7,6 +7,7 @@
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -77,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->mockObjectManager([SerializerInterface::class => $this->serializerMock]);
+        $this->mockObjectManager([Serialize::class => $this->serializerMock]);
     }
 
     protected function tearDown()
