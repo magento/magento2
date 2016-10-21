@@ -53,6 +53,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var  LayoutInterface |\PHPUnit_Framework_MockObject_MockObject */
     private $layoutMock;
 
+    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -78,15 +81,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
-        $serializerMock->method('serialize')
-            ->willReturn('serializedData');
-        $serializerMock->method('unserialize')
-            ->willReturn(['unserializedData']);
+        $this->serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
             'serializer',
-            $serializerMock
+            $this->serializerMock
         );
     }
 
@@ -171,13 +170,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->willReturn($storeCode);
 
+        $this->serializerMock->method('serialize')
+            ->willReturn('serializedData');
+
         $this->cacheTypeConfigMock->expects($this->once())
             ->method('load')
             ->with('DIRECTORY_COUNTRY_SELECT_STORE_' . $storeCode)
             ->willReturn(false);
         $this->cacheTypeConfigMock->expects($this->once())
             ->method('save')
-            ->with(json_encode($options), 'DIRECTORY_COUNTRY_SELECT_STORE_' . $storeCode)
+            ->with('serializedData', 'DIRECTORY_COUNTRY_SELECT_STORE_' . $storeCode)
             ->willReturnSelf();
 
         $this->scopeConfigMock->expects($this->once())
