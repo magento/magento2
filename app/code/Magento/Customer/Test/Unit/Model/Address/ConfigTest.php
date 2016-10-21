@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Address;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**

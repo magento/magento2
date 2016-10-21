@@ -5,6 +5,9 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
