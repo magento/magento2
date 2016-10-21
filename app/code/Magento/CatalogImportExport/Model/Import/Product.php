@@ -1438,6 +1438,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             '(mg.value_id = mgvte.value_id)',
             [$this->getProductEntityLinkField() => 'mgvte.' . $this->getProductEntityLinkField()]
         )->joinInner(
+            ['mgv' => $this->mediaGalleryValueTableName],
+            sprintf(
+                '(mg.value_id = mgv.value_id AND mgv.%s = mgvte.%s)',
+                $this->getProductEntityLinkField(),
+                $this->getProductEntityLinkField()
+            ),
+            [
+                'label' => 'mgv.label',
+                'value_id' => 'mgv.value_id'
+            ]
+        )->joinInner(
             ['pe' => $this->productEntityTableName],
             "(mgvte.{$this->getProductEntityLinkField()} = pe.{$this->getProductEntityLinkField()})",
             ['sku' => 'pe.sku']
@@ -1447,7 +1458,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
 
         foreach ($this->_connection->fetchAll($select) as $image) {
-            $result[$image['sku']][$image['value']] = true;
+            $result[$image['sku']][$image['value']] = $image;
         }
 
         return $result;
@@ -1462,22 +1473,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $images = [];
         $labels = [];
         foreach ($this->_imagesArrayKeys as $column) {
-            $images[$column] = [];
-            $labels[$column] = [];
             if (!empty($rowData[$column])) {
                 $images[$column] = array_unique(
-                    explode($this->getMultipleValueSeparator(), $rowData[$column])
+                    array_map(
+                        'trim',
+                        explode($this->getMultipleValueSeparator(), $rowData[$column])
+                    )
                 );
-            }
 
-            if (!empty($rowData[$column . '_label'])) {
-                $labels[$column] = explode($this->getMultipleValueSeparator(), $rowData[$column . '_label']);
-            }
+                if (!empty($rowData[$column . '_label'])) {
+                    $labels[$column] = $this->parseMultiselectValues(
+                        $rowData[$column . '_label'],
+                        $this->getMultipleValueSeparator()
+                    );
 
-            if (count($labels[$column]) > count($images[$column])) {
-                $labels[$column] = array_slice($labels[$column], 0, count($images[$column]));
-            } elseif (count($labels[$column]) < count($images[$column])) {
-                $labels[$column] = array_pad($labels[$column], count($images[$column]), '');
+                    if (count($labels[$column]) > count($images[$column])) {
+                        $labels[$column] = array_slice($labels[$column], 0, count($images[$column]));
+                    }
+                }
             }
         }
 
@@ -1616,7 +1629,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $position => $columnImage) {
                         if (!isset($uploadedImages[$columnImage])) {
-                            $uploadedFile = $this->uploadMediaFiles(trim($columnImage), true);
+                            $uploadedFile = $this->uploadMediaFiles($columnImage, true);
                             if ($uploadedFile) {
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
@@ -1636,20 +1649,26 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             $rowData[$column] = $uploadedFile;
                         }
 
-                        $imageNotAssigned = !isset($existingImages[$rowSku][$uploadedFile]);
-
-                        if ($uploadedFile && $imageNotAssigned) {
-                            if ($column == self::COL_MEDIA_IMAGE) {
-                                $rowData[$column][] = $uploadedFile;
+                        if ($uploadedFile && !isset($mediaGallery[$rowSku][$uploadedFile])) {
+                            if (isset($existingImages[$rowSku][$uploadedFile])) {
+                                if (isset($rowLabels[$column][$position])) {
+                                    $this->updateMediaGalleryItemLabel(
+                                        $rowLabels[$column][$position],
+                                        $existingImages[$rowSku][$uploadedFile]
+                                    );
+                                }
+                            } else {
+                                if ($column == self::COL_MEDIA_IMAGE) {
+                                    $rowData[$column][] = $uploadedFile;
+                                }
+                                $mediaGallery[$rowSku][$uploadedFile] = [
+                                    'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                    'label' => isset($rowLabels[$column][$position]) ? $rowLabels[$column][$position] : '',
+                                    'position' => $position + 1,
+                                    'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
+                                    'value' => $uploadedFile,
+                                ];
                             }
-                            $mediaGallery[$rowSku][] = [
-                                'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                'label' => isset($rowLabels[$column][$position]) ? $rowLabels[$column][$position] : '',
-                                'position' => $position + 1,
-                                'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
-                                'value' => $uploadedFile,
-                            ];
-                            $existingImages[$rowSku][$uploadedFile] = true;
                         }
                     }
                 }
@@ -2535,12 +2554,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
      *
      * @param string $values
+     * @param string $delimiter
      * @return array
      */
-    public function parseMultiselectValues($values)
+    public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
-            return explode(self::PSEUDO_MULTI_LINE_SEPARATOR, $values);
+            return explode($delimiter, $values);
         }
         if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
             return $values = array_map(function ($value) {
@@ -2751,5 +2771,30 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->getIdentifierField();
         }
         return $this->productEntityIdentifierField;
+    }
+
+    /**
+     * Update media gallery item label
+     *
+     * @param string $newLabel
+     * @param array $mediaData
+     */
+    private function updateMediaGalleryItemLabel($newLabel, array $mediaData)
+    {
+        if ($newLabel == $mediaData['label']) {
+            return;
+        }
+
+        $this->_connection->update(
+            $this->mediaGalleryValueTableName,
+            [
+                'label' => $newLabel
+            ],
+            [
+                'entity_id = ?' => $mediaData['entity_id'],
+                'value_id = ?' => $mediaData['value_id'],
+                'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            ]
+        );
     }
 }
