@@ -195,8 +195,8 @@
             <data name="product/data/price_type" xsi:type="string">Yes</data>
             <data name="product/data/price/dataset" xsi:type="string">dynamic-8</data>
             <data name="product/data/special_price" xsi:type="string">20</data>
-            <data name="product/data/special_from_date/pattern" xsi:type="string">M j, Y -1 day</data>
-            <data name="product/data/special_to_date/pattern" xsi:type="string">M j, Y +3 days</data>
+            <data name="product/data/special_from_date/pattern" xsi:type="string">m/d/y -1 day</data>
+            <data name="product/data/special_to_date/pattern" xsi:type="string">m/d/y +3 days</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">default_dynamic</data>
             <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">bundle_default</data>
