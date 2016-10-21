@@ -51,7 +51,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
         );
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->mockObjectManager(
-            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
+            [\Magento\Framework\Serialize\Serializer\Serialize::class => $this->serializerMock]
         );
     }
 
