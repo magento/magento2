@@ -82,6 +82,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
 
+        $result = $metadataForm->compactData($formData);
+
+        // Re-initialize additional attributes
+        $formData = array_replace($formData, $result);
+
         // Unset unused attributes
         $formAttributes = $metadataForm->getAttributes();
         foreach ($formAttributes as $attribute) {
@@ -94,12 +99,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
 
-        $result = $metadataForm->compactData($formData);
-
-        // Re-initialize additional attributes
-        $result = array_merge($result, array_diff_key($formData, $result));
-
-        return $result;
+        return $formData;
     }
 
     /**
@@ -225,7 +225,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     ['customer' => $customer, 'request' => $this->getRequest()]
                 );
                 $customer->setAddresses($addresses);
-                $customer->setStoreId($customerData['sendemail_store_id']);
+                if (isset($customerData['sendemail_store_id'])) {
+                    $customer->setStoreId($customerData['sendemail_store_id']);
+                }
 
                 // Save customer
                 if ($customerId) {

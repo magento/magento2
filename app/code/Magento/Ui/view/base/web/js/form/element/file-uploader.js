@@ -23,7 +23,7 @@ define([
     var ValidationResult = function (rule, passed, msg) {
         this.rule = rule || '';
         this.passed = passed || false;
-        this.msg = msg || '';
+        this.message = msg || '';
     };
 
     return Element.extend({
