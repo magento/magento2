@@ -55,12 +55,14 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->any())
             ->method('load')
-            ->willReturn('["elem 1","elem 2"," elem 3"]');
+            ->willReturn('serializedData');
 
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
-        $this->serializerMock->method('unserialize')
-            ->willReturn(['elem 1', 'elem 2', ' elem 3']);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn(['unserializedData']);
 
         $this->mockObjectManager(
             [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
