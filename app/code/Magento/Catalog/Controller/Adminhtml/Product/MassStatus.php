@@ -22,12 +22,12 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * MassActions filter
      *
-     * @var Filter
+     * @var \Magento\Ui\Component\MassAction\Filter
      */
     protected $filter;
 
     /**
-     * @var CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -35,8 +35,8 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
-     * @param Filter $filter
-     * @param CollectionFactory $collectionFactory
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -81,6 +81,11 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $productIds = $collection->getAllIds();
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
+        $filters = (array)$this->getRequest()->getParam('filters', []);
+
+        if (isset($filters['store_id'])) {
+            $storeId = (int)$filters['store_id'];
+        }
 
         try {
             $this->_validateMassStatus($productIds, $status);
