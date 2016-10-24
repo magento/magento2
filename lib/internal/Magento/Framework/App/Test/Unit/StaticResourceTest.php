@@ -206,7 +206,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with('Psr\Log\LoggerInterface')
+            ->with(\Psr\Log\LoggerInterface::class)
             ->willReturn($this->logger);
         $this->logger->expects($this->once())
             ->method('critical');
