@@ -170,7 +170,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->willReturn($storeCode);
 
-        $this->serializerMock->method('serialize')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->willReturn('serializedData');
 
         $this->cacheTypeConfigMock->expects($this->once())

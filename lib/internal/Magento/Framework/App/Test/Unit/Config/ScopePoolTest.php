@@ -114,7 +114,8 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             ->with('testScope')
             ->willReturn($data);
         $serializedData = 'serialized data';
-        $this->serializerMock->method('serialize')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data)
             ->willReturn($serializedData);
         $this->_cache->expects($this->once())
@@ -168,7 +169,8 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($cacheKey)
             ->willReturn($cachedData);
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturn($data);
         $configData = $this->getMock(\Magento\Framework\App\Config\Data::class, [], [], '', false);
         $this->_dataFactory->expects($this->once())

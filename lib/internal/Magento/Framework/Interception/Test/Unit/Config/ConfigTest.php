@@ -208,13 +208,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         $this->readerMock->expects($this->never())->method('read');
         $this->cacheMock->expects($this->never())->method('save');
-        $serializedValue = '{"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\Item":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\Item\\Enhanced":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer\\Enhanced":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer\\Proxy":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemProxy":false,'
-            . '"virtual_custom_item":true}';
+        $serializedValue = 'serializedData';
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with($cacheId)

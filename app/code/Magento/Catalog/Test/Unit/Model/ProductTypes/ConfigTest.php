@@ -65,9 +65,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheMock->expects($this->any())
             ->method('load')
-            ->willReturn(json_encode($value));
+            ->willReturn('serializedData');
 
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
             ->willReturn($value);
 
         $this->config = $this->objectManager->getObject(
@@ -95,7 +97,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn(json_encode('"types":["Expected Data"]]'));
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturn(['types' => $expected]);
 
         $this->config = $this->objectManager->getObject(
@@ -114,7 +117,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn('');
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturn([]);
 
         $this->config = $this->objectManager->getObject(

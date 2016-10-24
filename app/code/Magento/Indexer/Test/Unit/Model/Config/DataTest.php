@@ -102,7 +102,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with($this->cacheId)
             ->willReturn($serializedData);
 
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->with($serializedData)
             ->willReturn($this->indexers);
 

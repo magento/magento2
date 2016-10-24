@@ -135,7 +135,8 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($testValue)
         );
 
-        $this->serializerMock->method('serialize')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($testValue)
             ->willReturn($serializedData);
 
@@ -165,7 +166,8 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('adminhtml')
         );
 
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->with($serializedData)
             ->willReturn($testValue);
 

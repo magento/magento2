@@ -68,7 +68,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load');
 
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturn($expected);
 
         $configData = new \Magento\Sales\Model\Config\Data($this->_readerMock, $this->_cacheMock);
