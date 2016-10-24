@@ -2781,7 +2781,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function updateMediaGalleryItemLabel($newLabel, array $mediaData)
     {
-        if ($newLabel == $mediaData['label']) {
+        if ($newLabel == $mediaData['label']
+            || !isset($mediaData[$this->getProductEntityLinkField()])
+        ) {
             return;
         }
 
