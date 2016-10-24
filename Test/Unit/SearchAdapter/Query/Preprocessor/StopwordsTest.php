@@ -12,6 +12,8 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -49,6 +51,11 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
     protected $esConfig;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializerMock;
+
+    /**
      * Set up test environment.
      *
      * @return void
@@ -76,9 +83,11 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface::class
         )->disableOriginalConstructor()->getMock();
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords::class,
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
+
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            Stopwords::class,
             [
                 'storeManager' => $this->storeManager,
                 'localeResolver' => $this->localeResolver,
@@ -89,6 +98,11 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
                 'stopwordsDirectory' => ''
             ]
         );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'serializer',
+            $this->serializerMock
+        );
     }
 
     /**
@@ -96,6 +110,9 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess()
     {
+        $stopWordsFromFile = "a\nthe\nof";
+        $stopWords = ['a', 'the', 'of'];
+        $serializedStopWords = 'serialized stop words';
         $this->esConfig->expects($this->once())
             ->method('getStopwordsInfo')
             ->willReturn([
@@ -127,11 +144,21 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->configCache->expects($this->once())
             ->method('load')
-            ->willReturn('');
+            ->willReturn(false);
 
         $read->expects($this->once())
             ->method('readFile')
-            ->willReturn("a\nthe\nof");
+            ->willReturn($stopWordsFromFile);
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($stopWords)
+            ->willReturn($serializedStopWords);
+        $this->configCache->expects($this->once())
+            ->method('save')
+            ->with(
+                $serializedStopWords,
+                Stopwords::CACHE_ID
+            );
 
         $this->assertEquals(
             'test query',
@@ -144,6 +171,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessFromCache()
     {
+        $serializedStopWords = 'serialized stop words';
         $this->esConfig->expects($this->once())
             ->method('getStopwordsInfo')
             ->willReturn([
@@ -175,7 +203,11 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->configCache->expects($this->once())
             ->method('load')
-            ->willReturn('a:3:{i:0;s:1:"a";i:1;s:3:"the";i:2;s:2:"of";}');
+            ->willReturn($serializedStopWords);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedStopWords)
+            ->willReturn(['a', 'the', 'of']);
 
         $this->assertEquals(
             'test query',

@@ -13,6 +13,7 @@ use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Stopwords implements PreprocessorInterface
 {
@@ -65,6 +66,11 @@ class Stopwords implements PreprocessorInterface
      * @var string
      */
     private $stopwordsDirectory;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Initialize dependencies.
@@ -123,11 +129,11 @@ class Stopwords implements PreprocessorInterface
         $fileStats = $source->stat($filename);
         if (((time() - $fileStats['mtime']) > self::STOPWORDS_FILE_MODIFICATION_TIME_GAP)
             && ($cachedValue = $this->configCache->load(self::CACHE_ID))) {
-            $stopwords = unserialize($cachedValue);
+            $stopwords = $this->getSerializer()->unserialize($cachedValue);
         } else {
             $fileContent = $source->readFile($filename);
             $stopwords = explode("\n", $fileContent);
-            $this->configCache->save(serialize($stopwords), self::CACHE_ID);
+            $this->configCache->save($this->getSerializer()->serialize($stopwords), self::CACHE_ID);
         }
         return $stopwords;
     }
@@ -145,5 +151,20 @@ class Stopwords implements PreprocessorInterface
         $locale = $this->localeResolver->getLocale();
         $stopwordsFile = isset($stopwordsInfo[$locale]) ? $stopwordsInfo[$locale] : $stopwordsInfo['default'];
         return $stopwordsFile;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }
