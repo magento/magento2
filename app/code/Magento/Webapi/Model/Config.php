@@ -52,6 +52,7 @@ class Config
      *
      * @param WebapiCache $cache
      * @param Reader $configReader
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         WebapiCache $cache,

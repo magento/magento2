@@ -88,6 +88,7 @@ class ServiceMetadata
      * @param WebApiCache $cache
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Webapi\Model\Config $config,
