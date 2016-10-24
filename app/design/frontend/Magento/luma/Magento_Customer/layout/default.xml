@@ -9,7 +9,11 @@
     <body>
         <referenceBlock name="header.links">
             <block class="Magento\Customer\Block\Account\Customer" name="customer" template="account/customer.phtml" before="-"/>
-            <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login" template="account/link/authorization.phtml"/>
+            <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login" template="account/link/authorization.phtml">
+                <arguments>
+                    <argument name="sortOrder" xsi:type="number">10</argument>
+                </arguments>
+            </block>
         </referenceBlock>
         <block class="Magento\Theme\Block\Html\Header" name="header" as="header">
             <arguments>
