@@ -131,4 +131,39 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getSelect()->order('selection.position asc')->order('selection.selection_id asc');
         return $this;
     }
+
+    /**
+     * Add filtering of product then havent enoght stock
+     *
+     * @return $this
+     */
+    public function addQuantityFilter()
+    {
+        $this->getSelect()
+            ->joinInner(
+                ['stock' => $this->getTable('cataloginventory_stock_status')],
+                'selection.product_id = stock.product_id',
+                []
+            )
+            ->where(
+                '(selection.selection_can_change_qty or selection.selection_qty <= stock.qty) and stock.stock_status'
+            );
+        return $this;
+    }
+
+    /**
+     * @var null
+     */
+    private $itemPrototype = null;
+
+    /**
+     * @inheritDoc
+     */
+    public function getNewEmptyItem()
+    {
+        if ($this->itemPrototype == null) {
+            $this->itemPrototype = parent::getNewEmptyItem();
+        }
+        return clone $this->itemPrototype;
+    }
 }

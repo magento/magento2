@@ -94,7 +94,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
             $optionCollection = $typeInstance->getOptionsCollection($product);
 
-            $selectionCollection = $typeInstance->getSelectionsCollection(
+            $selectionCollection = $typeInstance->getSelectionsWithPriceCollection(
                 $typeInstance->getOptionsIds($product),
                 $product
             );

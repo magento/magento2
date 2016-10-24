@@ -9,6 +9,7 @@
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -440,6 +441,22 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $product->getData($this->_keyOptionsCollection);
     }
 
+    /** @var  \Magento\CatalogRule\Model\ResourceModel\Product\Collection */
+    private $catalogRuleProcessor;
+
+    /**
+     * @deprecated
+     * @return \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     */
+    private function getCatalogRuleProcessor()
+    {
+        if (!$this->catalogRuleProcessor instanceof \Magento\CatalogRule\Model\ResourceModel\Product\Collection) {
+            $this->catalogRuleProcessor = ObjectManager::getInstance()
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class);
+        }
+        return $this->catalogRuleProcessor;
+    }
+
     /**
      * Retrieve bundle selections collection based on used options
      *
@@ -452,22 +469,56 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $keyOptionIds = is_array($optionIds) ? implode('_', $optionIds) : '';
         $key = $this->_keySelectionsCollection . $keyOptionIds;
         if (!$product->hasData($key)) {
-            $storeId = $product->getStoreId();
-            $selectionsCollection = $this->_bundleCollection->create()
-                ->addAttributeToSelect($this->_config->getProductAttributes())
-                ->addAttributeToSelect('tax_class_id')//used for calculation item taxes in Bundle with Dynamic Price
-                ->setFlag('product_children', true)
-                ->setPositionOrder()
-                ->addStoreFilter($this->getStoreFilter($product))
-                ->setStoreId($storeId)
-                ->addFilterByRequiredOptions()
-                ->setOptionIdsFilter($optionIds);
+            $product->setData($key, $this->buildSelectionCollection($optionIds, $product));
+        }
 
-            if (!$this->_catalogData->isPriceGlobal() && $storeId) {
-                $websiteId = $this->_storeManager->getStore($storeId)
-                    ->getWebsiteId();
-                $selectionsCollection->joinPrices($websiteId);
-            }
+        return $product->getData($key);
+    }
+
+    /**
+     * @param array $optionIds
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
+     */
+    private function buildSelectionCollection($optionIds, $product)
+    {
+        $storeId = $product->getStoreId();
+        $selectionsCollection = $this->_bundleCollection->create()
+            ->addAttributeToSelect($this->_config->getProductAttributes())
+            ->addAttributeToSelect('tax_class_id')//used for calculation item taxes in Bundle with Dynamic Price
+            ->setFlag('product_children', true)
+            ->setPositionOrder()
+            ->addStoreFilter($this->getStoreFilter($product))
+            ->setStoreId($storeId)
+            ->addFilterByRequiredOptions()
+            ->setOptionIdsFilter($optionIds);
+
+        if (!$this->_catalogData->isPriceGlobal() && $storeId) {
+            $websiteId = $this->_storeManager->getStore($storeId)
+                ->getWebsiteId();
+            $selectionsCollection->joinPrices($websiteId);
+        }
+
+        return $selectionsCollection;
+    }
+
+    /**
+     * Retrieve bundle selections collection based on used options
+     *
+     * @param array $optionIds
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
+     */
+    public function getSelectionsWithPriceCollection($optionIds, $product)
+    {
+        $keyOptionIds = is_array($optionIds) ? implode('_', $optionIds) : '';
+        $key = $this->_keySelectionsCollection . $keyOptionIds;
+        if (!$product->hasData($key)) {
+            $selectionsCollection = $this->buildSelectionCollection($optionIds, $product);
+
+            $selectionsCollection->addPriceData();
+            $this->getCatalogRuleProcessor()->addPriceData($selectionsCollection);
+            $selectionsCollection->addTierPriceData();
 
             $product->setData($key, $selectionsCollection);
         }
@@ -549,36 +600,30 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return false;
         }
 
-        $requiredOptionIds = [];
-
+        $isSalable = true;
         foreach ($optionCollection->getItems() as $option) {
             if ($option->getRequired()) {
-                $requiredOptionIds[$option->getId()] = 0;
-            }
-        }
+                $hasSalable = false;
 
-        $selectionCollection = $this->getSelectionsCollection($optionCollection->getAllIds(), $product);
+                $selectionsCollection = $this->_bundleCollection->create();
+                $selectionsCollection->addQuantityFilter();
+                $selectionsCollection->addFilterByRequiredOptions();
+                $selectionsCollection->setOptionIdsFilter([$option->getId()]);
 
-        if (!count($selectionCollection->getItems())) {
-            return false;
-        }
-        $salableSelectionCount = 0;
+                foreach ($selectionsCollection as $selection) {
+                    if ($selection->isSalable()) {
+                        $hasSalable = true;
+                        break;
+                    }
+                }
 
-        foreach ($selectionCollection as $selection) {
-            /* @var $selection \Magento\Catalog\Model\Product */
-            if ($selection->isSalable()) {
-                $selectionEnoughQty = $this->_stockRegistry->getStockItem($selection->getId())
-                    ->getManageStock()
-                    ? $selection->getSelectionQty() <= $this->_stockState->getStockQty($selection->getId())
-                    : $selection->isInStock();
-
-                if (!$selection->hasSelectionQty() || $selection->getSelectionCanChangeQty() || $selectionEnoughQty) {
-                    $requiredOptionIds[$selection->getOptionId()] = 1;
-                    $salableSelectionCount++;
+                if (!$hasSalable) {
+                    $isSalable = false;
+                    break;
                 }
             }
         }
-        $isSalable = array_sum($requiredOptionIds) == count($requiredOptionIds) && $salableSelectionCount;
+
         $product->setData('all_items_salable', $isSalable);
 
         return $isSalable;
