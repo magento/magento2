@@ -33,12 +33,12 @@ class Save extends \Magento\Backend\App\Action
     /**
      * @var \Magento\Cms\Model\PageFactory
      */
-    protected $pageFactory;
+    private $pageFactory;
 
     /**
      * @var \Magento\Cms\Api\PageRepositoryInterface
      */
-    protected $pageRepository;
+    private $pageRepository;
 
     /**
      * @param Action\Context $context
