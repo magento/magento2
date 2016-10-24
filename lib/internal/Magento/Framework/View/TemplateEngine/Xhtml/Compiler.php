@@ -102,7 +102,7 @@ class Compiler implements CompilerInterface
                 $compiler = $this->getElementCompiler($node->nodeName);
                 if (null !== $compiler) {
                     $compiler->compile($this, $node, $processedObject, $context);
-                } else if ($node->hasChildNodes()) {
+                } elseif ($node->hasChildNodes()) {
                     foreach ($this->getChildNodes($node) as $child) {
                         $this->compile($child, $processedObject, $context);
                     }

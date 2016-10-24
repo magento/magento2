@@ -29,7 +29,10 @@ class SubscriptionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $subscriptionInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\SubscriptionInterface::class, [], '', false
+            \Magento\Framework\Mview\View\SubscriptionInterface::class,
+            [],
+            '',
+            false
         );
         $this->objectManagerMock->expects($this->once())
             ->method('create')

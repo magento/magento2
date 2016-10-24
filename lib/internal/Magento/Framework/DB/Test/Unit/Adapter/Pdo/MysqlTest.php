@@ -468,7 +468,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         $connectionMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
+            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'],
+            [],
+            '',
+            false
         );
 
         $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));

@@ -160,8 +160,8 @@ class Filesystem extends AbstractBackup
         if ($requiredSpace > $freeSpace) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughFreeSpace(
                 new \Magento\Framework\Phrase(
-                'Warning: necessary space for backup is ' . (ceil($requiredSpace) / 1024)
-                . 'MB, but your free disc space is ' . (ceil($freeSpace) / 1024) . 'MB.'
+                    'Warning: necessary space for backup is ' . (ceil($requiredSpace) / 1024)
+                    . 'MB, but your free disc space is ' . (ceil($freeSpace) / 1024) . 'MB.'
                 )
             );
         }

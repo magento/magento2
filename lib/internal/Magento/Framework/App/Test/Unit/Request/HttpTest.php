@@ -97,7 +97,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 

@@ -361,7 +361,7 @@ class Renderer implements RendererInterface
 
     /**
      * Get asset content type
-     * 
+     *
      * @param \Magento\Framework\View\Asset\AssetInterface $asset
      * @return string
      */

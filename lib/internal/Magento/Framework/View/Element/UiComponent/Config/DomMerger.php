@@ -208,7 +208,7 @@ class DomMerger implements DomMergerInterface
                             if ($this->isMergeContext($insertedXPath)) {
                                 if ($this->isTextNode($insertedItem) && $this->isTextNode($rootItem)) {
                                     $rootItem->nodeValue = $insertedItem->nodeValue;
-                                } else if (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
+                                } elseif (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
                                     && !$this->hasIdAttribute($rootItem)
                                     && !$this->hasIdAttribute($insertedItem)
                                 ) {

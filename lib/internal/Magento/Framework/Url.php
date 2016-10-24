@@ -832,7 +832,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             );
         }
 
-        if(!$isCached) {
+        if (!$isCached) {
             return $this->getUrlModifier()->execute(
                 $this->createUrl($routePath, $routeParams)
             );

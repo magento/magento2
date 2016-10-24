@@ -42,10 +42,18 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fetchStrategyMock = $this->getMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class, ['fetchAll'], [], '', false
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
+            ['fetchAll'],
+            [],
+            '',
+            false
         );
         $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class, ['create'], [], '', false
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->collection = new \Magento\Framework\Data\Test\Unit\Collection\DbCollection(
@@ -373,7 +381,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
         $adapterMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'query'], [], '', false);
+            ['select', 'query'],
+            [],
+            '',
+            false
+        );
         $selectMock = $this->getMock(
             \Magento\Framework\DB\Select::class,
             [],
@@ -556,7 +568,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $data = [10 => 'test'];
         $adapterMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'query'], [], '', false);
+            ['select', 'query'],
+            [],
+            '',
+            false
+        );
         $selectMock = $this->getMock(
             \Magento\Framework\DB\Select::class,
             [],

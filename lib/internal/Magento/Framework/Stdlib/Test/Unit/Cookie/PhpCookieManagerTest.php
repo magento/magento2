@@ -231,7 +231,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
                     [
                         'request' => $this->requestMock
                     ]
-                 );
+                );
             $this->scopeMock->expects($this->once())
                 ->method('getSensitiveCookieMetadata')
                 ->with()

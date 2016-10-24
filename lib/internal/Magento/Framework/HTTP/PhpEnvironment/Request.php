@@ -427,7 +427,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         // Lets read from db only one time okay.
         if ($this->sslOffloadHeader === null) {
-
             // @todo: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
             // installed MAGETWO-31756
             // Check if a proxy sent a header indicating an initial secure request
@@ -725,7 +724,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         if ($checkProxy && $this->getServer('HTTP_CLIENT_IP') != null) {
             $ip = $this->getServer('HTTP_CLIENT_IP');
-        } else if ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
+        } elseif ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
             $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
         } else {
             $ip = $this->getServer('REMOTE_ADDR');

@@ -34,7 +34,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())->method('read')->will($this->returnValue($data));
 
         $config = new \Magento\Framework\Config\Data(
-            $this->reader, $this->cache, $cacheid
+            $this->reader,
+            $this->cache,
+            $cacheid
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));

@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql\Query;
 
-
 use Magento\Framework\Search\Request\QueryInterface;
 
 // @codeCoverageIgnore

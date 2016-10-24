@@ -195,7 +195,8 @@ class ActionFake extends Action
             ActionTest::ACTION_NAME,
             ActionTest::CONTROLLER_NAME,
             ActionTest::MODULE_NAME,
-            ActionTest::$actionParams);
+            ActionTest::$actionParams
+        );
         $this->_redirect(ActionTest::FULL_ACTION_NAME, ActionTest::$actionParams);
         return;
     }

@@ -105,7 +105,6 @@ class LockerProcess implements LockerProcessInterface
                     return false;
                 }
             } catch (FileSystemException $e) {
-
                 return false;
             }
 

@@ -29,7 +29,11 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->dataMock = $this->getMock(
-            \Magento\Framework\Mview\Config\Data::class, [], [], '', false
+            \Magento\Framework\Mview\Config\Data::class,
+            [],
+            [],
+            '',
+            false
         );
     }
 
@@ -44,7 +48,8 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
             ->with(['some_config']);
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             true
         );
 
@@ -62,7 +67,8 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
             ->with(['some_config']);
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             false
         );
 
@@ -81,7 +87,8 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('some_value'));
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             true
         );
 
@@ -100,7 +107,8 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('some_value'));
 
         $this->model = new Proxy(
-            $this->objectManagerMock, \Magento\Framework\Mview\Config\Data::class,
+            $this->objectManagerMock,
+            \Magento\Framework\Mview\Config\Data::class,
             false
         );
 

@@ -65,7 +65,8 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
         $this->contentValidatorMock = $this->getMockBuilder(
-            \Magento\Framework\Api\ImageContentValidatorInterface::class)
+            \Magento\Framework\Api\ImageContentValidatorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)

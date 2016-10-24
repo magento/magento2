@@ -105,10 +105,10 @@ class TranslatedLists implements ListsInterface
         foreach ($zones as $code) {
             $options[] = [
                 'label' => \IntlTimeZone::createTimeZone($code)->getDisplayName(
-                        false,
-                        \IntlTimeZone::DISPLAY_LONG,
-                        $locale
-                    ) . ' (' . $code . ')',
+                    false,
+                    \IntlTimeZone::DISPLAY_LONG,
+                    $locale
+                ) . ' (' . $code . ')',
                 'value' => $code,
             ];
         }

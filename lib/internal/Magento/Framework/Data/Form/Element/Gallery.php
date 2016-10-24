@@ -44,7 +44,7 @@ class Gallery extends AbstractElement
         $html .= '<thead id="gallery_thead" class="gallery"><tr class="gallery"><td class="gallery" valign="middle" align="center">Big Image</td><td class="gallery" valign="middle" align="center">Thumbnail</td><td class="gallery" valign="middle" align="center">Small Thumb</td><td class="gallery" valign="middle" align="center">Sort Order</td><td class="gallery" valign="middle" align="center">Delete</td></tr></thead>';
         $widgetButton = $this->getForm()->getParent()->getLayout();
         $buttonHtml = $widgetButton->createBlock(
-             \Magento\Backend\Block\Widget\Button::class
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             ['label' => 'Add New Image', 'onclick' => 'addNewImg()', 'class' => 'add']
         )->toHtml();

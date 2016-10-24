@@ -133,7 +133,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
                 'data' => ['css_classes' => 'some_css_class'],
                 'price_code' => 'test_price',
                 'css_classes' => 'some_css_class price-test_price'
-        ]];
+            ]];
     }
 
     public function testGetSaleableItem()

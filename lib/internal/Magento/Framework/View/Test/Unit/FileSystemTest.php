@@ -49,24 +49,46 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\File::class, [],
-            [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\File::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_templateFileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class, [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_localeFileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile::class, [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_staticFileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class, [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_emailTemplateFileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class, [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_assetRepo = $this->getMock(
             \Magento\Framework\View\Asset\Repository::class,
-            ['extractScope', 'updateDesignParams', 'createAsset'], [], '', false
+            ['extractScope', 'updateDesignParams', 'createAsset'],
+            [],
+            '',
+            false
         );
 
         $this->_model = new \Magento\Framework\View\FileSystem(
@@ -84,8 +106,13 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
-                \Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false
-                ),
+                \Magento\Framework\View\Design\ThemeInterface::class,
+                [],
+                [],
+                '',
+                false,
+                false
+            ),
             'module' => 'Some_Module',   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
                                         // but PHPUnit has troubles with passing arguments by reference
         ];
@@ -111,8 +138,13 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area'       => 'some_area',
             'themeModel' => $this->getMock(
-                \Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false
-                ),
+                \Magento\Framework\View\Design\ThemeInterface::class,
+                [],
+                [],
+                '',
+                false,
+                false
+            ),
             'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
                                            // but PHPUnit has troubles with passing arguments by reference
         ];
@@ -262,7 +294,12 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area'       => 'some_area',
             'themeModel' => $this->getMock(
-                \Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false
+                \Magento\Framework\View\Design\ThemeInterface::class,
+                [],
+                [],
+                '',
+                false,
+                false
             ),
             'module'     => 'Some_Module',
             'locale'     => $locale

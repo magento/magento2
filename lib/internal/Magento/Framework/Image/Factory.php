@@ -43,6 +43,8 @@ class Factory
     {
         $adapter = $this->adapterFactory->create($adapterName);
         return $this->objectManager->create(
-            \Magento\Framework\Image::class, ['adapter' => $adapter, 'fileName' => $fileName]);
+            \Magento\Framework\Image::class,
+            ['adapter' => $adapter, 'fileName' => $fileName]
+        );
     }
 }

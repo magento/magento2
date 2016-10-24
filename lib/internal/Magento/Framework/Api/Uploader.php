@@ -17,7 +17,6 @@ class Uploader extends \Magento\Framework\File\Uploader
      */
     public function __construct()
     {
-
     }
 
     /**

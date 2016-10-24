@@ -75,7 +75,11 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $this->configLoader = $this->getMock(
-            \Magento\Framework\App\ObjectManager\ConfigLoader::class, [], [], '', false
+            \Magento\Framework\App\ObjectManager\ConfigLoader::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->object = new \Magento\Framework\App\StaticResource(
             $this->state,

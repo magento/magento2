@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
+
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Model\AbstractModel;
@@ -136,7 +137,8 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     {
         $data = 'MainTableName';
         $idFieldNameProperty = new \ReflectionProperty(
-            AbstractDb::class, '_idFieldName'
+            AbstractDb::class,
+            '_idFieldName'
         );
         $idFieldNameProperty->setAccessible(true);
         $idFieldNameProperty->setValue($this->_model, $data);
@@ -168,8 +170,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $this->_resourcesMock->expects($this->once())
             ->method('getTableName')
             ->with($expectedResult)
-            ->will($this->returnValue($expectedResult)
-            );
+            ->will($this->returnValue($expectedResult));
         $this->assertEquals($expectedResult, $this->_model->getMainTable());
     }
 
@@ -309,8 +310,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         );
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionInterfaceMock)
-        );
+            ->will($this->returnValue($connectionInterfaceMock));
 
         $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
         $connectionMock = $this->getMock(AdapterInterface::class);
@@ -413,8 +413,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $this->_resourcesMock->expects($this->once())
             ->method('getTableName')
             ->with('table')
-            ->will($this->returnValue('tableName')
-            );
+            ->will($this->returnValue('tableName'));
         $abstractModelMock->expects($this->at(0))->method('getOrigData')->will($this->returnValue(true));
         $abstractModelMock->expects($this->at(1))->method('getOrigData')->will($this->returnValue($getOriginData));
         $connectionInterfaceMock->expects($this->any())->method('describeTable')->with('tableName')->will(
@@ -470,8 +469,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $data = 'tableName';
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock)
-        );
+            ->will($this->returnValue($connectionMock));
         $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
             $this->returnValue('tableName')
         );

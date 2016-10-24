@@ -46,12 +46,12 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
-                'create'
-            )->with(
-                'testValue'
-            )->will(
-                $this->returnValue($resolverMock)
-            );
+            'create'
+        )->with(
+            'testValue'
+        )->will(
+            $this->returnValue($resolverMock)
+        );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
         $this->assertEquals($expected, $actual);
@@ -104,7 +104,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
     {
         $areas = ['area1' => 'value1', 'area2' => 'value2'];
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $expected = array_keys($areas);
@@ -116,7 +119,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
     {
         $areas = ['area1' => ['router' => 'value1'], 'area2' => 'value2'];
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $this->assertEquals($this->_model->getDefaultRouter('area1'), $areas['area1']['router']);
@@ -129,7 +135,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getObjectManagerMockGetArea();
         $areas = ['area1' => ['router' => 'value1'], 'area2' => 'value2'];
         $this->_model = new AreaList(
-            $objectManagerMock, $this->_resolverFactory, $areas, ''
+            $objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $this->assertEquals($this->_model->getArea('testArea'), 'ok');

@@ -93,7 +93,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
 
         if (!$exceptionDuringRename) {
             $renameMockEvent = $this->returnValue(true);
-        } else if ($fileExists) {
+        } elseif ($fileExists) {
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase('File already exists')));
         } else {
             $exceptionMessage = 'Some error renaming file';

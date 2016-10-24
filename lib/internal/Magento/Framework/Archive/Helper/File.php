@@ -5,8 +5,8 @@
  */
 
 /**
-* Helper class that simplifies files stream reading and writing
-*/
+ * Helper class that simplifies files stream reading and writing
+ */
 namespace Magento\Framework\Archive\Helper;
 
 use Magento\Framework\Exception\LocalizedException;

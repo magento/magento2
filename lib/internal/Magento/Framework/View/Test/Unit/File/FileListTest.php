@@ -105,8 +105,8 @@ class FileListTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($files),
                 $this->equalTo([
                     $this->_baseFile->getFileIdentifier() => $this->_baseFile,
-                    $this->_themeFile->getFileIdentifier() => $this->_themeFile, ]
-                ))
+                    $this->_themeFile->getFileIdentifier() => $this->_themeFile, ])
+            )
             ->will($this->returnValue($result));
         $this->assertNull($this->_model->replace($files));
         $this->assertSame($result, $this->_model->getAll());

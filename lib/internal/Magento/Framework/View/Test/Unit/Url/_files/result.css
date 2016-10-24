@@ -7,3 +7,4 @@ body {background: url(../two/another/body.gif);}
 a {background: url(data:image/png;)}
 li {background: url("https://example.com/absolute.gif");}
 ol.favicon {background: url(../two/another/Magento_Theme::favicon.ico)} /* base file */
+
