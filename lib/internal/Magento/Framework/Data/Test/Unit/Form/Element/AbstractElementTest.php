@@ -356,8 +356,10 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_model->setForm(
             $this->getMock(\Magento\Framework\Data\Form\AbstractForm::class, [], [], '', false)
         );
-        $expectedHtml = '<div class="admin__field">' . "\n"
-            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></div>' . "\n";
+        $expectedHtml = '<div class="admin__field">'
+            . "\n"
+            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></div>'
+            . "\n";
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
         $this->assertEquals(' required-entry _required', $this->_model->getClass());
