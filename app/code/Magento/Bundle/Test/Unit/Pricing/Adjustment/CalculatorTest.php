@@ -8,6 +8,7 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
+use Magento\Bundle\Model\ResourceModel\Selection\Collection;
 use \Magento\Bundle\Pricing\Adjustment\Calculator;
 
 use Magento\Bundle\Model\Product\Price as ProductPrice;
@@ -64,9 +65,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->saleableItem = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore'])
+            ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore', 'getTypeInstance'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock();
         $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
         $priceInfo->expects($this->any())->method('getPrice')->will(
@@ -145,8 +147,38 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         foreach ($optionList as $optionData) {
             $options[] = $this->createOptionMock($optionData);
         }
+        $typeInstance  = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->saleableItem->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);
+
+        $optionsCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionsCollection->expects($this->atLeastOnce())->method('getIterator')
+            ->willReturn(new \ArrayIterator($options));
+        $optionsCollection->expects($this->atLeastOnce())->method('addFilter')
+            ->willReturnSelf();
+        $optionsCollection->expects($this->atLeastOnce())->method('getSize')
+            ->willReturn(count($options));
+
+        foreach ($options as $index => $option) {
+            $selectionsCollection = $this->getMockBuilder(Collection::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $selectionsCollection->expects($this->any())->method('getIterator')
+                ->willReturn(new \ArrayIterator($option->getSelections()));
+
+
+            $typeInstance->expects($this->at($index + 2))->method('getSelectionsCollection')
+                ->willReturn($selectionsCollection);
+        }
+
+        $typeInstance->expects($this->atLeastOnce())->method('getOptionsCollection')->willReturn($optionsCollection);
+
         $price = $this->getMock(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class, [], [], '', false);
         $price->expects($this->atLeastOnce())->method('getOptions')->will($this->returnValue($options));
+
         $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
 
         // Price type of saleable items

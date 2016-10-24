@@ -7,6 +7,7 @@ namespace Magento\Bundle\Model\ResourceModel\Selection;
 
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
 
 /**
  * Bundle Selections Resource Collection
@@ -273,7 +274,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $orderByValue = new \Zend_Db_Expr('('. $price. ' * '. 'selection.selection_qty)');
         }
 
-        $this->getSelect()->order($orderByValue . ($searchMin ? \Zend_Db_Select::SQL_ASC : \Zend_Db_Select::SQL_DESC));
+        $this->getSelect()->order($orderByValue . ($searchMin ? Select::SQL_ASC : Select::SQL_DESC));
         $this->getSelect()->limit(1);
         return $this;
     }
