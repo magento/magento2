@@ -213,7 +213,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getPart')
             ->will($this->returnValue($getPartRet));
 
-        $this->selectMock->expects($this->once())->method('setPart')->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
+        $this->selectMock
+            ->expects($this->once())
+            ->method('setPart')
+            ->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
+        
         $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 
