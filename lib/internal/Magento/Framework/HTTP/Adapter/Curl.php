@@ -41,7 +41,10 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         'ssl_cert'     => CURLOPT_SSLCERT,
         'userpwd'      => CURLOPT_USERPWD,
         'useragent'    => CURLOPT_USERAGENT,
-        'referer'      => CURLOPT_REFERER
+        'referer'      => CURLOPT_REFERER,
+        'protocols'    => CURLOPT_PROTOCOLS,
+        'verifypeer'   => CURLOPT_SSL_VERIFYPEER,
+        'verifyhost'   => CURLOPT_SSL_VERIFYHOST,
     ];
 
     /**
@@ -51,12 +54,18 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     protected $_options = [];
 
+    public function __construct()
+    {
+        // as we support PHP 5.5.x in Magento 2.0.x we can't do this in declaration
+        $this->_config['protocols'] = (CURLPROTO_HTTP | CURLPROTO_HTTPS |  CURLPROTO_FTP | CURLPROTO_FTPS);
+        $this->_config['verifypeer'] = true;
+        $this->_config['verifyhost'] = 2;
+    }
+
     /**
      * Apply current configuration array to transport resource
      *
      * @return \Magento\Framework\HTTP\Adapter\Curl
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _applyConfig()
     {
@@ -65,22 +74,28 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             curl_setopt($this->_getResource(), $option, $value);
         }
 
-        if (empty($this->_config)) {
-            return $this;
+        // apply config options
+        foreach ($this->getDefaultConfig() as $option => $value) {
+            curl_setopt($this->_getResource(), $option, $value);
         }
 
-        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : true;
-        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
+        return $this;
+    }
 
-        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 2;
-        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
-
-        foreach ($this->_config as $param => $curlOption) {
+    /**
+     * Get default options
+     *
+     * @return array
+     */
+    private function getDefaultConfig()
+    {
+        $config = [];
+        foreach (array_keys($this->_config) as $param) {
             if (array_key_exists($param, $this->_allowedParams)) {
-                curl_setopt($this->_getResource(), $this->_allowedParams[$param], $this->_config[$param]);
+                $config[$this->_allowedParams[$param]] = $this->_config[$param];
             }
         }
-        return $this;
+        return $config;
     }
 
     /**
@@ -116,7 +131,9 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     public function setConfig($config = [])
     {
-        $this->_config = $config;
+        foreach ($config as $key => $value) {
+            $this->_config[$key] = $value;
+        }
         return $this;
     }
 
@@ -267,6 +284,13 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         $result = [];
 
         $multihandle = curl_multi_init();
+
+        // add default parameters
+        foreach ($this->getDefaultConfig() as $defaultOption => $defaultValue) {
+            if (!isset($options[$defaultOption])) {
+                $options[$defaultOption] = $defaultValue;
+            }
+        }
 
         foreach ($urls as $key => $url) {
             $handles[$key] = curl_init();

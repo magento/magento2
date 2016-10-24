@@ -7,6 +7,8 @@ namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Uploader;
+use \Magento\Framework\Validator\AllowedProtocols;
+use \Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,6 +46,13 @@ class RetrieveImage extends \Magento\Backend\App\Action
     protected $fileUtility;
 
     /**
+     * URI validator
+     *
+     * @var AllowedProtocols
+     */
+    private $validator;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -78,6 +87,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $baseTmpMediaPath = $this->mediaConfig->getBaseTmpMediaPath();
         try {
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
+            $this->validateRemoteFile($remoteFileUrl);
             $originalFileName = basename($remoteFileUrl);
             $localFileName = Uploader::getCorrectFileName($originalFileName);
             $localTmpFileName = Uploader::getDispretionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
@@ -96,6 +106,41 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $response->setHeader('Content-type', 'text/plain');
         $response->setContents(json_encode($result));
         return $response;
+    }
+
+    /**
+     * Get URI validator
+     *
+     * @return AllowedProtocols
+     */
+    private function getValidator()
+    {
+        if ($this->validator === null) {
+            $this->validator = $this->_objectManager->get(AllowedProtocols::class);
+        }
+
+        return $this->validator;
+    }
+
+    /**
+     * Validate remote file
+     *
+     * @param string $remoteFileUrl
+     * @throws LocalizedException
+     *
+     * @return $this
+     */
+    private function validateRemoteFile($remoteFileUrl)
+    {
+        /** @var AllowedProtocols $validator */
+        $validator = $this->getValidator();
+        if (!$validator->isValid($remoteFileUrl)) {
+            throw new LocalizedException(
+                __("Protocol isn't allowed")
+            );
+        }
+
+        return $this;
     }
 
     /**

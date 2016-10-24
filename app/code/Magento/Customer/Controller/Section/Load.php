@@ -8,10 +8,13 @@ namespace Magento\Customer\Controller\Section;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Customer\CustomerData\Section\Identifier;
+use Magento\Framework\Escaper;
 
 /**
  * Customer section controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Load extends \Magento\Framework\App\Action\Action
 {
@@ -31,21 +34,39 @@ class Load extends \Magento\Framework\App\Action\Action
     protected $sectionPool;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier
+     * @param Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
-        \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier,
+        Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sectionIdentifier = $sectionIdentifier;
         $this->sectionPool = $sectionPool;
+    }
+
+    /**
+     * Get new Escaper dependency for application code.
+     * @return \Magento\Framework\Escaper
+     * @deprecated
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper === null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()->get(Escaper::class);
+        }
+        return $this->escaper;
     }
 
     /**
@@ -70,7 +91,7 @@ class Load extends \Magento\Framework\App\Action\Action
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
-            $response = ['message' => $e->getMessage()];
+            $response = ['message' => $this->getEscaper()->escapeHtml($e->getMessage())];
         }
 
         return $resultJson->setData($response);

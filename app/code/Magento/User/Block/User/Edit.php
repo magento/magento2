@@ -48,11 +48,25 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         $this->buttonList->update('save', 'label', __('Save User'));
-        $this->buttonList->update('delete', 'label', __('Delete User'));
+        $this->buttonList->remove('delete');
 
         $objId = $this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
+            $this->addButton(
+                'delete',
+                [
+                    'label' => __('Delete User'),
+                    'class' => 'delete',
+                    'onclick' => sprintf(
+                        'deleteConfirm("%s", "%s", %s)',
+                        __('Are you sure you want to do this?'),
+                        $this->getUrl('adminhtml/*/delete'),
+                        json_encode(['data' => ['user_id' => $objId]])
+                    ),
+                ]
+            );
+
             $deleteConfirmMsg = __("Are you sure you want to revoke the user\'s tokens?");
             $this->addButton(
                 'invalidate',

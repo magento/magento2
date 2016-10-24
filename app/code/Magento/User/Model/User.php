@@ -293,9 +293,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             }
 
             // Check whether password was used before
-            $passwordHash = $this->_encryptor->getHash($password, false);
             foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
-                if ($passwordHash === $oldPasswordHash) {
+                if ($this->_encryptor->isValidHash($password, $oldPasswordHash)) {
                     return [$errorMessage];
                 }
             }

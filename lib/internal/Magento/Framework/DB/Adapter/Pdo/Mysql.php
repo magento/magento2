@@ -310,6 +310,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Creates a PDO object and connects to the database.
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     *
      * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
@@ -332,6 +335,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             unset($this->_config['host']);
         } elseif (strpos($this->_config['host'], ':') !== false) {
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
+        }
+
+        if (defined("\\PDO::MYSQL_ATTR_MULTI_STATEMENTS")) {
+            if (!isset($this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS])) {
+                $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
+            }
         }
 
         $this->logger->startTimer();
@@ -499,9 +508,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function query($sql, $bind = [])
     {
-        if (strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false && count($this->_splitMultiQuery($sql)) > 1) {
-            throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
+        if (strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false) {
+            if ($this->isMultiQuery($sql)) {
+                throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
+            }
         }
+
         return $this->_query($sql, $bind);
     }
 
@@ -3759,5 +3771,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $tables[] = $row;
         }
         return $tables;
+    }
+
+    /**
+     * @param $sql
+     * @return bool
+     */
+    private function isMultiQuery($sql)
+    {
+        return count($this->_splitMultiQuery(preg_replace("/(\\n)|\n|(\\t)|\t|(\\r)|\r|(\\f)|\f/", "", $sql))) > 1;
     }
 }

@@ -5,10 +5,14 @@
  */
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\StateException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\EstimateAddressInterface;
+use Magento\Quote\Api\ShipmentEstimationInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Shipping method read service.
@@ -16,7 +20,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
  */
 class ShippingMethodManagement implements
     \Magento\Quote\Api\ShippingMethodManagementInterface,
-    \Magento\Quote\Model\ShippingMethodManagementInterface
+    \Magento\Quote\Model\ShippingMethodManagementInterface,
+    ShipmentEstimationInterface
 {
     /**
      * Quote repository.
@@ -186,6 +191,21 @@ class ShippingMethodManagement implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function estimateByExtendedAddress($cartId, AddressInterface $address)
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->getActive($cartId);
+
+        // no methods applicable for empty carts or carts with virtual products
+        if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {
+            return [];
+        }
+        return $this->getShippingMethods($quote, $address->getData());
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function estimateByAddressId($cartId, $addressId)
@@ -220,13 +240,28 @@ class ShippingMethodManagement implements
      */
     protected function getEstimatedRates(\Magento\Quote\Model\Quote $quote, $country, $postcode, $regionId, $region)
     {
+        $data = [
+            EstimateAddressInterface::KEY_COUNTRY_ID => $country,
+            EstimateAddressInterface::KEY_POSTCODE => $postcode,
+            EstimateAddressInterface::KEY_REGION_ID => $regionId,
+            EstimateAddressInterface::KEY_REGION => $region
+        ];
+        return $this->getShippingMethods($quote, $data);
+    }
+
+    /**
+     * Get list of available shipping methods
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param array $addressData
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[]
+     */
+    private function getShippingMethods(Quote $quote, array $addressData)
+    {
         $output = [];
         $shippingAddress = $quote->getShippingAddress();
-        $shippingAddress->setCountryId($country);
-        $shippingAddress->setPostcode($postcode);
-        $shippingAddress->setRegionId($regionId);
-        $shippingAddress->setRegion($region);
+        $shippingAddress->addData($addressData);
         $shippingAddress->setCollectShippingRates(true);
+
         $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {

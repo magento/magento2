@@ -7,8 +7,6 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use \Magento\Framework\DB\Select;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 class SelectTest extends \PHPUnit_Framework_TestCase
 {
     public function testWhere()
@@ -39,7 +37,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
      *
      * @param int $callCount
      * @param string|null $returnValue
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getConnectionMockWithMockedQuote($callCount, $returnValue = null)
     {
@@ -55,5 +53,59 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             $method->will($this->returnValue($returnValue));
         }
         return $connection;
+    }
+
+    /**
+     *
+     * Test for group by
+     *
+     */
+    public function testGroupBy()
+    {
+        $select = new Select($this->_getConnectionMockWithMockedQuote(0));
+        $select->from('test')->group("field");
+        $this->assertEquals("SELECT `test`.* FROM `test` GROUP BY `field`", $select->assemble());
+
+        $select = new Select($this->_getConnectionMockWithMockedQuote(0));
+        $select->from('test')->group("(case when ((SELECT 1 ) = '1') then 2 else 3 end)");
+        $this->assertEquals(
+            "SELECT `test`.* FROM `test` GROUP BY (case when ((SELECT 1 ) = '1') then 2 else 3 end)",
+            $select->assemble()
+        );
+
+        $select = new Select($this->_getConnectionMockWithMockedQuote(0));
+        $select->from('test')->group(new \Zend_Db_Expr("(case when ((SELECT 1 ) = '1') then 2 else 3 end)"));
+        $this->assertEquals(
+            "SELECT `test`.* FROM `test` GROUP BY (case when ((SELECT 1 ) = '1') then 2 else 3 end)",
+            $select->assemble()
+        );
+    }
+
+    /**
+     *  Test order
+     *
+     * @dataProvider providerOrder
+     * @param string $expected
+     * @param string $orderValue
+     */
+    public function testOrder($expected, $orderValue)
+    {
+        $select = new Select($this->_getConnectionMockWithMockedQuote(0));
+        $select->from('test')->order($orderValue);
+        $this->assertEquals($expected, $select->assemble());
+    }
+
+    public function providerOrder()
+    {
+        return [
+            ["SELECT `test`.* FROM `test` ORDER BY `field` ASC", " field " . Select::SQL_ASC],
+            ["SELECT `test`.* FROM `test` ORDER BY `field` DESC", " field " . Select::SQL_DESC],
+
+            ["SELECT `test`.* FROM `test` ORDER BY field ASC", new \Zend_Db_Expr("field " . Select::SQL_ASC)],
+            ["SELECT `test`.* FROM `test` ORDER BY field DESC", new \Zend_Db_Expr("field " . Select::SQL_DESC)],
+
+            ["SELECT `test`.* FROM `test` ORDER BY (case when ((SELECT 1 ) = '1') then 2 else 3 end) DESC",
+                "(case when ((SELECT 1 ) = '1') then 2 else 3 end)" . Select::SQL_DESC],
+        ];
     }
 }

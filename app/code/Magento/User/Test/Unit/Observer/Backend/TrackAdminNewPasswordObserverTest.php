@@ -24,9 +24,6 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $authSessionMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $encryptorMock;
-
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $managerInterfaceMock;
 
@@ -57,11 +54,6 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
                 ]
             )->getMock();
 
-        $this->encryptorMock = $this->getMockBuilder('\Magento\Framework\Encryption\EncryptorInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
         $this->managerInterfaceMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -82,7 +74,6 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
                 'observerConfig' => $this->observerConfig,
                 'userResource' => $this->userMock,
                 'authSession' => $this->authSessionMock,
-                'encryptor' => $this->encryptorMock,
                 'messageManager' => $this->managerInterfaceMock,
             ]
         );
@@ -91,7 +82,6 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
     public function testTrackAdminPassword()
     {
         $newPW = "mYn3wpassw0rd";
-        $oldPW = "notsecure";
         $uid = 123;
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserverMock */
         $eventObserverMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
@@ -108,19 +98,18 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject $userMock */
         $userMock = $this->getMockBuilder('Magento\User\Model\User')
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getCurrentPassword', 'getForceNewPassword'])
+            ->setMethods(['getId', 'getPassword', 'getForceNewPassword'])
             ->getMock();
 
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getObject')->willReturn($userMock);
         $userMock->expects($this->once())->method('getId')->willReturn($uid);
-        $userMock->expects($this->once())->method('getCurrentPassword')->willReturn($newPW);
+        $userMock->expects($this->once())->method('getPassword')->willReturn($newPW);
         $this->configInterfaceMock
             ->expects($this->atLeastOnce())
             ->method('getValue')
             ->willReturn(1);
         $userMock->expects($this->once())->method('getForceNewPassword')->willReturn(false);
-        $this->encryptorMock->expects($this->once())->method('getHash')->willReturn(md5($oldPW));
 
         /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder('Magento\Framework\Message\Collection')

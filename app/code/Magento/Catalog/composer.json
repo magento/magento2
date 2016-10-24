@@ -34,7 +34,7 @@
         "magento/module-catalog-sample-data": "Sample Data version:100.0.*"
     },
     "type": "magento2-module",
-    "version": "100.0.9",
+    "version": "100.0.11",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
