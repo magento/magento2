@@ -10,8 +10,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $reader;
+
     /** @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cache;
+
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
 
