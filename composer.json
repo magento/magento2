@@ -217,9 +217,6 @@
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
     },
-    "config": {
-        "use-include-path": true
-    },
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
@@ -227,10 +224,18 @@
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
-            "": "app/code/"
+            "": [
+                "app/code/",
+                "var/generation"
+            ]
         },
         "files": [
             "app/etc/NonComposerComponentRegistration.php"
+        ],
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
         ]
     },
     "autoload-dev": {
