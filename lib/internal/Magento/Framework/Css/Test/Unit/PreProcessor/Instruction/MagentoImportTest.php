@@ -179,7 +179,10 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     public function testProcessException()
     {
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
-            $this->asset, '//@magento_import "some/file.css";', 'css', 'path'
+            $this->asset,
+            '//@magento_import "some/file.css";',
+            'css',
+            'path'
         );
         $exception = new \LogicException('Error happened');
         $this->assetRepo->expects($this->once())
