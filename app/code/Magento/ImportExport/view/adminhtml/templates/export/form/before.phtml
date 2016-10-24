@@ -80,6 +80,9 @@ require([
             var oldAction = form.action;
             var url = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity')
                 + '/file_format/' + $F('file_format');
+            if ($F('fields_enclosure')) {
+                url += '/fields_enclosure/' + $F('fields_enclosure');
+            }
             form.action = url;
             form.submit();
             form.action   = oldAction;
