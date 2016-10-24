@@ -24,6 +24,7 @@ class TranslatedLists implements ListsInterface
     protected $localeResolver;
 
     /**
+     * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $locale
      */
