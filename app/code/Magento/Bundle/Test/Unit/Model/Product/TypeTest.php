@@ -2119,8 +2119,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option1 = $this->getRequiredOptionMock(10, 10);
         $option2 = $this->getRequiredOptionMock(20, 10);
 
-
-
         $option3 = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
             ->setMethods(['getRequired', 'getOptionId', 'getId'])
             ->disableOriginalConstructor()
@@ -2226,7 +2224,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->bundleCollection->expects($this->once())
             ->method('create')
             ->will($this->returnValue($selectionCollectionMock));
-
 
         $product = new \Magento\Framework\DataObject(
             [

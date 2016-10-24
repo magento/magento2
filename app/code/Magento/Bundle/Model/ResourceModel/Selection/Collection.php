@@ -225,9 +225,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Add filter by price
+     *
      * @param Product $product
      * @param bool $searchMin
      * @param bool $useRegularPrice
+     *
+     * @return $this
      */
     public function addPriceFilter($product, $searchMin, $useRegularPrice = false)
     {
@@ -271,5 +275,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $this->getSelect()->order($orderByValue . ($searchMin ? \Zend_Db_Select::SQL_ASC : \Zend_Db_Select::SQL_DESC));
         $this->getSelect()->limit(1);
+        return $this;
     }
 }
