@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\CreateSimpleProductEntityByAttributeMaskSkuTest" summary="Create Simple Product with attribute sku mask" ticketId="MAGETWO-59861">
+        <variation name="CreateSimpleProductEntityByAttributeMaskSkuTest1">
+            <data name="configData" xsi:type="string">attribute_product_mask_sku</data>
+            <data name="description" xsi:type="string">Create product with country of manufacture attribute sku mask</data>
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10000</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
+            <data name="product/data/country_of_manufacture" xsi:type="string">Ukraine</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+        </variation>
+    </testCase>
+</config>
