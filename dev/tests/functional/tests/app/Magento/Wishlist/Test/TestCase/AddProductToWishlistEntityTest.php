@@ -48,15 +48,16 @@ class AddProductToWishlistEntityTest extends AbstractWishlistTest
      *
      * @param Customer $customer
      * @param string $product
+     * @param bool $configure
      * @return array
      */
-    public function test(Customer $customer, $product)
+    public function test(Customer $customer, $product, $configure = true)
     {
         $product = $this->createProducts($product)[0];
 
         // Steps:
         $this->loginCustomer($customer);
-        $this->addToWishlist([$product], true);
+        $this->addToWishlist([$product], $configure);
 
         return ['product' => $product];
     }
