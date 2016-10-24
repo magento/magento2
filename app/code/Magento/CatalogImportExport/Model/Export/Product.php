@@ -904,7 +904,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                             $additionalAttributes[$code] = $fieldName .
                                 ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
                                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                                    $this->wrapValue($this->collectedMultiselectsData[$storeId][$productLinkId][$code])
+                                    $this->wrapValue($this->collectedMultiselectsData[$storeId][$itemId][$code])
                                 );
                         }
                     }
