@@ -2327,7 +2327,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $rowData;
         }
         $rowData = array_merge($rowData, $this->parseAdditionalAttributes($rowData['additional_attributes']));
-
         return $rowData;
     }
 
@@ -2380,7 +2379,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $preparedAttributes[$code] = $value;
         }
-
         return $preparedAttributes;
     }
 
@@ -2416,10 +2414,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 : '"' . $matches[2][$i] . '"';
             $attributes[$attributeCode] = $value;
         }
-
         return $attributes;
     }
 
+    /**
+     * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
+     *
+     * @param string $values
+     * @return array
+     */
+    public function parseMultiselectValues($values)
+    {
+        if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
+            return explode(self::PSEUDO_MULTI_LINE_SEPARATOR, $values);
+        }
+        if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
+            return $values = array_map(function ($value) {
+                return str_replace('""', '"', $value);
+            }, $matches[1]);
+        }
+        return [$values];
+    }
 
     /**
      * Retrieves escaped PSEUDO_MULTI_LINE_SEPARATOR if it is metacharacter for regular expression
