@@ -21,6 +21,12 @@ class ViewWithSwatches extends View
      */
     private $swatchAttributeSelector = '.swatch-attribute.%s .swatch-attribute-selected-option';
 
+    /**
+     * Get chosen options from the product view page.
+     *
+     * @param InjectableFixture $product
+     * @return array
+     */
     public function getSelectedSwatchOptions(InjectableFixture $product)
     {
         $checkoutData = $product->getCheckoutData();

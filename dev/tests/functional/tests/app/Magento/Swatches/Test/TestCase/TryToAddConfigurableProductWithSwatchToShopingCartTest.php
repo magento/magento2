@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 4. Perform asserts
  *
  * @group Configurable_Product
- * @ZephyrId TODO: add zephyr id
+ * @ZephyrId TODO: MAGETWO-59979
  */
 class TryToAddConfigurableProductWithSwatchToShopingCartTest extends Scenario
 {
