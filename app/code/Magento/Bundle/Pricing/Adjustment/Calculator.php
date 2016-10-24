@@ -197,8 +197,20 @@ class Calculator implements BundleCalculatorInterface
             );
             $selectionsCollection->addQuantityFilter();
 
-            if (!($option->isMultiSelection() && !$searchMin)) {
+            if ($option->isMultiSelection() && !$searchMin) {
+                foreach ($selectionsCollection as $selection) {
+                    $priceList[] =  $this->selectionFactory->create(
+                        $bundleProduct,
+                        $selection,
+                        $selection->getSelectionQty(),
+                        [
+                            'useRegularPrice' => $useRegularPrice,
+                        ]
+                    );
+                }
+            } else {
                 $selectionsCollection->addPriceFilter($bundleProduct, $searchMin, $useRegularPrice);
+                $selectionsCollection->setPage(0, 1);
                 if (!$useRegularPrice) {
                     $selectionsCollection->addAttributeToSelect('special_price');
                     $selectionsCollection->addAttributeToSelect('special_price_from');
@@ -206,9 +218,7 @@ class Calculator implements BundleCalculatorInterface
                     $selectionsCollection->addAttributeToSelect('tax_class_id');
                     $selectionsCollection->addTierPriceData();
                 }
-            }
-            foreach ($selectionsCollection as $selection) {
-                var_dump(gettype($selection));
+                $selection = $selectionsCollection->getFirstItem();
                 $priceList[] =  $this->selectionFactory->create(
                     $bundleProduct,
                     $selection,
@@ -218,6 +228,7 @@ class Calculator implements BundleCalculatorInterface
                     ]
                 );
             }
+
         }
         return $priceList;
     }
