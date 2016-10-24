@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Catalog\Model\Indexer\Product;
+
+/**
+ * Class AffectCache
+ * @deprecated
+ */
+class AffectCache
+{
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext $context
+     */
+    protected $context;
+
+    /**
+     * @param \Magento\Framework\Indexer\CacheContext $context
+     */
+    public function __construct(
+        \Magento\Framework\Indexer\CacheContext $context
+    ) {
+        $this->context = $context;
+    }
+
+    /**
+     * @param \Magento\Framework\Indexer\ActionInterface $subject
+     * @param array $ids
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeExecute(\Magento\Framework\Indexer\ActionInterface $subject, $ids)
+    {
+        $this->context->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+        return [$ids];
+    }
+}

@@ -44,7 +44,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $logger;
+    protected $loggerMock;
 
     /**
      * @var \Magento\Framework\Pricing\Render\RendererPool|\PHPUnit_Framework_MockObject_MockObject
@@ -58,6 +58,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',
             ['getPriceInfo', '__wakeup', 'getCanShowPrice'],
@@ -70,71 +71,30 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $eventManager = $this->getMock('Magento\Framework\Event\Test\Unit\ManagerStub', [], [], '', false);
-        $config = $this->getMock('Magento\Store\Model\Store\Config', [], [], '', false);
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
 
         $this->priceBox = $this->getMock('Magento\Framework\Pricing\Render\PriceBox', [], [], '', false);
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->layout->expects($this->any())
             ->method('getBlock')
             ->will($this->returnValue($this->priceBox));
 
-        $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
-            ->getMockForAbstractClass();
-
-        $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resolver = $this->getMockBuilder(\Magento\Framework\View\Element\Template\File\Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->getMockForAbstractClass();
-
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
 
-        $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
             ->setMethods(['getStore', 'getCode'])
             ->getMockForAbstractClass();
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->any())
-            ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
-        $context->expects($this->any())
-            ->method('getStoreConfig')
-            ->will($this->returnValue($config));
-        $context->expects($this->any())
-            ->method('getLayout')
-            ->will($this->returnValue($this->layout));
-        $context->expects($this->any())
-            ->method('getLogger')
-            ->will($this->returnValue($this->logger));
-        $context->expects($this->any())
-            ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
-        $context->expects($this->any())
-            ->method('getCacheState')
-            ->will($this->returnValue($cacheState));
-        $context->expects($this->any())
-            ->method('getStoreManager')
-            ->will($this->returnValue($storeManager));
-        $context->expects($this->any())
-            ->method('getAppState')
-            ->will($this->returnValue($appState));
-        $context->expects($this->any())
-            ->method('getResolver')
-            ->will($this->returnValue($resolver));
-        $context->expects($this->any())
-            ->method('getUrlBuilder')
-            ->will($this->returnValue($urlBuilder));
+        $context = $objectManager->getObject(
+            'Magento\Framework\View\Element\Template\Context',
+            [
+                'storeManager' => $storeManagerMock,
+                'logger' => $this->loggerMock
+            ]
+        );
 
         $this->rendererPool = $this->getMockBuilder('Magento\Framework\Pricing\Render\RendererPool')
             ->disableOriginalConstructor()
@@ -145,7 +105,6 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceCode')
             ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE));
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
             'Magento\Catalog\Pricing\Render\FinalPriceBox',
             [
@@ -224,7 +183,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderMsrpNotRegisteredException()
     {
-        $this->logger->expects($this->once())
+        $this->loggerMock->expects($this->once())
             ->method('critical');
 
         $this->priceInfo->expects($this->once())
