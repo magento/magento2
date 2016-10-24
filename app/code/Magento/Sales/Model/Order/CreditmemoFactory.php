@@ -61,10 +61,12 @@ class CreditmemoFactory
 
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
             if ($orderItem->isDummy()) {
-                $qty = 1;
                 if (isset($data['qtys'][$orderItem->getParentItemId()])) {
-                    $qty = $this->calculateProductOptions($orderItem, $data['qtys']);
+                    $parentQty = $data['qtys'][$orderItem->getParentItemId()];
+                } else {
+                    $parentQty = $orderItem->getParentItem() ? $orderItem->getParentItem()->getQtyToRefund() : 1;
                 }
+                $qty = $this->calculateProductOptions($orderItem, $parentQty);
                 $orderItem->setLockedDoShip(true);
             } else {
                 if (isset($qtys[$orderItem->getId()])) {
@@ -139,10 +141,12 @@ class CreditmemoFactory
 
             $item = $this->convertor->itemToCreditmemoItem($orderItem);
             if ($orderItem->isDummy()) {
-                $qty = 1;
                 if (isset($data['qtys'][$orderItem->getParentItemId()])) {
-                    $qty = $this->calculateProductOptions($orderItem, $data['qtys']);
+                    $parentQty = $data['qtys'][$orderItem->getParentItemId()];
+                } else {
+                    $parentQty = $orderItem->getParentItem() ? $orderItem->getParentItem()->getQtyToRefund() : 1;
                 }
+                $qty = $this->calculateProductOptions($orderItem, $parentQty);
             } else {
                 if (isset($qtys[$orderItem->getId()])) {
                     $qty = (double)$qtys[$orderItem->getId()];
@@ -261,15 +265,15 @@ class CreditmemoFactory
      * @param array $qtys
      * @return int
      */
-    private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $qtys)
+    private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $parentQty)
     {
-        $qty = 1;
+        $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
             $bundleSelectionAttributes = $this->getUnserialize()
                 ->unserialize($productOptions['bundle_selection_attributes']);
             if ($bundleSelectionAttributes) {
-                $qty = $bundleSelectionAttributes['qty'] * $qtys[$orderItem->getParentItemId()];
+                $qty = $bundleSelectionAttributes['qty'] * $parentQty;
             }
         }
         return $qty;
