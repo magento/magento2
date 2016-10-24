@@ -90,7 +90,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn(json_encode($expected));
 
-        $this->serializerMock->method('unserialize')
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
             ->willReturn($expected);
 
         $this->envReaderMock->expects($this->any())->method('read')->willReturn([]);
