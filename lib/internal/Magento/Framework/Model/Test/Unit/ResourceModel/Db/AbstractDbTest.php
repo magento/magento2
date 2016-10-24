@@ -567,7 +567,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             ->willReturn($connectionMock);
 
         $idFieldName = 'id_field_name';
-        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id',]);
+        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id']);
 
 
         // Test expectations
