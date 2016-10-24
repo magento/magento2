@@ -441,22 +441,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $product->getData($this->_keyOptionsCollection);
     }
 
-    /** @var  \Magento\CatalogRule\Model\ResourceModel\Product\Collection */
-    private $catalogRuleProcessor;
-
-    /**
-     * @deprecated
-     * @return \Magento\CatalogRule\Model\ResourceModel\Product\Collection
-     */
-    private function getCatalogRuleProcessor()
-    {
-        if (!$this->catalogRuleProcessor instanceof \Magento\CatalogRule\Model\ResourceModel\Product\Collection) {
-            $this->catalogRuleProcessor = ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class);
-        }
-        return $this->catalogRuleProcessor;
-    }
-
     /**
      * Retrieve bundle selections collection based on used options
      *
