@@ -2119,18 +2119,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option1 = $this->getRequiredOptionMock(10, 10);
         $option2 = $this->getRequiredOptionMock(20, 10);
 
-        $this->stockRegistry->method('getStockItem')
-            ->willReturn($this->getStockItem(true));
-        $this->stockState
-            ->expects($this->at(0))
-            ->method('getStockQty')
-            ->with(10)
-            ->willReturn(10);
-        $this->stockState
-            ->expects($this->at(1))
-            ->method('getStockQty')
-            ->with(20)
-            ->willReturn(10);
+
 
         $option3 = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
             ->setMethods(['getRequired', 'getOptionId', 'getId'])
@@ -2145,6 +2134,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2, $option3]);
         $selectionCollectionMock = $this->getSelectionCollectionMock([$option1, $option2]);
+        $this->bundleCollection->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($selectionCollectionMock));
 
         $product = new \Magento\Framework\DataObject(
             [
@@ -2182,6 +2174,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option = $this->getRequiredOptionMock(1, 10);
         $optionCollectionMock = $this->getOptionCollectionMock([$option]);
         $selectionCollectionMock = $this->getSelectionCollectionMock([]);
+
+        $this->bundleCollection->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($selectionCollectionMock));
 
         $product = new \Magento\Framework\DataObject(
             [
@@ -2227,6 +2223,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2]);
         $selectionCollectionMock = $this->getSelectionCollectionMock([$option1, $option2]);
+        $this->bundleCollection->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($selectionCollectionMock));
+
 
         $product = new \Magento\Framework\DataObject(
             [
@@ -2287,7 +2287,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $selectionCollectionMock = $this->getMockBuilder(
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class
-        )->setMethods(['getItems', 'getIterator'])
+        )
             ->disableOriginalConstructor()
             ->getMock();
 

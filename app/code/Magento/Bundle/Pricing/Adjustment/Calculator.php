@@ -168,25 +168,6 @@ class Calculator implements BundleCalculatorInterface
     }
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory
-     */
-    private $selectionCollectionFactory;
-
-    /**
-     * @deprecated
-     * @return \Magento\Bundle\Model\ResourceModel\Selection\PriceCollectionFactory
-     */
-    private function getSelectionCollection()
-    {
-        if ($this->selectionCollectionFactory === null) {
-            $this->selectionCollectionFactory = ObjectManager::getInstance()
-                ->get(\Magento\Bundle\Model\ResourceModel\Selection\PriceCollectionFactory::class);
-        }
-
-        return $this->selectionCollectionFactory;
-    }
-
-    /**
      * Filter all options for bundle product
      *
      * @param Product $bundleProduct
@@ -208,9 +189,12 @@ class Calculator implements BundleCalculatorInterface
             if ($this->canSkipOption($option, $canSkipRequiredOptions)) {
                 continue;
             }
-
-            $selectionsCollection = $this->getSelectionCollection()->create();
-            $selectionsCollection->setOptionIdsFilter([(int)$option->getId()]);
+            /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
+            $typeInstance = $bundleProduct->getTypeInstance();
+            $selectionsCollection = clone $typeInstance->getSelectionsCollection(
+                [(int)$option->getId()],
+                $bundleProduct
+            );
             $selectionsCollection->addQuantityFilter();
 
             if ($option->isMultiSelection() && !$searchMin) {
@@ -230,6 +214,7 @@ class Calculator implements BundleCalculatorInterface
                     $selectionsCollection->addAttributeToSelect('special_price');
                     $selectionsCollection->addAttributeToSelect('special_price_from');
                     $selectionsCollection->addAttributeToSelect('special_price_to');
+                    $selectionsCollection->addAttributeToSelect('tax_class_id');
                     $selectionsCollection->addTierPriceData();
                 }
                 $selection = $selectionsCollection->getFirstItem();

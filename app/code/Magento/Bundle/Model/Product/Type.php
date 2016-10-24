@@ -485,7 +485,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $storeId = $product->getStoreId();
         $selectionsCollection = $this->_bundleCollection->create()
             ->addAttributeToSelect($this->_config->getProductAttributes())
-            ->addAttributeToSelect('tax_class_id')//used for calculation item taxes in Bundle with Dynamic Price
+            ->addAttributeToSelect('tax_class_id') //used for calculation item taxes in Bundle with Dynamic Price
             ->setFlag('product_children', true)
             ->setPositionOrder()
             ->addStoreFilter($this->getStoreFilter($product))
@@ -500,30 +500,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $selectionsCollection;
-    }
-
-    /**
-     * Retrieve bundle selections collection based on used options
-     *
-     * @param array $optionIds
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
-     */
-    public function getSelectionsWithPriceCollection($optionIds, $product)
-    {
-        $keyOptionIds = is_array($optionIds) ? implode('_', $optionIds) : '';
-        $key = $this->_keySelectionsCollection . $keyOptionIds;
-        if (!$product->hasData($key)) {
-            $selectionsCollection = $this->buildSelectionCollection($optionIds, $product);
-
-            $selectionsCollection->addPriceData();
-            $this->getCatalogRuleProcessor()->addPriceData($selectionsCollection);
-            $selectionsCollection->addTierPriceData();
-
-            $product->setData($key, $selectionsCollection);
-        }
-
-        return $product->getData($key);
     }
 
     /**

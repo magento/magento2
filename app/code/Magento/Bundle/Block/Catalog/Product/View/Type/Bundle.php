@@ -89,12 +89,13 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         if (!$this->options) {
             $product = $this->getProduct();
+            /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
             $typeInstance = $product->getTypeInstance();
             $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
             $optionCollection = $typeInstance->getOptionsCollection($product);
 
-            $selectionCollection = $typeInstance->getSelectionsWithPriceCollection(
+            $selectionCollection = $typeInstance->getSelectionsCollection(
                 $typeInstance->getOptionsIds($product),
                 $product
             );
