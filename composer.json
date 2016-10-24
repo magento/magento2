@@ -151,6 +151,7 @@
         "magento/module-rss": "100.0.5",
         "magento/module-rule": "100.0.6",
         "magento/module-sales": "100.0.11",
+        "magento/module-sales-inventory": "100.0.0",
         "magento/module-sales-rule": "100.0.7",
         "magento/module-sales-sequence": "100.0.5",
         "magento/module-sample-data": "100.0.5",
