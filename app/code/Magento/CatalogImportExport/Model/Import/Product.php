@@ -2791,7 +2791,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 'label' => $newLabel
             ],
             [
-                'entity_id = ?' => $mediaData[$this->getProductEntityLinkField()],
+                $this->getProductEntityLinkField() . ' = ?' => $mediaData[$this->getProductEntityLinkField()],
                 'value_id = ?' => $mediaData['value_id'],
                 'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ]
