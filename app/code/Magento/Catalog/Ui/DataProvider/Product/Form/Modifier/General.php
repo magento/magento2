@@ -315,17 +315,6 @@ class General extends AbstractModifier
             $importsConfig = [
                 'mask' => $this->locator->getStore()->getConfig('catalog/fields_masks/' . $listener),
                 'component' => 'Magento_Catalog/js/components/import-handler',
-                'imports' => [
-                    'handleNameChanges' => '${$.provider}:data.product.name',
-                    'handleDescriptionChanges' => '${$.provider}:data.product.description',
-                    'handleSkuChanges' => '${$.provider}:data.product.sku',
-                    'handleColorChanges' => '${$.provider}:data.product.color',
-                    'handleCountryChanges' => '${$.provider}:data.product.country_of_manufacture',
-                    'handleGenderChanges' => '${$.provider}:data.product.gender',
-                    'handleMaterialChanges' => '${$.provider}:data.product.material',
-                    'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
-                    'handleSizeChanges' => '${$.provider}:data.product.size'
-                ],
                 'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
