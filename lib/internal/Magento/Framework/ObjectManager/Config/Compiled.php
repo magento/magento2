@@ -141,7 +141,7 @@ class Compiled implements ConfigInterface
             }
 
             $property = $properties[$key];
-            $this->$property = array_replace_recursive($this->$property, $config);
+            $this->$property = array_replace($this->$property, $config);
         }
     }
 
