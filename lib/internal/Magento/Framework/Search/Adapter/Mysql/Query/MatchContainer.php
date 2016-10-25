@@ -16,6 +16,7 @@ class MatchContainer
      * @var QueryInterface
      */
     private $request;
+    
     /**
      * @var string
      */
