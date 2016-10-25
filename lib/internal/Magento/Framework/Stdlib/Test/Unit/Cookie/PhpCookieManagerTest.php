@@ -73,6 +73,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
          * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
          */
         protected $cookieManager;
+        
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|CookieScopeInterface
          */
