@@ -11,7 +11,11 @@
             <block class="Magento\Framework\View\Element\Js\Components" name="wishlist_page_head_components" template="Magento_Wishlist::js/components.phtml"/>
         </referenceBlock>
         <referenceBlock name="top.links">
-            <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link"/>
+            <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link">
+                <arguments>
+                    <argument name="sortOrder" xsi:type="number">60</argument>
+                </arguments>
+            </block>
         </referenceBlock>
         <referenceContainer name="sidebar.additional">
             <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml"/>
