@@ -5,7 +5,6 @@
  */
 namespace Magento\Indexer\Model\Config;
 
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
 
 class Data extends \Magento\Framework\Config\Data
@@ -52,20 +51,5 @@ class Data extends \Magento\Framework\Config\Data
                 $state->delete();
             }
         }
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    protected function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }
