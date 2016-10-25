@@ -79,15 +79,15 @@ class Sftp extends AbstractIo
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
         if ($recursive) {
-            $no_errors = true;
+            $noErrors = true;
             $dirList = explode('/', $dir);
             reset($dirList);
             $currentWorkingDir = $this->_connection->pwd();
-            while ($no_errors && ($dir_item = next($dirList))) {
-                $no_errors = $this->_connection->mkdir($dir_item) && $this->_connection->chdir($dir_item);
+            while ($noErrors && ($dirItem = next($dirList))) {
+                $noErrors = $this->_connection->mkdir($dirItem) && $this->_connection->chdir($dirItem);
             }
             $this->_connection->chdir($currentWorkingDir);
-            return $no_errors;
+            return $noErrors;
         } else {
             return $this->_connection->mkdir($dir);
         }
@@ -105,7 +105,7 @@ class Sftp extends AbstractIo
     public function rmdir($dir, $recursive = false)
     {
         if ($recursive) {
-            $no_errors = true;
+            $noErrors = true;
             $currentWorkingDir = $this->pwd();
             if (!$this->_connection->chdir($dir)) {
                 throw new \Exception("chdir(): {$dir}: Not a directory");
@@ -120,18 +120,18 @@ class Sftp extends AbstractIo
                     if ($this->_connection->chdir($filename)) {
                         // This is a directory
                         $this->_connection->chdir('..');
-                        $no_errors = $no_errors && $this->rmdir($filename, $recursive);
+                        $noErrors = $noErrors && $this->rmdir($filename, $recursive);
                     } else {
-                        $no_errors = $no_errors && $this->rm($filename);
+                        $noErrors = $noErrors && $this->rm($filename);
                     }
                 }
             }
-            $no_errors = $no_errors && ($this->_connection->chdir(
+            $noErrors = $noErrors && ($this->_connection->chdir(
                 $currentWorkingDir
             ) && $this->_connection->rmdir(
                 $dir
             ));
-            return $no_errors;
+            return $noErrors;
         } else {
             return $this->_connection->rmdir($dir);
         }
@@ -168,7 +168,7 @@ class Sftp extends AbstractIo
      */
     public function read($filename, $destination = null)
     {
-        if (is_null($destination)) {
+        if ($destination === null) {
             $destination = false;
         }
         return $this->_connection->get($filename, $destination);
