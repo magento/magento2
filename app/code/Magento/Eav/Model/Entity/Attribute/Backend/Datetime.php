@@ -76,7 +76,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         // unix timestamp given - simply instantiate date object
         if (is_scalar($date) && preg_match('/^[0-9]+$/', $date)) {
             $date = (new \DateTime())->setTimestamp($date);
-        } elseif (!($date instanceof \DateTime)) {
+        } elseif (!($date instanceof \DateTimeInterface)) {
             // normalized format expecting Y-m-d[ H:i:s]  - time is optional
             $date = new \DateTime($date);
         }

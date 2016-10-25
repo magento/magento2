@@ -162,7 +162,7 @@ class Timezone implements TimezoneInterface
 
         if (empty($date)) {
             return new \DateTime('now', new \DateTimeZone($timezone));
-        } elseif ($date instanceof \DateTime) {
+        } elseif ($date instanceof \DateTimeInterface) {
             return $date->setTimezone(new \DateTimeZone($timezone));
         } elseif (!is_numeric($date)) {
             $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
@@ -197,7 +197,7 @@ class Timezone implements TimezoneInterface
     {
         $formatTime = $showTime ? $format : \IntlDateFormatter::NONE;
 
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
 
@@ -260,7 +260,7 @@ class Timezone implements TimezoneInterface
         $timezone = null,
         $pattern = null
     ) {
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
 
@@ -296,7 +296,7 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {

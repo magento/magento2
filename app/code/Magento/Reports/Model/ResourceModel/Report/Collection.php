@@ -114,8 +114,8 @@ class Collection extends \Magento\Framework\Data\Collection
      * Set interval
      * @codeCoverageIgnore
      *
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @return $this
      */
     public function setInterval($fromDate, $toDate)
@@ -168,10 +168,10 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Get interval for a day
      *
-     * @param \DateTime $dateStart
+     * @param \DateTimeInterface $dateStart
      * @return array
      */
-    protected function _getDayInterval(\DateTime $dateStart)
+    protected function _getDayInterval(\DateTimeInterface $dateStart)
     {
         $interval = [
             'period' => $this->_localeDate->formatDateTime(
@@ -188,12 +188,12 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Get interval for a month
      *
-     * @param \DateTime $dateStart
-     * @param \DateTime $dateEnd
+     * @param \DateTimeInterface $dateStart
+     * @param \DateTimeInterface $dateEnd
      * @param bool $firstInterval
      * @return array
      */
-    protected function _getMonthInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
+    protected function _getMonthInterval(\DateTimeInterface $dateStart, \DateTimeInterface $dateEnd, $firstInterval)
     {
         $interval = [];
         $interval['period'] = $dateStart->format('m/Y');
@@ -231,12 +231,12 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Get Interval for a year
      *
-     * @param \DateTime $dateStart
-     * @param \DateTime $dateEnd
+     * @param \DateTimeInterface $dateStart
+     * @param \DateTimeInterface $dateEnd
      * @param bool $firstInterval
      * @return array
      */
-    protected function _getYearInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
+    protected function _getYearInterval(\DateTimeInterface $dateStart, \DateTimeInterface $dateEnd, $firstInterval)
     {
         $interval = [];
         $interval['period'] = $dateStart->format('Y');

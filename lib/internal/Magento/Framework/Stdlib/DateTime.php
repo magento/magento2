@@ -46,7 +46,7 @@ class DateTime
      */
     public function formatDate($date, $includeTime = true)
     {
-        if ($date instanceof \DateTime) {
+        if ($date instanceof \DateTimeInterface) {
             $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
             return $date->format($format);
         } elseif (empty($date)) {
