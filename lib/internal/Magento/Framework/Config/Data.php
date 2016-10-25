@@ -70,20 +70,23 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $serializer;
 
     /**
-     * Constructor
+     * Data constructor
      *
      * @param ReaderInterface $reader
      * @param CacheInterface $cache
-     * @param string $cacheId
+     * @param $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         ReaderInterface $reader,
         CacheInterface $cache,
-        $cacheId
+        $cacheId,
+        SerializerInterface $serializer = null
     ) {
         $this->reader = $reader;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
+        $this->serializer = $serializer ?: $this->getSerializer();
         $this->initData();
     }
 

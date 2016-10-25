@@ -30,26 +30,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mockObjectManager([
-            \Magento\Framework\Api\ExtensionAttributesFactory::class =>
-                $this->getMock(\Magento\Framework\Api\ExtensionAttributesFactory::class, [], [], '', false),
-            \Magento\Framework\Api\AttributeValueFactory::class =>
-                $this->getMock(\Magento\Framework\Api\AttributeValueFactory::class, [], [], '', false)
-        ]);
-
         $this->rule = $this->objectManager->getObject(
             \Magento\CatalogWidget\Model\Rule::class,
             [
                 'conditionsFactory' => $this->combineFactory
             ]
         );
-    }
-
-    protected function tearDown()
-    {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
     }
 
     public function testGetConditionsInstance()
@@ -67,22 +53,4 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->rule->getActionsInstance());
     }
 
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-    }
 }

@@ -43,27 +43,32 @@ class ActionList
     private $serializer;
 
     /**
+     * ActionList constructor
+     *
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param ModuleReader $moduleReader
-     * @param string $actionInterface
+     * @param $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         ModuleReader $moduleReader,
         $actionInterface = \Magento\Framework\App\ActionInterface::class,
         $cacheKey = 'app_action_list',
-        $reservedWords = []
+        $reservedWords = [],
+        SerializerInterface $serializer = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
         $data = $cache->load($cacheKey);
         if (!$data) {
             $this->actions = $moduleReader->getActionFiles();
-            $cache->save($this->getSerializer()->serialize($this->actions), $cacheKey);
+            $cache->save($this->serializer->serialize($this->actions), $cacheKey);
         } else {
-            $this->actions = $this->getSerializer()->unserialize($data);
+            $this->actions = $this->serializer->unserialize($data);
         }
     }
 
@@ -98,19 +103,5 @@ class ActionList
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
         }
         return null;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }

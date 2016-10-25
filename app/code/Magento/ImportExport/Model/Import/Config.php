@@ -5,19 +5,25 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Config extends \Magento\Framework\Config\Data implements \Magento\ImportExport\Model\Import\ConfigInterface
 {
     /**
-     * @param \Magento\ImportExport\Model\Import\Config\Reader $reader
+     * Config constructor
+     *
+     * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\ImportExport\Model\Import\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'import_config_cache'
+        $cacheId = 'import_config_cache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
     /**

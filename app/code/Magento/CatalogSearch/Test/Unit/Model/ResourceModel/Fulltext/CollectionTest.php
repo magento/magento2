@@ -83,11 +83,6 @@ class CollectionTest extends BaseCollectionTest
         $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
-        $this->mockObjectManager(
-            [
-                ProductLimitationFactory::class => $productLimitationFactoryMock,
-            ]
-        );
 
         $this->temporaryStorage = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class)
             ->disableOriginalConstructor()
@@ -106,7 +101,8 @@ class CollectionTest extends BaseCollectionTest
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
-                'temporaryStorageFactory' => $temporaryStorageFactory
+                'temporaryStorageFactory' => $temporaryStorageFactory,
+                'productLimitationFactory' => $productLimitationFactoryMock
             ]
         );
 
@@ -229,24 +225,5 @@ class CollectionTest extends BaseCollectionTest
             ->disableOriginalConstructor()
             ->getMock();
         return $filter;
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

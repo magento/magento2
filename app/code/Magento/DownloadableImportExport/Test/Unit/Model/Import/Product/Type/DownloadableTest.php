@@ -710,10 +710,6 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             ->getMock(\Magento\Framework\EntityManager\MetadataPool::class, ['getLinkField'], [], '', false);
         $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
 
-        $this->mockObjectManager([
-            \Magento\Framework\EntityManager\MetadataPool::class => $metadataPoolMock
-        ]);
-
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
             \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
@@ -722,7 +718,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'resource' => $this->resourceMock,
                 'params' => $this->paramsArray,
                 'uploaderHelper' => $this->uploaderHelper,
-                'downloadableHelper' => $this->downloadableHelper
+                'downloadableHelper' => $this->downloadableHelper,
+                'metadataPool' => $metadataPoolMock,
             ]
         );
         $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
@@ -734,33 +731,6 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->setExpectedException('\Exception');
         $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
         $this->downloadableModelMock->saveData();
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**

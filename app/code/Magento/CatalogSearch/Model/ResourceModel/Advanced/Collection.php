@@ -9,10 +9,12 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Collection Advanced
@@ -54,7 +56,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $filterBuilder;
 
     /**
-     * Collection constructor.
+     * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -77,8 +80,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Zend_Db_Adapter_Abstract $connection
-     * @param SearchResultFactory $searchResultFactory
+     * @param null $connection
+     * @param SearchResultFactory|null $searchResultFactory
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,7 +111,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         $connection = null,
-        SearchResultFactory $searchResultFactory = null
+        SearchResultFactory $searchResultFactory = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -134,7 +142,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection
+            $connection,
+            $productLimitationFactory,
+            $metadataPool
         );
     }
 

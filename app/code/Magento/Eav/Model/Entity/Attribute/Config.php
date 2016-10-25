@@ -5,20 +5,25 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Config extends \Magento\Framework\Config\Data
 {
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader
+     * Config constructor
+     *
+     * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
-     * @codeCoverageIgnore
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = "eav_attributes"
+        $cacheId = "eav_attributes",
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
     /**

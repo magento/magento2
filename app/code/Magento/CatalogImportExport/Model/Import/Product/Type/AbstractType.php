@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Import entity abstract product type model
@@ -142,22 +143,27 @@ abstract class AbstractType
     private $productEntityLinkField;
 
     /**
+     * AbstractType constructor
+     *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param array $params
+     * @param MetadataPool|null $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
-        array $params
+        array $params,
+        MetadataPool $metadataPool = null
     ) {
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
         $this->_resource = $resource;
         $this->_connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool ?: $this->getMetadataPool();
         if ($this->isSuitable()) {
             if (!isset($params[0])
                 || !isset($params[1])
@@ -563,7 +569,7 @@ abstract class AbstractType
     protected function getProductEntityLinkField()
     {
         if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
+            $this->productEntityLinkField = $this->metadataPool
                 ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
         }

@@ -5,19 +5,25 @@
  */
 namespace Magento\Catalog\Model\ProductTypes;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
 {
     /**
-     * @param \Magento\Catalog\Model\ProductTypes\Config\Reader $reader
+     * Config constructor
+     *
+     * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Catalog\Model\ProductTypes\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'product_types_config'
+        $cacheId = 'product_types_config',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
     /**
