@@ -39,37 +39,12 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $addressValidatorMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressRepositoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfigMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $shippingAddressMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $totalsCollectorMock;
 
     /**
      * @var \Magento\Checkout\Model\ShippingInformationManagement
@@ -106,9 +81,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $shippingMock;
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -122,18 +94,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->cartTotalsRepositoryMock = $this->getMock(\Magento\Quote\Api\CartTotalRepositoryInterface::class);
         $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->addressValidatorMock = $this->getMock(
-            \Magento\Quote\Model\QuoteAddressValidator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->addressRepositoryMock = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->totalsCollectorMock =
-            $this->getMock(\Magento\Quote\Model\Quote\TotalsCollector::class, [], [], '', false);
         $this->shippingAddressMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address::class,
             [
@@ -184,16 +144,14 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingFactoryMock =
             $this->getMock(\Magento\Quote\Model\ShippingFactory::class, ['create'], [], '', false);
 
-        $this->model = new \Magento\Checkout\Model\ShippingInformationManagement(
-            $this->paymentMethodManagementMock,
-            $this->paymentDetailsFactoryMock,
-            $this->cartTotalsRepositoryMock,
-            $this->quoteRepositoryMock,
-            $this->addressValidatorMock,
-            $this->loggerMock,
-            $this->addressRepositoryMock,
-            $this->scopeConfigMock,
-            $this->totalsCollectorMock
+        $this->model = $this->objectManager->getObject(
+            \Magento\Checkout\Model\ShippingInformationManagement::class,
+            [
+                'paymentMethodManagement' => $this->paymentMethodManagementMock,
+                'paymentDetailsFactory' => $this->paymentDetailsFactoryMock,
+                'cartTotalsRepository' => $this->cartTotalsRepositoryMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
+            ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
             $this->model,
