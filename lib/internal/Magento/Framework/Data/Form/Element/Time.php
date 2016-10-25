@@ -52,16 +52,16 @@ class Time extends AbstractElement
     {
         $this->addClass('select admin__control-select');
 
-        $value_hrs = 0;
-        $value_min = 0;
-        $value_sec = 0;
+        $valueHrs = 0;
+        $valueMin = 0;
+        $valueSec = 0;
 
         if ($value = $this->getValue()) {
             $values = explode(',', $value);
             if (is_array($values) && count($values) == 3) {
-                $value_hrs = $values[0];
-                $value_min = $values[1];
-                $value_sec = $values[2];
+                $valueHrs = $values[0];
+                $valueMin = $values[1];
+                $valueSec = $values[2];
             }
         }
 
@@ -73,7 +73,7 @@ class Time extends AbstractElement
         ) . '>' . "\n";
         for ($i = 0; $i < 24; $i++) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
-            $html .= '<option value="' . $hour . '" ' . ($value_hrs ==
+            $html .= '<option value="' . $hour . '" ' . ($valueHrs ==
                 $i ? 'selected="selected"' : '') . '>' . $hour . '</option>';
         }
         $html .= '</select>' . "\n";
@@ -85,7 +85,7 @@ class Time extends AbstractElement
         ) . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
-            $html .= '<option value="' . $hour . '" ' . ($value_min ==
+            $html .= '<option value="' . $hour . '" ' . ($valueMin ==
                 $i ? 'selected="selected"' : '') . '>' . $hour . '</option>';
         }
         $html .= '</select>' . "\n";
@@ -97,7 +97,7 @@ class Time extends AbstractElement
         ) . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
-            $html .= '<option value="' . $hour . '" ' . ($value_sec ==
+            $html .= '<option value="' . $hour . '" ' . ($valueSec ==
                 $i ? 'selected="selected"' : '') . '>' . $hour . '</option>';
         }
         $html .= '</select>' . "\n";
