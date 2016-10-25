@@ -249,7 +249,7 @@ define([
                 return 'document';
             }
 
-            type = file['type'].split('/')[0] || 'document';
+            type = file['type'].split('/')[0];
 
             return (type !== 'image' && type !== 'video') ? 'document' : type;
         },
