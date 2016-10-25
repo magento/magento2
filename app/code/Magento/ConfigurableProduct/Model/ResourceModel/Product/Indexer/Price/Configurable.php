@@ -189,7 +189,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         )->group(
             ['parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
-        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
+        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'e.row_id', 0, null, true);
         $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
 
         $select->columns(
