@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'NonExistentService'
             ]
         );
-        $this->assertEquals(array_replace_recursive($expected, $actual), $actual);
+        $this->assertEquals(array_replace_recursive($actual, $expected), $actual);
     }
 
     public function testGetServiceMethodInfo()

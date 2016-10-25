@@ -11,7 +11,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 
 class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
 {
-    /**
+    /**bootstrap.sh
      * @var ServiceMetadata
      */
     private $serviceMetadata;
@@ -68,7 +68,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
             'description' => 'Interface for managing customers accounts.',
         ];
         $actual = $this->serviceMetadata->getServiceMetadata('customerAccountManagementV1');
-        $this->assertEquals(array_replace_recursive($expected, $actual), $actual);
+        $this->assertEquals(array_replace_recursive($actual, $expected), $actual);
     }
 
     public function testGetRouteMetadata()
@@ -130,6 +130,6 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $actual = $this->serviceMetadata->getRouteMetadata('customerAccountManagementV1');
-        $this->assertEquals(array_replace_recursive($expected, $actual), $actual);
+        $this->assertEquals(array_replace_recursive($actual, $expected), $actual);
     }
 }
