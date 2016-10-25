@@ -19,7 +19,9 @@
         "ext-gd": "*",
         "ext-openssl": "*",
         "lib-libxml": "*",
-        "ext-xsl": "*"
+        "ext-xsl": "*",
+        "zendframework/zend-stdlib": "~2.4.6",
+        "zendframework/zend-http": "~2.4.6"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
