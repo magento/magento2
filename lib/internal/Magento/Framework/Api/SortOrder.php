@@ -31,8 +31,7 @@ class SortOrder extends AbstractSimpleObject
             $this->validateDirection($this->getDirection());
         }
     }
-
-
+    
     /**
      * Get sorting field.
      *
