@@ -202,7 +202,7 @@ class Calculator implements BundleCalculatorInterface
                     $priceList[] =  $this->selectionFactory->create(
                         $bundleProduct,
                         $selection,
-                        $selection->getSelectionQty(),
+                        $bundleProduct->getSelectionQty(),
                         [
                             'useRegularPrice' => $useRegularPrice,
                         ]
@@ -222,7 +222,7 @@ class Calculator implements BundleCalculatorInterface
                 $priceList[] =  $this->selectionFactory->create(
                     $bundleProduct,
                     $selection,
-                    $selection->getSelectionQty(),
+                    $bundleProduct->getSelectionQty(),
                     [
                         'useRegularPrice' => $useRegularPrice,
                     ]
