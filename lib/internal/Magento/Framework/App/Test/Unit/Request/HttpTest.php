@@ -281,7 +281,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -349,8 +348,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
-            ->willReturn($configOffloadHeader);
+            ->with(
+                \Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )->willReturn($configOffloadHeader);
 
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'sslOffloadHeader', null);
