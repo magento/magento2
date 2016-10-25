@@ -16,10 +16,10 @@
             <data name="address/dataset" xsi:type="string">US_address_1</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">United States Postal Service</data>
-            <data name="shipping/shipping_method" xsi:type="string">Priority Mail 1-Day</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Priority Mail 1-Day</data>
+            <data name="shipping/shipping_method" xsi:type="string">Priority Mail 1-Day Small Flat Rate Box</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Priority Mail 1-Day Small Flat Rate Box</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA</data>
+            <data name="configData" xsi:type="string">checkmo, usps, shipping_origin_US_CA, usps_container_sm_flat_rate_box</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
