@@ -262,11 +262,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory
-     */
-    private $productLimitationFiltersFactory;
-
-    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
