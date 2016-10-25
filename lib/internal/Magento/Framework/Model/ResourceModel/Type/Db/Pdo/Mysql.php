@@ -29,7 +29,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected $connectionConfig;
 
     /**
-     * @var
+     * @var SelectFactory
      */
     protected $selectFactory;
 
