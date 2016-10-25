@@ -126,7 +126,7 @@ abstract class AbstractType
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $_connection;
+    protected $connection;
 
     /**
      * Product metadata pool

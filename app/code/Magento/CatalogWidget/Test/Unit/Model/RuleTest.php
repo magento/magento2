@@ -52,5 +52,4 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->rule->getActionsInstance());
     }
-
 }

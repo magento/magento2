@@ -357,7 +357,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $entityTable = $metaDataPool->getEntityTable();
             $this->getSelect()
                 ->join(
-                    ['product_entity_table' => $entityTable], "links.product_id = product_entity_table.$linkField", []
+                    ['product_entity_table' => $entityTable],
+                    "links.product_id = product_entity_table.$linkField",
+                    []
                 );
         }
     }
