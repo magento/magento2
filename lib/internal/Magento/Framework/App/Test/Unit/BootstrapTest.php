@@ -91,7 +91,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             [\Magento\Framework\App\MaintenanceMode::class, $this->maintenanceMode],
             [\Magento\Framework\Filesystem::class, $filesystem],
             [\Magento\Framework\App\DeploymentConfig::class, $this->deploymentConfig],
-            ['Psr\Log\LoggerInterface', $this->logger],
+            [\Psr\Log\LoggerInterface::class, $this->logger],
         ];
 
         $this->objectManager->expects($this->any())->method('get')
