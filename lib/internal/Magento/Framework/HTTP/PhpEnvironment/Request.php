@@ -418,7 +418,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         return $this->initialRequestSecure($this->SslOffloadHeader());
     }
 
-    /***
+    /**
      * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
@@ -563,7 +563,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         }
         return $post;
     }
-
 
     /**
      * Set POST parameters
@@ -779,7 +778,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         $this->requestUri = $requestUri;
         return $this;
     }
-
 
     /**
      * Get base url
