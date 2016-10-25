@@ -88,7 +88,7 @@ class LockAdminUserWhenEditingUserTest extends Injectable
         $attempts,
         User $customAdmin,
         User $user,
-        $configData 
+        $configData
     ) {
         $this->configData = $configData;
 
