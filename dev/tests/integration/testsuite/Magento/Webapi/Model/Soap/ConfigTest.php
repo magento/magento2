@@ -1,34 +1,32 @@
 <?php
 /**
- * Config helper Unit tests.
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Webapi\Model\Soap;
 
 // @codingStandardsIgnoreFile
 
-/**
- * Class implements tests for \Magento\Webapi\Model\Soap\Config class.
- */
-namespace Magento\Webapi\Test\Unit\Model\Soap;
-
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Webapi\Model\Soap\Config */
-    protected $_soapConfig;
+    /**
+     * @var \Magento\Webapi\Model\Soap\Config
+     */
+    private $_soapConfig;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
-    protected $objectManager;
+    /**
+     * @var \Magento\TestFramework\Helper\Bootstrap
+     */
+    private $objectManager;
 
     /**
      * Set up helper.
      */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $typeProcessor = $this->objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class);
+        $typeProcessor = $this->objectManager->create(\Magento\Framework\Reflection\TypeProcessor::class);
 
         $objectManagerMock = $this->getMockBuilder(
             \Magento\Framework\App\ObjectManager::class
@@ -97,13 +95,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Webapi\Model\Config($cacheMock, $readerMock);
 
         /** @var $config \Magento\Webapi\Model\ServiceMetadata */
-        $serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata(
-            $config,
-            $cacheMock,
-            $classReflection,
-            $typeProcessor);
+        $serviceMetadata = $this->objectManager->create(
+            \Magento\Webapi\Model\ServiceMetadata::class,
+            [
+                'config' => $config,
+                'cache' => $cacheMock,
+                'classReflector' => $classReflection,
+                'typeProcessor' => $typeProcessor
+            ]
+        );
 
-        $this->_soapConfig = $this->objectManager->getObject(
+        $this->_soapConfig = $this->objectManager->create(
             \Magento\Webapi\Model\Soap\Config::class,
             [
                 'objectManager' => $objectManagerMock,
@@ -111,7 +113,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'serviceMetadata' => $serviceMetadata,
             ]
         );
-        parent::setUp();
     }
 
     public function testGetRequestedSoapServices()
@@ -162,5 +163,3 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $soapOperation);
     }
 }
-
-require_once realpath(__DIR__ . '/../../_files/test_interfaces.php');
