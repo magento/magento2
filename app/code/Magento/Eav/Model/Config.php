@@ -390,6 +390,7 @@ class Config
             $entityType
         )->getData();
 
+        $this->_attributeData[$entityTypeCode] = [];
         foreach ($attributes as $attribute) {
             if (empty($attribute['attribute_model'])) {
                 $attribute['attribute_model'] = $entityType->getAttributeModel();
