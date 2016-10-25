@@ -6,6 +6,7 @@
 
 namespace Magento\Rss\Test\Unit\Model;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class RssTest extends \PHPUnit_Framework_TestCase
@@ -40,17 +41,23 @@ class RssTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheInterface;
+    private $cacheMock;
+
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     protected function setUp()
     {
-        $this->cacheInterface = $this->getMock(\Magento\Framework\App\CacheInterface::class);
-
+        $this->cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rss = $this->objectManagerHelper->getObject(
             \Magento\Rss\Model\Rss::class,
             [
-                'cache' => $this->cacheInterface
+                'cache' => $this->cacheMock,
+                'serializer' => $this->serializerMock
             ]
         );
     }
@@ -64,8 +71,9 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->rss->setDataProvider($dataProvider);
 
-        $this->cacheInterface->expects($this->once())->method('load')->will($this->returnValue(false));
-        $this->cacheInterface->expects($this->once())->method('save')->will($this->returnValue(true));
+        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(false));
+        $this->cacheMock->expects($this->once())->method('save')->will($this->returnValue(true));
+        $this->serializerMock->expects($this->once())->method('serialize')->willReturn('serializedData');
 
         $this->assertEquals($this->feedData, $this->rss->getFeeds());
     }
@@ -79,9 +87,12 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->rss->setDataProvider($dataProvider);
 
-        $this->cacheInterface->expects($this->once())->method('load')
-            ->will($this->returnValue(serialize($this->feedData)));
-        $this->cacheInterface->expects($this->never())->method('save');
+        $this->cacheMock->expects($this->once())->method('load')
+            ->will($this->returnValue('serializedData'));
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($this->feedData);
+        $this->cacheMock->expects($this->never())->method('save');
 
         $this->assertEquals($this->feedData, $this->rss->getFeeds());
     }
