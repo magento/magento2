@@ -6,17 +6,19 @@
 
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin;
 
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments;
+
 class IncompatibleArgumentsType
 {
     /**
-     * @param \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject
+     * @param ItemWithArguments $subject
      * @param array $names
      * @return int
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject,
+        ItemWithArguments $subject,
         array $names
     ) {
         return count($names);
