@@ -96,6 +96,9 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($servicesConfig, $this->serviceMetadata->getServicesConfig());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetServicesConfigNoCache()
     {
         $servicesConfig = [
@@ -252,6 +255,9 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($routesConfig, $this->serviceMetadata->getRoutesConfig());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetRoutesConfigNoCache()
     {
         $servicesConfig = [
@@ -460,5 +466,4 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
             ['Foo\\BarV1Interface', 'V1'] // Missed module and Service
         ];
     }
-
 }
