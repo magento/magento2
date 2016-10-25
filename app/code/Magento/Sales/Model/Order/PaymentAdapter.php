@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order;
 
 /**
  * Payment adapter.
+ *
+ * @api
  */
 class PaymentAdapter implements PaymentAdapterInterface
 {
