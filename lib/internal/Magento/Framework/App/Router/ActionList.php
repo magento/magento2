@@ -43,11 +43,16 @@ class ActionList
     private $serializer;
 
     /**
+     * @var string
+     */
+    private $actionInterface;
+
+    /**
      * ActionList constructor
      *
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param ModuleReader $moduleReader
-     * @param $actionInterface
+     * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
      * @param SerializerInterface|null $serializer

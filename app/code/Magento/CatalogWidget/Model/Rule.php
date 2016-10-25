@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogWidget\Model;
+
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-
 
 /**
  * Class Rule

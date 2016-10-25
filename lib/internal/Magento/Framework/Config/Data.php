@@ -74,7 +74,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      *
      * @param ReaderInterface $reader
      * @param CacheInterface $cache
-     * @param $cacheId
+     * @param string $cacheId
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
