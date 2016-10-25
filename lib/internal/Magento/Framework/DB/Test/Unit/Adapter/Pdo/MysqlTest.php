@@ -52,12 +52,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-//        StringUtils $string,
-//        DateTime $dateTime,
-//        LoggerInterface $logger,
-//        SelectFactory $selectFactory,
-//        array $config = []
+        
         $this->_mockAdapter = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['beginTransaction', 'getTransactionLevel'],
