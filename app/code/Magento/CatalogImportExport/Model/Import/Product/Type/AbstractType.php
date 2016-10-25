@@ -126,7 +126,7 @@ abstract class AbstractType
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $connection;
+    protected $_connection;
 
     /**
      * Product metadata pool
@@ -162,7 +162,7 @@ abstract class AbstractType
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
         $this->_resource = $resource;
-        $this->_connection = $resource->getConnection();
+        $this->connection = $resource->getConnection();
         $this->metadataPool = $metadataPool ?: $this->getMetadataPool();
         if ($this->isSuitable()) {
             if (!isset($params[0])
@@ -252,8 +252,8 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entityId = $this->_entityModel->getEntityTypeId();
-        $entityAttributes = $this->_connection->fetchAll(
-            $this->_connection->select()->from(
+        $entityAttributes = $this->connection->fetchAll(
+            $this->connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
             )->joinLeft(
@@ -261,7 +261,7 @@ abstract class AbstractType
                 'set.attribute_set_id = attr.attribute_set_id',
                 ['set.attribute_set_name']
             )->where(
-                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
+                $this->connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
             )
         );
         $absentKeys = [];
