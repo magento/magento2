@@ -7,16 +7,7 @@ app/code/Magento/Authorizenet/view/frontend/web/js/view/payment/authorizenet.js
 app/code/Magento/Authorizenet/view/frontend/web/js/view/payment/method-renderer/authorizenet-directpost.js
 app/code/Magento/Backend/view/adminhtml/web/js/bootstrap/editor.js
 app/code/Magento/Braintree/view/adminhtml/requirejs-config.js
-app/code/Magento/Braintree/view/adminhtml/web/js/cc-data.js
-app/code/Magento/Braintree/view/adminhtml/web/js/cc-form.js
 app/code/Magento/Braintree/view/frontend/requirejs-config.js
-app/code/Magento/Braintree/view/frontend/web/js/braintree-paypal-shortcut.js
-app/code/Magento/Braintree/view/frontend/web/js/cc-data.js
-app/code/Magento/Braintree/view/frontend/web/js/cc-edit-form.js
-app/code/Magento/Braintree/view/frontend/web/js/cc-form.js
-app/code/Magento/Braintree/view/frontend/web/js/view/payment/braintree-methods.js
-app/code/Magento/Braintree/view/frontend/web/js/view/payment/method-renderer/braintree-paypal.js
-app/code/Magento/Braintree/view/frontend/web/js/view/payment/method-renderer/cc-form.js
 app/code/Magento/Bundle/view/adminhtml/web/js/bundle-product.js
 app/code/Magento/Bundle/view/base/web/js/price-bundle.js
 app/code/Magento/Bundle/view/frontend/requirejs-config.js

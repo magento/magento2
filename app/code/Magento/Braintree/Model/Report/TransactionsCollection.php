@@ -6,6 +6,7 @@
 namespace Magento\Braintree\Model\Report;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
@@ -26,7 +27,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Braintree\Model\Report\Row\TransactionMap';
+    protected $_itemObjectClass = TransactionMap::class;
 
     /**
      * @var array

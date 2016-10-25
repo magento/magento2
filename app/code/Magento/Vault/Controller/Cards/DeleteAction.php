@@ -133,7 +133,7 @@ class DeleteAction extends CardsManagement
     private function createSuccessMessage()
     {
         $this->messageManager->addSuccessMessage(
-            __('Credit Card was successfully removed')
+            __('Stored Payment Method was successfully removed')
         );
         return $this->_redirect('vault/cards/listaction');
     }

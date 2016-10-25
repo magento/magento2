@@ -57,10 +57,7 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
         }
 
         $quote = $paymentModel->getQuote();
-        $customerId = $quote->getCustomer()->getId();
-        if ($customerId === null) {
-            return;
-        }
+        $customerId = (int) $quote->getCustomer()->getId();
 
         $paymentToken = $this->paymentTokenManagement->getByPublicHash($tokenPublicHash, $customerId);
         if ($paymentToken === null) {

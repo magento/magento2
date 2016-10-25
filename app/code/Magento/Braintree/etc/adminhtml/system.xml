@@ -35,7 +35,7 @@
                         </requires>
                     </field>
                     <field id="braintree_cc_vault_active" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Vault enabled</label>
+                        <label>Vault Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_cc_vault/active</config_path>
                         <requires>
@@ -153,6 +153,14 @@
                             <config_path>payment/braintree_paypal/title</config_path>
                             <comment>It is recommended to set this value to "PayPal" per store views.</comment>
                         </field>
+                        <field id="braintree_paypal_vault_active" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Vault Enabled</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree_paypal_vault/active</config_path>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
+                        </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
                             <frontend_class>validate-number</frontend_class>
@@ -200,6 +208,11 @@
                             <config_path>payment/braintree_paypal/display_on_shopping_cart</config_path>
                             <comment>Also affects mini-shopping cart.</comment>
                         </field>
+                        <field id="skip_order_review" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Skip Order Review</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree_paypal/skip_order_review</config_path>
+                        </field>
                     </group>
                     <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">
                         <label>3D Secure Verification Settings</label>
@@ -223,6 +236,36 @@
                             <source_model>Magento\Braintree\Model\Adminhtml\System\Config\Country</source_model>
                             <can_be_empty>1</can_be_empty>
                             <config_path>payment/braintree/verify_specific_countries</config_path>
+                        </field>
+                    </group>
+                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Dynamic Descriptors</label>
+                        <comment><![CDATA[Dynamic descriptors are sent on a per-transaction basis and define what will appear on your customers credit card statements for a specific purchase.
+                            The clearer the description of your product, the less likely customers will issue chargebacks due to confusion or non-recognition.
+                            Dynamic descriptors are not enabled on all accounts by default. If you receive a validation error of 92203 or if your dynamic descriptors are not displaying as expected,
+                            please <a href="mailto:support@getbraintree.com">Braintree Support</a>.]]></comment>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Name</label>
+                            <config_path>payment/braintree/descriptor_name</config_path>
+                            <comment>
+                                The value in the business name field of a customer's statement. Company name/DBA section must be either 3, 7 or 12 characters
+                                and the product descriptor can be up to 18, 14, or 9 characters respectively (with an * in between for a total descriptor name of 22 characters).
+                            </comment>
+                        </field>
+                        <field id="phone" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Phone</label>
+                            <config_path>payment/braintree/descriptor_phone</config_path>
+                            <comment>
+                                The value in the phone number field of a customer's statement. Phone must be 10-14 characters and can only contain numbers, dashes, parentheses and periods.
+                            </comment>
+                        </field>
+                        <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>URL</label>
+                            <config_path>payment/braintree/descriptor_url</config_path>
+                            <comment>
+                                The value in the URL/web address field of a customer's statement. The URL must be 13 characters or shorter.
+                            </comment>
                         </field>
                     </group>
                 </group>

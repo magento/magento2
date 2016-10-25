@@ -34,22 +34,28 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $this->registryMock = $this->getMock('Magento\Framework\Registry');
-        $this->paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', ['getMethodInstance'], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class);
+        $this->paymentHelperMock = $this->getMock(
+            \Magento\Payment\Helper\Data::class,
+            ['getMethodInstance'],
+            [],
+            '',
+            false
+        );
         $this->encryptorInterfaceMock = $this->getMock(
-            'Magento\Framework\Encryption\EncryptorInterface',
+            \Magento\Framework\Encryption\EncryptorInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->methodInstanceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $this->methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->info = $this->objectManagerHelper->getObject(
-            'Magento\Payment\Model\Info',
+            \Magento\Payment\Model\Info::class,
             [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
@@ -138,7 +144,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->info->setData('method', false);
         $this->info->getMethodInstance();
     }
-    
+
     public function testGetMethodInstanceRequestedMethod()
     {
         $code = 'real_method';

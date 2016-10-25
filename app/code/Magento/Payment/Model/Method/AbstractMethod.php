@@ -70,12 +70,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Form';
+    protected $_formBlockType = \Magento\Payment\Block\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info';
+    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
     /**
      * Payment Method feature
