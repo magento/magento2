@@ -12,8 +12,8 @@ return [
             'primary' => 'first',
             'view_id' => 'catalogsearch_fulltext',
             'action_class' => \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
-            'title' => __('Catalog Search')->__toString(),
-            'description' => __('Rebuild Catalog product fulltext search index')->__toString(),
+            'title' => __('Catalog Search'),
+            'description' => __('Rebuild Catalog product fulltext search index'),
             'fieldsets' =>
                 [
                     [

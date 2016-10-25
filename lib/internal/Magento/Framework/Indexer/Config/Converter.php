@@ -212,7 +212,7 @@ class Converter implements ConverterInterface
     {
         $value = $node->nodeValue;
         if ($this->getAttributeValue($node, 'translate') == 'true') {
-            $value = (new \Magento\Framework\Phrase($value))->__toString();
+            $value = new \Magento\Framework\Phrase($value);
         }
         return $value;
     }
