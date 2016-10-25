@@ -944,7 +944,11 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $options = [];
         foreach ($optionsData as $optionData) {
-            $customOption = $customOptionFactory->create(['data' => $this->getFixtureForProductCustomOption($optionData)]);
+            $customOption = $customOptionFactory->create(
+                [
+                    'data' => $this->getFixtureForProductCustomOption($optionData)
+                ]
+            );
             $customOption->setProductSku($bundleProduct->getSku());
             $customOption->setOptionId(null);
 

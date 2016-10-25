@@ -94,101 +94,83 @@ class DynamicBundleWithTierPriceCalculatorTest extends \PHPUnit_Framework_TestCa
     public function getTestCases()
     {
         return [
-
             'Testing product price with tier price and sub items Configuration #1' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * 10
                     'maximalPrice' => 5
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #2' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
-
                     // 0.5 * 2 * 10
                     'maximalPrice' => 10
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #3' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * (1 * 10 + 3 * 20)
                     'maximalPrice' => 35
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #4' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * (1 * 10 + 3 * 20)
                     'maximalPrice' => 35
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #5' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * 3 * 20
                     'maximalPrice' => 30
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #6' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
-
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
                     'maximalPrice' => 65
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #7' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
-
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
                     'maximalPrice' => 65
                 ]
             ],
-
             'Testing product price with tier price and sub items Configuration #8' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
-
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
                     'maximalPrice' => 65
                 ]
             ],
-
             'Testing price for dynamic bundle product with tier price on it and on sub item' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategyConfiguration10(),
                 'expectedResults' => [
                     // 0.5 * 1 * 2.5
                     'minimalPrice' => 1.25,
-
                     // 0.5 * 3 * 20
                     'maximalPrice' => 30
                 ]

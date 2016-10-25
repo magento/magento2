@@ -132,7 +132,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with fixed sub items, fixed options and without any discounts
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 110 + 1 * 20 + 100
@@ -148,7 +149,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with percent sub items, percent options and without any discounts
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 110 + 110 * 0.2 + 110 * 1
@@ -164,7 +166,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with fixed sub items, percent options and without any discounts
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 110 + 1 * 20 + 110 * 1
@@ -180,7 +183,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with percent sub items, fixed options and without any discounts
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 110 + 110 * 0.2 + 100
@@ -196,7 +200,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and fixed options Configuration #1
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 20) + 100
@@ -212,7 +217,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and percent options Configuration #1
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 110 * 0.2 + 110 * 1)
@@ -228,7 +234,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and percent options Configuration #1
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 20 + 110 * 1)
@@ -244,7 +251,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and fixed options Configuration #1
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 110 * 0.2) + 100
@@ -260,7 +268,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and fixed options Configuration #2
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * 110 + 100
@@ -276,7 +285,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and percent options Configuration #2
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 110 * 1)
@@ -292,7 +302,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and percent options Configuration #2
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110)
@@ -308,7 +319,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and fixed options Configuration #2
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * 110 + 100
@@ -324,7 +336,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and fixed options Configuration #3
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 10) + 100
@@ -340,7 +353,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and percent options Configuration #3
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 110 * 0.1 + 110 * 1)
@@ -356,7 +370,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and percent options Configuration #3
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 10 + 1 * 110)
@@ -372,7 +387,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and fixed options Configuration #3
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 110 * 0.1) + 100
@@ -388,7 +404,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and fixed options Configuration #4
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40) + 100
@@ -404,7 +421,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and percent options Configuration #4
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110)
@@ -420,7 +438,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and percent options Configuration #4
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 1 * 110)
@@ -436,7 +455,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and fixed options Configuration #4
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4) + 100
@@ -452,7 +472,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and fixed options Configuration #5
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40) + 100
@@ -468,7 +489,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and percent options Configuration #5
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110)
@@ -484,7 +506,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and percent options Configuration #5
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 110 * 1)
@@ -500,7 +523,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and fixed options Configuration #5
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4) + 100
@@ -516,7 +540,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and fixed options Configuration #6
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 1 * 20) + 100
@@ -532,7 +557,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and percent options Configuration #6
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110 * 0.2 + 110 * 1)
@@ -548,7 +574,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, fixed sub items and percent options Configuration #6
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 1 * 20 + 1 * 110)
@@ -564,7 +591,8 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
                 with special price, percent sub items and fixed options Configuration #6
             ' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110 * 0.2) + 100
@@ -628,8 +656,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
     public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
         $selectionsPriceType,
         $customOptionsPriceType
-    )
-    {
+    ) {
         $optionsData = [
             [
                 'links' => [
@@ -668,8 +695,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
     public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
         $selectionsPriceType,
         $customOptionsPriceType
-    )
-    {
+    ) {
         $optionsData = [
             [
                 'required' => false,
@@ -710,8 +736,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
     public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
         $selectionsPriceType,
         $customOptionsPriceType
-    )
-    {
+    ) {
         $optionsData = [
             [
                 'links' => [
@@ -757,8 +782,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
     public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
         $selectionsPriceType,
         $customOptionsPriceType
-    )
-    {
+    ) {
         $optionsData = [
             [
                 'type' => 'multi',
@@ -805,8 +829,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
     public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
         $selectionsPriceType,
         $customOptionsPriceType
-    )
-    {
+    ) {
         $optionsData = [
             [
                 'type' => 'radio',
@@ -853,8 +876,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
     public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
         $selectionsPriceType,
         $customOptionsPriceType
-    )
-    {
+    ) {
         $optionsData = [
             [
                 'type' => 'radio',

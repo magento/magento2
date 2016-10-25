@@ -83,117 +83,96 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 'expectedResults' => [
                     // just price from simple1
                     'minimalPrice' => 10,
-
                     // just price from simple1
                     'maximalPrice' => 10
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #1' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * 10
                     'maximalPrice' => 5
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #2' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
-
                     // 0.5 * 2 * 10
                     'maximalPrice' => 10
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #3' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * (1 * 10 + 3 * 20)
                     'maximalPrice' => 35
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #4' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * (1 * 10 + 3 * 20)
                     'maximalPrice' => 35
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #5' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-
                     // 0.5 * 3 * 20
                     'maximalPrice' => 30
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #6' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
-
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
                     'maximalPrice' => 65
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #7' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
-
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
                     'maximalPrice' => 65
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price and sub items Configuration #8' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
-
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
                     'maximalPrice' => 65
                 ]
             ],
-
             'Testing price for dynamic bundle product with sub item product that has special price' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration9(),
                 'expectedResults' => [
                     // 1 * 3.5
                     'minimalPrice' => 3.5,
-
                     // 1 * 20
                     'maximalPrice' => 20
                 ]
             ],
-
             'Testing price for dynamic bundle product with special price on it and on sub item' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration10(),
                 'expectedResults' => [
                     // 0.5 * 1 * 3.5
                     'minimalPrice' => 1.75,
-
                     // 0.5 * 3 * 20
                     'maximalPrice' => 30
                 ]
