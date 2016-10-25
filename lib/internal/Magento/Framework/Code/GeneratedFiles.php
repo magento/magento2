@@ -132,7 +132,6 @@ class GeneratedFiles
         return $enabledCacheTypes;
     }
 
-
     /**
      * Returns path to env.php file
      *
@@ -182,8 +181,7 @@ class GeneratedFiles
      * Enables apppropriate cache types in app/etc/env.php based on the passed in $cacheTypes array
      * TODO: to be removed in scope of MAGETWO-53476
      *
-     * @param string[]
-     *
+     * @param string[] $cacheTypes
      * @return void
      */
     private function enableCacheTypes($cacheTypes)
