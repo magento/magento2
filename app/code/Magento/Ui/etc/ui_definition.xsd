@@ -40,6 +40,7 @@
             <xs:element type="select" name="select"/>
             <xs:element type="multiselect" name="multiselect"/>
             <xs:element type="textarea" name="textarea"/>
+            <xs:element type="fileUploader" name="fileUploader"/>
             <xs:element type="multiline" name="multiline"/>
             <xs:element type="dataTypeText" name="text"/>
             <xs:element type="dataTypeBoolean" name="boolean"/>

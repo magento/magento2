@@ -6,13 +6,16 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ImageProcessor
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageProcessor implements ImageProcessorInterface
 {
@@ -44,7 +47,7 @@ class ImageProcessor implements ImageProcessorInterface
     private $dataObjectHelper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -62,14 +65,14 @@ class ImageProcessor implements ImageProcessorInterface
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param Uploader $uploader
      */
     public function __construct(
         Filesystem $fileSystem,
         ImageContentValidatorInterface $contentValidator,
         DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         Uploader $uploader
     ) {
         $this->filesystem = $fileSystem;
@@ -91,7 +94,7 @@ class ImageProcessor implements ImageProcessorInterface
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
             $dataObjectWithCustomAttributes->getCustomAttributes(),
-            '\Magento\Framework\Api\Data\ImageContentInterface'
+            ImageContentInterface::class
         );
 
         // Return if no images to process
@@ -103,7 +106,7 @@ class ImageProcessor implements ImageProcessorInterface
         /** @var $imageDataObject \Magento\Framework\Api\AttributeValue */
         foreach ($imageDataObjects as $imageDataObject) {
 
-            /** @var $imageContent \Magento\Framework\Api\Data\ImageContentInterface */
+            /** @var $imageContent ImageContentInterface */
             $imageContent = $imageDataObject->getValue();
 
             $filename = $this->processImageContent($entityType, $imageContent);
@@ -121,7 +124,7 @@ class ImageProcessor implements ImageProcessorInterface
                 );
                 if ($previousImageAttribute) {
                     $previousImagePath = $previousImageAttribute->getValue();
-                    if (!empty($previousImagePath)) {
+                    if (!empty($previousImagePath) && ($previousImagePath != $filename)) {
                         @unlink($this->mediaDirectory->getAbsolutePath() . $entityType . $previousImagePath);
                     }
                 }
@@ -142,11 +145,12 @@ class ImageProcessor implements ImageProcessorInterface
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-        $fileName = substr(md5(rand()), 0, 7) . '.' . $imageContent->getName();
-        $tmpDirectory->writeFile($fileName, $fileContent);
+        $fileName = $this->getFileName($imageContent);
+        $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
+        $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
         $fileAttributes = [
-            'tmp_name' => $tmpDirectory->getAbsolutePath() . $fileName,
+            'tmp_name' => $tmpDirectory->getAbsolutePath() . $tmpFileName,
             'name' => $imageContent->getName()
         ];
 
@@ -169,10 +173,23 @@ class ImageProcessor implements ImageProcessorInterface
      */
     protected function getMimeTypeExtension($mimeType)
     {
-        if (isset($this->mimeTypeExtensionMap[$mimeType])) {
-            return $this->mimeTypeExtensionMap[$mimeType];
-        } else {
-            return "";
+        return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
+    }
+
+    /**
+     * @param ImageContentInterface $imageContent
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getFileName($imageContent)
+    {
+        $fileName = $imageContent->getName();
+        if (!pathinfo($fileName, PATHINFO_EXTENSION)) {
+            if (!$imageContent->getType() || !$this->getMimeTypeExtension($imageContent->getType())) {
+                throw new InputException(new Phrase('Cannot recognize image extension.'));
+            }
+            $fileName .= '.' . $this->getMimeTypeExtension($imageContent->getType());
         }
+        return $fileName;
     }
 }
