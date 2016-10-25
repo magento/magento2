@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\TestCase;
+
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Fixture\Role;
 use Magento\Backend\Test\Page\AdminAuthLogin;
+
 /**
  * Preconditions:
  * 1. Create new admin user and assign it to new role.
@@ -34,30 +36,35 @@ class LockAdminUserWhenEditingRoleTest extends Injectable
     const MVP = 'yes';
     const SEVERITY = 'S2';
     /* end tags */
+
     /**
      * UserRoleIndex page.
      *
      * @var UserRoleIndex
      */
     protected $userRoleIndex;
+
     /**
      * UserRoleEditRole page.
      *
      * @var UserRoleEditRole
      */
     protected $userRoleEditRole;
+
     /**
      * Configuration setting.
      *
      * @var string
      */
     protected $configData;
+
     /**
      * Admin login Page.
      *
      * @var AdminAuthLogin
      */
     protected $adminAuthLogin;
+
     /**
      * Setup data for test.
      *
@@ -75,6 +82,7 @@ class LockAdminUserWhenEditingRoleTest extends Injectable
         $this->userRoleEditRole = $userRoleEditRole;
         $this->adminAuthLogin = $adminAuthLogin;
     }
+
     /**
      * Runs Lock admin user when editing existing role test.
      *
@@ -116,6 +124,7 @@ class LockAdminUserWhenEditingRoleTest extends Injectable
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();
     }
+
     /**
      * Clean data after running test.
      *
