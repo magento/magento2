@@ -51,7 +51,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
     protected $esConfig;
 
     /**
-     * @var SerializerInterface
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
