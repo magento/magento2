@@ -62,6 +62,7 @@ class Categories extends AbstractModifier
      * @var CacheInterface
      */
     private $cacheManager;
+
     /**
      * @var SerializerInterface
      */
