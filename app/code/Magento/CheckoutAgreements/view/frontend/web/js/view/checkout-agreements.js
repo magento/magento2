@@ -26,6 +26,17 @@ define(
             modalWindow: null,
 
             /**
+             * build a unique id for the term checkbox
+             *
+             * @param parents
+             * @param agreementId
+             */
+            getCheckboxId: function(parents, agreementId) {
+              var paymentMethodName = (parents[2].item) ? parents[2].item.method : '';
+              return 'agreement_' + paymentMethodName + '_' + agreementId;
+            },
+
+            /**
              * Checks if agreement required
              *
              * @param element

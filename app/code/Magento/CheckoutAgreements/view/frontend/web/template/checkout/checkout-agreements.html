@@ -11,12 +11,12 @@
             <div class="checkout-agreement">
                 <input type="checkbox"
                        data-bind="attr: {
-                                    'id': 'agreement_' + agreementId,
+                                    'id': $parent.getCheckboxId($parents, agreementId),
                                     'name': 'agreement[' + agreementId + ']',
                                     'value': agreementId
                                     }"
                        data-validate="{required:true}" />
-                <label data-bind="attr: {'for': 'agreement_' + agreementId}">
+                <label data-bind="attr: {'for': $parent.getCheckboxId($parents, agreementId)}">
                     <button type="button"
                             class="action action-show"
                             data-bind="click: function(data, event) { return $parent.showContent(data, event) }"
@@ -39,4 +39,4 @@
             <div class="checkout-agreements-item-content" data-bind="html: modalContent"></div>
         </div>
     </div>
-</div>
+  </div>
