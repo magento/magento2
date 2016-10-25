@@ -7,6 +7,10 @@ namespace Magento\Framework\Serialize\Serializer;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class for serializing data to json string and unserializing json string to data
+ *
+ */
 class Json implements SerializerInterface
 {
     /**
