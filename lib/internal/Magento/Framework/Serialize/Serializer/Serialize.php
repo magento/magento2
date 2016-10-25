@@ -7,6 +7,11 @@ namespace Magento\Framework\Serialize\Serializer;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Less secure than Json implementation, but gives higher performance on big arrays. Does not unserialize objects on
+ * PHP 7. Using this implementation directly is discouraged as it may lead to security vulnerabilities, especially on
+ * older versions of PHP
+ */
 class Serialize implements SerializerInterface
 {
     /**
