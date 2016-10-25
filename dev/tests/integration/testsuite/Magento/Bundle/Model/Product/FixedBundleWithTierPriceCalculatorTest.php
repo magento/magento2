@@ -16,7 +16,7 @@ use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
  * @magentoAppArea frontend
  */
-class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
+class FixedBundleWithTierPriceCalculatorTest extends \PHPUnit_Framework_TestCase
 {
 
     const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';
@@ -39,7 +39,6 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
             'value' => 50
         ]
     ];
-
 
     private $fixtureForProductOption = [
         'title' => 'Some title',
@@ -136,7 +135,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and fixed options Configuration #1' => [
                 'strategy' => $this->getProductConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 20) + 100
@@ -149,7 +149,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and percent options Configuration #1' => [
                 'strategy' => $this->getProductConfiguration1(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 110 * 0.2 + 110 * 1)
@@ -162,7 +163,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #1' => [
                 'strategy' => $this->getProductConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 20 + 110 * 1)
@@ -175,7 +177,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #1' => [
                 'strategy' => $this->getProductConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 20 + 110 * 1)
@@ -188,7 +191,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and fixed options Configuration #1' => [
                 'strategy' => $this->getProductConfiguration1(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 110 * 0.2) + 100
@@ -201,7 +205,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and fixed options Configuration #2' => [
                 'strategy' => $this->getProductConfiguration2(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * 110 + 100
@@ -214,7 +219,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and percent options Configuration #2' => [
                 'strategy' => $this->getProductConfiguration2(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 110 * 1)
@@ -227,7 +233,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #2' => [
                 'strategy' => $this->getProductConfiguration2(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110)
@@ -240,7 +247,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and fixed options Configuration #2' => [
                 'strategy' => $this->getProductConfiguration2(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * 110 + 100
@@ -253,7 +261,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and fixed options Configuration #3' => [
                 'strategy' => $this->getProductConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 10) + 100
@@ -266,7 +275,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and percent options Configuration #3' => [
                 'strategy' => $this->getProductConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 110 * 0.1 + 110 * 1)
@@ -279,7 +289,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #3' => [
                 'strategy' => $this->getProductConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 10 + 1 * 110)
@@ -292,7 +303,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and fixed options Configuration #3' => [
                 'strategy' => $this->getProductConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 3 * 110 * 0.1) + 100
@@ -305,7 +317,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and fixed options Configuration #4' => [
                 'strategy' => $this->getProductConfiguration4(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40) + 100
@@ -318,7 +331,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and percent options Configuration #4' => [
                 'strategy' => $this->getProductConfiguration4(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110)
@@ -331,7 +345,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #4' => [
                 'strategy' => $this->getProductConfiguration4(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 1 * 110)
@@ -344,7 +359,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and fixed options Configuration #4' => [
                 'strategy' => $this->getProductConfiguration4(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4) + 100
@@ -357,7 +373,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and fixed options Configuration #5' => [
                 'strategy' => $this->getProductConfiguration5(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40) + 100
@@ -370,7 +387,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and percent options Configuration #5' => [
                 'strategy' => $this->getProductConfiguration5(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110)
@@ -383,7 +401,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #5' => [
                 'strategy' => $this->getProductConfiguration5(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 110 * 1)
@@ -396,7 +415,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and fixed options Configuration #5' => [
                 'strategy' => $this->getProductConfiguration5(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4) + 100
@@ -409,7 +429,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and fixed options Configuration #6' => [
                 'strategy' => $this->getProductConfiguration6(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 1 * 20) + 100
@@ -422,7 +443,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and percent options Configuration #6' => [
                 'strategy' => $this->getProductConfiguration6(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110 * 0.2 + 110 * 1)
@@ -435,7 +457,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, fixed sub items and percent options Configuration #6' => [
                 'strategy' => $this->getProductConfiguration6(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 40 + 1 * 20 + 1 * 110)
@@ -448,7 +471,8 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
 
             'Testing product price with tier price, percent sub items and fixed options Configuration #6' => [
                 'strategy' => $this->getProductConfiguration6(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.5 * (110 + 1 * 110 * 0.4 + 1 * 110 * 0.2) + 100
@@ -777,7 +801,7 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
         return array_merge($fixture, $data);
     }
 
-    private function addSimpleProduct(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
+    protected function addSimpleProduct(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
     {
         $options = [];
 
@@ -807,7 +831,7 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
         return $bundleProduct;
     }
 
-    private function addCustomOption(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
+    protected function addCustomOption(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
     {
         /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
         $customOptionFactory = $this->objectManager
@@ -832,7 +856,7 @@ class FixedBundleWithTierPRiceCalculatorTest extends \PHPUnit_Framework_TestCase
         return $bundleProduct;
     }
 
-    private function addTierPrice(\Magento\Catalog\Model\Product $bundleProduct, $percent = false)
+    private function addTierPrice(\Magento\Catalog\Model\Product $bundleProduct)
     {
         $tierPrice = $this->tierPriceFactory->create($this->fixtureForTierPrice);
         $bundleProduct->setTierPrices([$tierPrice]);

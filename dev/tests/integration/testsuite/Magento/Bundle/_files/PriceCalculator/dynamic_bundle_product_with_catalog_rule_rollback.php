@@ -5,4 +5,3 @@
  */
 
 require __DIR__ . '/dynamic_bundle_product.php';
-

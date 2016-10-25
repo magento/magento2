@@ -625,7 +625,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1($selectionsPriceType, $customOptionsPriceType)
+    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
+        $selectionsPriceType,
+        $customOptionsPriceType
+    )
     {
         $optionsData = [
             [
@@ -662,7 +665,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2($selectionsPriceType, $customOptionsPriceType)
+    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
+        $selectionsPriceType,
+        $customOptionsPriceType
+    )
     {
         $optionsData = [
             [
@@ -701,7 +707,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
+        $selectionsPriceType,
+        $customOptionsPriceType
+    )
     {
         $optionsData = [
             [
@@ -745,7 +754,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4($selectionsPriceType, $customOptionsPriceType)
+    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
+        $selectionsPriceType,
+        $customOptionsPriceType
+    )
     {
         $optionsData = [
             [
@@ -790,7 +802,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5($selectionsPriceType, $customOptionsPriceType)
+    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
+        $selectionsPriceType,
+        $customOptionsPriceType
+    )
     {
         $optionsData = [
             [
@@ -835,7 +850,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6($selectionsPriceType, $customOptionsPriceType)
+    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
+        $selectionsPriceType,
+        $customOptionsPriceType
+    )
     {
         $optionsData = [
             [
@@ -971,7 +989,11 @@ class FixedBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestC
 
         $options = [];
         foreach ($optionsData as $optionData) {
-            $customOption = $customOptionFactory->create(['data' => $this->getFixtureForProductCustomOption($optionData)]);
+            $customOption = $customOptionFactory->create(
+                [
+                    'data' => $this->getFixtureForProductCustomOption($optionData)
+                ]
+            );
             $customOption->setProductSku($bundleProduct->getSku());
             $customOption->setOptionId(null);
 

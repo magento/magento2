@@ -118,7 +118,8 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 with catalog price rule, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 20 + 100
@@ -134,7 +135,8 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 with catalog price rule, percent sub items and percent options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 0.9 * 110 * 0.2 + 0.9 * 110 * 1
@@ -150,7 +152,8 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 with catalog price rule, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 20 + 0.9 * 110 * 1
@@ -166,7 +169,8 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 with catalog price rule, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 0.9 * 110 * 0.2 + 100
@@ -181,8 +185,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #1
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 20 + 100
@@ -197,8 +202,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #1
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 0.9 * 110 * 0.2 + 0.9 * 110 * 1
@@ -213,8 +219,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #1
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 20 + 0.9 * 110 * 1
@@ -229,8 +236,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #1
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 0.9 * 110 * 0.2 + 100
@@ -245,8 +253,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #2
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 100
@@ -261,8 +270,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #2
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 0.9 * 110 * 1
@@ -277,8 +287,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #2
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110
@@ -293,8 +304,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #2
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 100
@@ -309,8 +321,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #3
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 3 * 10 + 100
@@ -325,8 +338,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #3
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 3 * 0.9 * 110 * 0.1 + 0.9 * 110 * 1
@@ -341,8 +355,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #3
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 3 * 10 + 1 * 0.9 * 110
@@ -357,8 +372,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #3
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 3 * 0.9 *  110 * 0.1 + 100
@@ -373,8 +389,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #4
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 40 + 100
@@ -389,8 +406,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #4
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110 * 0.4 + 1 * 0.9 * 110
@@ -405,8 +423,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #4
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 40 + 1 * 0.9 * 110
@@ -421,8 +440,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #4
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110 * 0.4 + 100
@@ -437,8 +457,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #5
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 40 + 100
@@ -453,8 +474,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #5
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110 * 0.4 + 1 * 0.9 * 110
@@ -469,8 +491,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #5
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 40 + 0.9 * 110 * 1
@@ -485,8 +508,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #5
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110 * 0.4 + 100
@@ -501,8 +525,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #6
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 40 + 1 * 20 + 100
@@ -517,8 +542,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #6
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110 * 0.4 + 1 * 0.9 * 110 * 0.2 + 0.9 * 110 * 1
@@ -533,8 +559,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #6
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_FIXED, self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 40 + 1 * 20 + 1 * 0.9 * 110
@@ -549,8 +576,9 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #6
             ' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(
-                    LinkInterface::PRICE_TYPE_PERCENT, self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
                 'expectedResults' => [
                     // 0.9 * 110 + 1 * 0.9 * 110 * 0.4 + 1 * 0.9 * 110 * 0.2 + 100
@@ -601,7 +629,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1($selectionsPriceType, $customOptionsPriceType)
+    public function getProductSubItemsAndOptionsStrategyConfiguration1($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -634,7 +662,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2($selectionsPriceType, $customOptionsPriceType)
+    public function getProductSubItemsAndOptionsStrategyConfiguration2($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -669,7 +697,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    public function getProductSubItemsAndOptionsStrategyConfiguration3($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -709,7 +737,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4($selectionsPriceType, $customOptionsPriceType)
+    public function getProductSubItemsAndOptionsStrategyConfiguration4($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -750,7 +778,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5($selectionsPriceType, $customOptionsPriceType)
+    public function getProductSubItemsAndOptionsStrategyConfiguration5($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -791,7 +819,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6($selectionsPriceType, $customOptionsPriceType)
+    public function getProductSubItemsAndOptionsStrategyConfiguration6($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
