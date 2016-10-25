@@ -24,25 +24,48 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string|int|bool|array|null $value
-     * @dataProvider serializeUnserializeDataProvider
+     * @param string|int|float|bool|array|null $value
+     * @param string $serializedValue
+     * @dataProvider serializeDataProvider
      */
-    public function testSerializeUnserialize($value)
+    public function testSerialize($value, $serializedValue)
     {
-        $this->assertEquals(
-            $this->serialize->unserialize($this->serialize->serialize($value)),
-            $value
-        );
+        $this->assertEquals($serializedValue, $this->serialize->serialize($value));
     }
 
-    public function serializeUnserializeDataProvider()
+    public function serializeDataProvider()
     {
         return [
-            ['string'],
-            [''],
-            [null],
-            [false],
-            [['a' => 'b']],
+            ['string', 's:6:"string";'],
+            ['', 's:0:"";'],
+            [10, 'i:10;'],
+            [10.5, 'd:10.5;'],
+            [null, 'N;'],
+            [false, 'b:0;'],
+            [['foo' => 'bar'], 'a:1:{s:3:"foo";s:3:"bar";}'],
+        ];
+    }
+
+    /**
+     * @param string $serializedValue
+     * @param string|int|float|bool|array|null $value
+     * @dataProvider unserializeDataProvider
+     */
+    public function testUnserialize($serializedValue, $value)
+    {
+        $this->assertEquals($value, $this->serialize->unserialize($serializedValue));
+    }
+
+    public function unserializeDataProvider()
+    {
+        return [
+            ['s:6:"string";', 'string'],
+            ['s:0:"";', ''],
+            ['i:10;', 10],
+            ['d:10.5;', 10.5],
+            ['N;', null],
+            ['b:0;', false],
+            ['a:1:{s:3:"foo";s:3:"bar";}', ['foo' => 'bar']],
         ];
     }
 }
