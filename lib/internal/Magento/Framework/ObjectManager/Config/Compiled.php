@@ -129,20 +129,15 @@ class Compiled implements ConfigInterface
      */
     public function extend(array $configuration)
     {
-        $properties = [
-            'arguments' => 'arguments',
-            'instanceTypes' => 'virtualTypes',
-            'preferences' => 'preferences'
-        ];
-
-        foreach ($configuration as $key => $config) {
-            if (empty($properties[$key])) {
-                continue;
-            }
-
-            $property = $properties[$key];
-            $this->$property = array_replace($this->$property, $config);
-        }
+        $this->arguments = isset($configuration['arguments'])
+            ? array_replace($this->arguments, $configuration['arguments'])
+            : $this->arguments;
+        $this->virtualTypes = isset($configuration['instanceTypes'])
+            ? array_replace($this->virtualTypes, $configuration['instanceTypes'])
+            : $this->virtualTypes;
+        $this->preferences = isset($configuration['preferences'])
+            ? array_replace($this->preferences, $configuration['preferences'])
+            : $this->preferences;
     }
 
     /**
