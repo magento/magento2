@@ -9,18 +9,24 @@
  */
 namespace Magento\Sales\Model\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * @param \Magento\Sales\Model\Config\Reader $reader
+     * Data constructor
+     *
+     * @param Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Sales\Model\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'sales_totals_config_cache'
+        $cacheId = 'sales_totals_config_cache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 }

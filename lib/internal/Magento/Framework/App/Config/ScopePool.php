@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -168,9 +169,8 @@ class ScopePool
      */
     private function getSerializer()
     {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
         }
         return $this->serializer;
     }

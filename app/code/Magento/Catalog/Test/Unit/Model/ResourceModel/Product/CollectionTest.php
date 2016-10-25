@@ -155,11 +155,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
-        $this->mockObjectManager(
-            [
-                ProductLimitationFactory::class => $productLimitationFactoryMock,
-            ]
-        );
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
@@ -182,7 +177,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $customerSession,
                 'dateTime' => $dateTime,
                 'groupManagement' => $groupManagement,
-                'connection' => $this->connectionMock
+                'connection' => $this->connectionMock,
+                'productLimitationFactory' => $productLimitationFactoryMock,
+                'metadataPool' => $this->metadataPoolMock,
             ]
         );
         $this->collection->setConnection($this->connectionMock);
@@ -193,21 +190,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManager->setBackwardCompatibleProperty(
             $this->collection,
-            'metadataPool',
-            $this->metadataPoolMock
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->collection,
             'productGalleryReadHandler',
             $this->galleryReadHandlerMock
         );
-    }
-
-    protected function tearDown()
-    {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
     }
 
     public function testAddProductCategoriesFilter()
@@ -275,24 +260,5 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($itemMock, $mediaGalleriesMock);
 
         $this->assertSame($this->collection, $this->collection->addMediaGalleryData());
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 }

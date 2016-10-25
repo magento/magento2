@@ -32,6 +32,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_areaList;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->_readerMock = $this->getMock(\Magento\Framework\App\Route\Config\Reader::class, [], [], '', false);
@@ -51,16 +56,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'areaList' => $this->_areaList
             ]
         );
-        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $objectManager->setBackwardCompatibleProperty($this->_config, 'serializer', $serializerMock);
-        $serializerMock->method('serialize')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $serializerMock->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $objectManager->setBackwardCompatibleProperty($this->_config, 'serializer', $this->serializerMock);
     }
 
     public function testGetRouteFrontNameIfCacheIfRouterIdNotExist()
@@ -74,14 +71,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteByFrontName()
     {
+        $data = ['routerCode' => ['frontName' => 'routerName']];
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('areaCode::RoutesConfig')
-            ->willReturn(json_encode(['routerCode' => ['frontName' => 'routerName']]));
-
-        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
-
-        // check internal caching in $this->_routes array
+            ->willReturn('serializedData');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn($data);
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
     }
 
@@ -90,11 +88,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('areaCode::RoutesConfig')
-            ->willReturn(json_encode([]));
-
-        $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
-
-        // check caching in $this->_routes array
+            ->willReturn('serializedData');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn([]);
         $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
     }
 
@@ -117,6 +115,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $serializedData = json_encode($routes);
+
         $this->_readerMock->expects(
             $this->once()
         )->method(
@@ -137,24 +137,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('default_router')
         );
 
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->willReturn($serializedData);
+
         $this->_cacheMock->expects($this->once())
             ->method('save')
-            ->with(json_encode($routes), 'scope::RoutesConfig');
+            ->with($serializedData, 'scope::RoutesConfig');
 
-        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
-
-        // check caching in $this->_routes array
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
     }
 
     public function testGetModulesByFrontName()
     {
+        $data = ['routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]];
+
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('areaCode::RoutesConfig')
-            ->willReturn(
-                json_encode(['routerCode' => ['frontName' => 'routerName', 'modules' => ['Module1']]])
-            );
+            ->willReturn('serializedData');
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn($data);
         $this->assertEquals(['Module1'], $this->_config->getModulesByFrontName('routerName'));
     }
 }

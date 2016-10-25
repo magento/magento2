@@ -8,6 +8,8 @@ namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Compiled implements ConfigLoaderInterface
 {
@@ -19,7 +21,7 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -50,13 +52,13 @@ class Compiled implements ConfigLoaderInterface
     /**
      * Get serializer
      *
-     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @return SerializerInterface
      * @deprecated
      */
     private function getSerializer()
     {
-        if ($this->serializer === null) {
-            $this->serializer = new \Magento\Framework\Serialize\Serializer\Json();
+        if (null === $this->serializer) {
+            $this->serializer = new Serialize();
         }
         return $this->serializer;
     }

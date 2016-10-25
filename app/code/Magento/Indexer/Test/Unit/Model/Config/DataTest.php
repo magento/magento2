@@ -62,48 +62,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->mockObjectManager(
-            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
-        );
-    }
-
-    protected function tearDown()
-    {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testConstructorWithCache()
     {
-        $jsonString = json_encode($this->indexers);
+        $serializedData = 'serialized data';
         $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
         $this->cache->expects($this->once())
             ->method('load')
             ->with($this->cacheId)
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
 
-        $this->serializerMock->method('unserialize')
-            ->with($jsonString)
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedData)
             ->willReturn($this->indexers);
 
         $this->stateCollection->expects($this->never())->method('getItems');
@@ -112,7 +84,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->reader,
             $this->cache,
             $this->stateCollection,
-            $this->cacheId
+            $this->cacheId,
+            $this->serializerMock
         );
     }
 
@@ -151,7 +124,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->reader,
             $this->cache,
             $this->stateCollection,
-            $this->cacheId
+            $this->cacheId,
+            $this->serializerMock
         );
     }
 }

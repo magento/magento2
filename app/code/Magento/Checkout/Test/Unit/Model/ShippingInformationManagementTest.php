@@ -106,6 +106,9 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $shippingMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

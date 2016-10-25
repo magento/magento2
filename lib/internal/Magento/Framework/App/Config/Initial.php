@@ -37,19 +37,25 @@ class Initial
     private $serializer;
 
     /**
-     * @param \Magento\Framework\App\Config\Initial\Reader $reader
+     * Initial constructor
+     *
+     * @param Initial\Reader $reader
      * @param \Magento\Framework\App\Cache\Type\Config $cache
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Config\Initial\Reader $reader,
-        \Magento\Framework\App\Cache\Type\Config $cache
+        \Magento\Framework\App\Cache\Type\Config $cache,
+        SerializerInterface $serializer = null
     ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SerializerInterface::class);
         $data = $cache->load(self::CACHE_ID);
         if (!$data) {
             $data = $reader->read();
-            $cache->save($this->getSerializer()->serialize($data), self::CACHE_ID);
+            $cache->save($this->serializer->serialize($data), self::CACHE_ID);
         } else {
-            $data = $this->getSerializer()->unserialize($data);
+            $data = $this->serializer->unserialize($data);
         }
         $this->_data = $data['data'];
         $this->_metadata = $data['metadata'];
@@ -81,20 +87,5 @@ class Initial
     public function getMetadata()
     {
         return $this->_metadata;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

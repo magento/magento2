@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Address;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -98,10 +101,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->mockObjectManager(
-            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
-        );
-
         $this->serializerMock->method('serialize')
             ->willReturn(json_encode($fixtureConfigData));
         $this->serializerMock->method('unserialize')
@@ -113,34 +112,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_storeManagerMock,
             $this->_addressHelperMock,
             $this->_scopeConfigMock,
-            $this->_cacheId
+            $this->_cacheId,
+            $this->serializerMock
         );
-    }
-
-    protected function tearDown()
-    {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGetStore()

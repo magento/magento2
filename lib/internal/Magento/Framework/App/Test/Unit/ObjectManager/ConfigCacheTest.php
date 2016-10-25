@@ -72,7 +72,7 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [false, false],
-            ['["some data"]', ['some data']],
+            ['serialized data', ['some data']],
         ];
     }
 
@@ -80,10 +80,11 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     {
         $key = 'key';
         $config = ['config'];
+        $serializedData = 'serialized data';
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->willReturn('["config"]');
-        $this->cacheFrontendMock->expects($this->once())->method('save')->with('["config"]', 'diConfig' . $key);
+            ->willReturn($serializedData);
+        $this->cacheFrontendMock->expects($this->once())->method('save')->with($serializedData, 'diConfig' . $key);
         $this->configCache->save($config, $key);
     }
 }

@@ -34,13 +34,10 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
         );
         $serializerMock = $this->getMock(SerializerInterface::class);
         $serializerMock->method('serialize')
-            ->willReturnCallback(function ($data) {
-                return json_encode($data);
-            });
+            ->willReturn('serializedData');
         $serializerMock->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+            ->willReturn(['unserializedData']);
+
         $objectManager->setBackwardCompatibleProperty(
             $methodsMapProcessor,
             'serializer',

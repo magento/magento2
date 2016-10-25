@@ -8,8 +8,9 @@
 namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Filesystem implements WriterInterface
 {
@@ -70,9 +71,9 @@ class Filesystem implements WriterInterface
      */
     private function getSerializer()
     {
-        if ($this->serializer === null) {
+        if (null === $this->serializer) {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
+                ->get(Serialize::class);
         }
         return $this->serializer;
     }

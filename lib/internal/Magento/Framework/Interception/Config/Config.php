@@ -8,6 +8,7 @@
 namespace Magento\Framework\Interception\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Config implements \Magento\Framework\Interception\ConfigInterface
 {
@@ -78,6 +79,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     private $serializer;
 
     /**
+     * Config constructor
+     *
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -85,6 +88,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * @param \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
@@ -93,7 +97,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\ObjectManager\RelationsInterface $relations,
         \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
-        $cacheId = 'interception'
+        $cacheId = 'interception',
+        SerializerInterface $serializer = null
     ) {
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
@@ -102,10 +107,11 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->_cacheId = $cacheId;
         $this->_reader = $reader;
         $this->_scopeList = $scopeList;
-
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Serialize::class);
         $intercepted = $this->_cache->load($this->_cacheId);
         if ($intercepted !== false) {
-            $this->_intercepted = $this->getSerializer()->unserialize($intercepted);
+            $this->_intercepted = $this->serializer->unserialize($intercepted);
         } else {
             $this->initialize($this->_classDefinitions->getClasses());
         }
@@ -136,7 +142,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
-        $this->_cache->save($this->getSerializer()->serialize($this->_intercepted), $this->_cacheId);
+        $this->_cache->save($this->serializer->serialize($this->_intercepted), $this->_cacheId);
     }
 
     /**
@@ -181,20 +187,5 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
             return $this->_intercepted[$type];
         }
         return $this->_inheritInterception($type);
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

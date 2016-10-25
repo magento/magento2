@@ -32,6 +32,11 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture */
     private $countryOfManufacture;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -46,19 +51,11 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
-        $serializerMock->method('serialize')
-            ->willReturnCallback(function ($string) {
-                return json_encode($string);
-            });
-        $serializerMock->method('unserialize')
-            ->willReturnCallback(function ($string) {
-                return json_decode($string, true);
-            });
+        $this->serializerMock = $this->getMock(SerializerInterface::class, [], [], '', false);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
             'serializer',
-            $serializerMock
+            $this->serializerMock
         );
     }
 
@@ -78,7 +75,9 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->equalTo('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code'))
             ->will($this->returnValue($cachedDataSrl));
-
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($cachedDataUnsrl);
         $this->assertEquals($cachedDataUnsrl, $this->countryOfManufacture->getAllOptions());
     }
 

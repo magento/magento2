@@ -102,7 +102,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeSwitchingWithNonCachedData()
     {
         $testValue = ['some' => 'testValue'];
-        $jsonString = '{"some":"testValue"}';
+        $serializedData = 'serialized data';
 
         /** change current area */
         $this->_configScopeMock->expects(
@@ -135,14 +135,15 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($testValue)
         );
 
-        $this->serializerMock->method('serialize')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($testValue)
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
 
         /** test cache saving  */
         $this->_cacheMock->expects($this->once())
             ->method('save')
-            ->with($jsonString, 'adminhtml::tag');
+            ->with($serializedData, 'adminhtml::tag');
 
         /** test config value existence */
         $this->assertEquals('testValue', $this->_model->get('some'));
@@ -154,7 +155,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeSwitchingWithCachedData()
     {
         $testValue = ['some' => 'testValue'];
-        $jsonString = '{"some":"testValue"}';
+        $serializedData = 'serialized data';
 
         /** change current area */
         $this->_configScopeMock->expects(
@@ -165,15 +166,16 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('adminhtml')
         );
 
-        $this->serializerMock->method('unserialize')
-            ->with($jsonString)
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedData)
             ->willReturn($testValue);
 
         /** set cache data */
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('adminhtml::tag')
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
 
         /** test preventing of getting data from reader  */
         $this->_readerMock->expects($this->never())->method('read');

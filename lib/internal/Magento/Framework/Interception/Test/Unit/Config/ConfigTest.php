@@ -7,6 +7,7 @@
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -77,33 +78,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->mockObjectManager([SerializerInterface::class => $this->serializerMock]);
-    }
-
-    protected function tearDown()
-    {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**
@@ -182,6 +156,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'relations' => $this->relationsMock,
                 'omConfig' => $this->omConfigMock,
                 'classDefinitions' => $this->definitionMock,
+                'serializer' => $this->serializerMock,
             ]
         );
 
@@ -207,13 +182,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         $this->readerMock->expects($this->never())->method('read');
         $this->cacheMock->expects($this->never())->method('save');
-        $serializedValue = '{"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\Item":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\Item\\Enhanced":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer\\Enhanced":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemContainer\\Proxy":true,'
-            . '"Magento\\Framework\\Interception\\Test\\Unit\\Custom\\Module\\Model\\ItemProxy":false,'
-            . '"virtual_custom_item":true}';
+        $serializedValue = 'serializedData';
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with($cacheId)
@@ -237,6 +206,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'omConfig' => $this->omConfigMock,
                 'classDefinitions' => $this->definitionMock,
                 'cacheId' => $cacheId,
+                'serializer' => $this->serializerMock,
             ]
         );
 

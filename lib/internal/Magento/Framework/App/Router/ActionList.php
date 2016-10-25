@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Router;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
 class ActionList
@@ -42,27 +43,37 @@ class ActionList
     private $serializer;
 
     /**
+     * @var string
+     */
+    private $actionInterface;
+
+    /**
+     * ActionList constructor
+     *
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         ModuleReader $moduleReader,
         $actionInterface = \Magento\Framework\App\ActionInterface::class,
         $cacheKey = 'app_action_list',
-        $reservedWords = []
+        $reservedWords = [],
+        SerializerInterface $serializer = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
         $data = $cache->load($cacheKey);
         if (!$data) {
             $this->actions = $moduleReader->getActionFiles();
-            $cache->save($this->getSerializer()->serialize($this->actions), $cacheKey);
+            $cache->save($this->serializer->serialize($this->actions), $cacheKey);
         } else {
-            $this->actions = $this->getSerializer()->unserialize($data);
+            $this->actions = $this->serializer->unserialize($data);
         }
     }
 
@@ -97,20 +108,5 @@ class ActionList
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
         }
         return null;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }
