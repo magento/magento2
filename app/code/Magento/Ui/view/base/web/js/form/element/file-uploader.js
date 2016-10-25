@@ -41,9 +41,6 @@ define([
                 formData: {
                     'form_key': window.FORM_KEY
                 }
-            },
-            tracks: {
-                isLoading: true
             }
         },
 
@@ -67,6 +64,19 @@ define([
             });
 
             $(fileInput).fileupload(this.uploaderConfig);
+
+            return this;
+        },
+
+        /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initObservable: function () {
+            this._super();
+
+            this.observe('isLoading');
 
             return this;
         },
@@ -362,14 +372,14 @@ define([
          * Load start event handler.
          */
         onLoadingStart: function () {
-            this.isLoading = true;
+            this.isLoading(true);
         },
 
         /**
          * Load stop event handler.
          */
         onLoadingStop: function () {
-            this.isLoading = false;
+            this.isLoading(false);
         },
 
         /**
