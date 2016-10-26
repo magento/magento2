@@ -138,6 +138,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     /**
      * @var \Magento\Framework\Url\RouteParamsResolverFactory
      */
+
     private $_routeParamsResolverFactory;
     /**
      * @var \Magento\Framework\Url\ScopeResolverInterface
@@ -267,7 +268,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
-        if (is_null($this->_useSession)) {
+        if ($this->_useSession === null) {
             $this->_useSession = $this->_sidResolver->getUseSessionInUrl();
         }
         return $this->_useSession;
@@ -282,7 +283,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getConfigData($key, $prefix = null)
     {
-        if (is_null($prefix)) {
+        if ($prefix === null) {
             $prefix = 'web/' . ($this->_isSecure() ? 'secure' : 'unsecure') . '/';
         }
         $path = $prefix . $key;
@@ -560,7 +561,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $routePath = $this->_getActionPath();
             if ($this->_getRouteParams()) {
                 foreach ($this->_getRouteParams() as $key => $value) {
-                    if (is_null($value) || false === $value || '' === $value || !is_scalar($value)) {
+                    if ($value === null || false === $value || '' === $value || !is_scalar($value)) {
                         continue;
                     }
                     $routePath .= $key . '/' . $value . '/';
@@ -930,7 +931,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $this->_queryParamsResolver->unsetData('query_params');
         }
 
-        if (!is_null($fragment)) {
+        if ($fragment !== null) {
             $url .= '#' . $this->getEscaper()->encodeUrlParam($fragment);
         }
         $this->getRouteParamsResolver()->unsetData('secure');
@@ -1064,7 +1065,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     public function useSessionIdForUrl($secure = false)
     {
         $key = 'use_session_id_for_url_' . (int)$secure;
-        if (is_null($this->getData($key))) {
+        if ($this->getData($key) === null) {
             $httpHost = $this->_request->getHttpHost();
             $urlHost = parse_url(
                 $this->_getScope()->getBaseUrl(UrlInterface::URL_TYPE_LINK, $secure),
