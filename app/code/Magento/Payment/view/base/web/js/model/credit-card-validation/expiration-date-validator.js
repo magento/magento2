@@ -54,6 +54,6 @@ define(
             }
 
             return resultWrapper(false, false, null, null);
-        }
+        };
     }
 );

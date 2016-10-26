@@ -15,6 +15,6 @@ define(
             expirationMonth: null,
             expirationYear: null,
             cvvCode: null
-        }
+        };
     }
 );

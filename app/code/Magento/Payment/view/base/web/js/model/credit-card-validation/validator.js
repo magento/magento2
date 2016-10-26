@@ -5,6 +5,8 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 (function (factory) {
+    'use strict';
+
     if (typeof define === 'function' && define.amd) {
         define([
             'jquery',
@@ -45,6 +47,7 @@
             $.mage.__('Please enter a valid credit card type number.')
         ],
         'validate-card-number': [
+
             /**
              * Validate credit card number based on mod 10
              * @param {String} number - credit card number
@@ -56,6 +59,7 @@
             $.mage.__('Please enter a valid credit card number.')
         ],
         'validate-card-date': [
+
             /**
              * Validate credit card number based on mod 10
              * @param {String} date - month
@@ -67,6 +71,7 @@
             $.mage.__('Incorrect credit card expiration month.')
         ],
         'validate-card-cvv': [
+
             /**
              * Validate credit card number based on mod 10
              * @param {String} cvv - month
@@ -80,6 +85,7 @@
             $.mage.__('Please enter a valid credit card verification number.')
         ],
         'validate-card-year': [
+
             /**
              * Validate credit card number based on mod 10
              * @param {String} date - month

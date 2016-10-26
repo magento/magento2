@@ -26,7 +26,7 @@ define(
             var month,
                 monthValid;
 
-            if ((value.replace(/\s/g, '') === '') || (value === '0')) {
+            if (value.replace(/\s/g, '') === '' || value === '0') {
                 return resultWrapper(false, true);
             }
 

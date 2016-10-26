@@ -143,6 +143,6 @@ define(
 
                 return result;
             }
-        }
+        };
     }
 );

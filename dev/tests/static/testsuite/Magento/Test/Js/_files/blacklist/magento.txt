@@ -218,16 +218,7 @@ app/code/Magento/PageCache/view/frontend/web/js/page-cache.js
 app/code/Magento/Payment/view/adminhtml/web/transparent.js
 app/code/Magento/Payment/view/frontend/requirejs-config.js
 app/code/Magento/Payment/view/frontend/web/cc-type.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/credit-card-data.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/credit-card-number-validator.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/credit-card-number-validator/credit-card-type.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/credit-card-number-validator/luhn10-validator.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/cvv-validator.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/expiration-date-validator.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/expiration-date-validator/parse-date.js
-app/code/Magento/Payment/view/frontend/web/js/model/credit-card-validation/validator.js
+app/code/Magento/Payment/view/base/web/js/model/credit-card-validation/validator.js
 app/code/Magento/Payment/view/frontend/web/js/view/payment/cc-form.js
 app/code/Magento/Payment/view/frontend/web/js/view/payment/iframe.js
 app/code/Magento/Payment/view/frontend/web/js/view/payment/method-renderer/free-method.js

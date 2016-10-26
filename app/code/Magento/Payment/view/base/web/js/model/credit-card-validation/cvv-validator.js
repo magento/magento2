@@ -28,6 +28,7 @@ define(
          */
         return function (value, maxLength) {
             var DEFAULT_LENGTH = 3;
+
             maxLength = maxLength || DEFAULT_LENGTH;
 
             if (!/^\d*$/.test(value)) {
