@@ -55,14 +55,14 @@ class Rule extends AbstractResource
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
      * @param string $connectionName
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap|null $associatedEntityMapInstance
+     * @param \Magento\Framework\DataObject|null $associatedEntityMapInstance
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
         $connectionName = null,
-        \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap $associatedEntityMapInstance = null
+        \Magento\Framework\DataObject $associatedEntityMapInstance = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
