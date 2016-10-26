@@ -6,9 +6,10 @@
 /*global alert*/
 define(
     [],
-    function() {
+    function () {
         'use strict';
-        return function(value) {
+
+        return function (value) {
             var month, len;
 
             if (value.match('/')) {
@@ -20,13 +21,13 @@ define(
                 };
             }
 
-            len = (value[0] === '0' || value.length > 5 || value.length === 4 || value.length === 3) ? 2 : 1;
+            len = value[0] === '0' || value.length > 5 || value.length === 4 || value.length === 3 ? 2 : 1;
             month = value.substr(0, len);
 
             return {
                 month: month,
                 year: value.substr(month.length, 4)
             };
-        }
+        };
     }
 );

@@ -11,6 +11,7 @@ define(
     ],
     function ($, utils) {
         'use strict';
+
         var types = [
             {
                 title: 'Visa',
@@ -113,7 +114,13 @@ define(
                 }
             }
         ];
+
         return {
+            /**
+             * Get credit card type
+             * @param {String} cardNumber
+             * @returns {Array}
+             */
             getCardTypes: function (cardNumber) {
                 var i, value,
                     result = [];
@@ -133,8 +140,9 @@ define(
                         result.push($.extend(true, {}, value));
                     }
                 }
+
                 return result;
             }
-        }
+        };
     }
 );

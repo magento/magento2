@@ -11,7 +11,7 @@
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-my-credit-cards-link">
                 <arguments>
                     <argument name="path" xsi:type="string">vault/cards/listaction</argument>
-                    <argument name="label" xsi:type="string" translate="true">My Credit Cards</argument>
+                    <argument name="label" xsi:type="string" translate="true">Stored Payment Methods</argument>
                 </arguments>
             </block>
         </referenceBlock>

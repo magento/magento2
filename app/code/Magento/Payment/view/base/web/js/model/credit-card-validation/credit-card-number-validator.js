@@ -13,6 +13,13 @@ define(
     function (utils, luhn10, creditCardTypes) {
         'use strict';
 
+        /**
+         * Validation result wrapper
+         * @param {Object} card
+         * @param {Boolean} isPotentiallyValid
+         * @param {Boolean} isValid
+         * @returns {Object}
+         */
         function resultWrapper(card, isPotentiallyValid, isValid) {
             return {
                 card: card,

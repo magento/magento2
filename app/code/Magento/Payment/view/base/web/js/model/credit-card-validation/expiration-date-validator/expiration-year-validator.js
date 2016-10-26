@@ -6,9 +6,15 @@
 /*global alert*/
 define(
     [],
-    function() {
+    function () {
         'use strict';
 
+        /**
+         * Validation result wrapper
+         * @param {Boolean} isValid
+         * @param {Boolean} isPotentiallyValid
+         * @returns {Object}
+         */
         function resultWrapper(isValid, isPotentiallyValid) {
             return {
                 isValid: isValid,
@@ -16,7 +22,7 @@ define(
             };
         }
 
-        return function(value) {
+        return function (value) {
             var currentYear = new Date().getFullYear(),
                 len = value.length,
                 valid,
@@ -36,6 +42,7 @@ define(
 
             value = parseInt(value, 10);
             valid = value >= currentYear && value <= currentYear + expMaxLifetime;
+
             return resultWrapper(valid, valid);
         };
     }
