@@ -18,25 +18,22 @@ define(
         'mage/storage',
         'mage/translate',
         'Magento_Checkout/js/action/get-payment-information',
-        'Magento_Checkout/js/model/totals'
+        'Magento_Checkout/js/model/totals',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
     function (
-        ko,
-        $,
-        quote,
-        urlManager,
-        errorProcessor,
-        messageContainer,
-        storage,
-        $t,
-        getPaymentInformationAction,
-        totals
+        ko, $, quote, urlManager, errorProcessor, messageContainer, storage, $t, getPaymentInformationAction, totals,
+        fullScreenLoader
     ) {
         'use strict';
-        return function (couponCode, isApplied, isLoading) {
-            var quoteId = quote.getQuoteId();
-            var url = urlManager.getApplyCouponUrl(couponCode, quoteId);
-            var message = $t('Your coupon was successfully applied.');
+
+        return function (couponCode, isApplied) {
+            var quoteId = quote.getQuoteId(),
+                url = urlManager.getApplyCouponUrl(couponCode, quoteId),
+                message = $t('Your coupon was successfully applied.');
+
+            fullScreenLoader.startLoader();
+
             return storage.put(
                 url,
                 {},
@@ -45,19 +42,22 @@ define(
                 function (response) {
                     if (response) {
                         var deferred = $.Deferred();
-                        isLoading(false);
+
                         isApplied(true);
                         totals.isLoading(true);
                         getPaymentInformationAction(deferred);
                         $.when(deferred).done(function () {
+                            fullScreenLoader.stopLoader();
                             totals.isLoading(false);
                         });
-                        messageContainer.addSuccessMessage({'message': message});
+                        messageContainer.addSuccessMessage({
+                            'message': message
+                        });
                     }
                 }
             ).fail(
                 function (response) {
-                    isLoading(false);
+                    fullScreenLoader.stopLoader();
                     totals.isLoading(false);
                     errorProcessor.process(response, messageContainer);
                 }

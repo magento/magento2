@@ -29,7 +29,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getCacheManager', 'getEventDispatcher', 'getLogger', 'getAppState', 'getActionValidator'],
+            [],
             [],
             '',
             false
