@@ -16,6 +16,7 @@
     <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
     <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
     <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
+    <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider" />
     <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
     <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
