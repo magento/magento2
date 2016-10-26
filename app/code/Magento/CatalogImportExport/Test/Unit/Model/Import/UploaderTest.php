@@ -119,10 +119,6 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         // Check readAll() method invoking.
         $readMock->expects($this->once())->method('readAll')->will($this->returnValue(null));
 
-/*        $this->readFactory = $this->getMockBuilder('\Magento\Framework\Filesystem\File\ReadFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();*/
         // Check create() method invoking with expected argument.
         $this->readFactory->expects($this->once())
             ->method('create')
@@ -135,7 +131,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['name' => $expectedFileName]);
 
         $this->uploader->setDestDir($destDir);
- 	 	$this->assertEquals(['name' => $expectedFileName], $this->uploader->move($fileUrl));
+        $this->assertEquals(['name' => $expectedFileName], $this->uploader->move($fileUrl));
     }
 
     public function testMoveFileName()
@@ -151,8 +147,11 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
         $this->uploader->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $fileName)
- 	 	 	->willReturn(['name' => $fileName]);
+        $this->uploader
+            ->expects($this->once())
+            ->method('save')
+            ->with($destDir . '/' . $fileName)
+            ->willReturn(['name' => $fileName]);
 
         $this->uploader->setDestDir($destDir);
         $this->assertEquals(['name' => $fileName], $this->uploader->move($fileName));
