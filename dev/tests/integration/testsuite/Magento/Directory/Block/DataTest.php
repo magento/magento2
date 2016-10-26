@@ -5,6 +5,8 @@
  */
 namespace Magento\Directory\Block;
 
+use Magento\TestFramework\Helper\CacheCleaner;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,38 +14,25 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     private $block;
 
-    /** @var \Magento\TestFramework\ObjectManager */
-    private $objectManager;
-
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->get(\Magento\Directory\Block\Data::class);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->block = $objectManager->get(\Magento\Directory\Block\Data::class);
     }
 
     public function testGetCountryHtmlSelect()
     {
-        $this->cleanAllCache();
+        CacheCleaner::cleanAll();
         $result = $this->block->getCountryHtmlSelect();
-        $result2 = $this->block->getCountryHtmlSelect();
-        $this->assertEquals($result, $result2);
+        $resultTwo = $this->block->getCountryHtmlSelect();
+        $this->assertEquals($result, $resultTwo);
     }
 
     public function testGetRegionHtmlSelect()
     {
-        $this->cleanAllCache();
+        CacheCleaner::cleanAll();
         $result = $this->block->getRegionHtmlSelect();
-        $result2 = $this->block->getRegionHtmlSelect();
-        $this->assertEquals($result, $result2);
-    }
-
-    private function cleanAllCache()
-    {
-        /** @var \Magento\Framework\App\Cache\Frontend\Pool $cachePool */
-        $cachePool = $this->objectManager->get(\Magento\Framework\App\Cache\Frontend\Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
+        $resultTwo = $this->block->getRegionHtmlSelect();
+        $this->assertEquals($result, $resultTwo);
     }
 }

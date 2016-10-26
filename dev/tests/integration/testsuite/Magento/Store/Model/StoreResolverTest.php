@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\TestFramework\Helper\CacheCleaner;
+
 class StoreResolverTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\TestFramework\ObjectManager */
@@ -23,23 +25,13 @@ class StoreResolverTest extends \PHPUnit_Framework_TestCase
         $methodReadStoresData = new \ReflectionMethod(\Magento\Store\Model\StoreResolver::class, 'readStoresData');
         $methodReadStoresData->setAccessible(true);
 
-        $storeResover = $this->objectManager->get(\Magento\Store\Model\StoreResolver::class);
+        $storeResolver = $this->objectManager->get(\Magento\Store\Model\StoreResolver::class);
 
-        $storesDataRead = $methodReadStoresData->invoke($storeResover);
-        $this->cleanAllCache();
-        $storesData = $methodGetStoresData->invoke($storeResover);
-        $storesDataCached = $methodGetStoresData->invoke($storeResover);
+        $storesDataRead = $methodReadStoresData->invoke($storeResolver);
+        CacheCleaner::cleanAll();
+        $storesData = $methodGetStoresData->invoke($storeResolver);
+        $storesDataCached = $methodGetStoresData->invoke($storeResolver);
         $this->assertEquals($storesDataRead, $storesData);
         $this->assertEquals($storesDataRead, $storesDataCached);
-    }
-
-    private function cleanAllCache()
-    {
-        /** @var \Magento\Framework\App\Cache\Frontend\Pool $cachePool */
-        $cachePool = $this->objectManager->get(\Magento\Framework\App\Cache\Frontend\Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
     }
 }

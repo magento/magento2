@@ -7,25 +7,24 @@
  */
 namespace Magento\Framework\Reflection;
 
+use Magento\TestFramework\Helper\CacheCleaner;
+
 class MethodsMapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Reflection\MethodsMap */
     private $object;
 
-    /** @var \Magento\TestFramework\ObjectManager */
-    private $objectManager;
-
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->object = $this->objectManager->create(
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->object = $objectManager->create(
             \Magento\Framework\Reflection\MethodsMap::class
         );
     }
 
     public function testGetMethodsMap()
     {
-        $this->cleanAllCache();
+        CacheCleaner::cleanAll();
         $data = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertArrayHasKey('getMethodsMap', $data);
         $cachedData = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
@@ -34,7 +33,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodParams()
     {
-        $this->cleanAllCache();
+        CacheCleaner::cleanAll();
         $data = $this->object->getMethodParams(
             \Magento\Framework\Reflection\MethodsMap::class,
             'getMethodParams'
@@ -45,15 +44,5 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
             'getMethodParams'
         );
         $this->assertEquals($data, $cachedData);
-    }
-
-    private function cleanAllCache()
-    {
-        /** @var \Magento\Framework\App\Cache\Frontend\Pool $cachePool */
-        $cachePool = $this->objectManager->get(\Magento\Framework\App\Cache\Frontend\Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
     }
 }
