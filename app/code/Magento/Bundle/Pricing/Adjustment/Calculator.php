@@ -202,7 +202,7 @@ class Calculator implements BundleCalculatorInterface
                     $priceList[] =  $this->selectionFactory->create(
                         $bundleProduct,
                         $selection,
-                        $bundleProduct->getSelectionQty(),
+                        $selection->getSelectionQty(),
                         [
                             'useRegularPrice' => $useRegularPrice,
                         ]
@@ -218,11 +218,11 @@ class Calculator implements BundleCalculatorInterface
                     $selectionsCollection->addAttributeToSelect('tax_class_id');
                     $selectionsCollection->addTierPriceData();
                 }
-                $selection = $selectionsCollection->getFirstItem();
+                $selection = $selectionsCollection->fetchItem();
                 $priceList[] =  $this->selectionFactory->create(
                     $bundleProduct,
                     $selection,
-                    $bundleProduct->getSelectionQty(),
+                    $selection->getSelectionQty(),
                     [
                         'useRegularPrice' => $useRegularPrice,
                     ]
