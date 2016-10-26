@@ -18,7 +18,7 @@ class AppConfigTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\TestFramework\Isolation\WorkingDirectory
      */
     private $model;
-
+x
     protected function setUp()
     {
         $this->model = new \Magento\TestFramework\Isolation\AppConfig();
@@ -41,9 +41,8 @@ class AppConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $testAppConfigProperty->setValue($this->model, $testAppConfigMock);
-        $testAppConfigMock->expects($this->exactly(2))
+        $testAppConfigMock->expects($this->once())
             ->method('clean');
         $this->model->startTest($test);
-        $this->model->endTest($test);
     }
 }
