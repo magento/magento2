@@ -298,6 +298,7 @@ class SessionManager implements SessionManagerInterface
             return;
         }
 
+        session_regenerate_id(true);
         session_destroy();
         if ($options['send_expire_cookie']) {
             $this->expireSessionCookie();
