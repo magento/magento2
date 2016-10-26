@@ -215,7 +215,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     protected function _getResource()
     {
-        if (is_null($this->_resource)) {
+        if ($this->_resource === null) {
             $this->_resource = curl_init();
         }
         return $this->_resource;
