@@ -51,11 +51,6 @@ class Rule extends AbstractResource
     protected $entityManager;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap
-     */
-    private $associatedEntitiesMapInstance;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
@@ -71,10 +66,10 @@ class Rule extends AbstractResource
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
-        $this->associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
+        $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
-        $this->_associatedEntitiesMap = $this->associatedEntitiesMapInstance->getData();
+        $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
         parent::__construct($context, $connectionName);
     }
 

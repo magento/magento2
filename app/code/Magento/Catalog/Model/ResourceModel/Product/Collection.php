@@ -2192,7 +2192,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
 
         $mediaGalleries = [];
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
         $items = $this->getItems();
 
         $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
@@ -2213,13 +2213,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Get MetadataPool instance
+     * Get product entity metadata
      *
-     * @return MetadataPool
+     * @return \Magento\Framework\EntityManager\EntityMetadataInterface
      */
-    public function getMetadataPool()
+    public function getProductEntityMetadata()
     {
-        return $this->metadataPool;
+        return $this->metadataPool->getMetadata(ProductInterface::class);
     }
 
     /**
