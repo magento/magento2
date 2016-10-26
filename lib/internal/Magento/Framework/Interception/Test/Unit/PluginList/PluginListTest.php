@@ -238,7 +238,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::initData
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
      */
     public function testLoadScopedDataCached()
     {
