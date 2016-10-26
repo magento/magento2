@@ -240,7 +240,7 @@ class Dom
      */
     protected function _getNodePathByParent(\DOMElement $node, $parentPath)
     {
-        $prefix = is_null($this->rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
+        $prefix = $this->rootNamespace === null ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
         $idAttribute = $this->nodeMergingConfig->getIdAttribute($path);
         if (is_array($idAttribute)) {
@@ -430,7 +430,7 @@ class Dom
      */
     private function _getAttributeName($attribute)
     {
-        if (!is_null($attribute->prefix) && !empty($attribute->prefix)) {
+        if ($attribute->prefix !== null && !empty($attribute->prefix)) {
             $attributeName = $attribute->prefix . ':' . $attribute->name;
         } else {
             $attributeName = $attribute->name;
