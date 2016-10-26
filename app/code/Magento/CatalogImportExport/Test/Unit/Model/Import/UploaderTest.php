@@ -142,15 +142,12 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
- 	 	 	->willReturn($destDir . '/' . $fileName);
+            ->willReturn($destDir . '/' . $fileName);
 
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
         $this->uploader->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $this->uploader
-            ->expects($this->once())
-            ->method('save')
-            ->with($destDir . '/' . $fileName)
+        $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $fileName)
             ->willReturn(['name' => $fileName]);
 
         $this->uploader->setDestDir($destDir);
