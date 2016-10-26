@@ -264,7 +264,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
-     * Attributes codes which shows as date
+     * Codes of attributes which are displayed as dates
      *
      * @var array
      */
