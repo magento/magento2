@@ -16,7 +16,7 @@ if (!defined('TESTS_TEMP_DIR')) {
 }
 
 $testFrameworkDir = __DIR__;
-require_once 'deployTestModules.php';
+require_once __DIR__ . '/deployTestModules.php';
 
 try {
     /* Bootstrap the application */
