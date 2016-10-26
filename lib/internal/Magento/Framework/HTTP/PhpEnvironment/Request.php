@@ -531,7 +531,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
-     * Retrieve GET parameters
+     * Set GET parameters
      *
      * @param string $name
      * @param mixed $value
