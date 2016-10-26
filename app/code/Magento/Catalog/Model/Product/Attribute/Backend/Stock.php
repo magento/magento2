@@ -59,7 +59,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if (isset($stockData['qty']) && $stockData['qty'] === '') {
             $stockData['qty'] = null;
         }
-        if ($object->getStockData() !== null || $stockData !== null) {
+        if ($object->getStockData() !== null && $stockData !== null) {
             $object->setStockData(array_replace((array)$object->getStockData(), (array)$stockData));
         }
         $object->unsetData($this->getAttribute()->getAttributeCode());
