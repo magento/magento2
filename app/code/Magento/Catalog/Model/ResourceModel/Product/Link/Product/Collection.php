@@ -142,7 +142,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             if (!is_array($products)) {
                 $products = [$products];
             }
-            $identifierField = $this->metadataPool->getMetadata(ProductInterface::class)->getIdentifierField();
+            $identifierField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
             $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
             $this->_hasLinkFilter = true;
         }
@@ -202,7 +202,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         if ($this->getProduct() && $this->getProduct()->getId()) {
             $linkFieldId = $this->getProduct()->getData(
                 $linkField
@@ -352,7 +352,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private function joinProductsToLinks()
     {
         if ($this->_hasLinkFilter) {
-            $metaDataPool = $this->metadataPool->getMetadata(ProductInterface::class);
+            $metaDataPool = $this->getMetadataPool()->getMetadata(ProductInterface::class);
             $linkField = $metaDataPool->getLinkField();
             $entityTable = $metaDataPool->getEntityTable();
             $this->getSelect()

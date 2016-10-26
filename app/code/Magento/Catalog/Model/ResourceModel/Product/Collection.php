@@ -259,7 +259,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * Collection constructor
@@ -2192,7 +2192,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
 
         $mediaGalleries = [];
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $items = $this->getItems();
 
         $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
@@ -2210,6 +2210,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->setFlag('media_gallery_added', true);
         return $this;
+    }
+
+    /**
+     * Get MetadataPool instance
+     *
+     * @return MetadataPool
+     */
+    public function getMetadataPool()
+    {
+        return $this->metadataPool;
     }
 
     /**

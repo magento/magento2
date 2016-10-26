@@ -61,7 +61,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setProductFilter($product)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         $this->getSelect()->where('link_table.parent_id = ?', $product->getData($metadata->getLinkField()));
         return $this;

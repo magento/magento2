@@ -5,12 +5,11 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\DB\Select;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Sales Rule resource model
@@ -52,20 +51,30 @@ class Rule extends AbstractResource
     protected $entityManager;
 
     /**
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap
+     */
+    private $associatedEntitiesMapInstance;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
      * @param string $connectionName
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap|null $associatedEntityMapInstance
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap $associatedEntityMapInstance = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
-        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
+        $this->associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
+            \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
+        );
+        $this->_associatedEntitiesMap = $this->associatedEntitiesMapInstance->getData();
         parent::__construct($context, $connectionName);
     }
 
@@ -378,20 +387,6 @@ class Rule extends AbstractResource
     {
         $this->getEntityManager()->delete($object);
         return $this;
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    private function getAssociatedEntitiesMap()
-    {
-        if (!$this->_associatedEntitiesMap) {
-            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
-                ->getData();
-        }
-        return $this->_associatedEntitiesMap;
     }
 
     /**
