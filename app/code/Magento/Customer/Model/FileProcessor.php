@@ -9,6 +9,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Url\EncoderInterface;
@@ -57,11 +58,17 @@ class FileProcessor
     private $allowedExtensions = [];
 
     /**
+     * @var Mime
+     */
+    private $mime;
+
+    /**
      * @param Filesystem $filesystem
      * @param UploaderFactory $uploaderFactory
      * @param UrlInterface $urlBuilder
      * @param EncoderInterface $urlEncoder
      * @param string $entityTypeCode
+     * @param Mime $mime
      * @param array $allowedExtensions
      */
     public function __construct(
@@ -70,6 +77,7 @@ class FileProcessor
         UrlInterface $urlBuilder,
         EncoderInterface $urlEncoder,
         $entityTypeCode,
+        Mime $mime,
         array $allowedExtensions = []
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
@@ -77,6 +85,7 @@ class FileProcessor
         $this->urlBuilder = $urlBuilder;
         $this->urlEncoder = $urlEncoder;
         $this->entityTypeCode = $entityTypeCode;
+        $this->mime = $mime;
         $this->allowedExtensions = $allowedExtensions;
     }
 
@@ -107,6 +116,21 @@ class FileProcessor
         $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
 
         $result = $this->mediaDirectory->stat($filePath);
+        return $result;
+    }
+
+    /**
+     * Retrieve MIME type of requested file
+     *
+     * @param string $fileName
+     * @return string
+     */
+    public function getMimeType($fileName)
+    {
+        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
+        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($filePath);
+
+        $result = $this->mime->getMimeType($absoluteFilePath);
         return $result;
     }
 
