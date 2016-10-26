@@ -18,7 +18,7 @@ class AppConfigTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\TestFramework\Isolation\WorkingDirectory
      */
     private $model;
-x
+
     protected function setUp()
     {
         $this->model = new \Magento\TestFramework\Isolation\AppConfig();
