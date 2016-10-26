@@ -11,9 +11,17 @@ define(
         'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator',
         'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator'
     ],
-    function(utils, parseDate, expirationMonth, expirationYear) {
+    function (utils, parseDate, expirationMonth, expirationYear) {
         'use strict';
 
+        /**
+         * Validation result wrapper
+         * @param {Boolean} isValid
+         * @param {Boolean} isPotentiallyValid
+         * @param {String} month
+         * @param {String} year
+         * @returns {Object}
+         */
         function resultWrapper(isValid, isPotentiallyValid, month, year) {
             return {
                 isValid: isValid,
@@ -23,7 +31,7 @@ define(
             };
         }
 
-        return function(value) {
+        return function (value) {
             var date,
                 monthValid,
                 yearValid;

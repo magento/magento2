@@ -6,9 +6,10 @@
 /*global alert*/
 define(
     [],
-    function() {
+    function () {
         'use strict';
-        return function(value) {
+
+        return function (value) {
             var month, len;
 
             if (value.match('/')) {

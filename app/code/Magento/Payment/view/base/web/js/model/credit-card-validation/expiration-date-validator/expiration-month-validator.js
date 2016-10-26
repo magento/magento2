@@ -9,6 +9,12 @@ define(
     function () {
         'use strict';
 
+        /**
+         * Validation result wrapper
+         * @param {Boolean} isValid
+         * @param {Boolean} isPotentiallyValid
+         * @returns {Object}
+         */
         function resultWrapper(isValid, isPotentiallyValid) {
             return {
                 isValid: isValid,

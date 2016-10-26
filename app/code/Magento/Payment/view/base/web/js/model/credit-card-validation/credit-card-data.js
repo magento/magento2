@@ -6,8 +6,9 @@
 /*global alert*/
 define(
     [],
-    function() {
+    function () {
         'use strict';
+
         return {
             creditCard: null,
             creditCardNumber: null,
