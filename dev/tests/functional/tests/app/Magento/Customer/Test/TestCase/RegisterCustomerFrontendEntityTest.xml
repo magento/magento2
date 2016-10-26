@@ -14,7 +14,6 @@
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
             <data name="customer/data/password" xsi:type="string">123123^q</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogout" />
@@ -26,7 +25,6 @@
             <data name="customer/data/is_subscribed" xsi:type="string">Yes</data>
             <data name="customer/data/password" xsi:type="string">123123^q</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
