@@ -12,9 +12,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Config */
-    private $config;
-
     /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $cache;
 

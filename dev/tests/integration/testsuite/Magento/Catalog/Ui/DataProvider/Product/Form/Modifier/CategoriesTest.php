@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace dev\tests\integration\testsuite\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
-
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
+namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 /**
  * @magentoAppArea adminhtml
