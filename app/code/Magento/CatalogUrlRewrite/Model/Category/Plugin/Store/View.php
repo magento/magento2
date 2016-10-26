@@ -17,6 +17,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * Plugin which is listening store resource model and on save or on delete replace catalog url rewrites
  *
  * @see \Magento\Store\Model\ResourceModel\Store
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\CatalogUrlRewrite\Model\Category\Plugin\Store
  */
 class View

@@ -25,9 +25,9 @@ class AppConfig
      * Assumption: this is done once right before executing very first test suite.
      * It is assumed that deployment configuration is valid at this point
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param \PHPUnit_Framework_TestCase $test
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function startTest(\PHPUnit_Framework_TestCase $test)
     {

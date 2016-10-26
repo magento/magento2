@@ -22,19 +22,25 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configPlaceholderMock = $this->getMock('Magento\Store\Model\Config\Placeholder', [], [], '', false);
+        $this->configPlaceholderMock = $this->getMock(
+            \Magento\Store\Model\Config\Placeholder::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->configPlaceholderMock->expects(
             $this->any()
         )->method(
             'process'
         )->withConsecutive(
-        [['key1' => 'value1']],
-        [['key2' => 'value2']]
+            [['key1' => 'value1']],
+            [['key2' => 'value2']]
         )->willReturnOnConsecutiveCalls(
-        ['key1' => 'value1-processed'],
-        ['key2' => 'value2-processed']
-    );
+            ['key1' => 'value1-processed'],
+            ['key2' => 'value2-processed']
+        );
 
         $this->model = new \Magento\Store\Model\Config\Processor\Placeholder($this->configPlaceholderMock);
     }

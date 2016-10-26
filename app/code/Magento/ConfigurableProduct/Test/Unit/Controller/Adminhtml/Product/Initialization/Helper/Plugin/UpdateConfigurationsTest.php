@@ -13,6 +13,11 @@ use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class UpdateConfigurationsTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
+ */
 class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
 {
     /**
