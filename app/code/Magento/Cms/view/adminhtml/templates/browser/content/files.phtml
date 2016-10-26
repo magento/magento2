@@ -21,11 +21,11 @@ $_height = $block->getImagesHeight();
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)): ?>
-            <small><?php echo $block->escapeHtml($block->getFileWidth($file)) ?>x<?php echo $block->escapeHtml($block->getFileHeight($file)) ?> <?php echo $this->escapeHtml(__('px.')) ?></small><br/>
+            <small><?php echo $block->escapeHtml($block->getFileWidth($file)) ?>x<?php echo $block->escapeHtml($block->getFileHeight($file)) ?> <?php echo $block->escapeHtml(__('px.')) ?></small><br/>
         <?php endif; ?>
         <small><?php echo $block->escapeHtml($block->getFileShortName($file)); ?></small>
     </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="empty"><?php echo $this->escapeHtml(__('No files found')) ?></div>
+    <div class="empty"><?php echo $block->escapeHtml(__('No files found')) ?></div>
 <?php endif; ?>
