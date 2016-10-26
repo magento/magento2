@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-    <page name="MyCreditCards" mca="vault/cards/listaction" module="Magento_Vault">
-        <block name="creditCardsBlock" class="Magento\Vault\Test\Block\CreditCards" locator=".table-credit-cards" strategy="css selector" />
+    <page name="StoredPaymentMethods" mca="vault/cards/listaction" module="Magento_Vault">
+        <block name="storedPaymentsBlock" class="Magento\Vault\Test\Block\StoredPayments" locator=".table-credit-cards" strategy="css selector" />
         <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector" />
     </page>
 </config>

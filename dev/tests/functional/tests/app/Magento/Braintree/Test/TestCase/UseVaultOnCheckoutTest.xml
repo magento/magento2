@@ -9,20 +9,21 @@
     <testCase name="Magento\Vault\Test\TestCase\UseVaultOnCheckoutTest" summary="Use saved for Braintree credit card on checkout.">
         <variation name="UseVaultOnCheckoutBraintreeTestVariation1" summary="Use saved for Braintree credit card on checkout" ticketId="MAGETWO-46530, MAGETWO-38382">
             <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="vault/method" xsi:type="string">braintree_cc_vault</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="creditCardSave" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">braintree, braintree_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Ship</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Ship, Reorder, Edit</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
