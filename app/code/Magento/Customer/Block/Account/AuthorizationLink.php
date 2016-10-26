@@ -6,13 +6,14 @@
 namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Model\Context;
+use Magento\Customer\Block\Account\SortLinkInterface;
 
 /**
  * Customer authorization link
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link
+class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
 {
     /**
      * Customer session
@@ -87,5 +88,13 @@ class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link
     public function isLoggedIn()
     {
         return $this->httpContext->getValue(Context::CONTEXT_AUTH);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortOrder()
+    {
+        return $this->getData(self::SORT_ORDER);
     }
 }

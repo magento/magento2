@@ -40,7 +40,7 @@
                         </arguments>
                     </block>
                     <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
-                    <block class="Magento\Framework\View\Element\Html\Links" name="top.links">
+                    <block class="Magento\Customer\Block\Account\Navigation" name="top.links">
                         <arguments>
                             <argument name="css_class" xsi:type="string">header links</argument>
                         </arguments>
