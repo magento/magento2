@@ -47,16 +47,4 @@ class AppConfig
 
         return $this->testAppConfig;
     }
-
-    /**Clean memorized and cached setting values
-     * Checks if deployment configuration has been changed by a test
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param \PHPUnit_Framework_TestCase $test
-     * @return void
-     */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
-    {
-        $this->getTestAppConfig()->clean();
-    }
 }
