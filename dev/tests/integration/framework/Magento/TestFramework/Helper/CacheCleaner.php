@@ -5,6 +5,7 @@
  */
 
 namespace Magento\TestFramework\Helper;
+
 use Magento\Framework\App\Cache\Frontend\Pool;
 
 /**
