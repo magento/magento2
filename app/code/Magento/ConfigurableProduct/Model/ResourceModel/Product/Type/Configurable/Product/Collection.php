@@ -7,10 +7,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
 
-use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
-
 /**
  * Class Collection
  *
@@ -61,7 +57,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setProductFilter($product)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getProductEntityMetadata();
 
         $this->getSelect()->where('link_table.parent_id = ?', $product->getData($metadata->getLinkField()));
         return $this;
