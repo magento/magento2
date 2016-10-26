@@ -120,7 +120,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $associatedEntitiesMap = $this->getMock(
-            \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class,
+            \Magento\Framework\DataObject::class,
             ['getData'],
             [],
             '',
