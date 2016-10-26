@@ -2,7 +2,7 @@
     "name": "magento/module-bundle-import-export",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
         "magento/module-catalog": "101.1.*",
         "magento/module-import-export": "100.2.*",
         "magento/module-catalog-import-export": "100.2.*",
