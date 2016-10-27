@@ -6,35 +6,10 @@
 -->
 <!-- ko ifnot: isItemsBlockExpanded() -->
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active'}}">
-    <div class="title" data-role="title">
-        <strong role="heading"><span data-bind="text: getItemsQty()"></span>
-            <!-- ko if: getItemsQty() == 1 -->
-            <!-- ko i18n: 'Item in Cart' --><!-- /ko -->
-            <!-- /ko -->
-            <!-- ko if: getItemsQty() > 1 -->
-            <!-- ko i18n: 'Items in Cart' --><!-- /ko -->
-            <!-- /ko -->
-        </strong>
-    </div>
-    <div class="content minicart-items" data-role="content">
-        <div class="minicart-items-wrapper overflowed">
-            <ol class="minicart-items">
-                <!-- ko foreach: getItems() -->
-                <li class="product-item">
-                    <div class="product">
-                        <!-- ko foreach: $parent.elems() -->
-                        <!-- ko template: getTemplate() --><!-- /ko -->
-                        <!-- /ko -->
-                    </div>
-                </li>
-                <!-- /ko -->
-            </ol>
-        </div>
-    </div>
-</div>
 <!-- /ko -->
 <!-- ko if: isItemsBlockExpanded() -->
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': true}}">
+<!-- /ko -->
     <div class="title" data-role="title">
         <strong role="heading"><span data-bind="text: getItemsQty()"></span>
             <!-- ko if: getItemsQty() == 1 -->
@@ -61,4 +36,3 @@
         </div>
     </div>
 </div>
-<!-- /ko -->
