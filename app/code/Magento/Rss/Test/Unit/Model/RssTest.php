@@ -71,7 +71,10 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->rss->setDataProvider($dataProvider);
 
-        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(false));
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with('cache_key')
+            ->will($this->returnValue(false));
         $this->cacheMock->expects($this->once())->method('save')->will($this->returnValue(true));
         $this->serializerMock->expects($this->once())
             ->method('serialize')
@@ -90,7 +93,9 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->rss->setDataProvider($dataProvider);
 
-        $this->cacheMock->expects($this->once())->method('load')
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with('cache_key')
             ->will($this->returnValue('serializedData'));
         $this->serializerMock->expects($this->once())
             ->method('unserialize')

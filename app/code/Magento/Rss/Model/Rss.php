@@ -9,11 +9,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Auth session model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 class Rss
 {
     /**
