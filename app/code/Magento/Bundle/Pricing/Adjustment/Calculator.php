@@ -216,9 +216,9 @@ class Calculator implements BundleCalculatorInterface
                     $selectionsCollection->addAttributeToSelect('special_price_from');
                     $selectionsCollection->addAttributeToSelect('special_price_to');
                     $selectionsCollection->addAttributeToSelect('tax_class_id');
-                    $selectionsCollection->addTierPriceData();
                 }
-                $selection = $selectionsCollection->fetchItem();
+
+                $selection = $selectionsCollection->getFirstItem();
                 $priceList[] =  $this->selectionFactory->create(
                     $bundleProduct,
                     $selection,
@@ -230,6 +230,19 @@ class Calculator implements BundleCalculatorInterface
             }
 
         }
+
+        if ($searchMin && $bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC && !$productHasRequiredOption) {
+            $minPrice = null;
+            $priceSelection = null;
+            foreach ($priceList as $price) {
+                $minPriceTmp = $price->getAmount()->getValue() * $price->getQuantity();
+                if (!$minPrice || $minPriceTmp < $minPrice) {
+                    $priceSelection = $price;
+                }
+            }
+            $priceList = [$priceSelection];
+        }
+
         return $priceList;
     }
 

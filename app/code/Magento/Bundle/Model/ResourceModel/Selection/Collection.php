@@ -279,4 +279,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getSelect()->limit(1);
         return $this;
     }
+
+    /**
+     * Clear collection data after clone
+     */
+    public function __clone()
+    {
+        parent::__clone();
+        $this->removeAttributeToSelect();
+        $this->clear();
+    }
 }

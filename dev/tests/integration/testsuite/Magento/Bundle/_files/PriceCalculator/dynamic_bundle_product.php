@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../../Magento/Catalog/_files/multiple_products.php';
+require __DIR__ . '/../../../../Magento/Bundle/_files/multiple_products.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
