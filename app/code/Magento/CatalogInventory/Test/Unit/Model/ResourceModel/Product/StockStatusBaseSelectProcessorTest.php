@@ -55,7 +55,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('join')
             ->with(
                 ['stock' => $tableName],
-                sprintf('stock.product_id = %s.entity_id', BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS),
+                'stock.product_id = ' . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . '.child_id',
                 []
             )
             ->willReturnSelf();

@@ -65,7 +65,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('join')
             ->with(
                 ['status_attr' => $backendTable],
-                'status_attr.entity_id = ' . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . '.entity_id',
+                'status_attr.entity_id = ' . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . '.child_id',
                 []
             )
             ->willReturnSelf();
