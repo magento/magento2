@@ -7,10 +7,11 @@ namespace Magento\Webapi\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
 {
-    /**bootstrap.sh
+    /**
      * @var ServiceMetadata
      */
     private $serviceMetadata;
@@ -57,7 +58,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ],
                             'throws' => [
-                                "\\Magento\\Framework\\Exception\\LocalizedException"
+                                '\\' . LocalizedException::class
                             ]
                         ]
                     ]
@@ -106,7 +107,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ],
                             'throws' => [
-                                "\\Magento\\Framework\\Exception\\LocalizedException"
+                                '\\' . LocalizedException::class
                             ]
                         ]
                     ]
