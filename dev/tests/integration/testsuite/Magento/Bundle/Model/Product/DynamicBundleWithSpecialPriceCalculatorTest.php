@@ -78,15 +78,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
     public function getTestCases()
     {
         return [
-            'Testing price for dynamic bundle product with sub items and without any discounts' => [
-                'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(),
-                'expectedResults' => [
-                    // just price from simple1
-                    'minimalPrice' => 10,
-                    // just price from simple1
-                    'maximalPrice' => 10
-                ]
-            ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #1' => [
                 'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(),
                 'expectedResults' => [
@@ -176,27 +167,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                     // 0.5 * 3 * 20
                     'maximalPrice' => 30
                 ]
-            ],
-        ];
-    }
-
-    public function getProductWithSubItemsAndOptionsStrategy()
-    {
-        $optionsData = [
-            [
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'option_id' => 1,
-                    ],
-                ]
-            ],
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
             ],
         ];
     }
