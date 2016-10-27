@@ -66,6 +66,7 @@ define([
          */
         initObservable: function () {
             var $form = $('[data-form="edit-product"]'),
+                formSubmitHandlers = $form.data('events').submit,
                 pagingObservables = {
                     current: ko.getObservable(this.paging, 'current'),
                     pageSize: ko.getObservable(this.paging, 'pageSize')
@@ -82,7 +83,7 @@ define([
                 }, this);
             }, this);
 
-            $form.change(function () {
+            $form.submit(function (event) {
                 var variations = this.prepareVariations(),
                     validationError = this.validateVariationPrices(this.variations) || false;
 
@@ -91,12 +92,15 @@ define([
                 this.configurationsSerialized(JSON.stringify(this.configurations));
 
                 if (validationError) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
                     pagingObservables.current(
                         Math.floor(this.variations.indexOf(validationError) / pagingObservables.pageSize() + 1)
                     );
                     $form.validation('isValid');
                 }
             }.bind(this));
+            formSubmitHandlers.splice(0, 0, formSubmitHandlers.pop());
 
             return this;
         },

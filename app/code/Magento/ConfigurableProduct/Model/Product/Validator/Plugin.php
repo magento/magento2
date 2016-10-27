@@ -128,9 +128,6 @@ class Plugin
                     }
                 }
             }
-            if (empty($productData['price'])) {
-                $validationResult['variations-matrix-' . $configurableAttribute . '-price'] = true;
-            }
         }
         return $validationResult;
     }
