@@ -5,11 +5,8 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
-/**
- * Eav attribute set resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -26,6 +23,11 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Eav\Model\Config
      */
     protected $eavConfig;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -152,7 +154,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
 
         if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
-            $setInfoData = unserialize($cache);
+            $setInfoData = $this->getSerializer()->unserialize($cache);
         } else {
             $attributeSetData = $this->fetchAttributeSetData($setId);
 
@@ -168,7 +170,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             if ($this->eavConfig->isCacheEnabled()) {
                 $this->eavConfig->getCache()->save(
-                    serialize($setInfoData),
+                    $this->getSerializer()->serialize($setInfoData),
                     $cacheKey,
                     [
                         \Magento\Eav\Model\Cache\Type::CACHE_TAG,
@@ -232,5 +234,20 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
         return $connection->fetchAll($select, $bind);
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }
