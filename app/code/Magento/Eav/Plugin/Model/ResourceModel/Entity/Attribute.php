@@ -47,7 +47,7 @@ class Attribute
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer;
-        $this->cacheState = $cacheState;;
+        $this->cacheState = $cacheState;
     }
 
     /**

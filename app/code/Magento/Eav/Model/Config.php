@@ -105,6 +105,7 @@ class Config
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param SerializerInterface $serializer
      * @codeCoverageIgnore
      */
     public function __construct(
