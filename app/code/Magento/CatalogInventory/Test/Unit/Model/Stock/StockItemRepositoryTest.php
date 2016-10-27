@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
@@ -151,9 +153,8 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getTypeId', '__wakeup'])
             ->getMock();
-        $this->productFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->productMock);
+
+        $this->productFactoryMock->expects($this->any())->method('create')->willReturn($this->productMock);
 
         $this->queryBuilderFactoryMock = $this->getMockBuilder('Magento\Framework\DB\QueryBuilderFactory')
             ->setMethods(['create'])
@@ -183,6 +184,22 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $productCollection = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
+        )->disableOriginalConstructor()->getMock();
+
+        $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addFieldToSelect')->willReturnSelf();
+        $productCollection->expects($this->any())->method('getFirstItem')->willReturn($this->productMock);
+
+        $productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
+
         $this->model = (new ObjectManager($this))->getObject(
             StockItemRepository::class,
             [
@@ -198,6 +215,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
                 'indexProcessor' => $this->indexProcessorMock,
                 'dateTime' => $this->dateTime,
                 'stockRegistryStorage' => $this->stockRegistryStorage,
+                'productCollectionFactory' => $productCollectionFactory,
             ]
         );
     }
@@ -261,7 +279,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('typeId');
         $this->stockConfigurationMock->expects($this->once())->method('isQty')->with('typeId')->willReturn(true);
@@ -307,7 +324,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn(null);
         $this->stockRegistryStorage->expects($this->never())->method('removeStockItem');
         $this->stockRegistryStorage->expects($this->never())->method('removeStockStatus');
@@ -323,7 +339,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('typeId');
         $this->stockConfigurationMock->expects($this->once())->method('isQty')->with('typeId')->willReturn(false);

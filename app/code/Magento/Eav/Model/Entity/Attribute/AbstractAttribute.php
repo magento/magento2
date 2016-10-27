@@ -6,8 +6,8 @@
 
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - attribute abstract
@@ -595,11 +595,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         /** @var array $emptyStringTypes list of attribute types that treat empty string as a possible value */
         $emptyStringTypes = ['int', 'decimal', 'datetime', 'varchar', 'text', 'static'];
-        $attributeType = $this->getBackend()->getType();
         return (is_array($value) && count($value) == 0)
             || $value === null
-            || ($value === false && $attributeType != 'int')
-            || ($value === '' && in_array($attributeType, $emptyStringTypes));
+            || ($value === false && $this->getBackend()->getType() != 'int')
+            || ($value === '' && in_array($this->getBackend()->getType(), $emptyStringTypes));
     }
 
     /**
