@@ -58,7 +58,8 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
             ->addIdFilter($productIds)
             ->addAttributeToSelect('*')
             ->addPriceData()
-            ->addTierPriceData();
+            ->addTierPriceData()
+            ->getItems();
         return $lowestPriceChildProducts;
     }
 }
