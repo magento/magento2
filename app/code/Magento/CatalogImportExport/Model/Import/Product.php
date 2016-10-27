@@ -2418,25 +2418,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
-     *
-     * @param string $values
-     * @return array
-     */
-    public function parseMultiselectValues($values)
-    {
-        if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
-            return explode(self::PSEUDO_MULTI_LINE_SEPARATOR, $values);
-        }
-        if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
-            return $values = array_map(function ($value) {
-                return str_replace('""', '"', $value);
-            }, $matches[1]);
-        }
-        return [$values];
-    }
-
-    /**
      * Retrieves escaped PSEUDO_MULTI_LINE_SEPARATOR if it is metacharacter for regular expression
      *
      * @return string
