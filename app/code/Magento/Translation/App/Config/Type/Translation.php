@@ -21,7 +21,7 @@ class Translation implements ConfigTypeInterface
     /**
      * @var DataObject[]
      */
-    private $data = [];
+    private $data;
 
     /**
      * @var ConfigSourceInterface

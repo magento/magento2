@@ -103,7 +103,7 @@ class Writer
             $paths = $pool ? $this->configFilePool->getPathsByPool($pool) : $this->configFilePool->getPaths();
 
             if (isset($paths[$fileKey])) {
-                $currentData = $this->reader->load($fileKey);
+                $currentData = $this->reader->loadConfigFile($fileKey, $paths[$fileKey], true);
                 if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);
