@@ -82,7 +82,7 @@ $currencySymbol = $block->getCurrencySymbol();
                             </tr>
                         </thead>
                         <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
-                            <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 },
+                            <tr data-role="row" data-bind="css: { _disabled: variation.status === '0', even: $index() % 2 },
                                 attr: { 'data-row-number': variation.variationKey }">
                                 <td class="col-image" data-column="image">
                                     <div class="actions split actions-image-uploader">
@@ -97,6 +97,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                     name: $parent.getVariationRowName(variation, 'image')}"/>
                                                 <span><?= /* @escapeNotVerified */  __('Upload Image'); ?></span>
                                                 <input name="image" type="file"
+                                                       data-bind="attr: {disabled: variation.status === '0'}"
                                                        data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
                                                        title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
                                             <!-- /ko -->
@@ -128,7 +129,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <input type="text" class="required-entry" data-bind="
                                             attr: {
                                                 id: $parent.getRowId(variation, 'name'),
-                                                name: $parent.getVariationRowName(variation, 'name')
+                                                name: $parent.getVariationRowName(variation, 'name'),
+                                                disabled: variation.status === '0'
                                             },
                                             value: variation.name
                                         "/>
@@ -155,7 +157,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <input type="text" class="required-entry" data-bind="
                                             attr: {
                                                 id: $parent.getRowId(variation, 'sku'),
-                                                name: $parent.getVariationRowName(variation, 'sku')
+                                                name: $parent.getVariationRowName(variation, 'sku'),
+                                                disabled: variation.status === '0'
                                             },
                                             value: variation.sku
                                         "/>
@@ -170,7 +173,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                             <input type="text" id="" class="required-entry validate-zero-or-greater" data-bind="
                                                 attr: {
                                                     id: $parent.getRowId(variation, 'price'),
-                                                    name: $parent.getVariationRowName(variation, 'price')
+                                                    name: $parent.getVariationRowName(variation, 'price'),
+                                                    disabled: variation.status === '0'
                                                 },
                                                 value: variation.price,
                                                 event: {
@@ -192,7 +196,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <input type="text" class="validate-zero-or-greater" data-bind="
                                             attr: {
                                                 id: $parent.getRowId(variation, 'qty'),
-                                                name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty')
+                                                name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'),
+                                                disabled: variation.status === '0'
                                             },
                                             value: variation.quantity
                                         "/>
@@ -206,7 +211,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <input type="text" class="validate-zero-or-greater" data-bind="
                                             attr: {
                                                 id: $parent.getRowId(variation, 'weight'),
-                                                name: $parent.getVariationRowName(variation, 'weight')
+                                                name: $parent.getVariationRowName(variation, 'weight'),
+                                                disabled: variation.status === '0'
                                             },
                                             value: variation.weight
                                         "/>
@@ -231,7 +237,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                 <a class="action-menu-item"
                                                    data-bind="
                                                         attr: {'data-attributes': variation.attribute},
-                                                        click: $parent.showGrid.bind($parent, $index())
+                                                        click: $parent.showGrid.bind($parent, variation.variationKey)
                                                     "
                                                    data-action="choose"
                                                    href="#">
@@ -241,11 +247,11 @@ $currencySymbol = $block->getCurrencySymbol();
                                             <li>
                                                 <a class="action-menu-item" data-bind="
                                                     text: variation.status == 1 ? $t('Disable Product') : $t('Enable Product'),
-                                                    click: $parent.toggleProduct.bind($parent, $index())">
+                                                    click: $parent.toggleProduct.bind($parent, variation.variationKey)">
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
+                                                <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, variation.variationKey)">
                                                     <?= /* @escapeNotVerified */  __('Remove Product');?>
                                                 </a>
                                             </li>

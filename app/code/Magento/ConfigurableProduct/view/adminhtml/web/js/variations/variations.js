@@ -112,10 +112,13 @@ define([
         },
 
         /**
-         * @param {String} rowIndex
+         * @param {String} variationKey
          */
-        showGrid: function (rowIndex) {
-            var product = this.productMatrix()[rowIndex],
+        showGrid: function (variationKey) {
+            var rowIndex = _.findIndex(this.variations, function (variation) {
+                    return variation.variationKey === variationKey;
+                }),
+                product = this.variations[rowIndex],
                 attributes = JSON.parse(product.attribute),
                 filterModifier = product.productId ? {
                     'entity_id': {
@@ -324,7 +327,7 @@ define([
 
                 if (variation.productId) {
                     configurations[variation.productId] = {
-                        'status': variation.status === undefined ? 1 : parseInt(variation.status, 10)
+                        'status': variation.status || '1'
                     };
 
                     if (this.associatedProducts.indexOf(variation.productId) === -1) {
@@ -348,7 +351,7 @@ define([
                     'media_gallery': variation['media_gallery'] || {},
                     'name': variation.name || variation.sku,
                     'configurable_attribute': JSON.stringify(attributes),
-                    'status': variation.status === undefined ? 1 : parseInt(variation.status, 10),
+                    'status': variation.status || '1',
                     'sku': variation.sku,
                     'price': variation.price,
                     'weight': variation.weight,
@@ -423,7 +426,7 @@ define([
                     variationKey: this.getVariationKey(variation.options),
                     editable: variation.editable === undefined ? !variation.productId : variation.editable,
                     productUrl: this.buildProductUrl(variation.productId),
-                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
+                    status: variation.status || '1',
 
                     /**
                      * Validates variation price.
@@ -433,6 +436,7 @@ define([
                     }
                 }));
             }, this);
+            this.productMatrix([]);
             this.productMatrix(tempMatrix);
         },
 
@@ -445,10 +449,16 @@ define([
         },
 
         /**
-         * @param {Number} rowIndex
+         * @param {Number} variationKey
          */
-        removeProduct: function (rowIndex) {
-            var removedProduct = this.variations.splice(rowIndex, 1);
+        removeProduct: function (variationKey) {
+            var removedProduct, rowIndex;
+
+            rowIndex = _.findIndex(this.variations, function (variation) {
+                return variation.variationKey === variationKey;
+            });
+
+            removedProduct = this.variations.splice(rowIndex, 1);
 
             this.opened(false);
             delete this.productAttributesMap[this.getVariationKey(removedProduct[0].options)];
@@ -464,29 +474,30 @@ define([
                 this.associatedProducts.splice(rowIndex, 1);
             }
             this.render(this.variations);
-            this.showPrice();
         },
 
         /**
-         * @param {String} rowIndex
+         * @param {String} variationKey
          * @see use in matrix.phtml
          */
-        toggleProduct: function (rowIndex) {
-            var product, row, productChanged = {};
+        toggleProduct: function (variationKey) {
+            var rowIndex = _.findIndex(this.variations, function (variation) {
+                    return variation.variationKey === variationKey;
+                }),
+                productRow = this.variations[rowIndex];
 
-            if (this.productMatrix()[rowIndex].editable) {
-                row = $('[data-row-number=' + rowIndex + ']');
-                _.each(['name','sku','qty','weight','price'], function (column) {
-                    productChanged[column] = $(
-                        'input[type=text]',
-                        row.find($('[data-column="%s"]'.replace('%s', column)))
-                    ).val();
+            if (productRow.editable) {
+                _.each(['name', 'sku', 'quantity', 'weight', 'price'], function (column) {
+                    productRow[column] = '';
                 });
             }
-            product = this.productMatrix.splice(rowIndex, 1)[0];
-            product = _.extend(product, productChanged);
-            product.status = +!product.status;
-            this.productMatrix.splice(rowIndex, 0, product);
+
+            if (productRow.status === '0') {
+                productRow.status = '1';
+            } else {
+                productRow.status = '0';
+            }
+            this.render(this.variations);
         },
 
         /**
