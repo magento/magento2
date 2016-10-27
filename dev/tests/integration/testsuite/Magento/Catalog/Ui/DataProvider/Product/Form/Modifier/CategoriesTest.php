@@ -35,9 +35,15 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
     public function testModifyMeta()
     {
         $inputMeta = include __DIR__ . '/_files/input_meta_for_categories.php';
-        CacheCleaner::cleanAll();
-        $meta = $this->object->modifyMeta($inputMeta);
         $expectedCategories = include __DIR__ . '/_files/expected_categories.php';
+        CacheCleaner::cleanAll();
+        $this->assertCategoriesInMeta($expectedCategories, $this->object->modifyMeta($inputMeta));
+        // Verify cached data
+        $this->assertCategoriesInMeta($expectedCategories, $this->object->modifyMeta($inputMeta));
+    }
+
+    private function assertCategoriesInMeta(array $expectedCategories, array $meta)
+    {
         $categoriesElement = $meta['product-details']['children']['container_category_ids']['children']['category_ids'];
         $this->assertEquals($expectedCategories, $categoriesElement['arguments']['data']['config']['options']);
     }
