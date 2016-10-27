@@ -84,6 +84,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         }
 
         $params = $this->getRequest()->getParams();
+
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(

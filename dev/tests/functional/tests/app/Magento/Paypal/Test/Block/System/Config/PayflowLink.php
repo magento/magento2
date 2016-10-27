@@ -20,8 +20,6 @@ class PayflowLink extends Block
      * @var array
      */
     private $fields = [
-        'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_payment_gateways_payflow_link_us_' .
-            'payflow_link_required_payflow_link_payflow_link_business_account',
         'Partner' => '#payment_us_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_' .
             'link_partner',
         'Vendor' => '#payment_us_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_' .
@@ -60,8 +58,6 @@ class PayflowLink extends Block
      */
     public function specifyCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])
-            ->setValue('test@test.com');
         $this->_rootElement->find($this->fields['Partner'])->setValue('1');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('1');
         $this->_rootElement->find($this->fields['User'])->setValue('1');
@@ -75,7 +71,6 @@ class PayflowLink extends Block
      */
     public function clearCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])->setValue('');
         $this->_rootElement->find($this->fields['Partner'])->setValue('');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('');
         $this->_rootElement->find($this->fields['User'])->setValue('');
