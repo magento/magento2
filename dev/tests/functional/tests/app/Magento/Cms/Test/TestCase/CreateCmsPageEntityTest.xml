@@ -67,8 +67,8 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
         </variation>
-        <variation name="CreateCmsPageEntityTestVariation2" summary="Create page for default store view">
-            <data name="tag" xsi:type="string">severity:S1</data>
+        <variation name="CreateCmsPageEntityTestVariation6" summary="Create CMS page with single store mode" ticketId="MAGETWO-59654">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="configData" xsi:type="string">enable_single_store_mode</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
