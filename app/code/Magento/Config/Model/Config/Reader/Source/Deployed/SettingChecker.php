@@ -22,12 +22,20 @@ class SettingChecker
     private $config;
 
     /**
+     * @var ScopeCodeResolver
+     */
+    private $scopeCodeResolver;
+
+    /**
      * @param DeploymentConfig $config
+     * @param ScopeCodeResolver $scopeCodeResolver
      */
     public function __construct(
-        DeploymentConfig $config
+        DeploymentConfig $config,
+        ScopeCodeResolver $scopeCodeResolver
     ) {
         $this->config = $config;
+        $this->scopeCodeResolver = $scopeCodeResolver;
     }
 
     /**
@@ -42,7 +50,7 @@ class SettingChecker
         $scopePath = 'system/' . $scope;
 
         if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $scopePath .= '/' . $this->getScopeCodeResolver()->resolve($scope, $scopeCode);
+            $scopePath .= '/' . $this->scopeCodeResolver->resolve($scope, $scopeCode);
         }
 
         return $scopePath;
@@ -59,13 +67,5 @@ class SettingChecker
     {
         $config = $this->config->get($this->resolvePath($scope, $scopeCode) . "/" . $path);
         return $config !== null;
-    }
-
-    /**
-     * @return ScopeCodeResolver
-     */
-    private function getScopeCodeResolver()
-    {
-        return ObjectManager::getInstance()->get(ScopeCodeResolver::class);
     }
 }

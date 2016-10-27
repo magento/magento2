@@ -45,7 +45,6 @@ class Store extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $this->_config->clean();
         $this->_cacheManager->clean();
         return parent::afterSave();
     }
