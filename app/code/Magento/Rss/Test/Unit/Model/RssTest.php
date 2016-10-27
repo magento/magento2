@@ -75,7 +75,10 @@ class RssTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with('cache_key')
             ->will($this->returnValue(false));
-        $this->cacheMock->expects($this->once())->method('save')->will($this->returnValue(true));
+        $this->cacheMock->expects($this->once())
+            ->method('save')
+            ->with('serializedData')
+            ->will($this->returnValue(true));
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($this->feedData)
