@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Soap;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                                     ]
                                 ],
                                 'throws' => [
-                                    "\\Magento\\Framework\\Exception\\LocalizedException"
+                                    '\\' . LocalizedException::class
                                 ]
                             ]
                         ]
