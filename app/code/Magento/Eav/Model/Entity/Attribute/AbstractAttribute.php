@@ -111,6 +111,13 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     protected $dataObjectHelper;
 
+	/**
+	 * Array of attribute types that have empty string as a possible value.
+	 *
+	 * @var array
+	 */
+	private $emptyStringTypes = ['int', 'decimal', 'datetime', 'varchar', 'text', 'static'];
+
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -587,19 +594,44 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         return $this->getEntityType()->getEntity()->getDefaultAttributeSourceModel();
     }
 
-    /**
-     * @param array|null|bool|int|float|string $value
-     * @return bool
-     */
-    public function isValueEmpty($value)
-    {
-        /** @var array $emptyStringTypes list of attribute types that treat empty string as a possible value */
-        $emptyStringTypes = ['int', 'decimal', 'datetime', 'varchar', 'text', 'static'];
-        return (is_array($value) && count($value) == 0)
-            || $value === null
-            || ($value === false && $this->getBackend()->getType() != 'int')
-            || ($value === '' && in_array($this->getBackend()->getType(), $emptyStringTypes));
-    }
+	/**
+	 * Check if Value is empty.
+	 *
+	 * @param array|null|bool|int|float|string $value
+	 * @param bool $strictEmptyStringType [optional] Flag for allow empty string as a possible value for String.
+	 *                                               By default set to TRUE = disallow empty string.
+	 * @return bool
+	 */
+	public function isValueEmpty($value, $strictEmptyStringType = true)
+	{
+		$isInEmptyStringTypes = $strictEmptyStringType ? $this->isInEmptyStringTypes() : !$this->isInEmptyStringTypes();
+
+		return (is_array($value) && count($value) == 0)
+			|| $value === null
+			|| ($value === false && $this->getBackend()->getType() != 'int')
+			|| ($value === '' && $isInEmptyStringTypes);
+	}
+
+	/**
+	 * Check if attribute empty value is valid.
+	 *
+	 * @param array|null|bool|int|float|string $value
+	 * @return bool
+	 */
+	public function isAllowedEmptyTextValue($value)
+	{
+		return $this->isInEmptyStringTypes() && $value === '';
+	}
+
+	/**
+	 * Check is attribute type in allowed empty string types.
+	 *
+	 * @return bool
+	 */
+	private function isInEmptyStringTypes()
+	{
+		return in_array($this->getBackendType(), $this->emptyStringTypes);
+	}
 
     /**
      * Check if attribute in specified set

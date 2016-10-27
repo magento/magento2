@@ -128,49 +128,60 @@ class UpdateHandler implements AttributeInterface
                 if ($attribute->isStatic()) {
                     continue;
                 }
-                /**
-                 * Only scalar values can be stored in generic tables
-                 */
-                if (isset($entityData[$attribute->getAttributeCode()])
-                    && !is_scalar($entityData[$attribute->getAttributeCode()])) {
-                    continue;
-                }
-                if (isset($snapshot[$attribute->getAttributeCode()])
-                    && $snapshot[$attribute->getAttributeCode()] !== false
-                    && (array_key_exists($attribute->getAttributeCode(), $entityData)
-                        && $attribute->isValueEmpty($entityData[$attribute->getAttributeCode()]))
-                ) {
-                    $this->attributePersistor->registerDelete(
-                        $entityType,
-                        $entityData[$metadata->getLinkField()],
-                        $attribute->getAttributeCode()
-                    );
-                }
-                if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
-                        || $snapshot[$attribute->getAttributeCode()] === false)
-                    && array_key_exists($attribute->getAttributeCode(), $entityData)
-                    && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
-                ) {
-                    $this->attributePersistor->registerInsert(
-                        $entityType,
-                        $entityData[$metadata->getLinkField()],
-                        $attribute->getAttributeCode(),
-                        $entityData[$attribute->getAttributeCode()]
-                    );
-                }
-                if (array_key_exists($attribute->getAttributeCode(), $snapshot)
-                    && $snapshot[$attribute->getAttributeCode()] !== false
-                    && array_key_exists($attribute->getAttributeCode(), $entityData)
-                    && $snapshot[$attribute->getAttributeCode()] != $entityData[$attribute->getAttributeCode()]
-                    && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
-                ) {
-                    $this->attributePersistor->registerUpdate(
-                        $entityType,
-                        $entityData[$metadata->getLinkField()],
-                        $attribute->getAttributeCode(),
-                        $entityData[$attribute->getAttributeCode()]
-                    );
-                }
+	            $code = $attribute->getAttributeCode();
+	            /**
+	             * Only scalar values can be stored in generic tables
+	             */
+	            if (isset($entityData[$code]) && !is_scalar($entityData[$code])) {
+		            continue;
+	            }
+	            /**
+	             * Only changed attributes need to handle update process
+	             */
+	            if (!array_key_exists($code, $entityData)) {
+		            continue;
+	            }
+
+	            $newValue = $entityData[$code];
+	            $isValueEmpty = $attribute->isValueEmpty($newValue, false);
+	            $isAllowedEmptyTextValue = $attribute->isAllowedEmptyTextValue($newValue);
+
+	            if (array_key_exists($code, $snapshot)) {
+		            $snapshotValue = $snapshot[$code];
+		            /**
+		             * 'FALSE' value for attributes can't be update or delete
+		             */
+		            if ($snapshotValue === false) {
+			            continue;
+		            }
+
+		            if ($isValueEmpty && !$isAllowedEmptyTextValue) {
+			            $this->attributePersistor->registerDelete(
+				            $entityType,
+				            $entityData[$metadata->getLinkField()],
+				            $code
+			            );
+		            } elseif ((!$isValueEmpty || $isAllowedEmptyTextValue) && $snapshotValue !== $newValue) {
+			            $this->attributePersistor->registerUpdate(
+				            $entityType,
+				            $entityData[$metadata->getLinkField()],
+				            $code,
+				            $newValue
+			            );
+		            }
+	            } else {
+		            /**
+		             * Only not empty value of attribute is insertable
+		             */
+		            if (!$isValueEmpty || $isAllowedEmptyTextValue) {
+			            $this->attributePersistor->registerInsert(
+				            $entityType,
+				            $entityData[$metadata->getLinkField()],
+				            $code,
+				            $newValue
+			            );
+		            }
+	            }
             }
             $this->attributePersistor->flush($entityType, $context);
         }
