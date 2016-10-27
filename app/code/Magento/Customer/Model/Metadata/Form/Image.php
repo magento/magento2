@@ -7,10 +7,21 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\Api\ArrayObjectSearch;
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
 
 class Image extends File
 {
+    /**
+     * @var ImageContentInterfaceFactory
+     */
+    private $imageContentFactory;
+
     /**
      * Validate file by attribute validate rules
      * Return array of errors
@@ -68,7 +79,7 @@ class Image extends File
 
         $maxImageHeight = ArrayObjectSearch::getArrayElementByName(
             $rules,
-            'max_image_height'
+            'max_image_heght'
         );
         if ($maxImageHeight !== null) {
             if ($maxImageHeight < $imageProp[1]) {
@@ -78,5 +89,82 @@ class Image extends File
         }
 
         return $errors;
+    }
+
+    /**
+     * Process file uploader UI component data
+     *
+     * @param array $value
+     * @return bool|int|ImageContentInterface|string
+     */
+    protected function processUiComponentValue(array $value)
+    {
+        if ($this->_entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
+            $result = $this->processCustomerAddressValue($value);
+            return $result;
+        }
+
+        if ($this->_entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
+            $result = $this->processCustomerValue($value);
+            return $result;
+        }
+
+        return $this->_value;
+    }
+
+    /**
+     * Process file uploader UI component data for customer_address entity
+     *
+     * @param array $value
+     * @return string
+     */
+    protected function processCustomerAddressValue(array $value)
+    {
+        $result = $this->getFileProcessor()->moveTemporaryFile($value['file']);
+        return $result;
+    }
+
+    /**
+     * Process file uploader UI component data for customer entity
+     *
+     * @param array $value
+     * @return bool|int|ImageContentInterface|string
+     */
+    protected function processCustomerValue(array $value)
+    {
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim($value['file'], '/');
+
+        if ($this->getFileProcessor()->isExist($temporaryFile)) {
+            $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
+
+            /** @var ImageContentInterface $imageContentDataObject */
+            $imageContentDataObject = $this->getImageContentFactory()->create()
+                ->setName($value['name'])
+                ->setBase64EncodedData($base64EncodedData)
+                ->setType($value['type']);
+
+            // Remove temporary file
+            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
+
+            return $imageContentDataObject;
+        }
+
+        return $this->_value;
+    }
+
+    /**
+     * Get ImageContentInterfaceFactory instance
+     *
+     * @return ImageContentInterfaceFactory
+     *
+     * @deprecated
+     */
+    private function getImageContentFactory()
+    {
+        if ($this->imageContentFactory === null) {
+            $this->imageContentFactory = ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\Data\ImageContentInterfaceFactory');
+        }
+        return $this->imageContentFactory;
     }
 }
