@@ -665,5 +665,170 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="with_3_options">
+            <field name="bundle_options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="title" xsi:type="string">Option 1</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">No</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">1</item>
+                                <item name="selection_price_value" xsi:type="string">1</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="title" xsi:type="string">Option 2</item>
+                    <item name="type" xsi:type="string">Radio Buttons</item>
+                    <item name="required" xsi:type="string">No</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">20</item>
+                                <item name="selection_price_value" xsi:type="string">20</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">21</item>
+                                <item name="selection_price_value" xsi:type="string">21</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                        <item name="2" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">22</item>
+                                <item name="selection_price_value" xsi:type="string">22</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="title" xsi:type="string">Option 3</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">No</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">3</item>
+                                <item name="selection_price_value" xsi:type="string">3</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                    <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+                    <item name="2" xsi:type="string">catalogProductSimple::product_without_category</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="with_3_options_delete">
+            <field name="bundle_options_delete" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="title" xsi:type="string">Option 1</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">No</item>
+                </item>
+            </field>
+            <field name="bundle_options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="title" xsi:type="string">Option 2</item>
+                    <item name="type" xsi:type="string">Radio Buttons</item>
+                    <item name="required" xsi:type="string">No</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">20</item>
+                                <item name="selection_price_value" xsi:type="string">20</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">21</item>
+                                <item name="selection_price_value" xsi:type="string">21</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                        <item name="2" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">22</item>
+                                <item name="selection_price_value" xsi:type="string">22</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="title" xsi:type="string">Option 3</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">No</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">3</item>
+                                <item name="selection_price_value" xsi:type="string">3</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                    <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+                    <item name="2" xsi:type="string">catalogProductSimple::product_without_category</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>
