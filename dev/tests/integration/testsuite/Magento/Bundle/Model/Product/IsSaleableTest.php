@@ -8,6 +8,8 @@ namespace Magento\Bundle\Model\Product;
 
 /**
  * Test class for \Magento\Bundle\Model\Product\Type (bundle product type)
+ *
+ * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/issaleable_product.php
  */
 class IsSaleableTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,13 +32,11 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     /**
      * check bundle product is saleable if his status is enabled
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
     public function testIsSaleableOnEnabledStatus()
     {
-
         $bundleProduct = $this->productRepository->get('bundle-product');
         $bundleProduct->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
 
@@ -49,7 +49,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     /**
      * check bundle product is NOT saleable if his status is disabled
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -68,7 +67,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      * check bundle product is saleable if his status is enabled
      * and it has internal data is_salable = true
      *
-     * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -88,7 +86,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      * check bundle product is NOT saleable if
      * his status is enabled but his data is_salable = false
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -107,7 +104,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     /**
      * check bundle product is saleable if it has all_items_salable = true
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -125,7 +121,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     /**
      * check bundle product is NOT saleable if it has all_items_salable = false
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -143,14 +138,12 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     /**
      * check bundle product is NOT saleable if it has no options
      *
-     * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
     public function testIsSaleableOnBundleWithoutOptions()
     {
         $optionRepository = $this->objectManager->create(\Magento\Bundle\Api\ProductOptionRepositoryInterface::class);
-
         $bundleProduct = $this->productRepository->get('bundle-product');
 
         // TODO: make cleaner option deletion after fix MAGETWO-59465
@@ -160,8 +153,8 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
         }
         $ea->setBundleProductOptions([]);
         $bundleProduct->setExtensionAttributes($ea);
-        $bundleProduct->setBundleOptionsData([]);
-        $this->productRepository->save($bundleProduct);
+
+        $bundleProduct = $this->productRepository->save($bundleProduct);
 
         $this->assertFalse(
             $bundleProduct->isSalable(),
@@ -172,7 +165,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     /**
      * check bundle product is NOT saleable if it has no selections
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -194,8 +186,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
             $linkManager->removeChild($bundleProductSku, $link->getOptionId(), $link->getSku());
         }
 
-        $bundleProduct = $this->productRepository->get($bundleProductSku, true, null, true);
-
         $this->assertFalse(
             $bundleProduct->isSalable(),
             'Bundle product supposed to be non saleable if it has no selections'
@@ -206,7 +196,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      * check bundle product is NOT saleable if
      * all his selections are not saleable
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -231,7 +220,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      * check bundle product is NOT saleable if
      * it has at least one required option without saleable selections
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -256,7 +244,6 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      * check bundle product is NOT saleable if
      * there are not enough qty of selection on required option
      *
-     * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
@@ -274,63 +261,31 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * check bundle product is saleable if
-     * all his selections has not selection qty
-     *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
-     * @magentoAppIsolation enabled
-     * @covers \Magento\Bundle\Model\Product\Type::isSalable
-     */
-    public function testIsSaleableOnBundleWithoutSelectionQty()
-    {
-        $this->setQtyForSelections(['simple1', 'simple2', 'simple3', 'simple4', 'simple5'], 1);
-
-        $bundleProduct = $this->productRepository->get('bundle-product', false, null, true);
-        $bundleType = $bundleProduct->getTypeInstance();
-
-        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
-        $options = $bundleType->getOptionsCollection($bundleProduct);
-        $selections = $bundleType->getSelectionsCollection($options->getAllIds(), $bundleProduct);
-
-        foreach ($selections as $link) {
-            $link->setSelectionQty(null);
-        }
-
-        $bundleProduct->setBundleOptionsData([]);
-        $bundleProduct->setBundleSelectionsData([]);
-        $this->productRepository->save($bundleProduct);
-
-        $this->assertTrue(
-            $bundleProduct->isSalable(),
-            'Bundle product supposed to be saleable if all his selections has no selection qty'
-        );
-    }
-
-    /**
-     * check bundle product is saleable if
      * all his selections have selection_can_change_qty = 1
      *
-     * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
      */
     public function testIsSaleableOnBundleWithSelectionCanChangeQty()
     {
         $this->setQtyForSelections(['simple1', 'simple2', 'simple3', 'simple4', 'simple5'], 1);
+        $bundleProduct = $this->productRepository->get('bundle-product');
+        $options = $bundleProduct->getExtensionAttributes()->getBundleProductOptions();
 
-        $bundleProduct = $this->productRepository->get('bundle-product', false, null, true);
-        $bundleType = $bundleProduct->getTypeInstance();
+        foreach ($options as $productOption) {
+            $links = $productOption->getProductLinks();
+            foreach ($links as $link) {
+                $link->setSelectionCanChangeQuantity(1);
+            }
 
-        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
-        $options = $bundleType->getOptionsCollection($bundleProduct);
-        $selections = $bundleType->getSelectionsCollection($options->getAllIds(), $bundleProduct);
-
-        foreach ($selections as $link) {
-            $link->setSelectionCanChangeQty(1);
+            $productOption->setProductLinks($links);
         }
 
-        $bundleProduct->setBundleOptionsData([]);
-        $bundleProduct->setBundleSelectionsData([]);
-        $this->productRepository->save($bundleProduct);
+        $extension = $bundleProduct->getExtensionAttributes();
+        $extension->setBundleProductOptions($options);
+        $bundleProduct->setExtensionAttributes($extension);
+
+        $bundleProduct = $this->productRepository->save($bundleProduct);
 
         $this->assertTrue(
             $bundleProduct->isSalable(),
@@ -341,7 +296,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     private function setQtyForSelections($productsSku, $qty)
     {
         foreach ($productsSku as $productSku) {
-            $product = $this->productRepository->get($productSku, false, null, true);
+            $product = $this->productRepository->get($productSku);
             $ea = $product->getExtensionAttributes();
             $ea->getStockItem()->setQty($qty);
             $this->productRepository->save($product);
