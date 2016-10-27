@@ -23,6 +23,8 @@ class AttributeMerger
         'textarea'    => 'Magento_Ui/js/form/element/textarea',
         'multiline'   => 'Magento_Ui/js/form/components/group',
         'multiselect' => 'Magento_Ui/js/form/element/multiselect',
+        'image' => 'Magento_Ui/js/form/element/media',
+        'file' => 'Magento_Ui/js/form/element/media',
     ];
 
     /**
@@ -32,6 +34,7 @@ class AttributeMerger
      */
     protected $templateMap = [
         'image' => 'media',
+        'file' => 'media',
     ];
 
     /**
