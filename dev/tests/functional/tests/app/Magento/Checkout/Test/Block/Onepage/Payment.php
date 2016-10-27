@@ -85,6 +85,7 @@ class Payment extends Block
         $paymentLabelSelector = sprintf($this->paymentMethodLabel, $payment['method']);
 
         try {
+            $this->waitForElementNotVisible($this->waitElement);
             $this->waitForElementVisible($paymentLabelSelector);
         } catch (\Exception $exception) {
             throw new \Exception('Such payment method is absent.');
