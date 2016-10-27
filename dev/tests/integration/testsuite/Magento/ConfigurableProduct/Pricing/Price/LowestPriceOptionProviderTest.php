@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
 {
