@@ -7,7 +7,7 @@
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider;
 
 use \Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
  * @magentoComponentsDir Magento/Framework/View/_files/UiComponent/theme
@@ -49,26 +49,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
         $this->objectManager->get(\Magento\Framework\View\DesignInterface::class)
             ->setDesignTheme('FrameworkViewUiComponent/default');
-        $this->cleanCache();
+        CacheCleaner::cleanAll();
 
         $resultOne = $this->model->getTemplate('test.xml');
         $resultTwo = $this->model->getTemplate('test.xml');
 
         $this->assertXmlStringEqualsXmlString($expected, $resultOne);
         $this->assertXmlStringEqualsXmlString($expected, $resultTwo);
-    }
-
-    /**
-     * Clean application cache
-     */
-    protected function cleanCache()
-    {
-        /** @var Pool $cachePool */
-        $cachePool = $this->objectManager->get(Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
     }
 
     /**

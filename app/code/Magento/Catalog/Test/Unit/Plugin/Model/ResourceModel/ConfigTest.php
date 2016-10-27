@@ -24,25 +24,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
     private $subject;
 
-    /**
-     * @var Config
-     */
-    private $object;
-
     protected function setUp()
     {
         $this->cache = $this->getMock(\Magento\Framework\App\CacheInterface::class);
         $this->cacheState = $this->getMock(\Magento\Framework\App\Cache\StateInterface::class);
         $this->serializer = $this->getMock(SerializerInterface::class);
         $this->subject = $this->getMock(\Magento\Catalog\Model\ResourceModel\Config::class, [], [], '', false);
-        $this->object = (new ObjectManager($this))->getObject(
-            Config::class,
-            [
-                'cache' => $this->cache,
-                'cacheState' => $this->cacheState,
-                'serializer' => $this->serializer,
-            ]
-        );
     }
 
     public function testGetAttributesUsedInListingOnCacheDisabled()

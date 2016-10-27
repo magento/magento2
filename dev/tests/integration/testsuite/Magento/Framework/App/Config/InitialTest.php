@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Config\Initial as Config;
 
 class InitialTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +24,7 @@ class InitialTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMetadata()
     {
-        $this->cleanCache();
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getMetadata(),
             $this->objectManager->create(Config::class)->getMetadata()
@@ -37,7 +37,7 @@ class InitialTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetData($scope)
     {
-        $this->cleanCache();
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getData($scope),
             $this->objectManager->create(Config::class)->getData($scope)
@@ -51,15 +51,5 @@ class InitialTest extends \PHPUnit_Framework_TestCase
             ['stores|default'],
             ['websites|default']
         ];
-    }
-
-    private function cleanCache()
-    {
-        /** @var Pool $cachePool */
-        $cachePool = $this->objectManager->get(Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
     }
 }

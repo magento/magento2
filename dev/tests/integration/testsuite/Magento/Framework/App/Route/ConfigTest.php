@@ -6,8 +6,7 @@
 namespace Magento\Framework\App\Route;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Cache\Frontend\Pool;
-use Magento\Framework\App\Route\Config;
+use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -29,7 +28,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRouteFrontName($route, $scope)
     {
-        $this->cleanCache();
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getRouteFrontName($route, $scope),
             $this->objectManager->create(Config::class)->getRouteFrontName($route, $scope)
@@ -42,15 +41,5 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['adminhtml', 'adminhtml'],
             ['catalog', 'frontend'],
         ];
-    }
-
-    private function cleanCache()
-    {
-        /** @var Pool $cachePool */
-        $cachePool = $this->objectManager->get(Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
     }
 }

@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\TestFramework\Helper\CacheCleaner;
+
 /**
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Catalog/_files/categories.php
@@ -33,6 +35,7 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
     public function testModifyMeta()
     {
         $inputMeta = include __DIR__ . '/_files/input_meta_for_categories.php';
+        CacheCleaner::cleanAll();
         $meta = $this->object->modifyMeta($inputMeta);
         $expectedCategories = include __DIR__ . '/_files/expected_categories.php';
         $categoriesElement = $meta['product-details']['children']['container_category_ids']['children']['category_ids'];
