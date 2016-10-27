@@ -117,7 +117,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('resetData');
         $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
         $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
+        $this->reader->expects($this->once())->method('loadConfigFile')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
         $this->formatter
             ->expects($this->once())
             ->method('format')
@@ -166,7 +166,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('resetData');
         $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
         $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
+        $this->reader->expects($this->once())->method('loadConfigFile')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
         $this->formatter
             ->expects($this->once())
             ->method('format')
