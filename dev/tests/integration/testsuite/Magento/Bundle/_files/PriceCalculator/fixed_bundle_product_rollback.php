@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../../Magento/Catalog/_files/multiple_products_rollback.php';
+require __DIR__ . '/../../../../Magento/Bundle/_files/multiple_products_rollback.php';
 
 /** @var \Magento\Framework\Registry $registry */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
