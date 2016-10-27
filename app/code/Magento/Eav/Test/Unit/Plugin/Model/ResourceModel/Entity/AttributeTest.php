@@ -70,7 +70,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $isProceedCalled = false;
         // @SuppressWarnings(PHPMD.UnusedFormalParameter)
-        $proceed = function($attributeId) use (&$isProceedCalled) {
+        $proceed = function ($attributeId) use (&$isProceedCalled) {
             $isProceedCalled = true;
         };
 
@@ -103,7 +103,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $isProceedCalled = false;
         // @SuppressWarnings(PHPMD.UnusedFormalParameter)
-        $proceed = function($attributeId) use (&$isProceedCalled) {
+        $proceed = function ($attributeId) use (&$isProceedCalled) {
             $isProceedCalled = true;
         };
 
@@ -152,7 +152,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             );
 
         // @SuppressWarnings(PHPMD.UnusedFormalParameter)
-        $proceed = function($attributeId) use ($attributes) {
+        $proceed = function ($attributeId) use ($attributes) {
             return $attributes;
         };
 
