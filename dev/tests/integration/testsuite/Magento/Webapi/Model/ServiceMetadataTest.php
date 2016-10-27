@@ -58,7 +58,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ],
                             'throws' => [
-                                '\Magento\Framework\Exception\LocalizedException'
+                                \Magento\Framework\Exception\LocalizedException::class
                             ]
                         ]
                     ]
@@ -107,7 +107,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ],
                             'throws' => [
-                                '\Magento\Framework\Exception\LocalizedException'
+                                \Magento\Framework\Exception\LocalizedException::class
                             ]
                         ]
                     ]
