@@ -109,7 +109,7 @@
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="placeholder" xsi:type="object">Magento\Store\Model\Config\Processor\Placeholder</item>
-                <item name="metadata" xsi:type="object">Magento\Framework\App\Config\MetadataProcessor</item>
+                <item name="metadata" xsi:type="object">Magento\Framework\App\Config\MetadataConfigTypeProcessor</item>
             </argument>
         </arguments>
     </virtualType>

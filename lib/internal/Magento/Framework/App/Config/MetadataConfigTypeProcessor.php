@@ -7,7 +7,9 @@
  */
 namespace Magento\Framework\App\Config;
 
-class MetadataProcessor
+use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+
+class MetadataConfigTypeProcessor implements PostProcessorInterface
 {
     /**
      * @var \Magento\Framework\App\Config\Data\ProcessorFactory
@@ -73,12 +75,12 @@ class MetadataProcessor
     }
 
     /**
-     * Process config data
+     * Process data by sections: stores, default, websites and by scope codes
      *
      * @param array $data
      * @return array
      */
-    public function process(array $data)
+    private function processScopeData(array $data)
     {
         foreach ($this->_metadata as $path => $metadata) {
             /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
@@ -86,6 +88,29 @@ class MetadataProcessor
             $value = $processor->processValue($this->_getValue($data, $path));
             $this->_setValue($data, $path, $value);
         }
+
         return $data;
+    }
+
+    /**
+     * Process config data
+     *
+     * @param array $data
+     * @return array
+     */
+    public function process(array $rawData)
+    {
+        $processedData = [];
+        foreach ($rawData as $scope => $scopeData) {
+            if ($scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+                $processedData[ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $this->processScopeData($scopeData);
+            } else {
+                foreach ($scopeData as $scopeCode => $data) {
+                    $processedData[$scope][$scopeCode] = $this->processScopeData($data);
+                }
+            }
+        }
+
+        return $processedData;
     }
 }
