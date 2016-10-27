@@ -21,6 +21,7 @@ return [
             \Magento\Setup\Controller\Environment::class,
             \Magento\Setup\Controller\DependencyCheck::class,
             \Magento\Setup\Controller\DatabaseCheck::class,
+            \Magento\Setup\Controller\UrlCheck::class,
             \Magento\Setup\Controller\ValidateAdminCredentials::class,
             \Magento\Setup\Controller\AddDatabase::class,
             \Magento\Setup\Controller\WebConfiguration::class,
