@@ -9,7 +9,8 @@ namespace Magento\Eav\Model\ResourceModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Update handler test.
+ * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
