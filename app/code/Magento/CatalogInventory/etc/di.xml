@@ -74,4 +74,11 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="catalogInventoryAroundSave" type="\Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="stock_status" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
