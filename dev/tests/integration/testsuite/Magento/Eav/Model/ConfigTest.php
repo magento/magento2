@@ -8,6 +8,7 @@ namespace Magento\Eav\Model;
 use Magento\Eav\Model\Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,20 +31,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityAttributeCodes()
     {
         $entityType = 'catalog_product';
-        $this->cleanAllCache();
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->config->getEntityAttributeCodes($entityType),
             $this->config->getEntityAttributeCodes($entityType)
         );
-    }
-
-    private function cleanAllCache()
-    {
-        /** @var \Magento\Framework\App\Cache\Frontend\Pool $cachePool */
-        $cachePool = $this->objectManager->get(\Magento\Framework\App\Cache\Frontend\Pool::class);
-        /** @var \Magento\Framework\Cache\FrontendInterface $cacheType */
-        foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
-        }
     }
 }
