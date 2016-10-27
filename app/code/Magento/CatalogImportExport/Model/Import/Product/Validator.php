@@ -190,7 +190,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
                 break;
             case 'multiselect':
-                $values = $this->parseMultiselectValues($this->context->getParameters(), $rowData[$attrCode]);
+                $values = $this->parseMultiSelectValues($this->context->getParameters(), $rowData[$attrCode]);
                 foreach ($values as $value) {
                     $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
                     if (!$valid) {
@@ -293,10 +293,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
      *
+     * @param array $parameters
      * @param string $values
      * @return array
      */
-    private function parseMultiselectValues(array $parameters, $values)
+    private function parseMultiSelectValues(array $parameters, $values)
     {
         if (empty($parameters[\Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE])) {
             return explode(\Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR, $values);

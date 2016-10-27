@@ -483,7 +483,7 @@ abstract class AbstractType
                     $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
                 } elseif ('multiselect' == $attrParams['type']) {
                     $resultAttrs[$attrCode] = [];
-                    $multiSelectValues = $this->parseMultiselectValues(
+                    $multiSelectValues = $this->parseMultiSelectValues(
                         $this->_entityModel->getParameters(),
                         $rowData[$attrCode]
                     );
@@ -533,10 +533,11 @@ abstract class AbstractType
     /**
      * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
      *
+     * @param array $parameters
      * @param string $values
      * @return array
      */
-    private function parseMultiselectValues(array $parameters, $values)
+    private function parseMultiSelectValues(array $parameters, $values)
     {
         if (empty($parameters[\Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE])) {
             return explode(\Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR, $values);
