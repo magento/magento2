@@ -532,4 +532,12 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="status" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\StatusBaseSelectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
