@@ -337,8 +337,8 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSaleableOnBundleWithOneSaleableSelection()
     {
-        // making selections as not saleable except simple1
-        $productsSku = ['simple2', 'simple3', 'simple4', 'simple5'];
+        // making selections as not saleable except simple3
+        $productsSku = ['simple1', 'simple2', 'simple4', 'simple5'];
 
         foreach ($productsSku as $productSku) {
             $product = $this->productRepository->get($productSku);

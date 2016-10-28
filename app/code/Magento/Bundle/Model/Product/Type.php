@@ -554,32 +554,30 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $product->getData('all_items_salable');
         }
 
-        if (!$this->getOptionsCollection($product)->getSize()) {
-            return false;
-        }
-
-        $isSalable = true;
+        $isSalable = false;
         foreach ($this->getOptionsCollection($product)->getItems() as $option) {
-            if ($option->getRequired()) {
-                $hasSalable = false;
+            $hasSalable = false;
 
-                $selectionsCollection = $this->_bundleCollection->create();
-                $selectionsCollection->addAttributeToSelect('status');
-                $selectionsCollection->addQuantityFilter();
-                $selectionsCollection->addFilterByRequiredOptions();
-                $selectionsCollection->setOptionIdsFilter([$option->getId()]);
+            $selectionsCollection = $this->_bundleCollection->create();
+            $selectionsCollection->addAttributeToSelect('status');
+            $selectionsCollection->addQuantityFilter();
+            $selectionsCollection->addFilterByRequiredOptions();
+            $selectionsCollection->setOptionIdsFilter([$option->getId()]);
 
-                foreach ($selectionsCollection as $selection) {
-                    if ($selection->isSalable()) {
-                        $hasSalable = true;
-                        break;
-                    }
-                }
-
-                if (!$hasSalable) {
-                    $isSalable = false;
+            foreach ($selectionsCollection as $selection) {
+                if ($selection->isSalable()) {
+                    $hasSalable = true;
                     break;
                 }
+            }
+
+            if ($hasSalable) {
+                $isSalable = true;
+            }
+
+            if (!$hasSalable && $option->getRequired()) {
+                $isSalable = false;
+                break;
             }
         }
 
