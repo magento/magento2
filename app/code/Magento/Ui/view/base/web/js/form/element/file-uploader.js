@@ -245,13 +245,13 @@ define([
         getFilePreviewType: function (file) {
             var type;
 
-            if (!file['type']) {
+            if (!file.type) {
                 return 'document';
             }
 
-            type = file['type'].split('/')[0];
+            type = file.type.split('/')[0];
 
-            return (type !== 'image' && type !== 'video') ? 'document' : type;
+            return type !== 'image' && type !== 'video' ? 'document' : type;
         },
 
         /**
