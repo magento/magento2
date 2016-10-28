@@ -5,12 +5,6 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Url\EncoderInterface;
-use Magento\Framework\UrlInterface;
-use Magento\MediaStorage\Model\File\UploaderFactory;
-
 class FileProcessor
 {
     /**
@@ -19,22 +13,22 @@ class FileProcessor
     const TMP_DIR = 'tmp';
 
     /**
-     * @var WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $mediaDirectory;
 
     /**
-     * @var UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     private $uploaderFactory;
 
     /**
-     * @var UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @var EncoderInterface
+     * @var \Magento\Framework\Url\EncoderInterface
      */
     private $urlEncoder;
 
@@ -54,19 +48,19 @@ class FileProcessor
     private $mime;
 
     /**
-     * @param Filesystem $filesystem
-     * @param UploaderFactory $uploaderFactory
-     * @param UrlInterface $urlBuilder
-     * @param EncoderInterface $urlEncoder
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param string $entityTypeCode
      * @param \Magento\Framework\File\Mime $mime
      * @param array $allowedExtensions
      */
     public function __construct(
-        Filesystem $filesystem,
-        UploaderFactory $uploaderFactory,
-        UrlInterface $urlBuilder,
-        EncoderInterface $urlEncoder,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
         $entityTypeCode,
         \Magento\Framework\File\Mime $mime,
         array $allowedExtensions = []
@@ -152,7 +146,7 @@ class FileProcessor
 
         if ($this->entityTypeCode == \Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
             $filePath = $this->entityTypeCode . '/' . ltrim($filePath, '/');
-            $viewUrl = $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA])
+            $viewUrl = $this->urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA])
                 . $this->mediaDirectory->getRelativePath($filePath);
         }
 
