@@ -13,37 +13,17 @@ namespace Magento\Sales\Model\Order;
 class PaymentAdapter implements PaymentAdapterInterface
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\RefundOperation
-     */
-    private $refundOperation;
-
-    /**
      * @var \Magento\Sales\Model\Order\Invoice\PayOperation
      */
     private $payOperation;
 
     /**
-     * PaymentAdapter constructor.
-     * @param \Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation
      * @param \Magento\Sales\Model\Order\Invoice\PayOperation $payOperation
      */
     public function __construct(
-        \Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation,
         \Magento\Sales\Model\Order\Invoice\PayOperation $payOperation
     ) {
-        $this->refundOperation = $refundOperation;
         $this->payOperation = $payOperation;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function refund(
-        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
-        \Magento\Sales\Api\Data\OrderInterface $order,
-        $isOnline = false
-    ) {
-        return $this->refundOperation->execute($creditmemo, $order, $isOnline);
     }
 
     /**
