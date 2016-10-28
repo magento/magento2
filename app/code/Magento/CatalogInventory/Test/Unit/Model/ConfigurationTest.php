@@ -59,18 +59,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetDefaultWebsiteId()
+    public function testGetDefaultScopeId()
     {
         $id = 1;
-        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $websiteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($id);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($websiteMock);
         $this->assertEquals($id, $this->model->getDefaultScopeId());
     }
 
