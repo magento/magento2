@@ -916,7 +916,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         if (is_scalar($attrValue)) {
                             if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
                                 $additionalAttributes[$fieldName] = $fieldName .
-                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
+                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
                             }
                             $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
                         }
@@ -926,7 +926,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                             $additionalAttributes[$code] = $fieldName .
                                 ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
                                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                                    $this->collectedMultiselectsData[$storeId][$productLinkId][$code]
+                                    $this->wrapValue($this->collectedMultiselectsData[$storeId][$productLinkId][$code])
                                 );
                         }
                     }
@@ -955,6 +955,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         return $data;
+    }
+
+    /**
+     * Wrap values with double quotes if "Fields Enclosure" option is enabled
+     *
+     * @param string|array $value
+     * @return string|array
+     */
+    private function wrapValue($value)
+    {
+        if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE])) {
+            $wrap = function ($value) {
+                return sprintf('"%s"', str_replace('"', '""', $value));
+            };
+
+            $value = is_array($value) ? array_map($wrap, $value) : $wrap($value);
+        }
+
+        return $value;
     }
 
     /**

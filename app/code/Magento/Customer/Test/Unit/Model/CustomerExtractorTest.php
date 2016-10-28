@@ -121,6 +121,10 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
             ->with($this->request)
             ->willReturn($customerData);
         $this->customerForm->expects($this->once())
+            ->method('compactData')
+            ->with($customerData)
+            ->willReturn($customerData);
+        $this->customerForm->expects($this->once())
             ->method('getAllowedAttributes')
             ->willReturn(['group_id' => 'attribute object']);
         $this->customerFactory->expects($this->once())
