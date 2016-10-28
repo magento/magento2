@@ -9,9 +9,40 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\Store;
 
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
+    /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param string $connectionName
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        $connectionName = null,
+        StoreResolverInterface $storeResolver = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $moduleManager, $connectionName);
+        $this->storeResolver = $storeResolver ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(StoreResolverInterface::class);
+    }
+
     /**
      * Reindex temporary (price result data) for all products
      *
@@ -167,10 +198,17 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             []
         )->where(
             'le.required_options=0'
-        )->join(
-            ['product_status' => $this->getTable($statusAttribute->getBackend()->getTable())],
-            'le.entity_id = product_status.entity_id AND product_status.attribute_id = '
-                .  $statusAttribute->getAttributeId(),
+        )->joinLeft(
+            ['status_global_attr' => $statusAttribute->getBackendTable()],
+            "status_global_attr.entity_id = le.entity_id"
+            . ' AND status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_global_attr.store_id  = ' . Store::DEFAULT_STORE_ID,
+            []
+        )->joinLeft(
+            ['status_attr' => $statusAttribute->getBackendTable()],
+            "status_attr.entity_id = le.entity_id"
+            . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
             []
         )->where(
             'product_status.value=' . ProductStatus::STATUS_ENABLED
