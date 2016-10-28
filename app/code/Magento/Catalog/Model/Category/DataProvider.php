@@ -11,6 +11,8 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
@@ -111,6 +113,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var CategoryFactory
      */
     private $categoryFactory;
+
+    /**
+     * @var Filesystem
+     */
+    private $fileInfo;
 
     /**
      * DataProvider constructor
@@ -386,8 +393,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if ($attribute->getBackend() instanceof ImageBackendModel) {
                 unset($categoryData[$attributeCode]);
 
-                $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
-                $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                $fileName = $category->getData($attributeCode);
+                if ($this->getFileInfo()->isExist($fileName)) {
+                    $stat = $this->getFileInfo()->getStat($fileName);
+                    $mime = $this->getFileInfo()->getMimeType($fileName);
+
+                    $categoryData[$attributeCode][0]['name'] = $fileName;
+                    $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                    $categoryData['image'][0]['size'] = isset($stat) ? $stat['size'] : 0;
+                    $categoryData['image'][0]['type'] = $mime;
+                }
             }
         }
 
@@ -483,5 +498,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                 ],
         ];
+    }
+
+    /**
+     * Get FileInfo instance
+     *
+     * @return FileInfo
+     *
+     * @deprecated
+     */
+    private function getFileInfo()
+    {
+        if ($this->fileInfo === null) {
+            $this->fileInfo = ObjectManager::getInstance()->get(FileInfo::class);
+        }
+        return $this->fileInfo;
     }
 }
