@@ -82,8 +82,8 @@ class Factory
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
                 $this->cache->save($this->getSerializer()->serialize($this->_configFiles->toArray()), self::CACHE_KEY);
             } else {
-                $filesArray = $this->getSerializer()->unserialize($this->_configFiles);
-                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($filesArray));
+                $files = $this->getSerializer()->unserialize($this->_configFiles);
+                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($files));
             }
         }
     }
@@ -161,8 +161,7 @@ class Factory
     private function getSerializer()
     {
         if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            $this->serializer = $this->_objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
         return $this->serializer;
     }
@@ -176,7 +175,7 @@ class Factory
     private function getFileIteratorFactory()
     {
         if ($this->fileIteratorFactory === null) {
-            $this->fileIteratorFactory = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->fileIteratorFactory = $this->_objectManager
                 ->get(\Magento\Framework\Config\FileIteratorFactory::class);
         }
         return $this->fileIteratorFactory;
