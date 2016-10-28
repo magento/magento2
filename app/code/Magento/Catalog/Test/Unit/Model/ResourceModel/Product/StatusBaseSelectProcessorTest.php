@@ -17,6 +17,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -91,8 +94,8 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ['status_attr' => $backendTable],
                 "status_attr.entity_id = " . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . ".child_id"
-                    . " AND status_attr.attribute_id = {$attributeId}"
-                    . " AND status_attr.store_id = {$currentStoreId}",
+                . " AND status_attr.attribute_id = {$attributeId}"
+                . " AND status_attr.store_id = {$currentStoreId}",
                 []
             )
             ->willReturnSelf();

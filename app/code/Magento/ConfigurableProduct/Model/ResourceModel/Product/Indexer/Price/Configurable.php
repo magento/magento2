@@ -12,6 +12,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
@@ -28,6 +31,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string $connectionName
+     * @param StoreResolverInterface $storeResolver
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
