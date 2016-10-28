@@ -117,7 +117,6 @@ define([
          * @returns {FileUploder} Chainable.
          */
         addFile: function (file) {
-            file.previewType = this.getFilePreviewType(file);
             file = this.processFile(file);
 
             this.isMultipleFiles ?
@@ -159,6 +158,8 @@ define([
          * @returns {Object} Modified file object.
          */
         processFile: function (file) {
+            file.previewType = this.getFilePreviewType(file);
+
             this.observe.call(file, true, [
                 'previewWidth',
                 'previewHeight'
