@@ -14,7 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {

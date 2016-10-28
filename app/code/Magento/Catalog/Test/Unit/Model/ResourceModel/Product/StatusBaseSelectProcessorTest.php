@@ -80,7 +80,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ['status_global_attr' => $backendTable],
                 "status_global_attr.entity_id = "
-                    . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . ".entity_id"
+                    . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . ".child_id"
                     . " AND status_global_attr.attribute_id = {$attributeId}"
                     . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
                 []
@@ -90,7 +90,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['status_attr' => $backendTable],
-                "status_attr.entity_id = " . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . ".entity_id"
+                "status_attr.entity_id = " . BaseSelectProcessorInterface::PRODUCT_RELATION_ALIAS . ".child_id"
                     . " AND status_attr.attribute_id = {$attributeId}"
                     . " AND status_attr.store_id = {$currentStoreId}",
                 []

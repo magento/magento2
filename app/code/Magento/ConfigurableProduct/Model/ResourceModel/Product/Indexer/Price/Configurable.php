@@ -211,7 +211,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
             []
         )->where(
-            'product_status.value=' . ProductStatus::STATUS_ENABLED
+            'IFNULL(status_attr.value, status_global_attr.value) = ?', ProductStatus::STATUS_ENABLED
         )->group(
             ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
