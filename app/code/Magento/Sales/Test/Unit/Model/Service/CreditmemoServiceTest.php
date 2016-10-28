@@ -5,10 +5,11 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order;
 
 /**
  * Class CreditmemoServiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,63 +39,73 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
     protected $creditmemoNotifierMock;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $priceCurrencyMock;
+
+    /**
      * @var \Magento\Sales\Model\Service\CreditmemoService
      */
     protected $creditmemoService;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManagerHelper;
 
     /**
      * SetUp
      */
     protected function setUp()
     {
-        $objectManager = new ObjectManagerHelper($this);
-
         $this->creditmemoRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\CreditmemoRepositoryInterface',
+            \Magento\Sales\Api\CreditmemoRepositoryInterface::class,
             ['get'],
             '',
             false
         );
         $this->creditmemoCommentRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\CreditmemoCommentRepositoryInterface',
+            \Magento\Sales\Api\CreditmemoCommentRepositoryInterface::class,
             [],
             '',
             false
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             ['create', 'addFilters'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
+            \Magento\Framework\Api\FilterBuilder::class,
             ['setField', 'setValue', 'setConditionType', 'create'],
             [],
             '',
             false
         );
         $this->creditmemoNotifierMock = $this->getMock(
-            'Magento\Sales\Model\Order\CreditmemoNotifier',
+            \Magento\Sales\Model\Order\CreditmemoNotifier::class,
             [],
             [],
             '',
             false
         );
-
-        $this->creditmemoService = $objectManager->getObject(
-            'Magento\Sales\Model\Service\CreditmemoService',
+        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+            ->getMockForAbstractClass();
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->creditmemoService = $this->objectManagerHelper->getObject(
+            \Magento\Sales\Model\Service\CreditmemoService::class,
             [
                 'creditmemoRepository' => $this->creditmemoRepositoryMock,
                 'creditmemoCommentRepository' => $this->creditmemoCommentRepositoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock,
-                'creditmemoNotifier' => $this->creditmemoNotifierMock
+                'creditmemoNotifier' => $this->creditmemoNotifierMock,
+                'priceCurrency' => $this->priceCurrencyMock
             ]
         );
     }
-
     /**
      * Run test cancel method
      * @expectedExceptionMessage You can not cancel Credit Memo
@@ -104,7 +115,6 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->creditmemoService->cancel(1));
     }
-
     /**
      * Run test getCommentsList method
      */
@@ -112,22 +122,20 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
     {
         $id = 25;
         $returnValue = 'return-value';
-
         $filterMock = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
             [],
             [],
             '',
             false
         );
         $searchCriteriaMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             [],
             [],
             '',
             false
         );
-
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
             ->with('parent_id')
@@ -153,10 +161,8 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->will($this->returnValue($returnValue));
-
         $this->assertEquals($returnValue, $this->creditmemoService->getCommentsList($id));
     }
-
     /**
      * Run test notify method
      */
@@ -164,14 +170,12 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
     {
         $id = 123;
         $returnValue = 'return-value';
-
         $modelMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false
         );
-
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
@@ -179,8 +183,128 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoNotifierMock->expects($this->once())
             ->method('notify')
             ->with($modelMock)
-        ->will($this->returnValue($returnValue));
-
+            ->will($this->returnValue($returnValue));
         $this->assertEquals($returnValue, $this->creditmemoService->notify($id));
+    }
+    public function testRefund()
+    {
+        $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
+            ->setMethods(['getId', 'getOrder', 'getInvoice'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
+        $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);
+        $orderMock->expects($this->once())->method('getBaseTotalPaid')->willReturn(10);
+        $creditMemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('round')
+            ->willReturnArgument(0);
+        // Set payment adapter dependency
+        $refundAdapterMock = $this->getMockBuilder(\Magento\Sales\Model\Order\RefundAdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->setBackwardCompatibleProperty(
+            $this->creditmemoService,
+            'refundAdapter',
+            $refundAdapterMock
+        );
+        // Set resource dependency
+        $resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->setBackwardCompatibleProperty(
+            $this->creditmemoService,
+            'resource',
+            $resourceMock
+        );
+        // Set order repository dependency
+        $orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->setBackwardCompatibleProperty(
+            $this->creditmemoService,
+            'orderRepository',
+            $orderRepositoryMock
+        );
+        $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
+        $adapterMock->expects($this->once())->method('beginTransaction');
+        $refundAdapterMock->expects($this->once())
+            ->method('refund')
+            ->with($creditMemoMock, $orderMock, false)
+            ->willReturn($orderMock);
+        $orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($orderMock);
+        $creditMemoMock->expects($this->once())
+            ->method('getInvoice')
+            ->willReturn(null);
+        $adapterMock->expects($this->once())->method('commit');
+        $this->creditmemoRepositoryMock->expects($this->once())
+            ->method('save');
+        $this->assertSame($creditMemoMock, $this->creditmemoService->refund($creditMemoMock, true));
+    }
+    /**
+     * @expectedExceptionMessage The most money available to refund is 1.
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testRefundExpectsMoneyAvailableToReturn()
+    {
+        $baseGrandTotal = 10;
+        $baseTotalRefunded = 9;
+        $baseTotalPaid = 10;
+        $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
+            ->setMethods(['getId', 'getOrder', 'formatBasePrice'])
+            ->getMockForAbstractClass();
+        $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
+        $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
+        $creditMemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotal);
+        $orderMock->expects($this->atLeastOnce())->method('getBaseTotalRefunded')->willReturn($baseTotalRefunded);
+        $this->priceCurrencyMock->expects($this->exactly(2))->method('round')->withConsecutive(
+            [$baseTotalRefunded + $baseGrandTotal],
+            [$baseTotalPaid]
+        )->willReturnOnConsecutiveCalls(
+            $baseTotalRefunded + $baseGrandTotal,
+            $baseTotalPaid
+        );
+        $orderMock->expects($this->atLeastOnce())->method('getBaseTotalPaid')->willReturn($baseTotalPaid);
+        $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
+        $orderMock->expects($this->once())->method('formatBasePrice')->with(
+            $baseAvailableRefund
+        )->willReturn($baseAvailableRefund);
+        $this->creditmemoService->refund($creditMemoMock, true);
+    }
+    /**
+     * @expectedExceptionMessage We cannot register an existing credit memo.
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testRefundDoNotExpectsId()
+    {
+        $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
+        $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
+        $this->creditmemoService->refund($creditMemoMock, true);
+    }
+
+    /**
+     * Set mocked property
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param object $propertyValue
+     * @return void
+     */
+    private function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
     }
 }

@@ -6,6 +6,8 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\Customer\Mapper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -20,6 +22,11 @@ use Magento\Framework\Exception\InputException;
  */
 class EditPost extends \Magento\Customer\Controller\AbstractAccount
 {
+    /**
+     * Form code for data extractor
+     */
+    const FORM_DATA_EXTRACTOR_CODE = 'customer_account_edit';
+
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
 
@@ -36,6 +43,11 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var Mapper
+     */
+    private $customerMapper;
 
     /**
      * @param Context $context
@@ -76,23 +88,19 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         if ($this->getRequest()->isPost()) {
-            $customerId = $this->session->getCustomerId();
-            $currentCustomer = $this->customerRepository->getById($customerId);
-
-            // Prepare new customer data
-            $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
-            $customer->setId($customerId);
-            if ($customer->getAddresses() == null) {
-                $customer->setAddresses($currentCustomer->getAddresses());
-            }
+            $currentCustomerDataObject = $this->getCustomerDataObject($this->session->getCustomerId());
+            $customerCandidateDataObject = $this->populateNewCustomerDataObject(
+                $this->_request,
+                $currentCustomerDataObject
+            );
 
             // Change customer password
             if ($this->getRequest()->getParam('change_password')) {
-                $this->changeCustomerPassword($currentCustomer->getEmail());
+                $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
             }
 
             try {
-                $this->customerRepository->save($customer);
+                $this->customerRepository->save($customerCandidateDataObject);
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
@@ -114,6 +122,43 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
+    }
+
+    /**
+     * Get customer data object
+     *
+     * @param int $customerId
+     *
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
+    private function getCustomerDataObject($customerId)
+    {
+        return $this->customerRepository->getById($customerId);
+    }
+
+    /**
+     * Create Data Transfer Object of customer candidate
+     *
+     * @param \Magento\Framework\App\RequestInterface $inputData
+     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
+    private function populateNewCustomerDataObject(
+        \Magento\Framework\App\RequestInterface $inputData,
+        \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
+    ) {
+        $attributeValues = $this->getCustomerMapper()->toFlatArray($currentCustomerData);
+        $customerDto = $this->customerExtractor->extract(
+            self::FORM_DATA_EXTRACTOR_CODE,
+            $inputData,
+            $attributeValues
+        );
+        $customerDto->setId($currentCustomerData->getId());
+        if (!$customerDto->getAddresses()) {
+            $customerDto->setAddresses($currentCustomerData->getAddresses());
+        }
+
+        return $customerDto;
     }
 
     /**
@@ -147,5 +192,20 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $this;
+    }
+
+    /**
+     * Get Customer Mapper instance
+     *
+     * @return Mapper
+     *
+     * @deprecated
+     */
+    private function getCustomerMapper()
+    {
+        if ($this->customerMapper === null) {
+            $this->customerMapper = ObjectManager::getInstance()->get(Mapper::class);
+        }
+        return $this->customerMapper;
     }
 }

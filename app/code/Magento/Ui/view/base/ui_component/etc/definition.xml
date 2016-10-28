@@ -232,6 +232,17 @@
             </item>
         </argument>
     </multiline>
+    <fileUploader class="Magento\Ui\Component\Form\Element\DataType\Media">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/file-uploader</item>
+                <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
+                </item>
+            </item>
+        </argument>
+    </fileUploader>
+
     <!-- Form elements -->
 
     <!-- Form element data types -->
