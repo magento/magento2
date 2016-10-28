@@ -42,7 +42,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductsIfOneOfChildIsDisabled()
     {
-        $configurableProduct = $this->productRepository->getById(1, false, null, true);
+        $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
@@ -105,7 +105,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductsIfOneOfChildIsOutOfStock()
     {
-        $configurableProduct = $this->productRepository->getById(1, false, null, true);
+        $configurableProduct = $this->productRepository->get('configurable', false, null, true);
         $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);

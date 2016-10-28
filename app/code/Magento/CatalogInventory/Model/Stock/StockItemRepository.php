@@ -190,6 +190,8 @@ class StockItemRepository implements StockItemRepositoryInterface
             $this->resource->save($stockItem);
 
             $this->indexProcessor->reindexRow($stockItem->getProductId());
+            $this->getStockRegistryStorage()->removeStockItem($stockItem->getProductId());
+            $this->getStockRegistryStorage()->removeStockStatus($stockItem->getProductId());
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Unable to save Stock Item'), $exception);
         }
