@@ -6,9 +6,11 @@
 -->
 <div class="file-uploader-summary">
     <div class="file-uploader-preview">
-        <a attr="href: $parent.getFilePreview($file)" target="_blank">
+        <a class="preview-link"
+           css="'preview-' + $file.previewType"
+           attr="href: $parent.getFilePreview($file), title: $file.name" target="_blank">
             <img
-                class="preview-image"
+                if="$file.previewType === 'image'"
                 tabindex="0"
                 event="load: $parent.onPreviewLoad.bind($parent)"
                 attr="
@@ -29,8 +31,11 @@
     </div>
 
     <div class="file-uploader-filename" text="$file.name"/>
+
     <div class="file-uploader-meta">
-        <text args="$file.previewWidth"/>x<text args="$file.previewHeight"/>, 
+        <span if="$file.previewType === 'image'">
+            <text args="$file.previewWidth"/>x<text args="$file.previewHeight"/>,
+        </span>
         <text args="$parent.formatSize($file.size)"/>
     </div>
 </div>
