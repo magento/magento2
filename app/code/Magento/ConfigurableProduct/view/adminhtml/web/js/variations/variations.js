@@ -57,6 +57,7 @@ define([
 
             if (this.variations.length) {
                 this.render(this.variations, this.productAttributes);
+                this.disableConfigurableAttributes(this.attributes);
             }
             this.initProductAttributesMap();
         },
@@ -193,7 +194,7 @@ define([
          */
         _makeProduct: function (product) {
             var productId = product['entity_id'] || product.productId || null,
-                attributes = _.pick(product, this.attributes.pluck('code')),
+                attributes = _.pick(product, this.attributes().pluck('code')),
                 options = _.map(attributes, function (option, attribute) {
                     var oldOptions = _.findWhere(this.attributes(), {
                             code: attribute
@@ -311,7 +312,6 @@ define([
             variationsPage = this.prepareRenderPage();
             this.populateVariationMatrix(variationsPage);
             this.initImageUpload();
-            this.disableConfigurableAttributes(this.attributes);
             this.showPrice();
             this.productMatrixSerialized(JSON.stringify(this.prepareVariations()));
         },
@@ -467,8 +467,8 @@ define([
             this.opened(false);
             delete this.productAttributesMap[this.getVariationKey(removedProduct[0].options)];
 
-            if (this.productMatrix().length === 0) {
-                this.attributes.each(function (attribute) {
+            if (this.variations.length === 0) {
+                this.attributes().each(function (attribute) {
                     $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
                 });
             }
@@ -732,7 +732,7 @@ define([
             $('[data-attribute-code] select.disabled-configurable-elements')
                 .removeClass('disabled-configurable-elements')
                 .prop('disabled', false);
-            _.each(attributes, function (attribute) {
+            _.each(attributes(), function (attribute) {
                 $('[data-attribute-code="' + attribute.code + '"] select')
                     .addClass('disabled-configurable-elements')
                     .prop('disabled', true);
