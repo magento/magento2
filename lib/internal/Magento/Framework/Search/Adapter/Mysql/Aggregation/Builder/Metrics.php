@@ -14,7 +14,7 @@ class Metrics
      *
      * @var string[]
      */
-    private $mapMetrics = ['count', 'sum', 'min', 'max', 'avg'];
+    private $allowedMetrics = ['count', 'sum', 'min', 'max', 'avg'];
 
     /**
      * Build metrics for Select->columns
@@ -30,7 +30,7 @@ class Metrics
 
         foreach ($metrics as $metric) {
             $metricType = $metric->getType();
-            if (in_array($metricType, $this->mapMetrics)) {
+            if (in_array($metricType, $this->allowedMetrics, true)) {
                 $selectAggregations[$metricType] = "$metricType(main_table.value)";
             }
         }
