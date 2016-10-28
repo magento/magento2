@@ -5,12 +5,17 @@
  */
 
 namespace Magento\Bundle\Model\Product;
+use Zend\Console\Exception\InvalidArgumentException;
 
 /**
  * Abstract class for testing bundle prices
  */
-abstract class BundlePrice extends \PHPUnit_Framework_TestCase
+abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
 {
+    const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';
+
+    const CUSTOM_OPTION_PRICE_TYPE_PERCENT = 'percent';
+
     /** @var \Magento\TestFramework\Helper\Bootstrap */
     protected $objectManager;
 
@@ -30,7 +35,8 @@ abstract class BundlePrice extends \PHPUnit_Framework_TestCase
     abstract public function getTestCases();
 
     /**
-     * @param array $strategyModifiers
+     * @param $strategyModifiers
+     * @throws InvalidArgumentException
      * @return \Magento\Catalog\Api\Data\ProductInterface
      */
     protected function prepareFixture($strategyModifiers)
@@ -41,6 +47,10 @@ abstract class BundlePrice extends \PHPUnit_Framework_TestCase
             if (method_exists($this, $modifier['modifierName'])) {
                 array_unshift($modifier['data'], $bundleProduct);
                 $bundleProduct = call_user_func_array([$this, $modifier['modifierName']], $modifier['data']);
+            } else {
+                throw new InvalidArgumentException(
+                    sprintf('Modifier %s does not exists', $modifier['modifierName'])
+                );
             }
         }
 
@@ -65,11 +75,10 @@ abstract class BundlePrice extends \PHPUnit_Framework_TestCase
             unset($optionData['links']);
 
             $option = $this->objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
-                ->create(['data' => $this->getFixtureForProductOption($optionData)])
+                ->create(['data' => $optionData])
                 ->setSku($bundleProduct->getSku());
 
             foreach ($linksData as $linkData) {
-                $linkData['option_id'] = $option->getId();
                 $links[] = $this->objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
                     ->create(['data' => $linkData]);
             }
@@ -83,18 +92,6 @@ abstract class BundlePrice extends \PHPUnit_Framework_TestCase
         $bundleProduct->setExtensionAttributes($extension);
 
         return $bundleProduct;
-    }
-
-    /**
-     * @param array $fixture
-     * @return array
-     */
-    private function getFixtureForProductCustomOption(array $fixture = [])
-    {
-        $fixture['title'] = 'Custom Option Title ' . microtime(true);
-        $fixture['sku'] = 'custom_option_sku_' . microtime(true);
-
-        return $fixture;
     }
 
     /**
@@ -112,7 +109,7 @@ abstract class BundlePrice extends \PHPUnit_Framework_TestCase
         foreach ($optionsData as $optionData) {
             $customOption = $customOptionFactory->create(
                 [
-                    'data' => $this->getFixtureForProductCustomOption($optionData)
+                    'data' => $optionData
                 ]
             );
             $customOption->setProductSku($bundleProduct->getSku());
@@ -125,16 +122,5 @@ abstract class BundlePrice extends \PHPUnit_Framework_TestCase
         $bundleProduct->setCanSaveCustomOptions(true);
 
         return $bundleProduct;
-    }
-
-    /**
-     * @param array $fixture
-     * @return array
-     */
-    private function getFixtureForProductOption(array $fixture = [])
-    {
-        $fixture['title'] = 'Option title' . microtime(true);
-
-        return $fixture;
     }
 }

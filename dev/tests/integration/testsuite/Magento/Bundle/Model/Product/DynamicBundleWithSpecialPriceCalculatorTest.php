@@ -10,53 +10,17 @@ namespace Magento\Bundle\Model\Product;
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
  * @magentoAppArea frontend
  */
-class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_TestCase
+class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 {
-    /** @var \Magento\TestFramework\Helper\Bootstrap */
-    protected $objectManager;
-
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
-    protected $productRepository;
-
-    protected $fixtureForProductOption = [
-        'title' => 'Some title',
-        'required' => true,
-        'type' => 'checkbox'
-    ];
-
-    protected $fixtureForProductOptionSelection = [
-        'sku' => null,          // need to set this
-        'option_id' => null,    // need to set this
-        'qty' => 1,
-        'is_default' => true,
-        'can_change_quantity' => 0
-    ];
-
-    protected function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-    }
-
     /**
-     * @param $strategyModifiers array
-     * @param $expectedResults array
+     * @param array $strategyModifiers
+     * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->productRepository->get('spherical_horse_in_a_vacuum');
-
-        foreach ($strategyModifiers as $modifier) {
-            if (method_exists($this, $modifier['modifierName'])) {
-                array_unshift($modifier['data'], $bundleProduct);
-                $bundleProduct = call_user_func_array([$this, $modifier['modifierName']], $modifier['data']);
-            }
-        }
-
-        $this->productRepository->save($bundleProduct);
-        $bundleProduct = $this->productRepository->get('spherical_horse_in_a_vacuum', false, null, true);
+        $bundleProduct = $this->prepareFixture($strategyModifiers);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -79,7 +43,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
     {
         return [
             'Testing price for dynamic bundle product with special price and sub items Configuration #1' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1(),
+                'strategy' => $this->getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
                     'minimalPrice' => 5,
@@ -88,7 +52,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #2' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2(),
+                'strategy' => $this->getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
@@ -97,7 +61,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #3' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3(),
+                'strategy' => $this->getBundleConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -106,7 +70,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #4' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4(),
+                'strategy' => $this->getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -115,7 +79,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #5' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5(),
+                'strategy' => $this->getBundleConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -124,7 +88,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #6' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6(),
+                'strategy' => $this->getBundleConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
@@ -133,7 +97,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #7' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration7(),
+                'strategy' => $this->getBundleConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
@@ -142,7 +106,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price and sub items Configuration #8' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration8(),
+                'strategy' => $this->getBundleConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
@@ -151,7 +115,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with sub item product that has special price' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration9(),
+                'strategy' => $this->getBundleConfiguration9(),
                 'expectedResults' => [
                     // 1 * 3.5
                     'minimalPrice' => 3.5,
@@ -160,7 +124,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
                 ]
             ],
             'Testing price for dynamic bundle product with special price on it and on sub item' => [
-                'strategy' => $this->getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration10(),
+                'strategy' => $this->getBundleConfiguration10(),
                 'expectedResults' => [
                     // 0.5 * 1 * 3.5
                     'minimalPrice' => 1.75,
@@ -171,14 +135,17 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration1()
+    public function getBundleConfiguration1()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                 ]
             ]
@@ -196,15 +163,16 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration2()
+    public function getBundleConfiguration2()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'type' => 'checkbox',
                 'required' => false,
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
                         'qty' => 2,
                     ],
                 ]
@@ -223,18 +191,20 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration3()
+    public function getBundleConfiguration3()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
@@ -253,19 +223,20 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration4()
+    public function getBundleConfiguration4()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'multi',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
@@ -284,19 +255,20 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration5()
+    public function getBundleConfiguration5()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
@@ -315,33 +287,35 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration6()
+    public function getBundleConfiguration6()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
             ],
             [
+                'title' => 'Op2',
+                'required' => true,
                 'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 2,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 2,
                         'qty' => 3,
                     ],
                 ]
@@ -360,34 +334,35 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration7()
+    public function getBundleConfiguration7()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
                 'required' => false,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
             ],
             [
+                'title' => 'Op2',
+                'required' => true,
                 'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 2,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 2,
                         'qty' => 3,
                     ],
                 ]
@@ -406,35 +381,35 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration8()
+    public function getBundleConfiguration8()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
                 'required' => false,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
             ],
             [
+                'title' => 'Op2',
                 'required' => false,
                 'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 2,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 2,
                         'qty' => 3,
                     ],
                 ]
@@ -453,19 +428,21 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration9()
+    public function getBundleConfiguration9()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                 ]
             ]
@@ -483,19 +460,20 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    public function getProductWithSpecialPriceSubItemsAndOptionsStrategyConfiguration10()
+    public function getBundleConfiguration10()
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'qty' => 3,
                     ],
                 ]
@@ -518,23 +496,11 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    protected function getFixtureForProductOption(array $data = [])
-    {
-        $fixture = $this->fixtureForProductOption;
-
-        // make title different for each call
-        $fixture['title'] .= ' ' . microtime(true);
-
-        return array_merge($fixture, $data);
-    }
-
-    protected function getFixtureForProductOptionSelection($data)
-    {
-        $fixture = $this->fixtureForProductOptionSelection;
-
-        return array_merge($fixture, $data);
-    }
-
+    /**
+     * @param \Magento\Catalog\Model\Product $bundleProduct
+     * @param int $discount
+     * @return \Magento\Catalog\Model\Product
+     */
     protected function addSpecialPrice(\Magento\Catalog\Model\Product $bundleProduct, $discount)
     {
         $bundleProduct->setSpecialPrice($discount);
@@ -542,41 +508,17 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends \PHPUnit_Framework_Tes
         return $bundleProduct;
     }
 
+    /**
+     * @param \Magento\Catalog\Model\Product $bundleProduct
+     * @param string $sku
+     * @param int $price
+     * @return \Magento\Catalog\Model\Product
+     */
     protected function addSpecialPriceForSimple(\Magento\Catalog\Model\Product $bundleProduct, $sku, $price)
     {
         $simple = $this->productRepository->get($sku, false, null, true);
         $simple->setSpecialPrice($price);
         $this->productRepository->save($simple);
-
-        return $bundleProduct;
-    }
-
-    protected function addSimpleProduct(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
-    {
-        $options = [];
-
-        foreach ($optionsData as $optionData) {
-            $links = [];
-            $linksData = $optionData['links'];
-            unset($optionData['links']);
-
-            $option = $this->objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
-                ->create(['data' => $this->getFixtureForProductOption($optionData)])
-                ->setSku($bundleProduct->getSku())
-                ->setOptionid(null);
-
-            foreach ($linksData as $linkData) {
-                $links[] = $this->objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
-                    ->create(['data' => $this->getFixtureForProductOptionSelection($linkData)]);
-            }
-
-            $option->setProductLinks($links);
-            $options[] = $option;
-        }
-
-        $extension = $bundleProduct->getExtensionAttributes();
-        $extension->setBundleProductOptions($options);
-        $bundleProduct->setExtensionAttributes($extension);
 
         return $bundleProduct;
     }

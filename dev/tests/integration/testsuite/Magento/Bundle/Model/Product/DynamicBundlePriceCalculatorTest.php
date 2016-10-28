@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model\Product;
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
  * @magentoAppArea frontend
  */
-class DynamicBundlePriceCalculatorTest extends BundlePrice
+class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
 {
     /**
      * @param array $strategyModifiers
@@ -51,7 +51,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePrice
                     'maximalPrice' => 10
                 ]
             ],
-            'Testing price for dynamic bundle product with three simples and differnt qty' => [
+            'Testing price for dynamic bundle product with three simples and different qty' => [
                 'strategy' => $this->getProductWithDifferentQty(),
                 'expectedResults' => [
                     // min price from simples 3*10 or 30
@@ -60,7 +60,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePrice
                     'maximalPrice' => 100
                 ]
             ],
-            'Testing price for dynamic bundle product with four simples and differnt price' => [
+            'Testing price for dynamic bundle product with four simples and different price' => [
                 'strategy' => $this->getProductWithDifferentPrice(),
                 'expectedResults' => [
                     //  10
@@ -76,6 +76,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [
@@ -99,6 +100,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [
@@ -130,6 +132,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [
