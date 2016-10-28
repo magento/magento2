@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Provide configurable sub-products for price calculation
+ * @api
  */
 interface ConfigurableOptionsProviderInterface
 {

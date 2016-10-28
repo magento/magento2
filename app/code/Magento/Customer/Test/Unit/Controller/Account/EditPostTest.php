@@ -94,6 +94,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $authenticationMock;
 
+    /**
+     * @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerMapperMock;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -133,6 +138,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->customerMapperMock = $this->getMockBuilder('Magento\Customer\Model\Customer\Mapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new EditPost(
             $this->context,
             $this->customerSession,
@@ -141,16 +150,28 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             $this->validator,
             $this->customerExtractor
         );
-        $reflection = new \ReflectionClass(get_class($this->model));
-        $reflectionProperty = $reflection->getProperty('emailNotification');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $this->emailNotification);
-        $reflectionProperty2 = $reflection->getProperty('scopeConfig');
-        $reflectionProperty2->setAccessible(true);
-        $reflectionProperty2->setValue($this->model, $scopeConfigMock);
-        $reflectionProperty3 = $reflection->getProperty('authentication');
-        $reflectionProperty3->setAccessible(true);
-        $reflectionProperty3->setValue($this->model, $this->authenticationMock);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'emailNotification',
+            $this->emailNotification
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'scopeConfig',
+            $scopeConfigMock
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'authentication',
+            $this->authenticationMock
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'customerMapper',
+            $this->customerMapperMock
+        );
     }
 
     public function testInvalidFormKey()
@@ -187,6 +208,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGeneralSave()
     {
         $customerId = 1;
@@ -202,6 +226,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $currentCustomerMock->expects($this->any())
             ->method('getEmail')
             ->willReturn($customerEmail);
+
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($currentCustomerMock)
+            ->willReturn([]);
 
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
@@ -300,6 +329,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $currentCustomerMock = $this->getCurrentCustomerMock($customerId, $address);
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($currentCustomerMock)
+            ->willReturn([]);
 
         $this->customerExtractor->expects($this->once())
             ->method('extract')
@@ -408,6 +442,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $currentCustomerMock = $this->getCurrentCustomerMock($customerId, $address);
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($currentCustomerMock)
+            ->willReturn([]);
 
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
@@ -558,6 +597,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $currentCustomerMock = $this->getCurrentCustomerMock($customerId, $address);
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+
+        $this->customerMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($currentCustomerMock)
+            ->willReturn([]);
 
         $exception = new $exception(__($message));
 

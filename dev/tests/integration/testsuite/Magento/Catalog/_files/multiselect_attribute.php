@@ -37,7 +37,7 @@ $attribute->setData(
                 'option_1' => ['Option 1'],
                 'option_2' => ['Option 2'],
                 'option_3' => ['Option 3'],
-                'option_4' => ['Option 4 "!@#$%^&*'],
+                'option_4' => ['Option 4 "!@#$%^&*']
             ],
             'order' => [
                 'option_1' => 1,
