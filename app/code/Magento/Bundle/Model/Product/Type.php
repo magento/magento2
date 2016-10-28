@@ -554,18 +554,17 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $product->getData('all_items_salable');
         }
 
-        $optionCollection = $this->getOptionsCollection($product);
-
-        if (!count($optionCollection->getItems())) {
+        if (!$this->getOptionsCollection($product)->getSize()) {
             return false;
         }
 
         $isSalable = true;
-        foreach ($optionCollection->getItems() as $option) {
+        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
             if ($option->getRequired()) {
                 $hasSalable = false;
 
                 $selectionsCollection = $this->_bundleCollection->create();
+                $selectionsCollection->addAttributeToSelect('status');
                 $selectionsCollection->addQuantityFilter();
                 $selectionsCollection->addFilterByRequiredOptions();
                 $selectionsCollection->setOptionIdsFilter([$option->getId()]);
