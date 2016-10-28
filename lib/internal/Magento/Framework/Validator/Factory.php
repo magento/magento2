@@ -82,8 +82,8 @@ class Factory
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
                 $this->cache->save($this->getSerializer()->serialize($this->_configFiles->toArray()), self::CACHE_KEY);
             } else {
-                $files = $this->getSerializer()->unserialize($this->_configFiles);
-                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($files));
+                $filesArray = $this->getSerializer()->unserialize($this->_configFiles);
+                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($filesArray));
             }
         }
     }
