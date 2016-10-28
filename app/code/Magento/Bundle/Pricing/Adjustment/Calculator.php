@@ -180,8 +180,14 @@ class Calculator implements BundleCalculatorInterface
     protected function getSelectionAmounts(Product $bundleProduct, $searchMin, $useRegularPrice = false)
     {
         // Flag shows - is it necessary to find minimal option amount in case if all options are not required
-        $productHasRequiredOption = $this->hasRequiredOption($bundleProduct);
-        $canSkipRequiredOptions = $searchMin && $productHasRequiredOption;
+        $shouldFindMinOption = false;
+        if ($searchMin
+            && $bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC
+            && !$this->hasRequiredOption($bundleProduct)
+        ) {
+            $shouldFindMinOption = true;
+        }
+        $canSkipRequiredOptions = $searchMin && !$shouldFindMinOption;
 
         $priceList = [];
         foreach ($this->getBundleOptions($bundleProduct) as $option) {
@@ -231,7 +237,7 @@ class Calculator implements BundleCalculatorInterface
 
         }
 
-        if ($searchMin && $bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC && !$productHasRequiredOption) {
+        if ($shouldFindMinOption) {
             $minPrice = null;
             $priceSelection = null;
             foreach ($priceList as $price) {
