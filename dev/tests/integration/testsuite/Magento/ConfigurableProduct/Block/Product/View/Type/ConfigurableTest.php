@@ -80,7 +80,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $config = json_decode($this->getSubject()->getJsonConfig(), true);
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
-        $this->assertEquals(1, $config['productId']);
+        $this->assertEquals(1001, $config['productId']);
         $this->assertArrayHasKey('attributes', $config);
         $this->assertArrayHasKey('template', $config);
         $this->assertArrayHasKey('prices', $config);
@@ -95,7 +95,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()
             ->create(ProductRepositoryInterface::class);
-        $product = $productRepository->getById(1, false, null, true);
+        $product = $productRepository->get('configurable');
         /** @var \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable $block */
         $block = Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\LayoutInterface'

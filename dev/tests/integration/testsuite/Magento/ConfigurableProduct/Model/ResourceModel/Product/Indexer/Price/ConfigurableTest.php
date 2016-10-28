@@ -39,11 +39,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductFinalPriceIfOneOfChildIsDisabled()
     {
+        $product = $this->productRepository->get('configurable');
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)
             ->create();
         $configurableProduct = $collection
-            ->addIdFilter([1])
+            ->addIdFilter([$product->getId()])
             ->addMinimalPrice()
             ->load()
             ->getFirstItem();
@@ -61,7 +62,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)
             ->create();
         $configurableProduct = $collection
-            ->addIdFilter([1])
+            ->addIdFilter([$product->getId()])
             ->addMinimalPrice()
             ->load()
             ->getFirstItem();
