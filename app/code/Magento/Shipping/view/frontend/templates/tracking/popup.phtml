@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\View\Element\Template;
+use Magento\Shipping\Block\Tracking\Popup;
 
 // @codingStandardsIgnoreFile
 
@@ -22,7 +22,7 @@ $results = $block->getTrackingInfo();
                 <?php foreach ($result as $counter => $track): ?>
                     <div class="table-wrapper">
                         <?php
-                            $block->addChild('shipping.tracking.details.' . $counter, Template::class, [
+                            $block->addChild('shipping.tracking.details.' . $counter, Popup::class, [
                                 'track' => $track,
                                 'template' => 'Magento_Shipping::tracking/details.phtml',
                                 'storeSupportEmail' => $block->getStoreSupportEmail()
@@ -33,7 +33,7 @@ $results = $block->getTrackingInfo();
                     </div>
                     <?php if (!empty($track->getProgressdetail())): ?>
                         <?php
-                            $block->addChild('shipping.tracking.progress.'. $counter, Template::class, [
+                            $block->addChild('shipping.tracking.progress.'. $counter, Popup::class, [
                                 'track' => $track,
                                 'template' => 'Magento_Shipping::tracking/progress.phtml'
                             ]);
