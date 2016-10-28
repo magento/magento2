@@ -812,7 +812,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             if (!is_null($product)) {
                 $this->setStoreFilter($product->getStoreId(), $product);
             }
-            $salable = (count($this->getSalableUsedProducts($product)) > 0) ? true : false;
+            $salable = count($this->getSalableUsedProducts($product)) > 0;
         }
 
         return $salable;

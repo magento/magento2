@@ -8,6 +8,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require 'product_configurable.php';
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 
 $productRepository = Bootstrap::getObjectManager()
     ->create(ProductRepositoryInterface::class);
