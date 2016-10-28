@@ -305,6 +305,7 @@ define([
 
             if (!_.isUndefined(attributes)) {
                 this.attributes(attributes);
+                this.disableConfigurableAttributes(this.attributes);
             }
             this.paging.totalRecords = this.variations.length;
 
