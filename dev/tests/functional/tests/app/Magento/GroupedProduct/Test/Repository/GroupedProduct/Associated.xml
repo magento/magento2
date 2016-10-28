@@ -28,6 +28,20 @@
             </field>
         </dataset>
 
+        <dataset name="oneSimpleProduct">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+        </dataset>
+
         <dataset name="defaultSimpleProduct_without_qty">
             <field name="assigned_products" xsi:type="array">
                 <item name="0" xsi:type="array">

@@ -13,6 +13,7 @@
             <render name="Yes/No" class="Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute\Select" />
             <render name="Text Field" class="Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute\Text" />
             <render name="Dropdown" class="Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute\Select" />
+            <render name="Weight" class="Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute\Weight" />
         </block>
         <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector" />
     </page>

@@ -27,6 +27,13 @@ class GridPageActions extends PageActions
     protected $createStoreButton = '#add_group';
 
     /**
+     * "Save Attribute" button selector
+     *
+     * @var string
+     */
+    protected $saveAttributeButton = '#save';
+
+    /**
      * Click on "Add New" button
      *
      * @return void
@@ -44,5 +51,15 @@ class GridPageActions extends PageActions
     public function createStoreGroup()
     {
         $this->_rootElement->find($this->createStoreButton)->click();
+    }
+
+    /**
+     * Click on "Save Attribute" button
+     *
+     * @return void
+     */
+    public function saveAttribute()
+    {
+        $this->_rootElement->find($this->saveAttributeButton)->click();
     }
 }

@@ -15,14 +15,14 @@ use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
 class Grid extends AbstractGrid
 {
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = 'td.col-frontend_label';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */

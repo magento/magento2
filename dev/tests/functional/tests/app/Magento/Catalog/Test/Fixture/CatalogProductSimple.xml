@@ -70,6 +70,7 @@
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />
+        <field name="additional_attributes" is_required="0" group="product-details" />
         <field name="id" group="null" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
