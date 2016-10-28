@@ -11,7 +11,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -463,6 +463,40 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'catalog_product',
             $code
         );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @dataProvider allowProductsDataProvider
+     */
+    public function testGetSalableUsedProducts($isInStock, $status, $expectedCount)
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $childProduct = $productRepository->get('simple_10');
+        $childProduct->setStatus($status);
+        $stockItem = $childProduct->getExtensionAttributes()->getStockItem();
+        $stockItem->setIsInStock($isInStock);
+        $productRepository->save($childProduct);
+
+        $products = $this->model->getSalableUsedProducts($this->product);
+        $this->assertCount($expectedCount, $products);
+        foreach ($products as $product) {
+            $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function allowProductsDataProvider()
+    {
+        return [
+            [Status::STATUS_OUT_OF_STOCK, false, 1],
+            [Status::STATUS_OUT_OF_STOCK, true, 1],
+            [Status::STATUS_IN_STOCK, false, 1],
+            [Status::STATUS_IN_STOCK, true, 2],
+        ];
     }
 
     /**
