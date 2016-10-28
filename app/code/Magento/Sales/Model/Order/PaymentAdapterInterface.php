@@ -23,16 +23,4 @@ interface PaymentAdapterInterface
      * @return OrderInterface
      */
     public function pay(OrderInterface $order, InvoiceInterface $invoice, $capture);
-
-    /**
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @param bool $isOnline
-     * @return \Magento\Sales\Api\Data\OrderInterface
-     */
-    public function refund(
-        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
-        \Magento\Sales\Api\Data\OrderInterface $order,
-        $isOnline = false
-    );
 }
