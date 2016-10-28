@@ -491,12 +491,6 @@ define([
                 }),
                 productRow = this.variations[rowIndex];
 
-            if (productRow.editable) {
-                _.each(['name', 'sku', 'quantity', 'weight', 'price'], function (column) {
-                    productRow[column] = '';
-                });
-            }
-
             if (productRow.status === '0') {
                 productRow.status = '1';
             } else {
