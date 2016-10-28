@@ -57,7 +57,7 @@ class SaveCreditCardStep implements TestStepInterface
      */
     public function run()
     {
-        $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->saveCreditCard(
+        $this->checkoutOnepage->getVaultPaymentBlock()->saveCreditCard(
             $this->payment['method'],
             $this->creditCardSave
         );
