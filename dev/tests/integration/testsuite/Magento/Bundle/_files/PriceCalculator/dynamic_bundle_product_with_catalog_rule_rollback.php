@@ -4,4 +4,4 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/dynamic_bundle_product.php';
+require __DIR__ . '/dynamic_bundle_product_rollback.php';
