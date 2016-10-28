@@ -174,6 +174,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                 ]
             );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                'checkbox',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                    'label' => __('Fields enclosure'),
+                    'title' => __('Fields enclosure'),
+                    'value' => 1,
+                ]
+            );
         }
 
         // fieldset for file uploading

@@ -15,7 +15,7 @@ interface ValidatorInterface
 {
     /**
      * @param object $entity
-     * @return array
+     * @return \Magento\Framework\Phrase[]
      * @throws DocumentValidationException
      * @throws NoSuchEntityException
      */

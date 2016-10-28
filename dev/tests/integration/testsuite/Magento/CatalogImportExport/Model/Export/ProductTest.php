@@ -16,6 +16,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * Stock item attributes which must be exported
      *
      * @var array
@@ -47,6 +52,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\CatalogImportExport\Model\Export\Product'
         );
@@ -170,5 +176,29 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $data = $model->setWriter($exportAdapter)->export();
         $this->assertEmpty($data);
+    }
+
+    /**
+     * Verify if fields wrapping works correct when "Fields Enclosure" option enabled
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     */
+    public function testExportWithFieldsEnclosure()
+    {
+        $this->_model->setParameters([
+            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
+        ]);
+
+        $this->_model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->_model->export();
+
+        $this->assertContains('""Option 2""', $exportData);
+        $this->assertContains('""Option 3""', $exportData);
+        $this->assertContains('""Option 4 """"!@#$%^&*""', $exportData);
+        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
     }
 }

@@ -10,6 +10,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
 
 /**
  * Class Relation
+ * @deprecated
  */
 class Refund implements RelationInterface
 {
