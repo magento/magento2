@@ -8,6 +8,9 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
@@ -163,6 +166,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $customerSession;
 
     /**
+     * @var StockRegistryInterface
+     */
+    private $stockRegistry;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -204,7 +212,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Cache\FrontendInterface $cache = null,
-        \Magento\Customer\Model\Session $customerSession = null
+        \Magento\Customer\Model\Session $customerSession = null,
+        StockRegistryInterface $stockRegistry = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -227,7 +236,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $logger,
             $productRepository
         );
-
+        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()
+            ->get(StockRegistryInterface::class);
     }
 
     /**
@@ -799,17 +809,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $salable = parent::isSalable($product);
 
         if ($salable !== false) {
-            $salable = false;
             if (!is_null($product)) {
                 $this->setStoreFilter($product->getStoreId(), $product);
             }
-            /** @var \Magento\Catalog\Model\Product $child */
-            foreach ($this->getUsedProducts($product) as $child) {
-                if ($child->isSalable()) {
-                    $salable = true;
-                    break;
-                }
-            }
+            $salable = (count($this->getSalableUsedProducts($product)) > 0) ? true : false;
         }
 
         return $salable;
@@ -1279,5 +1282,25 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $this->catalogConfig = ObjectManager::getInstance()->get(Config::class);
         }
         return $this->catalogConfig;
+    }
+
+    /**
+     * Retrieve array of salable "subproducts"
+     *
+     * @param Product $product
+     * @param array|null $requiredAttributeIds
+     * @return Product[]
+     */
+    public function getSalableUsedProducts(Product $product, $requiredAttributeIds = null)
+    {
+        $usedProducts = $this->getUsedProducts($product, $requiredAttributeIds);
+        $usedSalableProducts = array_filter($usedProducts, function (Product $product) {
+            $stockStatus = $this->stockRegistry->getStockStatus(
+                $product->getId(),
+                $product->getStore()->getWebsiteId()
+            );
+            return (int)$stockStatus->getStockStatus() === Status::STATUS_IN_STOCK && $product->isSalable();
+        });
+        return $usedSalableProducts;
     }
 }
