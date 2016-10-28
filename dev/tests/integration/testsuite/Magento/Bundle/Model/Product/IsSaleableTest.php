@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * Test class for \Magento\Bundle\Model\Product\Type (bundle product type)
  *
- * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/issaleable_product.php
+ * @magentoDataFixture Magento/Bundle/_files/issaleable_product.php
  */
 class IsSaleableTest extends \PHPUnit_Framework_TestCase
 {
@@ -170,9 +170,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSaleableOnBundleWithoutSelections()
     {
-        $bundleProductSku = 'bundle-product';
-
-        $bundleProduct = $this->productRepository->get($bundleProductSku, true, null, true);
+        $bundleProduct = $this->productRepository->get('bundle-product', true, null, true);
         $bundleType = $bundleProduct->getTypeInstance();
         /** @var  \Magento\Bundle\Model\LinkManagement $linkManager */
         $linkManager = $this->objectManager->create(\Magento\Bundle\Model\LinkManagement::class);
@@ -183,9 +181,10 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
 
         foreach ($selections as $link) {
             /** @var \Magento\Bundle\Model\Selection $link */
-            $linkManager->removeChild($bundleProductSku, $link->getOptionId(), $link->getSku());
+            $linkManager->removeChild('bundle-product', $link->getOptionId(), $link->getSku());
         }
 
+        $bundleProduct = $this->productRepository->get('bundle-product', false, null, true);
         $this->assertFalse(
             $bundleProduct->isSalable(),
             'Bundle product supposed to be non saleable if it has no selections'
@@ -290,6 +289,80 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $bundleProduct->isSalable(),
             'Bundle product supposed to be saleable if all his selections have selection_can_change_qty = 1'
+        );
+    }
+
+    /**
+     * check bundle product is not saleable if
+     * all his options are not required and selections are not saleable
+     *
+     * @magentoAppIsolation enabled
+     * @covers \Magento\Bundle\Model\Product\Type::isSalable
+     */
+    public function testIsSaleableOnBundleWithoutRequiredOptions()
+    {
+        // making selections as not saleable
+        $productsSku = ['simple1', 'simple2', 'simple3', 'simple4', 'simple5'];
+        foreach ($productsSku as $productSku) {
+            $product = $this->productRepository->get($productSku);
+            $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+            $this->productRepository->save($product);
+        }
+
+        $bundleProduct = $this->productRepository->get('bundle-product');
+
+        // setting all options as not required
+        $options = $bundleProduct->getExtensionAttributes()->getBundleProductOptions();
+        foreach ($options as $productOption) {
+            $productOption->setRequired(false);
+        }
+
+        $extension = $bundleProduct->getExtensionAttributes();
+        $extension->setBundleProductOptions($options);
+        $bundleProduct->setExtensionAttributes($extension);
+        $bundleProduct = $this->productRepository->save($bundleProduct);
+
+        $this->assertFalse(
+            $bundleProduct->isSalable(),
+            'Bundle product supposed to be not saleable if all his options are not required and selections are not saleable'
+        );
+    }
+
+    /**
+     * check bundle product is saleable if
+     * it has at least one not required option with saleable selections
+     *
+     * @magentoAppIsolation enabled
+     * @covers \Magento\Bundle\Model\Product\Type::isSalable
+     */
+    public function testIsSaleableOnBundleWithOneSaleableSelection()
+    {
+        // making selections as not saleable except simple1
+        $productsSku = ['simple2', 'simple3', 'simple4', 'simple5'];
+
+        foreach ($productsSku as $productSku) {
+            $product = $this->productRepository->get($productSku);
+            $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+            $this->productRepository->save($product);
+        }
+
+        $bundleProduct = $this->productRepository->get('bundle-product');
+
+        // setting all options as not required
+        $options = $bundleProduct->getExtensionAttributes()->getBundleProductOptions();
+        foreach ($options as $productOption) {
+            $productOption->setRequired(false);
+        }
+
+        $extension = $bundleProduct->getExtensionAttributes();
+        $extension->setBundleProductOptions($options);
+        $bundleProduct->setExtensionAttributes($extension);
+
+        $bundleProduct = $this->productRepository->save($bundleProduct);
+
+        $this->assertTrue(
+            $bundleProduct->isSalable(),
+            'Bundle product supposed to be saleable if it has at least one not required option with saleable selection'
         );
     }
 
