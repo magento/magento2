@@ -1,23 +1,20 @@
 <?php
 /**
- * Magento validator config factory
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Factory
 {
-    /** cache key */
+    /**
+     * Cache key
+     */
     const CACHE_KEY = __CLASS__;
 
     /**
