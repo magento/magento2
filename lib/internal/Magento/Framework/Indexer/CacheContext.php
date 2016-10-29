@@ -16,6 +16,11 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
     protected $entities = [];
 
     /**
+     * @var array
+     */
+    private $tags = [];
+
+    /**
      * Register entity Ids
      *
      * @param string $cacheTag
@@ -26,6 +31,18 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
     {
         $this->entities[$cacheTag] =
             array_merge($this->getRegisteredEntity($cacheTag), $ids);
+        return $this;
+    }
+
+    /**
+     * Register entity tags
+     *
+     * @param string $cacheTag
+     * @return $this
+     */
+    public function registerTags($cacheTags)
+    {
+        $this->tags = array_merge($this->tags, $cacheTags);
         return $this;
     }
 
@@ -57,6 +74,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
                 $identities[] = $cacheTag . '_' . $id;
             }
         }
-        return $identities;
+        return array_merge($identities, array_unique($this->tags));
     }
 }

@@ -39,8 +39,8 @@
         </arguments>
     </type>
     <type name="Magento\Indexer\Model\Processor">
-        <plugin name="page-cache-indexer-reindex-invalidate"
-                type="Magento\Indexer\Model\Processor\InvalidateCache" sortOrder="10"/>
+        <plugin name="page-cache-indexer-reindex-clean-cache"
+                type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
     </type>
 
     <type name="Magento\Framework\Console\CommandList">

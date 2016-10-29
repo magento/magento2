@@ -8,7 +8,9 @@ namespace Magento\PageCache\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
+ * Class InvalidateCacheIfChanged
  * An observer to invalidate full page cache when the content given is changed
+ * @deprecated
  */
 class InvalidateCacheIfChanged implements ObserverInterface
 {
