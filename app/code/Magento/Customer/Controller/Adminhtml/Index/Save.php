@@ -11,11 +11,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
-use Magento\Framework\Exception\LocalizedException;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
@@ -271,7 +267,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
-            } catch (LocalizedException $exception) {
+            } catch (\Magento\Framework\Exception\LocalizedException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessage());
                 $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
