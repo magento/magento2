@@ -5,8 +5,15 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Config;
 
+/**
+ * Information Expert in stores handling
+ *
+ * @package Magento\Store\Model
+ */
 class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 {
     /**
@@ -35,6 +42,11 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     protected $allLoaded = false;
 
     /**
+     * @var Config
+     */
+    private $appConfig;
+
+    /**
      * @param StoreFactory $storeFactory
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
      */
@@ -54,8 +66,12 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
         if (isset($this->entities[$code])) {
             return $this->entities[$code];
         }
-        $store = $this->storeFactory->create();
-        $store->load($code, 'code');
+
+        $storeData = $this->getAppConfig()->get('scopes', "stores/$code", []);
+        $store = $this->storeFactory->create([
+            'data' => $storeData
+        ]);
+
         if ($store->getId() === null) {
             throw new NoSuchEntityException(__('Requested store is not found'));
         }
@@ -85,11 +101,23 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
         if (isset($this->entitiesById[$id])) {
             return $this->entitiesById[$id];
         }
-        $store = $this->storeFactory->create();
-        $store->load($id);
+
+        $storeData = [];
+        $stores = $this->getAppConfig()->get('scopes', "stores", []);
+        foreach ($stores as $data) {
+            if (isset($data['store_id']) && $data['store_id'] == $id) {
+                $storeData = $data;
+                break;
+            }
+        }
+        $store = $this->storeFactory->create([
+            'data' => $storeData
+        ]);
+
         if ($store->getId() === null) {
             throw new NoSuchEntityException(__('Requested store is not found'));
         }
+
         $this->entitiesById[$id] = $store;
         $this->entities[$store->getCode()] = $store;
         return $store;
@@ -113,17 +141,33 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
      */
     public function getList()
     {
-        if (!$this->allLoaded) {
-            /** @var $storeCollection \Magento\Store\Model\ResourceModel\Store\Collection */
-            $storeCollection = $this->storeCollectionFactory->create();
-            $storeCollection->setLoadDefault(true);
-            foreach ($storeCollection as $item) {
-                $this->entities[$item->getCode()] = $item;
-                $this->entitiesById[$item->getId()] = $item;
-            }
-            $this->allLoaded = true;
+        if ($this->allLoaded) {
+            return $this->entities;
         }
+        $stores = $this->getAppConfig()->get('scopes', "stores", []);
+        foreach ($stores as $data) {
+            $store = $this->storeFactory->create([
+                'data' => $data
+            ]);
+            $this->entities[$store->getCode()] = $store;
+            $this->entitiesById[$store->getId()] = $store;
+        }
+        $this->allLoaded = true;
         return $this->entities;
+    }
+
+    /**
+     * Retrieve application config.
+     *
+     * @deprecated
+     * @return Config
+     */
+    private function getAppConfig()
+    {
+        if (!$this->appConfig) {
+            $this->appConfig = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->appConfig;
     }
 
     /**

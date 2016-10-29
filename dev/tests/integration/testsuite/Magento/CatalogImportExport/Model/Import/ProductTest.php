@@ -23,7 +23,8 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * Class ProductTest
- *
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
