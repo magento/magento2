@@ -73,7 +73,7 @@ class ManageProductsStockTest extends Injectable
         $product->persist();
 
         // Steps
-        if(!$skipAddingToCart) {
+        if (!$skipAddingToCart) {
             $this->objectManager->create(
                 \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
                 ['products' => [$product]]
