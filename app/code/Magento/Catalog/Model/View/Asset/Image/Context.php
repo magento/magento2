@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\View\Asset\Image;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\ContextInterface;
 
 /**
@@ -36,7 +37,7 @@ class Context implements ContextInterface
     ) {
         $this->mediaConfig = $mediaConfig;
         $this->filesystem = $filesystem;
-        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaDirectory->create($this->mediaConfig->getBaseMediaPath());
     }
 

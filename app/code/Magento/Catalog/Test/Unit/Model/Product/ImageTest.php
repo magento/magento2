@@ -6,12 +6,17 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
+use Magento\Catalog\Model\View\Asset\ImageFactory;
+use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\ContextInterface;
 
 /**
  * Class ImageTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,22 +86,22 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $imageAsset;
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewAssetImageFactory;
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewAssetPlaceholderFactory;
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\Image\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $imageContextFactory;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $imageContext;
 
@@ -159,7 +164,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->imageAsset
         );
 
-        $this->viewAssetImageFactory = $this->getMockBuilder(\Magento\Catalog\Model\View\Asset\ImageFactory::class)
+        $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -169,7 +174,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->viewAssetImageFactory
         );
 
-        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class)
+        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -179,9 +184,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->viewAssetPlaceholderFactory
         );
 
-        $this->imageContext = $this->getMockBuilder(\Magento\Framework\View\Asset\ContextInterface::class)
+        $this->imageContext = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $this->imageContextFactory = $this->getMockBuilder(\Magento\Catalog\Model\View\Asset\Image\ContextFactory::class)
+        $this->imageContextFactory = $this->getMockBuilder(ContextFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -393,9 +398,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrlNoSelection()
     {
-        $this->imageAsset->expects($this->any())->method('getUrl')->will($this->returnValue('URL to Default Placeholder'));
+        $this->imageAsset->expects($this->any())->method('getUrl')->will($this->returnValue('Default Placeholder URL'));
         $this->image->setBaseFile('no_selection');
-        $this->assertEquals('URL to Default Placeholder', $this->image->getUrl());
+        $this->assertEquals('Default Placeholder URL', $this->image->getUrl());
     }
 
     public function testSetGetDestinationSubdir()

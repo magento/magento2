@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\View\Asset;
 
+use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
 
@@ -39,19 +40,20 @@ class Image implements LocalInterface
     private $miscParams;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\ConfigInterface
+     * @var ConfigInterface
      */
     private $mediaConfig;
 
     /**
      * Image constructor.
      *
+     * @param ConfigInterface $mediaConfig
      * @param ContextInterface $context
      * @param string $filePath
-     * @param array $miscParams []
+     * @param array $miscParams
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Media\ConfigInterface $mediaConfig,
+        ConfigInterface $mediaConfig,
         ContextInterface $context,
         $filePath,
         array $miscParams = []

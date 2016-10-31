@@ -58,7 +58,7 @@ class Placeholder implements LocalInterface
      * @param ContextInterface $context
      * @param ScopeConfigInterface $scopeConfig
      * @param Repository $assetRepo
-     * @param $type
+     * @param string $type
      */
     public function __construct(
         ContextInterface $context,
@@ -173,6 +173,4 @@ class Placeholder implements LocalInterface
     {
         return 'placeholder';
     }
-
-
 }

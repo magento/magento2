@@ -12,6 +12,7 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Store\Model\Store;
@@ -481,7 +482,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $this->_isBaseFilePlaceholder = false;
         if ($file == 'no_selection') {
-           return $this;
+            return $this;
         }
 
         $imageContext = $this->getImageContextFactory()->create();
@@ -920,7 +921,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private function getViewAssetImageFactory()
     {
         if ($this->viewAssetImageFactory == null) {
-            $this->viewAssetImageFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\View\Asset\ImageFactory::class);
+            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\View\Asset\ImageFactory::class
+            );
         }
 
         return $this->viewAssetImageFactory;
@@ -932,7 +935,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private function getViewAssetPlaceholderFactory()
     {
         if ($this->viewAssetPlaceholderFactory == null) {
-            $this->viewAssetPlaceholderFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
+            $this->viewAssetPlaceholderFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\View\Asset\PlaceholderFactory::class
+            );
         }
 
         return $this->viewAssetPlaceholderFactory;
@@ -944,7 +949,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private function getImageContextFactory()
     {
         if ($this->imageContextFactory == null) {
-            $this->imageContextFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\View\Asset\Image\ContextFactory::class);
+            $this->imageContextFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\View\Asset\Image\ContextFactory::class
+            );
         }
 
         return $this->imageContextFactory;
@@ -954,6 +961,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Retrieve misc params based on all image attributes
      *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getMiscParams()
     {
