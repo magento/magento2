@@ -80,16 +80,6 @@ class Filter
      */
     public function getCollection(AbstractDb $collection)
     {
-        $component = $this->getComponent();
-        $this->prepareComponent($component);
-        $dataProvider = $component->getContext()->getDataProvider();
-        $dataProvider->setLimit(0, false);
-        $ids = [];
-        foreach ($dataProvider->getSearchResult()->getItems() as $document) {
-            $ids[] = $document->getId();
-        }
-
-        $collection->addFieldToFilter($collection->getIdFieldName(), ['in' => $ids]);
         return $this->applySelection($collection);
     }
 
