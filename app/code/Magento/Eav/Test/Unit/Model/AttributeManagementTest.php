@@ -371,6 +371,24 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $entityType = 'type';
         $attributeSetId = 148;
 
+        $attributeCollectionFactoryMock = $this->getMock(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $attributeCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->attributeCollectionMock);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'attributeCollectionFactory',
+            $attributeCollectionFactoryMock
+        );
+
         $attributeSetMock = $this->getMock(\Magento\Eav\Api\Data\AttributeSetInterface::class, [], [], '', false);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
