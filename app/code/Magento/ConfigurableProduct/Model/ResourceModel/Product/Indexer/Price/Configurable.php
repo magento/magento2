@@ -7,8 +7,46 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\Store;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
+    /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param string $connectionName
+     * @param StoreResolverInterface $storeResolver
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        $connectionName = null,
+        StoreResolverInterface $storeResolver = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $moduleManager, $connectionName);
+        $this->storeResolver = $storeResolver ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(StoreResolverInterface::class);
+    }
+
     /**
      * Reindex temporary (price result data) for all products
      *
@@ -146,6 +184,8 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
 
+        $statusAttribute = $this->_getAttribute(ProductInterface::STATUS);
+
         $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             []
@@ -162,11 +202,26 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             []
         )->where(
             'le.required_options=0'
+        )->joinLeft(
+            ['status_global_attr' => $statusAttribute->getBackendTable()],
+            "status_global_attr.entity_id = le.entity_id"
+            . ' AND status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_global_attr.store_id  = ' . Store::DEFAULT_STORE_ID,
+            []
+        )->joinLeft(
+            ['status_attr' => $statusAttribute->getBackendTable()],
+            "status_attr.entity_id = le.entity_id"
+            . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
+            []
+        )->where(
+            'IFNULL(status_attr.value, status_global_attr.value) = ?',
+            ProductStatus::STATUS_ENABLED
         )->group(
             ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
         $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
-        $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
+        $tierPriceColumn = $connection->getIfNullSql('MIN(i.tier_price)', 'NULL');
 
         $select->columns(
             ['price' => $priceColumn, 'tier_price' => $tierPriceColumn]
