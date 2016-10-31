@@ -8,7 +8,8 @@ namespace Magento\Braintree\Test\Unit\Model\Ui;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Ui\ConfigProvider;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class ConfigProviderTest
@@ -42,13 +43,21 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $payPalConfig = $this->getMockBuilder(PayPalConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+
         $this->configProvider = new ConfigProvider(
             $this->config,
-            $this->braintreeAdapter
+            $payPalConfig,
+            $this->braintreeAdapter,
+            $localeResolver
         );
     }
 

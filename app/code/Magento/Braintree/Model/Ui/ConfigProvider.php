@@ -8,7 +8,9 @@ namespace Magento\Braintree\Model\Ui;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class ConfigProvider
@@ -16,6 +18,11 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 final class ConfigProvider implements ConfigProviderInterface
 {
     const CODE = 'braintree';
+
+    /**
+     * @deprecated
+     */
+    const PAYPAL_CODE = 'braintree_paypal';
 
     const CC_VAULT_CODE = 'braintree_cc_vault';
 
@@ -38,11 +45,16 @@ final class ConfigProvider implements ConfigProviderInterface
      * Constructor
      *
      * @param Config $config
+     * @param PayPalConfig $payPalConfig;
      * @param BraintreeAdapter $adapter
+     * @param ResolverInterface $localeResolver
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Config $config,
-        BraintreeAdapter $adapter
+        PayPalConfig $payPalConfig,
+        BraintreeAdapter $adapter,
+        ResolverInterface $localeResolver
     ) {
         $this->config = $config;
         $this->adapter = $adapter;
