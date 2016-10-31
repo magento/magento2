@@ -19,9 +19,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory */
     protected $customOptionFactory;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -74,8 +71,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFinalPriceWithSelectedSimpleProduct()
     {
-        $product = $this->getProduct(1);
-        $product->addCustomOption('simple_product', 20, $this->getProduct(20));
+        $product = $this->getProduct('configurable');
+        $product->addCustomOption('simple_product', 20, $this->getProduct('simple_20'));
         $this->assertPrice(20, $product);
     }
 
@@ -86,7 +83,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFinalPriceWithCustomOption()
     {
-        $product = $this->getProduct(1);
+        $product = $this->getProduct('configurable');
 
         $options = $this->prepareOptions(
             [
@@ -154,7 +151,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertPrice($expectedPrice, $product = null)
     {
-        $product = $product ?: $this->getProduct(1);
+        $product = $product ?: $this->getProduct('configurable');
 
         /** @var $model \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price */
         $model = $this->objectManager->create(
@@ -166,13 +163,13 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $id
-     * @return \Magento\Catalog\Model\Product
+     * @param string $sku
+     * @return \Magento\Catalog\Api\Data\ProductInterface
      */
-    private function getProduct($id)
+    private function getProduct($sku)
     {
         /** @var $productRepository ProductRepositoryInterface */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        return $productRepository->getById($id, true, null, true);
+        return $productRepository->get($sku, true, null, true);
     }
 }
