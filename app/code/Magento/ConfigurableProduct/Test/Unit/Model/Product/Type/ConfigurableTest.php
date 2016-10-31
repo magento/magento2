@@ -11,11 +11,11 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Config;
+use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Cache\FrontendInterface;
 
 /**
  * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\ConfigurableTest
@@ -95,6 +95,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $catalogConfig;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockRegistry;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -162,6 +167,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
             [
@@ -179,6 +188,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock(),
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
+                'stockRegistry' => $this->stockRegistry,
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
@@ -592,14 +602,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSalable()
     {
-        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getStatus', 'hasData', 'getData', 'getStoreId', 'setData'])
             ->disableOriginalConstructor()
             ->getMock();
-        $childProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
-            ->setMethods(['__wakeup', 'isSalable'])
+        $childProductMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['__wakeup', 'isSalable', 'getStore'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->setMethods(['getWebsiteId'])
+            ->getMockForAbstractClass();
+
+        $stockStatus = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockStatusInterface::class)
+            ->setMethods(['getStockStatus'])
+            ->getMockForAbstractClass();
 
         $productMock->expects($this->once())->method('getStatus')->willReturn(1);
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
@@ -607,9 +625,75 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('getStoreId')->willReturn(1);
         $productMock->expects($this->once())->method('setData')->willReturnSelf();
         $productMock->expects($this->at(6))->method('getData')->willReturn([$childProductMock]);
+        $childProductMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->stockRegistry->expects($this->once())->method('getStockStatus')->willReturn($stockStatus);
+        $stockStatus->expects($this->once())->method('getStockStatus')->willReturn(1);
         $childProductMock->expects($this->once())->method('isSalable')->willReturn(true);
 
         $this->assertTrue($this->_model->isSalable($productMock));
+    }
+
+    /**
+     * @param $stockStatusValue
+     * @param $isSalable
+     * @param $expectedCount
+     * @dataProvider salableUsedProductsDataProvider
+     */
+    public function testGetSalableUsedProducts($stockStatusValue, $isSalable, $expectedCount)
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['hasData', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childProductMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['isSalable', 'getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->setMethods(['getWebsiteId'])
+            ->getMockForAbstractClass();
+
+        $stockStatus = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockStatusInterface::class)
+            ->setMethods(['getStockStatus'])
+            ->getMockForAbstractClass();
+
+        $productMock->expects($this->at(0))->method('hasData')->willReturn(true);
+        $productMock->expects($this->at(1))->method('getData')->willReturn([$childProductMock]);
+        $childProductMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->stockRegistry->expects($this->once())->method('getStockStatus')->willReturn($stockStatus);
+        $stockStatus->expects($this->once())->method('getStockStatus')->willReturn($stockStatusValue);
+        $childProductMock->expects($this->any())->method('isSalable')->willReturn($isSalable);
+
+        $this->assertCount($expectedCount, $this->_model->getSalableUsedProducts($productMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function salableUsedProductsDataProvider()
+    {
+        return [
+            [Status::STATUS_OUT_OF_STOCK, false, 0],
+            [Status::STATUS_OUT_OF_STOCK, true, 0],
+            [Status::STATUS_IN_STOCK, false, 0],
+            [Status::STATUS_IN_STOCK, true, 1],
+        ];
+    }
+
+    /**
+     * No child products assigned
+     */
+    public function testGetSalableUsedProductsEmpty()
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['hasData', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->at(0))->method('hasData')->willReturn(true);
+        $productMock->expects($this->at(1))->method('getData')->willReturn([]);
+        $this->assertCount(0, $this->_model->getSalableUsedProducts($productMock));
     }
 
     public function testGetSelectedAttributesInfo()

@@ -69,10 +69,14 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterInitialize()
+    /**
+     * Prepare configurable matrix
+     *
+     * @return array
+     */
+    private function getConfigurableMatrix()
     {
-        $productMock = $this->getProductMock();
-        $configurableMatrix = [
+        return [
             [
                 'newProduct' => true,
                 'id' => 'product1'
@@ -109,6 +113,12 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'weight' => '5.55',
             ],
         ];
+    }
+
+    public function testAfterInitialize()
+    {
+        $productMock = $this->getProductMock();
+        $configurableMatrix = $this->getConfigurableMatrix();
         $configurations = [
             'product2' => [
                 'status' => 'simple2_status',
