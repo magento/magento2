@@ -1416,7 +1416,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Get existing images for current bucnh
+     * Get existing images for current bunch
      *
      * @param array $bunch
      * @return array
@@ -1437,12 +1437,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ['mgvte' => $this->mediaGalleryEntityToValueTableName],
             '(mg.value_id = mgvte.value_id)',
             [$this->getProductEntityLinkField() => 'mgvte.' . $this->getProductEntityLinkField()]
-        )->joinInner(
+        )->joinLeft(
             ['mgv' => $this->mediaGalleryValueTableName],
             sprintf(
-                '(mg.value_id = mgv.value_id AND mgv.%s = mgvte.%s)',
+                '(mg.value_id = mgv.value_id AND mgv.%s = mgvte.%s AND mgv.store_id = %d)',
                 $this->getProductEntityLinkField(),
-                $this->getProductEntityLinkField()
+                $this->getProductEntityLinkField(),
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ),
             [
                 'label' => 'mgv.label',
@@ -1482,10 +1483,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
 
                 if (!empty($rowData[$column . '_label'])) {
-                    $labels[$column] = $this->parseMultiselectValues(
-                        $rowData[$column . '_label'],
-                        $this->getMultipleValueSeparator()
-                    );
+                    $labels[$column] = $this->parseImageLabels($rowData[$column . '_label']);
 
                     if (count($labels[$column]) > count($images[$column])) {
                         $labels[$column] = array_slice($labels[$column], 0, count($images[$column]));
@@ -1520,6 +1518,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->categoriesCache = [];
             $tierPrices = [];
             $mediaGallery = [];
+            $labelsForUpdate = [];
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
@@ -1651,11 +1650,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                         if ($uploadedFile && !isset($mediaGallery[$rowSku][$uploadedFile])) {
                             if (isset($existingImages[$rowSku][$uploadedFile])) {
-                                if (isset($rowLabels[$column][$position])) {
-                                    $this->updateMediaGalleryItemLabel(
-                                        $rowLabels[$column][$position],
-                                        $existingImages[$rowSku][$uploadedFile]
-                                    );
+                                if (isset($rowLabels[$column][$position])
+                                    && $rowLabels[$column][$position] != $existingImages[$rowSku][$uploadedFile]['label']
+                                ) {
+                                    $labelsForUpdate[] = [
+                                        'label' => $rowLabels[$column][$position],
+                                        'imageData' => $existingImages[$rowSku][$uploadedFile]
+                                    ];
                                 }
                             } else {
                                 if ($column == self::COL_MEDIA_IMAGE) {
@@ -1786,6 +1787,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $mediaGallery
             )->_saveProductAttributes(
                 $attributes
+            )->updateMediaGalleryLabels(
+                $labelsForUpdate
             );
 
             $this->_eventManager->dispatch(
@@ -2774,29 +2777,45 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Update media gallery item label
+     * Update media gallery labels
      *
-     * @param string $newLabel
-     * @param array $mediaData
+     * @param array $labels
      */
-    private function updateMediaGalleryItemLabel($newLabel, array $mediaData)
+    private function updateMediaGalleryLabels(array $labels)
     {
-        if ($newLabel == $mediaData['label']
-            || !isset($mediaData[$this->getProductEntityLinkField()])
-        ) {
+        if (empty($labels)) {
             return;
         }
 
-        $this->_connection->update(
+        $updateData = [];
+        foreach ($labels as $label) {
+            $imageData = $label['imageData'];
+            $updateData[] = [
+                'label' => $label['label'],
+                $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
+                'value_id' => $imageData['value_id'],
+                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            ];
+        }
+
+        $this->_connection->insertOnDuplicate(
             $this->mediaGalleryValueTableName,
-            [
-                'label' => $newLabel
-            ],
-            [
-                $this->getProductEntityLinkField() . ' = ?' => $mediaData[$this->getProductEntityLinkField()],
-                'value_id = ?' => $mediaData['value_id'],
-                'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            ]
+            $updateData,
+            ['label']
+        );
+    }
+
+    /**
+     * Parse labels from combined labels string
+     *
+     * @param string $labelRow
+     * @return array
+     */
+    private function parseImageLabels($labelRow)
+    {
+        return $this->parseMultiselectValues(
+            $labelRow,
+            $this->getMultipleValueSeparator()
         );
     }
 }
