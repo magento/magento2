@@ -116,7 +116,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @var array
      */
-    private $emptyStringTypes = ['int', 'decimal', 'datetime', 'varchar', 'text', 'static'];
+    private $emptyStringTypes = [
+        'int',
+        'decimal',
+        'datetime',
+        'varchar',
+        'text',
+        'static',
+    ];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -607,18 +614,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Check if Value is empty.
      *
      * @param array|null|bool|int|float|string $value
-     * @param bool $strictEmptyStringType [optional] Flag for allow empty string as a possible value for String.
-     *                                               By default set to TRUE = disallow empty string.
      * @return bool
      */
-    public function isValueEmpty($value, $strictEmptyStringType = true)
+    public function isValueEmpty($value)
     {
-        $isInEmptyStringTypes = $strictEmptyStringType ? $this->isInEmptyStringTypes() : !$this->isInEmptyStringTypes();
-
         return (is_array($value) && count($value) == 0)
-        || $value === null
-        || ($value === false && $this->getBackend()->getType() != 'int')
-        || ($value === '' && $isInEmptyStringTypes);
+            || $value === null
+            || ($value === false && $this->getBackend()->getType() != 'int')
+            || ($value === '' && $this->isInEmptyStringTypes());
     }
 
     /**

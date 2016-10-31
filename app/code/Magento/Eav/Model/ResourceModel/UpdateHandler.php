@@ -125,26 +125,17 @@ class UpdateHandler implements AttributeInterface
                 : null; // @todo verify is it normal to not have attributer_set_id
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
             foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
-                if ($attribute->isStatic()) {
-                    continue;
-                }
                 $code = $attribute->getAttributeCode();
-                /**
-                 * Only scalar values can be stored in generic tables
-                 */
-                if (isset($entityData[$code]) && !is_scalar($entityData[$code])) {
-                    continue;
-                }
-                /**
-                 * Only changed attributes need to handle update process
-                 */
-                if (!array_key_exists($code, $entityData)) {
+                $isAllowedValueType = array_key_exists($code, $entityData)
+                    && (is_scalar($entityData[$code]) || $entityData[$code] === null);
+
+                if ($attribute->isStatic() || !$isAllowedValueType) {
                     continue;
                 }
 
                 $newValue = $entityData[$code];
-                $isValueEmpty = $attribute->isValueEmpty($newValue, false);
-                $isAllowedEmptyTextValue = $attribute->isAllowedEmptyTextValue($newValue);
+                $isValueEmpty = $attribute->isValueEmpty($newValue);
+                $isAllowedEmptyStringValue = $attribute->isAllowedEmptyTextValue($newValue);
 
                 if (array_key_exists($code, $snapshot)) {
                     $snapshotValue = $snapshot[$code];
@@ -155,25 +146,32 @@ class UpdateHandler implements AttributeInterface
                         continue;
                     }
 
-                    if ($isValueEmpty && !$isAllowedEmptyTextValue) {
-                        $this->attributePersistor->registerDelete(
-                            $entityType,
-                            $entityData[$metadata->getLinkField()],
-                            $code
-                        );
-                    } elseif ((!$isValueEmpty || $isAllowedEmptyTextValue) && $snapshotValue !== $newValue) {
+                    if (!$isValueEmpty || $isAllowedEmptyStringValue) {
+                        /**
+                         * NOT Updated value for attributes not need to update
+                         */
+                        if ($snapshotValue === $newValue) {
+                            continue;
+                        }
+
                         $this->attributePersistor->registerUpdate(
                             $entityType,
                             $entityData[$metadata->getLinkField()],
                             $code,
                             $newValue
                         );
+                    } else {
+                        $this->attributePersistor->registerDelete(
+                            $entityType,
+                            $entityData[$metadata->getLinkField()],
+                            $code
+                        );
                     }
                 } else {
                     /**
                      * Only not empty value of attribute is insertable
                      */
-                    if (!$isValueEmpty || $isAllowedEmptyTextValue) {
+                    if (!$isValueEmpty || $isAllowedEmptyStringValue) {
                         $this->attributePersistor->registerInsert(
                             $entityType,
                             $entityData[$metadata->getLinkField()],

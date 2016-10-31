@@ -47,7 +47,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $resultEntity->setStoreId(0);
         $resultEntity->load(1);
 
-        $this->assertTrue($expected === $resultEntity->getData($code));
+        $this->assertSame($expected, $resultEntity->getData($code));
     }
 
     /**
@@ -91,7 +91,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $resultEntity->setStoreId($store->getId());
         $resultEntity->load(1);
 
-        $this->assertTrue($expected === $resultEntity->getData($code));
+        $this->assertSame($expected, $resultEntity->getData($code));
     }
 
     /**
@@ -174,7 +174,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             $expected = $optionIds[$expected];
         }
 
-        $this->assertTrue($expected === $resultEntity->getData($code));
+        $this->assertSame($expected, $resultEntity->getData($code));
     }
 
     /**
