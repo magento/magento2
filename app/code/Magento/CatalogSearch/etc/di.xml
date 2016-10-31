@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
+    <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
