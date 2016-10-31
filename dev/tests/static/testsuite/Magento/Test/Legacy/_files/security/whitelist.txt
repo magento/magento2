@@ -1,0 +1,4 @@
+module * /
+library * /
+setup
+pub

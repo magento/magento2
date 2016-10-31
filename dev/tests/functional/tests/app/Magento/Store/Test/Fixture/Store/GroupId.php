@@ -43,6 +43,15 @@ class GroupId extends DataSource
             $this->storeGroup = $data['fixture'];
             $this->data = $this->storeGroup->getWebsiteId() . "/" . $this->storeGroup->getName();
         }
+
+        if (isset($data['storeGroup']) && $data['storeGroup'] instanceof StoreGroup) {
+            $this->storeGroup = $data['storeGroup'];
+            $this->data = $data['storeGroup']->getWebsiteId() . "/" . $data['storeGroup']->getName();
+        }
+
+        if (isset($data['value'])) {
+            $this->data = $data['value'];
+        }
     }
 
     /**

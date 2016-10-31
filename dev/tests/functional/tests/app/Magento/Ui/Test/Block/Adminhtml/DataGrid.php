@@ -142,7 +142,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $currentPage = '[data-ui-id="current-page-input"]';
+    protected $currentPage = ".//*[@data-ui-id='current-page-input'][not(ancestor::*[@class='sticky-header'])]";
 
     /**
      * Clear all applied Filters.
@@ -165,7 +165,7 @@ class DataGrid extends Grid
      */
     protected function waitFilterToLoad()
     {
-        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->getTemplateBlock()->waitLoader();
         $browser = $this->_rootElement;
         $selector = $this->filterButton . ', ' . $this->resetButton;
         $browser->waitUntil(
@@ -347,7 +347,7 @@ class DataGrid extends Grid
             $this->sortGridByField('ID');
         }
         foreach ($items as $item) {
-            $this->_rootElement->find($this->currentPage)->setValue('');
+            $this->_rootElement->find($this->currentPage, Locator::SELECTOR_XPATH)->setValue('');
             $this->waitLoader();
             $selectItem = $this->getRow($item)->find($this->selectItem);
             do {

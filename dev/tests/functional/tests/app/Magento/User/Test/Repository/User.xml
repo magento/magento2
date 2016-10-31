@@ -41,5 +41,9 @@
             <field name="current_password" xsi:type="string">%current_password%</field>
             <field name="is_active" xsi:type="string">Active</field>
         </dataset>
+
+        <dataset name="system_admin">
+            <field name="current_password" xsi:type="string">123123q</field>
+        </dataset>
     </repository>
 </config>

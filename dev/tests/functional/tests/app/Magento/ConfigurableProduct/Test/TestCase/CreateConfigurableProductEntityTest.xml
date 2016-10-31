@@ -58,6 +58,7 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_new_options_with_special_price</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/dataset" xsi:type="string">from-9</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/special_price" xsi:type="string">9</data>
             <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
@@ -110,7 +111,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation6" summary="Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)" ticketId="MAGETWO-13361">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_searchable_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>

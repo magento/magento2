@@ -105,6 +105,11 @@
     <preference for="Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentValidator"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\CreditmemoValidator"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemCreationValidator"/>
+    <preference for="Magento\Sales\Model\ValidatorResultInterface" type="Magento\Sales\Model\ValidatorResult"/>
+    <preference for="Magento\Sales\Model\Order\Validation\InvoiceOrderInterface" type="Magento\Sales\Model\Order\Validation\InvoiceOrder"/>
+    <preference for="Magento\Sales\Model\Order\Validation\RefundInvoiceInterface" type="Magento\Sales\Model\Order\Validation\RefundInvoice"/>
+    <preference for="Magento\Sales\Model\Order\Validation\RefundOrderInterface" type="Magento\Sales\Model\Order\Validation\RefundOrder"/>
+    <preference for="Magento\Sales\Model\Order\Validation\ShipOrderInterface" type="Magento\Sales\Model\Order\Validation\ShipOrder"/>
     <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>

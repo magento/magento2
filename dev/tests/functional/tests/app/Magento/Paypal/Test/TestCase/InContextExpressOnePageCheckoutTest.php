@@ -32,6 +32,7 @@ class InContextExpressOnePageCheckoutTest extends Scenario
     const MVP = 'yes';
     const TEST_TYPE = '3rd_party_test';
     const TO_MAINTAIN = 'yes';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

@@ -110,4 +110,40 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($collectionMock, $this->model->getList($searchCriteriaMock));
     }
+
+    public function testSave()
+    {
+        $mapperMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderEntity = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $extensionAttributes = $this->getMock(
+            \Magento\Sales\Api\Data\OrderExtension::class,
+            ['getShippingAssignments'],
+            [],
+            '',
+            false
+        );
+        $shippingAssignment = $this->getMockBuilder(\Magento\Sales\Model\Order\ShippingAssignment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getShipping'])
+            ->getMock();
+        $shippingMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipping::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAddress', 'getMethod'])
+            ->getMock();
+        $orderEntity->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $orderEntity->expects($this->once())->method('getIsNotVirtual')->willReturn(true);
+        $extensionAttributes
+            ->expects($this->any())
+            ->method('getShippingAssignments')
+            ->willReturn([$shippingAssignment]);
+        $shippingAssignment->expects($this->once())->method('getShipping')->willReturn($shippingMock);
+        $shippingMock->expects($this->once())->method('getAddress');
+        $shippingMock->expects($this->once())->method('getMethod');
+        $this->metadata->expects($this->once())->method('getMapper')->willReturn($mapperMock);
+        $mapperMock->expects($this->once())->method('save');
+        $orderEntity->expects($this->any())->method('getEntityId')->willReturn(1);
+        $this->model->save($orderEntity);
+    }
 }

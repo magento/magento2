@@ -708,13 +708,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         return [
             'no changes' => [
-                ['catalog_product_1'],
+                ['cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
             ],
             'new product' => $this->getNewProductProviderData(),
             'status and category change' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1', 2 => 'catalog_category_product_2'],
+                [0 => 'cat_p_1', 1 => 'cat_c_p_1', 2 => 'cat_c_p_2'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
                 [
                     'id' => 1,
@@ -726,18 +726,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'status change only' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_7'],
+                [0 => 'cat_p_1', 1 => 'cat_c_p_7'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 2],
             ],
             'status changed, category unassigned' => $this->getStatusAndCategoryChangesData(),
             'no status changes' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             ],
             'no stock status changes' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -749,7 +749,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no stock status data 1' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -760,7 +760,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no stock status data 2' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -780,7 +780,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getStatusAndCategoryChangesData()
     {
         return [
-            [0 => 'catalog_product_1', 1 => 'catalog_category_product_5'],
+            [0 => 'cat_p_1', 1 => 'cat_c_p_5'],
             ['id' => 1, 'name' => 'value', 'category_ids' => [5], 'status' => 2],
             [
                 'id' => 1,
@@ -799,7 +799,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getNewProductProviderData()
     {
         return [
-            ['catalog_product_1', 'catalog_category_product_1'],
+            ['cat_p_1', 'cat_c_p_1'],
             null,
             [
                 'id' => 1,
@@ -818,7 +818,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getStatusStockProviderData($extensionAttributesMock)
     {
         return [
-            [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+            [0 => 'cat_p_1', 1 => 'cat_c_p_1'],
             ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             [
                 'id' => 1,

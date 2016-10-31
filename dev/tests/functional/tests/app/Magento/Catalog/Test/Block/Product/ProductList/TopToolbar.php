@@ -28,7 +28,9 @@ class TopToolbar extends Block
      */
     public function getSelectSortType()
     {
-        return $this->_rootElement->find("#sorter")->getElements('option[selected]')[0]->getText();
+        $selectedOption = $this->_rootElement->find($this->sorter)->getElements('option[selected]')[0]->getText();
+        preg_match('/\w+\s?\w+/', $selectedOption, $matches);
+        return $matches[0];
     }
 
     /**
@@ -38,7 +40,8 @@ class TopToolbar extends Block
      */
     public function getSortType()
     {
-        $content = str_replace("\r", '', $this->_rootElement->find($this->sorter)->getText());
-        return explode("\n", $content);
+        $content = $this->_rootElement->find($this->sorter)->getText();
+        preg_match_all('/\w+\s?\w+/', $content, $matches);
+        return $matches[0];
     }
 }

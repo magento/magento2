@@ -130,8 +130,8 @@
     </design>
     <schedule_design_update>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='custom_design_to']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="schedule_design_update"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <schedule_update_from>
                 <input>datepicker</input>

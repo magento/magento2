@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\UpdateStoreEntityTest" summary="Update Store View" ticketId="MAGETWO-27786">
         <variation name="UpdateStoreEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="storeInitial/dataset" xsi:type="string">custom</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>

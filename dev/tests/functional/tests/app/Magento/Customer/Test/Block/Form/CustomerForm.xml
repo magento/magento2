@@ -9,6 +9,12 @@
     <fields>
         <firstname />
         <lastname />
+        <change_email>
+            <input>checkbox</input>
+        </change_email>
+        <change_password>
+            <input>checkbox</input>
+        </change_password>
         <email />
         <current_password />
         <password />

@@ -10,12 +10,13 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
- * 1. Enable payment method "Check/Money Order".
- * 2. Enable shipping method one of "Flat Rate".
- * 3. Create order
+ * 1. Enable payment method: "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order/Zero Subtotal Checkout".
+ * 2. Enable shipping method one of "Flat Rate/Free Shipping".
+ * 3. Create order.
  *
  * Steps:
  * 1. Login to backend.
@@ -48,20 +49,7 @@ class CancelCreatedOrderTest extends Injectable
     protected $salesOrderView;
 
     /**
-     * Enable "Check/Money Order" and "Flat Rate" in configuration.
-     *
-     * @return void
-     */
-    public function __prepare()
-    {
-        $this->objectManager->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => 'checkmo, flatrate', 'rollback' => true]
-        )->run();
-    }
-
-    /**
-     * Inject pages
+     * Inject pages.
      *
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -77,11 +65,17 @@ class CancelCreatedOrderTest extends Injectable
      * Cancel created order.
      *
      * @param OrderInjectable $order
+     * @param TestStepFactory $stepFactory
+     * @param string $configData
      * @return array
      */
-    public function test(OrderInjectable $order)
+    public function test(OrderInjectable $order, TestStepFactory $stepFactory, $configData)
     {
         // Preconditions
+        $stepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         $order->persist();
 
         // Steps

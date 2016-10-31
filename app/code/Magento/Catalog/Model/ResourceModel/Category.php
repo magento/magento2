@@ -238,7 +238,9 @@ class Category extends AbstractResource
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
-
+        $object->setAttributeSetId(
+            $object->getAttributeSetId() ?: $this->getEntityType()->getDefaultAttributeSetId()
+        );
         if ($object->isObjectNew()) {
             if ($object->getPosition() === null) {
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);

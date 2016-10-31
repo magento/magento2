@@ -44,6 +44,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $tables = [
+                'catalog_product_index_price_bundle_idx',
+                'catalog_product_index_price_bundle_opt_idx',
+                'catalog_product_index_price_bundle_opt_tmp',
+                'catalog_product_index_price_bundle_sel_idx',
+                'catalog_product_index_price_bundle_sel_tmp',
+                'catalog_product_index_price_bundle_tmp',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    ['type' => 'integer', 'nullable' => false]
+                );
+            }
+        }
+
         $setup->endSetup();
     }
 }

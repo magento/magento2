@@ -17,15 +17,13 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
-use Magento\Sales\Model\Order\Creditmemo\CreditmemoValidatorInterface;
-use Magento\Sales\Model\Order\Creditmemo\ItemCreationValidatorInterface;
 use Magento\Sales\Api\Data\CreditmemoItemCreationInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
-use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
+use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
+use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\RefundInvoice;
 use Psr\Log\LoggerInterface;
 
@@ -55,21 +53,6 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
      * @var CreditmemoDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $creditmemoDocumentFactoryMock;
-
-    /**
-     * @var CreditmemoValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $creditmemoValidatorMock;
-
-    /**
-     * @var OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $orderValidatorMock;
-
-    /**
-     * @var InvoiceValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $invoiceValidatorMock;
 
     /**
      * @var PaymentAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -137,9 +120,14 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
     private $creditmemoItemCreationMock;
 
     /**
-     * @var ItemCreationValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundInvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $itemCreationValidatorMock;
+    private $refundInvoiceValidatorMock;
+
+    /**
+     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationMessagesMock;
 
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -160,24 +148,15 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoDocumentFactoryMock = $this->getMockBuilder(CreditmemoDocumentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->creditmemoValidatorMock = $this->getMockBuilder(CreditmemoValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderValidatorMock = $this->getMockBuilder(OrderValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invoiceValidatorMock = $this->getMockBuilder(InvoiceValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        
         $this->paymentAdapterMock = $this->getMockBuilder(PaymentAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->refundInvoiceValidatorMock = $this->getMockBuilder(RefundInvoiceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->configMock = $this->getMockBuilder(OrderConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -221,20 +200,17 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
-        $this->itemCreationValidatorMock = $this->getMockBuilder(ItemCreationValidatorInterface::class)
+        $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->getMock();
 
         $this->refundInvoice = new RefundInvoice(
             $this->resourceConnectionMock,
             $this->orderStateResolverMock,
             $this->orderRepositoryMock,
             $this->invoiceRepositoryMock,
-            $this->orderValidatorMock,
-            $this->invoiceValidatorMock,
-            $this->creditmemoValidatorMock,
-            $this->itemCreationValidatorMock,
+            $this->refundInvoiceValidatorMock,
             $this->creditmemoRepositoryMock,
             $this->paymentAdapterMock,
             $this->creditmemoDocumentFactoryMock,
@@ -245,22 +221,27 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $invoiceId
+     * @param bool $isOnline
+     * @param array $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @throws \Magento\Sales\Exception\CouldNotRefundException
+     * @throws \Magento\Sales\Exception\DocumentValidationException
      * @dataProvider dataProvider
      */
-    public function testOrderCreditmemo($invoiceId, $items, $notify, $appendComment)
+    public function testOrderCreditmemo($invoiceId, $isOnline, $items, $notify, $appendComment)
     {
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->with('sales')
             ->willReturn($this->adapterInterface);
-
         $this->invoiceRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->invoiceMock);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
-
         $this->creditmemoDocumentFactoryMock->expects($this->once())
             ->method('createFromInvoice')
             ->with(
@@ -270,24 +251,23 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
                 ($appendComment && $notify),
                 $this->creditmemoCreationArgumentsMock
             )->willReturn($this->creditmemoMock);
-
-        $this->creditmemoValidatorMock->expects($this->once())
+        $this->refundInvoiceValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->creditmemoMock)
-            ->willReturn([]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->orderMock)
-            ->willReturn([]);
-        $this->invoiceValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->invoiceMock)
-            ->willReturn([]);
-        $this->itemCreationValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->creditmemoItemCreationMock)
-            ->willReturn([]);
-        $this->orderMock->expects($this->once())->method('setCustomerNoteNotify')->with($notify);
+            ->with(
+                $this->invoiceMock,
+                $this->orderMock,
+                $this->creditmemoMock,
+                $items,
+                $isOnline,
+                $notify,
+                $appendComment,
+                $this->creditmemoCommentCreationMock,
+                $this->creditmemoCreationArgumentsMock
+            )
+            ->willReturn($this->validationMessagesMock);
+        $hasMessages = false;
+        $this->validationMessagesMock->expects($this->once())
+            ->method('hasMessages')->willReturn($hasMessages);
         $this->paymentAdapterMock->expects($this->once())
             ->method('refund')
             ->with($this->creditmemoMock, $this->orderMock)
@@ -315,7 +295,6 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('setState')
             ->with(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED)
             ->willReturnSelf();
-
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->creditmemoMock)
@@ -338,7 +317,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             $this->refundInvoice->execute(
                 $invoiceId,
                 $items,
-                false,
+                true,
                 $notify,
                 $appendComment,
                 $this->creditmemoCommentCreationMock,
@@ -356,6 +335,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $items = [1 => $this->creditmemoItemCreationMock];
         $notify = true;
         $appendComment = true;
+        $isOnline = false;
         $errorMessages = ['error1', 'error2'];
 
         $this->invoiceRepositoryMock->expects($this->once())
@@ -375,22 +355,25 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
                 $this->creditmemoCreationArgumentsMock
             )->willReturn($this->creditmemoMock);
 
-        $this->creditmemoValidatorMock->expects($this->once())
+        $this->refundInvoiceValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->creditmemoMock)
-            ->willReturn($errorMessages);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->orderMock)
-            ->willReturn([]);
-        $this->invoiceValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->invoiceMock)
-            ->willReturn([]);
-        $this->itemCreationValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->creditmemoItemCreationMock)
-            ->willReturn([]);
+            ->with(
+                $this->invoiceMock,
+                $this->orderMock,
+                $this->creditmemoMock,
+                $items,
+                $isOnline,
+                $notify,
+                $appendComment,
+                $this->creditmemoCommentCreationMock,
+                $this->creditmemoCreationArgumentsMock
+            )
+            ->willReturn($this->validationMessagesMock);
+        $hasMessages = true;
+        $this->validationMessagesMock->expects($this->once())
+            ->method('hasMessages')->willReturn($hasMessages);
+        $this->validationMessagesMock->expects($this->once())
+            ->method('getMessages')->willReturn($errorMessages);
 
         $this->assertEquals(
             $errorMessages,
@@ -415,6 +398,7 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
         $items = [1 => $this->creditmemoItemCreationMock];
         $notify = true;
         $appendComment = true;
+        $isOnline = false;
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->with('sales')
@@ -437,22 +421,23 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
                 $this->creditmemoCreationArgumentsMock
             )->willReturn($this->creditmemoMock);
 
-        $this->creditmemoValidatorMock->expects($this->once())
+        $this->refundInvoiceValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->creditmemoMock)
-            ->willReturn([]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->orderMock)
-            ->willReturn([]);
-        $this->invoiceValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->invoiceMock)
-            ->willReturn([]);
-        $this->itemCreationValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->creditmemoItemCreationMock)
-            ->willReturn([]);
+            ->with(
+                $this->invoiceMock,
+                $this->orderMock,
+                $this->creditmemoMock,
+                $items,
+                $isOnline,
+                $notify,
+                $appendComment,
+                $this->creditmemoCommentCreationMock,
+                $this->creditmemoCreationArgumentsMock
+            )
+            ->willReturn($this->validationMessagesMock);
+        $hasMessages = false;
+        $this->validationMessagesMock->expects($this->once())
+            ->method('hasMessages')->willReturn($hasMessages);
         $e = new \Exception();
 
         $this->paymentAdapterMock->expects($this->once())
@@ -485,8 +470,8 @@ class RefundInvoiceTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         return [
-            'TestWithNotifyTrue' => [1, [1 => $creditmemoItemCreationMock], true, true],
-            'TestWithNotifyFalse' => [1, [1 => $creditmemoItemCreationMock], false, true],
+            'TestWithNotifyTrue' => [1, true,  [1 => $creditmemoItemCreationMock], true, true],
+            'TestWithNotifyFalse' => [1, true,  [1 => $creditmemoItemCreationMock], false, true],
         ];
     }
 }

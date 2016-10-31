@@ -39,8 +39,8 @@
             <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;catalog.leftnav&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
-            <data name="category/data/schedule_update_from" xsi:type="string">Jan 10, 2014</data>
-            <data name="category/data/schedule_update_to" xsi:type="string">Dec 31, 2024</data>
+            <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
+            <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
@@ -82,8 +82,8 @@
             <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;content.aside&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
-            <data name="category/data/schedule_update_from" xsi:type="string">Jan 1, 2014</data>
-            <data name="category/data/schedule_update_to" xsi:type="string">Dec 31, 2024</data>
+            <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
+            <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />

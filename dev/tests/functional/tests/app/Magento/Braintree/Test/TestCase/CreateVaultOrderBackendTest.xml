@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Vault\Test\TestCase\CreateVaultOrderBackendTest" summary="Create Order from Admin via Braintree with saving Credit Cards">
         <variation name="CreateVaultOrderBackendTestBraintreeVariation1" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize Only)" ticketId="MAGETWO-47137, MAGETWO-47139">
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
@@ -19,6 +19,7 @@
                 <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="vault/method" xsi:type="string">braintree_cc_vault</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="creditCardSave" xsi:type="string">Yes</data>

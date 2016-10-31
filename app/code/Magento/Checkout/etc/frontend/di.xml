@@ -72,4 +72,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="form_key" xsi:type="string">form_key</item>
+                <item name="custom_price" xsi:type="string">custom_price</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
