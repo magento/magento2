@@ -49,6 +49,11 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     private $selectedOptions = [];
 
     /**
+     * @var \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     */
+    private $catalogRuleProcessor;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -78,6 +83,20 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * @deprecated
+     * @return \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     */
+    private function getCatalogRuleProcessor()
+    {
+        if ($this->catalogRuleProcessor === null) {
+            $this->catalogRuleProcessor = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class);
+        }
+
+        return $this->catalogRuleProcessor;
+    }
+
+    /**
      * Returns the bundle product options
      * Will return cached options data if the product options are already initialized
      * In a case when $stripSelection parameter is true will reload stored bundle selections collection from DB
@@ -95,10 +114,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
             $optionCollection = $typeInstance->getOptionsCollection($product);
 
-            $selectionCollection = $typeInstance->getSelectionsCollection(
+            $selectionCollection = clone $typeInstance->getSelectionsCollection(
                 $typeInstance->getOptionsIds($product),
                 $product
             );
+            $this->getCatalogRuleProcessor()->addPriceData($selectionCollection);
+            $selectionCollection->addTierPriceData();
 
             $this->options = $optionCollection->appendSelections(
                 $selectionCollection,

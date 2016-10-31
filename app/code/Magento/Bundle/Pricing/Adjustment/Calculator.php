@@ -52,6 +52,11 @@ class Calculator implements BundleCalculatorInterface
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Pricing\Amount\AmountInterface[]
+     */
+    private $optionAmount = [];
+
+    /**
      * @param CalculatorBase $calculator
      * @param AmountFactory $amountFactory
      * @param BundleSelectionFactory $bundleSelectionFactory
@@ -143,12 +148,17 @@ class Calculator implements BundleCalculatorInterface
         $baseAmount = 0.,
         $useRegularPrice = false
     ) {
-        return $this->calculateBundleAmount(
-            $baseAmount,
-            $saleableItem,
-            $this->getSelectionAmounts($saleableItem, $searchMin, $useRegularPrice),
-            $exclude
-        );
+        $cacheKey = implode('-', [$saleableItem->getId(), $exclude, $searchMin, $baseAmount, $useRegularPrice]);
+        if (!isset($this->optionAmount[$cacheKey])) {
+            $this->optionAmount[$cacheKey] = $this->calculateBundleAmount(
+                $baseAmount,
+                $saleableItem,
+                $this->getSelectionAmounts($saleableItem, $searchMin, $useRegularPrice),
+                $exclude
+            );
+        }
+
+        return $this->optionAmount[$cacheKey];
     }
 
     /**
