@@ -164,11 +164,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function prepareImageProperties($data)
     {
         $this->image->expects($this->once())
-            ->method('setDestinationSubdir')
+            ->method('setType')
             ->with($data['type'])
             ->willReturnSelf();
         $this->image->expects($this->any())
-            ->method('getDestinationSubdir')
+            ->method('getType')
             ->willReturn($data['type']);
         $this->image->expects($this->once())
             ->method('setWidth')
@@ -460,7 +460,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseFile')
             ->willReturn($baseFile);
         $this->image->expects($this->any())
-            ->method('getDestinationSubdir')
+            ->method('getType')
             ->willReturn($destination);
         $this->image->expects($this->any())
             ->method('isCached')
@@ -477,9 +477,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->expects($this->any())
             ->method('isBaseFilePlaceholder')
             ->willReturn($isBaseFilePlaceholder);
-        $this->image->expects($this->any())
-            ->method('getNewFile')
-            ->willReturn($newFile);
 
         $this->prepareAttributes([], $imageId);
 
@@ -498,20 +495,20 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     public function getResizedImageInfoDataProvider()
     {
         return [
-            [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => '/path/to/base_image.png',
-                'new_file' => '/path/to/base_image.png',
-                'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
-                    'x' => 100,
-                    'y' => 100,
-                ],
-            ],
+//            [
+//                'image_id' => 'test_image_id',
+//                'image_file' => '/path/to/test_image_id.png',
+//                'base_file' => '/path/to/base_image.png',
+//                'new_file' => '/path/to/base_image.png',
+//                'destination' => 'small_image',
+//                'set_image_file' => true,
+//                'is_cached' => false,
+//                'is_base_file_placeholder' => false,
+//                'resized_image_info' => [
+//                    'x' => 100,
+//                    'y' => 100,
+//                ],
+//            ],
             [
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
@@ -526,48 +523,48 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                     'y' => 100,
                 ],
             ],
-            [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
-                'new_file' => false,
-                'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
-                    'x' => 100,
-                    'y' => 100,
-                ],
-            ],
-            [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
-                'new_file' => true,
-                'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => true,
-                'resized_image_info' => [
-                    'x' => 100,
-                    'y' => 100,
-                ],
-            ],
-            [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
-                'new_file' => '/path/to/test_image_id.png',
-                'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
-                    'x' => 100,
-                    'y' => 100,
-                ],
-            ],
+//            [
+//                'image_id' => 'test_image_id',
+//                'image_file' => '/path/to/test_image_id.png',
+//                'base_file' => null,
+//                'new_file' => false,
+//                'destination' => 'small_image',
+//                'set_image_file' => true,
+//                'is_cached' => false,
+//                'is_base_file_placeholder' => false,
+//                'resized_image_info' => [
+//                    'x' => 100,
+//                    'y' => 100,
+//                ],
+//            ],
+//            [
+//                'image_id' => 'test_image_id',
+//                'image_file' => '/path/to/test_image_id.png',
+//                'base_file' => null,
+//                'new_file' => true,
+//                'destination' => 'small_image',
+//                'set_image_file' => true,
+//                'is_cached' => false,
+//                'is_base_file_placeholder' => true,
+//                'resized_image_info' => [
+//                    'x' => 100,
+//                    'y' => 100,
+//                ],
+//            ],
+//            [
+//                'image_id' => 'test_image_id',
+//                'image_file' => '/path/to/test_image_id.png',
+//                'base_file' => null,
+//                'new_file' => '/path/to/test_image_id.png',
+//                'destination' => 'small_image',
+//                'set_image_file' => true,
+//                'is_cached' => false,
+//                'is_base_file_placeholder' => false,
+//                'resized_image_info' => [
+//                    'x' => 100,
+//                    'y' => 100,
+//                ],
+//            ],
         ];
     }
 }
