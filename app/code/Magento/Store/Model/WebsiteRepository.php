@@ -5,9 +5,16 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
+use Magento\Framework\App\Config;
 
+/**
+ * Information Expert in store websites handling
+ *
+ * @package Magento\Store\Model
+ */
 class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 {
     /**
@@ -41,6 +48,11 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     protected $default;
 
     /**
+     * @var Config
+     */
+    private $appConfig;
+
+    /**
      * @param WebsiteFactory $factory
      * @param CollectionFactory $websiteCollectionFactory
      */
@@ -60,8 +72,12 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
         if (isset($this->entities[$code])) {
             return $this->entities[$code];
         }
-        $website = $this->factory->create();
-        $website->load($code, 'code');
+
+        $websiteData = $this->getAppConfig()->get('scopes', "websites/$code", []);
+        $website = $this->factory->create([
+            'data' => $websiteData
+        ]);
+
         if ($website->getId() === null) {
             throw new NoSuchEntityException();
         }
@@ -78,14 +94,23 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
         if (isset($this->entitiesById[$id])) {
             return $this->entitiesById[$id];
         }
-        /** @var Website $website */
-        $website = $this->factory->create();
-        $website->load($id);
+        $websiteData = [];
+        $websites = $this->getAppConfig()->get('scopes', 'websites', []);
+        foreach ($websites as $data) {
+            if (isset($data['website_id']) && $data['website_id'] == $id) {
+                $websiteData = $data;
+                break;
+            }
+        }
+        $website = $this->factory->create([
+            'data' => $websiteData
+        ]);
+
         if ($website->getId() === null) {
             throw new NoSuchEntityException();
         }
-        $this->entitiesById[$id] = $website;
         $this->entities[$website->getCode()] = $website;
+        $this->entitiesById[$id] = $website;
         return $website;
     }
 
@@ -95,10 +120,13 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
     public function getList()
     {
         if (!$this->allLoaded) {
-            $collection = $this->websiteCollectionFactory->create();
-            $collection->setLoadDefault(true);
-            foreach ($collection as $item) {
-                $this->entities[$item->getCode()] = $item;
+            $websites = $this->getAppConfig()->get('scopes', 'websites', []);
+            foreach ($websites as $data) {
+                $website = $this->factory->create([
+                    'data' => $data
+                ]);
+                $this->entities[$website->getCode()] = $website;
+                $this->entitiesById[$website->getId()] = $website;
             }
             $this->allLoaded = true;
         }
@@ -118,23 +146,13 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
                 }
             }
             if (!$this->allLoaded) {
-                /** @var \Magento\Store\Model\ResourceModel\Website\Collection $collection */
-                $collection = $this->websiteCollectionFactory->create();
-                $collection->addFieldToFilter('is_default', 1);
-                $items = $collection->getItems();
-                if (count($items) > 1) {
-                    throw new \DomainException(__('More than one default website is defined'));
-                }
-                if (count($items) === 0) {
-                    throw new \DomainException(__('Default website is not defined'));
-                }
-                $this->default = $collection->getFirstItem();
-                $this->entities[$this->default->getCode()] = $this->default;
-                $this->entitiesById[$this->default->getId()] = $this->default;
-            } else {
+                $this->initDefaultWebsite();
+            }
+            if (!$this->default) {
                 throw new \DomainException(__('Default website is not defined'));
             }
         }
+
         return $this->default;
     }
 
@@ -147,5 +165,41 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
         $this->entitiesById = [];
         $this->default = null;
         $this->allLoaded = false;
+    }
+
+    /**
+     * Retrieve application config.
+     *
+     * @deprecated
+     * @return Config
+     */
+    private function getAppConfig()
+    {
+        if (!$this->appConfig) {
+            $this->appConfig = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->appConfig;
+    }
+
+    /**
+     * Initialize default website.
+     * @return void
+     */
+    private function initDefaultWebsite()
+    {
+        $websites = (array)$this->getAppConfig()->get('scopes', 'websites', []);
+        foreach ($websites as $data) {
+            if (isset($data['is_default']) && $data['is_default'] == 1) {
+                if ($this->default) {
+                    throw new \DomainException(__('More than one default website is defined'));
+                }
+                $website = $this->factory->create([
+                    'data' => $data
+                ]);
+                $this->default = $website;
+                $this->entities[$this->default->getCode()] = $this->default;
+                $this->entitiesById[$this->default->getId()] = $this->default;
+            }
+        }
     }
 }

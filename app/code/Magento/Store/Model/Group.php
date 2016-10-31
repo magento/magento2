@@ -442,7 +442,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**
