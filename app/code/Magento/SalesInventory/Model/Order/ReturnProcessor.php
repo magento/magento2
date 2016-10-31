@@ -6,9 +6,7 @@
 namespace Magento\SalesInventory\Model\Order;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\SalesInventory\Model\Order\Creditmemo\QtyValuePool;
 
 /**
  * Class ReturnProcessor
