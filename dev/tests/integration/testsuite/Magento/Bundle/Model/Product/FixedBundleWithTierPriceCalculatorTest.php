@@ -27,8 +27,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
     }
 
     /**
-     * @param $strategyModifiers array
-     * @param $expectedResults array
+     * @param array $strategyModifiers
+     * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      */
