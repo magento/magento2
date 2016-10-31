@@ -12,7 +12,7 @@ use \Magento\Bundle\Api\Data\LinkInterface;
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
  * @magentoAppArea frontend
  */
-class FixedBundlePriceCalculatorTest extends BundlePrice
+class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 {
     /**
      * @param $strategyModifiers array
@@ -88,6 +88,7 @@ class FixedBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'Op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [
@@ -113,6 +114,7 @@ class FixedBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'Op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [
@@ -150,6 +152,7 @@ class FixedBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'Op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [
@@ -187,6 +190,7 @@ class FixedBundlePriceCalculatorTest extends BundlePrice
     {
         $optionsData = [
             [
+                'title' => 'Op1',
                 'required' => true,
                 'type' => 'checkbox',
                 'links' => [

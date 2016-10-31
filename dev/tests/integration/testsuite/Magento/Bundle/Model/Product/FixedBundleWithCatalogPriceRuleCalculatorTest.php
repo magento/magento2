@@ -12,72 +12,17 @@ use \Magento\Bundle\Api\Data\LinkInterface;
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_catalog_rule.php
  * @magentoAppArea frontend
  */
-class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_TestCase
+class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
 {
-    /** @var \Magento\TestFramework\Helper\Bootstrap */
-    protected $objectManager;
-
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
-    protected $productRepository;
-
-    const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';
-
-    const CUSTOM_OPTION_PRICE_TYPE_PERCENT = 'percent';
-
-    protected $fixtureForProductOption = [
-        'title' => 'Some title',
-        'required' => true,
-        'type' => 'checkbox'
-    ];
-
-    protected $fixtureForProductOptionSelection = [
-        'sku' => null,          // need to set this
-        'option_id' => null,    // need to set this
-        'qty' => 1,
-        'is_default' => true,
-        'price' => null,        // need to set this
-        'price_type' => LinkInterface::PRICE_TYPE_FIXED,
-        'can_change_quantity' => 0
-    ];
-
-    protected $fixtureForProductCustomOption = [
-        'option_id' => null,
-        'previous_group' => 'text',
-        'title' => 'Test Field',
-        'type' => 'field',
-        'is_require' => 1,
-        'sort_order' => 0,
-        'price' => 100,
-        'price_type' => 'fixed',
-        'sku' => '1-text',
-        'max_characters' => 100,
-    ];
-
-    protected function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-    }
-
     /**
-     * @param $strategyModifiers array
-     * @param $expectedResults array
+     * @param array $strategyModifiers
+     * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->productRepository->get('spherical_horse_in_a_vacuum');
-
-        foreach ($strategyModifiers as $modifier) {
-            if (method_exists($this, $modifier['modifierName'])) {
-                array_unshift($modifier['data'], $bundleProduct);
-                $bundleProduct = call_user_func_array([$this, $modifier['modifierName']], $modifier['data']);
-            }
-        }
-
-        $this->productRepository->save($bundleProduct);
-        $bundleProduct = $this->productRepository->get('spherical_horse_in_a_vacuum', false, null, true);
+        $bundleProduct = $this->prepareFixture($strategyModifiers);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -600,10 +545,13 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                         'price' => 20,
                         'price_type' => $selectionsPriceType
                     ],
@@ -613,7 +561,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -633,10 +586,13 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                         'price' => 20,
                         'price_type' => $selectionsPriceType
                     ],
@@ -646,7 +602,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -666,11 +627,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'type' => 'checkbox',
                 'required' => false,
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
                         'price' => 20,
                         'qty' => 2,
                         'price_type' => $selectionsPriceType
@@ -681,7 +643,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -701,16 +668,18 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                         'price' => 40,
                         'price_type' => $selectionsPriceType
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'price' => 10,
                         'qty' => 3,
                         'price_type' => $selectionsPriceType
@@ -721,7 +690,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -741,17 +715,18 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'multi',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                         'price' => 40,
                         'price_type' => $selectionsPriceType
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'price' => 15,
                         'qty' => 3,
                         'price_type' => $selectionsPriceType
@@ -762,7 +737,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -782,17 +762,18 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                         'price' => 40,
                         'price_type' => $selectionsPriceType
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'price' => 15,
                         'qty' => 3,
                         'price_type' => $selectionsPriceType
@@ -803,7 +784,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -823,17 +809,18 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
     {
         $optionsData = [
             [
+                'title' => 'Op1',
+                'required' => true,
                 'type' => 'radio',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 1,
+                        'qty' => 1,
                         'price' => 40,
                         'price_type' => $selectionsPriceType
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 1,
                         'price' => 15,
                         'qty' => 3,
                         'price_type' => $selectionsPriceType
@@ -841,17 +828,18 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 ]
             ],
             [
+                'title' => 'Op2',
+                'required' => true,
                 'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
-                        'option_id' => 2,
+                        'qty' => 1,
                         'price' => 20,
                         'price_type' => $selectionsPriceType
                     ],
                     [
                         'sku' => 'simple2',
-                        'option_id' => 2,
                         'price' => 10,
                         'qty' => 3,
                         'price_type' => $selectionsPriceType
@@ -862,7 +850,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
 
         $customOptionsData = [
             [
-                'price_type' => $customOptionsPriceType
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
             ]
         ];
 
@@ -876,88 +869,5 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends \PHPUnit_Framework_T
                 'data' => [$customOptionsData]
             ],
         ];
-    }
-
-    protected function getFixtureForProductOption(array $data = [])
-    {
-        $fixture = $this->fixtureForProductOption;
-
-        // make title different for each call
-        $fixture['title'] .= ' ' . microtime(true);
-
-        return array_merge($fixture, $data);
-    }
-
-    protected function getFixtureForProductOptionSelection($data)
-    {
-        $fixture = $this->fixtureForProductOptionSelection;
-
-        return array_merge($fixture, $data);
-    }
-
-    protected function getFixtureForProductCustomOption(array $data = [])
-    {
-        $fixture = $this->fixtureForProductCustomOption;
-
-        // make title and sku different for each call
-        $fixture['title'] .= ' ' . microtime(true);
-        $fixture['sku'] .= ' ' . microtime(true);
-
-        return array_merge($fixture, $data);
-    }
-
-    protected function addSimpleProduct(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
-    {
-        $options = [];
-
-        foreach ($optionsData as $optionData) {
-            $links = [];
-            $linksData = $optionData['links'];
-            unset($optionData['links']);
-
-            $option = $this->objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
-                ->create(['data' => $this->getFixtureForProductOption($optionData)])
-                ->setSku($bundleProduct->getSku())
-                ->setOptionid(null);
-
-            foreach ($linksData as $linkData) {
-                $links[] = $this->objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
-                    ->create(['data' => $this->getFixtureForProductOptionSelection($linkData)]);
-            }
-
-            $option->setProductLinks($links);
-            $options[] = $option;
-        }
-
-        $extension = $bundleProduct->getExtensionAttributes();
-        $extension->setBundleProductOptions($options);
-        $bundleProduct->setExtensionAttributes($extension);
-
-        return $bundleProduct;
-    }
-
-    protected function addCustomOption(\Magento\Catalog\Model\Product $bundleProduct, array $optionsData)
-    {
-        /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-        $customOptionFactory = $this->objectManager
-            ->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
-
-        $options = [];
-        foreach ($optionsData as $optionData) {
-            $customOption = $customOptionFactory->create(
-                [
-                    'data' => $this->getFixtureForProductCustomOption($optionData)
-                ]
-            );
-            $customOption->setProductSku($bundleProduct->getSku());
-            $customOption->setOptionId(null);
-
-            $options[] = $customOption;
-        }
-
-        $bundleProduct->setOptions($options);
-        $bundleProduct->setCanSaveCustomOptions(true);
-
-        return $bundleProduct;
     }
 }
