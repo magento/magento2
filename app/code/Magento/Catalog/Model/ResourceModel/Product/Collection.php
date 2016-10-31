@@ -1856,6 +1856,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
+        // Preventing overriding price loaded from EAV because we want to use the one from index
+        $this->removeAttributeToSelect('price');
+
         $connection = $this->getConnection();
         $select = $this->getSelect();
         $joinCond = join(
