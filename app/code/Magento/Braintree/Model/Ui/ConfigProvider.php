@@ -45,9 +45,9 @@ final class ConfigProvider implements ConfigProviderInterface
      * Constructor
      *
      * @param Config $config
-     * @param PayPalConfig $payPalConfig;
+     * @param PayPalConfig $payPalConfig No longer used by internal code and not recommended.
      * @param BraintreeAdapter $adapter
-     * @param ResolverInterface $localeResolver
+     * @param ResolverInterface $localeResolver No longer used by internal code and not recommended.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(

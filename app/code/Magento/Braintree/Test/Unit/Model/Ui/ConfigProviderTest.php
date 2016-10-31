@@ -8,6 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model\Ui;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Framework\Locale\ResolverInterface;
 
