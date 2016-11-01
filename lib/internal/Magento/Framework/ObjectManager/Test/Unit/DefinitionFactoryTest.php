@@ -7,14 +7,14 @@ namespace Magento\Framework\ObjectManager\Test\Unit;
 
 use Magento\Framework\ObjectManager\Definition\Compiled;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 
 class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystemDriverMock;
 
@@ -30,7 +30,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystemDriverMock = $this->getMock(DriverInterface::class);
+        $this->filesystemDriverMock = $this->getMock(File::class);
         $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->definitionFactory = new DefinitionFactory(
             $this->filesystemDriverMock,
