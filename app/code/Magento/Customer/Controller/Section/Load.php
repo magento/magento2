@@ -5,10 +5,10 @@
  */
 namespace Magento\Customer\Controller\Section;
 
+use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Customer section controller
@@ -22,6 +22,7 @@ class Load extends \Magento\Framework\App\Action\Action
 
     /**
      * @var Identifier
+     * @deprecated
      */
     protected $sectionIdentifier;
 
@@ -31,25 +32,33 @@ class Load extends \Magento\Framework\App\Action\Action
     protected $sectionPool;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier
+     * @param Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
+     * @param Escaper $escaper
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
-        \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier,
-        SectionPoolInterface $sectionPool
+        Identifier $sectionIdentifier,
+        SectionPoolInterface $sectionPool,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sectionIdentifier = $sectionIdentifier;
         $this->sectionPool = $sectionPool;
+        $this->escaper = $escaper ?: $this->_objectManager->get(\Magento\Framework\Escaper::class);
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -60,7 +69,7 @@ class Load extends \Magento\Framework\App\Action\Action
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
             $updateSectionId = $this->getRequest()->getParam('update_section_id');
-            if ('false' == $updateSectionId) {
+            if ('false' === $updateSectionId) {
                 $updateSectionId = false;
             }
             $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$updateSectionId);
@@ -70,7 +79,7 @@ class Load extends \Magento\Framework\App\Action\Action
                 \Zend\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
-            $response = ['message' => $e->getMessage()];
+            $response = ['message' => $this->escaper->escapeHtml($e->getMessage())];
         }
 
         return $resultJson->setData($response);
