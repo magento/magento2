@@ -32,7 +32,8 @@ class ProductItem extends CatalogProductItem
         $checkoutData = $product->getCheckoutData();
         $options = $checkoutData['options']['configurable_options'];
         $confAttrData = $product->getDataFieldConfig('configurable_attributes_data');
-        $attributes = ($confAttrData['source'])->getAttributes();
+        $confAttrSource = $confAttrData['source'];
+        $attributes = $confAttrSource->getAttributes();
 
         foreach ($options as $option) {
             if (!isset($attributes[$option['title']])) {
