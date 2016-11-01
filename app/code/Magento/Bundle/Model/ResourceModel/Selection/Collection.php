@@ -32,6 +32,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $catalogRuleProcessor;
 
     /**
+     * Is website scope prices joined to collection
+
+     * @var bool
+     */
+    private $websiteScopePriceJoined = false;
+
+    /**
      * @inheritDoc
      */
     public function __construct(
@@ -54,7 +61,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\CatalogRule\Model\ResourceModel\Product\Collection $catalogRuleProcessor,
+        \Magento\CatalogRule\Model\ResourceModel\Product\Collection $catalogRuleProcessor = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
@@ -153,6 +160,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 'price_scope' => 'price.website_id'
             ]
         );
+        $this->websiteScopePriceJoined = true;
+
         return $this;
     }
 
@@ -228,7 +237,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Add filter by price
      *
-     * @param Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param bool $searchMin
      * @param bool $useRegularPrice
      *
@@ -241,7 +250,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             if ($useRegularPrice) {
                 $minimalPriceExpression = 'minimal_price';
             } else {
-                $this->catalogRuleProcessor->addPriceData($this, 'selection.product_id');
+                $this->getCatalogRuleProcessor()->addPriceData($this, 'selection.product_id');
                 $minimalPriceExpression = 'LEAST(minimal_price, IFNULL(catalog_rule_price, 99999999))';
             }
             $orderByValue = new \Zend_Db_Expr(
@@ -252,7 +261,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             );
         } else {
             $connection = $this->getConnection();
-            $websiteId = $this->_storeManager->getStore()->getWebsiteId();
             $priceType = $connection->getIfNullSql(
                 'price.selection_price_type',
                 'selection.selection_price_type'
@@ -261,11 +269,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 'price.selection_price_value',
                 'selection.selection_price_value'
             );
-            $this->getSelect()->joinLeft(
-                ['price' => $this->getTable('catalog_product_bundle_selection_price')],
-                'selection.selection_id = price.selection_id AND price.website_id = ' . (int)$websiteId,
-                []
-            );
+            if (!$this->websiteScopePriceJoined) {
+                $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+                $this->getSelect()->joinLeft(
+                    ['price' => $this->getTable('catalog_product_bundle_selection_price')],
+                    'selection.selection_id = price.selection_id AND price.website_id = ' . (int)$websiteId,
+                    []
+                );
+            }
             $price = $connection->getCheckSql(
                 $priceType . ' = 1',
                 (float) $product->getPrice() . ' * '. $priceValue . ' / 100',
@@ -278,6 +289,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getSelect()->order($orderByValue . ($searchMin ? Select::SQL_ASC : Select::SQL_DESC));
         $this->getSelect()->limit(1);
         return $this;
+    }
+
+    /**
+     * @return \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     * @deprecated
+     */
+    private function getCatalogRuleProcessor()
+    {
+        if (null === $this->catalogRuleProcessor) {
+            $this->catalogRuleProcessor = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class);
+        }
+
+        return $this->catalogRuleProcessor;
     }
 
     /**

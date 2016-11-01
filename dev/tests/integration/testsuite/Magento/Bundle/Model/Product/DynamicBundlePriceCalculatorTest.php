@@ -39,6 +39,34 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
         );
     }
 
+    /**
+     * @param array $strategyModifiers
+     * @param array $expectedResults
+     * @dataProvider getTestCases
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     */
+    public function testPriceForDynamicBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
+    {
+        $bundleProduct = $this->prepareFixture($strategyModifiers);
+
+        /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
+        $priceInfo = $bundleProduct->getPriceInfo();
+        $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
+
+        $this->assertEquals(
+            $expectedResults['minimalPrice'],
+            $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
+            'Failed to check minimal price on product'
+        );
+
+        $this->assertEquals(
+            $expectedResults['maximalPrice'],
+            $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
+            'Failed to check maximal price on product'
+        );
+    }
+
     public function getTestCases()
     {
         return [
