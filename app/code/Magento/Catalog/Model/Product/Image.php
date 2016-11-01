@@ -503,10 +503,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
                     'type' => $this->getType(),
                 ]
             );
-            $this->_baseFile = $this->imageAsset->getSourceFile();
-        } else {
-            $this->_baseFile = $this->imageAsset->getSourceFile();
         }
+
+        $this->_baseFile = $this->imageAsset->getSourceFile();
 
         return $this;
     }

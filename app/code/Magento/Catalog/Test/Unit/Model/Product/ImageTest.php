@@ -272,9 +272,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->viewAssetPlaceholderFactory->expects($this->never())->method('create');
 
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
-        $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
         $this->image->setBaseFile('/somefile.png');
-        $this->assertEquals($absolutePath, $this->image->getBaseFile());
+        $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
     }
 
     public function testSetBaseNoSelectionFile()
@@ -412,6 +411,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     public function testIsCached()
     {
         $this->testSetGetBaseFile();
+        $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
+        $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
         $this->assertTrue($this->image->isCached());
     }
 
