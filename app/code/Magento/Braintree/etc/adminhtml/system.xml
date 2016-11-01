@@ -45,7 +45,7 @@
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
-                        <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
+                        <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.<br><br>Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Braintree v.zero with Hosted Fields</a> latest technology. Hosted Fields are small, transparent iframes that replace the sensitive credit card inputs in your checkout flow - helping you meet the latest data security requirements while ensuring your customization doesn't suffer. <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Find out more</a>.]]></comment>
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
