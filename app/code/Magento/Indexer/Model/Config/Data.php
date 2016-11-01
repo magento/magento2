@@ -6,6 +6,7 @@
 namespace Magento\Indexer\Model\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Data extends \Magento\Framework\Config\Data
 {
@@ -21,20 +22,18 @@ class Data extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection
      * @param string $cacheId
-     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Indexer\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection,
-        $cacheId = 'indexer_config',
-        SerializerInterface $serializer = null
+        $cacheId = 'indexer_config'
     ) {
         $this->stateCollection = $stateCollection;
 
         $isCacheExists = $cache->test($cacheId);
 
-        parent::__construct($reader, $cache, $cacheId, $serializer);
+        parent::__construct($reader, $cache, $cacheId);
 
         if (!$isCacheExists) {
             $this->deleteNonexistentStates();
@@ -54,5 +53,20 @@ class Data extends \Magento\Framework\Config\Data
                 $state->delete();
             }
         }
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    protected function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(Serialize::class);
+        }
+        return $this->serializer;
     }
 }
