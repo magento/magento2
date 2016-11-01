@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Perform all assertions
  *
  * @group Inventory
- * @ZephyrId MAGETWO-29543
+ * @ZephyrId MAGETWO-29543, MAGETWO-13645
  */
 class ManageProductsStockTest extends Injectable
 {

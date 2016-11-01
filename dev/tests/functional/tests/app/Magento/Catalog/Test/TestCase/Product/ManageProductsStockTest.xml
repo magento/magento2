@@ -15,7 +15,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertAddedProductToCartSuccessMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
         </variation>
-        <variation name="ManageProductsStockTestVariation2">
+        <variation name="ManageProductsStockTestVariation2" ticketId="MAGETWO-13645">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">hide_out_of_stock_products</data>
@@ -34,7 +34,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductStatusIsOutOfStock" />
         </variation>
-        <variation name="ManageProductsStockTestVariation3">
+        <variation name="ManageProductsStockTestVariation3" ticketId="MAGETWO-13645">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
@@ -53,7 +53,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
-        <variation name="ManageProductsStockTestVariation4">
+        <variation name="ManageProductsStockTestVariation4" ticketId="MAGETWO-13645">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
