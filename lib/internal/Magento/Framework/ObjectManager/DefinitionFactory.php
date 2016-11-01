@@ -1,20 +1,16 @@
 <?php
 /**
- * Object manager definition factory
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
- *
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\ObjectManager\Definition\Compiled;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,26 +18,11 @@ use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator
 class DefinitionFactory
 {
     /**
-     * Directory containing compiled class metadata
-     *
-     * @var string
-     */
-    protected $_definitionDir;
-
-    /**
      * Class generation dir
      *
      * @var string
      */
     protected $_generationDir;
-
-    /**
-     * Format of definitions
-     *
-     * @var string
-     * @deprecated
-     */
-    protected $_definitionFormat;
 
     /**
      * Filesystem Driver
@@ -51,11 +32,9 @@ class DefinitionFactory
     protected $_filesystemDriver;
 
     /**
-     * List of definition models
-     *
-     * @var array
+     * @var string
      */
-    protected static $definitionClasses = \Magento\Framework\ObjectManager\Definition\Compiled::class;
+    protected static $definitionClasses = Compiled::class;
 
     /**
      * @var \Magento\Framework\Code\Generator
@@ -63,28 +42,30 @@ class DefinitionFactory
     protected $codeGenerator;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param DriverInterface $filesystemDriver
-     * @param string $definitionDir
+     * @param SerializerInterface $serializer
      * @param string $generationDir
-     * @param string  $definitionFormat
      */
     public function __construct(
         DriverInterface $filesystemDriver,
-        $definitionDir,
-        $generationDir,
-        $definitionFormat = null
+        SerializerInterface $serializer,
+        $generationDir
     ) {
         $this->_filesystemDriver = $filesystemDriver;
-        $this->_definitionDir = $definitionDir;
+        $this->serializer = $serializer;
         $this->_generationDir = $generationDir;
-        $this->_definitionFormat = $definitionFormat;
     }
 
     /**
      * Create class definitions
      *
      * @param mixed $definitions
-     * @return Runtime
+     * @return Compiled|Runtime
      */
     public function createClassDefinition($definitions = false)
     {
@@ -110,14 +91,7 @@ class DefinitionFactory
      */
     public function createPluginDefinition()
     {
-        $path = $this->_definitionDir . '/plugins.json';
-        if ($this->_filesystemDriver->isReadable($path)) {
-            return new \Magento\Framework\Interception\Definition\Compiled(
-                $this->_unpack($this->_filesystemDriver->fileGetContents($path))
-            );
-        } else {
-            return new \Magento\Framework\Interception\Definition\Runtime();
-        }
+        return new \Magento\Framework\Interception\Definition\Runtime();
     }
 
     /**
@@ -127,25 +101,7 @@ class DefinitionFactory
      */
     public function createRelations()
     {
-        $path = $this->_definitionDir . '/relations.json';
-        if ($this->_filesystemDriver->isReadable($path)) {
-            return new \Magento\Framework\ObjectManager\Relations\Compiled(
-                $this->_unpack($this->_filesystemDriver->fileGetContents($path))
-            );
-        } else {
-            return new \Magento\Framework\ObjectManager\Relations\Runtime();
-        }
-    }
-
-    /**
-     * Gets supported definition formats
-     *
-     * @return array
-     * @deprecated
-     */
-    public static function getSupportedFormats()
-    {
-        return [];
+        return new \Magento\Framework\ObjectManager\Relations\Runtime();
     }
 
     /**
@@ -156,7 +112,7 @@ class DefinitionFactory
      */
     protected function _unpack($definitions)
     {
-        return json_decode($definitions);
+        return $this->serializer->unserialize($definitions);
     }
 
     /**

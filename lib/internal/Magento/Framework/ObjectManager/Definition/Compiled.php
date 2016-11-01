@@ -22,7 +22,7 @@ class Compiled implements \Magento\Framework\ObjectManager\DefinitionInterface
     /**
      * @var \Magento\Framework\Code\Reader\ClassReaderInterface
      */
-    protected $reader ;
+    protected $reader;
 
     /**
      * @var SerializerInterface

@@ -117,7 +117,7 @@ class ObjectManagerFactory
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
-            $this->directoryList->getPath(DirectoryList::DI),
+            new \Magento\Framework\Serialize\Serializer\Json(),
             $this->directoryList->getPath(DirectoryList::GENERATION)
         );
 
@@ -127,7 +127,7 @@ class ObjectManagerFactory
         /** @var EnvironmentFactory $envFactory */
         $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $envFactory->createEnvironment();
+        $env = $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();

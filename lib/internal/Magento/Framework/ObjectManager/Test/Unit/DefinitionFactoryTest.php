@@ -3,118 +3,74 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\ObjectManager\Test\Unit;
 
 use Magento\Framework\ObjectManager\Definition\Compiled;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\ObjectManager\DefinitionFactory;
+use Magento\Framework\ObjectManager\Definition\Runtime;
 
 class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DriverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filesystemDriverMock;
+    private $filesystemDriverMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\DefinitionFactory
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $serializerMock;
 
     /**
-     * @var string
+     * @var DefinitionFactory
      */
-    protected $sampleContent;
+    private $definitionFactory;
 
     protected function setUp()
     {
-        $this->sampleContent = '[1,2,3]';
-        $this->filesystemDriverMock = $this->getMock(
-            \Magento\Framework\Filesystem\Driver\File::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->model = new \Magento\Framework\ObjectManager\DefinitionFactory(
+        $this->filesystemDriverMock = $this->getMock(DriverInterface::class);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->definitionFactory = new DefinitionFactory(
             $this->filesystemDriverMock,
-            'DefinitionDir',
-            'GenerationDir'
+            $this->serializerMock,
+            'generation dir'
         );
     }
 
-    public function testCreateClassDefinitionFromString()
+    public function testCreateClassDefinitionSerialized()
     {
+        $serializedDefinitions = 'serialized definitions';
+        $definitions = [[], []];
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedDefinitions)
+            ->willReturn($definitions);
         $this->assertInstanceOf(
-            \Magento\Framework\ObjectManager\Definition\Compiled::class,
-            $this->model->createClassDefinition($this->sampleContent)
+            Compiled::class,
+            $this->definitionFactory->createClassDefinition($serializedDefinitions)
         );
     }
 
-    /**
-     * @param string $path
-     * @param string $callMethod
-     * @param string $expectedClass
-     * @dataProvider createPluginsAndRelationsReadableDataProvider
-     */
-    public function testCreatePluginsAndRelationsReadable($path, $callMethod, $expectedClass)
+    public function testCreateClassDefinitionArray()
     {
-        $this->filesystemDriverMock->expects($this->once())->method('isReadable')
-            ->with($path)
-            ->will($this->returnValue(true));
-        $this->filesystemDriverMock->expects($this->once())->method('fileGetContents')
-            ->with($path)
-            ->will($this->returnValue($this->sampleContent));
-        $this->assertInstanceOf($expectedClass, $this->model->$callMethod());
+        $definitions = [[], []];
+        $this->serializerMock->expects($this->never())
+            ->method('unserialize');
+        $this->assertInstanceOf(
+            Compiled::class,
+            $this->definitionFactory->createClassDefinition($definitions)
+        );
     }
 
-    public function createPluginsAndRelationsReadableDataProvider()
+    public function testCreateClassDefinition()
     {
-        return [
-            'relations' => [
-                'DefinitionDir/relations.json',
-                'createRelations', \Magento\Framework\ObjectManager\Relations\Compiled::class,
-            ],
-            'plugins' => [
-                'DefinitionDir/plugins.json',
-                'createPluginDefinition', \Magento\Framework\Interception\Definition\Compiled::class,
-            ],
-        ];
-    }
-
-    /**
-     * @param string $path
-     * @param string $callMethod
-     * @param string $expectedClass
-     * @dataProvider createPluginsAndRelationsNotReadableDataProvider
-     */
-    public function testCreatePluginsAndRelationsNotReadable($path, $callMethod, $expectedClass)
-    {
-        $this->filesystemDriverMock->expects($this->once())->method('isReadable')
-            ->with($path)
-            ->will($this->returnValue(false));
-        $this->assertInstanceOf($expectedClass, $this->model->$callMethod());
-    }
-
-    public function createPluginsAndRelationsNotReadableDataProvider()
-    {
-        return [
-            'relations' => [
-                'DefinitionDir/relations.json',
-                'createRelations', \Magento\Framework\ObjectManager\Relations\Runtime::class,
-            ],
-            'plugins' => [
-                'DefinitionDir/plugins.json',
-                'createPluginDefinition', \Magento\Framework\Interception\Definition\Runtime::class,
-            ],
-        ];
-    }
-
-    public function testGetSupportedFormats()
-    {
-        $actual = \Magento\Framework\ObjectManager\DefinitionFactory::getSupportedFormats();
-        $this->assertInternalType('array', $actual);
-        foreach ($actual as $className) {
-            $this->assertInternalType('string', $className);
-        }
+        $this->serializerMock->expects($this->never())
+            ->method('unserialize');
+        $this->assertInstanceOf(
+            Runtime::class,
+            $this->definitionFactory->createClassDefinition()
+        );
     }
 }

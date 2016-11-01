@@ -46,7 +46,7 @@ class Filesystem implements WriterInterface
         $this->initialize();
 
         file_put_contents(
-            $this->directoryList->getPath(DirectoryList::DI) . '/' . $key  . '.json',
+            $this->directoryList->getPath(DirectoryList::DI) . '/' . $key  . '.ser',
             $this->getSerializer()->serialize($config)
         );
     }
