@@ -23,6 +23,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     const TYPE_STATIC = 'static';
 
     /**
+     * Const for empty string value.
+     */
+    const EMPTY_STRING = '';
+
+    /**
      * Attribute name
      *
      * @var string
@@ -621,7 +626,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         return (is_array($value) && count($value) == 0)
             || $value === null
             || ($value === false && $this->getBackend()->getType() != 'int')
-            || ($value === '' && $this->isInEmptyStringTypes());
+            || ($value === self::EMPTY_STRING && $this->isInEmptyStringTypes());
     }
 
     /**
@@ -632,7 +637,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function isAllowedEmptyTextValue($value)
     {
-        return $this->isInEmptyStringTypes() && $value === '';
+        return $this->isInEmptyStringTypes() && $value === self::EMPTY_STRING;
     }
 
     /**

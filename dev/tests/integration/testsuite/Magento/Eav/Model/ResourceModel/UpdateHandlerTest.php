@@ -11,12 +11,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider getAllStoresDataProvider
@@ -51,8 +50,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandlerTest::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
@@ -95,8 +92,6 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandlerTest::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
