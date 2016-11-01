@@ -7,6 +7,8 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,6 +68,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     * @magentoDbIsolationEnabled
      */
     public function testExport()
     {
@@ -88,6 +91,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     * @magentoDbIsolationEnabled
      */
     public function testExportWithProductLinks()
     {
@@ -101,7 +105,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
-     *
+     * 
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
@@ -163,7 +169,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verifies if exception processing works properly
-     *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
     public function testExceptionInGetExportData()
@@ -205,5 +211,29 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $data = $model->setWriter($exportAdapter)->export();
         $this->assertEmpty($data);
+    }
+
+    /**
+     * Verify if fields wrapping works correct when "Fields Enclosure" option enabled
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     */
+    public function testExportWithFieldsEnclosure()
+    {
+        $this->model->setParameters([
+            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
+        ]);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+
+        $this->assertContains('""Option 2""', $exportData);
+        $this->assertContains('""Option 3""', $exportData);
+        $this->assertContains('""Option 4 """"!@#$%^&*"""', $exportData);
+        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;"""', $exportData);
     }
 }

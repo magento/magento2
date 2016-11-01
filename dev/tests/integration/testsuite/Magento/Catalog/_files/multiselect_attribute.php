@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
@@ -38,7 +37,7 @@ $attribute->setData(
                 'option_1' => ['Option 1'],
                 'option_2' => ['Option 2'],
                 'option_3' => ['Option 3'],
-                'option_4' => ['Option 4 "!@#$%^&*'],
+                'option_4' => ['Option 4 "!@#$%^&*']
             ],
             'order' => [
                 'option_1' => 1,
