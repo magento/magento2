@@ -130,7 +130,7 @@ class CheckPaymentsAdvancedConfigStep implements TestStepInterface
             [$enablers['Enable this Solution'], $enablers['Enable PayPal Credit']]
         );
         $this->systemConfigEditSectionPayment->getPageActions()->save();
-        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessageAndRefreshPage();
     }
 
     /**
@@ -150,6 +150,6 @@ class CheckPaymentsAdvancedConfigStep implements TestStepInterface
             [$enablers['Enable PayPal Credit']]
         );
         $this->systemConfigEditSectionPayment->getPageActions()->save();
-        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessageAndRefreshPage();
     }
 }

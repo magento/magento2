@@ -134,7 +134,7 @@ class CheckExpressConfigStep implements TestStepInterface
         );
         $this->expressCheckoutConfigBlock->specifyMerchantAccountId();
         $this->systemConfigEditSectionPayment->getPageActions()->save();
-        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessageAndRefreshPage();
     }
 
     /**
@@ -154,6 +154,6 @@ class CheckExpressConfigStep implements TestStepInterface
             [$enablers['Enable In-Context Checkout Experience'], $enablers['Enable PayPal Credit']]
         );
         $this->systemConfigEditSectionPayment->getPageActions()->save();
-        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessage();
+        $this->systemConfigEditSectionPayment->getMessagesBlock()->waitSuccessMessageAndRefreshPage();
     }
 }
