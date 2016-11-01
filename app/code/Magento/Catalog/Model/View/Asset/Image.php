@@ -7,6 +7,8 @@
 namespace Magento\Catalog\Model\View\Asset;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
 
@@ -45,16 +47,23 @@ class Image implements LocalInterface
     private $mediaConfig;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
      * @param ContextInterface $context
-     * @param string $filePath
+     * @param EncryptorInterface $encryptor
+     * @param $filePath
      * @param array $miscParams
      */
     public function __construct(
         ConfigInterface $mediaConfig,
         ContextInterface $context,
+        EncryptorInterface $encryptor,
         $filePath,
         array $miscParams = []
     ) {
@@ -62,7 +71,7 @@ class Image implements LocalInterface
         $this->context = $context;
         $this->filePath = $filePath;
         $this->miscParams = $miscParams;
-        $this->mediaConfig = $mediaConfig;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -163,7 +172,7 @@ class Image implements LocalInterface
      */
     private function getMiscPath()
     {
-        return md5(implode('_', $this->miscParams));
+        return $this->encryptor->hash(implode('_', $this->miscParams), Encryptor::HASH_VERSION_MD5);
     }
 
     /**
