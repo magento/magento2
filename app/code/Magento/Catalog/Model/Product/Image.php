@@ -505,7 +505,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             );
             $this->_baseFile = $this->imageAsset->getSourceFile();
         } else {
-            $this->_baseFile = $this->imageAsset->getPath();
+            $this->_baseFile = $this->imageAsset->getSourceFile();
         }
 
         return $this;
@@ -554,7 +554,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function getImageProcessor()
     {
         if (!$this->_processor) {
-            $this->_processor = $this->_imageFactory->create($this->getBaseFile());
+            $filename = $this->getBaseFile() ? $this->_mediaDirectory->getAbsolutePath($this->getBaseFile()) : null;
+            $this->_processor = $this->_imageFactory->create($filename);
         }
         $this->_processor->keepAspectRatio($this->_keepAspectRatio);
         $this->_processor->keepFrame($this->_keepFrame);
@@ -671,7 +672,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         if ($this->_isBaseFilePlaceholder) {
             return $this;
         }
-        $filename = $this->getBaseFile();
+        $filename = $this->getBaseFile() ? $this->imageAsset->getPath() : null;
         $this->getImageProcessor()->save($filename);
         $this->_coreFileStorageDatabase->saveFile($filename);
         return $this;
