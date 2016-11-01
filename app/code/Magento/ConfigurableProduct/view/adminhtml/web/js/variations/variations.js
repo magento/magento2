@@ -323,24 +323,13 @@ define([
          */
         prepareVariations: function () {
             var mappedVariations = {},
-                configurations = {};
+                configurations = {},
+                tempVariation = {};
 
             this.associatedProducts = _.intersection(this.variations.pluck('productId'), this.associatedProducts);
 
             _.each(this.variations, function (variation) {
                 var attributes;
-
-                if (variation.productId) {
-                    configurations[variation.productId] = {
-                        'status': variation.status || '1'
-                    };
-
-                    if (this.associatedProducts.indexOf(variation.productId) === -1) {
-                        this.associatedProducts.push(variation.productId);
-                    }
-
-                    return;
-                }
 
                 attributes = _.reduce(variation.options, function (memo, option) {
                     var attribute = {};
@@ -349,9 +338,9 @@ define([
 
                     return _.extend(memo, attribute);
                 }, {});
-
                 this.generateImageGallery(variation);
-                mappedVariations[this.getVariationKey(variation.options)] = {
+
+                tempVariation = {
                     'image': variation.image || '',
                     'media_gallery': variation['media_gallery'] || {},
                     'name': variation.name || variation.sku,
@@ -364,6 +353,21 @@ define([
                         'qty': variation.quantity || null
                     }
                 };
+
+                if (variation.productId) {
+                    configurations[variation.productId] = tempVariation;
+
+                    if (this.associatedProducts.indexOf(variation.productId) === -1) {
+                        this.associatedProducts.push(variation.productId);
+                    }
+                    _.each(variation.imageTypes, function (imageFile, key) {
+                        configurations[variation.productId][key] = imageFile;
+                    }, this);
+
+                    return;
+                }
+
+                mappedVariations[this.getVariationKey(variation.options)] = tempVariation;
                 _.each(variation.imageTypes, function (imageFile, key) {
                     mappedVariations[this.getVariationKey(variation.options)][key] = imageFile;
                 }, this);
