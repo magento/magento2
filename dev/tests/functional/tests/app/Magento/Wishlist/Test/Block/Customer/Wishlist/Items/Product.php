@@ -165,6 +165,18 @@ class Product extends Form
     }
 
     /**
+     * Returns product price
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getPrice($currency = '$')
+    {
+        $price = $this->_rootElement->find($this->price)->getText();
+        return str_replace($currency, '', $price);
+    }
+
+    /**
      * Get Wish List data for the Product.
      *
      * @param mixed $qty
