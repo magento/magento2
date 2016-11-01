@@ -48,6 +48,18 @@
                     <item name="US Dollar" xsi:type="string">USD</item>
                 </item>
             </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
         </dataset>
 
         <dataset name="config_base_currency_ch">

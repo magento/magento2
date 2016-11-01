@@ -20,5 +20,18 @@
             <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
             <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnCatalogPage" />
         </variation>
+        <variation name="CreateCurrencyRateTestVariation2">
+            <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
+            <data name="currencyRate/data/currency_to" xsi:type="string">UAH</data>
+            <data name="currencyRate/data/rate" xsi:type="number">2.000</data>
+            <data name="currencySymbol/dataSet" xsi:type="string">currency_symbols_uah</data>
+            <data name="product/dataset" xsi:type="string">simple_10_dollar</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">not_required_text_option</data>
+            <data name="config/dataset" xsi:type="string">config_base_currency_us_display_currency_uah</data>
+            <data name="basePrice" xsi:type="string">₴20.00</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnProductPage" />
+        </variation>
     </testCase>
 </config>

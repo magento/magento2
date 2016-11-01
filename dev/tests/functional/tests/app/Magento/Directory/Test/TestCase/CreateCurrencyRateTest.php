@@ -68,6 +68,7 @@ class CreateCurrencyRateTest extends Injectable
 
         // Steps:
         $this->currencyIndexPage->open();
+        $this->currencyIndexPage->getCurrencyRateForm()->clickImportButton();
         $this->currencyIndexPage->getCurrencyRateForm()->fill($currencyRate);
         $this->currencyIndexPage->getFormPageActions()->save();
     }
