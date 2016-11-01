@@ -28,53 +28,6 @@
                     </block>
                     <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
                         <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
-                        <!-- The following code shows how to set your own pager increments -->
-                        <!--
-                            <action method="setDefaultListPerPage">
-                            <argument name="limit" xsi:type="string">4</argument>
-                        </action>
-                        <action method="setDefaultGridPerPage">
-                            <argument name="limit" xsi:type="string">3</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">list</argument>
-                            <argument name="limit" xsi:type="string">2</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">list</argument>
-                            <argument name="limit" xsi:type="string">4</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">list</argument>
-                            <argument name="limit" xsi:type="string">6</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">list</argument>
-                            <argument name="limit" xsi:type="string">8</argument>
-                        </action>
-                        <action method="addPagerLimit" translate="label">
-                            <argument name="mode" xsi:type="string">list</argument>
-                            <argument name="limit" xsi:type="string">all</argument>
-                            <argument name="label" xsi:type="string">All</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">grid</argument>
-                            <argument name="limit" xsi:type="string">3</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">grid</argument>
-                            <argument name="limit" xsi:type="string">6</argument>
-                        </action>
-                        <action method="addPagerLimit">
-                            <argument name="mode" xsi:type="string">grid</argument>
-                            <argument name="limit" xsi:type="string">9</argument>
-                        </action>
-                        <action method="addPagerLimit" translate="label">
-                            <argument name="mode" xsi:type="string">grid</argument>
-                            <argument name="limit" xsi:type="string">all</argument>
-                            <argument name="label" xsi:type="string">All</argument>
-                        </action>
-                        -->
                     </block>
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
