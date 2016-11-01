@@ -6,6 +6,10 @@
 
 namespace Magento\Indexer\Test\Unit\Model\Processor;
 
+/**
+ * Class InvalidateCacheTest
+ * @deprecated
+ */
 class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**

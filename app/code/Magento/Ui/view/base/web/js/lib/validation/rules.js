@@ -787,6 +787,24 @@ define([
                 return value === $(param).val();
             },
             $.validator.messages.equalTo
+        ],
+        'validate-file-type': [
+            function (name, types) {
+                var extension = name.split('.').pop();
+
+                if (types && typeof types === 'string') {
+                    types = types.split(' ');
+                }
+
+                return !types || !types.length || ~types.indexOf(extension);
+            },
+            $.mage.__('We don\'t recognize or support this file extension type.')
+        ],
+        'validate-max-size': [
+            function (size, maxSize) {
+                return maxSize === false || size < maxSize;
+            },
+            $.mage.__('File you are trying to upload exceeds maximum file size limit.')
         ]
     };
 });

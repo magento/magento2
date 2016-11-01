@@ -1,0 +1,81 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field" data-bind="{
+    visible: visible,
+    css: $data.additionalClasses
+}" >
+    <!-- ko if: $data.label -->
+    <label class="admin__field-label" data-bind="{
+        attr: {for: uid}
+    }">
+        <span data-bind="{
+            text: $t(label),
+            attr: {'data-config-scope': $data.scopeLabel}
+        }"></span>
+    </label>
+    <!-- /ko -->
+
+    <div class="admin__field-control" data-bind="{
+        css: {'_with-tooltip': $data.tooltip}
+    }">
+        <div class="file-uploader" data-role="drop-zone" data-bind="{
+            css: {_loading: isLoading}
+        }">
+            <div class="file-uploader-area">
+                <input type="file" data-bind="{
+                    afterRender: function(elem){onElementRender(elem)},
+                    attr: {
+                        id: uid,
+                        name: inputName,
+                        multiple: isMultipleFiles
+                    },
+                    disable: disabled
+                }"/>
+                <label class="file-uploader-button action-default" data-bind="{
+                    attr: {for: uid},
+                    text: $t('Upload')
+                }"></label>
+
+                <span class="file-uploader-spinner"></span>
+                <!-- ko if: $data.showFallbackReset && $data.isDifferedFromDefault -->
+                    <div data-bind="{
+                        template: fallbackResetTpl
+                    }">
+                    </div>
+                <!-- /ko -->
+            </div>
+
+            <!-- ko if: $data.tooltip  -->
+                <div data-bind="{
+                    template: $data.tooltipTpl
+                }">
+                </div>
+            <!-- /ko -->
+
+            <!-- ko if: $data.notice -->
+            <div class="admin__field-note" data-bind="{
+                attr: {id: noticeId}
+            }">
+                <span data-bind="{
+                    html: notice
+                }"></span>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: error -->
+            <label class="admin__field-error" data-bind="{
+                attr: {for: uid},
+                text: error
+            }"> </label>
+            <!-- /ko -->
+
+            <!-- ko foreach: { data: value, as: '$file' } -->
+                <!-- ko template: $parent.getPreviewTmpl($file) --><!-- /ko -->
+            <!-- /ko -->
+        </div>
+    </div>
+</div>

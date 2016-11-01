@@ -86,6 +86,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'values' => $this->_formatFactory->create()->toOptionArray()
             ]
         );
+        $fieldset->addField(
+            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE,
+            'checkbox',
+            [
+                'name' => \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE,
+                'label' => __('Fields Enclosure'),
+                'title' => __('Fields Enclosure'),
+                'value' => 1,
+            ]
+        );
 
         $form->setUseContainer(true);
         $this->setForm($form);

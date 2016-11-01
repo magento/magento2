@@ -120,6 +120,16 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
+     * Get Key for caching block content
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return array
