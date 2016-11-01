@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "2.1.3-rc",
+    "version": "2.1.4-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
