@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\Definition\Compiled;
+use Magento\Framework\Code\Generator\Autoloader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -30,11 +31,6 @@ class DefinitionFactory
      * @var DriverInterface
      */
     protected $_filesystemDriver;
-
-    /**
-     * @var string
-     */
-    protected static $definitionClasses = Compiled::class;
 
     /**
      * @var \Magento\Framework\Code\Generator
@@ -65,7 +61,7 @@ class DefinitionFactory
      * Create class definitions
      *
      * @param mixed $definitions
-     * @return Compiled|Runtime
+     * @return DefinitionInterface
      */
     public function createClassDefinition($definitions = false)
     {
@@ -73,10 +69,9 @@ class DefinitionFactory
             if (is_string($definitions)) {
                 $definitions = $this->_unpack($definitions);
             }
-            $definitionModel = self::$definitionClasses;
-            $result = new $definitionModel($definitions);
+            $result = new Compiled($definitions);
         } else {
-            $autoloader = new \Magento\Framework\Code\Generator\Autoloader($this->getCodeGenerator());
+            $autoloader = new Autoloader($this->getCodeGenerator());
             spl_autoload_register([$autoloader, 'load']);
 
             $result = new Runtime();
