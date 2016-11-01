@@ -81,4 +81,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Setup\UpgradeData">
+        <arguments>
+            <argument name="indexerProcessor" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\Processor</argument>
+        </arguments>
+    </type>
 </config>
