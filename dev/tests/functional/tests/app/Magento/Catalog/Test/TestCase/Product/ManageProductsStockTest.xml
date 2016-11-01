@@ -17,11 +17,10 @@
         </variation>
         <variation name="ManageProductsStockTestVariation2">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
-            <data name="configData" xsi:type="string">hide_out_of_stock</data>
+            <data name="configData" xsi:type="string">hide_out_of_stock_products</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/use_config_min_sale_qty" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/min_sale_qty" xsi:type="string">1</data>
             <data name="product/data/stock_data/use_config_max_sale_qty" xsi:type="string">Yes</data>
@@ -31,7 +30,9 @@
             <data name="product/data/stock_data/use_config_notify_stock_qty" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/notify_stock_qty" xsi:type="string">1</data>
             <data name="product/data/stock_data/use_config_backorders" xsi:type="string">No</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductStatusIsOutOfStock" />
         </variation>
         <variation name="ManageProductsStockTestVariation3">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
