@@ -57,7 +57,7 @@ class Image implements LocalInterface
      * @param ConfigInterface $mediaConfig
      * @param ContextInterface $context
      * @param EncryptorInterface $encryptor
-     * @param $filePath
+     * @param string $filePath
      * @param array $miscParams
      */
     public function __construct(
