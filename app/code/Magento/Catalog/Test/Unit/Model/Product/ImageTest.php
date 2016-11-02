@@ -95,16 +95,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $viewAssetPlaceholderFactory;
 
-    /**
-     * @var ContextFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $imageContextFactory;
-
-    /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $imageContext;
-
     protected function setUp()
     {
         $this->context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
@@ -183,19 +173,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'viewAssetPlaceholderFactory',
             $this->viewAssetPlaceholderFactory
         );
-
-        $this->imageContext = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->imageContextFactory = $this->getMockBuilder(ContextFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->imageContextFactory->expects($this->any())->method('create')->willReturn($this->imageContext);
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->image,
-            'imageContextFactory',
-            $this->imageContextFactory
-        );
     }
 
     public function testSetGetQuality()
@@ -252,7 +229,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 [
-                    'context' => $this->imageContext,
                     'miscParams' => [
                         'image_type' => null,
                         'image_height' => null,
