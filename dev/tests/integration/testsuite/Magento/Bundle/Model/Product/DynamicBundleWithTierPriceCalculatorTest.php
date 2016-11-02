@@ -54,11 +54,15 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
     /**
      * Test cases for current test
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTestCases()
     {
         return [
-            '#1 Testing product price with tier price and sub items Configuration #1' => [
+            '
+                #1 Testing product price for dynamic bundle 
+                with one required option and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
@@ -67,7 +71,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 5
                 ]
             ],
-            '#2 Testing product price with tier price and sub items Configuration #2' => [
+
+            '
+                #2 Testing product price for dynamic bundle 
+                with one non required option and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
@@ -76,7 +84,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 10
                 ]
             ],
-            '#3 Testing product price with tier price and sub items Configuration #3' => [
+
+            '
+                #3 Testing product price for dynamic bundle 
+                with one required checkbox type option and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
@@ -85,7 +97,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 35
                 ]
             ],
-            '#4 Testing product price with tier price and sub items Configuration #4' => [
+
+            '
+                #4 Testing product price for dynamic bundle 
+                with one required multi type option and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
@@ -94,7 +110,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 35
                 ]
             ],
-            '#5 Testing product price with tier price and sub items Configuration #5' => [
+
+            '
+                #5 Testing product price for dynamic bundle 
+                with one required radio type option and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
@@ -103,7 +123,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 30
                 ]
             ],
-            '#6 Testing product price with tier price and sub items Configuration #6' => [
+
+            '
+                #6 Testing product price for dynamic bundle 
+                with two required options and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
@@ -112,7 +136,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 65
                 ]
             ],
-            '#7 Testing product price with tier price and sub items Configuration #7' => [
+
+            '
+                #7 Testing product price for dynamic bundle 
+                with one required option, one non required option and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
@@ -121,7 +149,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 65
                 ]
             ],
-            '#8 Testing product price with tier price and sub items Configuration #8' => [
+
+            '
+                #8 Testing product price for dynamic bundle 
+                with two non required options and tier price
+            ' => [
                 'strategy' => $this->getBundleConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
@@ -130,8 +162,12 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 65
                 ]
             ],
-            '#9 Testing price for dynamic bundle product with tier price on it and on sub item' => [
-                'strategy' => $this->getBundleConfiguration10(),
+
+            '
+                #9 Testing product price for dynamic bundle 
+                with tier price and with simple with tier price
+            ' => [
+                'strategy' => $this->getBundleConfiguration9(),
                 'expectedResults' => [
                     // 0.5 * 1 * 2.5
                     'minimalPrice' => 1.25,
@@ -142,6 +178,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with one required option and tier price
+     * @return array
+     */
     private function getBundleConfiguration1()
     {
         $optionsData = [
@@ -176,6 +216,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with one non required option and tier price
+     * @return array
+     */
     private function getBundleConfiguration2()
     {
         $optionsData = [
@@ -210,6 +254,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with one required checkbox type option and tier price
+     * @return array
+     */
     private function getBundleConfiguration3()
     {
         $optionsData = [
@@ -248,6 +296,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with one required multi type option and tier price
+     * @return array
+     */
     private function getBundleConfiguration4()
     {
         $optionsData = [
@@ -286,6 +338,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with one required radio type option and tier price
+     * @return array
+     */
     private function getBundleConfiguration5()
     {
         $optionsData = [
@@ -324,6 +380,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with two required options and tier price
+     * @return array
+     */
     private function getBundleConfiguration6()
     {
         $optionsData = [
@@ -377,6 +437,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with one required option, one non required option and tier price
+     * @return array
+     */
     private function getBundleConfiguration7()
     {
         $optionsData = [
@@ -430,6 +494,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle with two non required options and tier price
+     * @return array
+     */
     private function getBundleConfiguration8()
     {
         $optionsData = [
@@ -483,7 +551,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    private function getBundleConfiguration10()
+    /**
+     * Dynamic bundle with tier price and with simple with tier price
+     * @return array
+     */
+    private function getBundleConfiguration9()
     {
         $optionsData = [
             [

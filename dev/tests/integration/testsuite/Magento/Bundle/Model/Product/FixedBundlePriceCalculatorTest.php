@@ -87,7 +87,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 120
                 ]
             ],
-            '#2 Testing price for fixed bundle product with three simples and differnt qty' => [
+
+            '#2 Testing price for fixed bundle product with three simples and different qty' => [
                 'strategy' => $this->getProductWithDifferentQty(),
                 'expectedResults' => [
                     // 110 + 10 (min price from simples)
@@ -96,7 +97,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 170
                 ]
             ],
-            '#3 Testing price for fixed bundle product with three simples and differnt price' => [
+
+            '#3 Testing price for fixed bundle product with three simples and different price' => [
                 'strategy' => $this->getProductWithDifferentPrice(),
                 'expectedResults' => [
                     //  110 + 10
@@ -105,6 +107,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 170
                 ]
             ],
+
             '#4 Testing price for fixed bundle product with three simples' => [
                 'strategy' => $this->getProductWithSamePrice(),
                 'expectedResults' => [
@@ -117,6 +120,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Fixed bundle product with one simple
+     * @return array
+     */
     private function getProductWithOneSimple()
     {
         $optionsData = [
@@ -143,6 +150,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Fixed bundle product with three simples and different qty
+     * @return array
+     */
     private function getProductWithDifferentQty()
     {
         $optionsData = [
@@ -181,6 +192,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Fixed bundle product with three simples and different price
+     * @return array
+     */
     private function getProductWithSamePrice()
     {
         $optionsData = [
@@ -219,6 +234,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Fixed bundle product with three simples
+     * @return array
+     */
     private function getProductWithDifferentPrice()
     {
         $optionsData = [

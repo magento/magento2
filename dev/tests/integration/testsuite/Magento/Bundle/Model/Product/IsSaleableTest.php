@@ -30,7 +30,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is saleable if his status is enabled
+     * Check bundle product is saleable if his status is enabled
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
@@ -48,7 +48,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if his status is disabled
+     * Check bundle product is NOT saleable if his status is disabled
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
@@ -66,7 +66,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is saleable if his status is enabled
+     * Check bundle product is saleable if his status is enabled
      * and it has internal data is_salable = true
      *
      * @magentoAppIsolation enabled
@@ -86,7 +86,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if
+     * Check bundle product is NOT saleable if
      * his status is enabled but his data is_salable = false
      *
      * @magentoAppIsolation enabled
@@ -106,7 +106,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is saleable if it has all_items_salable = true
+     * Check bundle product is saleable if it has all_items_salable = true
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
@@ -124,7 +124,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if it has all_items_salable = false
+     * Check bundle product is NOT saleable if it has all_items_salable = false
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
@@ -142,7 +142,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if it has no options
+     * Check bundle product is NOT saleable if it has no options
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
@@ -170,7 +170,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if it has no selections
+     * Check bundle product is NOT saleable if it has no selections
      *
      * @magentoAppIsolation enabled
      * @covers \Magento\Bundle\Model\Product\Type::isSalable
@@ -200,7 +200,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if
+     * Check bundle product is NOT saleable if
      * all his selections are not saleable
      *
      * @magentoAppIsolation enabled
@@ -225,7 +225,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if
+     * Check bundle product is NOT saleable if
      * it has at least one required option without saleable selections
      *
      * @magentoAppIsolation enabled
@@ -250,7 +250,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is NOT saleable if
+     * Check bundle product is NOT saleable if
      * there are not enough qty of selection on required option
      *
      * @magentoAppIsolation enabled
@@ -270,7 +270,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is saleable if
+     * Check bundle product is saleable if
      * all his selections have selection_can_change_qty = 1
      *
      * @magentoAppIsolation enabled
@@ -305,7 +305,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is not saleable if
+     * Check bundle product is not saleable if
      * all his options are not required and selections are not saleable
      *
      * @magentoAppIsolation enabled
@@ -342,7 +342,7 @@ class IsSaleableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * check bundle product is saleable if
+     * Check bundle product is saleable if
      * it has at least one not required option with saleable selections
      *
      * @magentoAppIsolation enabled

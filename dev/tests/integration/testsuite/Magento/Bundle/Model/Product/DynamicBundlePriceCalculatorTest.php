@@ -85,6 +85,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 10
                 ]
             ],
+
             '#2 Testing price for dynamic bundle product with three simples and different qty' => [
                 'strategy' => $this->getProductWithDifferentQty(),
                 'expectedResults' => [
@@ -94,6 +95,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 100
                 ]
             ],
+
             '#3 Testing price for dynamic bundle product with four simples and different price' => [
                 'strategy' => $this->getProductWithDifferentPrice(),
                 'expectedResults' => [
@@ -106,6 +108,11 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle product with one simple
+     *
+     * @return array
+     */
     private function getProductWithOneSimple()
     {
         $optionsData = [
@@ -130,6 +137,11 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle product with three simples and different qty
+     *
+     * @return array
+     */
     private function getProductWithDifferentQty()
     {
         $optionsData = [
@@ -162,6 +174,11 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+    /**
+     * Dynamic bundle product with three simples and different price
+     *
+     * @return array
+     */
     private function getProductWithDifferentPrice()
     {
         $optionsData = [

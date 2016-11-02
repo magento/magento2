@@ -43,12 +43,13 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
     /**
      * Test cases for current test
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTestCases()
     {
         return [
-            '#1 Testing price for dynamic bundle product with sub items and catalog rule price' => [
-                'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(),
+            '#1 Testing price for dynamic bundle with one required option' => [
+                'strategy' => $this->getBundleProductConfiguration1(),
                 'expectedResults' => [
                     // 10 * 0.9
                     'minimalPrice' => 9,
@@ -58,8 +59,8 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#2 Testing price for dynamic bundle product with special price, sub items and catalog rule price' => [
-                'strategy' => $this->getBundleProductConfiguration1(),
+            '#2 Testing price for dynamic bundle with one required option and special price' => [
+                'strategy' => $this->getBundleProductConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 10 * 0.9
                     'minimalPrice' => 4.5,
@@ -69,8 +70,8 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#3 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #2' => [
-                'strategy' => $this->getBundleProductConfiguration2(),
+            '#3 Testing price for dynamic bundle with one non required option' => [
+                'strategy' => $this->getBundleProductConfiguration3(),
                 'expectedResults' => [
                     // 0.9 * 2 * 10
                     'minimalPrice' => 18,
@@ -80,18 +81,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#4 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #3' => [
-                'strategy' => $this->getBundleProductConfiguration3(),
-                'expectedResults' => [
-                    // 0.9 * 1 * 10
-                    'minimalPrice' => 9,
-
-                    // 0.9 * 1 * 10 + 3 * 0.9 * 20
-                    'maximalPrice' => 63
-                ]
-            ],
-
-            '#5 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #4' => [
+            '#4 Testing price for dynamic bundle with one required checkbox type option and 2 simples' => [
                 'strategy' => $this->getBundleProductConfiguration4(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
@@ -102,8 +92,19 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#6 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #5' => [
+            '#5 Testing price for dynamic bundle with one required multi type option and 2 simples' => [
                 'strategy' => $this->getBundleProductConfiguration5(),
+                'expectedResults' => [
+                    // 0.9 * 1 * 10
+                    'minimalPrice' => 9,
+
+                    // 0.9 * 1 * 10 + 3 * 0.9 * 20
+                    'maximalPrice' => 63
+                ]
+            ],
+
+            '#6 Testing price for dynamic bundle with one required radio type option and 2 simples' => [
+                'strategy' => $this->getBundleProductConfiguration6(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
                     'minimalPrice' => 9,
@@ -113,8 +114,8 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#7 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #6' => [
-                'strategy' => $this->getBundleProductConfiguration6(),
+            '#7 Testing price for dynamic bundle with two required options' => [
+                'strategy' => $this->getBundleProductConfiguration7(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10 + 0.9 * 1 * 10
                     'minimalPrice' => 18,
@@ -124,8 +125,8 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#8 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #7' => [
-                'strategy' => $this->getBundleProductConfiguration7(),
+            '#8 Testing price for dynamic bundle with one required option and one non required' => [
+                'strategy' => $this->getBundleProductConfiguration8(),
                 'expectedResults' => [
                     // 1 * 0.9 * 10
                     'minimalPrice' => 9,
@@ -135,8 +136,8 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#9 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #8' => [
-                'strategy' => $this->getBundleProductConfiguration8(),
+            '#9 Testing price for dynamic bundle with two non required options' => [
+                'strategy' => $this->getBundleProductConfiguration9(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
                     'minimalPrice' => 9,
@@ -148,7 +149,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getProductWithSubItemsAndOptionsStrategy()
+    /**
+     * Dynamic bundle with one required option
+     * @return array
+     */
+    private function getBundleProductConfiguration1()
     {
         $optionsData = [
             [
@@ -172,7 +177,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration1()
+    /**
+     * Dynamic bundle with one required option and special price
+     * @return array
+     */
+    private function getBundleProductConfiguration2()
     {
         $optionsData = [
             [
@@ -200,7 +209,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration2()
+    /**
+     * Dynamic bundle with one non required option
+     * @return array
+     */
+    private function getBundleProductConfiguration3()
     {
         $optionsData = [
             [
@@ -224,7 +237,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration3()
+    /**
+     * Dynamic bundle with one required checkbox type option and 2 simples
+     * @return array
+     */
+    private function getBundleProductConfiguration4()
     {
         $optionsData = [
             [
@@ -252,7 +269,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration4()
+    /**
+     * Dynamic bundle with one required multi type option and 2 simples
+     * @return array
+     */
+    private function getBundleProductConfiguration5()
     {
         $optionsData = [
             [
@@ -280,7 +301,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration5()
+    /**
+     * Dynamic bundle with one required radio type option and 2 simples
+     * @return array
+     */
+    private function getBundleProductConfiguration6()
     {
         $optionsData = [
             [
@@ -308,7 +333,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration6()
+    /**
+     * Dynamic bundle with two required options
+     * @return array
+     */
+    private function getBundleProductConfiguration7()
     {
         $optionsData = [
             [
@@ -351,7 +380,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration7()
+    /**
+     * Dynamic bundle with one required option and one non required
+     * @return array
+     */
+    private function getBundleProductConfiguration8()
     {
         $optionsData = [
             [
@@ -394,7 +427,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    private function getBundleProductConfiguration8()
+    /**
+     * Dynamic bundle with two non required options
+     * @return array
+     */
+    private function getBundleProductConfiguration9()
     {
         $optionsData = [
             [
