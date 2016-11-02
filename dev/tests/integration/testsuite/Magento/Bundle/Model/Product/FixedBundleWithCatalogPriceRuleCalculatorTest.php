@@ -22,7 +22,8 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->prepareFixture($strategyModifiers);
+        $this->prepareFixture($strategyModifiers, 'bundle_product');
+        $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -41,11 +42,15 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         );
     }
 
+    /**
+     * Test cases for current test
+     * @return array
+     */
     public function getTestCases()
     {
         return [
             '
-                Testing price for fixed bundle product
+                #1 Testing price for fixed bundle product
                 with catalog price rule and without sub items and options
             ' => [
                 'strategy' => $this->getEmptyProductStrategy(),
@@ -59,7 +64,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #2 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
@@ -76,7 +81,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #3 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
@@ -93,7 +98,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #4 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
@@ -110,7 +115,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #5 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(
@@ -127,7 +132,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #6 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #1
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
@@ -144,7 +149,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #7 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #1
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
@@ -161,7 +166,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #8 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #1
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
@@ -178,7 +183,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #9 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #1
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration1(
@@ -195,7 +200,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #10 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #2
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
@@ -212,7 +217,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #11 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #2
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
@@ -229,7 +234,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #12 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #2
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
@@ -246,7 +251,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #13 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #2
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration2(
@@ -263,7 +268,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #14 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #3
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
@@ -280,7 +285,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #15 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #3
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
@@ -297,7 +302,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #16 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #3
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
@@ -314,7 +319,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #17 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #3
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration3(
@@ -331,7 +336,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #18 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #4
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
@@ -348,7 +353,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #19 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #4
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
@@ -365,7 +370,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #20 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #4
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
@@ -382,7 +387,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #21 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #4
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration4(
@@ -399,7 +404,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #22 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #5
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
@@ -416,7 +421,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #23 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #5
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
@@ -433,7 +438,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #24 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #5
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
@@ -450,7 +455,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #25 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #5
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration5(
@@ -467,7 +472,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #26 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options Configuration #6
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
@@ -484,7 +489,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #27 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options Configuration #6
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
@@ -501,7 +506,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #28 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options Configuration #6
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
@@ -518,7 +523,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                Testing price for fixed bundle product
+                #29 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options Configuration #6
             ' => [
                 'strategy' => $this->getProductSubItemsAndOptionsStrategyConfiguration6(
@@ -536,12 +541,12 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getEmptyProductStrategy()
+    private function getEmptyProductStrategy()
     {
         return [];
     }
 
-    public function getProductWithSubItemsAndOptionsStrategy($selectionsPriceType, $customOptionsPriceType)
+    private function getProductWithSubItemsAndOptionsStrategy($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -582,7 +587,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductSubItemsAndOptionsStrategyConfiguration1($selectionsPriceType, $customOptionsPriceType)
+    private function getProductSubItemsAndOptionsStrategyConfiguration1($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -623,7 +628,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductSubItemsAndOptionsStrategyConfiguration2($selectionsPriceType, $customOptionsPriceType)
+    private function getProductSubItemsAndOptionsStrategyConfiguration2($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -664,7 +669,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductSubItemsAndOptionsStrategyConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    private function getProductSubItemsAndOptionsStrategyConfiguration3($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -711,7 +716,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductSubItemsAndOptionsStrategyConfiguration4($selectionsPriceType, $customOptionsPriceType)
+    private function getProductSubItemsAndOptionsStrategyConfiguration4($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -758,7 +763,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductSubItemsAndOptionsStrategyConfiguration5($selectionsPriceType, $customOptionsPriceType)
+    private function getProductSubItemsAndOptionsStrategyConfiguration5($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -805,7 +810,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductSubItemsAndOptionsStrategyConfiguration6($selectionsPriceType, $customOptionsPriceType)
+    private function getProductSubItemsAndOptionsStrategyConfiguration6($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [

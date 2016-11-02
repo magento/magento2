@@ -33,7 +33,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Is website scope prices joined to collection
-
+     *
      * @var bool
      */
     private $websiteScopePriceJoined = false;
@@ -307,6 +307,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Clear collection data after clone
+     * @return void
      */
     public function __clone()
     {

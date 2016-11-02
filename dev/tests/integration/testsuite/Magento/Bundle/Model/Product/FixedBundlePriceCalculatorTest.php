@@ -22,7 +22,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      */
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->prepareFixture($strategyModifiers);
+        $this->prepareFixture($strategyModifiers, 'bundle_product');
+        $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -50,7 +51,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      */
     public function testPriceForFixedBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->prepareFixture($strategyModifiers);
+        $this->prepareFixture($strategyModifiers, 'bundle_product');
+        $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -69,10 +71,14 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         );
     }
 
+    /**
+     * Test cases for current test
+     * @return array
+     */
     public function getTestCases()
     {
         return [
-            'Testing price for fixed bundle product with one simple' => [
+            '#1 Testing price for fixed bundle product with one simple' => [
                 'strategy' => $this->getProductWithOneSimple(),
                 'expectedResults' => [
                     //  110 + 10 (price from simple1)
@@ -81,7 +87,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 120
                 ]
             ],
-            'Testing price for fixed bundle product with three simples and differnt qty' => [
+            '#2 Testing price for fixed bundle product with three simples and differnt qty' => [
                 'strategy' => $this->getProductWithDifferentQty(),
                 'expectedResults' => [
                     // 110 + 10 (min price from simples)
@@ -90,7 +96,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 170
                 ]
             ],
-            'Testing price for fixed bundle product with three simples and differnt price' => [
+            '#3 Testing price for fixed bundle product with three simples and differnt price' => [
                 'strategy' => $this->getProductWithDifferentPrice(),
                 'expectedResults' => [
                     //  110 + 10
@@ -99,7 +105,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 170
                 ]
             ],
-            'Testing price for fixed bundle product with three simples' => [
+            '#4 Testing price for fixed bundle product with three simples' => [
                 'strategy' => $this->getProductWithSamePrice(),
                 'expectedResults' => [
                     //  110 + 10
@@ -111,7 +117,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductWithOneSimple()
+    private function getProductWithOneSimple()
     {
         $optionsData = [
             [
@@ -137,7 +143,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductWithDifferentQty()
+    private function getProductWithDifferentQty()
     {
         $optionsData = [
             [
@@ -175,7 +181,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductWithSamePrice()
+    private function getProductWithSamePrice()
     {
         $optionsData = [
             [
@@ -213,7 +219,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getProductWithDifferentPrice()
+    private function getProductWithDifferentPrice()
     {
         $optionsData = [
             [

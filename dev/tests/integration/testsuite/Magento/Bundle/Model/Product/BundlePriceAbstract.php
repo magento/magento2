@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Bundle\Model\Product;
+
 use Zend\Console\Exception\InvalidArgumentException;
 
 /**
@@ -12,8 +13,10 @@ use Zend\Console\Exception\InvalidArgumentException;
  */
 abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
 {
+    /** Fixed price type for product custom option */
     const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';
 
+    /** Percent price type for product custom option */
     const CUSTOM_OPTION_PRICE_TYPE_PERCENT = 'percent';
 
     /** @var \Magento\TestFramework\Helper\Bootstrap */
@@ -35,13 +38,18 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
     abstract public function getTestCases();
 
     /**
-     * @param $strategyModifiers
-     * @throws InvalidArgumentException
+     * @param array $strategyModifiers
+     * @param string $productSku
      * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    protected function prepareFixture($strategyModifiers)
+    protected function prepareFixture($strategyModifiers, $productSku)
     {
-        $bundleProduct = $this->productRepository->get('spherical_horse_in_a_vacuum');
+        $bundleProduct = $this->productRepository->get($productSku);
 
         foreach ($strategyModifiers as $modifier) {
             if (method_exists($this, $modifier['modifierName'])) {
@@ -54,8 +62,7 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $this->productRepository->save($bundleProduct);
-        return $this->productRepository->get('spherical_horse_in_a_vacuum', false, null, true);
+        return $this->productRepository->save($bundleProduct);
     }
 
     /**

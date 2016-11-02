@@ -15,7 +15,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 try {
-    $product = $productRepository->get('spherical_horse_in_a_vacuum', false, null, true);
+    $product = $productRepository->get('bundle_product', false, null, true);
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Product already removed

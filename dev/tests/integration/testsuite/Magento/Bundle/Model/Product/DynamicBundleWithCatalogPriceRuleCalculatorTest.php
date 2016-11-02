@@ -20,7 +20,8 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->prepareFixture($strategyModifiers);
+        $this->prepareFixture($strategyModifiers, 'bundle_product');
+        $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -39,10 +40,14 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         );
     }
 
+    /**
+     * Test cases for current test
+     * @return array
+     */
     public function getTestCases()
     {
         return [
-            'Testing price for dynamic bundle product with sub items and catalog rule price' => [
+            '#1 Testing price for dynamic bundle product with sub items and catalog rule price' => [
                 'strategy' => $this->getProductWithSubItemsAndOptionsStrategy(),
                 'expectedResults' => [
                     // 10 * 0.9
@@ -53,7 +58,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with special price, sub items and catalog rule price' => [
+            '#2 Testing price for dynamic bundle product with special price, sub items and catalog rule price' => [
                 'strategy' => $this->getBundleProductConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10 * 0.9
@@ -64,7 +69,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #2' => [
+            '#3 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #2' => [
                 'strategy' => $this->getBundleProductConfiguration2(),
                 'expectedResults' => [
                     // 0.9 * 2 * 10
@@ -75,7 +80,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #3' => [
+            '#4 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #3' => [
                 'strategy' => $this->getBundleProductConfiguration3(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
@@ -86,7 +91,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #4' => [
+            '#5 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #4' => [
                 'strategy' => $this->getBundleProductConfiguration4(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
@@ -97,7 +102,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #5' => [
+            '#6 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #5' => [
                 'strategy' => $this->getBundleProductConfiguration5(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
@@ -108,7 +113,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #6' => [
+            '#7 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #6' => [
                 'strategy' => $this->getBundleProductConfiguration6(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10 + 0.9 * 1 * 10
@@ -119,7 +124,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #7' => [
+            '#8 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #7' => [
                 'strategy' => $this->getBundleProductConfiguration7(),
                 'expectedResults' => [
                     // 1 * 0.9 * 10
@@ -130,7 +135,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            'Testing price for dynamic bundle product with sub items and catalog rule price Configuration #8' => [
+            '#9 Testing price for dynamic bundle product with sub items and catalog rule price Configuration #8' => [
                 'strategy' => $this->getBundleProductConfiguration8(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
@@ -143,7 +148,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getProductWithSubItemsAndOptionsStrategy()
+    private function getProductWithSubItemsAndOptionsStrategy()
     {
         $optionsData = [
             [
@@ -167,7 +172,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration1()
+    private function getBundleProductConfiguration1()
     {
         $optionsData = [
             [
@@ -195,7 +200,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration2()
+    private function getBundleProductConfiguration2()
     {
         $optionsData = [
             [
@@ -219,7 +224,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration3()
+    private function getBundleProductConfiguration3()
     {
         $optionsData = [
             [
@@ -247,7 +252,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration4()
+    private function getBundleProductConfiguration4()
     {
         $optionsData = [
             [
@@ -275,7 +280,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration5()
+    private function getBundleProductConfiguration5()
     {
         $optionsData = [
             [
@@ -303,7 +308,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration6()
+    private function getBundleProductConfiguration6()
     {
         $optionsData = [
             [
@@ -346,7 +351,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration7()
+    private function getBundleProductConfiguration7()
     {
         $optionsData = [
             [
@@ -389,7 +394,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
     }
 
-    public function getBundleProductConfiguration8()
+    private function getBundleProductConfiguration8()
     {
         $optionsData = [
             [

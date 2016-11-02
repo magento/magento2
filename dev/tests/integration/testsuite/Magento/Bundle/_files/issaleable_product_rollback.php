@@ -13,7 +13,8 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
     $product = $productRepository->get('bundle-product');

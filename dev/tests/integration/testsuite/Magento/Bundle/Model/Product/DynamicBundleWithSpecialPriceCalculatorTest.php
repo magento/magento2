@@ -20,7 +20,8 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
-        $bundleProduct = $this->prepareFixture($strategyModifiers);
+        $this->prepareFixture($strategyModifiers, 'bundle_product');
+        $bundleProduct = $this->productRepository->get('bundle_product', false, null, true);
 
         /** @var \Magento\Framework\Pricing\PriceInfo\Base $priceInfo */
         $priceInfo = $bundleProduct->getPriceInfo();
@@ -39,10 +40,14 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         );
     }
 
+    /**
+     * Test cases for current test
+     * @return array
+     */
     public function getTestCases()
     {
         return [
-            'Testing price for dynamic bundle product with special price and sub items Configuration #1' => [
+            '#1 Testing price for dynamic bundle product with special price and sub items Configuration #1' => [
                 'strategy' => $this->getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
@@ -51,7 +56,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 5
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #2' => [
+            '#2 Testing price for dynamic bundle product with special price and sub items Configuration #2' => [
                 'strategy' => $this->getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
@@ -60,7 +65,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 10
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #3' => [
+            '#3 Testing price for dynamic bundle product with special price and sub items Configuration #3' => [
                 'strategy' => $this->getBundleConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
@@ -69,7 +74,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 35
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #4' => [
+            '#4 Testing price for dynamic bundle product with special price and sub items Configuration #4' => [
                 'strategy' => $this->getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
@@ -78,7 +83,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 35
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #5' => [
+            '#5 Testing price for dynamic bundle product with special price and sub items Configuration #5' => [
                 'strategy' => $this->getBundleConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
@@ -87,7 +92,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 30
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #6' => [
+            '#6 Testing price for dynamic bundle product with special price and sub items Configuration #6' => [
                 'strategy' => $this->getBundleConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
@@ -96,7 +101,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 65
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #7' => [
+            '#7 Testing price for dynamic bundle product with special price and sub items Configuration #7' => [
                 'strategy' => $this->getBundleConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
@@ -105,7 +110,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 65
                 ]
             ],
-            'Testing price for dynamic bundle product with special price and sub items Configuration #8' => [
+            '#8 Testing price for dynamic bundle product with special price and sub items Configuration #8' => [
                 'strategy' => $this->getBundleConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
@@ -114,7 +119,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 65
                 ]
             ],
-            'Testing price for dynamic bundle product with sub item product that has special price' => [
+            '#9 Testing price for dynamic bundle product with sub item product that has special price' => [
                 'strategy' => $this->getBundleConfiguration9(),
                 'expectedResults' => [
                     // 1 * 3.5
@@ -123,7 +128,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     'maximalPrice' => 20
                 ]
             ],
-            'Testing price for dynamic bundle product with special price on it and on sub item' => [
+            '#10 Testing price for dynamic bundle product with special price on it and on sub item' => [
                 'strategy' => $this->getBundleConfiguration10(),
                 'expectedResults' => [
                     // 0.5 * 1 * 3.5
@@ -135,7 +140,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration1()
+    private function getBundleConfiguration1()
     {
         $optionsData = [
             [
@@ -163,7 +168,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration2()
+    private function getBundleConfiguration2()
     {
         $optionsData = [
             [
@@ -191,7 +196,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration3()
+    private function getBundleConfiguration3()
     {
         $optionsData = [
             [
@@ -223,7 +228,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration4()
+    private function getBundleConfiguration4()
     {
         $optionsData = [
             [
@@ -255,7 +260,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration5()
+    private function getBundleConfiguration5()
     {
         $optionsData = [
             [
@@ -287,7 +292,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration6()
+    private function getBundleConfiguration6()
     {
         $optionsData = [
             [
@@ -334,7 +339,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration7()
+    private function getBundleConfiguration7()
     {
         $optionsData = [
             [
@@ -381,7 +386,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration8()
+    private function getBundleConfiguration8()
     {
         $optionsData = [
             [
@@ -428,7 +433,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration9()
+    private function getBundleConfiguration9()
     {
         $optionsData = [
             [
@@ -460,7 +465,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    public function getBundleConfiguration10()
+    private function getBundleConfiguration10()
     {
         $optionsData = [
             [
