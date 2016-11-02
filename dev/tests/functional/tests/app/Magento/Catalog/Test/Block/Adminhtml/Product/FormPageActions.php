@@ -63,7 +63,7 @@ class FormPageActions extends ParentFormPageActions
      *
      * @var string
      */
-    protected $spinner = '[data-role="spinner"]';
+    private $spinner = '[data-role="spinner"]';
 
     /**
      * Default store switcher block locator.
