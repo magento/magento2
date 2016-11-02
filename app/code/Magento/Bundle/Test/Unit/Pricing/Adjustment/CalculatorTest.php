@@ -162,7 +162,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $optionsCollection->expects($this->atLeastOnce())->method('getSize')
             ->willReturn(count($options));
 
-        foreach ($options as $index => $option) {
+        foreach ($options as $option) {
             $selectionsCollection = $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
                 ->getMock();
