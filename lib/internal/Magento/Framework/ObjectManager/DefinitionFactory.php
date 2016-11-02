@@ -10,7 +10,6 @@ use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\ObjectManager\Definition\Compiled;
 use Magento\Framework\Code\Generator\Autoloader;
 
 /**
@@ -44,39 +43,26 @@ class DefinitionFactory
 
     /**
      * @param DriverInterface $filesystemDriver
-     * @param SerializerInterface $serializer
      * @param string $generationDir
      */
     public function __construct(
         DriverInterface $filesystemDriver,
-        SerializerInterface $serializer,
         $generationDir
     ) {
         $this->_filesystemDriver = $filesystemDriver;
-        $this->serializer = $serializer;
         $this->_generationDir = $generationDir;
     }
 
     /**
      * Create class definitions
      *
-     * @param mixed $definitions
      * @return DefinitionInterface
      */
-    public function createClassDefinition($definitions = false)
+    public function createClassDefinition()
     {
-        if ($definitions) {
-            if (is_string($definitions)) {
-                $definitions = $this->_unpack($definitions);
-            }
-            $result = new Compiled($definitions);
-        } else {
-            $autoloader = new Autoloader($this->getCodeGenerator());
-            spl_autoload_register([$autoloader, 'load']);
-
-            $result = new Runtime();
-        }
-        return $result;
+        $autoloader = new Autoloader($this->getCodeGenerator());
+        spl_autoload_register([$autoloader, 'load']);
+        return new Runtime();
     }
 
     /**
@@ -97,17 +83,6 @@ class DefinitionFactory
     public function createRelations()
     {
         return new \Magento\Framework\ObjectManager\Relations\Runtime();
-    }
-
-    /**
-     * Un-compress definitions
-     *
-     * @param string $definitions
-     * @return mixed
-     */
-    protected function _unpack($definitions)
-    {
-        return $this->serializer->unserialize($definitions);
     }
 
     /**

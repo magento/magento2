@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit;
 
-use Magento\Framework\ObjectManager\Definition\Compiled;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManager\DefinitionFactory;
-use Magento\Framework\ObjectManager\Definition\Runtime;
+use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\Interception\DefinitionInterface as InterceptionDefinitionInterface;
+use Magento\Framework\ObjectManager\RelationsInterface;
 
 class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,11 +17,6 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
      * @var File|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystemDriverMock;
-
-    /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializerMock;
 
     /**
      * @var DefinitionFactory
@@ -34,43 +29,31 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->definitionFactory = new DefinitionFactory(
             $this->filesystemDriverMock,
-            $this->serializerMock,
             'generation dir'
-        );
-    }
-
-    public function testCreateClassDefinitionSerialized()
-    {
-        $serializedDefinitions = 'serialized definitions';
-        $definitions = [[], []];
-        $this->serializerMock->expects($this->once())
-            ->method('unserialize')
-            ->with($serializedDefinitions)
-            ->willReturn($definitions);
-        $this->assertInstanceOf(
-            Compiled::class,
-            $this->definitionFactory->createClassDefinition($serializedDefinitions)
-        );
-    }
-
-    public function testCreateClassDefinitionArray()
-    {
-        $definitions = [[], []];
-        $this->serializerMock->expects($this->never())
-            ->method('unserialize');
-        $this->assertInstanceOf(
-            Compiled::class,
-            $this->definitionFactory->createClassDefinition($definitions)
         );
     }
 
     public function testCreateClassDefinition()
     {
-        $this->serializerMock->expects($this->never())
-            ->method('unserialize');
         $this->assertInstanceOf(
-            Runtime::class,
+            DefinitionInterface::class,
             $this->definitionFactory->createClassDefinition()
+        );
+    }
+
+    public function testCreatePluginDefinition()
+    {
+        $this->assertInstanceOf(
+            InterceptionDefinitionInterface::class,
+            $this->definitionFactory->createPluginDefinition()
+        );
+    }
+
+    public function testCreateRelations()
+    {
+        $this->assertInstanceOf(
+            RelationsInterface::class,
+            $this->definitionFactory->createRelations()
         );
     }
 }

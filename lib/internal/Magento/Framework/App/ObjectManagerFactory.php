@@ -117,11 +117,10 @@ class ObjectManagerFactory
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
-            new \Magento\Framework\Serialize\Serializer\Json(),
             $this->directoryList->getPath(DirectoryList::GENERATION)
         );
 
-        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
+        $definitions = $definitionFactory->createClassDefinition();
         $relations = $definitionFactory->createRelations();
 
         /** @var EnvironmentFactory $envFactory */
@@ -286,34 +285,5 @@ class ObjectManagerFactory
             );
         }
         return $configData;
-    }
-
-    /**
-     * Crete plugin list object
-     *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
-     * @param \Magento\Framework\ObjectManager\DefinitionFactory $definitionFactory
-     * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
-     * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
-     * @return \Magento\Framework\Interception\PluginList\PluginList
-     */
-    protected function _createPluginList(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\ObjectManager\RelationsInterface $relations,
-        \Magento\Framework\ObjectManager\DefinitionFactory $definitionFactory,
-        \Magento\Framework\ObjectManager\Config\Config $diConfig,
-        \Magento\Framework\ObjectManager\DefinitionInterface $definitions
-    ) {
-        return $objectManager->create(
-            \Magento\Framework\Interception\PluginList\PluginList::class,
-            [
-                'relations' => $relations,
-                'definitions' => $definitionFactory->createPluginDefinition(),
-                'omConfig' => $diConfig,
-                'classDefinitions' => $definitions instanceof
-                \Magento\Framework\ObjectManager\Definition\Compiled ? $definitions : null
-            ]
-        );
     }
 }
