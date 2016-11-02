@@ -135,6 +135,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap($files));
+        $configFilePool->expects($this->any())
+            ->method('getInitialFilePools')
+            ->willReturn([]);
         $configFilePool
             ->expects($this->any())
             ->method('getPaths')
@@ -155,6 +158,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap($files));
+        $configFilePool->expects($this->any())
+            ->method('getInitialFilePools')
+            ->willReturn([]);
         $configFilePool
             ->expects($this->any())
             ->method('getPaths')

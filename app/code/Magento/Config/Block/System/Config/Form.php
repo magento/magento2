@@ -373,7 +373,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope());
+        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getScopeCode());
+        $canUseDefault = $this->canUseDefaultValue($field->showInDefault());
+        $canUseWebsite = $this->canUseWebsiteValue($field->showInWebsite());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -390,8 +392,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope' => $this->getScope(),
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
-                'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
-                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
+                'can_use_default_value' => $canUseDefault,
+                'can_use_website_value' => $canUseWebsite,
                 'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore()),
                 'disabled' => $isReadOnly,
                 'is_disable_inheritance' => $isReadOnly

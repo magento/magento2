@@ -135,24 +135,31 @@ class Reader
     /**
      * @param string $fileKey
      * @param string $pathConfig
+     * @param bool $ignoreInitialConfigFiles
      * @return array
      */
-    private function loadConfigFile($fileKey, $pathConfig)
+    public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
     {
+        $result = [];
         $initialFilePools = $this->configFilePool->getInitialFilePools();
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
         $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+
         if ($fileDriver->isExists($path . '/' . $pathConfig)) {
             $result = include $path . '/' . $pathConfig;
-        } else {
-            $result = [];
+            $result = is_array($result) ? $result : [];
+        }
+
+        if (!$ignoreInitialConfigFiles) {
             foreach ($initialFilePools as $initialFiles) {
                 if (isset($initialFiles[$fileKey]) && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])) {
-                    $result = include $path . '/' . $initialFiles[$fileKey];
+                    $fileBuffer = include $path . '/' . $initialFiles[$fileKey];
+                    $result = array_replace_recursive($result, $fileBuffer);
                 }
             }
         }
-        return is_array($result) ? $result : [];
+
+        return $result;
     }
 
     /**

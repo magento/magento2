@@ -23,11 +23,6 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
     private $source;
 
     /**
-     * @var FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cache;
-
-    /**
      * @var Translation
      */
     private $configType;
@@ -36,60 +31,25 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
     {
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
-        $this->cache = $this->getMockBuilder(FrontendInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->configType = new Translation($this->source, $this->cache);
+        $this->configType = new Translation($this->source);
     }
 
-    /**
-     * @param bool $isCached
-     * @dataProvider getDataProvider
-     */
-    public function testGet($isCached)
+    public function testGet()
     {
         $path = 'en_US/default';
         $data = [
-            'default' => [
-                'hello' => 'bonjour'
+            'en_US' => [
+                'default' => [
+                    'hello' => 'bonjour'
+                ]
             ]
         ];
 
-        $this->cache->expects($this->once())
-            ->method('load')
-            ->with(Translation::CONFIG_TYPE . '/en_US')
-            ->willReturn($isCached ? serialize(['en_US' => new DataObject(['en_US' => $data])]) : false);
-
-        if (!$isCached) {
-            $this->source->expects($this->once())
-                ->method('get')
-                ->with('en_US')
-                ->willReturn([
-                    'default' => [
-                        'hello' => 'bonjour'
-                    ]
-                ]);
-            $this->cache
-                ->expects($this->once())
-                ->method('save')
-                ->with(
-                    serialize(['en_US' => new DataObject(['en_US' => $data])]),
-                    Translation::CONFIG_TYPE . '/en_US',
-                    [Translate::TYPE_IDENTIFIER]
-                );
-        }
+        $this->source->expects($this->once())
+            ->method('get')
+            ->with()
+            ->willReturn($data);
 
         $this->assertEquals(['hello' => 'bonjour'], $this->configType->get($path));
-    }
-
-    /**
-     * @return array
-     */
-    public function getDataProvider()
-    {
-        return [
-            [true],
-            [false]
-        ];
     }
 }

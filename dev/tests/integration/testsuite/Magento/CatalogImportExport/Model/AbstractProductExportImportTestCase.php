@@ -67,8 +67,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $this->productResource = $this->objectManager->create(
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
-        $appConfig = $this->objectManager->get(Config::class);
-        $appConfig->clean();
+        \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::$commonAttributesCache = [];
     }
 
     protected function tearDown()
