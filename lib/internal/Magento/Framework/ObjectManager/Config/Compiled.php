@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -164,14 +163,14 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     /**
      * Get serializer
      *
-     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @return SerializerInterface
      * @deprecated
      */
     private function getSerializer()
     {
-        if ($this->serializer === null) {
+        if (null === $this->serializer) {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
+                ->get(Serialize::class);
         }
         return $this->serializer;
     }
