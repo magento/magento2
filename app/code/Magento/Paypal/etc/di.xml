@@ -176,4 +176,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Paypal\Model\Payflow\Transparent">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
+        </arguments>
+    </type>
 </config>

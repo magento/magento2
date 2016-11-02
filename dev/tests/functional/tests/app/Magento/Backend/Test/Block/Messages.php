@@ -67,6 +67,19 @@ class Messages extends Block
     }
 
     /**
+     * Wait for success message and refresh page.
+     *
+     * @return bool
+     */
+    public function waitSuccessMessageAndRefreshPage()
+    {
+        $this->waitSuccessMessage();
+        $this->browser->refresh();
+
+        return $this->waitForElementNotVisible($this->successMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
      * Get all success messages which are present on the page.
      *
      * @return array

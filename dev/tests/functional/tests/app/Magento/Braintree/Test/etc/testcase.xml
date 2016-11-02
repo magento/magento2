@@ -21,6 +21,27 @@
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrderWith3dSecure" />
         <step name="placeOrderWith3dSecure" module="Magento_Braintree" />
     </scenario>
+    <scenario name="UseVaultWith3dSecureOnCheckoutTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="saveCreditCard" />
+        <step name="saveCreditCard" module="Magento_Vault" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrderWith3dSecure" />
+        <step name="placeOrderWith3dSecure" module="Magento_Braintree" next="addProductsToTheCartVault" />
+        <step name="addProductsToTheCartVault" alias="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTaxVault" />
+        <step name="estimateShippingAndTaxVault" alias="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckoutVault" />
+        <step name="clickProceedToCheckoutVault" alias="clickProceedToCheckout" module="Magento_Checkout" next="fillShippingMethodVault" />
+        <step name="fillShippingMethodVault" alias="fillShippingMethod" module="Magento_Checkout" next="useSavedPaymentMethod" />
+        <step name="useSavedPaymentMethod" module="Magento_Vault" next="placeOrder3dSecureVault" />
+        <step name="placeOrder3dSecureVault" alias="placeOrderWith3dSecure" module="Magento_Braintree" />
+    </scenario>
     <scenario name="OnePageCheckoutWithBraintreePaypalTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
@@ -87,5 +108,71 @@
         <step name="placeOrderWithPaypal" module="Magento_Braintree" next="createInvoice" />
         <step name="createInvoice" module="Magento_Sales" next="createBraintreeCreditMemo" />
         <step name="createBraintreeCreditMemo" module="Magento_Braintree" />
+    </scenario>
+    <scenario name="SaveUseDeleteVaultForPaypalBraintreeTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="continueToPaypal" />
+        <step name="continueToPaypal" module="Magento_Braintree" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="addProductsToTheCartVault" />
+        <step name="addProductsToTheCartVault" alias="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTaxVault" />
+        <step name="estimateShippingAndTaxVault" alias="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckoutVault" />
+        <step name="clickProceedToCheckoutVault" alias="clickProceedToCheckout" module="Magento_Checkout" next="fillShippingMethodVault" />
+        <step name="fillShippingMethodVault" alias="fillShippingMethod" module="Magento_Checkout" next="useSavedPaymentMethod" />
+        <step name="useSavedPaymentMethod" module="Magento_Vault" next="placeOrderVault" />
+        <step name="placeOrderVault" alias="placeOrder" module="Magento_Checkout" next="deleteStoredPayment" />
+        <step name="deleteStoredPayment" module="Magento_Vault" />
+    </scenario>
+    <scenario name="OnePageCheckoutAcceptPaymentTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="changeOrderStatusToPaymentReview" />
+        <step name="changeOrderStatusToPaymentReview" module="Magento_Braintree" next="acceptPayment" />
+        <step name="acceptPayment" module="Magento_Braintree" />
+    </scenario>
+    <scenario name="OnePageCheckoutDenyPaymentTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="changeOrderStatusToPaymentReview" />
+        <step name="changeOrderStatusToPaymentReview" module="Magento_Braintree" next="denyPayment" />
+        <step name="denyPayment" module="Magento_Braintree" />
+    </scenario>
+    <scenario name="CreateOrderWithPayPalBraintreeVaultBackendTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrderWithPaypal" />
+        <step name="placeOrderWithPaypal" module="Magento_Braintree" next="openOrder"/>
+        <step name="openOrder" module="Magento_Sales" next="reorder" />
+        <step name="reorder" module="Magento_Sales" next="useVaultPaymentToken" />
+        <step name="useVaultPaymentToken" module="Magento_Vault" next="submitOrder" />
+        <step name="submitOrder" module="Magento_Sales" />
     </scenario>
 </config>

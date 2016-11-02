@@ -25,13 +25,16 @@
                 <can_refund>1</can_refund>
                 <can_void>1</can_void>
                 <can_cancel>1</can_cancel>
+                <can_edit>1</can_edit>
+                <can_review_payment>1</can_review_payment>
+                <can_deny_payment>1</can_deny_payment>
                 <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
                 <useccv>1</useccv>
                 <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>
                 <allowspecific>0</allowspecific>
-                <sdk_url><![CDATA[https://js.braintreegateway.com/js/braintree-2.17.6.min.js]]></sdk_url>
+                <sdk_url><![CDATA[https://js.braintreegateway.com/js/braintree-2.25.0.min.js]]></sdk_url>
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <masked_fields>cvv,number</masked_fields>
@@ -57,6 +60,8 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_void>1</can_void>
                 <can_cancel>1</can_cancel>
+                <can_authorize_vault>1</can_authorize_vault>
+                <can_capture_vault>1</can_capture_vault>
                 <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
                 <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
             </braintree_paypal>
@@ -64,6 +69,11 @@
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards (Braintree)</title>
             </braintree_cc_vault>
+            <braintree_paypal_vault>
+                <model>BraintreePayPalVaultFacade</model>
+                <title>Stored Accounts (Braintree PayPal)</title>
+                <can_use_internal>1</can_use_internal>
+            </braintree_paypal_vault>
         </payment>
     </default>
 </config>

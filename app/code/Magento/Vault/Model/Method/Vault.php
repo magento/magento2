@@ -5,17 +5,16 @@
  */
 namespace Magento\Vault\Model\Method;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\ConfigFactoryInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -114,6 +113,7 @@ final class Vault implements VaultPaymentInterface
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param string $code
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -274,7 +274,12 @@ final class Vault implements VaultPaymentInterface
      */
     public function canUseInternal()
     {
-        return $this->getVaultProvider()->canUseInternal();
+        $isInternalAllowed = $this->getConfiguredValue('can_use_internal');
+        // if config has't been specified for Vault, need to check payment provider option
+        if ($isInternalAllowed === null) {
+            return $this->getVaultProvider()->canUseInternal();
+        }
+        return (bool) $isInternalAllowed;
     }
 
     /**
@@ -452,19 +457,17 @@ final class Vault implements VaultPaymentInterface
     /**
      * @param OrderPaymentInterface $orderPayment
      * @return void
-     * @throws \LogicException
      */
     private function attachTokenExtensionAttribute(OrderPaymentInterface $orderPayment)
     {
         $additionalInformation = $orderPayment->getAdditionalInformation();
-
-        if (empty($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ||
-            empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])
-        ) {
-            throw new \LogicException('Customer and public hash should be defined');
+        if (empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])) {
+            throw new \LogicException('Public hash should be defined');
         }
 
-        $customerId = $additionalInformation[PaymentTokenInterface::CUSTOMER_ID];
+        $customerId = isset($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ?
+            $additionalInformation[PaymentTokenInterface::CUSTOMER_ID] : null;
+
         $publicHash = $additionalInformation[PaymentTokenInterface::PUBLIC_HASH];
 
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
@@ -579,7 +582,8 @@ final class Vault implements VaultPaymentInterface
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        return $this->getVaultProvider()->isAvailable($quote);
+        return $this->getVaultProvider()->isAvailable($quote)
+            && $this->config->getValue(self::$activeKey, $this->getStore() ?: ($quote ? $quote->getStoreId() : null));
     }
 
     /**
