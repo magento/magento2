@@ -23,7 +23,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Image::class
         );
-        $model->setDestinationSubdir('image')->setBaseFile('');
+        $model->setType('image')->setBaseFile('');
         $this->assertEmpty($model->getBaseFile());
         return $model;
     }
