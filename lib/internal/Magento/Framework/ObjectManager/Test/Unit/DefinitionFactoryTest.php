@@ -26,7 +26,6 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filesystemDriverMock = $this->getMock(File::class);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->definitionFactory = new DefinitionFactory(
             $this->filesystemDriverMock,
             'generation dir'

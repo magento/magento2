@@ -37,11 +37,6 @@ class DefinitionFactory
     protected $codeGenerator;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @param DriverInterface $filesystemDriver
      * @param string $generationDir
      */
