@@ -18,9 +18,7 @@
         <variation name="ManageProductsStockTestVariation2" ticketId="MAGETWO-13645">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
-            <data name="configData" xsi:type="string">hide_out_of_stock_products</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/use_config_min_sale_qty" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/min_sale_qty" xsi:type="string">1</data>
             <data name="product/data/stock_data/use_config_max_sale_qty" xsi:type="string">Yes</data>
@@ -36,9 +34,7 @@
         </variation>
         <variation name="ManageProductsStockTestVariation3" ticketId="MAGETWO-13645">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
-            <data name="configData" xsi:type="string">hide_out_of_stock</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/stock_data/use_config_min_sale_qty" xsi:type="string">Yes</data>
@@ -55,7 +51,6 @@
         </variation>
         <variation name="ManageProductsStockTestVariation4" ticketId="MAGETWO-13645">
             <data name="product/dataset" xsi:type="string">product_with_category_with_anchor</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="skipAddingToCart" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">display_out_of_stock</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>

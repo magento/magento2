@@ -58,7 +58,8 @@ class ManageProductsStockTest extends Injectable
      * Manage products stock.
      *
      * @param CatalogProductSimple $product
-     * @param string $notToCart
+     * @param string $skipAddingToCart
+     * @param string $configData
      * @return mixed
      */
     public function test(CatalogProductSimple $product, $skipAddingToCart = null, $configData = null)

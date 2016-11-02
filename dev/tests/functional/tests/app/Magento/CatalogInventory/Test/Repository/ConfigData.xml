@@ -16,15 +16,6 @@
             </field>
         </dataset>
 
-        <dataset name="hide_out_of_stock_products">
-            <field name="cataloginventory/options/show_out_of_stock" xsi:type="array">
-                <item name="scope" xsi:type="string">cataloginventory</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">No</item>
-                <item name="value" xsi:type="number">0</item>
-            </field>
-        </dataset>
-
         <dataset name="backorders_allow_qty_below">
             <field name="cataloginventory/item_options/backorders" xsi:type="array">
                 <item name="scope" xsi:type="string">cataloginventory</item>
@@ -35,15 +26,6 @@
         </dataset>
 
         <dataset name="display_out_of_stock_rollback">
-            <field name="cataloginventory/options/show_out_of_stock" xsi:type="array">
-                <item name="scope" xsi:type="string">cataloginventory</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">No</item>
-                <item name="value" xsi:type="number">0</item>
-            </field>
-        </dataset>
-
-        <dataset name="hide_out_of_stock_products_rollback">
             <field name="cataloginventory/options/show_out_of_stock" xsi:type="array">
                 <item name="scope" xsi:type="string">cataloginventory</item>
                 <item name="scope_id" xsi:type="number">1</item>
