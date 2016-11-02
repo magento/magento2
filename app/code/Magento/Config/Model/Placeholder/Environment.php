@@ -9,10 +9,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
- * Class Environment
+ * Class is used to work with placeholders for environment variables names based on config paths
  */
 class Environment implements PlaceholderInterface
 {
+    /**
+     * @const string Prefix for placeholder
+     */
     const PREFIX = 'CONFIG__';
 
     /**
@@ -29,6 +32,8 @@ class Environment implements PlaceholderInterface
     }
 
     /**
+     * Generates placeholder like CONFIG__DEFAULT__TEST__TEST_VALUE
+     *
      * @inheritdoc
      */
     public function generate($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)

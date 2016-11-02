@@ -431,6 +431,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private function getStringScopeCode()
     {
         $scopeCode = $this->getData('scope_string_code');
+
         if (null === $scopeCode) {
             if ($this->getStoreCode()) {
                 $scopeCode = $this->_storeManager->getStore($this->getStoreCode())->getCode();
@@ -439,7 +440,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             } else {
                 $scopeCode = '';
             }
-            $this->setScopeStringCode($scopeCode);
+
+            $this->setData('scope_string_code', $scopeCode);
         }
 
         return $scopeCode;

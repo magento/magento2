@@ -122,4 +122,50 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetExcludedFields()
+    {
+        $path = '';
+        $data = [
+            'default' => [
+                'web' => [
+                    'unsecure' => [
+                        'base_url' => 'http://test.local',
+                    ],
+                    'secure' => [
+                        'base_url' => 'https://test.local',
+                    ]
+                ]
+            ],
+            'test' => [
+                'test' => [
+                    'test1' => [
+                        'test2' => [
+                            'test3' => 5,
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->sourceMock->expects($this->once())
+            ->method('get')
+            ->with($path)
+            ->willReturn($data);
+        $this->sourceMockTwo->expects($this->once())
+            ->method('get')
+            ->with($path)
+            ->willReturn(['key' => 'value2']);
+        $this->excludeListMock->expects($this->any())
+            ->method('isPresent')
+            ->willReturnMap([
+                ['web/unsecure/base_url', false],
+                ['web/secure/base_url', true],
+                ['test1/test2/test/3', false]
+            ]);
+
+        $this->assertEquals(
+            ['web/secure/base_url'],
+            $this->model->getExcludedFields()
+        );
+    }
 }

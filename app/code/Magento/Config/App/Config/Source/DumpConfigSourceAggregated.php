@@ -75,6 +75,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path
      * @param array $data
+     * @return void
      */
     private function filterChain($path, &$data)
     {
@@ -121,7 +122,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     }
 
     /**
-     * Sort sources
+     * Sort sources ASC from higher priority to lower
      *
      * @return void
      */
