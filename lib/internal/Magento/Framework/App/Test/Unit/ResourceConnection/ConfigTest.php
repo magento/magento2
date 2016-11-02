@@ -72,6 +72,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($jsonString)
             ->willReturn($this->resourcesConfig);
 
+        /**
+         * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject $deploymentConfigMock
+         */
         $deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deploymentConfigMock->expects($this->once())
             ->method('getConfigData')

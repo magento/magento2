@@ -15,12 +15,10 @@ class Data extends \Magento\Framework\Config\Data
     protected $stateCollection;
 
     /**
-     * Data constructor
-     *
      * @param \Magento\Framework\Indexer\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $stateCollection
-     * @param string $cacheId
+     * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      */
     public function __construct(

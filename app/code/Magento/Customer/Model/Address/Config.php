@@ -68,7 +68,7 @@ class Config extends ConfigData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param string $cacheId
+     * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      */
     public function __construct(

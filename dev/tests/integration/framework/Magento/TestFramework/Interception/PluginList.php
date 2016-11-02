@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\Interception;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
 {
     /**
@@ -22,7 +24,8 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param array $scopePriorityScheme
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -36,7 +39,8 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         array $scopePriorityScheme,
-        $cacheId = 'plugins'
+        $cacheId = 'plugins',
+        SerializerInterface $serializer = null
     ) {
         parent::__construct(
             $reader,
@@ -48,7 +52,8 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
             $objectManager,
             $classDefinitions,
             $scopePriorityScheme,
-            $cacheId
+            $cacheId,
+            $serializer
         );
         $this->_originScopeScheme = $this->_scopePriorityScheme;
     }

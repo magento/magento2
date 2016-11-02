@@ -10,11 +10,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
 {
     /**
-     * Config constructor
-     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      */
     public function __construct(

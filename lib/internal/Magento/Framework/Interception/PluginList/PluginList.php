@@ -1,7 +1,5 @@
 <?php
 /**
- * Plugin configuration storage. Provides list of plugins configured for type.
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,6 +19,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
+ * Plugin config, provides list of plugins for a type
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PluginList extends Scoped implements InterceptionPluginList

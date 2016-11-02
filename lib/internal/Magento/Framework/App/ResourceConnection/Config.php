@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\ResourceConnection;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Resource configuration, uses application configuration to retrieve resource connection information
@@ -24,7 +25,8 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -32,9 +34,10 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        $cacheId = 'resourcesCache'
+        $cacheId = 'resourcesCache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $configScope, $cache, $cacheId);
+        parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
 
         $resource = $deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_RESOURCE);
         foreach ($resource as $resourceName => $resourceData) {

@@ -14,11 +14,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * Data constructor
-     *
      * @param Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      */
     public function __construct(

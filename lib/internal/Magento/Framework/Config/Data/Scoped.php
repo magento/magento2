@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Config\Data;
 
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
+
 class Scoped extends \Magento\Framework\Config\Data
 {
     /**
@@ -56,17 +59,20 @@ class Scoped extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId
+        $cacheId,
+        SerializerInterface $serializer = null
     ) {
         $this->_reader = $reader;
         $this->_configScope = $configScope;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);;
     }
 
     /**

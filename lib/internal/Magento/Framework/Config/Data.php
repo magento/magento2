@@ -8,6 +8,7 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -70,8 +71,6 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $serializer;
 
     /**
-     * Data constructor
-     *
      * @param ReaderInterface $reader
      * @param CacheInterface $cache
      * @param string $cacheId
@@ -86,12 +85,13 @@ class Data implements \Magento\Framework\Config\DataInterface
         $this->reader = $reader;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
-        $this->serializer = $serializer ?: $this->getSerializer();
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->initData();
     }
 
     /**
      * Initialise data for configuration
+     *
      * @return void
      */
     protected function initData()
@@ -99,9 +99,9 @@ class Data implements \Magento\Framework\Config\DataInterface
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
-            $this->cache->save($this->getSerializer()->serialize($data), $this->cacheId, $this->cacheTags);
+            $this->cache->save($this->serializer->serialize($data), $this->cacheId, $this->cacheTags);
         } else {
-            $data = $this->getSerializer()->unserialize($data);
+            $data = $this->serializer->unserialize($data);
         }
 
         $this->merge($data);
@@ -144,25 +144,11 @@ class Data implements \Magento\Framework\Config\DataInterface
 
     /**
      * Clear cache data
+     *
      * @return void
      */
     public function reset()
     {
         $this->cache->remove($this->cacheId);
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    protected function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

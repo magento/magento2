@@ -10,11 +10,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * Cache identifier
-     */
-    const CACHE_ID = 'catalog_attributes';
-
-    /**
      * @param \Magento\Catalog\Model\Attribute\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
@@ -23,7 +18,7 @@ class Data extends \Magento\Framework\Config\Data
     public function __construct(
         \Magento\Catalog\Model\Attribute\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'eav_attributes',
+        $cacheId = 'catalog_attributes',
         SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
