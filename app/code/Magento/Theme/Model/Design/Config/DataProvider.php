@@ -5,8 +5,8 @@
  */
 namespace Magento\Theme\Model\Design\Config;
 
+use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -46,9 +46,9 @@ class DataProvider extends AbstractDataProvider
     private $request;
 
     /**
-     * @var StoreManagerInterface
+     * @var ScopeCodeResolver
      */
-    private $storeManager;
+    private $scopeCodeResolver;
 
     /**
      * @param string $name
@@ -114,7 +114,7 @@ class DataProvider extends AbstractDataProvider
         }
 
         $scope = $request['scope'];
-        $scopeCode = $this->getStringScopeCode(
+        $scopeCode = $this->getScopeCodeResolver()->resolve(
             $scope,
             isset($request['scope_id']) ? $request['scope_id'] : null
         );
@@ -143,23 +143,15 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * Retrieve Scope string code
-     *
-     * @param string $scope
-     * @param integer $scopeId
-     * @return string
+     * @deprecated
+     * @return ScopeCodeResolver
      */
-    private function getStringScopeCode($scope, $scopeId = null)
+    private function getScopeCodeResolver()
     {
-        $scopeCode = '';
-
-        if ($scope == 'stores') {
-            $scopeCode = $this->getStoreManager()->getStore($scopeId)->getCode();
-        } elseif ($scope == 'websites') {
-            $scopeCode = $this->getStoreManager()->getWebsite($scopeId)->getCode();
+        if ($this->scopeCodeResolver === null) {
+            $this->scopeCodeResolver = ObjectManager::getInstance()->get(ScopeCodeResolver::class);
         }
-
-        return $scopeCode;
+        return $this->scopeCodeResolver;
     }
 
     /**
@@ -184,17 +176,5 @@ class DataProvider extends AbstractDataProvider
             $this->request = ObjectManager::getInstance()->get(RequestInterface::class);
         }
         return $this->request;
-    }
-
-    /**
-     * @deprecated
-     * @return StoreManagerInterface
-     */
-    private function getStoreManager()
-    {
-        if ($this->storeManager === null) {
-            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        }
-        return $this->storeManager;
     }
 }

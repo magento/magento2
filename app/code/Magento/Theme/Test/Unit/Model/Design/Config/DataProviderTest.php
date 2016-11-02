@@ -6,10 +6,9 @@
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Design\Config\DataLoader;
 use Magento\Theme\Model\Design\Config\DataProvider;
 use Magento\Theme\Model\Design\Config\MetadataLoader;
@@ -48,9 +47,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     private $requestMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeManagerMock;
+    private $scopeCodeResolverMock;
 
     /**
      * @var SettingChecker|\PHPUnit_Framework_MockObject_MockObject
@@ -86,7 +85,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+        $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->settingCheckerMock = $this->getMockBuilder(SettingChecker::class)
@@ -108,8 +107,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManager->setBackwardCompatibleProperty(
             $this->model,
-            'storeManager',
-            $this->storeManagerMock
+            'scopeCodeResolver',
+            $this->scopeCodeResolverMock
         );
         $this->objectManager->setBackwardCompatibleProperty(
             $this->model,
@@ -139,24 +138,18 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMeta(array $inputMeta, array $expectedMeta, array $request)
     {
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->any())
-            ->method('getCode')
-            ->willReturn('store1');
         $this->requestMock->expects($this->any())
             ->method('getParams')
             ->willReturn($request);
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->with(1)
-            ->willReturn($store);
+        $this->scopeCodeResolverMock->expects($this->any())
+            ->method('resolve')
+            ->with('stores', 1)
+            ->willReturn('default');
         $this->settingCheckerMock->expects($this->any())
             ->method('isReadOnly')
             ->withConsecutive(
-                ['design/head/welcome', 'stores', 'store1'],
-                ['design/head/logo', 'stores', 'store1']
+                ['design/head/welcome', 'stores', 'default'],
+                ['design/head/logo', 'stores', 'default']
             )
             ->willReturnOnConsecutiveCalls(
                 true,
