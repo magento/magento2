@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\View\Asset;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
 
@@ -107,7 +108,11 @@ class Placeholder implements LocalInterface
             $defaultPlaceholder = $this->assetRepo->createAsset(
                 "Magento_Catalog::images/product/placeholder/{$this->type}.jpg"
             );
-            $result = $defaultPlaceholder->getSourceFile();
+            try {
+                $result = $defaultPlaceholder->getSourceFile();
+            } catch (NotFoundException $e) {
+                $result = null;
+            }
         }
 
         return $result;
