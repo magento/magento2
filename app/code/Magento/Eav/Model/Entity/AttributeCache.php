@@ -120,7 +120,7 @@ class AttributeCache
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
-                    \Magento\Framework\App\Config\ScopePool::CACHE_TAG
+                    \Magento\Framework\App\Config::SCOPE_CACHE_TAGE
                 ]
             );
         }

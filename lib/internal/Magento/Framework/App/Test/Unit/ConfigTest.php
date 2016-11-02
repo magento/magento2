@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
-use Magento\Framework\App\Config\ScopePool;
 use Magento\Framework\App\ScopeInterface;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -35,9 +34,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $scopePool = $this->getMockBuilder(ScopePool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -46,7 +42,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
 
-        $this->appConfig = new Config($scopePool, $this->scopeCodeResolver, ['system' => $this->configType]);
+        $this->appConfig = new Config($this->scopeCodeResolver, ['system' => $this->configType]);
     }
 
     /**

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Model\Config\Reader;
+use Magento\Framework\App\Config;
 
 /**
  * Reader for cron parameters from data base storage
@@ -21,19 +22,23 @@ class Db
      * @var \Magento\Framework\App\Config\Scope\ReaderInterface
      */
     protected $_reader;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * Initialize parameters
      *
-     * @param \Magento\Framework\App\Config\Scope\ReaderInterface $defaultReader
+     * @param Config $config
      * @param \Magento\Cron\Model\Config\Converter\Db $converter
      */
     public function __construct(
-        \Magento\Framework\App\Config\Scope\ReaderInterface $defaultReader,
+        Config $config,
         \Magento\Cron\Model\Config\Converter\Db $converter
     ) {
-        $this->_reader = $defaultReader;
         $this->_converter = $converter;
+        $this->config = $config;
     }
 
     /**
@@ -43,6 +48,6 @@ class Db
      */
     public function get()
     {
-        return $this->_converter->convert($this->_reader->read());
+        return $this->_converter->convert($this->config->get('system/default'));
     }
 }

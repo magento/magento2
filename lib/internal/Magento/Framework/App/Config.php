@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\Config\ScopePool;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
@@ -22,10 +21,7 @@ class Config implements ScopeConfigInterface
      */
     const CACHE_TAG = 'CONFIG';
 
-    /**
-     * @var ScopePool
-     */
-    protected $_scopePool;
+    const SCOPE_CACHE_TAGE = "config_scopes";
 
     /**
      * @var ScopeCodeResolver
@@ -40,16 +36,13 @@ class Config implements ScopeConfigInterface
     /**
      * Config constructor.
      *
-     * @param ScopePool $scopePool
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param array $types
      */
     public function __construct(
-        ScopePool $scopePool,
         ScopeCodeResolver $scopeCodeResolver,
         array $types = []
     ) {
-        $this->_scopePool = $scopePool;
         $this->scopeCodeResolver = $scopeCodeResolver;
         $this->types = $types;
     }
