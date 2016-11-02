@@ -428,57 +428,6 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-    private function getProductWithSubItemsAndOptionsStrategy($selectionsPriceType, $customOptionsPriceType)
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => true,
-                'type' => 'checkbox',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                        'price' => 20,
-                        'price_type' => $selectionsPriceType
-                    ],
-                ]
-            ],
-        ];
-
-        $customOptionsData = [
-            [
-                'price_type' => $customOptionsPriceType,
-                'title' => 'Test Field',
-                'type' => 'field',
-                'is_require' => 1,
-                'price' => 100,
-                'sku' => '1-text',
-            ]
-        ];
-
-        $tierPriceData = [
-            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-            'qty' => 1,
-            'value' => 50
-        ];
-
-        return [
-            [
-                'modifierName' => 'addTierPrice',
-                'data' => [$tierPriceData]
-            ],
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-            [
-                'modifierName' => 'addCustomOption',
-                'data' => [$customOptionsData]
-            ],
-        ];
-    }
-
     private function getProductConfiguration1($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
