@@ -8,7 +8,6 @@ namespace Magento\Config\Model\Config\Export;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
-use Magento\Config\Model\Placeholder\Environment;
 use Magento\Framework\App\Config\CommentInterface;
 
 /**
@@ -35,7 +34,7 @@ class Comment implements CommentInterface
         PlaceholderFactory $placeholderFactory,
         DumpConfigSourceInterface $source
     ) {
-        $this->placeholder = $placeholderFactory->create(Environment::class);
+        $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;
     }
 

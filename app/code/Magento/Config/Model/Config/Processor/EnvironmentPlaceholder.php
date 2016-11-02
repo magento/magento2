@@ -5,7 +5,6 @@
  */
 namespace Magento\Config\Model\Config\Processor;
 
-use Magento\Config\Model\Placeholder\Environment;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
@@ -38,7 +37,7 @@ class EnvironmentPlaceholder implements PreProcessorInterface
     ) {
         $this->placeholderFactory = $placeholderFactory;
         $this->arrayManager = $arrayManager;
-        $this->placeholder = $placeholderFactory->create(Environment::class);
+        $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
     }
 
     /**

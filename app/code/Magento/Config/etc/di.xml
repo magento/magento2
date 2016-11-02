@@ -176,9 +176,11 @@
             <argument name="source" xsi:type="object">appDumpSystemSource</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Structure">
+    <type name="Magento\Config\Model\Placeholder\PlaceholderFactory">
         <arguments>
-            <argument name="tabIterator" xsi:type="object">Magento\Config\Model\Config\Structure\Element\Iterator\Tab\Proxy</argument>
+            <argument name="types" xsi:type="array">
+                <item name="environment" xsi:type="string">Magento\Config\Model\Placeholder\Environment</item>
+            </argument>
         </arguments>
     </type>
 </config>

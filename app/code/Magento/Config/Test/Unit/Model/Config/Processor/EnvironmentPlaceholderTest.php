@@ -6,7 +6,6 @@
 namespace Magento\Config\Test\Unit\Model\Config\Processor;
 
 use Magento\Config\Model\Config\Processor\EnvironmentPlaceholder;
-use Magento\Config\Model\Placeholder\Environment;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -53,6 +52,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
 
         $this->placeholderFactoryMock->expects($this->any())
             ->method('create')
+            ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
             ->willReturn($this->placeholderMock);
 
         $this->model = new EnvironmentPlaceholder(

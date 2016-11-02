@@ -42,6 +42,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $placeholderFactoryMock->expects($this->once())
             ->method('create')
+            ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
             ->willReturn($this->placeholderMock);
 
         $this->configSourceMock = $this->getMockBuilder(DumpConfigSourceInterface::class)

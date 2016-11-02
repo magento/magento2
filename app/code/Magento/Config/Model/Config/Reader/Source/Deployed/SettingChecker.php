@@ -10,7 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
-use Magento\Config\Model\Placeholder\Environment;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 
 /**
@@ -50,7 +49,7 @@ class SettingChecker
     ) {
         $this->config = $config;
         $this->scopeCodeResolver = $scopeCodeResolver;
-        $this->placeholder = $placeholderFactory->create(Environment::class);
+        $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
     }
 
     /**

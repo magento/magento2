@@ -11,7 +11,6 @@ use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
-use Magento\Config\Model\Placeholder\Environment;
 
 /**
  * Test class for checking settings that defined in config file
@@ -60,7 +59,7 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
 
         $placeholderFactoryMock->expects($this->once())
             ->method('create')
-            ->with(Environment::class)
+            ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
             ->willReturn($this->placeholderMock);
 
         $this->checker = new SettingChecker($this->configMock, $placeholderFactoryMock, $this->scopeCodeResolverMock);
