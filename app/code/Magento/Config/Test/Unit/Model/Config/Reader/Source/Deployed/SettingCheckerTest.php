@@ -28,13 +28,20 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
      */
     private $checker;
 
+    /**
+     * @var ScopeCodeResolver | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeCodeResolver;
+
     public function setUp()
     {
         $this->config = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->checker = new SettingChecker($this->config);
+        $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->checker = new SettingChecker($this->config, $this->scopeCodeResolver);
     }
 
     public function testIsDefined()
@@ -42,6 +49,7 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
         $path = 'general/web/locale';
         $scope = 'website';
         $scopeCode = 'myWebsite';
+        $scopeCodeId = '4';
 
         $this->config->expects($this->once())
             ->method('get')
@@ -51,9 +59,13 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
                         $path => 'value'
                     ],
                 ],
-
             ]);
 
-        $this->assertTrue($this->checker->isReadOnly($path, $scope));
+        $this->scopeCodeResolver->expects($this->once())
+            ->method('resolve')
+            ->with($scope, $scopeCodeId)
+            ->willReturn($scopeCode);
+
+        $this->assertTrue($this->checker->isReadOnly($path, $scope, $scopeCodeId));
     }
 }

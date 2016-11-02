@@ -133,7 +133,6 @@ class GeneratedFiles
         return $enabledCacheTypes;
     }
 
-
     /**
      * Returns path to env.php file
      *
@@ -184,7 +183,6 @@ class GeneratedFiles
      * TODO: to be removed in scope of MAGETWO-53476
      *
      * @param string[]
-     *
      * @return void
      */
     private function enableCacheTypes($cacheTypes)
