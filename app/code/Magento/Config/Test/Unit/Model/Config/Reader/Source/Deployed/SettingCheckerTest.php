@@ -38,6 +38,11 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
      */
     private $checker;
 
+    /**
+     * @var array
+     */
+    private $env;
+
     public function setUp()
     {
         $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
@@ -51,6 +56,8 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->env = $_ENV;
+
         $placeholderFactoryMock->expects($this->once())
             ->method('create')
             ->with(Environment::class)
@@ -66,9 +73,9 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
      * @param string|null $confValue
      * @param array $variables
      * @param bool $expectedResult
-     * @dataProvider idDefinedDataProvider
+     * @dataProvider isReadonlyDataProvider
      */
-    public function testIsDefined($path, $scope, $scopeCode, $confValue, array $variables, $expectedResult)
+    public function testIsReadonly($path, $scope, $scopeCode, $confValue, array $variables, $expectedResult)
     {
         $this->placeholderMock->expects($this->once())
             ->method('isApplicable')
@@ -85,7 +92,7 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $_ENV = array_merge($_ENV, $variables);
+        $_ENV = array_merge($this->env, $variables);
 
         $this->configMock->expects($this->any())
             ->method('get')
@@ -103,7 +110,7 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function idDefinedDataProvider()
+    public function isReadonlyDataProvider()
     {
         return [
             [
@@ -131,5 +138,10 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
                 'expectedResult' => false,
             ]
         ];
+    }
+
+    protected function tearDown()
+    {
+        $_ENV = $this->env;
     }
 }

@@ -34,6 +34,11 @@ class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
      */
     private $placeholderMock;
 
+    /**
+     * @var array
+     */
+    private $env;
+
     protected function setUp()
     {
         $this->placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
@@ -44,6 +49,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
             ->getMockForAbstractClass();
+        $this->env = $_ENV;
 
         $this->placeholderFactoryMock->expects($this->any())
             ->method('create')
@@ -58,7 +64,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $_ENV = array_merge(
-            $_ENV,
+            $this->env,
             [
                 'CONFIG_DEFAULT_TEST' => 1,
                 'CONFIG_DEFAULT_TEST2' => 2,
@@ -116,5 +122,10 @@ class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
             ],
             $this->model->process([])
         );
+    }
+
+    protected function tearDown()
+    {
+        $_ENV = $this->env;
     }
 }
