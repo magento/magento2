@@ -149,11 +149,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('isReadOnly')
             ->withConsecutive(
                 ['design/head/welcome', 'stores', 'default'],
-                ['design/head/logo', 'stores', 'default']
+                ['design/head/logo', 'stores', 'default'],
+                ['design/head/head', 'stores', 'default']
             )
             ->willReturnOnConsecutiveCalls(
                 true,
-                false
+                false,
+                true
             );
 
         $this->objectManager->setBackwardCompatibleProperty(
@@ -193,6 +195,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'head_logo' => [
 
+                                    ],
+                                    'head_head' => [
+
                                     ]
                                 ]
                             ]
@@ -216,6 +221,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'head_logo' => [
 
+                                    ],
+                                    'head_head' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'disabled' => true,
+                                                    'is_disable_inheritance' => true,
+                                                ]
+                                            ]
+                                        ]
                                     ]
                                 ]
                             ]
