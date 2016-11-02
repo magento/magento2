@@ -168,9 +168,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 ->getMock();
             $selectionsCollection->expects($this->any())->method('getIterator')
                 ->willReturn(new \ArrayIterator($option->getSelections()));
+            $selectionsCollection->expects($this->atLeastOnce())->method('getFirstItem')
+                ->willReturn($option->getSelections()[0]);
 
-
-            $typeInstance->expects($this->at($index + 2))->method('getSelectionsCollection')
+            $typeInstance->expects($this->atLeastOnce())->method('getSelectionsCollection')
                 ->willReturn($selectionsCollection);
         }
 
