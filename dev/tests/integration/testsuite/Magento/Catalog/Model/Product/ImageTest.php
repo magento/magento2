@@ -23,8 +23,15 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Image::class
         );
-        $model->setType('image')->setBaseFile('');
-        $this->assertEmpty($model->getBaseFile());
+        /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
+        $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\View\Asset\Placeholder::class,
+                ['type' => 'image']
+            );
+
+        $model->setType('image');
+        $model->setBaseFile('');
+        $this->assertEquals($defualtPlaceholder->getSourceFile(), $model->getBaseFile());
         return $model;
     }
 

@@ -183,11 +183,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $viewAssetPlaceholderFactory;
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\Image\ContextFactory
-     */
-    private $imageContextFactory;
-
-    /**
      * @var \Magento\Framework\View\Asset\LocalInterface
      */
     private $imageAsset;
@@ -485,10 +480,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        $imageContext = $this->getImageContextFactory()->create();
         $this->imageAsset = $this->getViewAssetImageFactory()->create(
             [
-                'context' => $imageContext,
                 'miscParams' => $this->getMiscParams(),
                 'filePath' => $file,
             ]
@@ -499,7 +492,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
             $this->_isBaseFilePlaceholder = true;
             $this->imageAsset = $this->getViewAssetPlaceholderFactory()->create(
                 [
-                    'context' => $imageContext,
                     'type' => $this->getType(),
                 ]
             );
@@ -941,20 +933,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this->viewAssetPlaceholderFactory;
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\View\Asset\Image\ContextFactory
-     */
-    private function getImageContextFactory()
-    {
-        if ($this->imageContextFactory == null) {
-            $this->imageContextFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\Image\ContextFactory::class
-            );
-        }
-
-        return $this->imageContextFactory;
     }
 
     /**
