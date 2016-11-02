@@ -1,7 +1,5 @@
 <?php
 /**
- * Initialize application object manager.
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -16,16 +14,9 @@ use Magento\Framework\Code\GeneratedFiles;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * Class ObjectManagerFactory
  */
 class ObjectManagerFactory
 {
-    /**
-     * Path to definitions format in deployment configuration
-     * @deprecated
-     */
-    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
-
     /**
      * Initialization parameter for a custom deployment configuration file
      */
