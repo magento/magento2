@@ -24,6 +24,7 @@
 & when (@media-common = true) {
     .checkout-payment-method {
         .step-title {
+            border-bottom: 0;
             margin-bottom: 0;
         }
 
@@ -37,6 +38,12 @@
             &._active {
                 .payment-method-content {
                     display: block;
+                }
+            }
+
+            & + .payment-method {
+                .payment-method-title {
+                    .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
         }
@@ -54,7 +61,6 @@
         }
 
         .payment-method-title {
-            .lib-css(border-top, @checkout-payment-method-title__border);
             .lib-css(padding, @checkout-payment-method-title__padding 0);
             margin: 0;
 
@@ -72,11 +78,18 @@
 
         .payment-method-content {
             display: none;
-
             .lib-css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
             .fieldset {
                 &:not(:last-child) {
                     margin: 0 0 @indent__base;
+                }
+            }
+        }
+
+        .payment-group {
+            & + .payment-group {
+                .step-title {
+                    margin: @indent__base 0 0;
                 }
             }
         }
@@ -90,7 +103,7 @@
             margin: 0 0 @indent__s;
         }
 
-        .payment-method-billing-address {
+        .checkout-billing-address {
             margin: 0 0 @indent__base;
 
             .primary {
@@ -106,15 +119,11 @@
             .billing-address-details {
                 .lib-css(line-height, @checkout-billing-address-details__line-height);
                 .lib-css(padding, @checkout-billing-address-details__padding);
-
-                .action-edit-address {
-                    &:extend(.abs-action-button-as-link all);
-                }
             }
         }
 
         .payment-method-note {
-            & + .payment-method-billing-address {
+            & + .checkout-billing-address {
                 margin-top: @indent__base;
             }
         }
@@ -161,7 +170,7 @@
             .lib-css(padding, 0 @checkout-payment-method-title-mobile__padding @indent__base);
         }
 
-        .payment-method-billing-address {
+        .checkout-billing-address {
             .action-cancel {
                 margin-top: @indent__s;
             }
@@ -175,12 +184,10 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .checkout-payment-method {
-        .payment-methods {
-            .actions-toolbar {
-                .primary {
-                    float: right;
-                    margin: 0;
-                }
+        .actions-toolbar {
+            .primary {
+                float: right;
+                margin: 0;
             }
         }
 
@@ -214,7 +221,7 @@
         }
     }
 
-    .payment-method-billing-address {
+    .checkout-billing-address {
         .action-update {
             float: right;
         }

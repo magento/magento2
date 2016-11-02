@@ -11,6 +11,7 @@
     <preference for="Magento\Vault\Api\Data\PaymentTokenInterface" type="Magento\Vault\Model\PaymentToken"/>
     <preference for="Magento\Vault\Api\PaymentTokenRepositoryInterface" type="Magento\Vault\Model\PaymentTokenRepository" />
     <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
+    <preference for="Magento\Vault\Api\PaymentMethodListInterface" type="Magento\Vault\Model\PaymentMethodList" />
     <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
 

@@ -13,6 +13,9 @@ use Magento\Payment\Model\Config;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class ConfigTest
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Payment\Model\Config */
@@ -43,7 +46,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $paymentMethodsList = [
+    private $paymentMethodsList = [
         'not_active_method' => ['active' => 0],
         'active_method_no_model' => ['active' => 1],
         'active_method' => ['active' => 1, 'model' => 'model_name'],
@@ -97,20 +100,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->paymentMethodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->localeResolver = $this->getMock('Magento\Framework\Locale\ResolverInterface', [], [], '', false);
-        $this->dataStorage = $this->getMock('Magento\Framework\Config\DataInterface', [], [], '', false);
-        $this->date = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+        $this->paymentMethodFactory = $this->getMock(\Magento\Payment\Model\Method\Factory::class, [], [], '', false);
+        $this->localeResolver = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class, [], [], '', false);
+        $this->dataStorage = $this->getMock(\Magento\Framework\Config\DataInterface::class, [], [], '', false);
+        $this->date = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
-            'Magento\Payment\Model\Config',
+            \Magento\Payment\Model\Config::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'paymentMethodFactory' => $this->paymentMethodFactory,
@@ -122,6 +125,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Payment\Model\Config::getActiveMethods
      * @param bool $isActive
      * @dataProvider getActiveMethodsDataProvider
      */

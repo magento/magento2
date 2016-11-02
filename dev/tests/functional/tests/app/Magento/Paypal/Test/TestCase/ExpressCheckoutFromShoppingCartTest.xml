@@ -8,7 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutFromShoppingCartTest" summary="Guest Checkout with &quot;Checkout with PayPal&quot; button (Payflow Edition) from the Shopping Cart and Offline Shipping" ticketId="MAGETWO-12414">
         <variation name="ExpressCheckoutFromShoppingCartTestVariation1" summary="Check Out as a Guest with 'Checkout with PayPal' button (Payflow Edition) from the Shopping Cart and Offline Shipping" ticketId="MAGETWO-12414">
-            <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
+            <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
@@ -26,7 +28,7 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="configData" xsi:type="string">payflowpro</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />

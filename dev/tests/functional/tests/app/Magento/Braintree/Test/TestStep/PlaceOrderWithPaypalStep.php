@@ -80,7 +80,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         }
         $parentWindow = $this->checkoutOnepage->getPaymentBlock()
             ->getSelectedPaymentMethodBlock()
-            ->clickContinueToPaypal();
+            ->clickPayWithPaypal();
         $this->checkoutOnepage->getBraintreePaypalBlock()->process($parentWindow);
         
         $order = $this->fixtureFactory->createByCode(
