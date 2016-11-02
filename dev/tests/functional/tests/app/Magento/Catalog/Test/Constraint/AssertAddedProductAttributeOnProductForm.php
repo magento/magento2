@@ -74,8 +74,9 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
         CatalogProductEdit $catalogProductEdit,
         CatalogProductAttribute $attribute,
         CatalogAttributeSet $attributeSet,
-        CatalogProductAttribute $productAttributeOriginal = null,
-        BrowserInterface $browser
+        BrowserInterface $browser,
+        CatalogProductAttribute $productAttributeOriginal = null
+
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndex;
