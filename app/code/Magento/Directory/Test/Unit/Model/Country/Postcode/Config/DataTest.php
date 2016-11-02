@@ -53,6 +53,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $configData = new \Magento\Directory\Model\Country\Postcode\Config\Data(
             $this->readerMock,
             $this->cacheMock,
+            'country_postcodes',
             $this->serializerMock
         );
         $this->assertEquals($expected, $configData->get());
