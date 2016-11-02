@@ -14,8 +14,20 @@ class PhpFormatter implements FormatterInterface
     /**
      * {@inheritdoc}
      */
-    public function format($data)
+    public function format($data, array $comments = [])
     {
+        if (!empty($comments) && is_array($data)) {
+            $elements = array();
+            foreach ($data as $key => $value) {
+                $comment = '  ';
+                if (!empty($comments[$key])) {
+                    $comment = "  /**\n * " . str_replace("\n", "\n * ", var_export($comments[$key], true)) . "\n */\n";
+                }
+                $space = is_array($value) ? " \n" : ' ';
+                $elements[] = $comment . var_export($key, true) . ' =>' . $space . var_export($value, true);
+            }
+            return "<?php\nreturn array (\n" . implode(",\n", str_replace("\n", "\n  ", $elements)) . "\n);\n";
+        }
         return "<?php\nreturn " . var_export($data, true) . ";\n";
     }
 }

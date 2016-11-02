@@ -7,8 +7,10 @@ namespace Magento\Config\Block\System\Config;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 
 /**
  * System config form block
@@ -333,6 +335,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     ) {
         $inherit = true;
         $data = $this->getAppConfigDataValue($path);
+
+        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
+            $path,
+            $this->getScope(),
+            $this->getStringScopeCode()
+        );
+
+        if ($placeholderValue) {
+            $data = $placeholderValue;
+        }
         if ($data === null) {
             if (array_key_exists($path, $this->_configData)) {
                 $data = $this->_configData[$path];
@@ -373,9 +385,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getScopeCode());
-        $canUseDefault = $this->canUseDefaultValue($field->showInDefault());
-        $canUseWebsite = $this->canUseWebsiteValue($field->showInWebsite());
+        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -392,8 +402,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope' => $this->getScope(),
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
-                'can_use_default_value' => $canUseDefault,
-                'can_use_website_value' => $canUseWebsite,
+                'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
                 'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore()),
                 'disabled' => $isReadOnly,
                 'is_disable_inheritance' => $isReadOnly
@@ -411,6 +421,28 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $formField->setValues($field->getOptions());
         }
         $formField->setRenderer($fieldRenderer);
+    }
+
+    /**
+     * Retrieve Scope string code
+     *
+     * @return string
+     */
+    private function getStringScopeCode()
+    {
+        $scopeCode = $this->getData('scope_string_code');
+        if (null === $scopeCode) {
+            if ($this->getStoreCode()) {
+                $scopeCode = $this->_storeManager->getStore($this->getStoreCode())->getCode();
+            } elseif ($this->getWebsiteCode()) {
+                $scopeCode = $this->_storeManager->getWebsite($this->getWebsiteCode())->getCode();
+            } else {
+                $scopeCode = '';
+            }
+            $this->setScopeStringCode($scopeCode);
+        }
+
+        return $scopeCode;
     }
 
     /**
@@ -748,14 +780,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $appConfig = $this->getAppConfig()->get(System::CONFIG_TYPE);
         $scope = $this->getScope();
-        $scopeId = $this->getScopeId();
-        if ($scope === 'default') {
-            $data = isset($appConfig[$scope][$path]) ? $appConfig[$scope][$path] : null;
+        $scopeCode = $this->getStringScopeCode();
+
+        if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $data = new DataObject(isset($appConfig[$scope]) ? $appConfig[$scope] : []);
         } else {
-            $data = isset($appConfig[$scope][$scopeId][$path])
-                ? $appConfig[$scope][$scopeId][$path]
-                : null;
+            $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
         }
-        return $data;
+        return $data->getData($path);
     }
 }
