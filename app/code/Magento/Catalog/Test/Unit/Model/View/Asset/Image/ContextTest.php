@@ -36,7 +36,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystem;
 
-
     protected function setUp()
     {
         $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
