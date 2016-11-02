@@ -138,8 +138,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
             ]
         );
-        $objectHelper->setBackwardCompatibleProperty($this->model, 'catalogRuleProcessor', $this->catalogRuleProcessor);
-
     }
 
     /**
@@ -2096,10 +2094,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSalableWithoutOptions()
     {
-        $optionCollectionMock = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $optionCollectionMock = $this->getOptionCollectionMock([]);
         $product = new \Magento\Framework\DataObject(
             [
                 'is_salable' => true,
