@@ -28,6 +28,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $readerMock;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    /**
      * @var array
      */
     private $resourcesConfig;
@@ -39,7 +44,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
 
@@ -50,7 +54,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
@@ -64,12 +68,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'validResource' => ['connection' => 'validConnectionName'],
         ];
 
-        $jsonString = json_encode($this->resourcesConfig);
+        $serializedData = 'serialized data';
         $this->cacheMock->expects($this->any())
             ->method('load')
-            ->willReturn($jsonString);
-        $serializerMock->method('unserialize')
-            ->with($jsonString)
+            ->willReturn($serializedData);
+        $this->serializerMock->method('unserialize')
+            ->with($serializedData)
             ->willReturn($this->resourcesConfig);
 
         /**
@@ -86,15 +90,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->scopeMock,
             $this->cacheMock,
             $deploymentConfigMock,
-            'cacheId'
+            'cacheId',
+            $this->serializerMock
         );
-        $objectManager->setBackwardCompatibleProperty($this->config, 'serializer', $serializerMock);
     }
 
     /**
-     * @dataProvider getConnectionNameDataProvider
      * @param string $resourceName
      * @param string $connectionName
+     * @dataProvider getConnectionNameDataProvider
      */
     public function testGetConnectionName($resourceName, $connectionName)
     {
@@ -117,7 +121,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->scopeMock,
             $this->cacheMock,
             $deploymentConfigMock,
-            'cacheId'
+            'cacheId',
+            $this->serializerMock
         );
     }
 
