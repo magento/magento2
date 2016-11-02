@@ -378,10 +378,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Default Placeholder URL', $this->image->getUrl());
     }
 
-    public function testSetGetDestinationSubdir()
+    public function testSetGetType()
     {
-        $this->image->setDestinationSubdir('somesubdir');
-        $this->assertEquals('somesubdir', $this->image->getDestinationSubdir());
+        $this->image->setType('image_type');
+        $this->assertEquals('image_type', $this->image->getType());
     }
 
     public function testIsCached()

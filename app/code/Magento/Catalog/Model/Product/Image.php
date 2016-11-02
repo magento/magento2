@@ -13,9 +13,7 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Image as MagentoImage;
-use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -679,6 +677,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @deprecated
+     * @see \Magento\Catalog\Model\Product\Image::setType($imageType)
      * @param string $dir
      * @return $this
      */
@@ -690,6 +689,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @deprecated
+     * @see \Magento\Catalog\Model\Product\Image::getType()
      * @return string
      */
     public function getDestinationSubdir()

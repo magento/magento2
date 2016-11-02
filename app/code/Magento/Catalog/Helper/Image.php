@@ -442,7 +442,7 @@ class Image extends AbstractHelper
             $placeholderFullPath = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
         } else {
             $placeholderFullPath = $this->_placeholder
-                ?: 'Magento_Catalog::images/product/placeholder/' . $this->_getModel()->getDestinationSubdir() . '.jpg';
+                ?: 'Magento_Catalog::images/product/placeholder/' . $this->_getModel()->getType() . '.jpg';
         }
         return $placeholderFullPath;
     }
