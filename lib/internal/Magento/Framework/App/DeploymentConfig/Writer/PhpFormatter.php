@@ -12,6 +12,10 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
 class PhpFormatter implements FormatterInterface
 {
     /**
+     * Format deployment configuration.
+     * If $comments is present, each item will be added
+     * as comment to the corresponding section
+     *
      * {@inheritdoc}
      */
     public function format($data, array $comments = [])

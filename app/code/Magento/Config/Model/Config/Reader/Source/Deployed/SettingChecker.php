@@ -64,9 +64,12 @@ class SettingChecker
     public function isReadOnly($path, $scope, $scopeCode = null)
     {
         $config = $this->getEnvValue(
-            $this->placeholder->generate($path, $scope, $scopeCode),
-            $this->config->get($this->resolvePath($scope, $scopeCode) . "/" . $path)
+            $this->placeholder->generate($path, $scope, $scopeCode)
         );
+
+        if (null === $config) {
+            $config = $this->config->get($this->resolvePath($scope, $scopeCode) . "/" . $path);
+        }
 
         return $config !== null;
     }
@@ -79,7 +82,7 @@ class SettingChecker
      * @param string $path
      * @param string $scope
      * @param string|null $scopeCode
-     * @return mixed
+     * @return string|null
      */
     public function getPlaceholderValue($path, $scope, $scopeCode = null)
     {
@@ -90,10 +93,9 @@ class SettingChecker
      * Retrieve value of environment variable by placeholder
      *
      * @param string $placeholder
-     * @param mixed $defaultValue
-     * @return mixed
+     * @return string|null
      */
-    public function getEnvValue($placeholder, $defaultValue = null)
+    public function getEnvValue($placeholder)
     {
         if (null === $this->environmentVariables) {
             $this->environmentVariables = $_ENV;
@@ -103,7 +105,7 @@ class SettingChecker
             return $this->environmentVariables[$placeholder];
         }
 
-        return $defaultValue;
+        return null;
     }
 
 
