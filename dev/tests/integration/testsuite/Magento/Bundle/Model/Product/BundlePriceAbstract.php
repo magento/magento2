@@ -6,8 +6,6 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Zend\Console\Exception\InvalidArgumentException;
-
 /**
  * Abstract class for testing bundle prices
  */
@@ -41,7 +39,6 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
      * @param array $strategyModifiers
      * @param string $productSku
      * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws InvalidArgumentException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
@@ -56,7 +53,7 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
                 array_unshift($modifier['data'], $bundleProduct);
                 $bundleProduct = call_user_func_array([$this, $modifier['modifierName']], $modifier['data']);
             } else {
-                throw new InvalidArgumentException(
+                throw new \Magento\Framework\Exception\InputException(
                     sprintf('Modifier %s does not exists', $modifier['modifierName'])
                 );
             }
