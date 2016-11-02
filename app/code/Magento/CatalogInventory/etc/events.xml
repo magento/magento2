@@ -9,6 +9,9 @@
     <event name="catalog_block_product_status_display">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\DisplayProductStatusInfoObserver"/>
     </event>
+    <event name="catalog_product_load_after">
+        <observer name="inventory" instance="Magento\CatalogInventory\Observer\AddInventoryDataObserver"/>
+    </event>
     <event name="sales_quote_item_qty_set_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\QuantityValidatorObserver"/>
     </event>
