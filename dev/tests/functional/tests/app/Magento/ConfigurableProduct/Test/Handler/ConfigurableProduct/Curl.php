@@ -63,7 +63,10 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
         $data['new-variations-attribute-set-id'] = $attributeSetId;
         $data['associated_product_ids'] = $this->prepareAssociatedProductIds($configurableAttributesData);
 
-        return $this->replaceMappingData($data);
+        $this->replaceMappingData($data);
+        $data['configurable-matrix-serialized'] = json_encode($data['variations-matrix']);
+        $data['associated_product_ids_serialized'] = json_encode($data['associated_product_ids']);
+        return $data;
     }
 
     /**
