@@ -278,7 +278,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setKeepAspectRatio($keep)
     {
-        $this->_keepAspectRatio = filter_var($keep, FILTER_VALIDATE_BOOLEAN);
+        $this->_keepAspectRatio = $keep && $keep !== 'false';
         return $this;
     }
 
@@ -288,7 +288,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setKeepFrame($keep)
     {
-        $this->_keepFrame = filter_var($keep, FILTER_VALIDATE_BOOLEAN);
+        $this->_keepFrame = $keep && $keep !== 'false';
         return $this;
     }
 
@@ -298,7 +298,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setKeepTransparency($keep)
     {
-        $this->_keepTransparency = filter_var($keep, FILTER_VALIDATE_BOOLEAN);
+        $this->_keepTransparency = $keep && $keep !== 'false';
         return $this;
     }
 
@@ -308,7 +308,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setConstrainOnly($flag)
     {
-        $this->_constrainOnly = filter_var($flag, FILTER_VALIDATE_BOOLEAN);
+        $this->_constrainOnly = $flag && $flag !== 'false';
         return $this;
     }
 
