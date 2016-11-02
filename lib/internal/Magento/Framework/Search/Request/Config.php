@@ -5,21 +5,27 @@
  */
 namespace Magento\Framework\Search\Request;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class Config extends \Magento\Framework\Config\Data
 {
-    /** Cache ID for Search Request*/
+    /**
+     * Cache identifier
+     */
     const CACHE_ID = 'request_declaration';
 
     /**
      * @param \Magento\Framework\Search\Request\Config\FilesystemReader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Search\Request\Config\FilesystemReader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = self::CACHE_ID
+        $cacheId = self::CACHE_ID,
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 }

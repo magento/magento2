@@ -3,25 +3,28 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Cron\Model\Groups\Config;
+
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Prepare cron jobs data
  */
-namespace Magento\Cron\Model\Groups\Config;
-
 class Data extends \Magento\Framework\Config\Data
 {
     /**
      * @param \Magento\Cron\Model\Groups\Config\Reader\Xml $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Cron\Model\Groups\Config\Reader\Xml $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'cron_groups_config_cache'
+        $cacheId = 'cron_groups_config_cache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
     /**

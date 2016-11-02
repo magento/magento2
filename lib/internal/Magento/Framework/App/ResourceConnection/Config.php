@@ -1,7 +1,5 @@
 <?php
 /**
- * Resource configuration. Uses application configuration to retrieve resource connection information.
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +7,9 @@ namespace Magento\Framework\App\ResourceConnection;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
+/**
+ * Resource configuration, uses application configuration to retrieve resource connection information
+ */
 class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
     /**
