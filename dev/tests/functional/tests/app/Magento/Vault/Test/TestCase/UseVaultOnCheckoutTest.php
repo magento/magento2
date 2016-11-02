@@ -31,15 +31,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Click Place Order button.
  * 13. Perform assertions.
  *
- * @group One_Page_Checkout_(CS)
+ * @group One_Page_Checkout
  * @ZephyrId MAGETWO-46530
  */
 class UseVaultOnCheckoutTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

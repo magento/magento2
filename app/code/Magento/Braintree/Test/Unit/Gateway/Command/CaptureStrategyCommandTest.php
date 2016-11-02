@@ -374,7 +374,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $searchCriteria = new SearchCriteria();
-        $this->searchCriteriaBuilder->expects(static::once())
+        $this->searchCriteriaBuilder->expects(static::exactly(2))
             ->method('addFilters')
             ->willReturnSelf();
         $this->searchCriteriaBuilder->expects(static::once())

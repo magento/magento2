@@ -21,16 +21,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = $objectManagerHelper->getObject(
-            'Magento\Payment\Model\Method\Factory',
+            \Magento\Payment\Model\Method\Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }
 
     public function testCreateMethod()
     {
-        $className = 'Magento\Payment\Model\Method\AbstractMethod';
+        $className = \Magento\Payment\Model\Method\AbstractMethod::class;
         $methodMock = $this->getMock($className, [], [], '', false);
         $this->_objectManagerMock->expects(
             $this->once()
@@ -48,7 +48,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateMethodWithArguments()
     {
-        $className = 'Magento\Payment\Model\Method\AbstractMethod';
+        $className = \Magento\Payment\Model\Method\AbstractMethod::class;
         $data = ['param1', 'param2'];
         $methodMock = $this->getMock($className, [], [], '', false);
         $this->_objectManagerMock->expects(

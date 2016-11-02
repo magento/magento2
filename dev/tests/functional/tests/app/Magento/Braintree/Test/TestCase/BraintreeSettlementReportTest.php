@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 1. Log in Storefront.
  * 2. Add products to the Shopping Cart.
  * 3. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
- * 4. Click the 'Go to Checkout' button.
+ * 4. Click the 'Proceed to Checkout' button.
  * 5. Fill shipping information.
  * 6. Select shipping method.
  * 7. Select payment method (use reward points and store credit if available).
@@ -30,15 +30,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Find transaction for latest order.
  * 13. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-48162
  */
 class BraintreeSettlementReportTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

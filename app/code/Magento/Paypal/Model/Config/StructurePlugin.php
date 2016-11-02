@@ -5,6 +5,12 @@
  */
 namespace Magento\Paypal\Model\Config;
 
+use Magento\Config\Model\Config\ScopeDefiner;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Section;
+use Magento\Config\Model\Config\Structure\ElementInterface;
+use Magento\Paypal\Helper\Backend as BackendHelper;
+
 class StructurePlugin
 {
     /**
@@ -13,12 +19,12 @@ class StructurePlugin
     const REQUEST_PARAM_COUNTRY = 'paypal_country';
 
     /**
-     * @var \Magento\Paypal\Helper\Backend
+     * @var BackendHelper
      */
     protected $_helper;
 
     /**
-     * @var \Magento\Config\Model\Config\ScopeDefiner
+     * @var ScopeDefiner
      */
     protected $_scopeDefiner;
 
@@ -40,12 +46,12 @@ class StructurePlugin
     ];
 
     /**
-     * @param \Magento\Config\Model\Config\ScopeDefiner $scopeDefiner
-     * @param \Magento\Paypal\Helper\Backend $helper
+     * @param ScopeDefiner $scopeDefiner
+     * @param BackendHelper $helper
      */
     public function __construct(
-        \Magento\Config\Model\Config\ScopeDefiner $scopeDefiner,
-        \Magento\Paypal\Helper\Backend $helper
+        ScopeDefiner $scopeDefiner,
+        BackendHelper $helper
     ) {
         $this->_scopeDefiner = $scopeDefiner;
         $this->_helper = $helper;
@@ -69,14 +75,14 @@ class StructurePlugin
     /**
      * Substitute payment section with PayPal configs
      *
-     * @param \Magento\Config\Model\Config\Structure $subject
+     * @param Structure $subject
      * @param \Closure $proceed
      * @param array $pathParts
-     * @return \Magento\Config\Model\Config\Structure\ElementInterface
+     * @return ElementInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetElementByPathParts(
-        \Magento\Config\Model\Config\Structure $subject,
+        Structure $subject,
         \Closure $proceed,
         array $pathParts
     ) {
@@ -89,10 +95,11 @@ class StructurePlugin
                 $pathParts[0] = 'payment_other';
             }
         }
-        /** @var \Magento\Config\Model\Config\Structure\ElementInterface $result */
+        /** @var ElementInterface $result */
         $result = $proceed($pathParts);
         if ($isSectionChanged && isset($result)) {
-            if ($result instanceof \Magento\Config\Model\Config\Structure\Element\Section) {
+            if ($result instanceof Section) {
+                $this->restructurePayments($result);
                 $result->setData(array_merge(
                     $result->getData(),
                     ['showInDefault' => true, 'showInWebsite' => true, 'showInStore' => true]
@@ -100,5 +107,64 @@ class StructurePlugin
             }
         }
         return $result;
+    }
+
+    /**
+     * Changes payment config structure.
+     * Groups which have `displayIn` element, transfer to appropriate group.
+     * Groups without `displayIn` transfer to other payment methods group.
+     *
+     * @param Section $result
+     * @return void
+     */
+    private function restructurePayments(Section $result)
+    {
+        $sectionMap = [
+            'account' => [],
+            'recommended_solutions' => [],
+            'other_paypal_payment_solutions' => [],
+            'other_payment_methods' => []
+        ];
+
+        $configuration = $result->getData();
+
+        foreach ($configuration['children'] as $section => $data) {
+            if (array_key_exists($section, $sectionMap)) {
+                $sectionMap[$section] = $data;
+            } elseif ($displayIn = $this->getDisplayInSection($section, $data)) {
+                $sectionMap[$displayIn['parent']]['children'][$displayIn['section']] = $displayIn['data'];
+            } else {
+                $sectionMap['other_payment_methods']['children'][$section] = $data;
+            }
+        }
+
+        $configuration['children'] = $sectionMap;
+        $result->setData($configuration, $this->_scopeDefiner->getScope());
+    }
+
+    /**
+     * Recursive search of `displayIn` element in node children
+     *
+     * @param string $section
+     * @param array $data
+     * @return array|null
+     */
+    private function getDisplayInSection($section, $data)
+    {
+        if (is_array($data) && array_key_exists('displayIn', $data)) {
+            return [
+                'parent' => $data['displayIn'],
+                'section' => $section,
+                'data' => $data
+            ];
+        }
+
+        if (array_key_exists('children', $data)) {
+            foreach ($data['children'] as $childSection => $childData) {
+                return $this->getDisplayInSection($childSection, $childData);
+            }
+        }
+
+        return null;
     }
 }

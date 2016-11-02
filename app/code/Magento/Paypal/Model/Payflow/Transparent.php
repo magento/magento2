@@ -184,6 +184,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->createPaymentToken($payment, $token);
 
         $payment->unsAdditionalInformation(self::CC_DETAILS);
+        $payment->unsAdditionalInformation(self::PNREF);
 
         return $this;
     }

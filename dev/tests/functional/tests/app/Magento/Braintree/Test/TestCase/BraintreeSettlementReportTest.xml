@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Braintree\Test\TestCase\BraintreeSettlementReportTest" summary="Braintree Settlement Report.">
         <variation name="BraintreeSettlementReportTestVariation1" summary="Braintree Settlement Report" ticketId="MAGETWO-48162">
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
@@ -22,7 +22,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />

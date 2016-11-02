@@ -268,14 +268,17 @@ class Adapter implements MethodInterface
         $checkResult = new DataObject();
         $checkResult->setData('is_available', true);
         try {
-            $validator = $this->getValidatorPool()->get('availability');
-            $result = $validator->validate(
-                [
-                    'payment' => $this->paymentDataObjectFactory->create($this->getInfoInstance())
-                ]
-            );
+            $infoInstance = $this->getInfoInstance();
+            if ($infoInstance !== null) {
+                $validator = $this->getValidatorPool()->get('availability');
+                $result = $validator->validate(
+                    [
+                        'payment' => $this->paymentDataObjectFactory->create($infoInstance)
+                    ]
+                );
 
-            $checkResult->setData('is_available', $result->isValid());
+                $checkResult->setData('is_available', $result->isValid());
+            }
         } catch (\Exception $e) {
             // pass
         }

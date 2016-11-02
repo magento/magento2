@@ -12,13 +12,13 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
-        $commandI = $this->getMockBuilder('Magento\Payment\Gateway\CommandInterface')
+        $commandI = $this->getMockBuilder(\Magento\Payment\Gateway\CommandInterface::class)
             ->getMockForAbstractClass();
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -26,7 +26,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 [
-                    'array' => ['Magento\Payment\Gateway\CommandInterface'],
+                    'array' => [\Magento\Payment\Gateway\CommandInterface::class],
                     'type' => CommandInterface::class
                 ]
             )
@@ -40,20 +40,20 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->with('command')
             ->willReturn($commandI);
 
-        $pool = new CommandPool($tMapFactory, ['Magento\Payment\Gateway\CommandInterface']);
+        $pool = new CommandPool($tMapFactory, [\Magento\Payment\Gateway\CommandInterface::class]);
 
         static::assertSame($commandI, $pool->get('command'));
     }
 
     public function testGetException()
     {
-        $this->setExpectedException('Magento\Framework\Exception\NotFoundException');
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
 
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 
