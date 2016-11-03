@@ -6,6 +6,8 @@
 namespace Magento\Indexer\Model\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\App\ObjectManager;
 
 class Data extends \Magento\Framework\Config\Data
 {
@@ -29,6 +31,7 @@ class Data extends \Magento\Framework\Config\Data
         SerializerInterface $serializer = null
     ) {
         $this->stateCollection = $stateCollection;
+        $serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
 
         $isCacheExists = $cache->test($cacheId);
 

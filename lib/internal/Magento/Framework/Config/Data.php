@@ -1,7 +1,5 @@
 <?php
 /**
- * Config data. Represents loaded and cached configuration data. Should be used to gain access to different types
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +9,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Represents loaded and cached configuration data, should be used to gain access to different types
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Data implements \Magento\Framework\Config\DataInterface
