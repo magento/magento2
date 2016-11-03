@@ -11,7 +11,6 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 
 /**
  * Class AbstractPaymentTokenFactory
- * @api
  */
 abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFactory
 {

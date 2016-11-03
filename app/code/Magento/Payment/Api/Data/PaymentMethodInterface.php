@@ -7,8 +7,6 @@ namespace Magento\Payment\Api\Data;
 
 /**
  * Payment method interface.
- *
- * @api
  */
 interface PaymentMethodInterface
 {

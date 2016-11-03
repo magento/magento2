@@ -11,7 +11,6 @@ use Magento\Vault\Block\Customer\IconInterface;
 
 /**
  * Class AbstractTokenRenderer
- * @api
  */
 abstract class AbstractTokenRenderer extends Template implements TokenRendererInterface, IconInterface
 {
