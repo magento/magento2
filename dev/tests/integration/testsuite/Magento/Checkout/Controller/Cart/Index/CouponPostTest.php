@@ -6,6 +6,9 @@
 
 namespace Magento\Checkout\Controller\Cart\Index;
 
+/**
+ * @magentoDbIsolation enabled
+ */
 class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -15,7 +18,7 @@ class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testExecute()
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
+        /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
         $quote = $session->getQuote();
         $quote->setData('trigger_recollect', 1)->setTotalsCollectedFlag(true)->save();
@@ -28,7 +31,9 @@ class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
             'checkout/cart/couponPost/'
         );
 
-        $this->assertSessionMessages($this->equalTo(['The coupon code "test" is not valid.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages(
+            $this->equalTo(['The coupon code "test" is not valid.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
     }
 }
