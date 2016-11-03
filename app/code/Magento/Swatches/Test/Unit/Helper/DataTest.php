@@ -130,7 +130,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
-            $this->swatchHelperObject, 'metadataPool',
+            $this->swatchHelperObject,
+            'metadataPool',
             $this->metaDataPoolMock
         );
     }
