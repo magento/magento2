@@ -150,6 +150,15 @@
             </field>
         </dataset>
 
+        <dataset name="log_to_file">
+            <field name="dev/debug/debug_logging" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
         <dataset name="enable_https_frontend_admin">
             <field name="web/secure/use_in_frontend" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -162,6 +171,21 @@
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_https_frontend_admin_rollback">
+            <field name="web/secure/use_in_frontend" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="web/secure/use_in_adminhtml" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
         <dataset name="enable_hsts">
