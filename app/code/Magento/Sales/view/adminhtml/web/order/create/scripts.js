@@ -384,50 +384,10 @@ define([
                         block.show();
                         block.select('input', 'select', 'textarea').each(function(field) {
                             field.disabled = false;
-                            if (!el.include('_before') && !el.include('_after') && !field.bindChange) {
-                                field.bindChange = true;
-                                field.paymentContainer = form;
-                                field.method = method;
-                                field.observe('change', this.changePaymentData.bind(this))
-                            }
                         },this);
                     }
                 },this);
             }
-        },
-
-        changePaymentData : function(event){
-            var elem = Event.element(event);
-            if(elem && elem.method){
-                var data = this.getPaymentData(elem.method);
-                if (data) {
-                    this.loadArea(['card_validation'], true, data);
-                } else {
-                    return;
-                }
-            }
-        },
-
-        getPaymentData : function(currentMethod){
-            if (typeof(currentMethod) == 'undefined') {
-                if (this.paymentMethod) {
-                    currentMethod = this.paymentMethod;
-                } else {
-                    return false;
-                }
-            }
-            if (this.isPaymentValidationAvailable() == false) {
-                return false;
-            }
-            var data = {};
-            var fields = $('payment_form_' + currentMethod).select('input', 'select');
-            for(var i=0;i<fields.length;i++){
-                data[fields[i].name] = fields[i].getValue();
-            }
-            if ((typeof data['payment[cc_type]']) != 'undefined' && (!data['payment[cc_type]'] || !data['payment[cc_number]'])) {
-                return false;
-            }
-            return data;
         },
 
         applyCoupon : function(code){
