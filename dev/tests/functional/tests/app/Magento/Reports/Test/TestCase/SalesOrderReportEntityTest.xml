@@ -21,6 +21,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Created</data>
@@ -34,6 +35,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Updated</data>

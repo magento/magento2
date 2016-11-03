@@ -37,6 +37,7 @@ class SalesInvoiceReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
+    const STABLE = 'no';
     /* end tags */
 
     /**

@@ -17,6 +17,7 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">120.0000</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+            <data name="issue" xsi:type="string">MAGETWO-58145</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
@@ -24,6 +25,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Update visibility to Not Visible Individually</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -47,6 +49,7 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">25.0000</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
@@ -64,6 +67,7 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">89.0000</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
@@ -81,6 +85,7 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">125.0000</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
@@ -89,6 +94,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation6">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Update product status to offline</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -112,6 +118,7 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">87</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">333.0000</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteUpdatedProductInGrid" />
@@ -124,6 +131,7 @@
             <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">133.00</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
@@ -142,10 +150,12 @@
             <data name="product/data/sku" xsi:type="string">sku_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
             <data name="product/data/attribute_set_id/dataset" xsi:type="string">default</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
         <variation name="EditSimpleProductTestVariation11" summary="Update simple product with custom option">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
