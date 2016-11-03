@@ -17,6 +17,7 @@ use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Check attribute on product form.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
 {
@@ -76,7 +77,6 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
         CatalogAttributeSet $attributeSet,
         BrowserInterface $browser,
         CatalogProductAttribute $productAttributeOriginal = null
-
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndex;
