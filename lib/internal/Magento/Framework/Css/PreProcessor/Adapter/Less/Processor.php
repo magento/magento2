@@ -88,10 +88,8 @@ class Processor implements ContentProcessorInterface
             gc_enable();
 
             if (trim($content) === '') {
-                $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;
-                $this->logger->critical($errorMessage);
-
-                throw new ContentProcessorException(new Phrase($errorMessage));
+                $this->logger->warning('Parsed less file is empty: ' .  $path);
+                return '';
             }
 
             return $content;
