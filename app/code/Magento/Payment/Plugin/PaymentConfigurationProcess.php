@@ -53,7 +53,7 @@ class PaymentConfigurationProcess
 
         $storeId = $this->storeManager->getStore()->getId();
         $activePaymentMethodList = $this->paymentMethodList->getActiveList($storeId);
-        $getCodeFunc = function($method) {
+        $getCodeFunc = function ($method) {
             return $method->getCode();
         };
         $activePaymentMethodCodes = array_map($getCodeFunc, $activePaymentMethodList);

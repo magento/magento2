@@ -62,16 +62,20 @@ class PaymentVaultConfigurationProcess
         $storeId = $this->storeManager->getStore()->getId();
         $activePaymentMethodList = $this->paymentMethodList->getActiveList($storeId);
         $activeVaultList = $this->vaultPaymentList->getActiveList($storeId);
-        $getCodeFunc = function($method) {
+        $getCodeFunc = function ($method) {
             return $method->getCode();
         };
-        $getProviderCodeFunc = function($method) {
+        $getProviderCodeFunc = function ($method) {
             return $method->getProviderCode();
         };
         $activePaymentMethodCodes = array_map($getCodeFunc, $activePaymentMethodList);
         $activeVaultCodes = array_map($getCodeFunc, $activeVaultList);
         $activeVaultProviderCodes = array_map($getProviderCodeFunc, $activeVaultList);
-        $activePaymentMethodCodes = array_merge($activePaymentMethodCodes, $activeVaultCodes, $activeVaultProviderCodes);
+        $activePaymentMethodCodes = array_merge(
+            $activePaymentMethodCodes,
+            $activeVaultCodes,
+            $activeVaultProviderCodes
+        );
 
         foreach ($configuration as $paymentGroup => $groupConfig) {
             foreach (array_keys($groupConfig['methods']) as $paymentCode) {
