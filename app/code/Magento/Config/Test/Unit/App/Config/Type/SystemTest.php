@@ -8,6 +8,7 @@ namespace Magento\Config\Test\Unit\App\Config\Type;
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Config\Processor\Fallback;
@@ -27,6 +28,11 @@ class SystemTest extends \PHPUnit_Framework_TestCase
      * @var PostProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $postProcessor;
+
+    /**
+     * @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $preProcessor;
 
     /**
      * @var Fallback|\PHPUnit_Framework_MockObject_MockObject
@@ -54,11 +60,15 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
             ->getMockForAbstractClass();
+        $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
+            ->getMockForAbstractClass();
+
         $this->configType = new System(
             $this->source,
             $this->postProcessor,
             $this->fallback,
-            $this->cache
+            $this->cache,
+            $this->preProcessor
         );
     }
 
@@ -89,6 +99,10 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                 ->method('get')
                 ->willReturn($data);
             $this->fallback->expects($this->once())
+                ->method('process')
+                ->with($data)
+                ->willReturnArgument(0);
+            $this->preProcessor->expects($this->once())
                 ->method('process')
                 ->with($data)
                 ->willReturnArgument(0);

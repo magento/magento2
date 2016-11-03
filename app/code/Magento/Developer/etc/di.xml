@@ -241,4 +241,12 @@
             <argument name="subDir" xsi:type="string">web</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
