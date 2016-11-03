@@ -1436,7 +1436,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         )->joinInner(
             ['mgvte' => $this->mediaGalleryEntityToValueTableName],
             '(mg.value_id = mgvte.value_id)',
-            [$this->getProductEntityLinkField() => 'mgvte.' . $this->getProductEntityLinkField()]
+            [
+                $this->getProductEntityLinkField() => 'mgvte.' . $this->getProductEntityLinkField(),
+                'value_id' => 'mgvte.value_id'
+            ]
         )->joinLeft(
             ['mgv' => $this->mediaGalleryValueTableName],
             sprintf(
@@ -1446,8 +1449,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ),
             [
-                'label' => 'mgv.label',
-                'value_id' => 'mgv.value_id'
+                'label' => 'mgv.label'
             ]
         )->joinInner(
             ['pe' => $this->productEntityTableName],
@@ -2787,22 +2789,38 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return;
         }
 
-        $updateData = [];
+        $insertData = [];
         foreach ($labels as $label) {
             $imageData = $label['imageData'];
-            $updateData[] = [
-                'label' => $label['label'],
-                $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
-                'value_id' => $imageData['value_id'],
-                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            ];
+
+            if ($imageData['label'] === null) {
+                $insertData[] = [
+                    'label' => $label['label'],
+                    $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
+                    'value_id' => $imageData['value_id'],
+                    'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                ];
+            } else {
+                $this->_connection->update(
+                    $this->mediaGalleryValueTableName,
+                    [
+                        'label' => $label['label']
+                    ],
+                    [
+                        $this->getProductEntityLinkField() . ' = ?' => $imageData[$this->getProductEntityLinkField()],
+                        'value_id = ?' => $imageData['value_id'],
+                        'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    ]
+                );
+            }
         }
 
-        $this->_connection->insertOnDuplicate(
-            $this->mediaGalleryValueTableName,
-            $updateData,
-            ['label']
-        );
+        if (!empty($insertData)) {
+            $this->_connection->insertMultiple(
+                $this->mediaGalleryValueTableName,
+                $insertData
+            );
+        }
     }
 
     /**
