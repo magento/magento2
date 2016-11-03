@@ -10,7 +10,6 @@ use Magento\Vault\Model\VaultPaymentInterface;
 /**
  * Contains methods to retrieve vault payment methods
  * This interface is consistent with \Magento\Payment\Api\PaymentMethodListInterface
- * @api
  */
 interface PaymentMethodListInterface
 {

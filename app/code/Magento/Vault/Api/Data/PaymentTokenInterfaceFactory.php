@@ -7,7 +7,6 @@ namespace Magento\Vault\Api\Data;
 
 /**
  * Interface PaymentTokenInterfaceFactory
- * @api
  */
 interface PaymentTokenInterfaceFactory
 {
