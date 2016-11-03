@@ -111,7 +111,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->metaDataPoolMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $this->metaDataPoolMock = $this->getMock(
+            \Magento\Framework\EntityManager\MetadataPool::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
             [
@@ -124,7 +130,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
-            $this->swatchHelperObject, 'metadataPool', $this->metaDataPoolMock
+            $this->swatchHelperObject, 'metadataPool',
+            $this->metaDataPoolMock
         );
     }
 
