@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Test\TestCase;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -65,10 +66,14 @@ class DeleteSalesRuleEntityTest extends Injectable
      * @param SalesRule $salesRule
      * @return void
      */
-    public function testDeleteSalesRule(SalesRule $salesRule)
+    public function testDeleteSalesRule(SalesRule $salesRule, CatalogProductSimple $productForSalesRule1 = null)
     {
         // Preconditions
         $salesRule->persist();
+
+        if ($productForSalesRule1) {
+            $productForSalesRule1->persist();
+        }
 
         // Steps
         $this->promoQuoteIndex->open();
