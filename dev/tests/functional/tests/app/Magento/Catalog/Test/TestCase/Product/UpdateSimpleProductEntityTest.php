@@ -88,6 +88,8 @@ class UpdateSimpleProductEntityTest extends Injectable
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
      * @param string $storeDataset [optional]
+     * @param int $storesCount [optional]
+     * @param int $storeIndexToUpdate [optional]
      * @param string $configData
      * @return array
      */
@@ -95,6 +97,8 @@ class UpdateSimpleProductEntityTest extends Injectable
         CatalogProductSimple $initialProduct,
         CatalogProductSimple $product,
         $storeDataset = '',
+        $storesCount = 0,
+        $storeIndexToUpdate = null,
         $configData = ''
     ) {
         $this->configData = $configData;
@@ -110,14 +114,14 @@ class UpdateSimpleProductEntityTest extends Injectable
         $stores = [];
         $productNames = [];
         if ($storeDataset) {
-            for ($i = 0; $i < 2; $i++) {
+            for ($i = 0; $i < $storesCount; $i++) {
                 $stores[$i] = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
                 $stores[$i]->persist();
+                $productNames[$stores[$i]->getStoreId()] = $initialProduct->getName();
             }
-            $productNames = [
-                $stores[0]->getStoreId() => $initialProduct->getName(),
-                $stores[1]->getStoreId() => $product->getName(),
-            ];
+            if ($storeIndexToUpdate !== null) {
+                $productNames[$stores[$storeIndexToUpdate]->getStoreId()] = $product->getName();
+            }
         }
 
         $this->objectManager->create(
@@ -130,8 +134,8 @@ class UpdateSimpleProductEntityTest extends Injectable
 
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen($filter);
-        if ($storeDataset) {
-            $this->editProductPage->getFormPageActions()->changeStoreViewScope($stores[1]);
+        if ($storeDataset && $storeIndexToUpdate !== null) {
+            $this->editProductPage->getFormPageActions()->changeStoreViewScope($stores[$storeIndexToUpdate]);
         }
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();

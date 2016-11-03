@@ -59,13 +59,6 @@ class FormPageActions extends ParentFormPageActions
     private $addAttribute = '[data-ui-id="addattribute-button"]';
 
     /**
-     * Magento form loader.
-     *
-     * @var string
-     */
-    private $spinner = '[data-role="spinner"]';
-
-    /**
      * Default store switcher block locator.
      *
      * @var string
@@ -160,7 +153,7 @@ class FormPageActions extends ParentFormPageActions
     {
         $this->waitForElementNotVisible($this->spinner);
         $this->waitForElementVisible($this->storeSwitcherBlock);
-        $this->browser->find($this->storeSwitcherBlock)
+        $this->_rootElement->find($this->storeSwitcherBlock)
             ->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')
             ->setValue(sprintf('%s/%s', $store->getGroupId(), $store->getName()));
         $modalElement = $this->browser->find($this->confirmModal);
