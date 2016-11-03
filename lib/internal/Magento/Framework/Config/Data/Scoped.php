@@ -72,7 +72,7 @@ class Scoped extends \Magento\Framework\Config\Data
         $this->_configScope = $configScope;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
