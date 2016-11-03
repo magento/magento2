@@ -373,7 +373,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
 
         $attributeCollectionFactoryMock = $this->getMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory::class,
-            [],
+            ['create'],
             [],
             '',
             false

@@ -20,6 +20,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @deprecated please use instead \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
      */
     protected $attributeCollection;
 
@@ -168,8 +169,10 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
+     * Retrieve collection factory
+     *
      * @deprecated
-     * @return ResourceModel\Entity\Attribute\CollectionFactory
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory
      */
     private function getCollectionFactory()
     {
