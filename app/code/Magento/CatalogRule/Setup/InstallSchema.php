@@ -25,6 +25,9 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->startSetup();
 
+        $customerGroupTable = $setup->getConnection()->describeTable($setup->getTable('customer_group'));
+        $customerGroupIdType = $customerGroupTable['customer_group_id']['DATA_TYPE'] == 'int'
+            ? \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER : $customerGroupTable['customer_group_id']['DATA_TYPE'];
         /**
          * Create table 'catalogrule'
          */
@@ -372,7 +375,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                $customerGroupIdType,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
                 'Customer Group Id'
@@ -477,7 +480,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                $customerGroupIdType,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Customer Group Id'

@@ -368,7 +368,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('e.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cw.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
 

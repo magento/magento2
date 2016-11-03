@@ -22,7 +22,7 @@ define([], function () {
         return {
             email: addressData.email,
             countryId: addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
-            regionId: regionId,
+            regionId: regionId || addressData.regionId,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
             customerId: addressData.customer_id,
@@ -30,7 +30,7 @@ define([], function () {
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode,
+            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode || undefined,
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,
