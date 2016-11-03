@@ -129,9 +129,9 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function extend(array $configuration)
     {
-        $this->arguments = $configuration['arguments'];
-        $this->virtualTypes = $configuration['instanceTypes'];
-        $this->preferences = $configuration['preferences'];
+        $this->arguments = (isset($configuration['arguments']))?$configuration['arguments']:'';
+        $this->virtualTypes = (isset($configuration['instanceTypes']))?$configuration['instanceTypes']:'';
+        $this->preferences = (isset($configuration['preferences']))?$configuration['preferences']:'';
     }
 
     /**
