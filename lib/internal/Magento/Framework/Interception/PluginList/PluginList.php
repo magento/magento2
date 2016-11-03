@@ -92,7 +92,8 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param ObjectManagerInterface $objectManager
      * @param ClassDefinitions $classDefinitions
      * @param array $scopePriorityScheme
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,9 +106,11 @@ class PluginList extends Scoped implements InterceptionPluginList
         ObjectManagerInterface $objectManager,
         ClassDefinitions $classDefinitions,
         array $scopePriorityScheme = ['global'],
-        $cacheId = 'plugins'
+        $cacheId = 'plugins',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $configScope, $cache, $cacheId);
+        $serializer = $serializer ?: $objectManager->get(Serialize::class);
+        parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
         $this->_definitions = $definitions;
@@ -277,7 +280,7 @@ class PluginList extends Scoped implements InterceptionPluginList
             $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
             $data = $this->_cache->load($cacheId);
             if ($data) {
-                list($this->_data, $this->_inherited, $this->_processed) = $this->getSerializer()->unserialize($data);
+                list($this->_data, $this->_inherited, $this->_processed) = $this->serializer->unserialize($data);
                 foreach ($this->_scopePriorityScheme as $scope) {
                     $this->_loadedScopes[$scope] = true;
                 }
@@ -311,7 +314,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                     $this->_inheritPlugins($class);
                 }
                 $this->_cache->save(
-                    $this->getSerializer()->serialize([$this->_data, $this->_inherited, $this->_processed]),
+                    $this->serializer->serialize([$this->_data, $this->_inherited, $this->_processed]),
                     $cacheId
                 );
             }
@@ -388,19 +391,5 @@ class PluginList extends Scoped implements InterceptionPluginList
             $this->logger = $this->_objectManager->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    protected function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }
