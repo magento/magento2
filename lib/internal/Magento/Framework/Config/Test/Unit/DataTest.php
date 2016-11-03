@@ -60,16 +60,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigCached()
     {
         $data = ['a' => 'b'];
-        $jsonString = '{"a":"b"}';
+        $serializedData = '{"a":"b"}';
         $cacheId = 'test';
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
         $this->readerMock->expects($this->never())
             ->method('read');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->with($jsonString)
+            ->with($serializedData)
             ->willReturn($data);
         $config = new \Magento\Framework\Config\Data(
             $this->readerMock,
@@ -83,14 +83,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testReset()
     {
-        $jsonString = '';
+        $serializedData = '';
         $cacheId = 'test';
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->with($jsonString)
+            ->with($serializedData)
             ->willReturn([]);
         $this->cacheMock->expects($this->once())
             ->method('remove')

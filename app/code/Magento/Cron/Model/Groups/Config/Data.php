@@ -7,9 +7,6 @@ namespace Magento\Cron\Model\Groups\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Prepare cron jobs data
- */
 class Data extends \Magento\Framework\Config\Data
 {
     /**

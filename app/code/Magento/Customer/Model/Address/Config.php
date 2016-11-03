@@ -12,8 +12,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer address config
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Config extends ConfigData
 {
@@ -24,7 +22,7 @@ class Config extends ConfigData
     const DEFAULT_ADDRESS_FORMAT = 'oneline';
 
     /**
-     * Customer Address Templates per store
+     * Customer address templates per store
      *
      * @var array
      */
@@ -61,8 +59,6 @@ class Config extends ConfigData
     protected $_scopeConfig;
 
     /**
-     * Config constructor
-     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

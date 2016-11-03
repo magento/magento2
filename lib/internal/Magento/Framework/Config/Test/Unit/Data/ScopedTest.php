@@ -52,12 +52,8 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
                 'configScope' => $this->_configScopeMock,
                 'cache' => $this->_cacheMock,
                 'cacheId' => 'tag',
+                'serializer' => $this->serializerMock
             ]
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->_model,
-            'serializer',
-            $this->serializerMock
         );
     }
 

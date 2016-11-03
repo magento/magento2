@@ -14,6 +14,9 @@ use Magento\Framework\Serialize\SerializerInterface;
  */
 class Config extends \Magento\Framework\Config\Data
 {
+    /**
+     * Cache identifier
+     */
     const CACHE_ID = 'extension_attributes_config';
 
     /**

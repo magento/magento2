@@ -37,10 +37,14 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     private $cacheMock;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $serializerMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $loggerMock;
 
     protected function setUp()
@@ -64,6 +68,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
@@ -80,14 +85,9 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $objectManagerMock,
                 'classDefinitions' => $definitions,
                 'scopePriorityScheme' => ['global'],
-                'cacheId' => 'interception'
+                'cacheId' => 'interception',
+                'serializer' => $this->serializerMock
             ]
-        );
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->object,
-            'serializer',
-            $this->serializerMock
         );
 
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);

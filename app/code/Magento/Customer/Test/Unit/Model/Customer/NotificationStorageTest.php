@@ -45,15 +45,15 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
             'customer_id' => $customerId,
             'notification_type' => $notificationType
         ];
-        $jsonString = json_encode($data);
+        $serializedData = 'serialized data';
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($data)
-            ->willReturn($jsonString);
+            ->willReturn($serializedData);
         $this->cacheMock->expects($this->once())
             ->method('save')
             ->with(
-                $jsonString,
+                $serializedData,
                 $this->getCacheKey($notificationType, $customerId)
             );
         $this->notificationStorage->add($notificationType, $customerId);
