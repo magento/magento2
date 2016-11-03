@@ -61,6 +61,7 @@ class SettingChecker
      *
      * @param string $path
      * @param string $scope
+     * @param string $scopeCode
      * @return boolean
      */
     public function isReadOnly($path, $scope, $scopeCode)
