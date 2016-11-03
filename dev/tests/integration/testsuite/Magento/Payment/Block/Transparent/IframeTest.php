@@ -5,6 +5,10 @@
  */
 namespace Magento\Payment\Block\Transparent;
 
+use Magento\Payment\Block\Transparent\Iframe;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Class IframeTest
  * @package Magento\Payment\Block\Transparent
@@ -19,11 +23,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
     public function testToHtml($xssString)
     {
         /** @var $block Iframe */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
-        )->createBlock(
-            'Magento\Payment\Block\Transparent\Iframe'
-        );
+        $block = Bootstrap::getObjectManager()
+            ->get(LayoutInterface::class)
+            ->createBlock(Iframe::class);
 
         $block->setTemplate('transparent/iframe.phtml');
         $block->setData(

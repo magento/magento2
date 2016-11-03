@@ -176,7 +176,11 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Paypal\Model\Payflow\Transparent">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\Export\ExcludeList">
         <arguments>
             <argument name="configs" xsi:type="array">
