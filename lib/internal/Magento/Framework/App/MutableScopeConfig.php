@@ -16,6 +16,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class MutableScopeConfig extends Config implements MutableScopeConfigInterface
 {
+    /**
+     * @var array
+     */
     private $data;
 
     /**

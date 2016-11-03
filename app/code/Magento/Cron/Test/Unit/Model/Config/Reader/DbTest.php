@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
+
 use Magento\Framework\App\Config;
 use Magento\GoogleAdwords\Block\Code;
 

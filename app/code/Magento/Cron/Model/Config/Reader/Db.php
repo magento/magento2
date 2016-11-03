@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Model\Config\Reader;
+
 use Magento\Framework\App\Config;
 
 /**
@@ -22,6 +23,7 @@ class Db
      * @var \Magento\Framework\App\Config\Scope\ReaderInterface
      */
     protected $_reader;
+
     /**
      * @var Config
      */

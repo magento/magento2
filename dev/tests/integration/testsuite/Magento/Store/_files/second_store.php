@@ -34,4 +34,3 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     \Magento\Store\Model\StoreManagerInterface::class
 )->reinitStores();
-

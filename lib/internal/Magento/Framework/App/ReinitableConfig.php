@@ -22,4 +22,3 @@ class ReinitableConfig extends MutableScopeConfig implements ReinitableConfigInt
         return $this;
     }
 }
-

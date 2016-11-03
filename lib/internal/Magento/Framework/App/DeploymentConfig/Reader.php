@@ -145,11 +145,6 @@ class Reader
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
         $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
 
-        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
-            $result = include $path . '/' . $pathConfig;
-            $result = is_array($result) ? $result : [];
-        }
-
         if (!$ignoreInitialConfigFiles) {
             foreach ($initialFilePools as $initialFiles) {
                 if (isset($initialFiles[$fileKey]) && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])) {
@@ -157,6 +152,11 @@ class Reader
                     $result = array_replace_recursive($result, $fileBuffer);
                 }
             }
+        }
+
+        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
+            $fileBuffer = include $path . '/' . $pathConfig;
+            $result = array_replace_recursive($result, $fileBuffer);
         }
 
         return $result;
