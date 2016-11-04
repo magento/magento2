@@ -11,27 +11,27 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlRewriteFactory;
+    private $urlRewriteFactory;
 
     /**
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlPathGenerator;
+    private $urlPathGenerator;
 
     /**
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
      */
-    protected $urlRewriteGenerator;
+    private $urlRewriteGenerator;
 
     /**
      * @return void

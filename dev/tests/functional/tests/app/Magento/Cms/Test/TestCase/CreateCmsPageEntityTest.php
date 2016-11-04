@@ -59,7 +59,7 @@ class CreateCmsPageEntityTest extends Injectable
      *
      * @var string
      */
-    protected $configData;
+    private $configData;
 
     /**
      * Inject pages.
@@ -104,7 +104,7 @@ class CreateCmsPageEntityTest extends Injectable
     }
 
     /**
-     * Disable MAP on Config level.
+     * Disable single store mode on config level.
      *
      * @return void
      */

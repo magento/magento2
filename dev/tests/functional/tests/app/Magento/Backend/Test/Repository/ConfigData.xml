@@ -213,7 +213,7 @@
             </field>
         </dataset>
         <dataset name="enable_single_store_mode">
-            <field name="general/;/enabled" xsi:type="array">
+            <field name="general/single_store_mode/enabled" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">Yes</item>
