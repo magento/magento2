@@ -32,6 +32,7 @@ class UpdateCustomerGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

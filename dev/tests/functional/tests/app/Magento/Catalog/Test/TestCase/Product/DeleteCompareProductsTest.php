@@ -28,6 +28,7 @@ class DeleteCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
+    const STABLE = 'no';
     /* end tags */
 
     /**
