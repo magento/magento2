@@ -165,7 +165,7 @@ class DataGrid extends Grid
      */
     protected function waitFilterToLoad()
     {
-        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->getTemplateBlock()->waitLoader();
         $browser = $this->_rootElement;
         $selector = $this->filterButton . ', ' . $this->resetButton;
         $browser->waitUntil(
