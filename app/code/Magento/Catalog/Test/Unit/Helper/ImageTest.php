@@ -164,11 +164,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function prepareImageProperties($data)
     {
         $this->image->expects($this->once())
-            ->method('setType')
+            ->method('setDestinationSubdir')
             ->with($data['type'])
             ->willReturnSelf();
         $this->image->expects($this->any())
-            ->method('getType')
+            ->method('getDestinationSubdir')
             ->willReturn($data['type']);
         $this->image->expects($this->once())
             ->method('setWidth')
@@ -458,7 +458,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseFile')
             ->willReturn($baseFile);
         $this->image->expects($this->any())
-            ->method('getType')
+            ->method('getDestinationSubdir')
             ->willReturn($destination);
         $this->image->expects($this->any())
             ->method('isCached')
