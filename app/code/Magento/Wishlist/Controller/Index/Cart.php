@@ -113,6 +113,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
@@ -137,6 +138,10 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
 
         // Set qty
         $qty = $this->getRequest()->getParam('qty');
+        $postQty = $this->getRequest()->getPostValue('qty');
+        if ($postQty !== null && $qty !== $postQty) {
+            $qty = $postQty;
+        }
         if (is_array($qty)) {
             if (isset($qty[$itemId])) {
                 $qty = $qty[$itemId];

@@ -71,3 +71,18 @@ require([
 
 });
 </script>
+
+<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
+<?php if (is_object($editBlock)): ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=delete-user]" : {
+                "deleteUserAccount" : {
+                    "message": "<?php echo $editBlock->escapeHtml($editBlock->getDeleteMessage()) ?>",
+                    "url": "<?php /* @noEscape */ echo $editBlock->getDeleteUrl(); ?>",
+                    "objId": "<?php echo $editBlock->escapeHtml($editBlock->getObjectId()) ?>"
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

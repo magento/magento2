@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Framework\DB\Ddl\Table;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -848,6 +847,24 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         return $writer->getContents();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
+    {
+        $exportFilter = !empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]) ?
+            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP] : [];
+
+        if (isset($exportFilter['category_ids'])
+            && trim($exportFilter['category_ids'])
+            && $collection instanceof \Magento\Catalog\Model\ResourceModel\Product\Collection
+        ) {
+            $collection->addCategoriesFilter(['in' => explode(',', $exportFilter['category_ids'])]);
+        }
+
+        return parent::_prepareEntityCollection($collection);
     }
 
     /**

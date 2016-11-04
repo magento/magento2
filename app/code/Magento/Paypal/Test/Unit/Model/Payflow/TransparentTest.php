@@ -428,6 +428,13 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->method('setVaultPaymentToken')
             ->with($paymentTokenMock);
 
+        $this->paymentMock->expects($this->at(8))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::CC_DETAILS);
+        $this->paymentMock->expects($this->at(9))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::PNREF);
+
         $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
     }
 }
