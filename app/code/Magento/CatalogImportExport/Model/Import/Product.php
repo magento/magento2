@@ -1485,7 +1485,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
 
                 if (!empty($rowData[$column . '_label'])) {
-                    $labels[$column] = $this->parseImageLabels($rowData[$column . '_label']);
+                    $labels[$column] = $this->parseMultipleValues($rowData[$column . '_label']);
 
                     if (count($labels[$column]) > count($images[$column])) {
                         $labels[$column] = array_slice($labels[$column], 0, count($images[$column]));
@@ -2824,12 +2824,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse labels from combined labels string
+     * Parse values from multiple attributes fields
      *
      * @param string $labelRow
      * @return array
      */
-    private function parseImageLabels($labelRow)
+    private function parseMultipleValues($labelRow)
     {
         return $this->parseMultiselectValues(
             $labelRow,
