@@ -147,6 +147,7 @@ class FormPageActions extends ParentFormPageActions
     /**
      * Change Store View scope.
      *
+     * @param FixtureInterface $store
      * @return void
      */
     public function changeStoreViewScope(FixtureInterface $store)
