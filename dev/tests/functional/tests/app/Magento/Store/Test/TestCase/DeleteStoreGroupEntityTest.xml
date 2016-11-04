@@ -16,7 +16,7 @@
             <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid" />
         </variation>
         <variation name="DeleteStoreGroupEntityTestVariation2">
-            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="tag" xsi:type="string">severity:S3, stable:no</data>
             <data name="storeGroup/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">No</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteMessage" />

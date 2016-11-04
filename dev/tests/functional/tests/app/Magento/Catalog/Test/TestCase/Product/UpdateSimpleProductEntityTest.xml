@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest" summary="Update Simple Product" ticketId="MAGETWO-23544">
         <variation name="UpdateSimpleProductEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Update visibility to Catalog, Search</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -17,7 +18,6 @@
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">120.0000</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
-            <data name="issue" xsi:type="string">MAGETWO-58145</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
