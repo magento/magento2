@@ -14,14 +14,14 @@ class CouponPostTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test for \Magento\Checkout\Controller\Cart\CouponPost::execute() with simple product
      *
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      */
     public function testExecute()
     {
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
         $quote = $session->getQuote();
-        $quote->setData('trigger_recollect', 1)->setTotalsCollectedFlag(true)->save();
+        $quote->setData('trigger_recollect', 1)->setTotalsCollectedFlag(true);
         $inputData = [
             'remove' => 0,
             'coupon_code' => 'test'
