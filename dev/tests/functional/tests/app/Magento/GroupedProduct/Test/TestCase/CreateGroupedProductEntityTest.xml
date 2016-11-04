@@ -57,6 +57,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateGroupedProductEntityTestVariation5" summary="Create with no required products">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
@@ -109,6 +110,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateGroupedProductEntityTestVariation10" summary="Create Grouped Product and Assign it on Custom Website">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>

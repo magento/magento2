@@ -73,6 +73,7 @@ class UpdateBundleProductEntityTest extends Injectable
      */
     public function test(BundleProduct $product, BundleProduct $originalProduct)
     {
+        $this->markTestIncomplete('MAGETWO-56584: [FT] Custom options are not created for product in test');
         // Preconditions
         $originalProduct->persist();
         $originalCategory = $originalProduct->hasData('category_ids')

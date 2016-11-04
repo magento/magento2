@@ -23,13 +23,14 @@ class VerifyAdminAccountSharingEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
+    const TO_MAINTAIN = 'yes';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
      * Admin account settings page.
      *
-     * @var adminAccountSharing
+     * @var AdminAccountSharing
      */
     private $adminAccountSharing;
 
