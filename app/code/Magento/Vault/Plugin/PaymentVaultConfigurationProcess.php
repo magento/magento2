@@ -69,21 +69,18 @@ class PaymentVaultConfigurationProcess
             return $method->getProviderCode();
         };
         $activePaymentMethodCodes = array_map($getCodeFunc, $activePaymentMethodList);
-        $activeVaultCodes = array_map($getCodeFunc, $activeVaultList);
         $activeVaultProviderCodes = array_map($getProviderCodeFunc, $activeVaultList);
         $activePaymentMethodCodes = array_merge(
             $activePaymentMethodCodes,
-            $activeVaultCodes,
             $activeVaultProviderCodes
         );
 
         foreach ($configuration as $paymentGroup => $groupConfig) {
-            foreach (array_keys($groupConfig['methods']) as $paymentCode) {
-                if (!in_array($paymentCode, $activePaymentMethodCodes)) {
-                    unset($configuration[$paymentGroup]['methods'][$paymentCode]);
-                }
+            $notActivePaymentMethodCodes = array_diff(array_keys($groupConfig['methods']), $activePaymentMethodCodes);
+            foreach ($notActivePaymentMethodCodes as $notActivePaymentMethodCode) {
+                unset($configuration[$paymentGroup]['methods'][$notActivePaymentMethodCode]);
             }
-            if ($paymentGroup === 'vault' && !empty($activeVaultCodes)) {
+            if ($paymentGroup === 'vault' && !empty($activeVaultProviderCodes)) {
                 continue;
             }
             if (empty($configuration[$paymentGroup]['methods'])) {

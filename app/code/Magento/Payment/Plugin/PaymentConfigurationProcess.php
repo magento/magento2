@@ -59,10 +59,9 @@ class PaymentConfigurationProcess
         $activePaymentMethodCodes = array_map($getCodeFunc, $activePaymentMethodList);
 
         foreach ($configuration as $paymentGroup => $groupConfig) {
-            foreach (array_keys($groupConfig['methods']) as $paymentCode) {
-                if (!in_array($paymentCode, $activePaymentMethodCodes)) {
-                    unset($configuration[$paymentGroup]['methods'][$paymentCode]);
-                }
+            $notActivePaymentMethodCodes = array_diff(array_keys($groupConfig['methods']), $activePaymentMethodCodes);
+            foreach ($notActivePaymentMethodCodes as $notActivePaymentMethodCode) {
+                unset($configuration[$paymentGroup]['methods'][$notActivePaymentMethodCode]);
             }
             if (empty($configuration[$paymentGroup]['methods'])) {
                 unset($configuration[$paymentGroup]);

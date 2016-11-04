@@ -112,9 +112,7 @@ class PaymentVaultConfigurationProcessTest extends \PHPUnit_Framework_TestCase
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [
             'vault' => [
-                'methods' => [
-                    'braintree_paypal_vault' => []
-                ]
+                'methods' => []
             ],
             'braintree' => [
                 'methods' => [
@@ -134,9 +132,7 @@ class PaymentVaultConfigurationProcessTest extends \PHPUnit_Framework_TestCase
         $result2['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [
             'vault' => [
-                'methods' => [
-                    'braintree_paypal_vault' => []
-                ]
+                'methods' => []
             ],
             'braintree' => [
                 'methods' => [
@@ -156,7 +152,7 @@ class PaymentVaultConfigurationProcessTest extends \PHPUnit_Framework_TestCase
 
         return [
             [$jsLayout, [], [], $result1],
-            [$jsLayout, [$vaultPaymentMethod], [], $result2]
+            [$jsLayout, [$vaultPaymentMethod], [$vaultPaymentMethod], $result2]
         ];
     }
 }

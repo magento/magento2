@@ -101,13 +101,28 @@ class PaymentConfigurationProcessTest extends \PHPUnit_Framework_TestCase
         ['children']['payment']['children']['renders']['children'] = [
             'braintree' => [
                 'methods' => [
+                    'braintree_paypal' => [],
+                    'braintree' => []
+                ]
+            ],
+            'paypal-payments' => [
+                'methods' => [
+                    'payflowpro' => [],
+                    'payflow_link' => []
+                ]
+            ]
+        ];
+        $result1['components']['checkout']['children']['steps']['children']['billing-step']
+        ['children']['payment']['children']['renders']['children'] = [];
+        $result2['components']['checkout']['children']['steps']['children']['billing-step']
+        ['children']['payment']['children']['renders']['children'] = [
+            'braintree' => [
+                'methods' => [
                     'braintree' => [],
                     'braintree_paypal' => []
                 ]
             ]
         ];
-        $result['components']['checkout']['children']['steps']['children']['billing-step']
-        ['children']['payment']['children']['renders']['children'] = [];
 
         $braintreePaymentMethod = $this
             ->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterface::class)
@@ -124,8 +139,8 @@ class PaymentConfigurationProcessTest extends \PHPUnit_Framework_TestCase
         $braintreePaypalPaymentMethod->expects($this->any())->method('getCode')->willReturn('braintree_paypal');
 
         return [
-            [$jsLayout, [], $result],
-            [$jsLayout, [$braintreePaymentMethod, $braintreePaypalPaymentMethod], $jsLayout]
+            [$jsLayout, [], $result1],
+            [$jsLayout, [$braintreePaymentMethod, $braintreePaypalPaymentMethod], $result2]
         ];
     }
 }
