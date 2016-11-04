@@ -186,12 +186,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $imageAsset;
 
     /**
-     * Image type of thumbnail, small_image, image, swatch_image or swatch_thumb
-     * @var string
-     */
-    private $imageType;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
