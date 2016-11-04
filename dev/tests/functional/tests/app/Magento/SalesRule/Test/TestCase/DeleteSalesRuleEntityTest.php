@@ -15,6 +15,7 @@ use Magento\Mtf\TestCase\Injectable;
 /**
  * Precondition:
  * 1. Several Cart Price Rules are created.
+ * 2. Create sales rule from dataset using Handler.
  *
  * Steps:
  * 1. Login to backend.
@@ -64,9 +65,10 @@ class DeleteSalesRuleEntityTest extends Injectable
      * Delete Sales Rule Entity.
      *
      * @param SalesRule $salesRule
+     * @param CatalogProductSimple $productForSalesRule1
      * @return void
      */
-    public function testDeleteSalesRule(SalesRule $salesRule, CatalogProductSimple $productForSalesRule1 = null)
+    public function test(SalesRule $salesRule, CatalogProductSimple $productForSalesRule1 = null)
     {
         // Preconditions
         $salesRule->persist();
