@@ -90,7 +90,7 @@ class Payment extends Block
         } catch (\Exception $exception) {
             throw new \Exception('Such payment method is absent.');
         }
-
+        $this->waitForElementVisible($paymentSelector);
         $paymentRadioButton = $this->_rootElement->find($paymentSelector);
         if ($paymentRadioButton->isVisible()) {
             $paymentRadioButton->click();
