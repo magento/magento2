@@ -7,7 +7,7 @@
 return [
     'db-host' => 'localhost',
     'db-user' => 'root',
-    'db-password' => 'vagrant',
+    'db-password' => '123123q',
     'db-name' => 'magento_integration_tests',
     'db-prefix' => '',
     'backend-frontname' => 'backend',

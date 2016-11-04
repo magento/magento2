@@ -21,6 +21,8 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     protected $_connectionNames = [];
 
     /**
+     * Constructor
+     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache

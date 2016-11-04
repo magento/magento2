@@ -56,6 +56,11 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_loadedScopes = [];
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\ReaderInterface $reader

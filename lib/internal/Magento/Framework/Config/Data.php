@@ -68,7 +68,7 @@ class Data implements \Magento\Framework\Config\DataInterface
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    private $serializer;
 
     /**
      * Constructor

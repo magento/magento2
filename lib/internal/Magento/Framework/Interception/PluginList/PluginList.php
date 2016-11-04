@@ -83,6 +83,11 @@ class PluginList extends Scoped implements InterceptionPluginList
     private $logger;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -111,8 +116,8 @@ class PluginList extends Scoped implements InterceptionPluginList
         $cacheId = 'plugins',
         SerializerInterface $serializer = null
     ) {
-        $serializer = $serializer ?: $objectManager->get(Serialize::class);
-        parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
+        $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
+        parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
         $this->_definitions = $definitions;
