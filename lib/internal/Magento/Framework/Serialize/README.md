@@ -1,5 +1,8 @@
 # Serialize
 
-**Serialize** libaray provides *SerializerInterface* and multiple implementations of serializer to support different kinds of needs of serializing/unserializing of data. Here are list of serializers in this library:
+**Serialize** library provides interface *SerializerInterface* and multiple implementations:
 
- * **Json** (default) - It can be used to serialize string, integer, float, boolean, or array data to json string; it unserializes json string to string, integer, float, boolean, or array. This is the recommended serializer. 
+ * *Json* - default implementation. Uses PHP native json_encode/json_decode functions;
+ * *Serialize* - less secure than *Json*, but gives higher performance on big arrays. Uses PHP native serialize/unserialize functions, does not unserialize objects on PHP 7.
+ 
+Using *Serialize* implementation directly is discouraged, always use *SerializerInterface*, using *Serialize* implementation may lead to security vulnerabilities.
