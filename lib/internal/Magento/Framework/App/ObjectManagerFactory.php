@@ -277,4 +277,34 @@ class ObjectManagerFactory
         }
         return $configData;
     }
+
+    /**
+     * Crete plugin list object
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
+     * @param \Magento\Framework\ObjectManager\DefinitionFactory $definitionFactory
+     * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
+     * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
+     * @return \Magento\Framework\Interception\PluginList\PluginList
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _createPluginList(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\ObjectManager\RelationsInterface $relations,
+        \Magento\Framework\ObjectManager\DefinitionFactory $definitionFactory,
+        \Magento\Framework\ObjectManager\Config\Config $diConfig,
+        \Magento\Framework\ObjectManager\DefinitionInterface $definitions
+    ) {
+        return $objectManager->create(
+            \Magento\Framework\Interception\PluginList\PluginList::class,
+            [
+                'relations' => $relations,
+                'definitions' => $definitionFactory->createPluginDefinition(),
+                'omConfig' => $diConfig,
+                'classDefinitions' => null
+            ]
+        );
+    }
 }
