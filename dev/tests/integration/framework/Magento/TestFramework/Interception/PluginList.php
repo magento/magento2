@@ -7,6 +7,9 @@ namespace Magento\TestFramework\Interception;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Plugin list configuration
+ */
 class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
 {
     /**
@@ -15,6 +18,8 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
     protected $_originScopeScheme = [];
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -26,7 +31,6 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
      * @param array $scopePriorityScheme
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
