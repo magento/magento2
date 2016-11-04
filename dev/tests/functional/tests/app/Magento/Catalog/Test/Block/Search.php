@@ -155,4 +155,14 @@ class Search extends Block
         $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
         $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->click();
     }
+
+    /**
+     * Check if search field is visible.
+     *
+     * @return bool
+     */
+    public function isSearchVisible()
+    {
+        return $this->_rootElement->isVisible();
+    }
 }
