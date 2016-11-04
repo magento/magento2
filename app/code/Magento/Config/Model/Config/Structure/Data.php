@@ -7,9 +7,14 @@ namespace Magento\Config\Model\Config\Structure;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides configuration
+ */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {
     /**
+     * Constructor
+     *
      * @param Reader $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache

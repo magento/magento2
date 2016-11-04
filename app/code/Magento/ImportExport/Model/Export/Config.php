@@ -7,9 +7,14 @@ namespace Magento\ImportExport\Model\Export;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides export configuration
+ */
 class Config extends \Magento\Framework\Config\Data implements \Magento\ImportExport\Model\Export\ConfigInterface
 {
     /**
+     * Constructor
+     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId

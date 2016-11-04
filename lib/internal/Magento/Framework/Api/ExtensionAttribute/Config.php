@@ -20,6 +20,8 @@ class Config extends \Magento\Framework\Config\Data
     const CACHE_ID = 'extension_attributes_config';
 
     /**
+     * Constructor
+     *
      * @param Reader $reader
      * @param CacheInterface $cache
      * @param string $cacheId|null

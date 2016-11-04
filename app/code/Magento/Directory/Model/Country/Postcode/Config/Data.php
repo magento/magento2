@@ -7,9 +7,14 @@ namespace Magento\Directory\Model\Country\Postcode\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides country postcodes configuration
+ */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
+     * Constructor
+     *
      * @param Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId

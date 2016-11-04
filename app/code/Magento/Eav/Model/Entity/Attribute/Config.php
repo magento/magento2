@@ -7,9 +7,14 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides EAV attributes configuration
+ */
 class Config extends \Magento\Framework\Config\Data
 {
     /**
+     * Constructor
+     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId

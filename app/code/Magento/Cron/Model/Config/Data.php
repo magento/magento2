@@ -7,9 +7,14 @@ namespace Magento\Cron\Model\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides cron configuration
+ */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
+     * Constructor
+     *
      * @param Reader\Xml $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param Reader\Db $dbReader

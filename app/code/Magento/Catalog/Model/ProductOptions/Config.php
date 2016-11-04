@@ -7,10 +7,15 @@ namespace Magento\Catalog\Model\ProductOptions;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides product options configuration
+ */
 class Config extends \Magento\Framework\Config\Data implements
     \Magento\Catalog\Model\ProductOptions\ConfigInterface
 {
     /**
+     * Constructor
+     *
      * @param \Magento\Catalog\Model\ProductOptions\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId

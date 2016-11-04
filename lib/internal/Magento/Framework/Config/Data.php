@@ -16,14 +16,14 @@ use Magento\Framework\App\ObjectManager;
 class Data implements \Magento\Framework\Config\DataInterface
 {
     /**
-     * Configuration reader model
+     * Configuration reader
      *
      * @var ReaderInterface
      */
     protected $_reader;
 
     /**
-     * Configuration cache model
+     * Configuration cache
      *
      * @var CacheInterface
      */
@@ -71,6 +71,8 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $serializer;
 
     /**
+     * Constructor
+     *
      * @param ReaderInterface $reader
      * @param CacheInterface $cache
      * @param string $cacheId

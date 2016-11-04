@@ -8,6 +8,9 @@ namespace Magento\Framework\Config\Data;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Provides scoped configuration
+ */
 class Scoped extends \Magento\Framework\Config\Data
 {
     /**
@@ -53,6 +56,8 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_loadedScopes = [];
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache

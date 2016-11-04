@@ -7,6 +7,9 @@ namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides search request configuration
+ */
 class Config extends \Magento\Framework\Config\Data
 {
     /**
@@ -15,6 +18,8 @@ class Config extends \Magento\Framework\Config\Data
     const CACHE_ID = 'request_declaration';
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Search\Request\Config\FilesystemReader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId

@@ -7,6 +7,9 @@ namespace Magento\Setup\Module\Di\Code\Generator;
 
 use Magento\Framework\Interception;
 
+/**
+ * Provides plugin list configuration
+ */
 class PluginList extends Interception\PluginList\PluginList
 {
     /**

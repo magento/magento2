@@ -83,6 +83,8 @@ class PluginList extends Scoped implements InterceptionPluginList
     private $logger;
 
     /**
+     * Constructor
+     *
      * @param ReaderInterface $reader
      * @param ScopeInterface $configScope
      * @param CacheInterface $cache

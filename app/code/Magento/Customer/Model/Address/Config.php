@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Customer address config
+ * Customer address configuration
  */
 class Config extends ConfigData
 {
@@ -36,8 +36,7 @@ class Config extends ConfigData
     protected $_store = null;
 
     /**
-     * Default types per store
-     * Using for invalid code
+     * Default types per store, used for invalid code
      *
      * @var array
      */
@@ -59,6 +58,8 @@ class Config extends ConfigData
     protected $_scopeConfig;
 
     /**
+     * Constructor
+     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

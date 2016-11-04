@@ -7,9 +7,14 @@ namespace Magento\Framework\Communication\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides communication configuration
+ */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Communication\Config\CompositeReader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId

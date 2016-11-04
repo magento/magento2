@@ -7,6 +7,9 @@ namespace Magento\Framework\Mview\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides materialized view configuration
+ */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
@@ -15,6 +18,8 @@ class Data extends \Magento\Framework\Config\Data
     protected $stateCollection;
 
     /**
+     * Constructor
+     *
      * @param Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\Mview\View\State\CollectionInterface $stateCollection

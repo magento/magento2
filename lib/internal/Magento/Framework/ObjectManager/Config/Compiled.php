@@ -11,6 +11,9 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
+/**
+ * Provides object manager configuration when in compiled mode
+ */
 class Compiled implements ConfigInterface
 {
     /**
@@ -34,6 +37,8 @@ class Compiled implements ConfigInterface
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param array $data
      */
     public function __construct($data)

@@ -7,6 +7,9 @@ namespace Magento\Framework\Event\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Provides event configuration
+ */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {
     /**
@@ -17,6 +20,8 @@ class Data extends \Magento\Framework\Config\Data\Scoped
     protected $_scopePriorityScheme = ['global'];
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Event\Config\Reader $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
