@@ -1905,13 +1905,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptionById($optionId)
     {
-        /** @var \Magento\Catalog\Model\Product\Option $option */
-        foreach ($this->getOptions() as $option) {
-            if ($option->getId() == $optionId) {
-                return $option;
+        if (is_array($this->getOptions())) {
+            /** @var \Magento\Catalog\Model\Product\Option $option */
+            foreach ($this->getOptions() as $option) {
+                if ($option->getId() == $optionId) {
+                    return $option;
+                }
             }
         }
-
         return null;
     }
 
