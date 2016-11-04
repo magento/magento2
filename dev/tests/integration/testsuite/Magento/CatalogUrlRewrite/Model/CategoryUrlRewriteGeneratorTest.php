@@ -94,7 +94,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @param string $urlKey
-     * @dataProvider IncorrectUrlRewritesDataProvider
+     * @dataProvider incorrectUrlRewritesDataProvider
      */
     public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
     {
@@ -112,7 +112,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function IncorrectUrlRewritesDataProvider()
+    public function incorrectUrlRewritesDataProvider()
     {
         return [
             ['#'],

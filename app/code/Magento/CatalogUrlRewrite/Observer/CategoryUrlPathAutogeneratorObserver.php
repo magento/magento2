@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
