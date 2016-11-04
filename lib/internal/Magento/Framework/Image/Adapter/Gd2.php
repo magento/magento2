@@ -346,6 +346,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $newImage = imagecreate($dims['frame']['width'], $dims['frame']['height']);
         }
 
+        if ($isAlpha) {
+            $this->_saveAlpha($newImage);
+        }
+
         // fill new image with required color
         $this->_fillBackgroundColor($newImage);
 
