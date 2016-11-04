@@ -194,7 +194,7 @@ class Image extends AbstractHelper
      */
     protected function setImageProperties()
     {
-        $this->_getModel()->setType($this->getType());
+        $this->_getModel()->setDestinationSubdir($this->getType());
         $this->_getModel()->setWidth($this->getWidth());
         $this->_getModel()->setHeight($this->getHeight());
 
@@ -442,7 +442,7 @@ class Image extends AbstractHelper
             $placeholderFullPath = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
         } else {
             $placeholderFullPath = $this->_placeholder
-                ?: 'Magento_Catalog::images/product/placeholder/' . $this->_getModel()->getType() . '.jpg';
+                ?: 'Magento_Catalog::images/product/placeholder/' . $this->_getModel()->getDestinationSubdir() . '.jpg';
         }
         return $placeholderFullPath;
     }
@@ -485,7 +485,7 @@ class Image extends AbstractHelper
             if ($this->getImageFile()) {
                 $model->setBaseFile($this->getImageFile());
             } else {
-                $model->setBaseFile($this->getProduct()->getData($model->getType()));
+                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
             }
         }
         return $this;

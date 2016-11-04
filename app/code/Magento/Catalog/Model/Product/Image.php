@@ -490,7 +490,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             $this->_isBaseFilePlaceholder = true;
             $this->imageAsset = $this->getViewAssetPlaceholderFactory()->create(
                 [
-                    'type' => $this->getType(),
+                    'type' => $this->getDestinationSubdir(),
                 ]
             );
         }
@@ -676,8 +676,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @deprecated
-     * @see \Magento\Catalog\Model\Product\Image::setType($imageType)
      * @param string $dir
      * @return $this
      */
@@ -688,8 +686,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @deprecated
-     * @see \Magento\Catalog\Model\Product\Image::getType()
      * @return string
      */
     public function getDestinationSubdir()
@@ -944,7 +940,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private function getMiscParams()
     {
         $miscParams = [
-            'image_type' => $this->getType(),
+            'image_type' => $this->getDestinationSubdir(),
             'image_height' => $this->getHeight(),
             'image_width' => $this->getWidth(),
             'keep_aspect_ratio' => ($this->_keepAspectRatio ? '' : 'non') . 'proportional',
@@ -966,26 +962,5 @@ class Image extends \Magento\Framework\Model\AbstractModel
         }
 
         return $miscParams;
-    }
-
-    /**
-     * Set image type
-     *
-     * @param string $imageType
-     * @return void
-     */
-    public function setType($imageType)
-    {
-        $this->imageType = $imageType;
-    }
-
-    /**
-     * Retrieve image type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->imageType;
     }
 }
