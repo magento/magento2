@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest" summary="Apply Taxes for products" ticketId="MAGETWO-27809">
         <variation name="TaxCalculationTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Simple product tier price with sales rule, customer tax equals store tax and catalog price including tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, row_cat_incl_ship_excl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_category</data>
@@ -37,6 +38,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="TaxCalculationTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax less than store tax and catalog price including tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, row_cat_incl_ship_excl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_with_special_price_and_category</data>
@@ -66,6 +68,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="TaxCalculationTestVariation5">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Simple product tier price with sales rule, customer tax less than store tax and catalog price including tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, unit_cat_incl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_category</data>
@@ -95,6 +98,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="TaxCalculationTestVariation6">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax equals store tax and catalog price excluding tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, total_cat_excl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_with_special_price_and_category</data>
@@ -124,6 +128,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="TaxCalculationTestVariation9">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Simple product tier price with sales rule, customer tax greater than store tax and catalog price excluding tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, total_cat_excl_ship_incl_after_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_category</data>
@@ -153,6 +158,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="TaxCalculationTestVariation10">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax greater than store tax and catalog price excluding tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, unit_cat_excl_ship_incl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_with_special_price_and_category</data>
