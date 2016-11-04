@@ -23,7 +23,7 @@ class BlockGallery extends Section
     public function setFieldsData(array $data, SimpleElement $element = null)
     {
         if (isset($data['image'])) {
-            foreach ($data['image']['value'] as $key => $imageData) {
+            foreach ($data['image']['value'] as $imageData) {
                 $uploadElement = $this->_rootElement->find('[name="image"]', Locator::SELECTOR_CSS, 'upload');
                 $uploadElement->setValue($imageData['file']);
                 $this->waitForElementNotVisible('.image.image-placeholder .file-row');

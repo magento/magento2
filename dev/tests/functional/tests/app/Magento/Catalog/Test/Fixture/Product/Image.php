@@ -19,6 +19,7 @@ class Image extends DataSource
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {

@@ -17,6 +17,7 @@ class AssertProductCanUpdate extends \Magento\Mtf\Constraint\AbstractConstraint
      * @param \Magento\Mtf\Fixture\FixtureInterface $product
      * @param \Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit $catalogProductEdit
      * @param \Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex $catalogProductIndex
+     * @return void
      */
     public function processAssert(
         \Magento\Mtf\Fixture\FixtureInterface $product,
