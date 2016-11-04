@@ -14,7 +14,7 @@
         </variation>
         <variation name="NavigateMenuTest10">
             <data name="menuItem" xsi:type="string">Products > Categories</data>
-            <data name="pageTitle" xsi:type="string">Default Category</data>
+            <data name="pageTitle" xsi:type="string">Default Category (ID: 2)</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest11">

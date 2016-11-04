@@ -28,6 +28,7 @@ class CreateTaxRuleEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
