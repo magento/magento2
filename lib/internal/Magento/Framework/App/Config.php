@@ -21,8 +21,6 @@ class Config implements ScopeConfigInterface
      */
     const CACHE_TAG = 'CONFIG';
 
-    const SCOPE_CACHE_TAGE = "config_scopes";
-
     /**
      * @var ScopeCodeResolver
      */
