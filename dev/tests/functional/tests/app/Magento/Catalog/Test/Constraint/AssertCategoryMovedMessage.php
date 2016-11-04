@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCategoryMovedMessage
  * Assert that success message is displayed after category moving.
  */
 class AssertCategoryMovedMessage extends AbstractConstraint

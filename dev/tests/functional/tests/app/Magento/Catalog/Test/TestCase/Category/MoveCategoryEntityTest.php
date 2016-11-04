@@ -22,10 +22,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save category
  * 6. Verify created category
  *
+ * @group Category_Management
  * @ZephyrId MAGETWO-27319
  */
 class MoveCategoryEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    /* end tags */
+
     /**
      * CatalogCategoryIndex page.
      *
@@ -45,7 +50,7 @@ class MoveCategoryEntityTest extends Injectable
      *
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
-     * @return array
+     * @return void
      */
     public function __inject(
         CatalogCategoryIndex $catalogCategoryIndex,

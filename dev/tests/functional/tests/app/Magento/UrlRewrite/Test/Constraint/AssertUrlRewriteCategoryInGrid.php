@@ -11,13 +11,18 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 
 /**
- * Class AssertUrlRewriteCategoryInGrid
  * Assert that url rewrite category in grid.
  */
 class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
 {
+    /**
+     * Value for no redirect type in grid.
+     */
     const REDIRECT_TYPE_NO = 'No';
 
+    /**
+     * Value for Permanent (301) redirect type in grid.
+     */
     const REDIRECT_TYPE_301 = 'Permanent (301)';
 
     /**
@@ -45,42 +50,41 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
                 $filterByRequestPathCondition[] = $category->getUrlKey();
                 $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
             }
-            $filterByRequestPathConditionString = '';
-            $index = count($filterByRequestPathCondition);
-            while ($index) {
-                $filterByRequestPathConditionString .= $filterByRequestPathCondition[--$index];
-                $filterByRequestPathConditionString .= $index ? '/' : '.html';
-            }
+            $filterByRequestPathConditionString = implode('/', array_reverse($filterByRequestPathCondition)) . '.html';
             $urlPath = strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
             $filter = [
                 'request_path' => strtolower($filterByRequestPathConditionString),
                 'target_path' => $urlPath,
                 'redirect_type' => self::REDIRECT_TYPE_301
             ];
-            \PHPUnit_Framework_Assert::assertTrue(
-                $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
-                'URL Rewrite with request path "' . $filterByRequestPathConditionString . '" is absent in grid.'
-            );
         } else {
             $filter = [$filterByPath => strtolower($category->getUrlKey())];
-            \PHPUnit_Framework_Assert::assertTrue(
-                $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
-                'URL Rewrite with request path "' . $category->getUrlKey() . '" is absent in grid.'
-            );
+            $filterByRequestPathConditionString = $category->getUrlKey();
         }
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
+            'URL Rewrite with request path "' . $filterByRequestPathConditionString . '" is absent in grid.'
+        );
 
         if ($parentCategory && $childCategory) {
             $urlPath = strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
-            $filter = [
-                'request_path' => $urlPath,
-                'target_path' => 'catalog/category/view/id/' . $childCategory->getId(),
-                'redirect_type' => self::REDIRECT_TYPE_NO
-            ];
-            \PHPUnit_Framework_Assert::assertTrue(
-                $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
-                'URL Rewrite with several conditions is absent in grid.'
-            );
+            $categoryId = $childCategory->getId();
+        } else {
+            $urlPath = strtolower($category->getUrlKey() . '.html');
+            $categoryId = $category->getId();
         }
+
+        $filter = [
+            'request_path' => $urlPath,
+            'target_path' => 'catalog/category/view/id/' . $categoryId,
+            'redirect_type' => self::REDIRECT_TYPE_NO
+        ];
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
+            'URL Rewrite with several conditions is absent in grid.'
+        );
     }
 
     /**
