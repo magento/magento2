@@ -145,6 +145,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation6">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">California</data>
             <data name="address/data/postcode" xsi:type="string">95814</data>
