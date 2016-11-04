@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Serialize;
 
+/**
+ * Interface for serializing
+ */
 interface SerializerInterface
 {
     /**

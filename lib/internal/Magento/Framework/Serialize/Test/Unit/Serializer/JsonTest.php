@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
@@ -21,25 +22,57 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|bool|array $value
-     * @dataProvider serializeUnserializeDataProvider
+     * @param string|int|float|bool|array|null $value
+     * @param string $expected
+     * @dataProvider serializeDataProvider
      */
-    public function testSerializeUnserialize($value)
+    public function testSerialize($value, $expected)
     {
         $this->assertEquals(
-            $this->json->unserialize($this->json->serialize($value)),
-            $value
+            $expected,
+            $this->json->serialize($value)
         );
     }
 
-    public function serializeUnserializeDataProvider()
+    public function serializeDataProvider()
+    {
+        $dataObject = new DataObject(['something']);
+        return [
+            ['', '""'],
+            ['string', '"string"'],
+            [null, 'null'],
+            [false, 'false'],
+            [['a' => 'b', 'd' => 123], '{"a":"b","d":123}'],
+            [123, '123'],
+            [10.56, '10.56'],
+            [$dataObject, '{}'],
+        ];
+    }
+
+    /**
+     * @param string $value
+     * @param string|int|float|bool|array|null $expected
+     * @dataProvider unserializeDataProvider
+     */
+    public function testUnserialize($value, $expected)
+    {
+        $this->assertEquals(
+            $expected,
+            $this->json->unserialize($value)
+        );
+    }
+
+    public function unserializeDataProvider()
     {
         return [
-            [''],
-            ['string'],
-            [null],
-            [false],
-            [['a' => 'b']],
+            ['""', ''],
+            ['"string"', 'string'],
+            ['null', null],
+            ['false', false],
+            ['{"a":"b","d":123}', ['a' => 'b', 'd' => 123]],
+            ['123', 123],
+            ['10.56', 10.56],
+            ['{}', []],
         ];
     }
 }
