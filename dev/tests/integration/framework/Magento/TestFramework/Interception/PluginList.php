@@ -8,7 +8,7 @@ namespace Magento\TestFramework\Interception;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Plugin list configuration
+ * Provides plugin list configuration
  */
 class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
 {
