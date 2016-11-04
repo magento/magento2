@@ -500,5 +500,18 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
+        <variation name="CreateSimpleProductEntityWithImageTestVariation1">
+            <data name="description" xsi:type="string">Create product with image</data>
+            <data name="product/data/image/0/file" xsi:type="string">Magento/Catalog/Test/_files/test1.png</data>
+            <data name="product/data/image/1/file" xsi:type="string">Magento/Catalog/Test/_files/test2.png</data>
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">100</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCanUpdate" />
+        </variation>
     </testCase>
 </config>
