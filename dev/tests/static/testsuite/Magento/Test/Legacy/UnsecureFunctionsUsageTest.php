@@ -64,7 +64,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
                 if ($regexp) {
                     $matches = preg_grep(
                         $regexp,
-                        file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                        file($fileName)
                     );
                     if (!empty($matches)) {
                         foreach (array_keys($matches) as $line) {
@@ -114,7 +114,8 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
                     if (strpos($path, $directory) === 0) {
                         if (preg_match($fileExtensions, $path)) {
                             foreach ($blackListFiles as $blackListFile) {
-                                if (preg_match($blackListFile, $path)) {
+                                $blackListFile = preg_quote($blackListFile, '#');
+                                if (preg_match('#' . $blackListFile . '#', $path)) {
                                     return false;
                                 }
                             }
@@ -158,10 +159,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         if (empty($functions)) {
             return '';
         }
-        $regexArray = [];
-        foreach ($functions as $function) {
-            $regexArray[] = '\b' . $function . '\b\(';
-        }
-        return '/' . implode('|', $regexArray) . '/i';
+        return '/(?<!function |[^\s])\b(' . join('|', $functions) . ')\s*\(/i';
     }
 }
