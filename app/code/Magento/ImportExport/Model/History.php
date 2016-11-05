@@ -50,7 +50,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\ImportExport\Model\ResourceModel\History $resource
      * @param \Magento\ImportExport\Model\ResourceModel\History\Collection $resourceCollection
      * @param \Magento\ImportExport\Helper\Report $reportHelper
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Backend\Model\Auth\Session\Proxy $authSession
      * @param array $data
      */
     public function __construct(
@@ -59,7 +59,7 @@ class History extends \Magento\Framework\Model\AbstractModel
         \Magento\ImportExport\Model\ResourceModel\History $resource,
         \Magento\ImportExport\Model\ResourceModel\History\Collection $resourceCollection,
         \Magento\ImportExport\Helper\Report $reportHelper,
-        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Backend\Model\Auth\Session\Proxy $authSession,
         array $data = []
     ) {
         $this->reportHelper = $reportHelper;
