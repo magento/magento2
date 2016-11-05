@@ -13,13 +13,13 @@
         <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
             <li class="item <?php /* @escapeNotVerified */ echo $crumbName ?>">
             <?php if ($crumbInfo['link']) : ?>
-                <a href="<?php /* @escapeNotVerified */ echo $crumbInfo['link'] ?>" title="<?php echo $block->escapeHtml($crumbInfo['title']) ?>">
-                    <?php echo $block->escapeHtml($crumbInfo['label']) ?>
+                <a href="<?php /* @escapeNotVerified */ echo $crumbInfo['link'] ?>" title="<?php echo $block->escapeHtml($crumbInfo['title'], null, true) ?>">
+                    <?php echo $block->escapeHtml($crumbInfo['label'], null, true) ?>
                 </a>
             <?php elseif ($crumbInfo['last']) : ?>
-                <strong><?php echo $block->escapeHtml($crumbInfo['label']) ?></strong>
+                <strong><?php echo $block->escapeHtml($crumbInfo['label'], null, true) ?></strong>
             <?php else: ?>
-                <?php echo $block->escapeHtml($crumbInfo['label']) ?>
+                <?php echo $block->escapeHtml($crumbInfo['label'], null, true) ?>
             <?php endif; ?>
             </li>
         <?php endforeach; ?>

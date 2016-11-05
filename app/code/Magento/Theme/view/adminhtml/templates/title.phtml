@@ -11,7 +11,7 @@
  */
 $titleId = ($block->getTitleId()) ? ' id="' . $block->getTitleId() . '"' : '';
 $titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
-$title = $block->escapeHtml($block->getPageTitle());
+$title = $block->escapeHtml($block->getPageTitle(), null, true);
 ?>
 
 <div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $titleClass; ?>">

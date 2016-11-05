@@ -881,11 +881,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string|array $data
      * @param array|null $allowedTags
+     * @param bool $doubleEncode
      * @return string
      */
-    public function escapeHtml($data, $allowedTags = null)
+    public function escapeHtml($data, $allowedTags = null, $doubleEncode = false)
     {
-        return $this->_escaper->escapeHtml($data, $allowedTags);
+        return $this->_escaper->escapeHtml($data, $allowedTags, $doubleEncode);
     }
 
     /**

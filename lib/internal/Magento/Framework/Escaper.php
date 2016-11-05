@@ -41,9 +41,10 @@ class Escaper
      *
      * @param string|array $data
      * @param array|null $allowedTags
+     * @param boolean $doubleEscape
      * @return string|array
      */
-    public function escapeHtml($data, $allowedTags = null)
+    public function escapeHtml($data, $allowedTags = null, $doubleEscape = false)
     {
         if (is_array($data)) {
             $result = [];
@@ -89,7 +90,7 @@ class Escaper
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
-                $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+                $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $doubleEscape);
             }
         } else {
             $result = $data;
