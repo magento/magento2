@@ -104,7 +104,7 @@ class Menu extends Block
     /**
      * Check if menu item is visible.
      *
-     * @param $menuItem
+     * @param string $menuItem
      * @return bool|void
      */
     public function isMenuItemVisible($menuItem)
