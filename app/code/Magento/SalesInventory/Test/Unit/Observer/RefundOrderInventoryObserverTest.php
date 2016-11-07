@@ -68,7 +68,7 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderMock;
+    private $orderMock;
 
     protected function setUp()
     {
