@@ -106,7 +106,8 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
         ) ? $this->create(
             $carrierCode,
             $storeId
