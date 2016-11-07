@@ -3,9 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Cms\Block\Widget\Page\Link $block
+ */
 ?>
 <div class="widget block block-cms-link">
-    <a <?php /* @escapeNotVerified */ echo $block->getLinkAttributes() ?>>
+    <a <?php /* @noEscape */ echo $block->getLinkAttributes() ?>>
         <span><?php echo $block->escapeHtml($block->getLabel()) ?></span>
     </a>
 </div>

@@ -61,8 +61,8 @@
             <field name="postcode" xsi:type="string">90230</field>
             <field name="country_id" xsi:type="string">United States</field>
             <field name="telephone" xsi:type="string">555-55-555-55</field>
-            <field name="default_billing" xsi:type="string">Yes</field>
-            <field name="default_shipping" xsi:type="string">No</field>
+            <field name="default_billing" xsi:type="string">No</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
 
         <dataset name="US_address_1">
