@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Wishlist\Test\TestCase\ConfigureProductInCustomerWishlistOnBackendTest" summary="Configure Products in Customer Wishlist on Backend" ticketId="MAGETWO-29257">
         <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid" />
         </variation>
