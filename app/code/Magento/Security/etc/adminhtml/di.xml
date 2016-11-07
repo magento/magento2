@@ -15,6 +15,11 @@
     <type name="Magento\Backend\Controller\Adminhtml\Auth\Login">
         <plugin name="security_login_form" type="Magento\Security\Model\Plugin\LoginController" />
     </type>
+    <type name="Magento\Security\Model\Plugin\AccountManagement">
+        <arguments>
+            <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST</argument>
+        </arguments>
+    </type>
     <type name="Magento\Security\Model\SecurityManager">
         <arguments>
             <argument name="securityCheckers" xsi:type="array">
