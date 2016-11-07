@@ -7,12 +7,12 @@
 namespace Magento\Catalog\Test\Constraint;
 
 /**
- * Assert that can save already exist product
+ * Assert that can save already exist product.
  */
 class AssertCanSaveProduct extends \Magento\Mtf\Constraint\AbstractConstraint
 {
     /**
-     * Assert that can save already exist product
+     * Assert that can save already existing product.
      *
      * @param \Magento\Mtf\Fixture\FixtureInterface $product
      * @param \Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit $catalogProductEdit
@@ -30,12 +30,12 @@ class AssertCanSaveProduct extends \Magento\Mtf\Constraint\AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertNotEmpty(
             $catalogProductEdit->getMessagesBlock()->getSuccessMessage(),
-            'Cant save existing product.'
+            'Can\'t save existing product.'
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

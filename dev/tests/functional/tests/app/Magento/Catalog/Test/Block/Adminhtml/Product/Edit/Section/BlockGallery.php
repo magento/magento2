@@ -11,17 +11,26 @@ use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
- * Class for product gallery block
+ * Class for product gallery block.
  */
 class BlockGallery extends Section
 {
     /**
+     * Selector for image loader container.
+     *
      * @var string
      */
     private $imageLoader = '.image.image-placeholder .file-row';
 
     /**
-     * Upload product images
+     * Selector for image upload input.
+     *
+     * @var string
+     */
+    private $imageUploadInput = '[name="image"]';
+
+    /**
+     * Upload product images.
      *
      * @param array $data
      * @param SimpleElement|null $element
@@ -31,7 +40,7 @@ class BlockGallery extends Section
     public function setFieldsData(array $data, SimpleElement $element = null)
     {
         foreach ($data['image']['value'] as $imageData) {
-            $uploadElement = $element->find('[name="image"]', Locator::SELECTOR_CSS, 'upload');
+            $uploadElement = $element->find($this->imageUploadInput, Locator::SELECTOR_CSS, 'upload');
             $uploadElement->setValue($imageData['file']);
             $this->waitForElementNotVisible($this->imageLoader);
         }
