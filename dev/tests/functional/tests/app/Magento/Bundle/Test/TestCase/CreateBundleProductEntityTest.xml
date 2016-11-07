@@ -74,7 +74,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
-        <variation name="CreateBundleProductEntityTestVariation4">
+        <variation name="CreateBundleProductEntityTestVariation4" summary="Create bundle product with out of stock simple product" ticketId="MAGETWO-12801">
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create fixed bundle</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
@@ -89,7 +89,7 @@
             <data name="product/data/weight" xsi:type="string">10</data>
             <data name="product/data/description" xsi:type="string">Bundle Product Fixed Required</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">default_fixed</data>
-            <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
+            <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::out_of_stock</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">bundle_default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
