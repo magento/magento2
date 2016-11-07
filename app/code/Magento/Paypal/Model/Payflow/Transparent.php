@@ -5,16 +5,16 @@
  */
 namespace Magento\Paypal\Model\Payflow;
 
-use Magento\Framework\DataObject;
-use Magento\Paypal\Model\Payflowpro;
-use Magento\Sales\Model\Order\Payment;
-use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Model\Method\TransparentInterface;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Model\Method\TransparentInterface;
+use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
+use Magento\Paypal\Model\Payflowpro;
+use Magento\Sales\Model\Order\Payment;
 
 /**
  * Payflow Pro payment gateway model
@@ -112,23 +112,27 @@ class Transparent extends Payflowpro implements TransparentInterface
     /**
      * Performs authorize transaction
      *
-     * @param \Magento\Payment\Model\InfoInterface|Object $payment
+     * @param InfoInterface|Object $payment
      * @param float $amount
      * @return $this
      * @throws InvalidTransitionException
      * @throws LocalizedException
      */
-    public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function authorize(InfoInterface $payment, $amount)
     {
+        /** @var Payment $payment */
         $request = $this->buildBasicRequest();
 
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $payment->getOrder();
         $this->addRequestOrderInfo($request, $order);
         $request = $this->fillCustomerContacts($order, $request);
 
-        $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
-        $request->setOrigid($payment->getAdditionalInformation('pnref'));
-        $request->setAmt(round($amount, 2));
+        $token = $payment->getAdditionalInformation('pnref');
+        $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
+        $request->setData('origid', $token);
+        $request->setData('amt', round($amount, 2));
+        $request->setData('currency', $order->getBaseCurrencyCode());
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
