@@ -28,6 +28,7 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
 {
     /* tags */
     const MVP = 'no';
+    const STABLE = 'no';
     /* end tags */
 
     /**
