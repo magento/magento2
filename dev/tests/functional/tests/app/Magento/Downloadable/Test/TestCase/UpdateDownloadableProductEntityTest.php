@@ -7,6 +7,7 @@
 namespace Magento\Downloadable\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
@@ -14,7 +15,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Update DownloadableProductEntity
+ * Test Creation for Update DownloadableProductEntity.
  *
  * Test Flow:
  *
@@ -41,28 +42,35 @@ class UpdateDownloadableProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Downloadable product fixture
+     * Downloadable product fixture.
      *
      * @var DownloadableProduct
      */
-    protected $product;
+    private $product;
 
     /**
-     * Product page with a grid
+     * Store fixture.
+     *
+     * @var Store
+     */
+    private $store;
+
+    /**
+     * Product page with a grid.
      *
      * @var CatalogProductIndex
      */
-    protected $catalogProductIndex;
+    private $catalogProductIndex;
 
     /**
-     * Edit product page on backend
+     * Edit product page on backend.
      *
      * @var CatalogProductEdit
      */
-    protected $catalogProductEdit;
+    private $catalogProductEdit;
 
     /**
-     * Persist category
+     * Persist category.
      *
      * @param Category $category
      * @return array
@@ -76,7 +84,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
     }
 
     /**
-     * Filling objects of the class
+     * Filling objects of the class.
      *
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductEdit $catalogProductEditPage
@@ -93,24 +101,32 @@ class UpdateDownloadableProductEntityTest extends Injectable
             ['dataset' => 'default']
         );
         $this->product->persist();
+        $this->store = $fixtureFactory->createByCode('store', ['dataset' => 'custom']);
+        $this->store->persist();
         $this->catalogProductIndex = $catalogProductIndexNewPage;
         $this->catalogProductEdit = $catalogProductEditPage;
     }
 
     /**
-     * Test update downloadable product
+     * Test update downloadable product.
      *
      * @param DownloadableProduct $product
      * @param Category $category
-     * @return void
+     * @param bool|int $customStore [optional]
+     * @return array
      */
-    public function test(DownloadableProduct $product, Category $category)
+    public function test(DownloadableProduct $product, Category $category, $customStore = null)
     {
         // Steps
         $filter = ['sku' => $this->product->getSku()];
         $this->catalogProductIndex->open()->getProductGrid()->searchAndOpen($filter);
+        if ($customStore) {
+            $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($this->store);
+        }
         $productBlockForm = $this->catalogProductEdit->getProductForm();
         $productBlockForm->fill($product, null, $category);
         $this->catalogProductEdit->getFormPageActions()->save();
+
+        return ['store' => $this->store, 'product' => $this->product, 'changedProduct' => $product];
     }
 }

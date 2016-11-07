@@ -68,6 +68,7 @@
         <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\Product\TierPrice" repository="Magento\Catalog\Test\Repository\Product\TierPrice" />
         <field name="updated_at" is_required="1" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
+        <field name="use_default_url_key" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />

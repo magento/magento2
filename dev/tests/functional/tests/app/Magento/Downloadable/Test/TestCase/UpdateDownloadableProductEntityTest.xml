@@ -115,5 +115,15 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation7" summary="Verify data overriding on Store View level" ticketId="MTO-6">
+            <data name="customStore" xsi:type="boolean">true</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test Downloadable Product %isolation%</data>
+            <data name="product/data/use_default_url_key" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductOnCustomStoreView" />
+        </variation>
     </testCase>
 </config>
