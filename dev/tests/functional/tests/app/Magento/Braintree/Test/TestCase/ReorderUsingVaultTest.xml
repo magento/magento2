@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Vault\Test\TestCase\ReorderUsingVaultTest" summary="Reorder from Admin with saved within Braintree credit card">
-        <variation name="ReorderUsingVaultBraintreeTestVariation1" summary="Reorder from Admin with saved within Braintree credit card for Guest Customer" ticketId="MAGETWO-54870">
+        <variation name="ReorderUsingVaultBraintreeTestVariation1" summary="Reorder from Admin with saved within Braintree credit card for Guest Customer" ticketId="MAGETWO-54869, MAGETWO-54870">
             <data name="description" xsi:type="string">Reorder from Admin with saved within Braintree credit card for Guest Customer</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
