@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Setup;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
@@ -40,30 +41,83 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $oldCompositeKeyColumns = ['product_id', 'website_id'];
         $newCompositeKeyColumns = ['product_id', 'stock_id'];
 
+        $foreignKeys = $this->getForeignKeys($setup, $oldCompositeKeyColumns);
+        // drop foreign keys
+        $this->dropForeignKeys($setup, $foreignKeys);
+
         $oldIndexName = $setup->getIdxName(
-            \Magento\CatalogInventory\Model\Stock\Item::ENTITY,
+            $setup->getTable(StockItem::ENTITY),
             $oldCompositeKeyColumns,
             \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         );
 
         $newIndexName = $setup->getIdxName(
-            \Magento\CatalogInventory\Model\Stock\Item::ENTITY,
+            $setup->getTable(StockItem::ENTITY),
             $newCompositeKeyColumns,
             \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         );
 
         // Drop a key based on the following columns: "product_id","website_id"
-        $setup->getConnection()->dropIndex(
-            $setup->getTable(\Magento\CatalogInventory\Model\Stock\Item::ENTITY),
-            $oldIndexName
-        );
+        $setup->getConnection()->dropIndex($setup->getTable(StockItem::ENTITY), $oldIndexName);
 
         // Create a key based on the following columns: "product_id","stock_id"
-        $setup->getConnection()->addIndex(
-            \Magento\CatalogInventory\Model\Stock\Item::ENTITY,
-            $newIndexName,
-            $newCompositeKeyColumns,
-            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-        );
+        $setup->getConnection()
+            ->addIndex(
+                $setup->getTable(StockItem::ENTITY),
+                $newIndexName,
+                $newCompositeKeyColumns,
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            );
+        // restore deleted foreign keys
+        $this->createForeignKeys($setup, $foreignKeys);
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @param array                $keys
+     * @return void
+     */
+    private function dropForeignKeys(SchemaSetupInterface $setup, array $keys)
+    {
+        foreach ($keys as $key) {
+            $setup->getConnection()->dropForeignKey($key['TABLE_NAME'], $key['FK_NAME']);
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @param array                $keys
+     * @return void
+     */
+    private function createForeignKeys(SchemaSetupInterface $setup, array $keys)
+    {
+        foreach ($keys as $key) {
+            $setup->getConnection()->addForeignKey(
+                $key['FK_NAME'],
+                $key['TABLE_NAME'],
+                $key['COLUMN_NAME'],
+                $key['REF_TABLE_NAME'],
+                $key['REF_COLUMN_NAME'],
+                $key['ON_DELETE']
+            );
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @param array                $compositeKeys
+     * @return array
+     */
+    private function getForeignKeys(SchemaSetupInterface $setup, array $compositeKeys)
+    {
+        $foreignKeys = [];
+        $allForeignKeys = $setup->getConnection()->getForeignKeys($setup->getTable(StockItem::ENTITY));
+        foreach ($allForeignKeys as $key) {
+            if (in_array($key['COLUMN_NAME'], $compositeKeys)) {
+                $foreignKeys[] = $key;
+            }
+        }
+
+        return $foreignKeys;
     }
 }
