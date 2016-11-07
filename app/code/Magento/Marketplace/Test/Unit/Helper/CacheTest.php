@@ -6,70 +6,79 @@
 
 namespace Magento\Marketplace\Test\Unit\Helper;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 class CacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Helper\Cache
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheHelperMock;
+    private $cache;
+
+    /**
+     * @var  SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
+     * @var \Magento\Marketplace\Helper\Cache
+     */
+    private $cacheHelper;
 
     protected function setUp()
     {
-        $this->cacheHelperMock = $this->getCacheHelperMock(['getCache']);
+        $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->cacheHelper = $objectManagerHelper->getObject(
+            \Magento\Marketplace\Helper\Cache::class,
+            [
+                'cache' => $this->cache,
+                'serializer' => $this->serializer,
+            ]
+        );
     }
 
-    /**
-     * @covers \Magento\Marketplace\Helper\Cache::loadPartnersFromCache
-     */
     public function testLoadPartnersFromCache()
     {
-        $cache = $this->getCacheMock();
-        $this->cacheHelperMock
-            ->expects($this->once())
-            ->method('getCache')
-            ->will($this->returnValue($cache));
-        $cache->expects($this->once())
+        $partners = ['partner1', 'partner2'];
+        $serializedPartners = '["partner1", "partner2"]';
+        $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(''));
+            ->with('partners')
+            ->willReturn($serializedPartners);
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedPartners)
+            ->willReturn($partners);
 
-        $this->cacheHelperMock->loadPartnersFromCache();
+        $this->assertSame($partners, $this->cacheHelper->loadPartnersFromCache());
     }
 
-    /**
-     * @covers \Magento\Marketplace\Helper\Cache::savePartnersToCache
-     */
+    public function testLoadPartnersFromCacheNoCachedData()
+    {
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->with('partners')
+            ->willReturn(false);
+        $this->serializer->expects($this->never())
+            ->method('unserialize');
+
+        $this->assertSame(false, $this->cacheHelper->loadPartnersFromCache());
+    }
+
     public function testSavePartnersToCache()
     {
-        $cache = $this->getCacheMock();
-        $this->cacheHelperMock
-            ->expects($this->once())
-            ->method('getCache')
-            ->will($this->returnValue($cache));
-        $cache->expects($this->once())
+        $partners = ['partner1', 'partner2'];
+        $serializedPartners = '["partner1", "partner2"]';
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($partners)
+            ->willReturn($serializedPartners);
+        $this->cache->expects($this->once())
             ->method('save')
-            ->will($this->returnValue(true));
+            ->with($serializedPartners);
 
-        $this->cacheHelperMock->savePartnersToCache([]);
-    }
-
-    /**
-     * Gets cache helper mock
-     *
-     * @param null $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Helper\Cache
-     */
-    public function getCacheHelperMock($methods = null)
-    {
-        return $this->getMock(\Magento\Marketplace\Helper\Cache::class, $methods, [], '', false);
-    }
-
-    /**
-     * Gets Filesystem mock
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Config\CacheInterface
-     */
-    public function getCacheMock()
-    {
-        return $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
+        $this->cacheHelper->savePartnersToCache($partners);
     }
 }

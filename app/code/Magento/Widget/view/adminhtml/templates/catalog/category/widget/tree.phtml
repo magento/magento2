@@ -79,7 +79,7 @@ jQuery(function()
                 // Add empty node to reset category filter
                 if(!emptyNodeAdded) {
                     var empty = Object.clone(_node);
-                    empty.text = '<?php /* @escapeNotVerified */ echo __('None') ?>';
+                    empty.text = '<?php echo $block->escapeJs($block->escapeHtml(__('None'))); ?>';
                     empty.children = [];
                     empty.id = 'none';
                     empty.path = '1/none';

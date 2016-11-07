@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\ClearAllCompareProductsTest" summary="Clear All Compare Products" ticketId="MAGETWO-25961">
         <variation name="ClearAllCompareProductsTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="config/dataset" xsi:type="string">compare_products</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductVirtual::default,downloadableProduct::default,groupedProduct::grouped_product_with_price,configurableProduct::default,bundleProduct::bundle_dynamic_product,bundleProduct::bundle_fixed_product</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessRemoveAllProductsMessage" />
