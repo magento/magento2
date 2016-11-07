@@ -55,20 +55,23 @@ class RefundOrderInventoryObserver implements ObserverInterface
      * @param StockManagementInterface $stockManagement
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
-     * @param \Magento\Framework\App\ObjectManager $returnProcessor
+     * @param ReturnProcessor $returnProcessor
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         StockManagementInterface $stockManagement,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
-        \Magento\Framework\App\ObjectManager $returnProcessor
+        \Magento\SalesInventory\Model\Order\ReturnProcessor $returnProcessor,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockManagement = $stockManagement;
         $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->priceIndexer = $priceIndexer;
         $this->returnProcessor = $returnProcessor;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -81,7 +84,7 @@ class RefundOrderInventoryObserver implements ObserverInterface
     {
         /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
-        $order = $this->getOrderRepository()->get($creditmemo->getOrderId());
+        $order = $this->orderRepository->get($creditmemo->getOrderId());
         $returnToStockItems = [];
         foreach ($creditmemo->getItems() as $item) {
             if ($item->getBackToStock()) {
@@ -94,21 +97,5 @@ class RefundOrderInventoryObserver implements ObserverInterface
             $returnToStockItems,
             $this->stockConfiguration->isAutoReturnEnabled()
         );
-    }
-
-    /**
-     * Get OrderRepository
-     *
-     * @return OrderRepository
-     * @deprecated
-     */
-    private function getOrderRepository()
-    {
-        if (!$this->orderRepository) {
-            $this->orderRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(OrderRepository::class);
-
-        }
-        return $this->orderRepository;
     }
 }
