@@ -50,10 +50,12 @@ class RefundOrderInventoryObserver implements ObserverInterface
     private $orderRepository;
 
     /**
+     * RefundOrderInventoryObserver constructor.
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockManagementInterface $stockManagement
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @param \Magento\Framework\App\ObjectManager $returnProcessor
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
