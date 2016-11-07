@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="\Liip\CustomerHierarchy\Model\Role\Permission\Checker\PoolInterface" type="\Liip\CustomerHierarchy\Model\Role\Permission\Checker\Pool" />
+
+    <type name="\Liip\CustomerHierarchy\Model\Role\Permission\Checker\Pool">
+        <arguments>
+            <argument name="checkers" xsi:type="array">
+                <item name="login" xsi:type="object">\Liip\CustomerHierarchy\Model\Role\Permission\Checker\Login</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="\Magento\Customer\Model\AccountManagement">
+        <plugin name="customer_account" type="\Liip\CustomerHierarchy\Model\Plugin\AccountManagement" />
+    </type>
+</config>
