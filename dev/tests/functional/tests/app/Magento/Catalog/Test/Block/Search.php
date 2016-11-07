@@ -72,8 +72,11 @@ class Search extends Block
      *
      * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
-    public function search($keyword)
+    public function search($keyword, $length = null)
     {
+        if ($length) {
+            $keyword = substr($keyword, 0, $length);
+        }
         $this->fillSearch($keyword);
         $this->_rootElement->find($this->searchButton)->click();
     }
