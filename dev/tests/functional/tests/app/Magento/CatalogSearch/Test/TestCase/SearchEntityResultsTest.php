@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Perform all assertions.
  *
  * @group Search_Frontend
- * @ZephyrId MAGETWO-25095
+ * @ZephyrId MAGETWO-25095, MAGETWO-36542
  */
 class SearchEntityResultsTest extends Injectable
 {
