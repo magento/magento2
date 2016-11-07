@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogRule\Test\Constraint;
 
-use Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedOnepageCheckout;
+use Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout;
 
 /**
  * Assert that Catalog Price Rule is not applied on OnePage Checkout page.
  */
-class AssertCatalogPriceRuleIsNotAppliedOnepageCheckout extends AssertCatalogPriceRuleAppliedOnepageCheckout
+class AssertCatalogPriceRuleIsNotAppliedOnepageCheckout extends AssertCatalogPriceRuleOnOnepageCheckout
 {
 
 }

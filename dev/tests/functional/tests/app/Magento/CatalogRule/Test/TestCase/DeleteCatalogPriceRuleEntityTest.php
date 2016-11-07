@@ -69,7 +69,7 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
      *
      * @param CatalogRule $catalogPriceRule
      * @param string $product
-     * @param Customer $customer
+     * @param Customer|null $customer
      * @return array
      */
     public function test(CatalogRule $catalogPriceRule, $product, Customer $customer = null)
