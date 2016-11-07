@@ -143,7 +143,7 @@
         </fields>
     </attributes>
     <gallery>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\BlockGallery</class>
         <selector>[data-index='block_gallery']</selector>
         <strategy>css selector</strategy>
     </gallery>
@@ -223,9 +223,4 @@
         <selector>[data-index="related"]</selector>
         <strategy>css selector</strategy>
     </related>
-    <block_gallery>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\BlockGallery</class>
-        <selector>[data-index="block_gallery"]</selector>
-        <strategy>css selector</strategy>
-    </block_gallery>
 </sections>

@@ -15,21 +15,46 @@ use Magento\Mtf\Fixture\FixtureFactory;
 class Image extends DataSource
 {
     /**
-     * Image constructor.
+     * Fixture Factory instance.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * Fixture data.
+     *
+     * @var array
+     */
+    private $fixtureData;
+
+    /**
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
-        foreach ($data as $key => &$imageData) {
+        $this->fixtureFactory = $fixtureFactory;
+        $this->params = $params;
+        $this->fixtureData = $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws \Exception
+     */
+    public function getData($key = null)
+    {
+        foreach ($this->fixtureData as &$imageData) {
             if (isset($imageData['file']) && file_exists(MTF_TESTS_PATH . $imageData['file'])) {
                 $imageData['file'] = MTF_TESTS_PATH . $imageData['file'];
             } else {
-                unset($data[$key]);
+                throw new \Exception("Image '{$imageData['file']}'' not found on the server.");
             }
         }
-        $this->data = $data;
+        $this->data = $this->fixtureData;
+
+        return parent::getData($key);
     }
 }

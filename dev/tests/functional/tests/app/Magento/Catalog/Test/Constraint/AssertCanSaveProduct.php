@@ -7,12 +7,12 @@
 namespace Magento\Catalog\Test\Constraint;
 
 /**
- * Class AssertProductCanUpdate
+ * Assert that can save already exist product
  */
-class AssertProductCanUpdate extends \Magento\Mtf\Constraint\AbstractConstraint
+class AssertCanSaveProduct extends \Magento\Mtf\Constraint\AbstractConstraint
 {
     /**
-     * Assert that product with image can update without errors.
+     * Assert that can save already exist product
      *
      * @param \Magento\Mtf\Fixture\FixtureInterface $product
      * @param \Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit $catalogProductEdit
@@ -29,7 +29,8 @@ class AssertProductCanUpdate extends \Magento\Mtf\Constraint\AbstractConstraint
         $catalogProductEdit->getFormPageActions()->save();
 
         \PHPUnit_Framework_Assert::assertNotEmpty(
-            $catalogProductEdit->getMessagesBlock()->getSuccessMessage()
+            $catalogProductEdit->getMessagesBlock()->getSuccessMessage(),
+            'Cant save existing product.'
         );
     }
 
@@ -40,6 +41,6 @@ class AssertProductCanUpdate extends \Magento\Mtf\Constraint\AbstractConstraint
      */
     public function toString()
     {
-        return 'Product with image was updated without errors.';
+        return 'Product was saved without errors.';
     }
 }
