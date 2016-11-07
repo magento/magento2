@@ -43,6 +43,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Selections Collection
      *
      * @var string
+     * @deprecated
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -449,22 +450,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
      */
     public function getSelectionsCollection($optionIds, $product)
-    {
-        $keyOptionIds = is_array($optionIds) ? implode('_', $optionIds) : '';
-        $key = $this->_keySelectionsCollection . $keyOptionIds;
-        if (!$product->hasData($key)) {
-            $product->setData($key, $this->buildSelectionCollection($optionIds, $product));
-        }
-
-        return $product->getData($key);
-    }
-
-    /**
-     * @param array $optionIds
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
-     */
-    private function buildSelectionCollection($optionIds, $product)
     {
         $storeId = $product->getStoreId();
         $selectionsCollection = $this->_bundleCollection->create()

@@ -117,7 +117,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->catalogRuleProcessor = $this->getMockBuilder(
-            \Magento\CatalogRule\Model\ResourceModel\Product\Collection::class
+            \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class
         )
             ->disableOriginalConstructor()
             ->getMock();

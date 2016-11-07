@@ -91,9 +91,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $ruleProcessor = $this->getMockBuilder(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleProcessor = $this->getMockBuilder(
+            \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class
+        )->disableOriginalConstructor()->getMock();
         $objectHelper->setBackwardCompatibleProperty(
             $this->bundleBlock,
             'catalogRuleProcessor',

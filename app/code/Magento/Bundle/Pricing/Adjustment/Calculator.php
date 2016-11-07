@@ -205,15 +205,19 @@ class Calculator implements BundleCalculatorInterface
             if ($this->canSkipOption($option, $canSkipRequiredOptions)) {
                 continue;
             }
+
             /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
             $typeInstance = $bundleProduct->getTypeInstance();
-            $selectionsCollection = clone $typeInstance->getSelectionsCollection(
+            $selectionsCollection = $typeInstance->getSelectionsCollection(
                 [(int)$option->getId()],
                 $bundleProduct
             );
+            $selectionsCollection->removeAttributeToSelect();
             $selectionsCollection->addQuantityFilter();
 
             if ($option->isMultiSelection() && !$searchMin) {
+                $selectionsCollection->addPriceData();
+
                 foreach ($selectionsCollection as $selection) {
                     $priceList[] =  $this->selectionFactory->create(
                         $bundleProduct,
@@ -284,7 +288,7 @@ class Calculator implements BundleCalculatorInterface
     {
         /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
         $typeInstance = $bundleProduct->getTypeInstance();
-        $collection = clone $typeInstance->getOptionsCollection($bundleProduct);
+        $collection = $typeInstance->getOptionsCollection($bundleProduct);
         return $collection->addFilter(\Magento\Bundle\Model\Option::KEY_REQUIRED, 1)->getSize() > 0;
     }
 

@@ -27,7 +27,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $itemPrototype = null;
 
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
     private $catalogRuleProcessor = null;
 
@@ -241,27 +241,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @return \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      * @deprecated
      */
     private function getCatalogRuleProcessor()
     {
         if (null === $this->catalogRuleProcessor) {
             $this->catalogRuleProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class);
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class);
         }
 
         return $this->catalogRuleProcessor;
-    }
-
-    /**
-     * Clear collection data after clone
-     * @return void
-     */
-    public function __clone()
-    {
-        parent::__clone();
-        $this->removeAttributeToSelect();
-        $this->clear();
     }
 }

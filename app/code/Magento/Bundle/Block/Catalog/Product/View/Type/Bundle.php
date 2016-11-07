@@ -49,7 +49,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     private $selectedOptions = [];
 
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
     private $catalogRuleProcessor;
 
@@ -84,13 +84,13 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * @deprecated
-     * @return \Magento\CatalogRule\Model\ResourceModel\Product\Collection
+     * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
     private function getCatalogRuleProcessor()
     {
         if ($this->catalogRuleProcessor === null) {
             $this->catalogRuleProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\Collection::class);
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class);
         }
 
         return $this->catalogRuleProcessor;
@@ -114,7 +114,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
             $optionCollection = $typeInstance->getOptionsCollection($product);
 
-            $selectionCollection = clone $typeInstance->getSelectionsCollection(
+            $selectionCollection = $typeInstance->getSelectionsCollection(
                 $typeInstance->getOptionsIds($product),
                 $product
             );

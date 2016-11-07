@@ -9,7 +9,10 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 
-class Collection
+/**
+ * Add catalog rule prices to collection
+ */
+class CollectionProcessor
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

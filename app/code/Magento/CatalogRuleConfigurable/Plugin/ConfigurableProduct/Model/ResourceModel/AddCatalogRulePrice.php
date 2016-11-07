@@ -12,15 +12,15 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 class AddCatalogRulePrice
 {
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionFactory
+     * @var \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessorFactory
      */
     private $catalogRuleCollectionFactory;
 
     /**
-     * @param \Magento\CatalogRule\Model\ResourceModel\Product\CollectionFactory $catalogRuleCollectionFactory
+     * @param \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessorFactory $catalogRuleCollectionFactory
      */
     public function __construct(
-        \Magento\CatalogRule\Model\ResourceModel\Product\CollectionFactory $catalogRuleCollectionFactory
+        \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessorFactory $catalogRuleCollectionFactory
     ) {
         $this->catalogRuleCollectionFactory = $catalogRuleCollectionFactory;
     }
