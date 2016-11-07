@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CancelCreatedOrderTest" summary="Cancel Created Order for Offline Payment Methods" ticketId="MAGETWO-28191">
         <variation name="CancelCreatedOrderTestVariationWithCheckMoneyOrderPaymentMethod" summary="Cancel order with check/money order payment method and check status on storefront">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <data name="status" xsi:type="string">Canceled</data>
@@ -17,6 +18,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
         <variation name="CancelCreatedOrderTestVariationWithZeroSubtotalCheckout" summary="Cancel order with zero subtotal checkout payment method and check status on storefront">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">free</data>
             <data name="order/data/shipping_method" xsi:type="string">freeshipping_freeshipping</data>

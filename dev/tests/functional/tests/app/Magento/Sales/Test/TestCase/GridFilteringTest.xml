@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridFilteringTest" summary="Grid UI Component Filtering" ticketId="MAGETWO-41328">
         <variation name="SalesOrderGridFiltering">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Verify sales order grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">-</item>
