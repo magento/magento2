@@ -122,11 +122,7 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
         $eavCustomValueField = $eavCustomField . $valueFieldSuffix;
         $this->flatIndexerMock->expects($this->once())->method('getAttributes')->willReturn([]);
         $this->flatIndexerMock->expects($this->exactly(3))->method('getFlatColumns')
-            ->willReturnOnConsecutiveCalls(
-                [],
-                [$eavCustomValueField => []],
-                [$eavCustomValueField => []]
-            );
+            ->willReturnOnConsecutiveCalls([], [$eavCustomValueField => []], [$eavCustomValueField => []]);
         $this->flatIndexerMock->expects($this->once())->method('getFlatIndexes')->willReturn([]);
         $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -137,9 +133,7 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
         $this->flatIndexerMock->expects($this->once())->method('getTablesStructure')
             ->willReturn(
                 [
-                    'catalog_product_entity' => [
-                        $linkField => $statusAttributeMock
-                    ],
+                    'catalog_product_entity' => [$linkField => $statusAttributeMock],
                     'catalog_product_entity_int' => [
                         $linkField => $statusAttributeMock,
                         $eavCustomField => $eavCustomAttributeMock
@@ -147,14 +141,8 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $this->flatIndexerMock->expects($this->atLeastOnce())->method('getTable')
-            ->withConsecutive(
-                [$tableName],
-                ['catalog_product_website']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $tableName,
-                'catalog_product_website'
-            );
+            ->withConsecutive([$tableName], ['catalog_product_website'])
+            ->willReturnOnConsecutiveCalls($tableName, 'catalog_product_website');
         $this->flatIndexerMock->expects($this->once())->method('getAttribute')
             ->with('status')
             ->willReturn($statusAttributeMock);
