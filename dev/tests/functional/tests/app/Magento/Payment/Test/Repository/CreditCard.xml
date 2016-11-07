@@ -14,8 +14,15 @@
             <field name="cc_cid" xsi:type="string">123</field>
         </dataset>
 
+        <dataset name="visa_alt">
+            <field name="cc_number" xsi:type="string">4012888888881881</field>
+            <field name="cc_exp_month" xsi:type="string">02 - February</field>
+            <field name="cc_exp_year" xsi:type="string">2021</field>
+            <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
+
         <dataset name="amex_default">
-            <field name="cc_number" xsi:type="string">371449635398431</field>
+            <field name="cc_number" xsi:type="string">378282246310005</field>
             <field name="cc_exp_month" xsi:type="string">02 - February</field>
             <field name="cc_exp_year" xsi:type="string">2021</field>
             <field name="cc_cid" xsi:type="string">1234</field>
