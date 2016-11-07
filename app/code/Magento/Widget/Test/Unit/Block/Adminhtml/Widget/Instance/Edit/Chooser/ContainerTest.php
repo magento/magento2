@@ -66,7 +66,7 @@ class ContainerTest extends AbstractContainerTest
             . 'Main Content Area</option><option value="content.bottom" >Main Content Bottom</option>'
             . '<option value="content.top" >Main Content Top</option></select>';
 
-        $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
+        $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
@@ -153,7 +153,7 @@ class ContainerTest extends AbstractContainerTest
             . '<option value="sidebar.additional" >Sidebar Additional</option>'
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
-        $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
+        $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
@@ -284,7 +284,7 @@ class ContainerTest extends AbstractContainerTest
             . '<option value="sidebar.additional" >Sidebar Additional</option>'
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
-        $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
+        $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
@@ -402,7 +402,7 @@ class ContainerTest extends AbstractContainerTest
             . '<option value="sidebar.additional" >Sidebar Additional</option><option value="sidebar.main" >'
             . 'Sidebar Main</option></select>';
 
-        $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
+        $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())

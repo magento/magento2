@@ -26,14 +26,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Delete Search" button
  * 5. Perform all assertions
  *
- * @group Search_Terms_(MX)
+ * @group Search_Terms
  * @ZephyrId MAGETWO-26491
  */
 class DeleteSearchTermEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

@@ -227,7 +227,7 @@
     ._required > & {
         > span {
             &:after {
-                color: @field-label__required__color;
+                color: @validation__color;
                 content: '*';
                 display: inline-block;
                 font-size: @font-size__l;
@@ -485,6 +485,7 @@
 
 //  Field containing a value
 .admin__field-value {
+    display: inline-block;
     padding-top: @field-option__padding-top;
 }
 
@@ -738,6 +739,10 @@
     .admin__field-complex-content {
         max-width: 60%;
         overflow: hidden;
+    }
+
+    .admin__field-complex-text {
+        margin-left: -@indent__s;
     }
 
     //  Field with empty table and no thead

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridSortingTest" summary="Grid UI Component Sorting" ticketId="MAGETWO-41328">
         <variation name="CmsPagesGridSorting">
+            <data name="tag" xsi:type="string">severity:S2, stable:no</data>
             <data name="description" xsi:type="string">Verify cms page grid sorting</data>
             <data name="columnsForSorting" xsi:type="array">
                 <item name="id" xsi:type="string">ID</item>
@@ -18,6 +19,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridSorting"/>
         </variation>
         <variation name="CmsBlocksGridSorting">
+            <data name="tag" xsi:type="string">severity:S2, stable:no</data>
             <data name="description" xsi:type="string">Verify cms blocks grid sorting</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">-</item>

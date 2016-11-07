@@ -13,6 +13,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Deploy\Model\Deploy\LocaleDeploy">
+        <arguments>
+            <argument name="alternativeSources" xsi:type="array">
+                <item name="css" xsi:type="object">AlternativeSourceProcessors</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">

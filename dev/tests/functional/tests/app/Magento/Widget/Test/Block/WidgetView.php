@@ -16,18 +16,18 @@ use Magento\Mtf\Client\Locator;
 class WidgetView extends Block
 {
     /**
-     * Widgets selectors.
+     * Widgets link selector.
      *
-     * @var array
+     * @var string
      */
-    protected $widgetSelectors = [
-        'cmsPageLink' => '/descendant-or-self::div//a[contains(.,"%s")]',
-        'catalogCategoryLink' => '//a[contains(.,"%s")]',
-        'catalogProductLink' => '//a[contains(.,"%s")]',
-        'recentlyComparedProducts' => '/descendant-or-self::div[contains(.,"%s")]',
-        'recentlyViewedProducts' => '/descendant-or-self::div[contains(.,"%s")]',
-        'cmsStaticBlock' => '/descendant-or-self::div[contains(.,"%s")]',
-    ];
+    protected $widgetLinkSelector = '//a[contains(.,"%s")]';
+
+    /**
+     * Widgets selector.
+     *
+     * @var string
+     */
+    protected $widgetSelector = '//div[contains(.,"%s")]';
 
     /**
      * Check is visible widget selector.
@@ -47,9 +47,9 @@ class WidgetView extends Block
                 ['widget' => $widget, 'widgetText' => $widgetText]
             );
         } else {
-            if (isset($this->widgetSelectors[$widgetType])) {
+            if (isset($this->widgetSelector)) {
                 return $this->_rootElement->find(
-                    sprintf($this->widgetSelectors[$widgetType], $widgetText),
+                    sprintf($this->widgetSelector, $widgetText),
                     Locator::SELECTOR_XPATH
                 )->isVisible();
             } else {
@@ -72,9 +72,9 @@ class WidgetView extends Block
         if ($this->hasRender($widgetType)) {
             $this->callRender($widgetType, 'clickToWidget', ['widget' => $widget, 'widgetText' => $widgetText]);
         } else {
-            if (isset($this->widgetSelectors[$widgetType])) {
+            if (isset($this->widgetLinkSelector)) {
                 $this->_rootElement->find(
-                    sprintf($this->widgetSelectors[$widgetType], $widgetText),
+                    sprintf($this->widgetLinkSelector, $widgetText),
                     Locator::SELECTOR_XPATH
                 )->click();
             } else {

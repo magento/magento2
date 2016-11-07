@@ -29,10 +29,14 @@ class ShipmentListTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Sales/_files/shipment.php
+     * @magentoApiDataFixture Magento/Sales/_files/shipment_list.php
      */
     public function testShipmentList()
     {
+        /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = $this->objectManager->get(
+            \Magento\Framework\Api\SortOrderBuilder::class
+        );
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(
             \Magento\Framework\Api\SearchCriteriaBuilder::class
@@ -42,16 +46,28 @@ class ShipmentListTest extends WebapiAbstract
         $filterBuilder = $this->objectManager->create(
             \Magento\Framework\Api\FilterBuilder::class
         );
+        $filter1 = $filterBuilder
+            ->setField('shipment_status')
+            ->setValue(1)
+            ->setConditionType('eq')
+            ->create();
+        $filter2 = $filterBuilder
+            ->setField('store_id')
+            ->setValue(1)
+            ->setConditionType('eq')
+            ->create();
+        $filter3 = $filterBuilder
+            ->setField('shipping_address_id')
+            ->setValue(3)
+            ->setConditionType('eq')
+            ->create();
+        $sortOrder = $sortOrderBuilder->setField('increment_id')
+            ->setDirection('ASC')
+            ->create();
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $searchCriteriaBuilder->addFilters([$filter3]);
+        $searchCriteriaBuilder->addSortOrder($sortOrder);
 
-        $searchCriteriaBuilder->addFilters(
-            [
-                $filterBuilder
-                    ->setField('shipment_status')
-                    ->setValue((string)\Magento\Sales\Model\Order\Shipment::STATUS_NEW)
-                    ->setConditionType('eq')
-                    ->create()
-            ]
-        );
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];
@@ -70,8 +86,10 @@ class ShipmentListTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
         // TODO Test fails, due to the inability of the framework API to handle data collection
         $this->assertArrayHasKey('items', $result);
-        $this->assertCount(1, $result['items']);
+        $this->assertCount(2, $result['items']);
         $this->assertArrayHasKey('search_criteria', $result);
         $this->assertEquals($searchData, $result['search_criteria']);
+        $this->assertEquals('100000002', $result['items'][0]['increment_id']);
+        $this->assertEquals('100000003', $result['items'][1]['increment_id']);
     }
 }

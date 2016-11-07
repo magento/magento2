@@ -21,7 +21,7 @@
                     <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Ship To') ?></th>
                     <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Order Total') ?></th>
                     <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
-                    <th scope="col" class="col actions">&nbsp;</th>
+                    <th scope="col" class="col actions"><?php /* @escapeNotVerified */ echo __('Action') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -42,7 +42,10 @@
                                 <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
                             </a>
                             <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getReorderUrl($_order) ?>" class="action order">
+                                <a href="#" data-post='<?php /* @escapeNotVerified */ echo
+                                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                    ->getPostData($block->getReorderUrl($_order))
+                                ?>' class="action order">
                                     <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
                                 </a>
                             <?php endif ?>

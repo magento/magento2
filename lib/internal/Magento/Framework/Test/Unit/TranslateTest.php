@@ -176,8 +176,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         ];
         $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue($dbData));
 
-        $this->cache->expects($this->exactly(1))
-            ->method('save');
+        if (!$forceReload) {
+            $this->cache->expects($this->exactly(1))->method('save');
+        }
 
         $this->translate->loadData($area, $forceReload);
 

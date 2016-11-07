@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\MassProductUpdateTest" summary="Edit Products Using Mass Actions" ticketId="MAGETWO-21128">
+        <variation name="MassProductUpdateTestVariation2" summary="Update stock data for simple and configurable">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="configData" xsi:type="string">product_flat</data>
+            <data name="initialProducts/1" xsi:type="string">configurableProduct::out_of_stock</data>
+            <data name="initialProducts/0" xsi:type="string">catalogProductSimple::out_of_stock</data>
+            <data name="productsCount" xsi:type="number">2</data>
+            <data name="product/data/stock_data" xsi:type="string">In Stock</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsInStock" />
+        </variation>
+    </testCase>
+</config>

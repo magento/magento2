@@ -599,6 +599,8 @@ define([
             }
 
             tooltip.setContent.apply(null, arguments);
+
+            return false;
         },
 
         /**

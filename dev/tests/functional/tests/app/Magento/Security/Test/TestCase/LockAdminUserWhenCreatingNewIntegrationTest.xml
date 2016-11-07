@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Security\Test\TestCase\LockAdminUserWhenCreatingNewIntegrationTest" summary="Lock admin user after entering incorrect password while creating new integration">
         <variation name="LockAdminUserWhenCreatingNewIntegrationTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="configData" xsi:type="string">user_lockout_failures</data>
             <data name="customAdmin/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>

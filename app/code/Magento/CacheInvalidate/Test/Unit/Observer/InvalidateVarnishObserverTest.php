@@ -5,6 +5,8 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver */
@@ -22,11 +24,16 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\ */
     protected $observerObject;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Cache\Tag\Resolver */
+    private $tagResolver;
+
     /**
      * Set up all mocks and data for test
      */
     protected function setUp()
     {
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $this->configMock = $this->getMock(
             \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
@@ -39,6 +46,10 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
             $this->configMock,
             $this->purgeCache
         );
+
+        $this->tagResolver = $this->getMock(\Magento\Framework\App\Cache\Tag\Resolver::class, [], [], '', false);
+        $helper->setBackwardCompatibleProperty($this->model, 'tagResolver', $this->tagResolver);
+
         $this->observerMock = $this->getMock(
             \Magento\Framework\Event\Observer::class,
             ['getEvent'],
@@ -65,10 +76,12 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
         );
+
         $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
         $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($this->observerObject));
         $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
-        $this->observerObject->expects($this->once())->method('getIdentities')->will($this->returnValue($tags));
+        $this->tagResolver->expects($this->once())->method('getTags')->with($this->observerObject)
+            ->will($this->returnValue($tags));
         $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with($pattern);
 
         $this->model->execute($this->observerMock);

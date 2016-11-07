@@ -200,6 +200,8 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
+        $entryMock->expects($this->once())->method('getFile')->willReturn("base64");
+        $entryMock->expects($this->once())->method('setId')->with(null);
 
         $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
             ->willReturn([$entryMock]);

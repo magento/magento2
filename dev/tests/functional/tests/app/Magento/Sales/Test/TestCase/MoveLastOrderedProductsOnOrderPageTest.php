@@ -26,14 +26,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click Update Changes.
  * 6. Perform all assertions.
  *
- * @group Customers_(CS), Order_Management_(CS)
+ * @group Customers, Order_Management
  * @ZephyrId MAGETWO-27640
  */
 class MoveLastOrderedProductsOnOrderPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

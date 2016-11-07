@@ -8,18 +8,19 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest" summary="Create Cms Page" ticketId="MAGETWO-25580">
         <variation name="CreateCmsPageEntityTestVariation1" summary="Create CMS Content Page" ticketId="MAGETWO-12399">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
             <data name="data/store_id" xsi:type="string">All Store Views</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation2" summary="Create page for default store view">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
@@ -30,6 +31,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation3" summary="Create page with widget and system variable">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
@@ -39,11 +41,10 @@
             <data name="data/content/widget/dataset" xsi:type="string">default</data>
             <data name="data/content/variable" xsi:type="string">General Contact Name</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation4" summary="Create disabled page">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
@@ -51,9 +52,20 @@
             <data name="data/is_active" xsi:type="string">No</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend" />
+        </variation>
+        <variation name="CreateCmsPageEntityTestVariation5" summary="Block Cache Exploit" ticketId="MAGETWO-48017">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
+            <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="data/is_active" xsi:type="string">Yes</data>
+            <data name="data/content/content" xsi:type="string">\\{{block class=&apos;Magento\Framework\View\Element\Text&apos; text=&apos;bla bla bla&apos; cache_key=&apos;BACKEND_ACL_RESOURCES&apos; cache_lifetime=999\}}</data>
+            <data name="displayContent" xsi:type="string">bla bla bla</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
         </variation>
     </testCase>
 </config>

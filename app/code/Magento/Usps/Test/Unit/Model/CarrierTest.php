@@ -6,6 +6,7 @@
 namespace Magento\Usps\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Usps\Helper\Data as DataHelper;
 use Magento\Usps\Model\Carrier;
 
 /**
@@ -42,6 +43,11 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scope;
+
+    /**
+     * @var DataHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataHelper;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -154,7 +160,14 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         ];
 
+        $this->dataHelper = $this->getMockBuilder(DataHelper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['displayGirthValue'])
+            ->getMock();
+
         $this->carrier = $this->helper->getObject(\Magento\Usps\Model\Carrier::class, $arguments);
+
+        $this->helper->setBackwardCompatibleProperty($this->carrier, 'dataHelper', $this->dataHelper);
     }
 
     /**
@@ -322,6 +335,35 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                     </Package>
                 </RateRequest>',
             ],
+        ];
+    }
+
+    /**
+     * @param string $countyCode
+     * @param string $carrierMethodCode
+     * @param bool $displayGirthValueResult
+     * @param bool $result
+     * @dataProvider isGirthAllowedDataProvider
+     */
+    public function testIsGirthAllowed($countyCode, $carrierMethodCode, $displayGirthValueResult, $result)
+    {
+        $this->dataHelper->expects(static::any())
+            ->method('displayGirthValue')
+            ->with($carrierMethodCode)
+            ->willReturn($displayGirthValueResult);
+
+        self::assertEquals($result, $this->carrier->isGirthAllowed($countyCode, $carrierMethodCode));
+    }
+
+    /**
+     * @return array
+     */
+    public function isGirthAllowedDataProvider()
+    {
+        return [
+            ['US', 'usps_1', true, false],
+            ['UK', 'usps_1', true, true],
+            ['US', 'usps_0', false, true],
         ];
     }
 }

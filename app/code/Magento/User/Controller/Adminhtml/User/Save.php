@@ -55,9 +55,9 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             return;
         }
         $model->setData($this->_getAdminUserData($data));
-        $uRoles = $this->getRequest()->getParam('roles', []);
-        if (count($uRoles)) {
-            $model->setRoleId($uRoles[0]);
+        $userRoles = $this->getRequest()->getParam('roles', []);
+        if (count($userRoles)) {
+            $model->setRoleId($userRoles[0]);
         }
 
         /** @var $currentUser \Magento\User\Model\User */

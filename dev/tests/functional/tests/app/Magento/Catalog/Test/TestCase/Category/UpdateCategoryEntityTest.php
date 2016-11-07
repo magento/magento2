@@ -27,14 +27,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 5. Save
  * 6. Perform asserts
  *
- * @group Category_Management_(MX)
+ * @group Category_Management
  * @ZephyrId MAGETWO-23290
  */
 class UpdateCategoryEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

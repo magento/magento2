@@ -8,6 +8,7 @@ namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\Utility\XssOutputValidator;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Find not escaped output in phtml templates
@@ -48,6 +49,43 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
                 );
             },
             Files::init()->getPhtmlFiles()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAbsenceOfEscapeNotVerifiedAnnotationInRefinedModules()
+    {
+        $componentRegistrar = new ComponentRegistrar();
+        $exemptModules = [];
+        foreach (array_diff(scandir(__DIR__ . '/_files/whitelist/exempt_modules'), ['..', '.']) as $file) {
+            $exemptModules = array_merge(
+                $exemptModules,
+                include(__DIR__ . '/_files/whitelist/exempt_modules/' . $file)
+            );
+        }
+
+        $result = "";
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+            if (in_array($moduleName, $exemptModules)) {
+                continue;
+            }
+            foreach (Files::init()->getFiles([$modulePath], '*.phtml') as $file) {
+                $fileContents = file_get_contents($file);
+                $pattern = "/\\/* @escapeNotVerified \\*\\/ echo (?!__).+/";
+                $instances = preg_grep($pattern, explode("\n", $fileContents));
+                if (!empty($instances)) {
+                    foreach (array_keys($instances) as $line) {
+                        $result .= $file . ':' . ($line + 1) . "\n";
+                    }
+                }
+            }
+        }
+        $this->assertEmpty(
+            $result,
+            "@escapeNotVerified annotation detected.\n" .
+            "Please use the correct escape strategy and remove annotation at:\n" . $result
         );
     }
 }

@@ -6,10 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount()): ?>
-    <button type="submit" name="do" title="<?php /* @escapeNotVerified */ echo __('Update Wish List') ?>" class="action update">
-        <span><?php /* @escapeNotVerified */ echo __('Update Wish List') ?></span>
+    <button type="submit" name="do" title="<?php echo $block->escapeHtmlAttr(__('Update Wish List')) ?>" class="action update">
+        <span><?php echo $block->escapeHtml(__('Update Wish List')) ?></span>
     </button>
 <?php endif;?>

@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendTest" summary="Checkout with Braintree Credit Card from Admin">
         <variation name="CreateOrderBackendTestBraintreeVariation1" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize Only)" ticketId="MAGETWO-46294">
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
@@ -32,11 +32,10 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
         <variation name="CreateOrderBackendTestBraintreeVariation2" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize and Capture)" ticketId="MAGETWO-38316">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
@@ -63,7 +62,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
     </testCase>

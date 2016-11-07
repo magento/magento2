@@ -78,7 +78,7 @@ class ReadHandler implements ExtensionInterface
 
         foreach ($mediaEntries as $mediaEntry) {
             $mediaEntry = $this->substituteNullsWithDefaultValues($mediaEntry);
-            $value['images'][] = $mediaEntry;
+            $value['images'][$mediaEntry['value_id']] = $mediaEntry;
         }
         $product->setData($attrCode, $value);
     }

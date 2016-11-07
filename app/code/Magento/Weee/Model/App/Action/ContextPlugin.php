@@ -92,29 +92,27 @@ class ContextPlugin
 
     /**
      * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function aroundDispatch(
+    public function beforeDispatch(
         \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
         if (!$this->weeeHelper->isEnabled() ||
             !$this->customerSession->isLoggedIn() ||
             !$this->moduleManager->isEnabled('Magento_PageCache') ||
             !$this->cacheConfig->isEnabled()) {
-            return $proceed($request);
+            return;
         }
 
         $basedOn = $this->taxHelper->getTaxBasedOn();
         if ($basedOn != 'shipping' && $basedOn != 'billing') {
-            return $proceed($request);
+            return;
         }
 
         $weeeTaxRegion = $this->getWeeeTaxRegion($basedOn);
@@ -124,7 +122,7 @@ class ContextPlugin
 
         if (!$countryId && !$regionId) {
             // country and region does not exist
-            return $proceed($request);
+            return;
         } else if ($countryId && !$regionId) {
             // country exist and region does not exist
             $regionId = 0;
@@ -158,7 +156,6 @@ class ContextPlugin
                 0
             );
         }
-        return $proceed($request);
     }
 
     /**

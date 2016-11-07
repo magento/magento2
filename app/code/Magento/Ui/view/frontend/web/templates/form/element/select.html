@@ -9,7 +9,9 @@
         name: inputName,
         id: uid,
         disabled: disabled,
-        'aria-describedby': noticeId,
+        'aria-describedby': getDescriptionId(),
+        'aria-required': required,
+        'aria-invalid': error() ? true : 'false',
         placeholder: placeholder
     },
     hasFocus: focused,

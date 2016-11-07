@@ -19,6 +19,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation2" summary="Customer with prefix">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="customerAction" xsi:type="string">save</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
             <data name="customer/data/prefix" xsi:type="string">M</data>
@@ -27,7 +28,7 @@
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">S</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob" xsi:type="string">Mar 16, 2004</data>
+            <data name="customer/data/dob" xsi:type="string">03/16/2004</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
@@ -92,6 +93,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation7" summary="Create customer with custom customer group">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="customerAction" xsi:type="string">saveAndContinue</data>
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">customer_group_retail_customer</data>
@@ -129,6 +131,33 @@
                 <item name="6" xsi:type="string">Phone Number</item>
             </data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields" />
+        </variation>
+        <variation name="CreateCustomerBackendEntityTestVariation10" summary="Create customer with 2 websites and with different allowed countries.">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="customerAction" xsi:type="string">save</data>
+            <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+            <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
+            <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+            <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="address/data/company" xsi:type="string">Magento</data>
+            <data name="address/data/country_id" xsi:type="string">Bangladesh</data>
+            <data name="address/data/street" xsi:type="string">Chmielna 113</data>
+            <data name="address/data/city" xsi:type="string">Bielsko-Biala</data>
+            <data name="address/data/postcode" xsi:type="string">43-310</data>
+            <data name="address/data/telephone" xsi:type="string">799885616</data>
+            <data name="steps" xsi:type="array">
+                <item name="configureAllowedCountries" xsi:type="array">
+                    <item name="countries" xsi:type="array">
+                        <item name="0" xsi:type="string">AS,BM</item>
+                        <item name="1" xsi:type="string">BD,BB,AF</item>
+                    </item>
+                </item>
+            </data>
+            <data name="beforeActionCallback" xsi:type="array">
+                <item name="assertAllowedCountries" xsi:type="string">assertAllowedCountries</item>
+            </data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
         </variation>
     </testCase>
 </config>

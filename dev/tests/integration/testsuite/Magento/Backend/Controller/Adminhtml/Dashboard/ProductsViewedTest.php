@@ -9,6 +9,7 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
+     * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Reports/_files/viewed_products.php
      */
     public function testExecute()

@@ -23,22 +23,40 @@ use Magento\Vault\Test\Constraint\AssertCreditCardNotPresentOnCheckout;
  * 6. Go to One page Checkout
  * 7. Perform assertions.
  *
- * @group Vault_(CS)
+ * @group Vault
  * @ZephyrId MAGETWO-54059, MAGETWO-54072, MAGETWO-54068, MAGETWO-54015, MAGETWO-54011
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteSavedCreditCardTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
+
+    /**
+     * Page for one page checkout.
+     *
+     * @var CheckoutOnepage
+     */
+    private $checkoutOnepage;
+
+    /**
+     * Injection data.
+     *
+     * @param CheckoutOnepage $checkoutOnepage
+     * @return void
+     */
+    public function __inject(CheckoutOnepage $checkoutOnepage)
+    {
+        $this->checkoutOnepage = $checkoutOnepage;
+    }
 
     /**
      * Runs delete saved credit card test.
      *
      * @param AssertCreditCardNotPresentOnCheckout $assertCreditCardNotPresentOnCheckout
-     * @param CheckoutOnepage $checkoutOnepage
      * @param $products
      * @param $configData
      * @param $customer
@@ -47,10 +65,10 @@ class DeleteSavedCreditCardTest extends Injectable
      * @param $shipping
      * @param array $payments
      * @param $creditCardSave
+     * @return void
      */
     public function test(
         AssertCreditCardNotPresentOnCheckout $assertCreditCardNotPresentOnCheckout,
-        CheckoutOnepage $checkoutOnepage,
         $products,
         $configData,
         $customer,
@@ -69,13 +87,13 @@ class DeleteSavedCreditCardTest extends Injectable
         foreach ($payments as $key => $payment) {
             $this->addToCart($products);
             $this->proceedToCheckout();
-            if($key < 1) { // if this is the first order to be placed
+            if ($key < 1) { // if this is the first order to be placed
                 $this->selectCheckoutMethod($checkoutMethod, $customer);
                 $this->fillShippingAddress($shippingAddress);
             }
             $this->fillShippingMethod($shipping);
             if ($key >= 2) { // if this order will be placed via stored credit card
-                $this->useSavedCreditCard($payment);
+                $this->useSavedCreditCard($payment['vault']);
             } else {
                 $this->selectPaymentMethod($payment, $payment['creditCardClass'], $payment['creditCard']);
                 $this->saveCreditCard($payment, $creditCardSave);
@@ -84,7 +102,7 @@ class DeleteSavedCreditCardTest extends Injectable
         }
         // Delete credit cards from Stored Payment Methods and verify they are not available on checkout
         $paymentsCount = count($payments);
-        for($i = 2; $i < $paymentsCount; $i++) {
+        for ($i = 2; $i < $paymentsCount; $i++) {
             $deletedCard = $this->deleteCreditCardFromMyAccount(
                 $customer,
                 $payments[$i]['creditCard'],
@@ -94,7 +112,7 @@ class DeleteSavedCreditCardTest extends Injectable
             $this->proceedToCheckout();
             $this->fillShippingMethod($shipping);
             $assertCreditCardNotPresentOnCheckout->processAssert(
-                $checkoutOnepage,
+                $this->checkoutOnepage,
                 $deletedCard['deletedCreditCard']
             );
         }
@@ -244,7 +262,7 @@ class DeleteSavedCreditCardTest extends Injectable
         );
         $saveCreditCardStep->run();
     }
-    
+
     /**
      * @return void
      */
@@ -255,7 +273,7 @@ class DeleteSavedCreditCardTest extends Injectable
         );
         $fillBillingInformationStep->run();
     }
-    
+
     /**
      * @return void
      */
@@ -274,7 +292,7 @@ class DeleteSavedCreditCardTest extends Injectable
     {
         $useSavedCreditCardStep = ObjectManager::getInstance()->create(
             \Magento\Vault\Test\TestStep\UseSavedPaymentMethodStep::class,
-            ['payment' => $payment]
+            ['vault' => $payment]
         );
         $useSavedCreditCardStep->run();
     }

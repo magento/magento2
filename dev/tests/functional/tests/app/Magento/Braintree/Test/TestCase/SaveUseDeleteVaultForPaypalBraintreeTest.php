@@ -35,15 +35,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 15. Click *Delete* button on appeared pop up.
  * 16. Perform assertions. *
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-54838, MAGETWO-54843, MAGETWO-54844"
  */
 class SaveUseDeleteVaultForPaypalBraintreeTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

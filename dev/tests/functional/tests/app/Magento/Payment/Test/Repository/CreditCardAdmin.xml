@@ -22,5 +22,11 @@
             <field name="cc_exp_year" xsi:type="string">2020</field>
             <field name="cc_cid" xsi:type="string">123</field>
         </dataset>
+        <dataset name="visa_empty">
+            <field name="cc_type" xsi:type="string">Please Select</field>
+            <field name="cc_number" xsi:type="string" />
+            <field name="cc_exp_month" xsi:type="string">Month</field>
+            <field name="cc_cid" xsi:type="string" />
+        </dataset>
     </repository>
 </config>

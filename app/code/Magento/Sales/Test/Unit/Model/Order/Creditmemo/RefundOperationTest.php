@@ -50,7 +50,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCost'])
+            ->setMethods(['getBaseCost', 'setDoTransaction'])
             ->getMockForAbstractClass();
 
         $this->paymentMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
@@ -142,6 +142,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
     public function testExecuteOffline($amounts)
     {
         $orderId = 1;
+        $online = false;
         $this->creditmemoMock->expects($this->once())
             ->method('getState')
             ->willReturn(Creditmemo::STATE_REFUNDED);
@@ -174,8 +175,17 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->never())
             ->method('setTotalOnlineRefunded');
 
-        $this->orderMock->expects($this->never())
-            ->method('getPayment');
+        $this->orderMock->expects($this->once())
+            ->method('getPayment')
+            ->willReturn($this->paymentMock);
+
+        $this->paymentMock->expects($this->once())
+            ->method('refund')
+            ->with($this->creditmemoMock);
+
+        $this->creditmemoMock->expects($this->once())
+            ->method('setDoTransaction')
+            ->with($online);
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
@@ -186,7 +196,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->orderMock,
-            $this->subject->execute($this->creditmemoMock, $this->orderMock, false)
+            $this->subject->execute($this->creditmemoMock, $this->orderMock, $online)
         );
     }
 
@@ -197,6 +207,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
     public function testExecuteOnline($amounts)
     {
         $orderId = 1;
+        $online = true;
         $this->creditmemoMock->expects($this->once())
             ->method('getState')
             ->willReturn(Creditmemo::STATE_REFUNDED);
@@ -229,6 +240,10 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->never())
             ->method('setTotalOfflineRefunded');
 
+        $this->creditmemoMock->expects($this->once())
+            ->method('setDoTransaction')
+            ->with($online);
+
         $this->orderMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
@@ -238,7 +253,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->orderMock,
-            $this->subject->execute($this->creditmemoMock, $this->orderMock, true)
+            $this->subject->execute($this->creditmemoMock, $this->orderMock, $online)
         );
     }
 

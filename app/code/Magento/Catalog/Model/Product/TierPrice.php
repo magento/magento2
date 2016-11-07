@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -78,8 +77,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     *
-     * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -88,9 +85,6 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes
-     * @return $this
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes

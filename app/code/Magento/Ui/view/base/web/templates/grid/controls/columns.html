@@ -16,7 +16,9 @@
                     disable="isDisabled($col())"
                     ko-checked="$col().visible"
                     attr="id: ++ko.uid"/>
-                <label class="admin__field-label" text="$col().label" attr="for: ko.uid"/>
+                <label class="admin__field-label"
+                       translate="$col().label"
+                       attr="for: ko.uid, title: $col().label"/>
             </div>
         </div>
         <div class="admin__action-dropdown-menu-footer">

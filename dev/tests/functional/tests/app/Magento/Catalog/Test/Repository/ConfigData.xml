@@ -23,5 +23,27 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+        <dataset name="empty_product_mask_sku">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string"/>
+            </field>
+        </dataset>
+        <dataset name="empty_product_mask_sku_rollback">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string">{{name}}</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="attribute_product_mask_sku">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string">{{name}} {{country_of_manufacture}}</item>
+            </field>
+        </dataset>
+        <dataset name="attribute_product_mask_sku_rollback">
+            <field name="catalog/fields_masks/sku" xsi:type="array">
+                <item name="value" xsi:type="string">{{name}}</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
     </repository>
 </config>

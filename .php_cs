@@ -33,7 +33,6 @@ return Symfony\CS\Config\Config::create()
         'extra_empty_lines',
         'include',
         'join_function',
-        'multiline_array_trailing_comma',
         'namespace_no_leading_whitespace',
         'new_with_braces',
         'object_operator',

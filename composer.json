@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
         "zendframework/zend-stdlib": "~2.4.6",
         "zendframework/zend-code": "~2.4.6",
         "zendframework/zend-server": "~2.4.6",
@@ -31,9 +31,9 @@
         "zendframework/zend-serializer": "~2.4.6",
         "zendframework/zend-log": "~2.4.6",
         "zendframework/zend-http": "~2.4.6",
-        "magento/zendframework1": "1.12.16",
+        "magento/zendframework1": "~1.12.16",
         "colinmollenhour/credis": "1.6",
-        "colinmollenhour/php-redis-session-abstract": "1.1",
+        "colinmollenhour/php-redis-session-abstract": "1.2",
         "colinmollenhour/cache-backend-redis": "1.9",
         "colinmollenhour/cache-backend-file": "1.4",
         "composer/composer": "1.0.0-beta1",
@@ -64,6 +64,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-zip": "*",
+        "ext-pdo_mysql": "*",
         "sjparkinson/static-review": "~4.1",
         "ramsey/uuid": "3.4"
     },
@@ -72,7 +73,7 @@
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
         "pdepend/pdepend": "2.2.2",
-        "fabpot/php-cs-fixer": "~1.2",
+        "friendsofphp/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3 <=0.7.0",
         "sebastian/phpcpd": "2.0.0"
     },
@@ -150,6 +151,7 @@
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
+        "magento/module-sales-inventory": "100.0.0-dev",
         "magento/module-sales-rule": "100.2.0-dev",
         "magento/module-sales-sequence": "100.2.0-dev",
         "magento/module-sample-data": "100.2.0-dev",

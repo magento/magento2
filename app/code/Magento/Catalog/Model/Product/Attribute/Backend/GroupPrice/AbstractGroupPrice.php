@@ -130,6 +130,18 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
+     * Get additional fields
+     *
+     * @param array $objectArray
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function getAdditionalFields($objectArray)
+    {
+        return [];
+    }
+
+    /**
      * Whether group price value fixed or percent of original price
      *
      * @param \Magento\Catalog\Model\Product\Type\Price $priceObject
@@ -176,9 +188,7 @@ abstract class AbstractGroupPrice extends Price
                 throw new \Magento\Framework\Exception\LocalizedException(__($this->_getDuplicateErrorMessage()));
             }
 
-            if (!$this->isPositiveOrZero($priceRow['price'])) {
-                return __('Group price must be a number greater than 0.');
-            }
+            $this->validatePrice($priceRow);
 
             $duplicates[$compare] = true;
         }
@@ -229,6 +239,20 @@ abstract class AbstractGroupPrice extends Price
     }
 
     /**
+     * @param array $priceRow
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function validatePrice(array $priceRow)
+    {
+        if (!isset($priceRow['price']) || !$this->isPositiveOrZero($priceRow['price'])) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Group price must be a number greater than 0.')
+            );
+        }
+    }
+
+    /**
      * Prepare group prices data for website
      *
      * @param array $priceData
@@ -270,37 +294,70 @@ abstract class AbstractGroupPrice extends Price
      */
     public function afterLoad($object)
     {
-        $storeId = $object->getStoreId();
+        $data = $this->_getResource()->loadPriceData(
+            $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()),
+            $this->getWebsiteId($object->getStoreId())
+        );
+        $this->setPriceData($object, $data);
+
+        return $this;
+    }
+
+    /**
+     * @param int $storeId
+     * @return int|null
+     */
+    private function getWebsiteId($storeId)
+    {
         $websiteId = null;
         if ($this->getAttribute()->isScopeGlobal()) {
             $websiteId = 0;
         } elseif ($storeId) {
             $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
         }
+        return $websiteId;
+    }
 
-        $data = $this->_getResource()->loadPriceData(
-            $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()),
-            $websiteId
-        );
-        foreach ($data as $k => $v) {
-            $data[$k]['website_price'] = $v['price'];
-            if ($v['all_groups']) {
-                $data[$k]['cust_group'] = $this->_groupManagement->getAllCustomersGroup()->getId();
-            }
-        }
-
+    /**
+     * @param \Magento\Catalog\Model\Product $object
+     * @param array $priceData
+     */
+    public function setPriceData($object, $priceData)
+    {
+        $priceData = $this->modifyPriceData($object, $priceData);
+        $websiteId = $this->getWebsiteId($object->getStoreId());
         if (!$object->getData('_edit_mode') && $websiteId) {
-            $data = $this->preparePriceData($data, $object->getTypeId(), $websiteId);
+            $priceData = $this->preparePriceData($priceData, $object->getTypeId(), $websiteId);
         }
 
-        $object->setData($this->getAttribute()->getName(), $data);
-        $object->setOrigData($this->getAttribute()->getName(), $data);
+        $object->setData($this->getAttribute()->getName(), $priceData);
+        $object->setOrigData($this->getAttribute()->getName(), $priceData);
 
         $valueChangedKey = $this->getAttribute()->getName() . '_changed';
         $object->setOrigData($valueChangedKey, 0);
         $object->setData($valueChangedKey, 0);
+    }
 
-        return $this;
+    /**
+     * Perform price modification
+     *
+     * @param \Magento\Catalog\Model\Product $object
+     * @param array $data
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function modifyPriceData($object, $data)
+    {
+        /** @var array $priceItem */
+        foreach ($data as $key => $priceItem) {
+            if (isset($priceItem['price']) && $priceItem['price'] > 0) {
+                $data[$key]['website_price'] = $priceItem['price'];
+            }
+            if ($priceItem['all_groups']) {
+                $data[$key]['cust_group'] = $this->_groupManagement->getAllCustomersGroup()->getId();
+            }
+        }
+        return $data;
     }
 
     /**
@@ -372,13 +429,13 @@ abstract class AbstractGroupPrice extends Price
 
             $useForAllGroups = $data['cust_group'] == $this->_groupManagement->getAllCustomersGroup()->getId();
             $customerGroupId = !$useForAllGroups ? $data['cust_group'] : 0;
-
             $new[$key] = array_merge(
+                $this->getAdditionalFields($data),
                 [
                     'website_id' => $data['website_id'],
                     'all_groups' => $useForAllGroups ? 1 : 0,
                     'customer_group_id' => $customerGroupId,
-                    'value' => $data['price'],
+                    'value' => isset($data['price']) ? $data['price'] : null,
                 ],
                 $this->_getAdditionalUniqueFields($data)
             );
@@ -412,14 +469,7 @@ abstract class AbstractGroupPrice extends Price
         }
 
         if (!empty($update)) {
-            foreach ($update as $k => $v) {
-                if ($old[$k]['price'] != $v['value']) {
-                    $price = new \Magento\Framework\DataObject(['value_id' => $old[$k]['price_id'], 'value' => $v['value']]);
-                    $this->_getResource()->savePriceData($price);
-
-                    $isChanged = true;
-                }
-            }
+            $isChanged = $this->updateValues($update, $old);
         }
 
         if ($isChanged) {
@@ -428,6 +478,29 @@ abstract class AbstractGroupPrice extends Price
         }
 
         return $this;
+    }
+
+    /**
+     * @param array $valuesToUpdate
+     * @param array $oldValues
+     * @return boolean
+     */
+    protected function updateValues(array $valuesToUpdate, array $oldValues)
+    {
+        $isChanged = false;
+        foreach ($valuesToUpdate as $key => $value) {
+            if ($oldValues[$key]['price'] != $value['value']) {
+                $price = new \Magento\Framework\DataObject(
+                    [
+                        'value_id' => $oldValues[$key]['price_id'],
+                        'value' => $value['value']
+                    ]
+                );
+                $this->_getResource()->savePriceData($price);
+                $isChanged = true;
+            }
+        }
+        return $isChanged;
     }
 
     /**

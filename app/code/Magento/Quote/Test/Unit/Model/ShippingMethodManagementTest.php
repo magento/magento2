@@ -311,12 +311,13 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetMethodWithInputException()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
+        $this->quoteRepository->expects($this->exactly(2))
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quote);
         $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
         $this->quote->expects($this->never())->method('isVirtual');
 
@@ -329,13 +330,14 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetMethodWithVirtualProduct()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
 
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
+        $this->quoteRepository->expects($this->exactly(2))
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quote);
         $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
 
@@ -348,12 +350,13 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetMethodWithoutShippingAddress()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
+        $this->quoteRepository->expects($this->exactly(2))
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quote);
         $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
@@ -364,59 +367,33 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Carrier with such method not found: 34, 56
-     */
-    public function testSetMethodWithNotFoundMethod()
-    {
-        $this->markTestSkipped('MAGETWO-48531');
-        $cartId = 12;
-        $carrierCode = 34;
-        $methodCode = 56;
-        $countryId = 1;
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
-        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
-        $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $this->quote->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
-        $this->shippingAddress->expects($this->once())
-            ->method('getCountryId')->will($this->returnValue($countryId));
-        $this->shippingAddress->expects($this->once())
-            ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
-        $this->shippingAddress->expects($this->once())
-            ->method('getShippingRateByCode')->will($this->returnValue(false));
-        $this->shippingAddress->expects($this->never())->method('save');
-
-        $this->model->set($cartId, $carrierCode, $methodCode);
-    }
-
-    /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @expectedExceptionMessage Cannot set shipping method. Custom Error
      */
     public function testSetMethodWithCouldNotSaveException()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
         $countryId = 1;
 
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
+        $this->quoteRepository->expects($this->exactly(2))
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quote);
         $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddress);
         $this->shippingAddress->expects($this->once())
-            ->method('getCountryId')->will($this->returnValue($countryId));
+            ->method('getCountryId')
+            ->willReturn($countryId);
         $this->shippingAddress->expects($this->once())
-            ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
-        $this->shippingAddress->expects($this->once())
-            ->method('getShippingRateByCode')->will($this->returnValue(true));
+            ->method('setShippingMethod')
+            ->with($carrierCode . '_' . $methodCode);
         $exception = new \Exception('Custom Error');
-        $this->quote->expects($this->once())->method('collectTotals')->will($this->returnSelf());
+        $this->quote->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->quoteRepository->expects($this->once())
             ->method('save')
             ->with($this->quote)
@@ -431,16 +408,18 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetMethodWithoutAddress()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
+        $this->quoteRepository->expects($this->exactly(2))
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quote);
         $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddress);
         $this->shippingAddress->expects($this->once())->method('getCountryId');
 
         $this->model->set($cartId, $carrierCode, $methodCode);
@@ -448,13 +427,14 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMethod()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
         $countryId = 1;
-        $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
+        $this->quoteRepository->expects($this->exactly(2))
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quote);
         $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
@@ -463,8 +443,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddress->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
-        $this->shippingAddress->expects($this->once())
-            ->method('getShippingRateByCode')->will($this->returnValue(true));
         $this->quote->expects($this->once())->method('collectTotals')->will($this->returnSelf());
         $this->quoteRepository->expects($this->once())->method('save')->with($this->quote);
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tabs>
+    <product-details>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action\Tab\UpdateAttributeTab</class>
+        <selector>#attributes_update_tabs_attributes</selector>
+        <fields>
+            <price>
+                <selector>#price</selector>
+            </price>
+        </fields>
+    </product-details>
+    <advanced-inventory>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action\Tab\UpdateAttributeTab</class>
+        <selector>#attributes_update_tabs_inventory</selector>
+        <fields>
+            <stock_data>
+                <selector>#inventory_stock_availability</selector>
+                <input>select</input>
+            </stock_data>
+        </fields>
+    </advanced-inventory>
+</tabs>

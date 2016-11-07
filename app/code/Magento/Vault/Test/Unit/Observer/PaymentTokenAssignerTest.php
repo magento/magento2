@@ -161,7 +161,6 @@ class PaymentTokenAssignerTest extends \PHPUnit_Framework_TestCase
         $paymentModel->expects(static::once())
             ->method('setAdditionalInformation')
             ->with(
-                Vault::TOKEN_METADATA_KEY,
                 [
                     PaymentTokenInterface::CUSTOMER_ID => $customerId,
                     PaymentTokenInterface::PUBLIC_HASH => $publicHash

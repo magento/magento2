@@ -58,7 +58,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf(\Magento\Framework\DataObject::class, $item);
             $this->assertStringEndsWith('/1.swf', $item->getUrl());
             $this->assertStringMatchesFormat(
-                'http://%s/static/adminhtml/%s/%s/Magento_Cms/images/placeholder_thumbnail.jpg',
+                'http://%s/static/%s/adminhtml/%s/%s/Magento_Cms/images/placeholder_thumbnail.jpg',
                 $item->getThumbUrl()
             );
             return;

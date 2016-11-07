@@ -261,9 +261,12 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->additional->setData('cache_lifetime', 789);
         $this->additional->setData('cache_key', 'cache-key');
 
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManagerMock->expects($this->at(0))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_before', ['block' => $this->additional]);
+        $this->eventManagerMock->expects($this->at(1))
+            ->method('dispatch')
+            ->with('view_block_abstract_to_html_after');
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(

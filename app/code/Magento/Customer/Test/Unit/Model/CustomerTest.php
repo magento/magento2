@@ -198,7 +198,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'firstname'  => 'FirstName',
                 'lastname'   => 'LastName',
                 'middlename' => 'MiddleName',
-                'prefix'     => 'Prefix',
+                'prefix'     => 'Name Prefix',
         ]);
         $this->_model->sendNewAccountEmail('registered');
     }

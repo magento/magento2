@@ -47,11 +47,6 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     protected $imageHelper;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $assetRepo;
-
-    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -171,12 +166,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultPlaceholderUrl', 'getPlaceholder'])
-            ->getMock();
-
-        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['createAsset', 'getPath'])
+            ->setMethods(['getDefaultPlaceholderUrl'])
             ->getMock();
 
         $this->objectManager->setBackwardCompatibleProperty(
@@ -185,15 +175,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             $this->imageHelper
         );
 
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->content,
-            'assetRepo',
-            $this->assetRepo
-        );
-
         $placeholderUrl = 'url_to_the_placeholder/placeholder.jpg';
-
-        $sizePlaceholder = ['size' => 399659];
 
         $imagesResult = [
             [
@@ -202,7 +184,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
                 'media_type' => 'image',
                 'position' => '0',
                 'url' => 'url_to_the_placeholder/placeholder.jpg',
-                'size' => 399659
+                'size' => 0
             ],
             [
                 'value_id' => '1',
@@ -210,7 +192,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
                 'media_type' => 'image',
                 'position' => '1',
                 'url' => 'url_to_the_placeholder/placeholder.jpg',
-                'size' => 399659
+                'size' => 0
             ]
         ];
 
@@ -238,18 +220,13 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->mediaConfigMock->expects($this->any())->method('getMediaPath');
         $this->readMock->expects($this->any())->method('stat')->willReturnOnConsecutiveCalls(
             $this->throwException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase('test'))
+                new \Magento\Framework\Exception\FileSystemException(new Phrase('test'))
             ),
-            $sizePlaceholder,
             $this->throwException(
-                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase('test'))
-            ),
-            $sizePlaceholder
+                new \Magento\Framework\Exception\FileSystemException(new Phrase('test'))
+            )
         );
         $this->imageHelper->expects($this->any())->method('getDefaultPlaceholderUrl')->willReturn($placeholderUrl);
-        $this->imageHelper->expects($this->any())->method('getPlaceholder');
-        $this->assetRepo->expects($this->any())->method('createAsset')->willReturnSelf();
-        $this->assetRepo->expects($this->any())->method('getPath');
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturnCallback('json_encode');
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());

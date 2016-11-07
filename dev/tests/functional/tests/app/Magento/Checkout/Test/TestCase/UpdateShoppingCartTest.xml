@@ -15,7 +15,7 @@
             <data name="product/data/checkout_data/cartItem/subtotal" xsi:type="string">300</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
         </variation>
         <variation name="UpdateShoppingCartTestVariation2">
@@ -26,7 +26,7 @@
             <data name="product/data/checkout_data/cartItem/subtotal" xsi:type="string">715</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
         </variation>
     </testCase>

@@ -26,14 +26,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Update Shopping Cart" button
  * 5. Perform all assertion from dataset
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-25081
  */
 class UpdateShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**

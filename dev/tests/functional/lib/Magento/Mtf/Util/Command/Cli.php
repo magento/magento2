@@ -47,6 +47,7 @@ class Cli
     {
         $curl = $this->transport;
         $curl->write($this->prepareUrl($command, $options), [], CurlInterface::GET);
+        $curl->read();
         $curl->close();
     }
 
@@ -60,6 +61,6 @@ class Cli
     private function prepareUrl($command, array $options)
     {
         $command .= ' ' . implode(' ', $options);
-        return $_ENV['app_frontend_url'] . Cli::URL . '?command=' . urldecode($command);
+        return $_ENV['app_frontend_url'] . Cli::URL . '?command=' . urlencode($command);
     }
 }

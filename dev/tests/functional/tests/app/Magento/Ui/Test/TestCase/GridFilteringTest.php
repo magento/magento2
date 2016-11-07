@@ -22,14 +22,14 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * 3. Filter grid using provided columns
  * 5. Perform Asserts
  *
- * @group Ui_(CS)
+ * @group Ui
  * @ZephyrId MAGETWO-41329
  */
 class GridFilteringTest extends Injectable
 {
     /* tags */
+    const STABLE = 'no';
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

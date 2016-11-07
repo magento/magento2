@@ -19,11 +19,6 @@ class Extension
     private $composerInformation;
 
     /**
-     * @var TypeMapper
-     */
-    private $typeMapper;
-
-    /**
      * @var PackagesData
      */
     private $packagesData;
@@ -31,16 +26,13 @@ class Extension
     /**
      * @param ComposerInformation $composerInformation
      * @param PackagesData $packagesData
-     * @param TypeMapper $typeMapper
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        PackagesData $packagesData,
-        TypeMapper $typeMapper
+        PackagesData $packagesData
     ) {
         $this->composerInformation = $composerInformation;
         $this->packagesData = $packagesData;
-        $this->typeMapper = $typeMapper;
     }
 
     /**
@@ -89,7 +81,6 @@ class Extension
     {
         foreach ($extensions as &$extension) {
             $extension['vendor'] = ucfirst(current(explode('/', $extension['name'])));
-            $extension['type'] = $this->typeMapper->map($extension['name'], $extension['type']);
         }
         return array_values($extensions);
     }

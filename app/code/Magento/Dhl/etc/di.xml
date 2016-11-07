@@ -9,8 +9,4 @@
     <type name="Magento\Checkout\Block\Cart\LayoutProcessor">
         <plugin name="checkout_cart_shipping_dhl" type="Magento\Dhl\Model\Plugin\Checkout\Block\Cart\Shipping"/>
     </type>
-    <type name="Magento\Rma\Block\Adminhtml\Rma\Edit\Tab\General\Shippingmethod">
-        <plugin name="rma_tab_shippingmethod_dhl"
-                type="Magento\Dhl\Model\Plugin\Rma\Block\Adminhtml\Rma\Edit\Tab\General\Shippingmethod"/>
-    </type>
 </config>

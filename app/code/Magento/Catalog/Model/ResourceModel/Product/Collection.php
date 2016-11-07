@@ -2090,12 +2090,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($this->getFlag('tier_price_added')) {
             return $this;
         }
+        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
 
         $tierPrices = [];
         $productIds = [];
         foreach ($this->getItems() as $item) {
-            $productIds[] = $item->getId();
-            $tierPrices[$item->getId()] = [];
+            $productIds[] = $item->getData($linkField);
+            $tierPrices[$item->getData($linkField)] = [];
         }
         if (!$productIds) {
             return $this;
@@ -2103,57 +2104,27 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $attribute = $this->getAttribute('tier_price');
+        /* @var $backend \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice */
+        $backend = $attribute->getBackend();
         $websiteId = 0;
         if (!$attribute->isScopeGlobal() && null !== $this->getStoreId()) {
             $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
 
-        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
-        $connection = $this->getConnection();
-        $columns = [
-            'price_id' => 'value_id',
-            'website_id' => 'website_id',
-            'all_groups' => 'all_groups',
-            'cust_group' => 'customer_group_id',
-            'price_qty' => 'qty',
-            'price' => 'value',
-            'product_id' => $linkField,
-        ];
-        $select = $connection->select()->from(
-            $this->getTable('catalog_product_entity_tier_price'),
-            $columns
-        )->where(
+        $select = $backend->getResource()->getSelect($websiteId);
+        $select->columns(['product_id' => $linkField])->where(
             $linkField .' IN(?)',
             $productIds
         )->order(
-            [$linkField, 'qty']
+            $linkField
         );
 
-        if ($websiteId == 0) {
-            $select->where('website_id = ?', $websiteId);
-        } else {
-            $select->where('website_id IN(?)', [0, $websiteId]);
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $tierPrices[$row['product_id']][] = $row;
         }
-
-        foreach ($connection->fetchAll($select) as $row) {
-            $tierPrices[$row['product_id']][] = [
-                'website_id' => $row['website_id'],
-                'cust_group' => $row['all_groups'] ? $this->_groupManagement->getAllCustomersGroup()->getId() : $row['cust_group'],
-                'price_qty' => $row['price_qty'],
-                'price' => $row['price'],
-                'website_price' => $row['price'],
-            ];
-        }
-
-        /* @var $backend \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice */
-        $backend = $attribute->getBackend();
 
         foreach ($this->getItems() as $item) {
-            $data = $tierPrices[$item->getId()];
-            if (!empty($data) && $websiteId) {
-                $data = $backend->preparePriceData($data, $item->getTypeId(), $websiteId);
-            }
-            $item->setData('tier_price', $data);
+            $backend->setPriceData($item, $tierPrices[$item->getData($linkField)]);
         }
 
         $this->setFlag('tier_price_added', true);
@@ -2211,12 +2182,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $mediaGalleries = [];
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $items = $this->getItems();
+
+        $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
+            return $item->getId();
+        }, $items));
 
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row[$linkField]][] = $row;
         }
 
-        foreach ($this->getItems() as $item) {
+        foreach ($items as $item) {
             $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
             $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
         }

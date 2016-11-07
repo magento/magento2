@@ -68,7 +68,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\GiftMessage\Model\Plugin\QuoteItem($this->helperMock);
     }
 
-    public function testAroundItemToOrderItem()
+    public function testAfterItemToOrderItem()
     {
         $storeId = 1;
         $giftMessageId = 1;
@@ -99,7 +99,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->orderItemMock,
-            $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, [])
+            $this->model->afterConvert($this->subjectMock, $this->orderItemMock, $this->quoteItemMock, [])
         );
     }
 }

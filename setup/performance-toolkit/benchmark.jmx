@@ -790,7 +790,7 @@ if (1 == Integer.parseInt(vars.get("category_name_counter"))) {
 } else {
     categoryNamesList = props.get("category_names_list");
 }
-log.info("category name: " + vars.get("category_name"));
+
 categoryNamesList.add(vars.get("category_name"));</stringProp>
           <stringProp name="BeanShellSampler.filename"/>
           <stringProp name="BeanShellSampler.parameters"/>

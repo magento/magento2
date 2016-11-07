@@ -24,14 +24,14 @@
                 <div class="item-number">{{countOfUpdate}}</div>
                 <div class="item-title">Updates<br />Available</div>
                 <button ui-sref="root.update" href="#update-extension-grid"
-                        ng-class="{'disabled' : !countOfUpdate}"
+                        ng-class="{'disabled' : !countOfUpdate, 'goUpdate' : countOfUpdate}"
                         type="button" class="btn">
                     Review Updates
                 </button>
             </li>
             <li class="item col-m-4">
                 <div class="item-number">{{countOfInstall}}</div>
-                <div class="item-title">Products<br />Ready to Install</div>
+                <div class="item-title">Extensions<br />Ready to Install</div>
                 <div class="item-install">
                     <button ui-sref="root.install" href="#install-extension-grid"
                             ng-class="{'disabled' : !enabledInstall, 'goInstall' : enabledInstall}"
@@ -77,8 +77,8 @@
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3 module-summary">
-                <span class="module-summary-title">Installed Products</span>
-                <span class="module-summary-count">{{total}} products</span>
+                <span class="module-summary-title">Installed Extensions</span>
+                <span class="module-summary-count">{{total}} extensions</span>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap"
                  ng-include="'<?php echo $this->basePath();?>/pub/magento/setup/view/pagination.html'">
@@ -93,7 +93,7 @@
                     ng-class="{'_ascend' : predicate === 'name' && !reverse,
                                '_descend' : predicate === 'name' && reverse}"
                     class="data-grid-th _sortable">
-                    <span>Product Name</span>
+                    <span>Extension Name</span>
                 </th>
                 <th ng-click="order('type')"
                     ng-class="{'_ascend' : predicate === 'type' && !reverse,
@@ -130,10 +130,10 @@
                           data-label="{{getIndicatorInfo(extension, 'label')}}"
                     ><span>{{getIndicatorInfo(extension, 'label')}}</span>
                     </span>
-                    <span class="data-grid-data">{{extension.name}}</span>
+                    <span class="data-grid-data">{{extension.package_title}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.type}}</span>
+                    <span class="data-grid-data">{{extension.package_type}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data" data-type="version">{{extension.version}}</span>

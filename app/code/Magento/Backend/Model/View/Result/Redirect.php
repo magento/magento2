@@ -10,6 +10,7 @@ use Magento\Backend\Model\Session;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App;
 use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 
 class Redirect extends \Magento\Framework\Controller\Result\Redirect
 {
@@ -56,7 +57,7 @@ class Redirect extends \Magento\Framework\Controller\Result\Redirect
     /**
      * {@inheritdoc}
      */
-    protected function render(App\ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         $this->session->setIsUrlNotice($this->actionFlag->get('', AbstractAction::FLAG_IS_URLS_CHECKED));
         return parent::render($response);

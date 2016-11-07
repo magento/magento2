@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest" summary="Create Currency Rate" ticketId="MAGETWO-36824">
         <variation name="CreateCurrencyRateTestVariation1">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
             <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
             <data name="currencyRate/data/currency_to" xsi:type="string">EUR</data>
             <data name="currencyRate/data/rate" xsi:type="number">0.8</data>

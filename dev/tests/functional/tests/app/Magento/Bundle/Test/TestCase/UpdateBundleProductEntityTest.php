@@ -26,14 +26,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts
  *
- * @group Bundle_Product_(MX)
+ * @group Bundle_Product
  * @ZephyrId MAGETWO-26195
  */
 class UpdateBundleProductEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -74,6 +73,7 @@ class UpdateBundleProductEntityTest extends Injectable
      */
     public function test(BundleProduct $product, BundleProduct $originalProduct)
     {
+        $this->markTestIncomplete('MAGETWO-56584: [FT] Custom options are not created for product in test');
         // Preconditions
         $originalProduct->persist();
         $originalCategory = $originalProduct->hasData('category_ids')

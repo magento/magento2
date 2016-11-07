@@ -10,6 +10,7 @@ use \Magento\CatalogWidget\Block\Product\ProductsList;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class ProductsListTest
@@ -72,6 +73,11 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
      */
     protected $layout;
 
+    /**
+     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $priceCurrency;
+
     protected function setUp()
     {
         $this->collectionFactory =
@@ -105,11 +111,13 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         );
         $this->request = $arguments['context']->getRequest();
         $this->layout = $arguments['context']->getLayout();
+        $this->priceCurrency = $this->getMock(PriceCurrencyInterface::class);
 
         $this->productsList = $objectManagerHelper->getObject(
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $arguments
         );
+        $objectManagerHelper->setBackwardCompatibleProperty($this->productsList, 'priceCurrency', $this->priceCurrency);
     }
 
     public function testGetCacheKeyInfo()
@@ -130,9 +138,11 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('getParam')->with('page_number')->willReturn(1);
 
         $this->request->expects($this->once())->method('getParams')->willReturn('request_params');
+        $this->priceCurrency->expects($this->once())->method('getCurrencySymbol')->willReturn('$');
 
         $cacheKey = [
             'CATALOG_PRODUCTS_LIST_WIDGET',
+            '$',
             1,
             'blank',
             'context_group',

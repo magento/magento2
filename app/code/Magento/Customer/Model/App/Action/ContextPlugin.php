@@ -8,6 +8,10 @@ namespace Magento\Customer\Model\App\Action;
 
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\RequestInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
  * Class ContextPlugin
@@ -15,39 +19,35 @@ use Magento\Customer\Model\GroupManagement;
 class ContextPlugin
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $httpContext;
 
     /**
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param Session $customerSession
+     * @param HttpContext $httpContext
      */
-    public function __construct(
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\App\Http\Context $httpContext
-    ) {
+    public function __construct(Session $customerSession, HttpContext $httpContext)
+    {
         $this->customerSession = $customerSession;
         $this->httpContext = $httpContext;
     }
 
     /**
-     * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * Set customer group and customer session id to HTTP context
+     *
+     * @param AbstractAction $subject
+     * @param RequestInterface $request
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    {
         $this->httpContext->setValue(
             Context::CONTEXT_GROUP,
             $this->customerSession->getCustomerGroupId(),
@@ -58,6 +58,5 @@ class ContextPlugin
             $this->customerSession->isLoggedIn(),
             false
         );
-        return $proceed($request);
     }
 }

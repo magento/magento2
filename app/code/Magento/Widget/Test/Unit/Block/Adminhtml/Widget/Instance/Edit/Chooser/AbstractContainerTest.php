@@ -103,7 +103,14 @@ abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $this->escaperMock = $this->getMock(
+            \Magento\Framework\Escaper::class,
+            ['escapeHtml', 'escapeHtmlAttr'],
+            [],
+            '',
+            false
+        );
+        $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
 
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->setMethods(['getEventManager', 'getScopeConfig', 'getEscaper'])

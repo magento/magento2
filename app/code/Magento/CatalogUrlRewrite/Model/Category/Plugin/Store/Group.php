@@ -63,19 +63,19 @@ class Group
     }
 
     /**
-     * @param \Magento\Store\Model\ResourceModel\Group $object
-     * @param callable $proceed
+     * Perform updating url for categories and products assigned to the group
+     *
+     * @param \Magento\Store\Model\ResourceModel\Group $subject
+     * @param \Magento\Store\Model\ResourceModel\Group $result
      * @param AbstractModel $group
      * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Store\Model\ResourceModel\Group $object,
-        \Closure $proceed,
+    public function afterSave(
+        \Magento\Store\Model\ResourceModel\Group $subject,
+        \Magento\Store\Model\ResourceModel\Group $result,
         AbstractModel $group
     ) {
-        $originGroup = $group;
-        $result = $proceed($originGroup);
         if (!$group->isObjectNew()
             && ($group->dataHasChangedFor('website_id')
                 || $group->dataHasChangedFor('root_category_id'))

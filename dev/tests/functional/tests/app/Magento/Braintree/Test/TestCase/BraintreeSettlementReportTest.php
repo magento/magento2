@@ -30,15 +30,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Find transaction for latest order.
  * 13. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-48162
  */
 class BraintreeSettlementReportTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

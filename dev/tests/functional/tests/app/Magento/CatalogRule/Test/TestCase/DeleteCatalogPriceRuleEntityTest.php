@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click on the "Delete" button.
  * 5. Perform all assertions.
  *
- * @group Catalog_Price_Rules_(MX)
+ * @group Catalog_Price_Rules
  * @ZephyrId MAGETWO-25211
  */
 class DeleteCatalogPriceRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

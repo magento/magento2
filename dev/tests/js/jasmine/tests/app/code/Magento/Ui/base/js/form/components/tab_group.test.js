@@ -23,14 +23,6 @@ define([
         });
 
         window.FORM_KEY = 'magentoFormKey';
-        registry.set('provName', {
-            on: function () {
-            },
-            get: function () {
-            },
-            set: function () {
-            }
-        });
 
         describe('"initElement" method', function () {
             it('Check for defined ', function () {
@@ -48,6 +40,8 @@ define([
                     on: function () {
                     },
                     active: function () {
+                    },
+                    activate: function () {
                     }
                 };
 
@@ -60,6 +54,8 @@ define([
                         on: function () {
                         },
                         active: function () {
+                        },
+                        activate: function () {
                         }
                     },
                     type = typeof obj.initElement(arg);
@@ -83,6 +79,8 @@ define([
                     on: function () {
                     },
                     active: function () {
+                    },
+                    activate: function () {
                     }
                 };
 
@@ -95,6 +93,8 @@ define([
                         on: function () {
                         },
                         active: function () {
+                        },
+                        activate: function () {
                         }
                     },
                     type = typeof obj.initActivation(arg);
@@ -118,6 +118,8 @@ define([
                     on: function () {
                     },
                     active: function () {
+                    },
+                    activate: function () {
                     },
                     delegate: jasmine.createSpy()
                 };
@@ -150,7 +152,7 @@ define([
                     return [];
                 });
                 obj.onValidate();
-                expect(obj.validate.calls.count()).toBe(3);
+                expect(obj.validate.calls.count()).toBe(1);
             });
         });
     });

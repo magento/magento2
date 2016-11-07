@@ -44,3 +44,5 @@ echo $var;
 /* foreach ($block->getColumns() as $_column): ?>
     <col <?php echo $_column->getProperty() ?> />
 <?php endforeach; */ ?>
+
+<?php echo $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])); ?>

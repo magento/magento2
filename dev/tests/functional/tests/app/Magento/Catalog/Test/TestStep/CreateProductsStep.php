@@ -19,7 +19,7 @@ class CreateProductsStep implements TestStepInterface
     /**
      * Products names in data set
      *
-     * @var array
+     * @var string|array
      */
     protected $products;
 
@@ -42,10 +42,10 @@ class CreateProductsStep implements TestStepInterface
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
-     * @param array $products
+     * @param string|array $products
      * @param array $data [optional]
      */
-    public function __construct(FixtureFactory $fixtureFactory, array $products, array $data = [])
+    public function __construct(FixtureFactory $fixtureFactory, $products, array $data = [])
     {
         $this->products = $products;
         $this->data = $data;
@@ -60,6 +60,9 @@ class CreateProductsStep implements TestStepInterface
     public function run()
     {
         $products = [];
+        if (!is_array($this->products)) { // for backward compatible changes
+            $this->products = explode(',', $this->products);
+        }
         foreach ($this->products as $key => $productDataSet) {
             $productDataSet = explode('::', $productDataSet);
             $fixtureClass = $productDataSet[0];

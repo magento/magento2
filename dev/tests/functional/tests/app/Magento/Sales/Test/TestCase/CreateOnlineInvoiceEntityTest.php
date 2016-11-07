@@ -32,14 +32,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 16. Click 'Submit Invoice' button.
  * 17. Perform assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-47010
  */
 class CreateOnlineInvoiceEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
     /* end tags */
 

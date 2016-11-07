@@ -37,7 +37,7 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
  * 16. Check for Success message
  * 17. Return to "Web Setup Wizard".
  *
- * @group Setup_(CS)
+ * @group Setup
  * @ZephyrId MAGETWO-43202
  */
 class EnableDisableModuleTest extends Injectable

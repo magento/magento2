@@ -23,6 +23,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     protected $cache;
 
     /**
+     * @var \Magento\Framework\View\Design\ThemeInterface[]
+     */
+    private $themes;
+
+    /**
      * ThemeProvider constructor.
      *
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory
@@ -44,10 +49,14 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeByFullPath($fullPath)
     {
+        if (isset($this->themes[$fullPath])) {
+            return $this->themes[$fullPath];
+        }
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $theme = $this->cache->load('theme'. $fullPath);
         if ($theme) {
-            return unserialize($theme);
+            $this->themes[$fullPath] = unserialize($theme);
+            return $this->themes[$fullPath];
         }
         $themeCollection = $this->collectionFactory->create();
         $item = $themeCollection->getThemeByFullPath($fullPath);
@@ -55,7 +64,9 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $themeData = serialize($item);
             $this->cache->save($themeData, 'theme' . $fullPath);
             $this->cache->save($themeData, 'theme-by-id-' . $item->getId());
+            $this->themes[$fullPath] = $item;
         }
+
         return $item;
     }
 
@@ -77,15 +88,20 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeById($themeId)
     {
+        if (isset($this->themes[$themeId])) {
+            return $this->themes[$themeId];
+        }
         $theme = $this->cache->load('theme-by-id-' . $themeId);
         if ($theme) {
-            return unserialize($theme);
+            $this->themes[$themeId] = unserialize($theme);
+            return $this->themes[$themeId];
         }
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = $this->themeFactory->create();
         $themeModel->load($themeId);
         if ($themeModel->getId()) {
             $this->cache->save(serialize($themeModel), 'theme-by-id-' . $themeId);
+            $this->themes[$themeId] = $themeModel;
         }
         return $themeModel;
     }

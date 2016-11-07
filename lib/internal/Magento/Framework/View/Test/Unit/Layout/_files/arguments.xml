@@ -33,7 +33,7 @@
                     <item name="label" xsi:type="string">Excel XML</item>
                 </argument>
                 <argument name="testArrayWithUpdater" xsi:type="array">
-                    <updater>Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater</updater>
+                    <updater>Magento\Framework\View\Layout\Argument\UpdaterInterface</updater>
                     <item name="add" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Move to Archive</item>
                         <item name="url" xsi:type="string">*/sales_archive/massAdd</item>

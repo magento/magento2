@@ -6,22 +6,21 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
 /**
  * Customer "Remember Me" template
- *
- * @var $block \Magento\Persistent\Block\Form\Remember
  */
+
+/** @var \Magento\Persistent\Block\Form\Remember $block */
+
 ?>
 <div id="remember-me-box" class="field choice persistent">
     <?php $rememberMeId = 'remember_me' . $block->getRandomString(10); ?>
-    <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?php /* @escapeNotVerified */ echo $rememberMeId; ?>"<?php if ($block->isRememberMeChecked()): ?> checked="checked"<?php endif; ?> title="<?php /* @escapeNotVerified */ echo __('Remember Me') ?>" />
-    <label for="<?php /* @escapeNotVerified */ echo $rememberMeId; ?>" class="label"><span><?php /* @escapeNotVerified */ echo __('Remember Me') ?></span></label>
+    <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?php echo $block->escapeHtmlAttr($rememberMeId); ?>"<?php if ($block->isRememberMeChecked()): ?> checked="checked"<?php endif; ?> title="<?php echo $block->escapeHtmlAttr(__('Remember Me')) ?>" />
+    <label for="<?php echo $block->escapeHtmlAttr($rememberMeId); ?>" class="label"><span><?php echo $block->escapeHtml(__('Remember Me')) ?></span></label>
     <span class="tooltip wrapper">
-        <a class="link tooltip toggle" href="#"><?php /* @escapeNotVerified */ echo __('What\'s this?') ?></a>
+        <a class="link tooltip toggle" href="#"><?php echo $block->escapeHtml(__('What\'s this?')) ?></a>
         <span class="tooltip content">
-            <?php /* @escapeNotVerified */ echo __('Check &quot;Remember Me&quot; to access your shopping cart on this computer even if you are not signed in.')?>
+            <?php echo $block->escapeHtml(__('Check &quot;Remember Me&quot; to access your shopping cart on this computer even if you are not signed in.')) ?>
         </span>
     </span>
 </div>

@@ -20,14 +20,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Save' button.
  * 6. Perform all asserts.
  *
- * @group Variables_(PS)
+ * @group Variables
  * @ZephyrId MAGETWO-23293
  */
 class CreateCustomVariableEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 

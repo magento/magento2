@@ -30,14 +30,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-26204
  */
 class UpdateVirtualProductEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

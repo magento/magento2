@@ -41,6 +41,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     protected $addressRepository;
 
     /**
+     * @var \Magento\Quote\Model\ShippingAddressAssignment
+     */
+    private $shippingAddressAssignment;
+
+    /**
      * Constructs a quote billing address service object.
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
@@ -71,6 +76,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
         try {
+            $this->getShippingAddressAssignment()->setAddress($quote, $address, $useForShipping);
             $quote->setDataChanges(true);
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
@@ -87,5 +93,18 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     {
         $cart = $this->quoteRepository->getActive($cartId);
         return $cart->getBillingAddress();
+    }
+
+    /**
+     * @return \Magento\Quote\Model\ShippingAddressAssignment
+     * @deprecated
+     */
+    private function getShippingAddressAssignment()
+    {
+        if (!$this->shippingAddressAssignment) {
+            $this->shippingAddressAssignment = ObjectManager::getInstance()
+                ->get(\Magento\Quote\Model\ShippingAddressAssignment::class);
+        }
+        return $this->shippingAddressAssignment;
     }
 }

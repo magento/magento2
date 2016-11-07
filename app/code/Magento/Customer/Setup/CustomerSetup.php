@@ -166,7 +166,7 @@ class CustomerSetup extends EavSetup
                     ],
                     'prefix' => [
                         'type' => 'static',
-                        'label' => 'Prefix',
+                        'label' => 'Name Prefix',
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 30,
@@ -202,7 +202,7 @@ class CustomerSetup extends EavSetup
                     ],
                     'suffix' => [
                         'type' => 'static',
-                        'label' => 'Suffix',
+                        'label' => 'Name Suffix',
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 70,
@@ -350,7 +350,7 @@ class CustomerSetup extends EavSetup
                 'attributes' => [
                     'prefix' => [
                         'type' => 'static',
-                        'label' => 'Prefix',
+                        'label' => 'Name Prefix',
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 10,
@@ -386,7 +386,7 @@ class CustomerSetup extends EavSetup
                     ],
                     'suffix' => [
                         'type' => 'static',
-                        'label' => 'Suffix',
+                        'label' => 'Name Suffix',
                         'input' => 'text',
                         'required' => false,
                         'sort_order' => 50,

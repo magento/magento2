@@ -22,9 +22,8 @@
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_sale, braintree_paypal_skip_order_review</data>
             <data name="paymentAction" xsi:type="string">sale</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
@@ -42,12 +41,11 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">2</data>
             <data name="refundData/items_data/0/qty" xsi:type="string">1</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="isCreditMemoPartial" xsi:type="string">Yes</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />

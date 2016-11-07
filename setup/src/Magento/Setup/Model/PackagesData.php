@@ -5,10 +5,9 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Composer\ComposerInformation;
-
 /**
  * Class PackagesData returns system packages and available for update versions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PackagesData
 {
@@ -22,7 +21,7 @@ class PackagesData
     /**#@-*/
 
     /**
-     * @var ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
@@ -64,24 +63,27 @@ class PackagesData
     /**
      * PackagesData constructor.
      *
-     * @param ComposerInformation $composerInformation,
-     * @param \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
-     * @param \Magento\Setup\Model\PackagesAuth $packagesAuth,
-     * @param \Magento\Framework\Filesystem $filesystem,
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation ,
+     * @param \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider ,
+     * @param \Magento\Setup\Model\PackagesAuth $packagesAuth ,
+     * @param \Magento\Framework\Filesystem $filesystem ,
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param TypeMapper $typeMapper
      */
     public function __construct(
-        ComposerInformation $composerInformation,
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
         \Magento\Setup\Model\PackagesAuth $packagesAuth,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Magento\Setup\Model\Grid\TypeMapper $typeMapper
     ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->composerInformation = $composerInformation;
         $this->timeZoneProvider = $timeZoneProvider;
         $this->packagesAuth = $packagesAuth;
         $this->filesystem = $filesystem;
+        $this->typeMapper = $typeMapper;
     }
 
     /**
@@ -174,10 +176,16 @@ class PackagesData
      */
     public function getInstalledPackages()
     {
-        return array_intersect_key(
+        $installedPackages = array_intersect_key(
             $this->composerInformation->getInstalledMagentoPackages(),
             $this->composerInformation->getRootPackage()->getRequires()
         );
+
+        foreach ($installedPackages as &$package) {
+            $package = $this->addPackageExtraInfo($package);
+        }
+
+        return $this->filterPackagesList($installedPackages);
     }
 
     /**
@@ -273,20 +281,55 @@ class PackagesData
                     ksort($package);
                     $packageValues = array_values($package);
                     if ($this->isNewUserPackage($packageValues[0], $packageNames)) {
-                        $versions = array_reverse(array_keys($package));
+                        uksort($package, 'version_compare');
                         $installPackage = $packageValues[0];
-                        $installPackage['versions'] = $versions;
+                        $installPackage['versions'] = array_reverse(array_keys($package));
                         $installPackage['name'] = $packageName;
                         $installPackage['vendor'] = explode('/', $packageName)[0];
-                        $installPackages[$packageName] = $installPackage;
+                        $installPackages[$packageName] = $this->addPackageExtraInfo($installPackage);
                     }
                 }
             }
-            $packagesForInstall['packages'] = $installPackages;
+            $packagesForInstall['packages'] = $this->filterPackagesList($installPackages);
             return $packagesForInstall;
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in syncing packages for Install');
         }
+    }
+
+    /**
+     * Get package extra info
+     *
+     * @param string $packageName
+     * @param string $packageVersion
+     * @return array
+     */
+    private function getPackageExtraInfo($packageName, $packageVersion)
+    {
+        $packagesJson = $this->getPackagesJson();
+
+        return isset($packagesJson[$packageName][$packageVersion]['extra']) ?
+            $packagesJson[$packageName][$packageVersion]['extra'] : [] ;
+    }
+
+    /**
+     * Add package extra info
+     *
+     * @param array $package
+     * @return array
+     */
+    public function addPackageExtraInfo(array $package)
+    {
+        $extraInfo = $this->getPackageExtraInfo($package['name'], $package['version']);
+
+        $package['package_title'] =  isset($extraInfo['x-magento-ext-title']) ?
+            $extraInfo['x-magento-ext-title'] : $package['name'];
+        $package['package_type'] = isset($extraInfo['x-magento-ext-type']) ? $extraInfo['x-magento-ext-type'] :
+            $this->typeMapper->map($package['type']);
+        $package['package_link'] = isset($extraInfo['x-magento-ext-package-link']) ?
+            $extraInfo['x-magento-ext-package-link'] : '';
+
+        return $package;
     }
 
     /**
@@ -353,6 +396,32 @@ class PackagesData
     }
 
     /**
+     * Filter packages by allowed types
+     *
+     * @param array $packages
+     * @return array
+     */
+    private function filterPackagesList(array $packages)
+    {
+        return array_filter(
+            $packages,
+            function ($item) {
+                return in_array(
+                    $item['package_type'],
+                    [
+                        \Magento\Setup\Model\Grid\TypeMapper::LANGUAGE_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::EXTENSION_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::THEME_PACKAGE_TYPE,
+                        \Magento\Setup\Model\Grid\TypeMapper::METAPACKAGE_PACKAGE_TYPE
+                    ]
+                );
+            }
+        );
+    }
+
+    /**
+     * Get MetaPackage for package
      *
      * @param array $packages
      * @return array
@@ -361,7 +430,7 @@ class PackagesData
     {
         $result = [];
         foreach ($packages as $package) {
-            if ($package['type'] == ComposerInformation::METAPACKAGE_PACKAGE_TYPE) {
+            if ($package['type'] == \Magento\Framework\Composer\ComposerInformation::METAPACKAGE_PACKAGE_TYPE) {
                 if (isset($package['require'])) {
                     foreach ($package['require'] as $key => $requirePackage) {
                         $result[$key] = $package['name'];
@@ -385,7 +454,7 @@ class PackagesData
             $packages = $this->getPackagesJson();
             array_walk($packages, function ($packageVersions) {
                 $package = array_shift($packageVersions);
-                if ($package['type'] == ComposerInformation::METAPACKAGE_PACKAGE_TYPE
+                if ($package['type'] == \Magento\Framework\Composer\ComposerInformation::METAPACKAGE_PACKAGE_TYPE
                     && isset($package['require'])
                 ) {
                     foreach (array_keys($package['require']) as $key) {
@@ -423,26 +492,38 @@ class PackagesData
 
                 return array_keys($packageVersions);
             }
-        } else {
-            $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+        }
 
-            $commandParams = [
-                self::PARAM_COMMAND => self::COMPOSER_SHOW,
-                self::PARAM_PACKAGE => $package,
-                self::PARAM_AVAILABLE => true
-            ];
+        return $this->getAvailableVersionsFromAllRepositories($package);
+    }
 
-            $applicationFactory = $this->objectManagerProvider->get()
-                ->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
-            /** @var \Magento\Composer\MagentoComposerApplication $application */
-            $application = $applicationFactory->create();
+    /**
+     * Get available versions of package by "composer show" command
+     *
+     * @param string $package
+     * @return array
+     * @exception \RuntimeException
+     */
+    private function getAvailableVersionsFromAllRepositories($package)
+    {
+        $versionsPattern = '/^versions\s*\:\s(.+)$/m';
 
-            $result = $application->runComposerCommand($commandParams);
-            $matches = [];
-            preg_match($versionsPattern, $result, $matches);
-            if (isset($matches[1])) {
-                return explode(', ', $matches[1]);
-            }
+        $commandParams = [
+            self::PARAM_COMMAND => self::COMPOSER_SHOW,
+            self::PARAM_PACKAGE => $package,
+            self::PARAM_AVAILABLE => true
+        ];
+
+        $applicationFactory = $this->objectManagerProvider->get()
+            ->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
+        /** @var \Magento\Composer\MagentoComposerApplication $application */
+        $application = $applicationFactory->create();
+
+        $result = $application->runComposerCommand($commandParams);
+        $matches = [];
+        preg_match($versionsPattern, $result, $matches);
+        if (isset($matches[1])) {
+            return explode(', ', $matches[1]);
         }
 
         throw new \RuntimeException(

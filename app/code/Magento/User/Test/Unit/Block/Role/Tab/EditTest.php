@@ -86,7 +86,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTree()
     {
-        $resources = ['resource1', 'resource2', 'resource3'];
+        $resources = [
+            ['id' => 'Magento_Backend::admin', 'children' => ['resource1', 'resource2', 'resource3']],
+            ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
+        ];
         $mappedResources = ['mapped1', 'mapped2', 'mapped3'];
         $this->aclResourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($resources);
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);

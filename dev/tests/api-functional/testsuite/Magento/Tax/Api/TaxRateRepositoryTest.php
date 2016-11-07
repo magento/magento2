@@ -479,16 +479,26 @@ class TaxRateRepositoryTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
         $rates = $this->setupTaxRatesForSearch();
 
+        $filterBR = $this->filterBuilder->setField(Rate::KEY_COUNTRY_ID)
+            ->setValue('BR')
+            ->create();
+        $filterUS = $this->filterBuilder->setField(Rate::KEY_COUNTRY_ID)
+            ->setValue('US')
+            ->create();
         // Find rates which country id 'CZ'
-        $filter = $this->filterBuilder->setField(Rate::KEY_COUNTRY_ID)
+        $filterCZ = $this->filterBuilder->setField(Rate::KEY_COUNTRY_ID)
             ->setValue('CZ')
             ->create();
         $sortOrder = $this->sortOrderBuilder
             ->setField(Rate::KEY_POSTCODE)
             ->setDirection(SortOrder::SORT_DESC)
             ->create();
+        $filterRate = $this->filterBuilder->setField(Rate::KEY_PERCENTAGE_RATE)
+            ->setValue('2.2000')
+            ->create();
+        $this->searchCriteriaBuilder->addFilters([$filterBR, $filterUS, $filterCZ]);
         // Order them by descending postcode (not the default order)
-        $this->searchCriteriaBuilder->addFilters([$filter])
+        $this->searchCriteriaBuilder->addFilters([$filterCZ, $filterRate])
             ->addSortOrder($sortOrder);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];

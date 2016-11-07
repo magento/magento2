@@ -331,16 +331,24 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->getModelMock();
         $originalConfig = ['area' => 'some_area', 'store' => 1];
-        $expectedConfig = ['area' => 'frontend', 'store' => 2];
         $model->setDesignConfig($originalConfig);
 
-        $model->emulateDesign(2);
-        // assert config data has been emulated
-        $this->assertEquals($expectedConfig, $model->getDesignConfig()->getData());
+        $expectedConfigs = [
+            ['in' => ['area' => 'frontend', 'store' => null], 'out' => $originalConfig],
+            ['in' => ['area' => 'frontend', 'store' => false], 'out' => $originalConfig],
+            ['in' => ['area' => 'frontend', 'store' => 0], 'out' => ['area' => 'frontend', 'store' => 0]],
+            ['in' => ['area' => 'frontend', 'store' => 1], 'out' => ['area' => 'frontend', 'store' => 1]],
+            ['in' => ['area' => 'frontend', 'store' => 2], 'out' => ['area' => 'frontend', 'store' => 2]],
+        ];
+        foreach ($expectedConfigs as $set) {
+            $model->emulateDesign($set['in']['store'], $set['in']['area']);
+            // assert config data has been emulated
+            $this->assertEquals($set['out'], $model->getDesignConfig()->getData());
 
-        $model->revertDesign();
-        // assert config data has been reverted to the original state
-        $this->assertEquals($originalConfig, $model->getDesignConfig()->getData());
+            $model->revertDesign();
+            // assert config data has been reverted to the original state
+            $this->assertEquals($originalConfig, $model->getDesignConfig()->getData());
+        }
     }
 
     public function testGetDesignConfig()

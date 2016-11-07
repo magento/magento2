@@ -29,14 +29,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Save Attribute Set.
  * 8. Preform all assertions.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-26251
  */
 class UpdateAttributeSetTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

@@ -38,7 +38,6 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
 
     /**
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
-     * @magentoAppIsolation disabled
      */
     public function testSaveActionQueueTemplateAndVerifySuccessMessage()
     {

@@ -22,14 +22,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save
  * 6. Perform all assertions
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-29398
  */
 class ProductTypeSwitchingOnCreationTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

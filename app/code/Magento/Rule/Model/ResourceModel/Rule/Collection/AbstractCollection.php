@@ -74,15 +74,18 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      */
     public function addWebsiteFilter($websiteId)
     {
-        $entityInfo = $this->_getAssociatedEntityInfo('website');
         if (!$this->getFlag('is_website_table_joined')) {
+            $websiteIds = is_array($websiteId) ? $websiteId : [$websiteId];
+            $entityInfo = $this->_getAssociatedEntityInfo('website');
             $this->setFlag('is_website_table_joined', true);
-            if ($websiteId instanceof \Magento\Store\Model\Website) {
-                $websiteId = $websiteId->getId();
+            foreach ($websiteIds as $index => $website) {
+                if ($website instanceof \Magento\Store\Model\Website) {
+                    $websiteIds[$index] = $website->getId();
+                }
             }
             $this->getSelect()->join(
                 ['website' => $this->getTable($entityInfo['associations_table'])],
-                $this->getConnection()->quoteInto('website.' . $entityInfo['entity_id_field'] . ' = ?', $websiteId)
+                $this->getConnection()->quoteInto('website.' . $entityInfo['entity_id_field'] . ' IN (?)', $websiteIds)
                 . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
                 []
             );

@@ -26,15 +26,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Fill data according to dataset
  * 5. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27647
  */
 class CreateStoreEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

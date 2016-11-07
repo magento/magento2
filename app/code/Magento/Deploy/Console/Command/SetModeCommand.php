@@ -104,6 +104,8 @@ class SetModeCommand extends Command
                     throw new LocalizedException(__('Cannot switch into given mode "%1"', $toMode));
             }
             $output->writeln('Enabled ' . $toMode . ' mode.');
+            
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {

@@ -10,10 +10,11 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
- * 1. Enable payment method "Check/Money Order".
+ * 1. Enable payment method one of "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order".
  * 2. Enable shipping method one of "Flat Rate/Free Shipping".
  * 3. Create order.
  * 4. Create Invoice.
@@ -25,14 +26,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. On order's page click 'Refund offline' button.
  * 5. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29116
  */
 class CreateCreditMemoEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -56,37 +56,33 @@ class CreateCreditMemoEntityTest extends Injectable
     ];
 
     /**
-     * Set up configuration.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return void
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $this->fixtureFactory = $fixtureFactory;
-
-        $setupConfigurationStep = $this->objectManager->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => 'checkmo, flatrate']
-        );
-        $setupConfigurationStep->run();
-    }
-
-    /**
      * Create credit memo.
      *
+     * @param TestStepFactory $stepFactory
+     * @param FixtureFactory $fixtureFactory
      * @param OrderInjectable $order
      * @param array $data
+     * @param string $configData
      * @return array
      */
-    public function test(OrderInjectable $order, array $data)
-    {
+    public function test(
+        TestStepFactory $stepFactory,
+        FixtureFactory $fixtureFactory,
+        OrderInjectable $order,
+        array $data,
+        $configData
+    ) {
         // Preconditions
+        $this->fixtureFactory = $fixtureFactory;
+        $stepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         $order->persist();
-        $this->objectManager->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
+        $stepFactory->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
 
         // Steps
-        $createCreditMemoStep = $this->objectManager->create(
+        $createCreditMemoStep = $stepFactory->create(
             \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
             ['order' => $order, 'data' => $data]
         );

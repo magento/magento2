@@ -476,13 +476,24 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoAppIsolation enabled
      */
     public function testGetOptions()
     {
-        $this->_model = $this->productRepository->get('simple');
-
-        $this->assertEquals(4, count($this->_model->getOptions()));
+        $this->_model = $this->productRepository->get('simple_with_custom_options');
+        $options = $this->_model->getOptions();
+        $this->assertNotEmpty($options);
+        $expectedValue = [
+            '3-1-select' => 3000.00,
+            '3-2-select' => 5000.00,
+            '4-1-radio' => 600.234,
+            '4-2-radio' => 40000.00
+        ];
+        foreach ($options as $option) {
+            foreach ($option->getValues() as $value) {
+                $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
+            }
+        }
     }
 }

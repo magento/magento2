@@ -28,6 +28,20 @@ class CategoryListTest extends WebapiAbstract
                                 'value' => 'Category 1',
                                 'condition_type' => 'eq',
                             ],
+                            [
+                                'field' => 'name',
+                                'value' => 'Category 1.1',
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'level',
+                                'value' => 2,
+                                'condition_type' => 'eq',
+                            ],
                         ],
                     ],
                 ],

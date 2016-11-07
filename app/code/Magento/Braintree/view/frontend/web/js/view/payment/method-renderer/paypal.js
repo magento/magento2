@@ -12,8 +12,19 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
-    'Magento_Vault/js/view/payment/vault-enabler'
-], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators, VaultEnabler) {
+    'Magento_Vault/js/view/payment/vault-enabler',
+    'Magento_Checkout/js/action/create-billing-address'
+], function (
+    $,
+    _,
+    Component,
+    Braintree,
+    quote,
+    fullScreenLoader,
+    additionalValidators,
+    VaultEnabler,
+    createBillingAddress
+) {
     'use strict';
 
     return Component.extend({
@@ -87,7 +98,6 @@ define([
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
-                    self.reInitPayPal();
                 }
             });
 
@@ -172,14 +182,16 @@ define([
             var billingAddress = {
                 street: [address.streetAddress],
                 city: address.locality,
-                regionCode: address.region,
                 postcode: address.postalCode,
                 countryId: address.countryCodeAlpha2,
+                email: customer.email,
                 firstname: customer.firstName,
                 lastname: customer.lastName,
                 telephone: customer.phone
             };
 
+            billingAddress['region_code'] = address.region;
+            billingAddress = createBillingAddress(billingAddress);
             quote.billingAddress(billingAddress);
         },
 

@@ -76,4 +76,15 @@ class Selector extends \Magento\Backend\Block\Template
         $keys = array_keys($this->_modes);
         return array_shift($keys);
     }
+
+    /**
+     * Get mode Url
+     *
+     * @param string $mode
+     * @return string
+     */
+    public function getModeUrl($mode)
+    {
+        return $this->getUrl('adminhtml/*/*') . $mode;
+    }
 }

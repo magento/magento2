@@ -46,6 +46,8 @@
     <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
     <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList" />
     <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
+    <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -470,6 +472,7 @@
     <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="\Magento\Catalog\Model\Product\Option\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface" type="Magento\Catalog\Model\Product\Option\Type" />
     <preference for="Magento\Catalog\Api\ProductTierPriceManagementInterface" type="\Magento\Catalog\Model\Product\TierPriceManagement" />
+    <preference for="Magento\Catalog\Api\ScopedProductTierPriceManagementInterface" type="\Magento\Catalog\Model\Product\ScopedTierPriceManagement" />
     <preference for="Magento\Catalog\Api\Data\ProductTierPriceInterface" type="Magento\Catalog\Model\Product\TierPrice" />
     <preference for="Magento\Catalog\Api\Data\CategoryProductLinkInterface" type="Magento\Catalog\Model\CategoryProductLink" />
     <preference for="Magento\Catalog\Api\ProductCustomOptionTypeListInterface" type="Magento\Catalog\Model\ProductOptions\TypeList" />
@@ -802,6 +805,43 @@
                 <item name="specialPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderBySpecialPrice</item>
                 <item name="tierPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByTierPrice</item>
                 <item name="indexPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="category_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\ProductRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Catalog\Model\CategoryList">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
+    </type>
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="status" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\StatusBaseSelectProcessor</item>
             </argument>
         </arguments>
     </type>

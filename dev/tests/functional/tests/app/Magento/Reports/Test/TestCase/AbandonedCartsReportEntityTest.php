@@ -27,14 +27,14 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
  * 3. Click "Reset Filter".
  * 4. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28558
  */
 class AbandonedCartsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**

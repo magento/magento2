@@ -10,6 +10,7 @@
     attr: {
         'data-level': $data.current.level++
     }">
+    <!-- ko if: $data.current.visible() || $data.current.isVisited  -->
     <!-- ko foreach: { data: $data.current.optgroup, as: 'option'}  -->
     <li class="admin__action-multiselect-menu-inner-item"
         data-bind="css: { _parent: $data.optgroup }">
@@ -55,5 +56,6 @@
         <!-- /ko -->
         <!-- /ko-->
     </li>
+    <!-- /ko -->
     <!-- /ko -->
 </ul>

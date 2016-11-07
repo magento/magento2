@@ -8,6 +8,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
+use Magento\Eav\Api\Data\AttributeDefaultValueInterface;
 
 /**
  * Converter for AttributeMetadata
@@ -93,7 +94,13 @@ class AttributeMetadataConverter
             $validationRules[] = $validationRule;
         }
 
-        return $this->attributeMetadataFactory->create()->setAttributeCode($attribute->getAttributeCode())
+        $attributeMetaData = $this->attributeMetadataFactory->create();
+
+        if ($attributeMetaData instanceof AttributeDefaultValueInterface) {
+            $attributeMetaData->setDefaultValue($attribute->getDefaultValue());
+        }
+
+        return $attributeMetaData->setAttributeCode($attribute->getAttributeCode())
             ->setFrontendInput($attribute->getFrontendInput())
             ->setInputFilter((string)$attribute->getInputFilter())
             ->setStoreLabel($attribute->getStoreLabel())

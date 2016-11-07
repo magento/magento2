@@ -55,7 +55,28 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
         $data['new-variations-attribute-set-id'] = $attributeSetId;
         $data['associated_product_ids'] = $this->prepareAssociatedProductIds($configurableAttributesData);
 
-        return $this->replaceMappingData($data);
+        $this->replaceMappingData($data);
+        $data['configurable-matrix-serialized'] = json_encode($data['configurable-matrix']);
+        $data['associated_product_ids_serialized'] = json_encode($data['associated_product_ids']);
+        return $data;
+    }
+
+    /**
+     * Preparation of websites data.
+     *
+     * @return void
+     */
+    protected function prepareWebsites()
+    {
+        if (!empty($this->fields['product']['website_ids'])) {
+            foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
+                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
+            }
+        } else {
+            $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+                ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
+            $this->fields['product']['website_ids'][] = $website->getWebsiteId();
+        }
     }
 
     /**

@@ -8,44 +8,44 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\UpdateProductFromMiniShoppingCartEntityTest" summary="Update Product from Mini Shopping Cart" ticketId="MAGETWO-29812">
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation1" summary="Update Simple">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="originalProduct/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="checkoutData/dataset" xsi:type="string">simple_update_mini_shopping_cart</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation2" summary="Update Configurable and verify previous product was updated to new one in shopping cart and mini shopping cart">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="originalProduct/0" xsi:type="string">configurableProduct::default</data>
             <data name="checkoutData/dataset" xsi:type="string">configurable_update_mini_shopping_cart</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart" />
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation3" summary="Update Bundle and verify previous product was updated to new one in shopping cart and mini shopping cart">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="originalProduct/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="checkoutData/dataset" xsi:type="string">bundle_update_mini_shopping_cart</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart" />
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation4" summary="Update Downloadable and check previous link was updated to new one in shopping cart and mini shopping cart">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="originalProduct/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="checkoutData/dataset" xsi:type="string">downloadable_update_mini_shopping_cart</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart" />
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation5" summary="Update Virtual product in mini shopping cart">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="originalProduct/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="checkoutData/dataset" xsi:type="string">virtual_update_mini_shopping_cart</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
         </variation>
     </testCase>

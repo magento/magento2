@@ -41,6 +41,11 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     protected $addressRepository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingAssignmentMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -58,6 +63,19 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'addressRepository' => $this->addressRepository
             ]
+        );
+
+        $this->shippingAssignmentMock = $this->getMock(
+            \Magento\Quote\Model\ShippingAddressAssignment::class,
+            ['setAddress'],
+            [],
+            '',
+            false
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'shippingAddressAssignment',
+            $this->shippingAssignmentMock
         );
     }
 
@@ -78,93 +96,42 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage error123
-     */
-    public function testSetAddressValidationFailed()
-    {
-        $this->markTestSkipped('MAGETWO-48531');
-        $address = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with('cartId')
-            ->will($this->returnValue($quoteMock));
-
-        $this->validatorMock->expects($this->once())
-            ->method('validate')
-            ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException(__('error123'))));
-
-        $this->model->assign('cartId', $address);
-    }
-
-    /**
-     * @return void
      */
     public function testSetAddress()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 100;
         $useForShipping = true;
         $addressId = 1;
-        $customerAddressId = 10;
 
         $address = $this->getMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['setSaveInAddressBook', 'getCustomerAddressId', 'getSaveInAddressBook'],
+            ['getId'],
             [],
             '',
             false
         );
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
+            ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges'],
+            [],
+            '',
+            false
+        );
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($quoteMock);
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($address)
-            ->willReturn(true);
 
-        $address->expects($this->once())->method('getCustomerAddressId')->willReturn($customerAddressId);
-        $address->expects($this->once())->method('getSaveInAddressBook')->willReturn(1);
+        $address->expects($this->exactly(2))->method('getId')->willReturn($addressId);
+        $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($address);
+        $quoteMock->expects($this->once())->method('removeAddress')->with($addressId)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setBillingAddress')->with($address)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setDataChanges')->with(1)->willReturnSelf();
 
-        $customerAddressMock = $this->getMock(\Magento\Customer\Api\Data\AddressInterface::class, [], [], '', false);
-        $this->addressRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerAddressId)
-            ->willReturn($customerAddressMock);
-
-        $quoteBillingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
-        $quoteBillingAddress->expects($this->once())->method('getId')->will($this->returnValue($addressId));
-        $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($quoteBillingAddress);
-        $quoteBillingAddress->expects($this->once())
-            ->method('importCustomerAddressData')
-            ->with($customerAddressMock)
-            ->willReturnSelf();
-
-        $quoteShippingAddress = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['setSaveInAddressBook', 'setSameAsBilling', 'setCollectShippingRates', 'importCustomerAddressData'],
-            [],
-            '',
-            false
-        );
-        $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($quoteShippingAddress);
-        $quoteShippingAddress->expects($this->once())
-            ->method('importCustomerAddressData')
-            ->with($customerAddressMock)
-            ->willReturnSelf();
-        $quoteShippingAddress->expects($this->once())->method('setSaveInAddressBook')->with(1)->willReturnSelf();
-
-        $quoteBillingAddress->expects($this->once())->method('setSaveInAddressBook')->with(1)->willReturnSelf();
-        $quoteMock->expects($this->once())->method('setBillingAddress')->with($quoteBillingAddress)->willReturnSelf();
-
-        $quoteShippingAddress->expects($this->once())->method('setSameAsBilling')->with(1)->willReturnSelf();
-        $quoteShippingAddress->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
-
-        $quoteMock->expects($this->once())->method('setShippingAddress')->with($quoteShippingAddress);
-        $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
+        $this->shippingAssignmentMock->expects($this->once())
+            ->method('setAddress')
+            ->with($quoteMock, $address, $useForShipping);
 
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $this->assertEquals($addressId, $this->model->assign($cartId, $address, $useForShipping));
@@ -177,27 +144,45 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
-        $this->markTestSkipped('MAGETWO-48531');
-        $address = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false, false);
+        $cartId = 100;
+        $addressId = 1;
 
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $address = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getId'],
+            [],
+            '',
+            false
+        );
+        $quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
+            ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges'],
+            [],
+            '',
+            false
+        );
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
-            ->with('cartId')
-            ->will($this->returnValue($quoteMock));
+            ->with($cartId)
+            ->willReturn($quoteMock);
 
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($address)
-            ->will($this->returnValue(true));
+        $address->expects($this->once())->method('getId')->willReturn($addressId);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($address);
+        $quoteMock->expects($this->once())->method('removeAddress')->with($addressId)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setBillingAddress')->with($address)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setDataChanges')->with(1)->willReturnSelf();
 
-        $quoteMock->expects($this->once())->method('setBillingAddress')->with($address);
-        $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
+        $this->shippingAssignmentMock->expects($this->once())
+            ->method('setAddress')
+            ->with($quoteMock, $address, false);
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($quoteMock)
             ->willThrowException(
                 new \Exception('Some DB Error')
             );
-        $this->model->assign('cartId', $address);
+        $this->model->assign($cartId, $address);
     }
 }

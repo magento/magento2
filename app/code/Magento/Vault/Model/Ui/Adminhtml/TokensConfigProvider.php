@@ -130,38 +130,57 @@ final class TokensConfigProvider
         }
 
         if ($customerId) {
-            $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
-                ->setValue($customerId)
-                ->create();
+            $this->searchCriteriaBuilder->addFilters(
+                [
+                    $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
+                    ->setValue($customerId)
+                    ->create(),
+                ]
+            );
         } else {
             try {
-                $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
-                    ->setValue($this->getPaymentTokenEntityId())
-                    ->create();
+                $this->searchCriteriaBuilder->addFilters(
+                    [
+                        $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
+                            ->setValue($this->getPaymentTokenEntityId())
+                            ->create(),
+                    ]
+                );
             } catch (InputException $e) {
                 return $result;
             } catch (NoSuchEntityException $e) {
                 return $result;
             }
         }
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
-            ->setValue($vaultProviderCode)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
-            ->setValue(1)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
-            ->setConditionType('gt')
-            ->setValue(
-                $this->dateTimeFactory->create(
-                    'now',
-                    new \DateTimeZone('UTC')
-                )->format('Y-m-d 00:00:00')
-            )
-            ->create();
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
+                    ->setValue($vaultProviderCode)
+                    ->create(),
+                ]
+        );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+                    ->setValue(1)
+                    ->create(),
+                ]
+        );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+                    ->setConditionType('gt')
+                    ->setValue(
+                        $this->dateTimeFactory->create(
+                            'now',
+                            new \DateTimeZone('UTC')
+                        )->format('Y-m-d 00:00:00')
+                    )
+                    ->create(),
+                ]
+        );
 
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
-            ->create();
+        $searchCriteria = $this->searchCriteriaBuilder->create();
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
             $result[] = $componentProvider->getComponentForToken($token);
@@ -186,7 +205,7 @@ final class TokensConfigProvider
 
     /**
      * Get active vault payment by code
-     * @param $vaultPaymentCode
+     * @param string $vaultPaymentCode
      * @return VaultPaymentInterface|null
      */
     private function getVaultPayment($vaultPaymentCode)
@@ -202,9 +221,11 @@ final class TokensConfigProvider
      */
     private function getPaymentTokenEntityId()
     {
-        return $this->getPaymentTokenManagement()
-            ->getByPaymentId($this->getOrderPaymentEntityId())
-            ->getEntityId();
+        $paymentToken = $this->getPaymentTokenManagement()->getByPaymentId($this->getOrderPaymentEntityId());
+        if ($paymentToken === null) {
+            throw new NoSuchEntityException(__('No available payment tokens for specified order payment.'));
+        }
+        return $paymentToken->getEntityId();
     }
 
     /**

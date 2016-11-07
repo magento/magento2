@@ -6,18 +6,18 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\Catalog\Product\View\Addto\Wishlist */
+/** @var \Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist $block */
 ?>
 <?php if ($block->isWishListAllowed()) : ?>
     <a href="#"
        class="action towishlist"
-       data-post='<?php /* @escapeNotVerified */ echo $block->getWishlistParams(); ?>'
-       data-action="add-to-wishlist"><span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span></a>
+       data-post='<?php /* @noEscape */ echo $block->getWishlistParams(); ?>'
+       data-action="add-to-wishlist"><span><?php echo $block->escapeHtml(__('Add to Wish List')) ?></span></a>
 <?php endif; ?>
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?php /* @escapeNotVerified */ echo $block->getWishlistOptionsJson() ?>
+            "addToWishlist": <?php /* @noEscape */ echo $block->getWishlistOptionsJson() ?>
         }
     }
 </script>

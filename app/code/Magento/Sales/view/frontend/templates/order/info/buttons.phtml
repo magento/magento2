@@ -10,7 +10,10 @@
 <div class="actions">
     <?php  $_order = $block->getOrder() ?>
     <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
-        <a class="action reorder" href="<?php /* @escapeNotVerified */ echo $block->getReorderUrl($_order) ?>">
+        <a href="#" data-post='<?php /* @escapeNotVerified */ echo
+        $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+            ->getPostData($block->getReorderUrl($_order))
+        ?>' class="action order">
             <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
         </a>
     <?php endif ?>

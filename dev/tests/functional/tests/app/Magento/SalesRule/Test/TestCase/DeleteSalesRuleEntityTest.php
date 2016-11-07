@@ -22,14 +22,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click 'Delete' button.
  * 5. Perform asserts.
  *
- * @group Shopping_Cart_Price_Rules_(CS)
+ * @group Shopping_Cart_Price_Rules
  * @ZephyrId MAGETWO-24985
  */
 class DeleteSalesRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

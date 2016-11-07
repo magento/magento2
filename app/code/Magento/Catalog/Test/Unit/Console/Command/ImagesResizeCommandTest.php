@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductColl
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Symfony\Component\Console\Tester\CommandTester;
+use \Magento\Framework\App\Area;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -79,7 +80,7 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->appState->expects($this->once())
             ->method('setAreaCode')
-            ->with('catalog')
+            ->with(Area::AREA_GLOBAL)
             ->willReturnSelf();
 
         $this->productCollection->expects($this->once())
@@ -101,7 +102,7 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->appState->expects($this->once())
             ->method('setAreaCode')
-            ->with('catalog')
+            ->with(Area::AREA_GLOBAL)
             ->willReturnSelf();
 
         $this->productCollection->expects($this->once())
@@ -142,7 +143,7 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->appState->expects($this->once())
             ->method('setAreaCode')
-            ->with('catalog')
+            ->with(Area::AREA_GLOBAL)
             ->willReturnSelf();
 
         $this->productCollection->expects($this->once())

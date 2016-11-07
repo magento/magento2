@@ -23,14 +23,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Delete second address - click 'Delete Address' button.
  * 5. Perform all assertions.
  *
- * @group Customers_(CS)
+ * @group Customers
  * @ZephyrId MAGETWO-28066
  */
 class DeleteCustomerAddressTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
+    const STABLE = 'no';
     /* end tags */
 
     /**

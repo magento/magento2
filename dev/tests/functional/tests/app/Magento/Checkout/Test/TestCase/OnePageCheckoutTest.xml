@@ -27,6 +27,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation2" summary="US customer during checkout using coupon for all customer groups">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -47,7 +48,8 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
-        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product">
+        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
@@ -167,6 +169,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with Tier Prices">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_order_qty_3</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
@@ -183,6 +186,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="products/2" xsi:type="string">configurableProduct::with_one_option</data>

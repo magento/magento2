@@ -5,38 +5,36 @@
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * Currency switcher
  *
- * @see \Magento\Directory\Block\Currency
+ * @var \Magento\Directory\Block\Currency $block
  */
+
 ?>
 <?php if ($block->getCurrencyCount() > 1): ?>
 <?php $currencies = $block->getCurrencies(); ?>
 <?php $currentCurrencyCode = $block->getCurrentCurrencyCode(); ?>
-<?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : ''?>
-<div class="switcher currency switcher-currency" id="switcher-currency<?php /* @escapeNotVerified */ echo $id?>">
-    <strong class="label switcher-label"><span><?php /* @escapeNotVerified */ echo __('Currency') ?></span></strong>
+<?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '' ?>
+<div class="switcher currency switcher-currency" id="switcher-currency<?php echo $block->escapeHtmlAttr($id) ?>">
+    <strong class="label switcher-label"><span><?php echo $block->escapeHtml(__('Currency')) ?></span></strong>
     <div class="actions dropdown options switcher-options">
-        <div class="action toggle switcher-trigger" id="switcher-currency-trigger<?php /* @escapeNotVerified */ echo $id?>">
+        <div class="action toggle switcher-trigger" id="switcher-currency-trigger<?php echo $block->escapeHtmlAttr($id) ?>">
             <strong class="language-<?php echo $block->escapeHtml($block->getCurrentCurrencyCode()) ?>">
                 <span><?php echo $block->escapeHtml($currentCurrencyCode) ?> - <?php echo @$block->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
             </strong>
         </div>
         <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{
-            "appendTo":"#switcher-currency<?php /* @escapeNotVerified */ echo $id?> > .options",
-            "triggerTarget":"#switcher-currency-trigger<?php /* @escapeNotVerified */ echo $id?>",
+            "appendTo":"#switcher-currency<?php echo $block->escapeJs($id) ?> > .options",
+            "triggerTarget":"#switcher-currency-trigger<?php echo $block->escapeJs($id) ?>",
             "closeOnMouseLeave": false,
             "triggerClass":"active",
             "parentClass":"active",
             "buttons":null}}'>
             <?php foreach ($currencies as $_code => $_name): ?>
                 <?php if ($_code != $currentCurrencyCode): ?>
-                    <li class="currency-<?php /* @escapeNotVerified */ echo $_code ?> switcher-option">
-                        <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getSwitchCurrencyPostData($_code); ?>'><?php /* @escapeNotVerified */ echo $_code ?> - <?php /* @escapeNotVerified */ echo $_name ?></a>
+                    <li class="currency-<?php echo $block->escapeHtmlAttr($_code) ?> switcher-option">
+                        <a href="#" data-post='<?php /* @noEscape */ echo $block->getSwitchCurrencyPostData($_code); ?>'><?php echo $block->escapeHtml($_code) ?> - <?php echo $block->escapeHtml($_name) ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

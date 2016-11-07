@@ -144,8 +144,6 @@ class Write extends Read implements WriteInterface
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
-        $this->assertIsFile($path);
-
         $targetDirectory = $targetDirectory ?: $this;
         $parentDirectory = $this->driver->getParentDirectory($destination);
         if (!$targetDirectory->isExist($parentDirectory)) {

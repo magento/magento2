@@ -64,17 +64,32 @@ class AttributeLoader implements AttributeLoaderInterface
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
+        $suffix = $this->getLoadAllAttributesCacheSuffix($object);
+
         $typeCode = $resource->getEntityType()->getEntityTypeCode();
-        $attributes = $this->cache->getAttributes($typeCode);
+        $attributes = $this->cache->getAttributes($typeCode, $suffix);
         if ($attributes) {
             foreach ($attributes as $attribute) {
                 $resource->addAttribute($attribute);
             }
             return $resource;
         }
+        $attributes = $this->checkAndInitAttributes($resource, $object);
 
+        $this->cache->saveAttributes($typeCode, $attributes, $suffix);
+        return $resource;
+    }
+
+    /**
+     * @param AbstractEntity $resource
+     * @param DataObject|null $object
+     * @return array
+     */
+    private function checkAndInitAttributes(AbstractEntity $resource, DataObject $object = null)
+    {
         $attributeCodes = $this->config->getEntityAttributeCodes($resource->getEntityType(), $object);
         $attributes = [];
+
         /**
          * Check and init default attributes
          */
@@ -95,8 +110,23 @@ class AttributeLoader implements AttributeLoaderInterface
             $attribute = $resource->getAttribute($code);
             $attributes[] = $attribute;
         }
-        $this->cache->saveAttributes($typeCode, $attributes);
-        return $resource;
+        return $attributes;
+    }
+
+    /**
+     * @param DataObject|null $object
+     * @return string
+     */
+    private function getLoadAllAttributesCacheSuffix(DataObject $object = null)
+    {
+        $attributeSetId = 0;
+        $storeId = 0;
+        if (null !== $object) {
+            $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
+            $storeId = $object->getStoreId() ?: $storeId;
+        }
+        $suffix = $storeId . '-' . $attributeSetId;
+        return $suffix;
     }
 
     /**

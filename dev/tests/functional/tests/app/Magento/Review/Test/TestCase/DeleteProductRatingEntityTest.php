@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Delete Rating' button.
  * 6. Perform all asserts.
  *
- * @group Reviews_and_Ratings_(MX)
+ * @group Reviews_and_Ratings
  * @ZephyrId MAGETWO-23276
  */
 class DeleteProductRatingEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

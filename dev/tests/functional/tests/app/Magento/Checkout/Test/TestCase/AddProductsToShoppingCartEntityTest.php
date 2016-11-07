@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Add to cart test product
  * 4. Perform all asserts
  *
- * @group Shopping_Cart_(CS)
+ * @group Shopping_Cart
  * @ZephyrId MAGETWO-25382
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Delete" button.
  * 5. Perform asserts.
  *
- * @group Category_Management_(MX)
+ * @group Category_Management
  * @ZephyrId MAGETWO-23303
  */
 class DeleteCategoryEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

@@ -39,11 +39,6 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
-     * @var \Closure|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $closureMock;
-
-    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManagerHelper;
@@ -153,7 +148,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
         return $taxDetailsMock;
     }
 
-    public function testAroundProcess()
+    public function testAfterProcess()
     {
         $taxRate = [
             'percent' => 8.25,
@@ -211,11 +206,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
             'tax' => $taxSegmentMock,
         ];
 
-        $this->closureMock = function () use ($totalSegments) {
-            return $totalSegments;
-        };
-
-        $result = $this->model->aroundProcess($this->subjectMock, $this->closureMock, $addressTotals);
+        $result = $this->model->afterProcess($this->subjectMock, $totalSegments, $addressTotals);
         $this->assertEquals($totalSegments, $result);
     }
 }

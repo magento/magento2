@@ -40,7 +40,7 @@ class Method extends Block
      *
      * @var string
      */
-    protected $vaultCheckbox = '#%s_vault_enabler';
+    protected $vaultCheckbox = '#%s_enable_vault';
 
     /**
      * PayPal load spinner.

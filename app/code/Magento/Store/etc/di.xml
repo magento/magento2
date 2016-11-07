@@ -12,6 +12,7 @@
     <preference for="Magento\Store\Api\Data\StoreInterface" type="Magento\Store\Model\Store"/>
     <preference for="Magento\Store\Api\Data\GroupInterface" type="Magento\Store\Model\Group"/>
     <preference for="Magento\Store\Api\Data\WebsiteInterface" type="Magento\Store\Model\Website"/>
+    <preference for="Magento\Store\Api\StoreWebsiteRelationInterface" type="Magento\Store\Model\StoreManager"/>
     <preference for="Magento\Store\Api\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />

@@ -31,14 +31,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Click "Delete Web Site"
  * 7. Perform all assertions
  *
- * @group Store_Management_(PS)
+ * @group Store_Management
  * @ZephyrId MAGETWO-27723
  */
 class DeleteWebsiteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const SEVERITY = 'S3';
+    const STABLE = 'no';
     /* end tags */
 
     /**

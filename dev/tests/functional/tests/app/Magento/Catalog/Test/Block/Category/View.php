@@ -20,7 +20,14 @@ class View extends Block
      *
      * @var string
      */
-    protected $recentlyViewedProducts = './/*[contains(@class,"widget")]//strong[@class="product-item-name"]';
+    protected $recentlyViewedProducts = '.block-viewed-products-grid strong.product-item-name';
+
+    /**
+     * New Products selectors.
+     *
+     * @var string
+     */
+    protected $newProducts = '.block-new-products strong.product-item-name';
 
     /**
      * Description CSS selector.
@@ -65,8 +72,24 @@ class View extends Block
     public function getProductsFromRecentlyViewedBlock()
     {
         $products = [];
-        $this->waitForElementVisible($this->recentlyViewedProducts, Locator::SELECTOR_XPATH);
-        $productNames = $this->_rootElement->getElements($this->recentlyViewedProducts, Locator::SELECTOR_XPATH);
+        $this->waitForElementVisible($this->recentlyViewedProducts, Locator::SELECTOR_CSS);
+        $productNames = $this->_rootElement->getElements($this->recentlyViewedProducts, Locator::SELECTOR_CSS);
+        foreach ($productNames as $productName) {
+            $products[] = $productName->getText();
+        }
+        return $products;
+    }
+
+    /**
+     * Get products from Catalog New Products List block.
+     *
+     * @return array
+     */
+    public function getProductsFromCatalogNewProductsListBlock()
+    {
+        $products = [];
+        $this->waitForElementVisible($this->newProducts, Locator::SELECTOR_CSS);
+        $productNames = $this->_rootElement->getElements($this->newProducts, Locator::SELECTOR_CSS);
         foreach ($productNames as $productName) {
             $products[] = $productName->getText();
         }

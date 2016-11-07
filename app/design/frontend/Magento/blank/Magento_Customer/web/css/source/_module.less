@@ -15,6 +15,8 @@
 @account-nav-current-color: false;
 @account-nav-current-font-weight: @font-weight__semibold;
 
+@account-nav-delimiter__border-color: @color-gray82;
+
 @account-nav-item-hover: @color-gray91;
 
 @_password-default: @color-gray-light01;
@@ -84,6 +86,25 @@
     .box-newsletter {
         .box-content {
             line-height: 26px;
+        }
+    }
+
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            &.field {
+                > .label {
+                    &:extend(.abs-visually-hidden all);
+
+                    + .control {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .field {
+                &:extend(.abs-add-clearfix all);
+            }
         }
     }
 
@@ -199,6 +220,12 @@
                 a {
                     .lib-css(border-color, @account-nav-current-border-color);
                 }
+            }
+
+            .delimiter {
+                border-top: 1px solid @account-nav-delimiter__border-color;
+                display: block;
+                margin: @indent__s 1.8rem;
             }
         }
     }
@@ -400,18 +427,23 @@
         }
     }
 
-    .form-create-account {
-        .fieldset-fullname {
-            .fields {
-                .field {
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            .field {
+                .label {
+                    .lib-css(margin, @form-field-type-label-inline__margin);
+                    .lib-css(padding, @form-field-type-label-inline__padding);
+                    .lib-css(text-align, @form-field-type-label-inline__align);
+                    .lib-css(width, @form-field-type-label-inline__width);
+                    box-sizing: border-box;
                     float: left;
-                    margin: 0 @indent__s @indent__s 0;
                 }
-            }
 
-            .field-name-prefix,
-            .field-name-suffix {
-                width: 50px;
+                .control {
+                    .lib-css(width, @form-field-type-control-inline__width);
+                    float: left;
+                }
             }
         }
     }

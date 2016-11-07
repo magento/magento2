@@ -105,7 +105,7 @@ define([
         apply: function (value) {
             value = value || this.inputValue;
 
-            this.value = this.inputValue = value;
+            this.value = this.inputValue = value.trim();
 
             return this;
         },

@@ -102,7 +102,8 @@ class PhpReadinessCheck
 
         $settings = array_merge(
             $this->checkXDebugNestedLevel(),
-            $this->checkPopulateRawPostSetting()
+            $this->checkPopulateRawPostSetting(),
+            $this->checkFunctionsExistence()
         );
 
         foreach ($settings as $setting) {
@@ -312,6 +313,33 @@ class PhpReadinessCheck
             'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
             'error' => $error
         ];
+
+        return $data;
+    }
+
+    /**
+     * Check whether all special functions exists
+     *
+     * @return array
+     */
+    private function checkFunctionsExistence()
+    {
+        $data = [];
+        $requiredFunctions = [
+            [
+                'name' => 'imagecreatefromjpeg',
+                'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+            ],
+        ];
+
+        foreach ($requiredFunctions as $function) {
+            $data['missed_function_' . $function['name']] = [
+                'message' => $function['message'],
+                'helpUrl' => $function['helpUrl'],
+                'error' => !function_exists($function['name']),
+            ];
+        }
 
         return $data;
     }

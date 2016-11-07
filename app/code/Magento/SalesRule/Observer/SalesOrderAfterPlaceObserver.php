@@ -57,7 +57,7 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
     {
         $order = $observer->getEvent()->getOrder();
 
-        if (!$order || $order->getDiscountAmount() == 0) {
+        if (!$order || !$order->getAppliedRuleIds()) {
             return $this;
         }
 

@@ -71,7 +71,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+    protected $massActionToggleList = './/span[contains(@class, "action-menu-item") and .= "%s"]';
 
     /**
      * Action button (located above the Grid).
@@ -85,7 +85,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $actionList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+    protected $actionList = './/span[contains(@class, "action-menu-item") and .= "%s"]';
 
     /**
      * Column header locator.
@@ -104,6 +104,13 @@ class DataGrid extends Grid
      * @var string
      */
     private $cellByHeader = "//td[count(//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th)+1]";
+
+    /**
+     * Admin data grid header selector.
+     *
+     * @var string
+     */
+    private $gridHeader = './/div[@class="admin__data-grid-header"][(not(ancestor::*[@class="sticky-header"]) and not(contains(@style,"visibility: hidden"))) or (ancestor::*[@class="sticky-header" and not(contains(@style,"display: none"))])]';
     // @codingStandardsIgnoreEnd
 
     /**
@@ -135,14 +142,14 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $sortLink = "//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
+    protected $sortLink = './/div[@data-role="grid-wrapper"]//th[contains(@class, "%s")]/span[contains(text(), "%s")]';
 
     /**
      * Current page input.
      *
      * @var string
      */
-    protected $currentPage = '[data-ui-id="current-page-input"]';
+    protected $currentPage = ".//*[@data-ui-id='current-page-input'][not(ancestor::*[@class='sticky-header'])]";
 
     /**
      * Clear all applied Filters.
@@ -165,7 +172,7 @@ class DataGrid extends Grid
      */
     protected function waitFilterToLoad()
     {
-        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->getTemplateBlock()->waitLoader();
         $browser = $this->_rootElement;
         $selector = $this->filterButton . ', ' . $this->resetButton;
         $browser->waitUntil(
@@ -322,12 +329,12 @@ class DataGrid extends Grid
     public function selectAction($action)
     {
         $actionType = is_array($action) ? key($action) : $action;
-        $this->_rootElement->find($this->actionButton)->click();
-        $this->_rootElement
+        $this->getGridHeaderElement()->find($this->actionButton)->click();
+        $this->getGridHeaderElement()
             ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if (is_array($action)) {
-            $this->_rootElement
+            $this->getGridHeaderElement()
                 ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
                 ->click();
         }
@@ -347,7 +354,7 @@ class DataGrid extends Grid
             $this->sortGridByField('ID');
         }
         foreach ($items as $item) {
-            $this->_rootElement->find($this->currentPage)->setValue('');
+            $this->_rootElement->find($this->currentPage, Locator::SELECTOR_XPATH)->setValue('');
             $this->waitLoader();
             $selectItem = $this->getRow($item)->find($this->selectItem);
             do {
@@ -462,5 +469,15 @@ class DataGrid extends Grid
         }
 
         return $data;
+    }
+
+    /**
+     * Returns admin data grid header element.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    private function getGridHeaderElement()
+    {
+        return $this->_rootElement->find($this->gridHeader, Locator::SELECTOR_XPATH);
     }
 }

@@ -11,11 +11,11 @@
      css="element.setClasses(element)"
      attr="'data-index': index">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span text="element.label"/>
+        <span translate="element.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
-        <div class="admin__control-table-pagination" visible="!!$data.recordData().length">
+        <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                 <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
@@ -40,10 +40,10 @@
 
                     <th repeat="foreach: labels, item: '$label'"
                         class="data-grid-th"
-                        text="$label().label"
                         visible="$label().visible"
                         disable="$label().disabled"
                         css="$label().columnsHeaderClasses">
+                        <span translate="$label().label"/>
                     </th>
                 </tr>
                 </thead>
@@ -73,7 +73,7 @@
             <button attr="{disabled: disabled}"
                     type="button"
                     click="addChild.bind($data, false, false)">
-                <span text="addButtonLabel"/>
+                <span translate="addButtonLabel"/>
             </button>
         </div>
         <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>

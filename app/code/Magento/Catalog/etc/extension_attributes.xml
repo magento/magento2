@@ -25,4 +25,10 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="category_links" type="Magento\Catalog\Api\Data\CategoryLinkInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductTierPriceInterface">
+        <attribute code="percentage_value" type="float" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductTierPriceInterface">
+        <attribute code="website_id" type="int" />
+    </extension_attributes>
 </config>

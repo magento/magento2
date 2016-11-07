@@ -30,8 +30,10 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getUsedProducts($expectedProduct);
-        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getUsedProducts($actualProduct);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $prooductType */
+        $prooductType = $expectedProduct->getTypeInstance();
+        $expectedAssociatedProducts = $prooductType->getUsedProductCollection($expectedProduct);
+        $actualAssociatedProducts = iterator_to_array($prooductType->getUsedProductCollection($actualProduct));
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
@@ -91,5 +93,20 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             $data[$key][2] = array_merge($value[2], ['_cache_instance_product_set_attributes']);
         }
         return $data;
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     */
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
+    {
+        parent::testImportReplace($fixtures, $skus, $skippedAttributes);
     }
 }

@@ -23,15 +23,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save user
  * 6. Perform assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-25699
  */
 class CreateAdminUserEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     const TEST_TYPE = 'extended_acceptance_test';
+    const STABLE = 'no';
     /* end tags */
 
     /**

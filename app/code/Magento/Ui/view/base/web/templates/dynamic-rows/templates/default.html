@@ -6,7 +6,7 @@
 -->
 <div class="admin__field" visible="visible" disable="disabled" css="element.setClasses(element)">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span text="element.label"/>
+        <span translate="element.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper" attr="'data-index': index">
@@ -27,8 +27,8 @@
                             text="$label().label"
                             css="setClasses($label())"
                             visible="$label().visible"
-                            disable="$label().disabled"
-                            attr="{'data-name': name}"/>
+                            disable="$label().disabled">
+                            <span translate="$label().label"/>
                         </th>
                     </tr>
                 </thead>
@@ -49,17 +49,18 @@
                 </tr>
                 </tbody>
 
-                <tfoot visible="element.addButton || (!!$data.recordData().length && (pages() > 1))">
+                <tfoot visible="element.addButton || (!!element.getRecordCount() && (element.pages() > 1))">
                     <tr>
-                        <td attr="{'colspan': element.getColumnsCount()}">
+                        <td attr="{'colspan': element.getColumnsCount()}"
+                            visible="element.addButton || pages() > 1">
                             <button if="element.addButton"
                                     attr="{disabled: disabled, 'data-action': 'add_new_row'}"
                                     type="button"
                                     click="processingAddChild.bind($data, false, false, false)">
-                                <span text="addButtonLabel"/>
+                                <span translate="addButtonLabel"/>
                             </button>
 
-                            <div class="admin__control-table-pagination" visible="!!$data.recordData().length && (pages() > 1)">
+                            <div class="admin__control-table-pagination" visible="!!element.getRecordCount() && element.pages() > 1">
                                 <div class="admin__data-grid-pager">
                                     <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                                     <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">

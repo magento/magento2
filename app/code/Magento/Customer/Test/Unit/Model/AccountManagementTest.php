@@ -1146,7 +1146,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $storeId = 1;
 
-        mt_srand(mt_rand() + (100000000 * microtime()) % PHP_INT_MAX);
+        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
         $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
 
         $this->emailNotificationMock->expects($this->once())
@@ -1168,7 +1168,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        mt_srand(mt_rand() + (100000000 * microtime()) % PHP_INT_MAX);
+        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
         $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
 
         $this->emailNotificationMock->expects($this->once())
@@ -1194,7 +1194,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        mt_srand(mt_rand() + (100000000 * microtime()) % PHP_INT_MAX);
+        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
         $hash = md5(uniqid(microtime() . mt_rand(0, mt_getrandmax()), true));
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);

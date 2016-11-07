@@ -27,26 +27,40 @@ class OrderItemGetListTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @magentoApiDataFixture Magento/Sales/_files/order_item_list.php
      */
     public function testGetList()
     {
+        $expectedRowTotals = [112, 102, 92];
+        /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = $this->objectManager->get(
+            \Magento\Framework\Api\SortOrderBuilder::class
+        );
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
-
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
         $filterBuilder = $this->objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
 
-        $searchCriteriaBuilder->addFilters(
-            [
-                $filterBuilder->setField('order_id')
-                    ->setValue($order->getId())
-                    ->create(),
-            ]
-        );
+        $filter2 = $filterBuilder->setField('product_type')
+            ->setValue('configurable')
+            ->create();
+        $filter3 = $filterBuilder->setField('base_price')
+            ->setValue(110)
+            ->setConditionType('gteq')
+            ->create();
+        $filter4 = $filterBuilder->setField('product_type')
+            ->setValue('simple')
+            ->setConditionType('neq')
+            ->create();
+        $sortOrder = $sortOrderBuilder->setField('row_total')
+            ->setDirection('DESC')
+            ->create();
+        $searchCriteriaBuilder->addFilters([$filter4]);
+        $searchCriteriaBuilder->addFilters([$filter2, $filter3]);
+        $searchCriteriaBuilder->addSortOrder($sortOrder);
 
         $requestData = ['searchCriteria' => $searchCriteriaBuilder->create()->__toArray()];
 
@@ -66,9 +80,15 @@ class OrderItemGetListTest extends WebapiAbstract
 
         $this->assertTrue(is_array($response));
         $this->assertArrayHasKey('items', $response);
-        $this->assertCount(1, $response['items']);
+        $this->assertCount(3, $response['items']);
         $this->assertTrue(is_array($response['items'][0]));
-        $this->assertOrderItem(current($order->getItems()), $response['items'][0]);
+        $rowTotals = [];
+
+        foreach ($response['items'] as $item) {
+            $rowTotals[] = $item['row_total'];
+        }
+
+        $this->assertEquals($expectedRowTotals, $rowTotals);
     }
 
     /**

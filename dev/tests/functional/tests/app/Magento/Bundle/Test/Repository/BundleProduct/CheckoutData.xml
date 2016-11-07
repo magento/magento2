@@ -95,9 +95,9 @@
             </field>
             <field name="qty" xsi:type="string">1</field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">756</item>
+                <item name="price" xsi:type="string">755</item>
                 <item name="qty" xsi:type="string">1</item>
-                <item name="subtotal" xsi:type="string">756</item>
+                <item name="subtotal" xsi:type="string">755</item>
             </field>
         </dataset>
 
@@ -203,6 +203,36 @@
                         <item name="value" xsi:type="string">option_key_0</item>
                     </item>
                 </item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_with_custom_options_3">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">product_10_dollar</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">100</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">100</item>
+                <item name="subItemPrice" xsi:type="string">10</item>
             </field>
         </dataset>
 

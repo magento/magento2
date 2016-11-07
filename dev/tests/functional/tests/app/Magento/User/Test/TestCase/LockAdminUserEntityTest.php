@@ -24,14 +24,13 @@ use Magento\User\Test\Fixture\User;
  * 3. "You did not sign in correctly or your account is temporarily disabled." appears after each login attempt.
  * 4. Perform all assertions.
  *
- * @group AuthN_&_AuthZ_(PS)
+ * @group AuthN_&_AuthZ
  * @ZephyrId MAGETWO-12386
  */
 class LockAdminUserEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

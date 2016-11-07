@@ -129,12 +129,12 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
     <?php endif; ?>
 
     <?php if($block->isVaultEnabled()): ?>
-        <div class="field-tooltip-content">
+        <div class="admin__field admin__field-option field-tooltip-content">
             <input type="checkbox"
                    id="<?php /* @noEscape */ echo $code; ?>_vault"
                    name="payment[is_active_payment_token_enabler]"
                    class="admin__control-checkbox"/>
-            <label class="label" for="<?php /* @noEscape */ echo $code; ?>_vault">
+            <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_vault">
                 <span><?php echo $block->escapeHtml('Save for later use.'); ?></span>
             </label>
         </div>

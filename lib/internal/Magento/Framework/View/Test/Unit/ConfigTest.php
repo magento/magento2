@@ -40,17 +40,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetViewConfig()
     {
-        $themeCode = 2;
+        $themeCode = 'area/theme';
 
         $themeMock = $this->getMock(
             \Magento\Theme\Model\Theme::class,
-            ['getCode'],
+            ['getFullPath'],
             [],
             '',
             false
         );
         $themeMock->expects($this->atLeastOnce())
-            ->method('getCode')
+            ->method('getFullPath')
             ->will($this->returnValue($themeCode));
         $params = [
             'themeModel' => $themeMock,

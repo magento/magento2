@@ -149,7 +149,7 @@
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">customer_group_ids</item>
                 </item>
-                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
+                <item name="options" xsi:type="object">\Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
             </argument>
         </field>
         <field name="from_date">

@@ -75,6 +75,37 @@
             </field>
         </dataset>
 
+        <dataset name="percent_and_fixed_drop_down_options">
+            <field name="0" xsi:type="array">
+                <item name="title" xsi:type="string">custom option drop down %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">Select/Drop-down</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">30 bucks</item>
+                        <item name="price" xsi:type="string">30</item>
+                        <item name="price_type" xsi:type="string">Fixed</item>
+                        <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="title" xsi:type="string">custom option drop down 2 %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">Select/Drop-down</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">40 Percent</item>
+                        <item name="price" xsi:type="string">40</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="drop_down_with_one_option_fixed_price">
             <field name="0" xsi:type="array">
                 <item name="title" xsi:type="string">custom option drop down %isolation%</item>

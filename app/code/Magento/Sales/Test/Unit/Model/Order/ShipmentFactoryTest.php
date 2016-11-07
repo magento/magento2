@@ -5,10 +5,9 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * Unit test for shipment factory class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +38,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->converter = $this->getMock(
             \Magento\Sales\Model\Convert\Order::class,

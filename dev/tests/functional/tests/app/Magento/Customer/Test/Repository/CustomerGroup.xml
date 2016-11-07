@@ -15,7 +15,7 @@
         </dataset>
 
         <dataset name="General">
-            <field name="customer_group_id" xsi:type="string">1</field>
+            <field name="customer_group_id" xsi:type="string">%id%</field>
             <field name="customer_group_code" xsi:type="string">General</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">retail_customer</item>
@@ -23,7 +23,7 @@
         </dataset>
 
         <dataset name="Retailer">
-            <field name="customer_group_id" xsi:type="string">3</field>
+            <field name="customer_group_id" xsi:type="string">%id%</field>
             <field name="customer_group_code" xsi:type="string">Retailer</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">retail_customer</item>
@@ -31,7 +31,7 @@
         </dataset>
 
         <dataset name="Wholesale">
-            <field name="customer_group_id" xsi:type="string">2</field>
+            <field name="customer_group_id" xsi:type="string">%id%</field>
             <field name="customer_group_code" xsi:type="string">Wholesale</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">retail_customer</item>
@@ -39,12 +39,12 @@
         </dataset>
 
         <dataset name="all_customer_groups">
-            <field name="customer_group_id" xsi:type="string">0</field>
+            <field name="customer_group_id" xsi:type="string">%id%</field>
             <field name="customer_group_code" xsi:type="string">All Customer Groups</field>
         </dataset>
 
         <dataset name="NOT_LOGGED_IN">
-            <field name="customer_group_id" xsi:type="string">0</field>
+            <field name="customer_group_id" xsi:type="string">%id%</field>
             <field name="customer_group_code" xsi:type="string">NOT LOGGED IN</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">retail_customer</item>
@@ -52,7 +52,7 @@
         </dataset>
 
         <dataset name="ALL_GROUPS">
-            <field name="customer_group_id" xsi:type="string">32000</field>
+            <field name="customer_group_id" xsi:type="string">%id%</field>
             <field name="customer_group_code" xsi:type="string">ALL GROUPS</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">retail_customer</item>

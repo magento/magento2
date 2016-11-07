@@ -127,7 +127,11 @@ class Configurable
      */
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
-        $associatedProductIds = $this->request->getPost('associated_product_ids', []);
+        $associatedProductIds = $this->request->getPost('associated_product_ids_serialized', '[]');
+        if ($associatedProductIds != null && !empty($associatedProductIds)) {
+            $associatedProductIds = json_decode($associatedProductIds, true);
+        }
+
         $variationsMatrix = $this->getVariationMatrix();
 
         if ($associatedProductIds || $variationsMatrix) {
@@ -149,7 +153,10 @@ class Configurable
     protected function getVariationMatrix()
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
+        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+            $configurableMatrix = json_decode($configurableMatrix, true);
+        }
 
         foreach ($configurableMatrix as $item) {
             if ($item['newProduct']) {

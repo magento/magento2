@@ -251,13 +251,19 @@ main.controller('navigationController',
 .service('titleService', ['$localStorage', '$rootScope',
     function ($localStorage, $rootScope) {
         return {
-            setTitle: function(type, moduleName) {
-                $localStorage.moduleName = moduleName;
+            setTitle: function(type, component) {
+                if (type === 'enable' || type === 'disable') {
+                    $localStorage.packageTitle = $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.moduleName ? component.moduleName : component.name;
+                    $localStorage.packageTitle = component.package_title;
+                }
+
                 if (typeof $localStorage.titles === 'undefined') {
                     $localStorage.titles = [];
                 }
                 $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                    + $localStorage.moduleName;
+                    + ($localStorage.packageTitle ? $localStorage.packageTitle : $localStorage.moduleName);
                 $rootScope.titles = $localStorage.titles;
             }
         };
@@ -273,6 +279,91 @@ main.controller('navigationController',
                         $scope.currentPage = $scope.numberOfPages;
                     }
                 });
+            }
+        };
+    }
+])
+.service('multipleChoiceService', ['$localStorage',
+    function ($localStorage) {
+        return {
+            selectedExtensions: {},
+            allExtensions: {},
+            someExtensionsSelected: false,
+            allExtensionsSelected: false,
+            isNewExtensionsMenuVisible: false,
+
+            addExtension: function (name, version) {
+                this.allExtensions[name] = {
+                    'name': name,
+                    'version': version
+                };
+            },
+            reset: function () {
+                this.allExtensions = {};
+                this.selectedExtensions = {};
+                this.someExtensionsSelected = false;
+                this.allExtensionsSelected = false;
+                this.isNewExtensionsMenuVisible = false;
+            },
+            updateSelectedExtensions: function ($event, name, version) {
+                var checkbox = $event.target;
+                if (checkbox.checked) {
+                    this.selectedExtensions[name] = {
+                        'name': name,
+                        'version': version
+                    };
+                    if (this._getObjectSize(this.selectedExtensions) == this._getObjectSize(this.allExtensions)) {
+                        this.someExtensionsSelected = false;
+                        this.allExtensionsSelected = true;
+                    } else {
+                        this.someExtensionsSelected = true;
+                        this.allExtensionsSelected = false;
+                    }
+                } else {
+                    delete this.selectedExtensions[name];
+                    this.allExtensionsSelected = false;
+                    this.someExtensionsSelected = (this._getObjectSize(this.selectedExtensions) > 0);
+                }
+            },
+            toggleNewExtensionsMenu: function() {
+                this.isNewExtensionsMenuVisible = !this.isNewExtensionsMenuVisible;
+            },
+            hideNewExtensionsMenu: function() {
+                this.isNewExtensionsMenuVisible = false;
+            },
+            selectAllExtensions: function() {
+                this.isNewExtensionsMenuVisible = false;
+                this.someExtensionsSelected = false;
+                this.allExtensionsSelected = true;
+                this.selectedExtensions = angular.copy(this.allExtensions);
+            },
+            deselectAllExtensions: function() {
+                this.isNewExtensionsMenuVisible = false;
+                this.someExtensionsSelected = false;
+                this.allExtensionsSelected = false;
+                this.selectedExtensions = {};
+            },
+            checkSelectedExtensions: function() {
+                var result = {error: false, errorMessage: ''};
+                if (this._getObjectSize(this.selectedExtensions) > 0) {
+                    result.error = false;
+                    result.errorMessage = '';
+                    $localStorage.packages = this.selectedExtensions;
+                } else {
+                    result.error = true;
+                    result.errorMessage = 'Please select at least one extension';
+                }
+
+                return result;
+            },
+            _getObjectSize: function (obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        ++size;
+                    }
+                }
+                return size;
             }
         };
     }

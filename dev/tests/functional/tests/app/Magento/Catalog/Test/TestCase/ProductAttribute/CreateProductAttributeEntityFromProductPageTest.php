@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 8. Save product.
  * 7. Perform appropriate assertions.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-30528
  */
 class CreateProductAttributeEntityFromProductPageTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

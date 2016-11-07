@@ -66,7 +66,7 @@ angular.module('module-grid', ['ngStorage'])
                         isComposerPackage: component.name !== 'unknown',
                     }
                 ];
-                titleService.setTitle(type, component.moduleName ? component.moduleName : component.name);
+                titleService.setTitle(type, component);
                 $localStorage.componentType = component.type;
                 $state.go('root.readiness-check-'+type);
             };

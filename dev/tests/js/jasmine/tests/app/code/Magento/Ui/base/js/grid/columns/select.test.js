@@ -25,11 +25,6 @@ define([
             it('get label while options empty', function () {
                 expect(select.getLabel(2)).toBe('');
             });
-
-            it('get label for existed value', function () {
-                select.options = opts;
-                expect(select.getLabel(2)).toBe('b');
-            });
         });
     });
 });

@@ -20,10 +20,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAssociatedProductIds()
     {
         $associatedProductIds = [3, 14, 15, 92];
+        $associatedProductIdsJSON = json_encode($associatedProductIds);
         $this->getRequest()->setPostValue(
             [
                 'attributes' => [$this->_getConfigurableAttribute()->getId()],
-                'associated_product_ids' => $associatedProductIds,
+                'associated_product_ids_serialized' => $associatedProductIdsJSON,
             ]
         );
 

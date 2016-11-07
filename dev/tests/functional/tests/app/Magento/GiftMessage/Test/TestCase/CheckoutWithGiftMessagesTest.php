@@ -22,14 +22,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 4. Complete Checkout steps
  * 5. Perform all asserts
  *
- * @group Gift_Messages_(CS)
+ * @group Gift_Messages
  * @ZephyrId MAGETWO-28978
  */
 class CheckoutWithGiftMessagesTest extends Scenario
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     const TO_MAINTAIN = 'yes'; // Consider variation #2 to work correctly with Virtual products
     /* end tags */
 

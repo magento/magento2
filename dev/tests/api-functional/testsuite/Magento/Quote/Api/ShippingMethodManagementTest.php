@@ -78,7 +78,6 @@ class ShippingMethodManagementTest extends WebapiAbstract
      */
     public function testGetListForMyCart()
     {
-        $this->markTestSkipped('Will be fixed after MAGETWO-35573');
         $this->_markTestAsRestOnly();
 
         $this->quote->load('test_order_1', 'reserved_order_id');
@@ -89,9 +88,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
-        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagementService */
+        /** @var \Magento\Quote\Model\ShippingMethodManagementInterface $shippingMethodManagementService */
         $shippingMethodManagementService = $this->objectManager->create(
-            \Magento\Quote\Api\ShippingMethodManagementInterface::class
+            \Magento\Quote\Model\ShippingMethodManagementInterface::class
         );
         $shippingMethodManagementService->set($this->quote->getId(), 'flatrate', 'flatrate');
 

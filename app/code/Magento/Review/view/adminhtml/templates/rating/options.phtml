@@ -5,24 +5,24 @@
  */
 
 // @codingStandardsIgnoreFile
-
+// @deprecated
 ?>
 <div class="entry-edit-head">
-    <h4 class="icon-head head-edit-form fieldset-legend"><?php /* @escapeNotVerified */ echo __('Assigned Options') ?></h4>
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $block->escapeHtml(__('Assigned Options')) ?></h4>
 </div>
 <fieldset id="options_form">
 <?php if (!$options): ?>
-    <?php for ($_i = 1;$_i <= 5;$_i++): ?>
+    <?php for ($_i = 1; $_i <= 5; $_i++): ?>
         <span class="field-row">
-            <label for="option_<?php /* @escapeNotVerified */ echo $_i ?>"><?php /* @escapeNotVerified */ echo __('Option Title:') ?></label>
-            <input id="option_<?php /* @escapeNotVerified */ echo $_i ?>" name="option[<?php /* @escapeNotVerified */ echo $_i ?>][code]" value="<?php /* @escapeNotVerified */ echo $_i ?>" class="input-text" type="text" />
+            <label for="option_<?php /* @noEscape */ echo $_i ?>"><?php echo $block->escapeHtml(__('Option Title:')) ?></label>
+            <input id="option_<?php /* @noEscape */ echo $_i ?>" name="option[<?php /* @noEscape */ echo $_i ?>][code]" value="<?php /* @noEscape */ echo $_i ?>" class="input-text" type="text" />
         </span>
     <?php endfor; ?>
 <?php elseif ($options->getSize() > 0): ?>
     <?php foreach ($options->getItems() as $_item): ?>
         <span class="field-row">
-            <label for="option_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"><?php /* @escapeNotVerified */ echo __('Option Title:') ?></label>
-            <input id="option_<?php /* @escapeNotVerified */ echo $_item->getId() ?>" name="option[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][code]" value="<?php /* @escapeNotVerified */ echo $_item->getCode() ?>" class="input-text" type="text" />
+            <label for="option_<?php echo $block->escapeHtmlAttr($_item->getId()) ?>"><?php echo $block->escapeHtml(__('Option Title:')) ?></label>
+            <input id="option_<?php echo $block->escapeHtmlAttr($_item->getId()) ?>" name="option[<?php echo $block->escapeHtmlAttr($_item->getId()) ?>][code]" value="<?php echo $block->escapeHtmlAttr($_item->getCode()) ?>" class="input-text" type="text" />
         </span>
     <?php endforeach; ?>
 <?php endif; ?>

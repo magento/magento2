@@ -104,7 +104,7 @@ class PaymentToken extends AbstractDb
         $connection = $this->getConnection();
 
         $select = $connection->select()
-            ->from(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE)
+            ->from($this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE))
             ->where('order_payment_id = ?', (int) $orderPaymentId)
             ->where('payment_token_id =?', (int) $paymentTokenId);
 

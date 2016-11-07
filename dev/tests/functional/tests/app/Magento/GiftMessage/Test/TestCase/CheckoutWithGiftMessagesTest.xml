@@ -8,7 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\GiftMessage\Test\TestCase\CheckoutWithGiftMessagesTest" summary="One Page Checkout with Gift Messages" ticketId="MAGETWO-28978">
         <variation name="CheckoutWithGiftMessagesTestVariation1">
-            <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
@@ -26,7 +27,9 @@
             <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" />
         </variation>
         <variation name="CheckoutWithGiftMessagesTestVariation2">
-            <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>

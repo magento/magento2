@@ -8,8 +8,16 @@ angular.module('updater-success', ['ngStorage'])
     .controller('updaterSuccessController', ['$scope', '$state', '$localStorage', '$window', 'navigationService', function ($scope, $state, $localStorage, $window, navigationService) {
         if ($localStorage.successPageAction) {
             $scope.successPageAction = $localStorage.successPageAction;
-            $scope.successPageActionMessage = $scope.successPageAction +
-                ($scope.endsWith($scope.successPageAction, 'e')  ? 'd' : 'ed');
+            switch (true) {
+                case $scope.endsWith($scope.successPageAction, 'd'):
+                    $scope.successPageActionMessage = $scope.successPageAction;
+                    break;
+                case $scope.endsWith($scope.successPageAction, 'e'):
+                    $scope.successPageActionMessage = $scope.successPageAction + 'd';
+                    break;
+                default:
+                    $scope.successPageActionMessage = $scope.successPageAction + 'ed';
+            }
         }
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;

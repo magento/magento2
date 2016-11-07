@@ -130,4 +130,49 @@
         <step name="placeOrderVault" alias="placeOrder" module="Magento_Checkout" next="deleteStoredPayment" />
         <step name="deleteStoredPayment" module="Magento_Vault" />
     </scenario>
+    <scenario name="OnePageCheckoutAcceptPaymentTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="changeOrderStatusToPaymentReview" />
+        <step name="changeOrderStatusToPaymentReview" module="Magento_Braintree" next="acceptPayment" />
+        <step name="acceptPayment" module="Magento_Braintree" />
+    </scenario>
+    <scenario name="OnePageCheckoutDenyPaymentTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="changeOrderStatusToPaymentReview" />
+        <step name="changeOrderStatusToPaymentReview" module="Magento_Braintree" next="denyPayment" />
+        <step name="denyPayment" module="Magento_Braintree" />
+    </scenario>
+    <scenario name="CreateOrderWithPayPalBraintreeVaultBackendTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrderWithPaypal" />
+        <step name="placeOrderWithPaypal" module="Magento_Braintree" next="openOrder"/>
+        <step name="openOrder" module="Magento_Sales" next="reorder" />
+        <step name="reorder" module="Magento_Sales" next="useVaultPaymentToken" />
+        <step name="useVaultPaymentToken" module="Magento_Vault" next="submitOrder" />
+        <step name="submitOrder" module="Magento_Sales" />
+    </scenario>
 </config>

@@ -21,14 +21,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Delete" button.
  * 5. Perform all assertions.
  *
- * @group Web_API_Framework_(PS)
+ * @group Web_API_Framework
  * @ZephyrId MAGETWO-26058
  */
 class DeleteIntegrationEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

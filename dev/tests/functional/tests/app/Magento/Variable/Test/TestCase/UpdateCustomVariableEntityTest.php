@@ -29,14 +29,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 8. Save Custom variable using correspond saveActions.
  * 9. Perform all assertions.
  *
- * @group Variables_(PS)
+ * @group Variables
  * @ZephyrId MAGETWO-26104
  */
 class UpdateCustomVariableEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

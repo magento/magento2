@@ -22,14 +22,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save category
  * 6. Verify created category
  *
- * @group Category_Management_(MX)
+ * @group Category_Management
  * @ZephyrId MAGETWO-23411
  */
 class CreateCategoryEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 

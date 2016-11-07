@@ -8,6 +8,8 @@ namespace Magento\Sales\Model\ResourceModel\Order\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
 class Authorization
 {
@@ -20,33 +22,28 @@ class Authorization
      * @param UserContextInterface $userContext
      */
     public function __construct(
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        UserContextInterface $userContext
     ) {
         $this->userContext = $userContext;
     }
 
     /**
-     * Checks if order is allowed
-     *
-     * @param \Magento\Sales\Model\ResourceModel\Order $subject
-     * @param callable $proceed
+     * @param ResourceOrder $subject
+     * @param ResourceOrder $result
      * @param \Magento\Framework\Model\AbstractModel $order
-     * @param mixed $value
-     * @param null|string $field
-     * @return \Magento\Sales\Model\Order
+     * @return ResourceOrder
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundLoad(
-        \Magento\Sales\Model\ResourceModel\Order $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $order,
-        $value,
-        $field = null
+    public function afterLoad(
+        ResourceOrder $subject,
+        ResourceOrder $result,
+        \Magento\Framework\Model\AbstractModel $order
     ) {
-        $result = $proceed($order, $value, $field);
-        if (!$this->isAllowed($order)) {
-            throw NoSuchEntityException::singleField('orderId', $order->getId());
+        if ($order instanceof Order) {
+            if (!$this->isAllowed($order)) {
+                throw NoSuchEntityException::singleField('orderId', $order->getId());
+            }
         }
         return $result;
     }
@@ -57,7 +54,7 @@ class Authorization
      * @param \Magento\Sales\Model\Order $order
      * @return bool
      */
-    protected function isAllowed(\Magento\Sales\Model\Order $order)
+    protected function isAllowed(Order $order)
     {
         return $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER
             ? $order->getCustomerId() == $this->userContext->getUserId()

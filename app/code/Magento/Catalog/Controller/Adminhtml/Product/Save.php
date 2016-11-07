@@ -97,6 +97,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
+                $this->unserializeProductData($data);
                 $product = $this->initializationHelper->initialize(
                     $this->productBuilder->build($this->getRequest())
                 );
@@ -178,6 +179,30 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
         }
         return $resultRedirect;
+    }
+
+    /**
+     * Unserialize product data for configurable products
+     *
+     * @param array $postData
+     * @return void
+     */
+    private function unserializeProductData($postData)
+    {
+        if (isset($postData["configurable-matrix-serialized"])) {
+            $configurableMatrixSerialized = $postData["configurable-matrix-serialized"];
+            if ($configurableMatrixSerialized != null && !empty($configurableMatrixSerialized)) {
+                $postData["configurable-matrix"] = json_decode($configurableMatrixSerialized, true);
+                unset($postData["configurable-matrix-serialized"]);
+            }
+        }
+        if (isset($postData["associated_product_ids_serialized"])) {
+            $associatedProductIdsSerialized = $postData["associated_product_ids_serialized"];
+            if ($associatedProductIdsSerialized != null && !empty($associatedProductIdsSerialized)) {
+                $postData["associated_product_ids"] = json_decode($associatedProductIdsSerialized, true);
+                unset($postData["associated_product_ids_serialized"]);
+            }
+        }
     }
 
     /**

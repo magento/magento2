@@ -34,6 +34,7 @@ class Tierprice extends AbstractGroupPrice
     {
         $columns = parent::_loadPriceDataColumns($columns);
         $columns['price_qty'] = 'qty';
+        $columns['percentage_value'] = 'percentage_value';
         return $columns;
     }
 

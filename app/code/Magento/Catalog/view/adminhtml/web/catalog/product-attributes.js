@@ -6,7 +6,8 @@ define([
     'jquery',
     'underscore',
     'uiRegistry',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/translate'
 ], function ($, _, registry) {
     'use strict';
 

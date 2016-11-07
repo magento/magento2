@@ -5,116 +5,118 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View as StoreViewIndexerPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
+use Magento\Store\Model\Store;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var StoreViewIndexerPlugin
      */
-    protected $indexerMock;
+    private $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store
+     * @var ObjectManagerHelper
      */
-    protected $subjectMock;
+    private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
-     * @var View
+     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $indexerMock;
+
+    /**
+     * @var StoreResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectMock;
+
+    /**
+     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock(\Magento\Store\Model\ResourceModel\Store::class, [], [], '', false);
-        $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
+        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
+            ->getMockForAbstractClass();
+        $this->subjectMock = $this->getMockBuilder(StoreResourceModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isObjectNew'])
+            ->getMock();
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->plugin = $this->objectManagerHelper->getObject(
+            StoreViewIndexerPlugin::class,
+            ['indexerRegistry' => $this->indexerRegistryMock]
         );
-        $this->indexerRegistryMock = $this->getMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->model = new View($this->indexerRegistryMock);
     }
 
     /**
      * @param bool $isObjectNew
      * @param int $invalidateCounter
-     * @return void
-     * @dataProvider aroundSaveDataProvider
+     *
+     * @dataProvider beforeAfterSaveDataProvider
      */
-    public function testAroundSave($isObjectNew, $invalidateCounter)
+    public function testBeforeAfterSave($isObjectNew, $invalidateCounter)
     {
-        $viewMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $viewMock->expects($this->once())->method('isObjectNew')->will($this->returnValue($isObjectNew));
-
-        $closureMock = function (\Magento\Store\Model\Store $object) use ($viewMock) {
-            $this->assertEquals($object, $viewMock);
-            return $this->subjectMock;
-        };
-
-        $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
         $this->prepareIndexer($invalidateCounter);
+        $this->storeMock->expects(static::once())
+            ->method('isObjectNew')
+            ->willReturn($isObjectNew);
+        $this->indexerMock->expects(static::exactly($invalidateCounter))
+            ->method('invalidate');
 
-        $this->assertEquals(
-            $this->subjectMock,
-            $this->model->aroundSave($this->subjectMock, $closureMock, $viewMock)
-        );
+        $this->plugin->beforeSave($this->subjectMock, $this->storeMock);
+        $this->assertSame($this->subjectMock, $this->plugin->afterSave($this->subjectMock, $this->subjectMock));
     }
 
     /**
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public function beforeAfterSaveDataProvider()
     {
         return [
             [false, 0],
-            [true, 1],
+            [true, 1]
         ];
     }
 
-    /**
-     * @return void
-     */
     public function testAfterDelete()
     {
-        $this->indexerMock->expects($this->once())->method('invalidate');
         $this->prepareIndexer(1);
+        $this->indexerMock->expects(static::once())
+            ->method('invalidate');
 
-        $this->assertEquals(
-            $this->subjectMock,
-            $this->model->afterDelete($this->subjectMock, $this->subjectMock)
-        );
+        $this->assertSame($this->subjectMock, $this->plugin->afterDelete($this->subjectMock, $this->subjectMock));
     }
 
     /**
+     * Prepare expectations for indexer
+     *
      * @param int $invalidateCounter
+     * @return void
      */
-    protected function prepareIndexer($invalidateCounter)
+    private function prepareIndexer($invalidateCounter)
     {
-        $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
+        $this->indexerRegistryMock->expects(static::exactly($invalidateCounter))
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->with(FulltextIndexer::INDEXER_ID)
+            ->willReturn($this->indexerMock);
     }
 }
