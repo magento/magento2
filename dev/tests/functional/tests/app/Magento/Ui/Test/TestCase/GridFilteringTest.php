@@ -28,6 +28,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 class GridFilteringTest extends Injectable
 {
     /* tags */
+    const STABLE = 'no';
     const MVP = 'no';
     /* end tags */
 

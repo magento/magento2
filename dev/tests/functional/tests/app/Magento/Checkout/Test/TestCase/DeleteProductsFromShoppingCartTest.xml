@@ -16,6 +16,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="DeleteProductsFromShoppingCartTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
@@ -36,6 +37,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="DeleteProductsFromShoppingCartTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
