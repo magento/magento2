@@ -29,7 +29,16 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
-            onlyMainImg: false
+
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace'
         },
 
         /**
@@ -54,6 +63,8 @@ define([
 
             // Setup/configure values to inputs
             this._configureForValues();
+
+            $(this.element).trigger('configurable.initialized');
         },
 
         /**
@@ -83,10 +94,10 @@ define([
 
             this.inputSimpleProduct = this.element.find(options.selectSimpleProduct);
 
-            gallery.on('gallery:loaded', function () {
-                var galleryObject = gallery.data('gallery');
-                options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-            });
+            gallery.data('gallery') ?
+                this._onGalleryLoaded(gallery) :
+                gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
+
         },
 
         /**
@@ -257,46 +268,33 @@ define([
          */
         _changeProductImage: function () {
             var images,
-                initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
+                initialImages = this.options.mediaGalleryInitial,
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
-            if (this.options.spConfig.images[this.simpleProduct]) {
-                images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
+            if (!galleryObject) {
+                return;
             }
 
-            function updateGallery(imagesArr) {
-                var imgToUpdate,
-                    mainImg;
+            images = this.options.spConfig.images[this.simpleProduct];
 
-                mainImg = imagesArr.filter(function (img) {
-                    return img.isMain;
+            if (images) {
+                if (this.options.gallerySwitchStrategy === 'prepend') {
+                    images = images.concat(initialImages);
+                }
+
+                images = $.extend(true, [], images);
+
+                images.forEach(function (img) {
+                    img.type = 'image';
                 });
 
-                imgToUpdate = mainImg.length ? mainImg[0] : imagesArr[0];
-                galleryObject.updateDataByIndex(0, imgToUpdate);
-                galleryObject.seek(1);
+                galleryObject.updateData(images);
+            } else {
+                galleryObject.updateData(initialImages);
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
-            if (galleryObject) {
-                if (images) {
-                    images.map(function (img) {
-                        img.type = 'image';
-                    });
-
-                    if (this.options.onlyMainImg) {
-                        updateGallery(images);
-                    } else {
-                        galleryObject.updateData(images)
-                    }
-                } else {
-                    if (this.options.onlyMainImg) {
-                        updateGallery(initialImages);
-                    } else {
-                        galleryObject.updateData(this.options.mediaGalleryInitial);
-                        $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
-                    }
-                }
-            }
+            galleryObject.first();
         },
 
         /**
@@ -504,8 +502,18 @@ define([
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
-        }
+        },
 
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        }
     });
 
     return $.mage.configurable;

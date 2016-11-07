@@ -190,8 +190,15 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
-            //
-            onlyMainImg: false
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace'
         },
 
         /**
@@ -236,11 +243,9 @@ define([
                     this.element.parents('.product-item-info');
 
             if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
@@ -900,26 +905,27 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
-                updateImg,
-                imagesToUpdate,
+                initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
-                item;
+                imagesToUpdate,
+                isInitial;
 
             if (isProductViewExist) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.onlyMainImg) {
-                    updateImg = imagesToUpdate.filter(function (img) {
-                        return img.isMain;
-                    });
-                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
-                    gallery.updateDataByIndex(0, item);
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
 
-                    gallery.seek(1);
-                } else {
-                    gallery.updateData(imagesToUpdate);
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
                 }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -971,6 +977,17 @@ define([
             }
 
             return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         }
     });
 
