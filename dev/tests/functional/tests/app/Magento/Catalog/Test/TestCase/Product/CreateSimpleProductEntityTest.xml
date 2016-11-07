@@ -520,6 +520,7 @@
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">100</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductHasImageInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCanSaveProduct" />
         </variation>
     </testCase>
