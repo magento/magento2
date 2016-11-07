@@ -22,22 +22,22 @@ class RefundOrderInventoryObserver implements ObserverInterface
     /**
      * @var StockConfigurationInterface
      */
-    protected $stockConfiguration;
+    private $stockConfiguration;
 
     /**
      * @var StockManagementInterface
      */
-    protected $stockManagement;
+    private $stockManagement;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $stockIndexerProcessor;
+    private $stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
-    protected $priceIndexer;
+    private $priceIndexer;
 
     /**
      * @var \Magento\SalesInventory\Model\Order\ReturnProcessor
@@ -59,12 +59,14 @@ class RefundOrderInventoryObserver implements ObserverInterface
         StockConfigurationInterface $stockConfiguration,
         StockManagementInterface $stockManagement,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
+        \Magento\Framework\App\ObjectManager $returnProcessor
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockManagement = $stockManagement;
         $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->priceIndexer = $priceIndexer;
+        $this->returnProcessor = $returnProcessor;
     }
 
     /**
@@ -84,7 +86,7 @@ class RefundOrderInventoryObserver implements ObserverInterface
                 $returnToStockItems[] = $item->getOrderItemId();
             }
         }
-        $this->getReturnProcessor()->execute(
+        $this->returnProcessor->execute(
             $creditmemo,
             $order,
             $returnToStockItems,
@@ -106,19 +108,5 @@ class RefundOrderInventoryObserver implements ObserverInterface
 
         }
         return $this->orderRepository;
-    }
-
-    /**
-     * Get OrderRepository
-     *
-     * @return ReturnProcessor
-     * @deprecated
-     */
-    private function getReturnProcessor()
-    {
-        if (!$this->returnProcessor) {
-            $this->returnProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(ReturnProcessor::class);
-        }
-        return $this->returnProcessor;
     }
 }
