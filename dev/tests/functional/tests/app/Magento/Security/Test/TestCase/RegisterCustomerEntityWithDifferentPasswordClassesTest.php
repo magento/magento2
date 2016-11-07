@@ -62,6 +62,7 @@ class RegisterCustomerEntityWithDifferentPasswordClassesTest extends Injectable
      * Create Customer account on Storefront.
      *
      * @param Customer $customer
+     * @param ConfigData $config
      * @return void
      */
     public function test(Customer $customer, ConfigData $config)
@@ -79,6 +80,11 @@ class RegisterCustomerEntityWithDifferentPasswordClassesTest extends Injectable
         return ['characterClassesNumber' => $characterClassesNumber];
     }
 
+    /**
+     * Set default settings and logout customer.
+     *
+     * @return void
+     */
     protected function tearDown()
     {
         //Set default required character classes for the password
