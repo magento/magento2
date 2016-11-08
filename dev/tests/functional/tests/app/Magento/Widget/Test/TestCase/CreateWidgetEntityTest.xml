@@ -118,5 +118,16 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetSuccessSaveMessage" />
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetCatalogNewProductsList" />
         </variation>
+        <variation name="CreateWidgetEntityTestWithDifferentThemes">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="widget/data/code" xsi:type="string">Recently Viewed Products</data>
+            <data name="widget/data/theme_id" xsi:type="string">Magento Blank</data>
+            <data name="widget/data/title" xsi:type="string">Title_%isolation%</data>
+            <data name="widget/data/store_ids/dataset" xsi:type="string">all_store_views</data>
+            <data name="widget/data/widget_instance/dataset" xsi:type="string">for_viewed_products</data>
+            <data name="widget/data/parameters/dataset" xsi:type="string">recentlyViewedProducts</data>
+            <data name="additionalWidgets/0" xsi:type="string">simple_widget</data>
+            <constraint name="Magento\Widget\Test\Constraint\AssertWidgetWithDifferentThemesArePresentedInGrid" />
+        </variation>
     </testCase>
 </config>

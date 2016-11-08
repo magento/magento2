@@ -25,8 +25,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
 {
     /* tags */
     const MVP = 'yes';
-    const TEST_TYPE = 'extended_acceptance_test';
-    const SEVERITY = 'S1';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**
@@ -40,20 +39,29 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
      * Create for New Widget.
      *
      * @param Widget $widget
+     * @param array $additionalWidgets
      * @param array $caches [optional]
-     * @return void
+     * @return array
      */
-    public function test(Widget $widget, array $caches = [])
+    public function test(Widget $widget, array $additionalWidgets = [], array $caches = [])
     {
         // Preconditions
         $this->caches = $caches;
         $this->adjustCacheSettings();
-        
+
         // Steps
         $this->widgetInstanceIndex->open();
         $this->widgetInstanceIndex->getPageActionsBlock()->addNew();
         $this->widgetInstanceNew->getWidgetForm()->fill($widget);
         $this->widgetInstanceEdit->getPageActionsBlock()->save();
+
+        foreach ($additionalWidgets as $key => $additionalWidget) {
+            $additionalWidget = $this->fixtureFactory->createByCode('widget', ['dataset' => $additionalWidget]);
+            $additionalWidget->persist();
+            $additionalWidgets[$key] = $additionalWidget;
+        }
+
+        return ['additionalWidgets' => $additionalWidgets];
     }
 
     /**

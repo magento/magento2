@@ -25,5 +25,19 @@
                 <item name="dataset" xsi:type="string">cmsPageLink</item>
             </field>
         </dataset>
+        <dataset name="simple_widget">
+            <field name="code" xsi:type="string">Recently Viewed Products</field>
+            <field name="title" xsi:type="string">Title_%isolation%</field>
+            <field name="theme_id" xsi:type="string">Magento Blank</field>
+            <field name="store_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">all_store_views</item>
+            </field>
+            <field name="widget_instance" xsi:type="array">
+                <item name="dataset" xsi:type="string">for_viewed_products</item>
+            </field>
+            <field name="parameters" xsi:type="array">
+                <item name="dataset" xsi:type="string">recentlyViewedProducts</item>
+            </field>
+        </dataset>
     </repository>
 </config>

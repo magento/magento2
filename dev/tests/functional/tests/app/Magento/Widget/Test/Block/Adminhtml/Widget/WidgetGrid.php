@@ -36,5 +36,9 @@ class WidgetGrid extends AbstractGrid
         'title' => [
             'selector' => 'input[name="title"]',
         ],
+        'theme_id' => [
+            'selector' => 'select[name="theme_id"]',
+            'input' => 'select',
+        ],
     ];
 }

@@ -66,4 +66,9 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Widget\Test\Constraint\AssertWidgetWithDifferentThemesArePresentedInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
 </config>
