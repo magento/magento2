@@ -10,12 +10,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
 
 /**
- * Assert that search query length truncated to 103 symbols.
+ * Assert that search query length truncated to 128 symbols.
  */
 class AssertCatalogSearchQueryLength extends AbstractConstraint
 {
     /**
-     * Assert that search query length truncated to 103 symbols.
+     * Assert that search query length truncated to 128 symbols.
      *
      * @param CatalogsearchResult $catalogSearchResult
      * @return void
@@ -24,8 +24,8 @@ class AssertCatalogSearchQueryLength extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             $catalogSearchResult->getSearchResultsTitleBlock()->searchQueryLength(),
-            103,
-            'Search query length is not truncated to 103 symbols.'
+            128,
+            'Search query length is not truncated to 128 symbols.'
         );
     }
 
@@ -36,6 +36,6 @@ class AssertCatalogSearchQueryLength extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Search query truncated to 103 symbols.';
+        return 'Search query truncated to 128 symbols.';
     }
 }
