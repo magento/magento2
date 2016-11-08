@@ -22,7 +22,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleIsNotAppliedOnepageCheckout" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleOnOnepageCheckout" />
         </variation>
     </testCase>
 </config>
