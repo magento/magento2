@@ -31,7 +31,10 @@ class CategoryId extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataset'])) {
+        if (isset($data['fixture'])) {
+            $this->category = $data['fixture'];
+            $this->data = $this->category->getName();
+        } elseif (isset($data['dataset'])) {
             $category = $fixtureFactory->createByCode('category', ['dataset' => $data['dataset']]);
             /** @var Category $category */
             if (!$category->getId()) {
