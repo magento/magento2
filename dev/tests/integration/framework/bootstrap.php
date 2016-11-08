@@ -15,6 +15,9 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
 
+$testFrameworkDir = __DIR__;
+require_once __DIR__ . '/deployTestModules.php';
+
 try {
     /* Bootstrap the application */
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());

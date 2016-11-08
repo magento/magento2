@@ -9,7 +9,10 @@ require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
 require dirname(dirname(__DIR__)) . '/Catalog/_files/product_text_attribute.php';
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+/** @var \Magento\Catalog\Model\Product $productModel */
+$productModel = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $customOptions = [
     1 => [
