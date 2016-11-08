@@ -168,7 +168,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         }
 
         $optionSelections = [];
-        foreach ($options as $index => $option) {
+        foreach ($options as $option) {
             $selectionsCollection = $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
                 ->getMock();
