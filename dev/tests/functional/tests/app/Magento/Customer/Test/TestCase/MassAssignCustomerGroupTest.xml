@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\MassAssignCustomerGroupTest" summary="Mass Assign Customer's Group to Customers" ticketId="MAGETWO-27892">
         <variation name="MassAssignCustomerGroupTestVariation1">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="customerGroup/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertMassActionSuccessUpdateMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />

@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Model\Config;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
  * Configuration class for ordered items
  *
@@ -70,21 +73,29 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
     protected $_salesConfig;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Simplexml\Element $sourceData
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
-        $sourceData = null
+        $sourceData = null,
+        SerializerInterface $serializer = null
     ) {
         parent::__construct($sourceData);
         $this->_configCacheType = $configCacheType;
         $this->_logger = $logger;
         $this->_salesConfig = $salesConfig;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -179,11 +190,11 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
         $sortedCodes = [];
         $cachedData = $this->_configCacheType->load($this->_collectorsCacheKey);
         if ($cachedData) {
-            $sortedCodes = unserialize($cachedData);
+            $sortedCodes = $this->serializer->unserialize($cachedData);
         }
         if (!$sortedCodes) {
             $sortedCodes = $this->_getSortedCollectorCodes($this->_modelsConfig);
-            $this->_configCacheType->save(serialize($sortedCodes), $this->_collectorsCacheKey);
+            $this->_configCacheType->save($this->serializer->serialize($sortedCodes), $this->_collectorsCacheKey);
         }
         foreach ($sortedCodes as $code) {
             $this->_collectors[$code] = $this->_models[$code];
