@@ -6,7 +6,6 @@
 
 namespace Magento\Widget\Test\TestCase;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceEdit;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceNew;
@@ -55,11 +54,6 @@ abstract class AbstractCreateWidgetEntityTest extends Injectable
     protected $cache;
 
     /**
-     * @var FixtureFactory
-     */
-    protected $fixtureFactory;
-
-    /**
      * Injection data.
      *
      * @param WidgetInstanceIndex $widgetInstanceIndex
@@ -67,22 +61,20 @@ abstract class AbstractCreateWidgetEntityTest extends Injectable
      * @param WidgetInstanceEdit $widgetInstanceEdit
      * @param CmsIndex $cmsIndex
      * @param Cache $cache
-     * @param FixtureFactory $fixtureFactory
+     * @return void
      */
     public function __inject(
         WidgetInstanceIndex $widgetInstanceIndex,
         WidgetInstanceNew $widgetInstanceNew,
         WidgetInstanceEdit $widgetInstanceEdit,
         CmsIndex $cmsIndex,
-        Cache $cache,
-        FixtureFactory $fixtureFactory
+        Cache $cache
     ) {
         $this->widgetInstanceIndex = $widgetInstanceIndex;
         $this->widgetInstanceNew = $widgetInstanceNew;
         $this->widgetInstanceEdit = $widgetInstanceEdit;
         $this->cmsIndex = $cmsIndex;
         $this->cache = $cache;
-        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**

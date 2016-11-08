@@ -25,7 +25,8 @@
                 <item name="dataset" xsi:type="string">cmsPageLink</item>
             </field>
         </dataset>
-        <dataset name="simple_widget">
+
+        <dataset name="recently_viewed_products_on_blank_theme">
             <field name="code" xsi:type="string">Recently Viewed Products</field>
             <field name="title" xsi:type="string">Title_%isolation%</field>
             <field name="theme_id" xsi:type="string">Magento Blank</field>
