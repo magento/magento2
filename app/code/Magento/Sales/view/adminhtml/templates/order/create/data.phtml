@@ -61,6 +61,12 @@
             </div>
         </section>
 
+        <?php if ($block->getChildBlock('card_validation')): ?>
+        <section id="order-card_validation" class="admin__page-section order-card-validation">
+            <?php echo $block->getChildHtml('card_validation') ?>
+        </section>
+        <?php endif; ?>
+
         <?php echo $block->getChildHtml('gift_options') ?>
 
         <section class="admin__page-section order-summary">

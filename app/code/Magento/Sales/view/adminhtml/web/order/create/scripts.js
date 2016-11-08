@@ -352,6 +352,11 @@ define([
                 });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
+            if (method !== 'free') {
+                var data = {};
+                data['order[payment_method]'] = method;
+                this.loadArea(['card_validation'], true, data);
+            }
         },
 
         setPaymentMethod : function(method){
@@ -388,10 +393,23 @@ define([
                                 field.bindChange = true;
                                 field.paymentContainer = form;
                                 field.method = method;
+                                field.observe('change', this.changePaymentData.bind(this))
                             }
                         },this);
                     }
                 },this);
+            }
+        },
+
+        changePaymentData : function(event){
+            var elem = Event.element(event);
+            if(elem && elem.method){
+                var data = this.getPaymentData(elem.method);
+                if (data) {
+                    this.loadArea(['card_validation'], true, data);
+                } else {
+                    return;
+                }
             }
         },
 
