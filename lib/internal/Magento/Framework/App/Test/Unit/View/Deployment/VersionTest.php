@@ -6,7 +6,6 @@
 namespace Magento\Framework\App\Test\Unit\View\Deployment;
 
 use Magento\Framework\App\View\Deployment\Version;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class VersionTest
@@ -70,7 +69,8 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGetValueInNonProductionMode() {
+    public function testGetValueInNonProductionMode()
+    {
         $version = 123123123123;
         $this->versionStorageMock->expects($this->once())
             ->method('load')

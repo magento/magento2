@@ -84,7 +84,6 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         $this->getVersionModel(State::MODE_PRODUCTION)->getValue();
     }
 
-
     public function testGetValueInDeveloperMode()
     {
         $this->assertFalse($this->directoryWrite->isExist($this->fileName));

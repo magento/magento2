@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\View\Deployment;
 
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Deployment version of static files
@@ -72,7 +71,7 @@ class Version
             if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
                 $this->getLogger()->critical('Can not load static content version.');
                 throw new \UnexpectedValueException(
-                    __('Unable to retrieve deployment version of static files from the file system.')
+                    "Unable to retrieve deployment version of static files from the file system."
                 );
             }
             $result = $this->generateVersion();
