@@ -468,9 +468,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function setBaseFile($file)
     {
         $this->_isBaseFilePlaceholder = false;
-        if ($file == 'no_selection') {
-            return $this;
-        }
 
         $this->imageAsset = $this->getViewAssetImageFactory()->create(
             [
@@ -478,7 +475,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
                 'filePath' => $file,
             ]
         );
-        if (!$this->_fileExists($this->imageAsset->getSourceFile())
+        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())
             || !$this->_checkMemory($this->imageAsset->getSourceFile())
         ) {
             $this->_isBaseFilePlaceholder = true;

@@ -254,8 +254,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testSetBaseNoSelectionFile()
     {
+        $this->viewAssetPlaceholderFactory->expects($this->once())->method('create')->willReturn($this->imageAsset);
+        $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('Default Placeholder Path');
         $this->image->setBaseFile('no_selection');
-        $this->assertNull($this->image->getBaseFile());
+        $this->assertEquals('Default Placeholder Path', $this->image->getBaseFile());
     }
 
     public function testSetGetImageProcessor()
@@ -373,6 +375,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrlNoSelection()
     {
+        $this->viewAssetPlaceholderFactory->expects($this->once())->method('create')->willReturn($this->imageAsset);
         $this->imageAsset->expects($this->any())->method('getUrl')->will($this->returnValue('Default Placeholder URL'));
         $this->image->setBaseFile('no_selection');
         $this->assertEquals('Default Placeholder URL', $this->image->getUrl());
