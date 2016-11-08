@@ -13,6 +13,7 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="value" xsi:type="array">
                     <item name="Ukrainian Hryvnia" xsi:type="string">UAH</item>
+                    <item name="US Dollar" xsi:type="string">USD</item>
                 </item>
             </field>
             <field name="currency/options/base" xsi:type="array">

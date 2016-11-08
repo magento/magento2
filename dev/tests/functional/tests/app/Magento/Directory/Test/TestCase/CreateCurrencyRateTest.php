@@ -6,11 +6,12 @@
 
 namespace Magento\Directory\Test\TestCase;
 
+use Magento\Catalog\Test\TestStep\CreateProductsStep;
 use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Directory\Test\Fixture\CurrencyRate;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
@@ -42,28 +43,39 @@ class CreateCurrencyRateTest extends Injectable
     protected $currencyIndexPage;
 
     /**
+     * Test step factory.
+     *
+     * @var TestStepFactory
+     */
+    private $stepFactory;
+
+    /**
      * Inject data.
      *
      * @param SystemCurrencyIndex $currencyIndexPage
-     * @return void
+     * @param TestStepFactory $stepFactory
      */
-    public function __inject(SystemCurrencyIndex $currencyIndexPage)
+    public function __inject(SystemCurrencyIndex $currencyIndexPage, TestStepFactory $stepFactory)
     {
         $this->currencyIndexPage = $currencyIndexPage;
+        $this->stepFactory = $stepFactory;
     }
 
     /**
      * Create currency rate test.
      *
      * @param CurrencyRate $currencyRate
-     * @param CatalogProductSimple $product
-     * @param $config
-     * @return void
+     * @param ConfigData $config
+     * @param string $product
+     * @param array $productData [optional]
+     * @return array
      */
-    public function test(CurrencyRate $currencyRate, CatalogProductSimple $product, ConfigData $config)
+    public function test(CurrencyRate $currencyRate, ConfigData $config, $product, array $productData = [])
     {
         // Preconditions:
-        $product->persist();
+        $product = $this->stepFactory
+            ->create(CreateProductsStep::class, ['products' => [$product], 'data' => $productData])
+            ->run()['products'][0];
         $config->persist();
 
         // Steps:
@@ -71,6 +83,8 @@ class CreateCurrencyRateTest extends Injectable
         $this->currencyIndexPage->getCurrencyRateForm()->clickImportButton();
         $this->currencyIndexPage->getCurrencyRateForm()->fill($currencyRate);
         $this->currencyIndexPage->getFormPageActions()->save();
+
+        return ['product' => $product];
     }
 
     /**
