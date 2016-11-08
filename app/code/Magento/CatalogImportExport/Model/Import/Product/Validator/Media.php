@@ -25,14 +25,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
-     * {@inheritdoc}
-     */
-    public function init($context)
-    {
-        return parent::init($context);
-    }
-
-    /**
      * @param string $string
      * @return bool
      */
