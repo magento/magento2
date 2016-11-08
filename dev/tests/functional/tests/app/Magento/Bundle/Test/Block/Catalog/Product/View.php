@@ -7,10 +7,8 @@
 namespace Magento\Bundle\Test\Block\Catalog\Product;
 
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle;
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class View
@@ -47,6 +45,20 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     protected $newsletterFormSelector = '#newsletter-validate-detail[novalidate="novalidate"]';
 
     /**
+     * Selector for Bundle Summary section.
+     *
+     * @var string
+     */
+    protected $bundleSummarySelector = '#bundle-summary > .bundle li div div';
+
+    /**
+     * Selector for Customized Bundle price block.
+     *
+     * @var string
+     */
+    protected $customizedBundlePriceSelector = '.bundle-info';
+
+    /**
      * Get bundle options block.
      *
      * @return Bundle
@@ -56,6 +68,19 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         return $this->blockFactory->create(
             \Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle::class,
             ['element' => $this->_rootElement->find($this->bundleBlock, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
+     * Get Bundle customized Price block.
+     *
+     * @return \Magento\Bundle\Test\Block\Catalog\Product\CustomizedPrice
+     */
+    public function getCustomizedPriceBlock()
+    {
+        return $this->blockFactory->create(
+            \Magento\Bundle\Test\Block\Catalog\Product\CustomizedPrice::class,
+            ['element' => $this->_rootElement->find($this->customizedBundlePriceSelector)]
         );
     }
 
@@ -113,5 +138,30 @@ class View extends \Magento\Catalog\Test\Block\Product\View
             $this->clickCustomize();
         }
         $this->getBundleBlock()->fillBundleOptions($bundleCheckoutData);
+    }
+
+    /**
+     * Fill in the custom option data.
+     *
+     * @param array $optionsData
+     * @return void
+     */
+    public function fillOptionsWithCustomData(array $optionsData = [])
+    {
+        if (!$this->getBundleBlock()->isVisible()) {
+            $this->clickCustomize();
+        }
+
+        $this->getBundleBlock()->fillBundleOptions($optionsData);
+    }
+
+    /**
+     * Get Bundle Summary row items.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getBundleSummary()
+    {
+        return $this->_rootElement->getElements($this->bundleSummarySelector, Locator::SELECTOR_CSS);
     }
 }
