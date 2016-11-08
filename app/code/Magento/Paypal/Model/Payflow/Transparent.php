@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Model\InfoInterface;
@@ -14,7 +15,6 @@ use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflowpro;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Payflow Pro payment gateway model
@@ -120,7 +120,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      */
     public function authorize(InfoInterface $payment, $amount)
     {
-        /** @var Payment $payment */
+        /** @var DataObject $request */
         $request = $this->buildBasicRequest();
 
         /** @var \Magento\Sales\Model\Order $order */
