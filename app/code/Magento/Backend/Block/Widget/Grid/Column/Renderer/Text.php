@@ -27,7 +27,7 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     public function _getValue(\Magento\Framework\DataObject $row)
     {
-        if ($this->getColumn()->getFormat() === null) {
+        if (null === $this->getColumn()->getFormat()) {
             return $this->getSimpleValue($row);
         }
         return $this->getFormattedValue($row);
