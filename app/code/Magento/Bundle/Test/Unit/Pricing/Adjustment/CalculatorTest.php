@@ -10,7 +10,6 @@ namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
 use Magento\Bundle\Model\ResourceModel\Selection\Collection;
 use \Magento\Bundle\Pricing\Adjustment\Calculator;
-
 use Magento\Bundle\Model\Product\Price as ProductPrice;
 use Magento\Bundle\Pricing\Price;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -139,6 +138,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetterAmount($amountForBundle, $optionList, $expectedResult)
     {
+        $searchMin = $expectedResult['isMinAmount'];
         $this->baseCalculator->expects($this->atLeastOnce())->method('getAmount')
             ->with($this->baseAmount, $this->saleableItem)
             ->will($this->returnValue($this->createAmountMock($amountForBundle)));
@@ -147,39 +147,55 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         foreach ($optionList as $optionData) {
             $options[] = $this->createOptionMock($optionData);
         }
+
         $typeInstance  = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->saleableItem->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);
+        $this->saleableItem->expects($this->atLeastOnce())->method('getTypeInstance')->willReturn($typeInstance);
 
         $optionsCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $optionsCollection->expects($this->atLeastOnce())->method('getIterator')
             ->willReturn(new \ArrayIterator($options));
-        $optionsCollection->expects($this->atLeastOnce())->method('addFilter')
-            ->willReturnSelf();
-        $optionsCollection->expects($this->atLeastOnce())->method('getSize')
-            ->willReturn(count($options));
+        $typeInstance->expects($this->atLeastOnce())->method('getOptionsCollection')->willReturn($optionsCollection);
 
-        foreach ($options as $option) {
+
+        if ($searchMin) {
+            $optionsCollection->expects($this->atLeastOnce())->method('addFilter')->willReturnSelf();
+            $optionsCollection->expects($this->atLeastOnce())->method('getSize')->willReturn(0);
+            $optionsCollection->expects($this->atLeastOnce())->method('getSize')->willReturn(count($options));
+        }
+
+        $optionSelections = [];
+        foreach ($options as $index => $option) {
             $selectionsCollection = $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-            $selectionsCollection->expects($this->any())->method('getIterator')
-                ->willReturn(new \ArrayIterator($option->getSelections()));
-            $selectionsCollection->expects($this->atLeastOnce())->method('getFirstItem')
-                ->willReturn($option->getSelections()[0]);
 
-            $typeInstance->expects($this->atLeastOnce())->method('getSelectionsCollection')
-                ->willReturn($selectionsCollection);
+            if ($option->isMultiSelection()) {
+                $selectionsCollection->expects($this->any())
+                    ->method('getIterator')
+                    ->willReturn(new \ArrayIterator($option->getSelections()));
+                $selectionsCollection->expects($this->any())
+                    ->method('getItems')
+                    ->willReturn($option->getSelections());
+            } else {
+                $selectionsCollection->expects($this->atLeastOnce())
+                    ->method('getFirstItem')
+                    ->willReturn(isset($option->getSelections()[0]) ? $option->getSelections()[0] : false);
+            }
+            $optionSelections[$option->getOptionId()] = $selectionsCollection;
         }
 
-        $typeInstance->expects($this->atLeastOnce())->method('getOptionsCollection')->willReturn($optionsCollection);
+        $typeInstance->expects($this->any())->method('getSelectionsCollection')
+            ->willReturnCallback(
+                function ($optionId) use ($optionSelections) {
+                    return $optionSelections[array_pop($optionId)];
+                }
+            );
 
         $price = $this->getMock(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class, [], [], '', false);
-        $price->expects($this->atLeastOnce())->method('getOptions')->will($this->returnValue($options));
-
         $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
 
         // Price type of saleable items
@@ -191,7 +207,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->amountFactory->expects($this->atLeastOnce())->method('create')
             ->with($expectedResult['fullAmount'], $expectedResult['adjustments']);
-        if ($expectedResult['isMinAmount']) {
+        if ($searchMin) {
             $this->model->getAmount($this->baseAmount, $this->saleableItem);
         } else {
             $this->model->getMaxAmount($this->baseAmount, $this->saleableItem);
@@ -254,6 +270,11 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $selections = [];
         foreach ($optionData['selections'] as $selectionData) {
             $selections[] = $this->createSelectionMock($selectionData);
+        }
+        if (!$selections) {
+            $emptyProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()->getMock();
+            $emptyProduct->expects($this->any())->method('isEmpty')->willReturn(true);
+            $selections = [$emptyProduct];
         }
         foreach ($optionData['data'] as $key => $value) {
             $option->setData($key, $value);
@@ -320,6 +341,13 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'required' => '1',
                     ],
                     'selections' => [
+                        'third product selection with the lowest price' => [
+                            'data' => ['price' => 50.],
+                            'amount' => [
+                                'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
+                                'amount' => 8,
+                            ],
+                        ],
                         'first product selection' => [
                             'data' => ['price' => 70.],
                             'amount' => [
@@ -332,13 +360,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 18],
                                 'amount' => 28,
-                            ],
-                        ],
-                        'third product selection with the lowest price' => [
-                            'data' => ['price' => 50.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
-                                'amount' => 8,
                             ],
                         ],
                     ]

@@ -208,20 +208,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($productType);
-        $product->expects($this->any())
-            ->method('getData')
-            ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
-                    $resultValue = null;
-                    switch ($key) {
-                        case '_cache_instance_options_collection':
-                            $resultValue = $optionCollection;
-                            break;
-                    }
-
-                    return $resultValue;
-                }
-            );
         $optionCollection->expects($this->any())
             ->method('appendSelections')
             ->willReturn([$option]);
@@ -2136,7 +2122,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'is_salable' => true,
                 '_cache_instance_options_collection' => $optionCollectionMock,
                 'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-                '_cache_instance_selections_collection10_20_30' => $selectionCollectionMock
             ]
         );
 
@@ -2177,7 +2162,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'is_salable' => true,
                 '_cache_instance_options_collection' => $optionCollectionMock,
                 'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-                '_cache_instance_selections_collection1' => $selectionCollectionMock
             ]
         );
 
@@ -2225,7 +2209,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'is_salable' => true,
                 '_cache_instance_options_collection' => $optionCollectionMock,
                 'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-                '_cache_instance_selections_collection10_20' => $selectionCollectionMock
             ]
         );
 
@@ -2427,38 +2410,29 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'addAttributeToSelect',
-                    'setFlag',
-                    'setPositionOrder',
-                    'addStoreFilter',
-                    'setStoreId',
-                    'addFilterByRequiredOptions',
-                    'setOptionIdsFilter',
-                    'joinPrices',
-                    'addPriceData',
-                    'addTierPriceData'
-                ]
-            )
-            ->getMock();
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
             ->getMock();
 
-        $product->expects($this->once())
-            ->method('hasData')
-            ->with('_cache_instance_selections_collection1_2_3')
-            ->willReturn(false);
         $product->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $product->expects($this->at(2))
-            ->method('getData')
-            ->with('_cache_instance_store_filter')
-            ->willReturn($selectionCollection);
+        $selectionCollection = $this->getSelectionCollection();
         $this->bundleCollection->expects($this->once())->method('create')->willReturn($selectionCollection);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
+        $selectionCollection->expects($this->any())->method('joinPrices')->with('website_id')->willReturnSelf();
+
+        $this->assertEquals($selectionCollection, $this->model->getSelectionsCollection($optionIds, $product));
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getSelectionCollection()
+    {
+        $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $selectionCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
         $selectionCollection->expects($this->any())->method('setFlag')->willReturnSelf();
         $selectionCollection->expects($this->any())->method('setPositionOrder')->willReturnSelf();
@@ -2469,19 +2443,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $selectionCollection->expects($this->any())->method('addPriceData')->willReturnSelf();
         $selectionCollection->expects($this->any())->method('addTierPriceData')->willReturnSelf();
 
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
-        $store->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
-        $selectionCollection->expects($this->any())->method('joinPrices')->with('website_id')->willReturnSelf();
-        $product->expects($this->once())
-            ->method('setData')
-            ->with('_cache_instance_selections_collection1_2_3', $selectionCollection)
-            ->willReturnSelf();
-        $product->expects($this->at(4))
-            ->method('getData')
-            ->with('_cache_instance_selections_collection1_2_3')
-            ->willReturn($selectionCollection);
-
-        $this->assertEquals($selectionCollection, $this->model->getSelectionsCollection($optionIds, $product));
+        return $selectionCollection;
     }
 
     public function testProcessBuyRequest()
@@ -2515,7 +2477,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getRequired'])
             ->getMock();
-        $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
+        $selectionCollection = $this->getSelectionCollection();
+        $this->bundleCollection->expects($this->once())->method('create')->willReturn($selectionCollection);
+
+        $selectionItem = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -2526,13 +2491,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dbResourceMock);
         $dbResourceMock->expects($this->once())->method('getItems')->willReturn([$item]);
         $item->expects($this->once())->method('getId')->willReturn('itemId');
-        $product->expects($this->at(3))
-            ->method('getData')
-            ->with('_cache_instance_selections_collectionitemId')
-            ->willReturn([$selectionCollection]);
         $item->expects($this->once())->method('getRequired')->willReturn(true);
 
-        $this->assertEquals([[$selectionCollection]], $this->model->getProductsToPurchaseByReqGroups($product));
+        $selectionCollection
+            ->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$selectionItem]));
+        $this->assertEquals([[$selectionItem]], $this->model->getProductsToPurchaseByReqGroups($product));
     }
 
     public function testGetSearchableData()
@@ -2565,14 +2530,17 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])
             ->getMock();
-        $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectionCollection = $this->getSelectionCollection();
+        $selectionCollection
+            ->expects($this->any())
+            ->method('count')
+            ->willReturn(1);
+        $this->bundleCollection->expects($this->once())->method('create')->willReturn($selectionCollection);
 
-        $product->expects($this->once())->method('getStoreId')->willReturn('storeId');
+        $product->expects($this->any())->method('getStoreId')->willReturn(0);
         $product->expects($this->once())
             ->method('setData')
-            ->with('_cache_instance_store_filter', 'storeId')
+            ->with('_cache_instance_store_filter', 0)
             ->willReturnSelf();
         $product->expects($this->any())->method('hasData')->willReturn(true);
         $product->expects($this->at(3))
@@ -2580,10 +2548,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->with('_cache_instance_options_collection')
             ->willReturn($optionCollection);
         $optionCollection->expects($this->once())->method('getAllIds')->willReturn(['ids']);
-        $product->expects($this->at(5))
-            ->method('getData')
-            ->with('_cache_instance_selections_collectionids')
-            ->willReturn([$selectionCollection]);
 
         $this->assertTrue($this->model->hasOptions($product));
     }

@@ -209,7 +209,7 @@ class Calculator implements BundleCalculatorInterface
             /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
             $typeInstance = $bundleProduct->getTypeInstance();
             $selectionsCollection = $typeInstance->getSelectionsCollection(
-                [(int)$option->getId()],
+                [(int)$option->getOptionId()],
                 $bundleProduct
             );
             $selectionsCollection->removeAttributeToSelect();
@@ -239,16 +239,18 @@ class Calculator implements BundleCalculatorInterface
                 }
 
                 $selection = $selectionsCollection->getFirstItem();
-                $priceList[] =  $this->selectionFactory->create(
-                    $bundleProduct,
-                    $selection,
-                    $selection->getSelectionQty(),
-                    [
-                        'useRegularPrice' => $useRegularPrice,
-                    ]
-                );
-            }
 
+                if (!$selection->isEmpty()) {
+                    $priceList[] = $this->selectionFactory->create(
+                        $bundleProduct,
+                        $selection,
+                        $selection->getSelectionQty(),
+                        [
+                            'useRegularPrice' => $useRegularPrice,
+                        ]
+                    );
+                }
+            }
         }
 
         if ($shouldFindMinOption) {
@@ -257,10 +259,11 @@ class Calculator implements BundleCalculatorInterface
             foreach ($priceList as $price) {
                 $minPriceTmp = $price->getAmount()->getValue() * $price->getQuantity();
                 if (!$minPrice || $minPriceTmp < $minPrice) {
+                    $minPrice = $minPriceTmp;
                     $priceSelection = $price;
                 }
             }
-            $priceList = [$priceSelection];
+            $priceList = $priceSelection ? [$priceSelection] : [];
         }
 
         return $priceList;
