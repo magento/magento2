@@ -352,11 +352,9 @@ define([
                 });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
-            if (method !== 'free') {
-                var data = {};
-                data['order[payment_method]'] = method;
-                this.loadArea(['card_validation'], true, data);
-            }
+            var data = {};
+            data['order[payment_method]'] = method;
+            this.loadArea(['card_validation'], true, data);
         },
 
         setPaymentMethod : function(method){
