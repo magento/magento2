@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridFullTextSearchTest" summary="Grid UI Component Full Text Search" ticketId="MAGETWO-41023">
         <variation name="SalesOrderGridFullTextSearch">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Verify sales order grid full text search</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">-</item>
@@ -23,6 +24,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesInvoiceGridFullTextSearch">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Verify sales invoice grid full text search</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
@@ -55,6 +57,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesCreditMemoGridFullTextSearch">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Verify sales credit memo grid full text search</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">
