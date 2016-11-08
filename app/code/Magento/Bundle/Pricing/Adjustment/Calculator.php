@@ -9,7 +9,6 @@ namespace Magento\Bundle\Pricing\Adjustment;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -199,15 +198,16 @@ class Calculator implements BundleCalculatorInterface
         }
         $canSkipRequiredOptions = $searchMin && !$shouldFindMinOption;
 
+        /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
+        $typeInstance = $bundleProduct->getTypeInstance();
         $priceList = [];
+
         foreach ($this->getBundleOptions($bundleProduct) as $option) {
             /** @var \Magento\Bundle\Model\Option $option */
             if ($this->canSkipOption($option, $canSkipRequiredOptions)) {
                 continue;
             }
 
-            /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
-            $typeInstance = $bundleProduct->getTypeInstance();
             $selectionsCollection = $typeInstance->getSelectionsCollection(
                 [(int)$option->getOptionId()],
                 $bundleProduct
@@ -215,7 +215,7 @@ class Calculator implements BundleCalculatorInterface
             $selectionsCollection->removeAttributeToSelect();
             $selectionsCollection->addQuantityFilter();
 
-            if ($option->isMultiSelection() && !$searchMin) {
+            if (!$searchMin && $option->isMultiSelection()) {
                 $selectionsCollection->addPriceData();
 
                 foreach ($selectionsCollection as $selection) {
@@ -278,7 +278,7 @@ class Calculator implements BundleCalculatorInterface
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
-        return ($canSkipRequiredOption && !$option->getRequired());
+        return $canSkipRequiredOption && !$option->getRequired();
     }
 
     /**
@@ -289,9 +289,9 @@ class Calculator implements BundleCalculatorInterface
      */
     protected function hasRequiredOption($bundleProduct)
     {
-        /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        $collection = $typeInstance->getOptionsCollection($bundleProduct);
+        $collection = clone $this->getBundleOptions($bundleProduct);
+        $collection->clear();
+
         return $collection->addFilter(\Magento\Bundle\Model\Option::KEY_REQUIRED, 1)->getSize() > 0;
     }
 

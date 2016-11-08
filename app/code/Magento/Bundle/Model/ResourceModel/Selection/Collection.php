@@ -177,7 +177,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getNewEmptyItem()
     {
-        if ($this->itemPrototype == null) {
+        if (null === $this->itemPrototype) {
             $this->itemPrototype = parent::getNewEmptyItem();
         }
         return clone $this->itemPrototype;
@@ -200,7 +200,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $minimalPriceExpression = 'minimal_price';
             } else {
                 $this->getCatalogRuleProcessor()->addPriceData($this, 'selection.product_id');
-                $minimalPriceExpression = 'LEAST(minimal_price, IFNULL(catalog_rule_price, 99999999))';
+                $minimalPriceExpression = 'LEAST(minimal_price, IFNULL(catalog_rule_price, minimal_price))';
             }
             $orderByValue = new \Zend_Db_Expr(
                 '(' .
