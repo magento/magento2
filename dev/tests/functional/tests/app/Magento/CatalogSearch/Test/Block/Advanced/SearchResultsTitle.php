@@ -24,24 +24,14 @@ class SearchResultsTitle extends Block
     /**
      * Getting actual search query value.
      *
-     * @return string
+     * @return string|null
      */
-    public function searchQueryValue()
+    public function getSearchQuery()
     {
         $searchQueryResult = $this->_rootElement->find(sprintf($this->searchResultsFor), Locator::SELECTOR_CSS)
             ->getText();
         preg_match("~Search results for: \'(.*)\'~", $searchQueryResult, $matches);
         $query = isset($matches[1]) ? $matches[1] : null;
         return $query;
-    }
-
-    /**
-     * Getting length of search query.
-     *
-     * @return int
-     */
-    public function searchQueryLength()
-    {
-        return mb_strlen($this->searchQueryValue());
     }
 }
