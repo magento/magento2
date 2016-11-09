@@ -19,8 +19,8 @@ use Magento\Customer\Test\Fixture\Customer;
  * 1. Open login page.
  * 2. Fill email.
  * 3. Fill wrong password.
- * 3. Click login.
- * 4. Check error message.
+ * 4. Click login.
+ * 5. Check error message.
  *
  * @group Customer
  * @ZephyrId MAGETWO-16883
