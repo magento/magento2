@@ -271,6 +271,8 @@ define([
          */
         _init: function () {
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                // store unsorted attributes
+                this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
                 $(this.element).trigger('swatch.initialized');
@@ -622,6 +624,7 @@ define([
                 $parent.attr('option-selected', $this.attr('option-id')).find('.selected').removeClass('selected');
                 $label.text($this.attr('option-label'));
                 $input.val($this.attr('option-id'));
+                $input.attr('data-attr-name', this._getAttributeCodeById(attributeId));
                 $this.addClass('selected');
                 $widget._toggleCheckedAttributes($this, $wrapper);
             }
@@ -636,6 +639,19 @@ define([
 
             $widget._LoadProductMedia();
             $input.trigger('change');
+        },
+
+        /**
+         * Get human readable attribute code (eg. size, color) by it ID from configuration
+         *
+         * @param {Number} attributeId
+         * @returns {*}
+         * @private
+         */
+        _getAttributeCodeById: function (attributeId) {
+            var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+
+            return attribute ? attribute.code : attributeId;
         },
 
         /**
@@ -1110,7 +1126,7 @@ define([
                 params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
                 selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
-                    var attribute = this.options.jsonConfig.attributes[attributeId];
+                    var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
 
                     return attribute ? attribute.code : attributeId;
                 }.bind(this)));
