@@ -123,14 +123,12 @@ class Product extends Form
         $viewDetails = $this->_rootElement->find($this->viewDetails);
         if ($viewDetails->isVisible()) {
             $this->_rootElement->find($this->footer, Locator::SELECTOR_XPATH)->click();
-            $viewDetails->click();
+            $viewDetails->hover();
             $labels = $this->_rootElement->getElements($this->optionLabel);
             $values = $this->_rootElement->getElements($this->optionValue);
             $data = [];
             foreach ($labels as $key => $label) {
-                if (!$label->isVisible()) {
-                    $viewDetails->click();
-                }
+                $viewDetails->hover();
                 $data[] = [
                     'title' => $label->getText(),
                     'value' => str_replace('$', '', $values[$key]->getText()),

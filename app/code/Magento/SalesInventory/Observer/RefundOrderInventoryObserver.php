@@ -4,54 +4,74 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogInventory\Observer;
+namespace Magento\SalesInventory\Observer;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Model\OrderRepository;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
  * Catalog inventory module observer
+ * @deprecated
  */
 class RefundOrderInventoryObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
      */
-    protected $stockConfiguration;
+    private $stockConfiguration;
 
     /**
      * @var StockManagementInterface
      */
-    protected $stockManagement;
+    private $stockManagement;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $stockIndexerProcessor;
+    private $stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
-    protected $priceIndexer;
+    private $priceIndexer;
 
     /**
+     * @var \Magento\SalesInventory\Model\Order\ReturnProcessor
+     */
+    private $returnProcessor;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * RefundOrderInventoryObserver constructor.
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockManagementInterface $stockManagement
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @param ReturnProcessor $returnProcessor
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         StockManagementInterface $stockManagement,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
+        \Magento\SalesInventory\Model\Order\ReturnProcessor $returnProcessor,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockManagement = $stockManagement;
         $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->priceIndexer = $priceIndexer;
+        $this->returnProcessor = $returnProcessor;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -64,31 +84,18 @@ class RefundOrderInventoryObserver implements ObserverInterface
     {
         /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
-        $itemsToUpdate = [];
-        foreach ($creditmemo->getAllItems() as $item) {
-            $qty = $item->getQty();
-            if (($item->getBackToStock() && $qty) || $this->stockConfiguration->isAutoReturnEnabled()) {
-                $productId = $item->getProductId();
-                $parentItemId = $item->getOrderItem()->getParentItemId();
-                /* @var $parentItem \Magento\Sales\Model\Order\Creditmemo\Item */
-                $parentItem = $parentItemId ? $creditmemo->getItemByOrderId($parentItemId) : false;
-                $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
-                if (isset($itemsToUpdate[$productId])) {
-                    $itemsToUpdate[$productId] += $qty;
-                } else {
-                    $itemsToUpdate[$productId] = $qty;
-                }
+        $order = $this->orderRepository->get($creditmemo->getOrderId());
+        $returnToStockItems = [];
+        foreach ($creditmemo->getItems() as $item) {
+            if ($item->getBackToStock()) {
+                $returnToStockItems[] = $item->getOrderItemId();
             }
         }
-        if (!empty($itemsToUpdate)) {
-            $this->stockManagement->revertProductsSale(
-                $itemsToUpdate,
-                $creditmemo->getStore()->getWebsiteId()
-            );
-
-            $updatedItemIds = array_keys($itemsToUpdate);
-            $this->stockIndexerProcessor->reindexList($updatedItemIds);
-            $this->priceIndexer->reindexList($updatedItemIds);
-        }
+        $this->returnProcessor->execute(
+            $creditmemo,
+            $order,
+            $returnToStockItems,
+            $this->stockConfiguration->isAutoReturnEnabled()
+        );
     }
 }
