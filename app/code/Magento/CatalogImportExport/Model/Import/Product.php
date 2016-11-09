@@ -2782,6 +2782,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Update media gallery labels
      *
      * @param array $labels
+     * @return void
      */
     private function updateMediaGalleryLabels(array $labels)
     {
