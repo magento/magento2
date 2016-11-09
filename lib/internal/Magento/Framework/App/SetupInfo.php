@@ -147,8 +147,13 @@ class SetupInfo
     {
         $setupDir = $this->getDir($this->projectRoot);
         $isSubDir = false !== strpos($setupDir . '/', $this->docRoot . '/');
-        // Setup is not accessible from pub folder MAGETWO-52799
-        $setupDir = str_replace('/pub/', '/', $setupDir);
+        // Setup is not accessible from pub folder
+        $setupDir = rtrim($setupDir, '/');
+        $lastOccurrence = strrpos($setupDir, '/pub/setup');
+
+        if (false !== $lastOccurrence) {
+            $setupDir = substr_replace($setupDir, '/setup', $lastOccurrence, strlen('/pub/setup'));
+        }
 
         return $isSubDir && realpath($setupDir);
     }
