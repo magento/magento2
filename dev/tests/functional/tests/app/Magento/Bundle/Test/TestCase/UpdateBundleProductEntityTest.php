@@ -84,6 +84,8 @@ class UpdateBundleProductEntityTest extends Injectable
      * @param int $storesCount [optional]
      * @param int $storeIndexToUpdate [optional]
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function test(
         BundleProduct $product,
@@ -92,6 +94,7 @@ class UpdateBundleProductEntityTest extends Injectable
         $storesCount = 0,
         $storeIndexToUpdate = null
     ) {
+        $this->markTestIncomplete('MAGETWO-56584: [FT] Custom options are not created for product in test');
         // Preconditions
         $originalProduct->persist();
         $originalCategory = $originalProduct->hasData('category_ids')
