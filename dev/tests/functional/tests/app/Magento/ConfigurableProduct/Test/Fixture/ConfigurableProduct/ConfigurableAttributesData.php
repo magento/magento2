@@ -275,15 +275,14 @@ class ConfigurableAttributesData extends DataSource
         // generate matrix
         foreach ($this->attributesData as $attributeKey => $attribute) {
             $variationsMatrix = $this->addVariationMatrix($variationsMatrix, $attribute, $attributeKey);
-            if (!isset($data['matrix'])) {
-                $data['matrix'] = $variationsMatrix;
-            }
         }
 
-        foreach ($data['matrix'] as $key => $value) {
-            if (isset($value['sku']) && $value['sku'] === '') {
-                unset($variationsMatrix[$key]['sku']);
-                unset($data['matrix'][$key]['sku']);
+        if (isset($data['matrix'])) {
+            foreach ($data['matrix'] as $key => $value) {
+                if (isset($value['sku']) && $value['sku'] === '') {
+                    unset($variationsMatrix[$key]['sku']);
+                    unset($data['matrix'][$key]['sku']);
+                }
             }
         }
 
