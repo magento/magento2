@@ -109,6 +109,17 @@ class TextTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
+                    'format' => 'Name: $customer_name, email: $subscriber_email',
+                    'translate' => true
+                ],
+                [
+                    'customer_name' => 'John Doe',
+                    'subscriber_email' => 'john@doe.com'
+                ],
+                'Nom: John Doe, email: john@doe.com'
+            ],
+            [
+                [
                     'format' => 'Need to be translated',
                     'translate' => true
                 ],
