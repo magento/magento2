@@ -32,12 +32,12 @@ class ContactForm extends Template
         return $this->getUrl('contact/index/post', ['_secure' => true]);
     }
 
-	/**
-	 * @return $this
-	 */
-	protected function _prepareLayout()
-	{
-		$this->pageConfig->getTitle()->set(__('Contact Us'));
-		return parent::_prepareLayout();
-	}
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $this->pageConfig->getTitle()->set(__('Contact Us'));
+        return parent::_prepareLayout();
+    }
 }
