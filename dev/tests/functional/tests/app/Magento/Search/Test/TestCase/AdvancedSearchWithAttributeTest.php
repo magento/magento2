@@ -188,7 +188,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
     /**
      * Assert Creation Product.
      *
-     * @var AssertCreateProducts
+     * @var CatalogProductAttributeIndex
      */
     private $productAttributePage;
 
@@ -250,13 +250,13 @@ class AdvancedSearchWithAttributeTest extends Injectable
     ) {
         $this->indexManagement = $indexManagement;
         $this->advancedSearch = $advancedSearch;
-        $this->productAttributePage = $productAttributePage;
         $this->resultPage = $resultPage;
         $this->productGrid = $productGrid;
         $this->newProductPage = $newProductPage;
         $this->productEdit = $productEdit;
         $this->assertIndexerStatus = $assertIndexerStatus;
         $this->assertCreateProducts = $assertCreateProducts;
+        $this->productAttributePage = $productAttributePage;
         $this->attributeNewPage = $attributeNewPage;
         $this->assertSuccessSaveMessage = $assertSuccessSaveMessage;
         $this->assertSearchAttributeTest = $assertSearchAttributeTest;
