@@ -2078,12 +2078,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $attribute = $this->getAttribute('tier_price');
-        if ($attribute->isScopeGlobal()) {
-            $websiteId = 0;
-        } else {
-            if ($this->getStoreId()) {
-                $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
-            }
+        $websiteId = 0;
+        if (!$attribute->isScopeGlobal() && null !== $this->getStoreId()) {
+            $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
 
         $connection = $this->getConnection();
