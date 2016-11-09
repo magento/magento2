@@ -90,32 +90,7 @@ class CreateCreditMemoEntityTest extends Injectable
 
         return [
             'ids' => ['creditMemoIds' => $result['creditMemoIds']],
-            'product' => $this->getProduct($order, $data),
             'customer' => $order->getDataFieldConfig('customer_id')['source']->getCustomer()
         ];
-    }
-
-    /**
-     * Get product's fixture.
-     *
-     * @param OrderInjectable $order
-     * @param array $data
-     * @param int $index [optional]
-     * @return FixtureInterface
-     */
-    protected function getProduct(OrderInjectable $order, array $data, $index = 0)
-    {
-        if (!isset($data['items_data'][$index]['back_to_stock'])
-            || $data['items_data'][$index]['back_to_stock'] != 'Yes'
-        ) {
-            return $order->getEntityId()['products'][$index];
-        }
-        $product = $order->getEntityId()['products'][$index];
-        $productData = $product->getData();
-        $checkoutDataQty = $productData['checkout_data']['qty'];
-        $productData['quantity_and_stock_status']['qty'] -= ($checkoutDataQty - $data['items_data'][$index]['qty']);
-        $productData = array_diff_key($productData, array_flip($this->skipFields));
-
-        return $this->fixtureFactory->create(get_class($product), ['data' => $productData]);
     }
 }
