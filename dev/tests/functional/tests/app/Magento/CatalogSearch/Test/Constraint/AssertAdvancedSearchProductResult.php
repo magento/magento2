@@ -43,7 +43,6 @@ class AssertAdvancedSearchProductResult extends AbstractConstraint
         );
     }
 
-
     /**
      * Returns array with expected products.
      *

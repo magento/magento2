@@ -66,6 +66,8 @@ use Magento\Catalog\Test\Fixture\Category;
  *
  * @group Search
  * @ZephyrId MAGETWO-25931
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedSearchWithAttributeTest extends Injectable
 {
@@ -128,13 +130,6 @@ class AdvancedSearchWithAttributeTest extends Injectable
      * @var Indexer
      */
     private $cli;
-
-    /**
-     * Catalog Product Attribute Index Page.
-     *
-     * @var AttributePage
-     */
-    private $attributePage;
 
     /**
      * Advanced Result Page.
@@ -231,6 +226,8 @@ class AdvancedSearchWithAttributeTest extends Injectable
      * @param AssertAdvancedSearchProductResult $assertAdvancedSearchResult
      * @param AssertProductAttributeSaveMessage $assertAttributeStatus
      * @return void
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __inject(
         IndexManagement $indexManagement,
@@ -280,6 +277,8 @@ class AdvancedSearchWithAttributeTest extends Injectable
      * @param array $products
      * @param string|null $indexers
      * @return void
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function test(
         Indexer $cli,
