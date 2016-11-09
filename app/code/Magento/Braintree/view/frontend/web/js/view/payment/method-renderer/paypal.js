@@ -11,8 +11,18 @@ define([
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/model/payment/additional-validators'
-], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators) {
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Checkout/js/action/create-billing-address'
+], function (
+    $,
+    _,
+    Component,
+    Braintree,
+    quote,
+    fullScreenLoader,
+    additionalValidators,
+    createBillingAddress
+) {
     'use strict';
 
     return Component.extend({
@@ -152,14 +162,16 @@ define([
             var billingAddress = {
                 street: [address.streetAddress],
                 city: address.locality,
-                regionCode: address.region,
                 postcode: address.postalCode,
                 countryId: address.countryCodeAlpha2,
+                email: customer.email,
                 firstname: customer.firstName,
                 lastname: customer.lastName,
                 telephone: customer.phone
             };
 
+            billingAddress['region_code'] = address.region;
+            billingAddress = createBillingAddress(billingAddress);
             quote.billingAddress(billingAddress);
         },
 
