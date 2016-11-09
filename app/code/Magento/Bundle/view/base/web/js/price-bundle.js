@@ -295,6 +295,10 @@ define([
             case 'hidden':
                 optionHash = 'bundle-option-' + optionName + '##' + optionValue;
                 optionQty = optionConfig[optionValue].qty || 0;
+                canQtyCustomize = optionConfig[optionValue].customQty === '1';
+                qtyField = element.data('qtyField');
+                qtyField.data('option', element);
+                toggleQtyField(qtyField, optionQty, optionId, optionValue, canQtyCustomize);
                 tempChanges = utils.deepClone(optionConfig[optionValue].prices);
                 tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);
                 tempChanges = applyQty(tempChanges, optionQty);
