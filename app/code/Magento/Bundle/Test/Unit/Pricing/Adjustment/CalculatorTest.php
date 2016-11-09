@@ -57,6 +57,11 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected $taxData;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $selectionPriceListProvider;
+
+    /**
      * @var Calculator
      */
     protected $model;
@@ -113,6 +118,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->selectionPriceListProvider = $this->getMockBuilder(
+            \Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface::class
+        )->getMock();
+
         $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Pricing\Adjustment\Calculator::class,
             [
                 'calculator' => $this->baseCalculator,
@@ -120,6 +129,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 'bundleSelectionFactory' => $this->selectionFactory,
                 'taxHelper' => $this->taxData,
                 'priceCurrency' => $priceCurrency,
+                'selectionPriceListProvider' => $this->selectionPriceListProvider
             ]
         );
     }
@@ -148,52 +158,11 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             $options[] = $this->createOptionMock($optionData);
         }
 
-        $typeInstance  = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->saleableItem->expects($this->atLeastOnce())->method('getTypeInstance')->willReturn($typeInstance);
-
-        $optionsCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $optionsCollection->expects($this->atLeastOnce())->method('getIterator')
-            ->willReturn(new \ArrayIterator($options));
-        $typeInstance->expects($this->atLeastOnce())->method('getOptionsCollection')->willReturn($optionsCollection);
-
-
-        if ($searchMin) {
-            $optionsCollection->expects($this->atLeastOnce())->method('addFilter')->willReturnSelf();
-            $optionsCollection->expects($this->atLeastOnce())->method('getSize')->willReturn(0);
-            $optionsCollection->expects($this->atLeastOnce())->method('getSize')->willReturn(count($options));
-        }
-
         $optionSelections = [];
         foreach ($options as $option) {
-            $selectionsCollection = $this->getMockBuilder(Collection::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            if ($option->isMultiSelection()) {
-                $selectionsCollection->expects($this->any())
-                    ->method('getIterator')
-                    ->willReturn(new \ArrayIterator($option->getSelections()));
-                $selectionsCollection->expects($this->any())
-                    ->method('getItems')
-                    ->willReturn($option->getSelections());
-            } else {
-                $selectionsCollection->expects($this->atLeastOnce())
-                    ->method('getFirstItem')
-                    ->willReturn(isset($option->getSelections()[0]) ? $option->getSelections()[0] : false);
-            }
-            $optionSelections[$option->getOptionId()] = $selectionsCollection;
+            $optionSelections = array_merge($optionSelections, $option->getSelections());
         }
-
-        $typeInstance->expects($this->any())->method('getSelectionsCollection')
-            ->willReturnCallback(
-                function ($optionId) use ($optionSelections) {
-                    return $optionSelections[array_pop($optionId)];
-                }
-            );
+        $this->selectionPriceListProvider->expects($this->any())->method('getPriceList')->willReturn($optionSelections);
 
         $price = $this->getMock(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class, [], [], '', false);
         $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
@@ -271,11 +240,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         foreach ($optionData['selections'] as $selectionData) {
             $selections[] = $this->createSelectionMock($selectionData);
         }
-        if (!$selections) {
-            $emptyProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()->getMock();
-            $emptyProduct->expects($this->any())->method('isEmpty')->willReturn(true);
-            $selections = [$emptyProduct];
-        }
         foreach ($optionData['data'] as $key => $value) {
             $option->setData($key, $value);
         }
@@ -341,25 +305,11 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'required' => '1',
                     ],
                     'selections' => [
-                        'third product selection with the lowest price' => [
+                        'selection with the lowest price' => [
                             'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
                                 'amount' => 8,
-                            ],
-                        ],
-                        'first product selection' => [
-                            'data' => ['price' => 70.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
-                                'amount' => 18,
-                            ],
-                        ],
-                        'second product selection' => [
-                            'data' => ['price' => 80.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 18],
-                                'amount' => 28,
                             ],
                         ],
                     ]
@@ -402,13 +352,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                             'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
-                                'amount' => 8,
-                            ],
-                        ],
-                        'second product selection' => [
-                            'data' => ['price' => 80.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 18],
                                 'amount' => 8,
                             ],
                         ],
@@ -525,13 +468,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                                 'amount' => 8,
                             ],
                         ],
-                        'second product selection' => [
-                            'data' => ['price' => 30.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 10],
-                                'amount' => 12,
-                            ],
-                        ],
                     ]
                 ],
                 // second option
@@ -546,20 +482,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'required' => '0',
                     ],
                     'selections' => [
-                        'first product selection' => [
-                            'data' => ['price' => 25.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 8],
-                                'amount' => 9,
-                            ],
-                        ],
-                        'second product selection' => [
-                            'data' => ['price' => 35.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 10],
-                                'amount' => 10,
-                            ],
-                        ],
                     ]
                 ],
             ],

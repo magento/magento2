@@ -56,24 +56,32 @@ class Calculator implements BundleCalculatorInterface
     private $optionAmount = [];
 
     /**
+     * @var SelectionPriceListProviderInterface
+     */
+    private $selectionPriceListProvider;
+
+    /**
      * @param CalculatorBase $calculator
      * @param AmountFactory $amountFactory
      * @param BundleSelectionFactory $bundleSelectionFactory
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
+     * @param SelectionPriceListProviderInterface|null $selectionPriceListProvider
      */
     public function __construct(
         CalculatorBase $calculator,
         AmountFactory $amountFactory,
         BundleSelectionFactory $bundleSelectionFactory,
         TaxHelper $taxHelper,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        SelectionPriceListProviderInterface $selectionPriceListProvider = null
     ) {
         $this->calculator = $calculator;
         $this->amountFactory = $amountFactory;
         $this->selectionFactory = $bundleSelectionFactory;
         $this->taxHelper = $taxHelper;
         $this->priceCurrency = $priceCurrency;
+        $this->selectionPriceListProvider = $selectionPriceListProvider;
     }
 
     /**
@@ -183,90 +191,24 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $searchMin
      * @param bool $useRegularPrice
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getSelectionAmounts(Product $bundleProduct, $searchMin, $useRegularPrice = false)
     {
-        // Flag shows - is it necessary to find minimal option amount in case if all options are not required
-        $shouldFindMinOption = false;
-        if ($searchMin
-            && $bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC
-            && !$this->hasRequiredOption($bundleProduct)
-        ) {
-            $shouldFindMinOption = true;
-        }
-        $canSkipRequiredOptions = $searchMin && !$shouldFindMinOption;
+        return $this->getSelectionPriceListProvider()->getPriceList($bundleProduct, $searchMin, $useRegularPrice);
+    }
 
-        /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        $priceList = [];
-
-        foreach ($this->getBundleOptions($bundleProduct) as $option) {
-            /** @var \Magento\Bundle\Model\Option $option */
-            if ($this->canSkipOption($option, $canSkipRequiredOptions)) {
-                continue;
-            }
-
-            $selectionsCollection = $typeInstance->getSelectionsCollection(
-                [(int)$option->getOptionId()],
-                $bundleProduct
-            );
-            $selectionsCollection->removeAttributeToSelect();
-            $selectionsCollection->addQuantityFilter();
-
-            if (!$searchMin && $option->isMultiSelection()) {
-                $selectionsCollection->addPriceData();
-
-                foreach ($selectionsCollection as $selection) {
-                    $priceList[] =  $this->selectionFactory->create(
-                        $bundleProduct,
-                        $selection,
-                        $selection->getSelectionQty(),
-                        [
-                            'useRegularPrice' => $useRegularPrice,
-                        ]
-                    );
-                }
-            } else {
-                $selectionsCollection->addPriceFilter($bundleProduct, $searchMin, $useRegularPrice);
-                $selectionsCollection->setPage(0, 1);
-                if (!$useRegularPrice) {
-                    $selectionsCollection->addAttributeToSelect('special_price');
-                    $selectionsCollection->addAttributeToSelect('special_price_from');
-                    $selectionsCollection->addAttributeToSelect('special_price_to');
-                    $selectionsCollection->addAttributeToSelect('tax_class_id');
-                }
-
-                $selection = $selectionsCollection->getFirstItem();
-
-                if (!$selection->isEmpty()) {
-                    $priceList[] = $this->selectionFactory->create(
-                        $bundleProduct,
-                        $selection,
-                        $selection->getSelectionQty(),
-                        [
-                            'useRegularPrice' => $useRegularPrice,
-                        ]
-                    );
-                }
-            }
+    /**
+     * @return SelectionPriceListProviderInterface
+     * @deprecated
+     */
+    private function getSelectionPriceListProvider()
+    {
+        if (null === $this->selectionPriceListProvider) {
+            $this->selectionPriceListProvider = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SelectionPriceListProviderInterface::class);
         }
 
-        if ($shouldFindMinOption) {
-            $minPrice = null;
-            $priceSelection = null;
-            foreach ($priceList as $price) {
-                $minPriceTmp = $price->getAmount()->getValue() * $price->getQuantity();
-                if (!$minPrice || $minPriceTmp < $minPrice) {
-                    $minPrice = $minPriceTmp;
-                    $priceSelection = $price;
-                }
-            }
-            $priceList = $priceSelection ? [$priceSelection] : [];
-        }
-
-        return $priceList;
+        return $this->selectionPriceListProvider;
     }
 
     /**
@@ -275,10 +217,11 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Model\Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
+     * @deprecated
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
-        return $canSkipRequiredOption && !$option->getRequired();
+        return !$option->getSelections() || ($canSkipRequiredOption && !$option->getRequired());
     }
 
     /**
@@ -286,13 +229,17 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $bundleProduct
      * @return bool
+     * @deprecated
      */
     protected function hasRequiredOption($bundleProduct)
     {
-        $collection = clone $this->getBundleOptions($bundleProduct);
-        $collection->clear();
-
-        return $collection->addFilter(\Magento\Bundle\Model\Option::KEY_REQUIRED, 1)->getSize() > 0;
+        $options = array_filter(
+            $this->getBundleOptions($bundleProduct),
+            function ($item) {
+                return $item->getRequired();
+            }
+        );
+        return !empty($options);
     }
 
     /**
@@ -300,10 +247,15 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
+     * @deprecated
      */
     protected function getBundleOptions(Product $saleableItem)
     {
-        return $saleableItem->getTypeInstance()->getOptionsCollection($saleableItem);
+        /** @var \Magento\Bundle\Pricing\Price\BundleOptionPrice $bundlePrice */
+        $bundlePrice = $saleableItem->getPriceInfo()->getPrice(
+            \Magento\Bundle\Pricing\Price\BundleOptionPrice::PRICE_CODE
+        );
+        return $bundlePrice->getOptions();
     }
 
     /**
