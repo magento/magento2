@@ -29,6 +29,7 @@ class CreateCustomerGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const STABLE = 'no';
     /* end tags */
 
     /**

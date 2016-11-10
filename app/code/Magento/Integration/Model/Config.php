@@ -5,6 +5,8 @@
  */
 namespace Magento\Integration\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Integration\Model\Cache\Type;
 
 /**
@@ -35,13 +37,23 @@ class Config
     protected $_integrations;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param Cache\Type $configCacheType
      * @param Config\Reader $configReader
+     * @param SerializerInterface $serializer
      */
-    public function __construct(Cache\Type $configCacheType, Config\Reader $configReader)
-    {
+    public function __construct(
+        Cache\Type $configCacheType,
+        Config\Reader $configReader,
+        SerializerInterface $serializer = null
+    ) {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -55,10 +67,14 @@ class Config
         if (null === $this->_integrations) {
             $integrations = $this->_configCacheType->load(self::CACHE_ID);
             if ($integrations && is_string($integrations)) {
-                $this->_integrations = unserialize($integrations);
+                $this->_integrations = $this->serializer->unserialize($integrations);
             } else {
                 $this->_integrations = $this->_configReader->read();
-                $this->_configCacheType->save(serialize($this->_integrations), self::CACHE_ID, [Type::CACHE_TAG]);
+                $this->_configCacheType->save(
+                    $this->serializer->serialize($this->_integrations),
+                    self::CACHE_ID,
+                    [Type::CACHE_TAG]
+                );
             }
         }
         return $this->_integrations;

@@ -7,6 +7,8 @@ namespace Magento\Webapi\Model;
 
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebApiCache;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Service Metadata Model
@@ -75,23 +77,31 @@ class ServiceMetadata
     protected $typeProcessor;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Config $config
      * @param WebApiCache $cache
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Webapi\Model\Config $config,
         WebApiCache $cache,
         \Magento\Webapi\Model\Config\ClassReflector $classReflector,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+        SerializerInterface $serializer = null
     ) {
         $this->config = $config;
         $this->cache = $cache;
         $this->classReflector = $classReflector;
         $this->typeProcessor = $typeProcessor;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -142,12 +152,18 @@ class ServiceMetadata
             $servicesConfig = $this->cache->load(self::SERVICES_CONFIG_CACHE_ID);
             $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
             if ($servicesConfig && is_string($servicesConfig) && $typesData && is_string($typesData)) {
-                $this->services = unserialize($servicesConfig);
-                $this->typeProcessor->setTypesData(unserialize($typesData));
+                $this->services = $this->serializer->unserialize($servicesConfig);
+                $this->typeProcessor->setTypesData($this->serializer->unserialize($typesData));
             } else {
                 $this->services = $this->initServicesMetadata();
-                $this->cache->save(serialize($this->services), self::SERVICES_CONFIG_CACHE_ID);
-                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
+                $this->cache->save(
+                    $this->serializer->serialize($this->services),
+                    self::SERVICES_CONFIG_CACHE_ID
+                );
+                $this->cache->save(
+                    $this->serializer->serialize($this->typeProcessor->getTypesData()),
+                    self::REFLECTED_TYPES_CACHE_ID
+                );
             }
         }
         return $this->services;
@@ -256,12 +272,18 @@ class ServiceMetadata
             $routesConfig = $this->cache->load(self::ROUTES_CONFIG_CACHE_ID);
             $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
             if ($routesConfig && is_string($routesConfig) && $typesData && is_string($typesData)) {
-                $this->routes = unserialize($routesConfig);
-                $this->typeProcessor->setTypesData(unserialize($typesData));
+                $this->routes = $this->serializer->unserialize($routesConfig);
+                $this->typeProcessor->setTypesData($this->serializer->unserialize($typesData));
             } else {
                 $this->routes = $this->initRoutesMetadata();
-                $this->cache->save(serialize($this->routes), self::ROUTES_CONFIG_CACHE_ID);
-                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
+                $this->cache->save(
+                    $this->serializer->serialize($this->routes),
+                    self::ROUTES_CONFIG_CACHE_ID
+                );
+                $this->cache->save(
+                    $this->serializer->serialize($this->typeProcessor->getTypesData()),
+                    self::REFLECTED_TYPES_CACHE_ID
+                );
             }
         }
         return $this->routes;

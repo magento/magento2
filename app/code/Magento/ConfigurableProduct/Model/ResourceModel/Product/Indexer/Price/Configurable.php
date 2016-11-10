@@ -8,6 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
@@ -166,6 +167,9 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
 
+        $statusAttribute = $this->_getAttribute(ProductInterface::STATUS);
+        $linkField = $metadata->getLinkField();
+
         $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             []
@@ -175,7 +179,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             ['parent_id' => 'e.entity_id']
         )->join(
             ['l' => $this->getTable('catalog_product_super_link')],
-            'l.parent_id = e.' . $metadata->getLinkField(),
+            'l.parent_id = e.' . $linkField,
             ['product_id']
         )->columns(
             ['customer_group_id', 'website_id'],
@@ -186,11 +190,21 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             []
         )->where(
             'le.required_options=0'
+        )->join(
+            ['product_status' => $this->getTable($statusAttribute->getBackend()->getTable())],
+            sprintf(
+                'le.%1$s = product_status.%1$s AND product_status.attribute_id = %2$s',
+                $linkField,
+                $statusAttribute->getAttributeId()
+            ),
+            []
+        )->where(
+            'product_status.value=' . ProductStatus::STATUS_ENABLED
         )->group(
-            ['parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
+            ['e.entity_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
-        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
-        $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
+        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'le.' . $linkField, 0, null, true);
+        $tierPriceColumn = $connection->getIfNullSql('MIN(i.tier_price)', 'NULL');
 
         $select->columns(
             ['price' => $priceColumn, 'tier_price' => $tierPriceColumn]

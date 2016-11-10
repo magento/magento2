@@ -17,7 +17,7 @@
             <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend" />
         </variation>
         <variation name="DeleteStoreEntityTestVariation2">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, stable:no</data>
             <data name="store/dataset" xsi:type="string">custom</data>
             <data name="createBackup" xsi:type="string">No</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteMessage" />
