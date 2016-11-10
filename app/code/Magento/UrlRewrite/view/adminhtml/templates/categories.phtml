@@ -9,7 +9,7 @@
 /** @var \Magento\UrlRewrite\Block\Catalog\Category\Tree $block */
 ?>
 <fieldset class="admin__fieldset" data-ui-id="category-selector">
-    <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Select Category') ?></span></legend>
+    <legend class="admin__legend"><span><?php echo $block->escapeHtml(__('Select Category')) ?></span></legend>
     <div class="content content-category-tree">
         <input type="hidden" name="categories" id="product_categories" value="" />
         <?php if ($block->getRoot()): ?>
