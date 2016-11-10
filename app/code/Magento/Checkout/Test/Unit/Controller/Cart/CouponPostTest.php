@@ -70,6 +70,16 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
     protected $quoteRepository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $redirect;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $redirectFactory;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -204,6 +214,12 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getCouponCode')
             ->willReturn('OLDCODE');
 
+        $coupon = $this->getMock(\Magento\SalesRule\Model\Coupon::class, [], [], '', false);
+        $this->couponFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($coupon);
+        $coupon->expects($this->once())->method('load')->willReturnSelf();
+        $coupon->expects($this->once())->method('getId')->willReturn(1);
         $this->quote->expects($this->any())
             ->method('getItemsCount')
             ->willReturn(1);
