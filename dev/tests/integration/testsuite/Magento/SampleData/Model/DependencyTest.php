@@ -20,7 +20,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $composerInformationMock;
+    private $composerInformationMock;
 
     /**
      * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
