@@ -318,8 +318,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         ];
         $addressExtractedData = [
             'entity_id' => $addressId,
-/*            'default_billing' => 'true',
-            'default_shipping' => 'true',*/
             'code' => 'value',
             'coolness' => false,
             'region' => 'region',
