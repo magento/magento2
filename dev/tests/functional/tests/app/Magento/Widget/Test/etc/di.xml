@@ -66,4 +66,14 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Widget\Test\Constraint\AssertWidgetsInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Widget\Test\Constraint\AssertThemeFilterValuesOnWidgetGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
 </config>
