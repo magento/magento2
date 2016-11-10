@@ -14,6 +14,9 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  */
 class AssertCustomerLoginErrorMessage extends AbstractConstraint
 {
+    /**
+     * Customer login error message.
+     */
     const ERROR_MESSAGE = 'Invalid login or password.';
 
     /**
