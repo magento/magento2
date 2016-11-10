@@ -11,27 +11,44 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Login
- * Form for frontend login
+ * Class Login.
+ * Form for frontend login.
  */
 class Login extends Form
 {
     /**
-     * Login button for registered customers
+     * Login button for registered customers.
      *
      * @var string
      */
-    protected $loginButton = '.action.login';
+    private $loginButton = '.action.login';
 
     /**
-     * 'Register' customer button
+     * 'Register' customer button.
      *
      * @var string
      */
-    protected $registerButton = '.action.create';
+    private $registerButton = '.action.create';
 
     /**
-     * Login customer in the Frontend
+     * Selector for password field with autocomplete off.
+     *
+     * @var string
+     */
+    private $passwordFieldWithAutocompleteOff = 'input[name="login[password]"][autocomplete="off"]';
+
+    /**
+     * Checks if password field autocomplete is off.
+     *
+     * @return bool
+     */
+    public function isPasswordAutocompleteOff()
+    {
+        return $this->_rootElement->find($this->passwordFieldWithAutocompleteOff)->isVisible();
+    }
+
+    /**
+     * Login customer in the Frontend.
      *
      * @param FixtureInterface $customer
      *
@@ -45,7 +62,7 @@ class Login extends Form
     }
 
     /**
-     * Submit login form
+     * Submit login form.
      */
     public function submit()
     {
@@ -53,7 +70,7 @@ class Login extends Form
     }
 
     /**
-     * Press 'Register' button
+     * Press 'Register' button.
      */
     public function registerCustomer()
     {
@@ -61,7 +78,7 @@ class Login extends Form
     }
 
     /**
-     * Check whether block is visible
+     * Check whether block is visible.
      *
      * @return bool
      */
