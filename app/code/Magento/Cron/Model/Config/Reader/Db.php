@@ -39,8 +39,8 @@ class Db
         Config $config,
         \Magento\Cron\Model\Config\Converter\Db $converter
     ) {
-        $this->_converter = $converter;
         $this->config = $config;
+        $this->_converter = $converter;
     }
 
     /**

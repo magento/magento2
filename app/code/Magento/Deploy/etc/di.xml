@@ -23,7 +23,6 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="staticContentDeployCommand" xsi:type="object">Magento\Deploy\Console\Command\DeployStaticContentCommand</item>
                 <item name="setModeCommand" xsi:type="object">Magento\Deploy\Console\Command\SetModeCommand</item>
                 <item name="showModeCommand" xsi:type="object">Magento\Deploy\Console\Command\ShowModeCommand</item>
                 <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>

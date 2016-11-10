@@ -3,15 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Console\Command;
+namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\Exception\LocalizedException;
@@ -65,13 +65,6 @@ class DeployStaticContentCommand extends Command
     private $validator;
 
     /**
-     * Factory to get object manager
-     *
-     * @var ObjectManagerFactory
-     */
-    private $objectManagerFactory;
-
-    /**
      * object manager to create various objects
      *
      * @var ObjectManagerInterface
@@ -85,19 +78,16 @@ class DeployStaticContentCommand extends Command
     /**
      * Inject dependencies
      *
-     * @param ObjectManagerFactory $objectManagerFactory
      * @param Locale $validator
-     * @param ObjectManagerInterface $objectManager
+     * @param ObjectManagerProvider $objectManagerProvider
      * @throws \LogicException When the command name is empty
      */
     public function __construct(
-        ObjectManagerFactory $objectManagerFactory,
         Locale $validator,
-        ObjectManagerInterface $objectManager
+        ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->objectManagerFactory = $objectManagerFactory;
         $this->validator = $validator;
-        $this->objectManager = $objectManager;
+        $this->objectManager = $objectManagerProvider->get();
 
         parent::__construct();
     }
