@@ -15,7 +15,9 @@ use Magento\Backend\Model\Locale\Manager;
 use Magento\Framework\TranslateInterface;
 
 /**
+ * @magentoComponentsDir Magento/Backend/Block/_files/app/code/Magento
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  */
 class TextTest extends \PHPUnit_Framework_TestCase
