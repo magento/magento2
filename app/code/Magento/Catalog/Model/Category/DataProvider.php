@@ -5,12 +5,16 @@
  */
 namespace Magento\Catalog\Model\Category;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
@@ -113,6 +117,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $categoryFactory;
 
     /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
      * DataProvider constructor
      *
      * @param string $name
@@ -151,8 +165,57 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
+
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->meta = $this->prepareMeta($this->meta);
+    }
+
+    public function getMeta()
+    {
+        $meta = parent::getMeta();
+        $meta = $this->prepareMeta($meta);
+        $meta = $this->addUseDefaultValueCheckbox($this->getCurrentCategory(), $meta);
+
+        return $meta;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $meta
+     * @return array
+     */
+    private function addUseDefaultValueCheckbox(Category $category, array $meta)
+    {
+        /** @var EavAttributeInterface $attribute */
+        foreach ($category->getAttributes() as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $canDisplayUseDefault = $attribute->getScope() != EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                && $category->getId()
+                && $category->getStoreId();
+            $sectionName = $this->getSectionName($meta, $attributeCode);
+
+            if (!$sectionName || !$canDisplayUseDefault) {
+                continue;
+            }
+
+            $meta = $this->getArrayManager()->set(
+                [$sectionName, 'children', $attributeCode, 'arguments/data/config'],
+                $meta,
+                [
+                    'service' => [
+                        'template' => 'ui/form/element/helper/service',
+                    ],
+                    'disabled' => !$this->getScopeOverriddenValue()->containsValue(
+                        CategoryInterface::class,
+                        $category,
+                        $attributeCode,
+                        $this->request->getParam($this->requestScopeFieldName, Store::DEFAULT_STORE_ID)
+                    )
+                ]
+            );
+
+        }
+
+        return $meta;
     }
 
     /**
@@ -160,6 +223,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param array $meta
      * @return array
+     * @deprecated
      */
     public function prepareMeta($meta)
     {
@@ -204,7 +268,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $category = $this->getCurrentCategory();
         if ($category) {
             $categoryData = $category->getData();
-            $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
             $categoryData = $this->convertValues($category, $categoryData);
@@ -292,6 +355,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Catalog\Model\Category $category
      * @param array $categoryData
      * @return array
+     * @deprecated
      */
     protected function addUseDefaultSettings($category, $categoryData)
     {
@@ -483,5 +547,57 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                 ],
         ];
+    }
+
+    /**
+     * Retrieve section name by attribute code
+     *
+     * @param array $meta
+     * @param string $attributeCode
+     * @return string|null
+     */
+    private function getSectionName(array $meta, $attributeCode)
+    {
+        foreach ($meta as $name => $section) {
+            if (isset($section['children'][$attributeCode])) {
+                return $name;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieve scope overridden value
+     *
+     * @return ScopeOverriddenValue
+     * @deprecated
+     */
+    private function getScopeOverriddenValue()
+    {
+        if (null === $this->scopeOverriddenValue) {
+            $this->scopeOverriddenValue = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                ScopeOverriddenValue::class
+            );
+        }
+
+        return $this->scopeOverriddenValue;
+    }
+
+    /**
+     * Retrieve array manager
+     *
+     * @return ArrayManager
+     * @deprecated
+     */
+    private function getArrayManager()
+    {
+        if (null === $this->arrayManager) {
+            $this->arrayManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                ArrayManager::class
+            );
+        }
+
+        return $this->arrayManager;
     }
 }

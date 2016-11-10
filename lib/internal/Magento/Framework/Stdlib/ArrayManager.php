@@ -57,7 +57,7 @@ class ArrayManager
     /**
      * Set value into node and return modified data
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param mixed $value
      * @param string $delimiter
@@ -65,6 +65,10 @@ class ArrayManager
      */
     public function set($path, array $data, $value, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
+        if (is_array($path)) {
+            $path = implode($delimiter, $path);
+        }
+
         if ($this->find($path, $data, $delimiter, true)) {
             $this->parentNode[$this->nodeIndex] = $value;
         }
