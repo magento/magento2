@@ -10,7 +10,7 @@
  */
 ?>
 <?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
-<?php if ($block->getInfo()->getAdditionalData()): ?>
+<?php if ($block->getInfo()->getAdditionalInformation()): ?>
     <?php if ($block->getPayableTo()): ?>
         <br /><?php echo $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
     <?php endif; ?>
