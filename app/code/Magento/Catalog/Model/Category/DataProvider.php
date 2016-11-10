@@ -174,6 +174,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $meta = parent::getMeta();
         $meta = $this->prepareMeta($meta);
         $meta = $this->addUseDefaultValueCheckbox($this->getCurrentCategory(), $meta);
+        $meta = $this->resolveParentInheritance($this->getCurrentCategory(), $meta);
 
         return $meta;
     }
@@ -191,14 +192,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $canDisplayUseDefault = $attribute->getScope() != EavAttributeInterface::SCOPE_GLOBAL_TEXT
                 && $category->getId()
                 && $category->getStoreId();
-            $sectionName = $this->getSectionName($meta, $attributeCode);
+            $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
 
-            if (!$sectionName || !$canDisplayUseDefault) {
+            if (!$attributePath || !$canDisplayUseDefault || $attribute->getFrontendInput() === 'image') {
                 continue;
             }
 
-            $meta = $this->getArrayManager()->set(
-                [$sectionName, 'children', $attributeCode, 'arguments/data/config'],
+            $meta = $this->getArrayManager()->merge(
+                [$attributePath, 'arguments/data/config'],
                 $meta,
                 [
                     'service' => [
@@ -219,11 +220,32 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Removes not necessary inheritance fields
+     *
+     * @param Category $category
+     * @param array $meta
+     * @return array
+     */
+    private function resolveParentInheritance(Category $category, array $meta)
+    {
+        if (!$category->getParentId() || !$this->getArrayManager()->findPath('custom_use_parent_settings', $meta)) {
+            return $meta;
+        }
+
+        $meta = $this->getArrayManager()->merge(
+            [$this->getArrayManager()->findPath('custom_use_parent_settings', $meta), 'arguments/data/config'],
+            $meta,
+            ['visible' => false]
+        );
+
+        return $meta;
+    }
+
+    /**
      * Prepare meta data
      *
      * @param array $meta
      * @return array
-     * @deprecated
      */
     public function prepareMeta($meta)
     {
@@ -547,24 +569,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                 ],
         ];
-    }
-
-    /**
-     * Retrieve section name by attribute code
-     *
-     * @param array $meta
-     * @param string $attributeCode
-     * @return string|null
-     */
-    private function getSectionName(array $meta, $attributeCode)
-    {
-        foreach ($meta as $name => $section) {
-            if (isset($section['children'][$attributeCode])) {
-                return $name;
-            }
-        }
-
-        return null;
     }
 
     /**
