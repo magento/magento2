@@ -105,7 +105,7 @@ class Menu extends Block
      * Check if menu item is visible.
      *
      * @param string $menuItem
-     * @return bool|void
+     * @return bool
      */
     public function isMenuItemVisible($menuItem)
     {
@@ -117,11 +117,11 @@ class Menu extends Block
         if (!$mainMenuElement->isVisible()) {
             return false;
         }
+        if ($subMenu === null) {
+            return true;
+        }
         $mainMenuElement->click();
 
-        if ($subMenu === null) {
-            return;
-        }
         $subMenuSelector = sprintf($this->subMenu, $mainMenu);
         $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
         $subMenuItem = $subMenuSelector . sprintf($this->subMenuItem, $subMenu);

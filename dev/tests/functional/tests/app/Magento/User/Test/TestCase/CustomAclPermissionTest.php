@@ -59,16 +59,4 @@ class CustomAclPermissionTest extends Injectable
             ['user' => $user]
         )->run();
     }
-
-    /**
-     * Logout Admin User from account.
-     *
-     * return void
-     */
-    public function tearDown()
-    {
-        $this->testStepFactory->create(
-            \Magento\User\Test\TestStep\LogoutUserOnBackendStep::class
-        )->run();
-    }
 }
