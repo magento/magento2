@@ -13,17 +13,15 @@
                 <item name="0" xsi:type="string">default</item>
             </data>
             <data name="customerGroup/dataset" xsi:type="string">default</data>
-            <data name="newGroup" xsi:type="boolean">true</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertMassActionSuccessUpdateMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
         </variation>
-        <variation name="MassAssignCustomerGroupTestVariation2">
+        <variation name="MassAssignCustomerGroupTestVariation2" summary="Two customers are created and mass actions for changing customer group to 'Retail' is applied" ticketId="MAGETWO-19456">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="customers" xsi:type="array">
                 <item name="0" xsi:type="string">default</item>
                 <item name="1" xsi:type="string">customer_US</item>
             </data>
-            <data name="newGroup" xsi:type="boolean">false</data>
             <data name="customerGroup/dataset" xsi:type="string">Retailer</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertMassActionSuccessUpdateMessage" />
         </variation>

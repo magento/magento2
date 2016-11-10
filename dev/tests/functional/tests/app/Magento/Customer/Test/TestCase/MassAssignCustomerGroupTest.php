@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Perform all assertions
  *
  * @group Customer_Groups, Customers
- * @ZephyrId MAGETWO-27892
+ * @ZephyrId MAGETWO-27892, MAGETWO-19456
  */
 class MassAssignCustomerGroupTest extends Injectable
 {
@@ -70,13 +70,12 @@ class MassAssignCustomerGroupTest extends Injectable
      * @param CustomerGroup $customerGroup
      * @param FixtureFactory $fixtureFactory
      * @param array $customers
-     * @param bool $newGroup
      * @return array
      */
-    public function test(CustomerGroup $customerGroup, FixtureFactory $fixtureFactory, array $customers, $newGroup)
+    public function test(CustomerGroup $customerGroup, FixtureFactory $fixtureFactory, array $customers)
     {
         // Preconditions
-        if ($newGroup) {
+        if (!$customerGroup->hasData('customer_group_id')) {
             $customerGroup->persist();
         }
 
@@ -94,6 +93,6 @@ class MassAssignCustomerGroupTest extends Injectable
             [$this->customersGridActions => $customerGroup->getCustomerGroupCode()],
             true
         );
-        return ['customer' => $customers];
+        return ['customers' => $customers];
     }
 }
