@@ -86,7 +86,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         
         $connection->beginTransaction();
         try {
-            foreach ($newIds as $subscriberId) {
+            foreach (array_keys($newIds) as $subscriberId) {
                 $data = [];
                 $data['queue_id'] = $queue->getId();
                 $data['subscriber_id'] = $subscriberId;
