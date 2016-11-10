@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
-use Magento\Deploy\Console\Command\DeployStaticContentCommand;
+use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
