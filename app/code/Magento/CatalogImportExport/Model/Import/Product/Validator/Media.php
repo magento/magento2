@@ -15,7 +15,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
 
     const ADDITIONAL_IMAGES = 'additional_images';
-
+    
     const ADDITIONAL_IMAGES_DELIMITER = ',';
 
     /** @var array */
@@ -83,7 +83,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
             }
         }
         if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
-            foreach (explode(self::ADDITIONAL_IMAGES_DELIMITER, $value[self::ADDITIONAL_IMAGES]) as $image) {
+            foreach (explode($this->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES]) as $image) {
                 if (!$this->checkPath($image) && !$this->checkValidUrl($image)) {
                     $this->_addMessages(
                         [
@@ -99,5 +99,13 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
             }
         }
         return $valid;
+    }
+    
+    /**
+     * @return string
+     */
+    private function getMultipleValueSeparator()
+    {
+        return $this->context->getMultipleValueSeparator();
     }
 }
