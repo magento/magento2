@@ -77,20 +77,31 @@ class CountryProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountryForBillingAddressWithoutCountry()
     {
-        $address = $this->getMockBuilder(Address::class)
+        $billingAddress = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::never())
-            ->method('getShippingAddress');
+        $shippingAddress = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountry'])
+            ->getMock();
+
+        $this->quote->expects(static::once())
+            ->method('getShippingAddress')
+            ->willReturn($shippingAddress);
         $this->quote->expects(static::once())
             ->method('getBillingAddress')
-            ->willReturn($address);
+            ->willReturn($billingAddress);
 
-        $address->expects(static::once())
+        $billingAddress->expects(static::once())
             ->method('getCountry')
             ->willReturn(null);
+
+        $shippingAddress->expects(static::once())
+            ->method('getCountry')
+            ->willReturn(null);
+
         $this->directory->expects(static::once())
             ->method('getDefaultCountry')
             ->willReturn('US');
@@ -102,22 +113,31 @@ class CountryProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountryShippingAddress()
     {
-        $address = $this->getMockBuilder(Address::class)
+        $shippingAddress = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountry'])
+            ->getMock();
+
+        $billingAddress = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCountry'])
             ->getMock();
 
         $this->quote->expects(static::once())
             ->method('getBillingAddress')
-            ->willReturn(null);
+            ->willReturn($billingAddress);
 
         $this->quote->expects(static::once())
             ->method('getShippingAddress')
-            ->willReturn($address);
+            ->willReturn($shippingAddress);
 
-        $address->expects(static::once())
+        $shippingAddress->expects(static::once())
             ->method('getCountry')
             ->willReturn('CA');
+
+        $shippingAddress->expects(static::once())
+            ->method('getCountry')
+            ->willReturn(null);
 
         $this->directory->expects(static::never())
             ->method('getDefaultCountry');
