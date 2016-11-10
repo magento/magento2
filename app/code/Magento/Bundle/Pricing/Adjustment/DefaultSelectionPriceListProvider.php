@@ -22,6 +22,11 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     private $selectionFactory;
 
     /**
+     * @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     */
+    private $priceList;
+
+    /**
      * @param BundleSelectionFactory $bundleSelectionFactory
      */
     public function __construct(BundleSelectionFactory $bundleSelectionFactory)
@@ -39,7 +44,7 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
 
         /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
         $typeInstance = $bundleProduct->getTypeInstance();
-        $priceList = [];
+        $this->priceList = [];
 
         foreach ($this->getBundleOptions($bundleProduct) as $option) {
             /** @var Option $option */
@@ -54,24 +59,25 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
             $selectionsCollection->removeAttributeToSelect();
             $selectionsCollection->addQuantityFilter();
 
+            if (!$useRegularPrice) {
+                $selectionsCollection->addAttributeToSelect('special_price');
+                $selectionsCollection->addAttributeToSelect('special_price_from');
+                $selectionsCollection->addAttributeToSelect('special_price_to');
+                $selectionsCollection->addAttributeToSelect('tax_class_id');
+            }
+
             if (!$searchMin && $option->isMultiSelection()) {
-                $priceList = array_merge(
-                    $priceList,
-                    $this->getMaximumMultiselectionPriceList($bundleProduct, $selectionsCollection, $useRegularPrice)
-                );
+                $this->addMaximumMultiSelectionPriceList($bundleProduct, $selectionsCollection, $useRegularPrice);
             } else {
-                $priceList = array_merge(
-                    $priceList,
-                    $this->getMiniMaxPriceList($bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
-                );
+                $this->addMiniMaxPriceList($bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice);
             }
         }
 
         if ($shouldFindMinOption) {
-            $priceList = $this->getMinPriceForNonRequiredOptions($priceList);
+            $this->processMinPriceForNonRequiredOptions();
         }
 
-        return $priceList;
+        return $this->priceList;
     }
 
     /**
@@ -95,31 +101,23 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     }
 
     /**
-     * Get minimum or maximum price for option
+     * Add minimum or maximum price for option
      *
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selectionsCollection
      * @param bool $searchMin
      * @param bool $useRegularPrice
-     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @return void
      */
-    private function getMiniMaxPriceList(Product $bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
+    private function addMiniMaxPriceList(Product $bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
     {
-        $priceList = [];
-
         $selectionsCollection->addPriceFilter($bundleProduct, $searchMin, $useRegularPrice);
         $selectionsCollection->setPage(0, 1);
-        if (!$useRegularPrice) {
-            $selectionsCollection->addAttributeToSelect('special_price');
-            $selectionsCollection->addAttributeToSelect('special_price_from');
-            $selectionsCollection->addAttributeToSelect('special_price_to');
-            $selectionsCollection->addAttributeToSelect('tax_class_id');
-        }
 
         $selection = $selectionsCollection->getFirstItem();
 
         if (!$selection->isEmpty()) {
-            $priceList[] = $this->selectionFactory->create(
+            $this->priceList[] = $this->selectionFactory->create(
                 $bundleProduct,
                 $selection,
                 $selection->getSelectionQty(),
@@ -128,25 +126,22 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
                 ]
             );
         }
-
-        return $priceList;
     }
 
     /**
-     * Get maximum price for multiselection option
+     * Add maximum price for multi selection option
      *
      * @param Product $bundleProduct
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selectionsCollection
      * @param bool $useRegularPrice
-     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @return void
      */
-    private function getMaximumMultiselectionPriceList(Product $bundleProduct, $selectionsCollection, $useRegularPrice)
+    private function addMaximumMultiSelectionPriceList(Product $bundleProduct, $selectionsCollection, $useRegularPrice)
     {
-        $priceList = [];
-
         $selectionsCollection->addPriceData();
+
         foreach ($selectionsCollection as $selection) {
-            $priceList[] =  $this->selectionFactory->create(
+            $this->priceList[] =  $this->selectionFactory->create(
                 $bundleProduct,
                 $selection,
                 $selection->getSelectionQty(),
@@ -155,28 +150,23 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
                 ]
             );
         }
-
-        return $priceList;
     }
 
     /**
-     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $priceList
-     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @return void
      */
-    private function getMinPriceForNonRequiredOptions($priceList)
+    private function processMinPriceForNonRequiredOptions()
     {
         $minPrice = null;
         $priceSelection = null;
-        foreach ($priceList as $price) {
+        foreach ($this->priceList as $price) {
             $minPriceTmp = $price->getAmount()->getValue() * $price->getQuantity();
             if (!$minPrice || $minPriceTmp < $minPrice) {
                 $minPrice = $minPriceTmp;
                 $priceSelection = $price;
             }
         }
-        $priceList = $priceSelection ? [$priceSelection] : [];
-
-        return $priceList;
+        $this->priceList = $priceSelection ? [$priceSelection] : [];
     }
 
     /**

@@ -89,14 +89,12 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
             '
                 #4 Testing price for dynamic bundle 
-                with one required multi type option, two simples and special price
+                with one required multi type option, two simples with special price
             ' => [
                 'strategy' => $this->getBundleConfiguration4(),
                 'expectedResults' => [
-                    // 0.5 * 1 * 10
-                    'minimalPrice' => 5,
-                    // 0.5 * (1 * 10 + 3 * 20)
-                    'maximalPrice' => 35
+                    'minimalPrice' => 9.99,
+                    'maximalPrice' => 21.97
                 ]
             ],
 
@@ -290,7 +288,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             [
                 'title' => 'Op1',
                 'required' => true,
-                'type' => 'multi',
+                'type' => 'checkbox',
                 'links' => [
                     [
                         'sku' => 'simple1',
@@ -298,7 +296,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     ],
                     [
                         'sku' => 'simple2',
-                        'qty' => 3,
+                        'qty' => 2,
                     ],
                 ]
             ]
@@ -306,8 +304,12 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
+                'modifierName' => 'addSpecialPriceForSimple',
+                'data' => ['simple1', 9.99]
+            ],
+            [
+                'modifierName' => 'addSpecialPriceForSimple',
+                'data' => ['simple2', 5.99]
             ],
             [
                 'modifierName' => 'addSimpleProduct',
