@@ -16,7 +16,7 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedString
      * @dataProvider executeDataProvider
      */
-    public function testExecute($options = [], $expectedString ='')
+    public function testExecute($options = [], $expectedString = '')
     {
         $installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
         $installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
