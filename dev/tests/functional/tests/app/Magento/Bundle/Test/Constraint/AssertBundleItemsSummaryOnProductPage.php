@@ -33,14 +33,15 @@ class AssertBundleItemsSummaryOnProductPage extends AbstractAssertForm
 
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $bundleOptions = $product->getData()['bundle_selections']['bundle_options'];
-        $optionsBlock = $catalogProductView->getBundleViewBlock();
-        $customizedPriceBlock = $optionsBlock->getCustomizedPriceBlock();
+        $bundleViewBlock = $catalogProductView->getBundleViewBlock();
+        $configuredPriceBlock = $bundleViewBlock->getBundleSummaryBlock()->getConfiguredPriceBlock();
         foreach ($bundleOptions as $bundleOption) {
             foreach ($bundleOption['assigned_products'] as $assignedProduct) {
-                $optionsBlock->fillOptionsWithCustomData([
+                $bundleViewBlock->fillOptionsWithCustomData([
                     [
                         'title' => $bundleOption['title'],
                         'type' => $bundleOption['type'],
+                        'frontend_type' => $bundleOption['type'],
                         'value' => [
                             'name' => $assignedProduct['search_data']['name']
                         ]
@@ -49,11 +50,11 @@ class AssertBundleItemsSummaryOnProductPage extends AbstractAssertForm
                 $assignedProductPrice = (double)$assignedProduct['data']['selection_price_value'];
                 $assignedProductQty = (double)$assignedProduct['data']['selection_qty'];
 
-                foreach ($optionsBlock->getBundleSummary() as $bundleSummaryItem) {
+                foreach ($bundleViewBlock->getBundleSummaryBlock()->getSummaryItems() as $bundleSummaryItem) {
                     $bundleSummaryItemText = $bundleSummaryItem->getText();
                     if (strpos($bundleSummaryItemText, $assignedProduct['search_data']['name']) !== false) {
                         $optionData = $this->getBundleOptionData($bundleSummaryItemText);
-                        $optionData['price'] = (double)$customizedPriceBlock->getFinalPrice();
+                        $optionData['price'] = (double)$configuredPriceBlock->getPrice();
                         $actualResult[] = $optionData;
                     }
                 }

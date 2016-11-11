@@ -79,19 +79,6 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     }
 
     /**
-     * Get Bundle customized Price block.
-     *
-     * @return \Magento\Bundle\Test\Block\Catalog\Product\CustomizedPrice
-     */
-    public function getCustomizedPriceBlock()
-    {
-        return $this->blockFactory->create(
-            \Magento\Bundle\Test\Block\Catalog\Product\CustomizedPrice::class,
-            ['element' => $this->_rootElement->find($this->customizedBundlePriceSelector)]
-        );
-    }
-
-    /**
      * Click "Customize and add to cart button".
      *
      * @return void
