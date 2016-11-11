@@ -194,7 +194,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 && $category->getStoreId();
             $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
 
-            if (!$attributePath || !$canDisplayUseDefault) {
+            if (!$attributePath || !$canDisplayUseDefault || $attribute->getFrontendInput() === 'image') {
                 continue;
             }
 
