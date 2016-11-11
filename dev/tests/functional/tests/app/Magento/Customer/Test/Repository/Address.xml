@@ -189,6 +189,18 @@
             <field name="telephone" xsi:type="string">555-55-555-55</field>
         </dataset>
 
+        <dataset name="UK_address_2_without_email">
+            <field name="firstname" xsi:type="string">Billy</field>
+            <field name="lastname" xsi:type="string">Holiday</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Liverpool</field>
+            <field name="street" xsi:type="string">99 Henry St</field>
+            <field name="postcode" xsi:type="string">SE1 7RW</field>
+            <field name="country_id" xsi:type="string">United Kingdom</field>
+            <field name="region" xsi:type="string">Liverpool</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+        </dataset>
+
         <dataset name="UK_address_without_email">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
@@ -219,6 +231,7 @@
         <dataset name="DE_address">
             <field name="firstname" xsi:type="string">Jan</field>
             <field name="lastname" xsi:type="string">Jansen</field>
+            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">Berlin</field>
             <field name="street" xsi:type="string">Augsburger Strabe 41</field>

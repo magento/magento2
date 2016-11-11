@@ -18,7 +18,7 @@ class AuthenticationPopup extends Form
      *
      * @var string
      */
-    private $login = '[name="send"]';
+    private $login = '.action.action-login.secondary';
 
     /**
      * Selector for loading mask element.
