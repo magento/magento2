@@ -10,6 +10,8 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
@@ -54,18 +56,25 @@ class System implements ConfigTypeInterface
     private $fallback;
 
     /**
+     * @var Serialize
+     */
+    private $serializer;
+
+    /**
      * System constructor.
      * @param ConfigSourceInterface $source
      * @param PostProcessorInterface $postProcessor
      * @param Fallback $fallback
      * @param FrontendInterface $cache
      * @param int $cachingNestedLevel
+     * @param Serialize $serializer
      */
     public function __construct(
         ConfigSourceInterface $source,
         PostProcessorInterface $postProcessor,
         Fallback $fallback,
         FrontendInterface $cache,
+        Serialize $serializer,
         $cachingNestedLevel = 1
     ) {
         $this->source = $source;
@@ -73,6 +82,7 @@ class System implements ConfigTypeInterface
         $this->cache = $cache;
         $this->cachingNestedLevel = $cachingNestedLevel;
         $this->fallback = $fallback;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -88,11 +98,16 @@ class System implements ConfigTypeInterface
             if (!$data) {
                 $data = $this->fallback->process($this->source->get());
                 $this->data = new DataObject($data);
+                //Placeholder processing need system config - so we need to save intermediate result
                 $data = $this->postProcessor->process($data);
                 $this->data = new DataObject($data);
-                $this->cache->save(serialize($this->data), self::CONFIG_TYPE, [self::CACHE_TAG]);
+                $this->cache->save(
+                    $this->serializer->serialize($this->data->getData()),
+                    self::CONFIG_TYPE,
+                    [self::CACHE_TAG]
+                );
             } else {
-                $this->data = unserialize($data);
+                $this->data = new DataObject($this->serializer->unserialize($data));
             }
         }
 

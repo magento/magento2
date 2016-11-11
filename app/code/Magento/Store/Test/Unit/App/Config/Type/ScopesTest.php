@@ -8,6 +8,7 @@ namespace Magento\Store\Test\Unit\App\Config\Type;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Store\App\Config\Type\Scopes;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Store;
@@ -30,14 +31,22 @@ class ScopesTest extends \PHPUnit_Framework_TestCase
      */
     private $configType;
 
+    /**
+     * @var Serialize | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     public function setUp()
     {
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
             ->getMockForAbstractClass();
+        $this->serializer = $this->getMockBuilder(Serialize::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->configType = new Scopes($this->source, $this->cache);
+        $this->configType = new Scopes($this->source, $this->cache, $this->serializer);
     }
 
     /**
@@ -58,9 +67,18 @@ class ScopesTest extends \PHPUnit_Framework_TestCase
         $this->cache->expects($this->once())
             ->method('load')
             ->with(Scopes::CONFIG_TYPE)
-            ->willReturn($isCached ? serialize(new DataObject($data)) : false);
+            ->willReturn($isCached ? serialize($data) : false);
+
+        if ($isCached) {
+            $this->serializer->expects($this->once())
+                ->method('unserialize')
+                ->willReturn($data);
+        }
 
         if (!$isCached) {
+            $this->serializer->expects($this->once())
+                ->method('serialize')
+                ->willReturn(serialize($data));
             $this->source->expects($this->once())
                 ->method('get')
                 ->with('')
@@ -68,7 +86,7 @@ class ScopesTest extends \PHPUnit_Framework_TestCase
             $this->cache->expects($this->once())
                 ->method('save')
                 ->with(
-                    serialize(new DataObject($data)),
+                    serialize($data),
                     Scopes::CONFIG_TYPE,
                     [Group::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG]
                 );

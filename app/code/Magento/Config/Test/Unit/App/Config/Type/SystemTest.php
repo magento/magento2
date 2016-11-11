@@ -8,8 +8,9 @@ namespace Magento\Config\Test\Unit\App\Config\Type;
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
@@ -43,6 +44,11 @@ class SystemTest extends \PHPUnit_Framework_TestCase
      */
     private $configType;
 
+    /**
+     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     public function setUp()
     {
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
@@ -54,11 +60,15 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
             ->getMockForAbstractClass();
+        $this->serializer = $this->getMockBuilder(Serialize::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configType = new System(
             $this->source,
             $this->postProcessor,
             $this->fallback,
-            $this->cache
+            $this->cache,
+            $this->serializer
         );
     }
 
@@ -79,12 +89,22 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+
         $this->cache->expects($this->once())
             ->method('load')
             ->with(System::CONFIG_TYPE)
-            ->willReturn($isCached ? serialize(new DataObject($data)) : null);
+            ->willReturn($isCached ? $data : null);
+
+        if ($isCached) {
+            $this->serializer->expects($this->once())
+                ->method('unserialize')
+                ->willReturn($data);
+        }
 
         if (!$isCached) {
+            $this->serializer->expects($this->once())
+                ->method('serialize')
+                ->willReturn(serialize($data));
             $this->source->expects($this->once())
                 ->method('get')
                 ->willReturn($data);
@@ -99,7 +119,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             $this->cache->expects($this->once())
                 ->method('save')
                 ->with(
-                    serialize(new DataObject($data)),
+                    serialize($data),
                     System::CONFIG_TYPE,
                     [System::CACHE_TAG]
                 );

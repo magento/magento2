@@ -9,6 +9,8 @@ use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
@@ -43,19 +45,27 @@ class Scopes implements ConfigTypeInterface
     private $cachingNestedLevel;
 
     /**
+     * @var Serialize
+     */
+    private $serializer;
+
+    /**
      * System constructor.
      * @param ConfigSourceInterface $source
      * @param FrontendInterface $cache
      * @param int $cachingNestedLevel
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         ConfigSourceInterface $source,
         FrontendInterface $cache,
+        Serialize $serializer,
         $cachingNestedLevel = 1
     ) {
         $this->source = $source;
         $this->cache = $cache;
         $this->cachingNestedLevel = $cachingNestedLevel;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -69,12 +79,12 @@ class Scopes implements ConfigTypeInterface
             if (!$data) {
                 $this->data = new DataObject($this->source->get());
                 $this->cache->save(
-                    serialize($this->data),
+                    $this->serializer->serialize($this->data->getData()),
                     self::CONFIG_TYPE,
                     [Group::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG]
                 );
             } else {
-                $this->data = unserialize($data);
+                $this->data = new DataObject($this->serializer->unserialize($data));
             }
         }
 
