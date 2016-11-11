@@ -28,6 +28,23 @@ class AuthenticationPopup extends Form
     private $loadingMask = '.loading-mask';
 
     /**
+     * 'Create an Account' button.
+     *
+     * @var string
+     */
+    protected $createAccountButton = '.action.action-register.primary';
+
+    /**
+     * Click 'Create an Account' button.
+     *
+     * @return void
+     */
+    public function createAccount()
+    {
+        $this->_rootElement->find($this->createAccountButton)->click();
+    }
+
+    /**
      * Login customer on authentication popup.
      *
      * @param Customer $customer

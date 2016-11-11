@@ -91,18 +91,24 @@ class SelectCheckoutMethodStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->checkoutMethod === 'login') {
+        $this->processLogin();
+        $this->processRegister();
+    }
+
+    /**
+     * Process login action.
+     *
+     * @return void
+     */
+    private function processLogin()
+    {
+        if ($this->checkoutMethod == 'login') {
             if ($this->checkoutOnepage->getAuthenticationPopupBlock()->isVisible()) {
                 $this->checkoutOnepage->getAuthenticationPopupBlock()->loginCustomer($this->customer);
                 $this->clickProceedToCheckoutStep->run();
             } else {
                 $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
             }
-        }
-
-        if ($this->checkoutMethod === 'sign_in') {
-            $this->checkoutOnepage->getAuthenticationWrapperBlock()->signInLinkClick();
-            $this->checkoutOnepage->getAuthenticationWrapperBlock()->loginCustomer($this->customer);
         }
     }
 
@@ -120,16 +126,13 @@ class SelectCheckoutMethodStep implements TestStepInterface
     }
 
     /**
-     * Logout customer on frontend.
+     * Logout customer on fronted.
      *
      * @return void
      */
     public function cleanup()
     {
-        if ($this->checkoutMethod === 'login'
-            || $this->checkoutMethod === 'sign_in'
-            || $this->checkoutMethod === 'register_before_checkout'
-        ) {
+        if ($this->checkoutMethod === 'login' || $this->checkoutMethod === 'register_before_checkout') {
             $this->logoutCustomerOnFrontend->run();
         }
     }
