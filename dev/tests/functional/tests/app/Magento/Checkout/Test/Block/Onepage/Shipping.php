@@ -37,6 +37,39 @@ class Shipping extends Form
     private $addressModalBlock = '//*[@id="opc-new-shipping-address"]/../..';
 
     /**
+     * @var string
+     */
+    private $selectedAddress = '.shipping-address-item.selected-item';
+
+    /**
+     * New address button selector.
+     *
+     * @var string
+     */
+    private $newAddressButton = '.action-show-popup';
+
+    /**
+     * Locator for address select button.
+     *
+     * @var string
+     */
+    private $addressSelectButton = '.action-select-shipping-item';
+
+    /**
+     * Locator for shipping address select block.
+     *
+     * @var string
+     */
+    private $shippingAddressBlock = '.shipping-address-item';
+
+    /**
+     * Locator for shipping address select block.
+     *
+     * @var string
+     */
+    private $selectedShippingAddressBlock = '.selected-item';
+
+    /**
      * Click on "New Address" button.
      *
      * @return void
@@ -45,6 +78,16 @@ class Shipping extends Form
     {
         $this->waitForElementNotVisible($this->waitElement);
         $this->_rootElement->find($this->newAddressButton)->click();
+    }
+
+    /**
+     * 'Ship here' button click.
+     *
+     * @return void
+     */
+    public function clickShipHere()
+    {
+        $this->_rootElement->find($this->shipHereButton, Locator::SELECTOR_XPATH)->click();
     }
 
     /**
@@ -68,5 +111,64 @@ class Shipping extends Form
     public function getRequiredFields()
     {
         return $this->_rootElement->getElements("div .field._required");
+    }
+
+    /**
+     * @return array
+     */
+    public function getSelectedAddress()
+    {
+        return $this->_rootElement->find($this->selectedAddress, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Select address.
+     *
+     * @param string $address
+     * @return void
+     */
+    public function selectAddress($address)
+    {
+        $addresses = $this->_rootElement->getElements($this->shippingAddressBlock);
+        foreach ($addresses as $addressBlock) {
+            if (strpos($addressBlock->getText(), $address) === 0 && !$this->isAddressSelected($address)) {
+                $addressBlock->find($this->addressSelectButton)->click();
+                break;
+            }
+        }
+    }
+
+    /**
+     * Check if address selected.
+     *
+     * @param string $address
+     * @return bool
+     */
+    public function isAddressSelected($address)
+    {
+        $text = $this->_rootElement->find($this->shippingAddressBlock . $this->selectedShippingAddressBlock)->getText();
+
+        return $text == $address;
+    }
+
+    /**
+     * Checks if new address button is visible.
+     *
+     * @return bool
+     */
+    public function isNewAddressButtonVisible()
+    {
+        $button = $this->_rootElement->find($this->newAddressButton);
+        return $button->isVisible();
+    }
+
+    /**
+     * Clicks new address button.
+     *
+     * @return void
+     */
+    public function clickNewAddressButton()
+    {
+        $this->_rootElement->find($this->newAddressButton)->click();
     }
 }
