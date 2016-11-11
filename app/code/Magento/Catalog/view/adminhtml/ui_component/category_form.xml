@@ -375,19 +375,6 @@
                         <item name="source" xsi:type="string">category</item>
                         <item name="label" xsi:type="string" translate="true">URL Key</item>
                         <item name="sortOrder" xsi:type="number">10</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_default.url_key</item>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-            <field name="use_default.url_key">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Use Default</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="sortOrder" xsi:type="number">20</item>
                     </item>
                 </argument>
             </field>
