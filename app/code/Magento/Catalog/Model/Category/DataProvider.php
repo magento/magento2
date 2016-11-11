@@ -194,7 +194,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 && $category->getStoreId();
             $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
 
-            if (!$attributePath || !$canDisplayUseDefault || $attribute->getFrontendInput() === 'image') {
+            if (!$attributePath || !$canDisplayUseDefault) {
                 continue;
             }
 
@@ -228,15 +228,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function resolveParentInheritance(Category $category, array $meta)
     {
-        if (!$category->getParentId() || !$this->getArrayManager()->findPath('custom_use_parent_settings', $meta)) {
-            return $meta;
-        }
-
-        $meta = $this->getArrayManager()->merge(
-            [$this->getArrayManager()->findPath('custom_use_parent_settings', $meta), 'arguments/data/config'],
-            $meta,
-            ['visible' => false]
-        );
+//        if (!$category->getParentId() || !$this->getArrayManager()->findPath('custom_use_parent_settings', $meta)) {
+//            return $meta;
+//        }
+//
+//        $meta = $this->getArrayManager()->merge(
+//            [$this->getArrayManager()->findPath('custom_use_parent_settings', $meta), 'arguments/data/config'],
+//            $meta,
+//            ['visible' => false]
+//        );
 
         return $meta;
     }
