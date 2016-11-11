@@ -13,6 +13,7 @@ module.exports = {
     tmpLess: 'var/view_preprocessed/less/',
     tmpSource: 'var/view_preprocessed/source/',
     tmp: 'var',
+    deployedVersion: 'pub/static/deployed_version.txt',
     css: {
         setup: 'setup/pub/styles',
         updater: '../magento2-updater/pub/css'
