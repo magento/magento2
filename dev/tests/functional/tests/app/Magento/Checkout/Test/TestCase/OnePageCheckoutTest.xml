@@ -205,5 +205,26 @@
             <data name="configData" xsi:type="string">checkmo</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
+        <variation name="OnePageCheckoutTestVariation11" summary="Checkout as Customer using default address" ticketId="MAGETWO-42600, MAGETWO-42546">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">customer_UK_US_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">0</item>
+            </data>
+            <data name="billingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">0</item>
+            </data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+        </variation>
     </testCase>
 </config>
