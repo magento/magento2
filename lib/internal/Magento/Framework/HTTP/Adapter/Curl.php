@@ -175,6 +175,9 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         if ($method == \Zend_Http_Client::POST) {
             curl_setopt($this->_getResource(), CURLOPT_POST, true);
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
+        } elseif ($method == \Zend_Http_Client::PUT) {
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         } elseif ($method == \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
         }
