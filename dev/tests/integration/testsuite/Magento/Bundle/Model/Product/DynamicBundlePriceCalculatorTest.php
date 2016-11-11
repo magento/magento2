@@ -77,7 +77,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
     {
         return [
             '#1 Testing price for dynamic bundle product with one simple' => [
-                'strategy' => $this->getProductWithOneSimple(),
+                'strategy' => $this->getBundleConfiguration1(),
                 'expectedResults' => [
                     // just price from simple1
                     'minimalPrice' => 10,
@@ -87,7 +87,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for dynamic bundle product with three simples and different qty' => [
-                'strategy' => $this->getProductWithDifferentQty(),
+                'strategy' => $this->getBundleConfiguration2(),
                 'expectedResults' => [
                     // min price from simples 3*10 or 30
                     'minimalPrice' => 30,
@@ -97,14 +97,34 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#3 Testing price for dynamic bundle product with four simples and different price' => [
-                'strategy' => $this->getProductWithDifferentPrice(),
+                'strategy' => $this->getBundleConfiguration3(),
                 'expectedResults' => [
                     //  10
                     'minimalPrice' => 10,
                     // 10 + 20 + 30
                     'maximalPrice' => 60
                 ]
-            ]
+            ],
+
+            '#4 Testing price for dynamic bundle with two non required options' => [
+                'strategy' => $this->getBundleConfiguration4(),
+                'expectedResults' => [
+                    // 1 * 10
+                    'minimalPrice' => 10,
+                    // 3 * 20 + 1 * 10 + 3 * 20
+                    'maximalPrice' => 130
+                ]
+            ],
+
+            '#5 Testing price for dynamic bundle with two required options' => [
+                'strategy' => $this->getBundleConfiguration5(),
+                'expectedResults' => [
+                    // 1 * 10 + 1 * 10
+                    'minimalPrice' => 20,
+                    // 3 * 20 + 1 * 10 + 3 * 20
+                    'maximalPrice' => 130
+                ]
+            ],
         ];
     }
 
@@ -113,7 +133,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      *
      * @return array
      */
-    private function getProductWithOneSimple()
+    private function getBundleConfiguration1()
     {
         $optionsData = [
             [
@@ -142,7 +162,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      *
      * @return array
      */
-    private function getProductWithDifferentQty()
+    private function getBundleConfiguration2()
     {
         $optionsData = [
             [
@@ -179,7 +199,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      *
      * @return array
      */
-    private function getProductWithDifferentPrice()
+    private function getBundleConfiguration3()
     {
         $optionsData = [
             [
@@ -199,6 +219,100 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                         'sku' => 'simple3',
                         'qty' => 1,
                     ]
+                ]
+            ]
+        ];
+
+        return [
+            [
+                'modifierName' => 'addSimpleProduct',
+                'data' => [$optionsData]
+            ],
+        ];
+    }
+
+    /**
+     * Dynamic bundle with two non required options and special price
+     * @return array
+     */
+    private function getBundleConfiguration4()
+    {
+        $optionsData = [
+            [
+                'title' => 'Op1',
+                'required' => false,
+                'type' => 'radio',
+                'links' => [
+                    [
+                        'sku' => 'simple1',
+                        'qty' => 1,
+                    ],
+                    [
+                        'sku' => 'simple2',
+                        'qty' => 3,
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Op2',
+                'required' => false,
+                'type' => 'checkbox',
+                'links' => [
+                    [
+                        'sku' => 'simple1',
+                        'qty' => 1,
+                    ],
+                    [
+                        'sku' => 'simple2',
+                        'qty' => 3,
+                    ],
+                ]
+            ]
+        ];
+
+        return [
+            [
+                'modifierName' => 'addSimpleProduct',
+                'data' => [$optionsData]
+            ],
+        ];
+    }
+
+    /**
+     * Dynamic bundle with two required options
+     * @return array
+     */
+    private function getBundleConfiguration5()
+    {
+        $optionsData = [
+            [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'radio',
+                'links' => [
+                    [
+                        'sku' => 'simple1',
+                        'qty' => 1,
+                    ],
+                    [
+                        'sku' => 'simple2',
+                        'qty' => 3,
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Op2',
+                'required' => true,
+                'type' => 'checkbox',
+                'links' => [
+                    [
+                        'sku' => 'simple1',
+                        'qty' => 1,
+                    ],
+                    [
+                        'sku' => 'simple2',
+                        'qty' => 3,
+                    ],
                 ]
             ]
         ];

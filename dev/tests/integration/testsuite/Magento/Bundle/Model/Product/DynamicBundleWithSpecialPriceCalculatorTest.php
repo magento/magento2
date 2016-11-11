@@ -7,7 +7,7 @@
 namespace Magento\Bundle\Model\Product;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+ * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_special_price.php
  * @magentoAppArea frontend
  */
 class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
@@ -38,6 +38,24 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+
+        if (isset($expectedResults['regularMinimalPrice'])) {
+            $priceCode = \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE;
+            $this->assertEquals(
+                $expectedResults['regularMinimalPrice'],
+                $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
+                'Failed to check minimal regular price on product'
+            );
+        }
+
+        if (isset($expectedResults['regularMaximalPrice'])) {
+            $priceCode = \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE;
+            $this->assertEquals(
+                $expectedResults['regularMaximalPrice'],
+                $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
+                'Failed to check minimal regular price on product'
+            );
+        }
     }
 
     /**
@@ -48,10 +66,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     public function getTestCases()
     {
         return [
-            '
-                #1 Testing price for dynamic bundle 
-                with one required option and special price
-            ' => [
+            '#1 Testing price for dynamic bundle with one required option and special price' => [
                 'strategy' => $this->getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
@@ -61,10 +76,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 ]
             ],
 
-            '
-                #2 Testing price for dynamic bundle 
-                with one non required option and special price
-            ' => [
+            '#2 Testing price for dynamic bundle with one non required option and special price' => [
                 'strategy' => $this->getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
@@ -82,8 +94,8 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
-                    // 0.5 * (1 * 10 + 3 * 20)
-                    'maximalPrice' => 35
+                    // 0.5 * (1 * 10 + 3 * 30)
+                    'maximalPrice' => 50
                 ]
             ],
 
@@ -93,93 +105,41 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ' => [
                 'strategy' => $this->getBundleConfiguration4(),
                 'expectedResults' => [
-                    'minimalPrice' => 9.99,
-                    'maximalPrice' => 21.97
+                    // 0.5 * (min (1 * 9.9, 2.5 * 4))
+                    'minimalPrice' => 4.95,
+                    // 0.5 * ( 1 * 9.9 +  2.5 * 4)
+                    'maximalPrice' => 9.95
                 ]
             ],
 
-            '
-                #5 Testing price for dynamic bundle 
-                with one required radio type option, two simples and special price
-            ' => [
+            '#5 Testing price for dynamic bundle with one required option, one non required and special price' => [
                 'strategy' => $this->getBundleConfiguration5(),
                 'expectedResults' => [
-                    // 0.5 * 1 * 10
-                    'minimalPrice' => 5,
-                    // 0.5 * 3 * 20
-                    'maximalPrice' => 30
+                    // 0.5 * (3 * 2.5)
+                    'minimalPrice' => 3.75,
+                    // 0.5 * (3 * 13 + 1 * 30 + 1 * 10)
+                    'maximalPrice' => 39.5,
+                    // 1 * 10
+                    'regularMinimalPrice' => '10',
+                    // 3 * 20 + (30 * 1 + 13 * 3)
+                    'regularMaximalPrice' => '129',
                 ]
             ],
 
-            '
-                #6 Testing price for dynamic bundle 
-                with two required options and special price
-            ' => [
+            '#6 Testing price for dynamic bundle with one simple product with special price' => [
                 'strategy' => $this->getBundleConfiguration6(),
                 'expectedResults' => [
-                    // 0.5 * (1 * 10 + 1 * 10)
-                    'minimalPrice' => 10,
-                    // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
-                ]
-            ],
-
-            '
-                #7 Testing price for dynamic bundle 
-                with one required option, one non required and special price
-            ' => [
-                'strategy' => $this->getBundleConfiguration7(),
-                'expectedResults' => [
-                    // 0.5 * (1 * 10)
-                    'minimalPrice' => 5,
-                    // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
-                ]
-            ],
-
-            '
-                #8 Testing price for dynamic bundle 
-                with two non required options and special price
-            ' => [
-                'strategy' => $this->getBundleConfiguration8(),
-                'expectedResults' => [
-                    // 0.5 * (1 * 10)
-                    'minimalPrice' => 5,
-                    // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
-                ]
-            ],
-
-            '
-                #9 Testing price for dynamic bundle 
-                with one simple product with special price
-            ' => [
-                'strategy' => $this->getBundleConfiguration9(),
-                'expectedResults' => [
-                    // 1 * 3.5
-                    'minimalPrice' => 3.5,
-                    // 1 * 20
-                    'maximalPrice' => 20
-                ]
-            ],
-
-            '
-                #10 Testing price for dynamic bundle
-                with special price and with one simple product with special price
-            ' => [
-                'strategy' => $this->getBundleConfiguration10(),
-                'expectedResults' => [
-                    // 0.5 * 1 * 3.5
-                    'minimalPrice' => 1.75,
-                    // 0.5 * 3 * 20
-                    'maximalPrice' => 30
+                    // 0.5 * min(4 * 2.5, 1 * 9.9)
+                    'minimalPrice' => 4.95,
+                    // 0.5 * max(4 * 2.5, 1 * 9.9)
+                    'maximalPrice' => 5
                 ]
             ],
         ];
     }
 
     /**
-     * Dynamic bundle with one required option and special price
+     * Dynamic bundle with one required option
      * @return array
      */
     private function getBundleConfiguration1()
@@ -199,10 +159,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
 
         return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
             [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
@@ -232,10 +188,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -259,7 +211,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                         'qty' => 1,
                     ],
                     [
-                        'sku' => 'simple2',
+                        'sku' => 'simple3',
                         'qty' => 3,
                     ],
                 ]
@@ -267,10 +219,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
 
         return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
             [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
@@ -291,26 +239,18 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 'type' => 'checkbox',
                 'links' => [
                     [
-                        'sku' => 'simple1',
+                        'sku' => 'simple5',
                         'qty' => 1,
                     ],
                     [
                         'sku' => 'simple2',
-                        'qty' => 2,
+                        'qty' => 4,
                     ],
                 ]
             ]
         ];
 
         return [
-            [
-                'modifierName' => 'addSpecialPriceForSimple',
-                'data' => ['simple1', 9.99]
-            ],
-            [
-                'modifierName' => 'addSpecialPriceForSimple',
-                'data' => ['simple2', 5.99]
-            ],
             [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
@@ -319,7 +259,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     }
 
     /**
-     * Dynamic bundle with one required radio type option, two simples and special price
+     * Dynamic bundle with one required option, one non required and special price
      * @return array
      */
     private function getBundleConfiguration5()
@@ -339,14 +279,25 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                         'qty' => 3,
                     ],
                 ]
+            ],
+            [
+                'title' => 'Op2',
+                'required' => false,
+                'type' => 'checkbox',
+                'links' => [
+                    [
+                        'sku' => 'simple3',
+                        'qty' => 1,
+                    ],
+                    [
+                        'sku' => 'simple4',
+                        'qty' => 3,
+                    ],
+                ]
             ]
         ];
 
         return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
             [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
@@ -354,8 +305,9 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
+
     /**
-     * Dynamic bundle with two required options and special price
+     * Dynamic bundle with one simple product with special price
      * @return array
      */
     private function getBundleConfiguration6()
@@ -367,164 +319,11 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 'type' => 'radio',
                 'links' => [
                     [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
                         'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ],
-            [
-                'title' => 'Op2',
-                'required' => true,
-                'type' => 'checkbox',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
+                        'qty' => 4,
                     ],
                     [
-                        'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ]
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-        ];
-    }
-
-    /**
-     * Dynamic bundle with one required option, one non required and special price
-     * @return array
-     */
-    private function getBundleConfiguration7()
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => false,
-                'type' => 'radio',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
-                        'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ],
-            [
-                'title' => 'Op2',
-                'required' => true,
-                'type' => 'checkbox',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
-                        'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ]
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-        ];
-    }
-
-    /**
-     * Dynamic bundle with two non required options and special price
-     * @return array
-     */
-    private function getBundleConfiguration8()
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => false,
-                'type' => 'radio',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
-                        'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ],
-            [
-                'title' => 'Op2',
-                'required' => false,
-                'type' => 'checkbox',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
-                        'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ]
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-        ];
-    }
-
-    /**
-     * Dynamic bundle with one simple product with special price
-     * @return array
-     */
-    private function getBundleConfiguration9()
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => true,
-                'type' => 'radio',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
-                        'sku' => 'simple2',
+                        'sku' => 'simple5',
                         'qty' => 1,
                     ],
                 ]
@@ -533,80 +332,9 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPriceForSimple',
-                'data' => ['simple1', 3.5]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
         ];
-    }
-
-    /**
-     * Dynamic bundle with special price and with one simple product with special price
-     * @return array
-     */
-    private function getBundleConfiguration10()
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => true,
-                'type' => 'radio',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                    [
-                        'sku' => 'simple2',
-                        'qty' => 3,
-                    ],
-                ]
-            ]
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSpecialPriceForSimple',
-                'data' => ['simple1', 3.5]
-            ],
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-        ];
-    }
-
-    /**
-     * @param \Magento\Catalog\Model\Product $bundleProduct
-     * @param int $discount
-     * @return \Magento\Catalog\Model\Product
-     */
-    protected function addSpecialPrice(\Magento\Catalog\Model\Product $bundleProduct, $discount)
-    {
-        $bundleProduct->setSpecialPrice($discount);
-
-        return $bundleProduct;
-    }
-
-    /**
-     * @param \Magento\Catalog\Model\Product $bundleProduct
-     * @param string $sku
-     * @param int $price
-     * @return \Magento\Catalog\Model\Product
-     */
-    protected function addSpecialPriceForSimple(\Magento\Catalog\Model\Product $bundleProduct, $sku, $price)
-    {
-        $simple = $this->productRepository->get($sku, false, null, true);
-        $simple->setSpecialPrice($price);
-        $this->productRepository->save($simple);
-
-        return $bundleProduct;
     }
 }

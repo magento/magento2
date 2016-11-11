@@ -38,7 +38,7 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
     /**
      * @param array $strategyModifiers
      * @param string $productSku
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
@@ -54,12 +54,12 @@ abstract class BundlePriceAbstract extends \PHPUnit_Framework_TestCase
                 $bundleProduct = call_user_func_array([$this, $modifier['modifierName']], $modifier['data']);
             } else {
                 throw new \Magento\Framework\Exception\InputException(
-                    sprintf('Modifier %s does not exists', $modifier['modifierName'])
+                    __('Modifier %s does not exists', $modifier['modifierName'])
                 );
             }
         }
 
-        return $this->productRepository->save($bundleProduct);
+        $this->productRepository->save($bundleProduct);
     }
 
     /**

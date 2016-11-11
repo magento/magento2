@@ -59,17 +59,6 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 ]
             ],
 
-            '#2 Testing price for dynamic bundle with one required option and special price' => [
-                'strategy' => $this->getBundleProductConfiguration2(),
-                'expectedResults' => [
-                    // 0.5 * 10 * 0.9
-                    'minimalPrice' => 4.5,
-
-                    // 0.5 * 10 * 0.9
-                    'maximalPrice' => 4.5
-                ]
-            ],
-
             '#3 Testing price for dynamic bundle with one non required option' => [
                 'strategy' => $this->getBundleProductConfiguration3(),
                 'expectedResults' => [
@@ -170,38 +159,6 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
         ];
 
         return [
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-        ];
-    }
-
-    /**
-     * Dynamic bundle with one required option and special price
-     * @return array
-     */
-    private function getBundleProductConfiguration2()
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => true,
-                'type' => 'checkbox',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                    ],
-                ]
-            ]
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
             [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
@@ -472,17 +429,5 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
                 'data' => [$optionsData]
             ],
         ];
-    }
-
-    /**
-     * @param \Magento\Catalog\Model\Product $bundleProduct
-     * @param int $discount
-     * @return \Magento\Catalog\Model\Product
-     */
-    protected function addSpecialPrice(\Magento\Catalog\Model\Product $bundleProduct, $discount)
-    {
-        $bundleProduct->setSpecialPrice($discount);
-
-        return $bundleProduct;
     }
 }

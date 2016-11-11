@@ -197,7 +197,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($product->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
             $this->addPriceData();
             if ($useRegularPrice) {
-                $minimalPriceExpression = 'minimal_price';
+                $minimalPriceExpression = 'price';
             } else {
                 $this->getCatalogRuleProcessor()->addPriceData($this, 'selection.product_id');
                 $minimalPriceExpression = 'LEAST(minimal_price, IFNULL(catalog_rule_price, minimal_price))';
