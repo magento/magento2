@@ -102,7 +102,7 @@ class FillShippingAddressStep implements TestStepInterface
                 'address',
                 ['dataset' => $this->shippingAddressCustomer['new']]
             );
-            $this->checkoutOnepage->getShippingBlock()->clickNewAddressButton();
+            $this->checkoutOnepage->getShippingBlock()->clickPopupNewAddressButton();
             $this->checkoutOnepage->getShippingAddressPopupBlock()->fill($shippingAddress)->clickSaveAddressButton();
         }
         if (isset($this->shippingAddressCustomer['added'])) {

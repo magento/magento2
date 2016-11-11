@@ -46,7 +46,7 @@ class Shipping extends Form
      *
      * @var string
      */
-    private $newAddressButton = '.action-show-popup';
+    private $popupSelector = '.action-show-popup';
 
     /**
      * Locator for address select button.
@@ -78,16 +78,6 @@ class Shipping extends Form
     {
         $this->waitForElementNotVisible($this->waitElement);
         $this->_rootElement->find($this->newAddressButton)->click();
-    }
-
-    /**
-     * 'Ship here' button click.
-     *
-     * @return void
-     */
-    public function clickShipHere()
-    {
-        $this->_rootElement->find($this->shipHereButton, Locator::SELECTOR_XPATH)->click();
     }
 
     /**
@@ -152,23 +142,12 @@ class Shipping extends Form
     }
 
     /**
-     * Checks if new address button is visible.
-     *
-     * @return bool
-     */
-    public function isNewAddressButtonVisible()
-    {
-        $button = $this->_rootElement->find($this->newAddressButton);
-        return $button->isVisible();
-    }
-
-    /**
      * Clicks new address button.
      *
      * @return void
      */
-    public function clickNewAddressButton()
+    public function clickPopupNewAddressButton()
     {
-        $this->_rootElement->find($this->newAddressButton)->click();
+        $this->_rootElement->find($this->popupSelector)->click();
     }
 }
