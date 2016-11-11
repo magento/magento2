@@ -7,6 +7,34 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="OnePageCheckout within Offline Payment Methods" ticketId="MAGETWO-27485">
+        <variation name="OnePageCheckoutUsingLoginPopup" summary="Customer is redirected to checkout on login if guest is disabled, flow for existed Customer" ticketId="MAGETWO-49916">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, disable_guest_checkout, disable_customer_redirect_after_logging</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
+        <variation name="OnePageCheckoutUsingRegisterLink" summary="Customer is redirected to checkout on login if guest is disabled, flow with registration new Customer" ticketId="MAGETWO-49917">
+            <data name="issue" xsi:type="string">MAGETWO-59816: Redirect works improperly in a browser incognito mode</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">register_customer</data>
+            <data name="checkoutMethod" xsi:type="string">register_before_checkout</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, disable_guest_checkout, disable_customer_redirect_after_logging, enable_https_frontend_only</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
         <variation name="OnePageCheckoutTestVariation1" summary="Checkout as UK guest with virtual product and downloadable product using coupon for not logged in customers">
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>

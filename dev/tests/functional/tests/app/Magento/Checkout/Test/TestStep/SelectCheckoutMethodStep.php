@@ -8,6 +8,7 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
 
@@ -52,8 +53,16 @@ class SelectCheckoutMethodStep implements TestStepInterface
     private $clickProceedToCheckoutStep;
 
     /**
+     * Customer account create page instance.
+     *
+     * @var CustomerAccountCreate
+     */
+    private $customerAccountCreatePage;
+
+    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
+     * @param CustomerAccountCreate $customerAccountCreatePage
      * @param Customer $customer
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
      * @param ClickProceedToCheckoutStep $clickProceedToCheckoutStep
@@ -61,12 +70,14 @@ class SelectCheckoutMethodStep implements TestStepInterface
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
+        CustomerAccountCreate $customerAccountCreatePage,
         Customer $customer,
         LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
         ClickProceedToCheckoutStep $clickProceedToCheckoutStep,
         $checkoutMethod
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
+        $this->customerAccountCreatePage = $customerAccountCreatePage;
         $this->customer = $customer;
         $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
         $this->clickProceedToCheckoutStep = $clickProceedToCheckoutStep;
@@ -80,7 +91,18 @@ class SelectCheckoutMethodStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->checkoutMethod === 'login') {
+        $this->processLogin();
+        $this->processRegister();
+    }
+
+    /**
+     * Process login action.
+     *
+     * @return void
+     */
+    private function processLogin()
+    {
+        if ($this->checkoutMethod == 'login') {
             if ($this->checkoutOnepage->getAuthenticationPopupBlock()->isVisible()) {
                 $this->checkoutOnepage->getAuthenticationPopupBlock()->loginCustomer($this->customer);
                 $this->clickProceedToCheckoutStep->run();
@@ -91,13 +113,26 @@ class SelectCheckoutMethodStep implements TestStepInterface
     }
 
     /**
+     * Process customer register action.
+     *
+     * @return void
+     */
+    private function processRegister()
+    {
+        if ($this->checkoutMethod === 'register_before_checkout') {
+            $this->checkoutOnepage->getAuthenticationPopupBlock()->createAccount();
+            $this->customerAccountCreatePage->getRegisterForm()->registerCustomer($this->customer);
+        }
+    }
+
+    /**
      * Logout customer on fronted.
      *
      * @return void
      */
     public function cleanup()
     {
-        if ($this->checkoutMethod === 'login') {
+        if ($this->checkoutMethod === 'login' || $this->checkoutMethod === 'register_before_checkout') {
             $this->logoutCustomerOnFrontend->run();
         }
     }
