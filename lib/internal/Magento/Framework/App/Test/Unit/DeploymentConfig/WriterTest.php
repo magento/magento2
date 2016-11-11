@@ -135,17 +135,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ConfigFilePool::APP_CONFIG => 'config.php'
         ];
 
-        $testSetExisting = [
-            ConfigFilePool::APP_CONFIG => [
-                'foo' => 'bar',
-                'key' => 'value',
-                'baz' => [
-                    'test' => 'value',
-                    'test1' => 'value1'
-                ]
-            ],
-        ];
-
         $testSetUpdate = [
             ConfigFilePool::APP_CONFIG => [
                 'baz' => [
