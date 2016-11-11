@@ -8,6 +8,8 @@
 
 namespace Magento\Framework;
 
+use Magento\Framework\Url\HostChecker;
+
 /**
  * URL
  *
@@ -179,6 +181,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $escaper;
 
     /**
+     * @var HostChecker
+     */
+    private $hostChecker;
+
+    /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
@@ -191,6 +198,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor
      * @param string $scopeType
      * @param array $data
+     * @param HostChecker|null $hostChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -205,7 +213,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor,
         $scopeType,
-        array $data = []
+        array $data = [],
+        HostChecker $hostChecker = null
     ) {
         $this->_request = $request;
         $this->_routeConfig = $routeConfig;
@@ -218,6 +227,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_scopeConfig = $scopeConfig;
         $this->routeParamsPreprocessor = $routeParamsPreprocessor;
         $this->_scopeType = $scopeType;
+        $this->hostChecker = $hostChecker ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(HostChecker::class);
         parent::__construct($data);
     }
 
@@ -1086,17 +1097,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function isOwnOriginUrl()
     {
-        $scopeDomains = [];
-        $referer = parse_url($this->_request->getServer('HTTP_REFERER'), PHP_URL_HOST);
-        foreach ($this->_scopeResolver->getScopes() as $scope) {
-            $scopeDomains[] = parse_url($scope->getBaseUrl(), PHP_URL_HOST);
-            $scopeDomains[] = parse_url($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true), PHP_URL_HOST);
-        }
-        $scopeDomains = array_unique($scopeDomains);
-        if (empty($referer) || in_array($referer, $scopeDomains)) {
-            return true;
-        }
-        return false;
+        return $this->hostChecker->isOwnOrigin($this->_request->getServer('HTTP_REFERER'));
     }
 
     /**
