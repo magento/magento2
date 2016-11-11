@@ -64,6 +64,26 @@ class Topmenu extends Block
     }
 
     /**
+     * Hover on category from top menu by name.
+     *
+     * @param string $categoryName
+     * @return void
+     */
+    public function hoverCategoryByName($categoryName)
+    {
+        $rootElement = $this->_rootElement;
+        $category = $this->waitLoadTopMenu($categoryName);
+        if ($category[1]) {
+            $rootElement->waitUntil(
+                function () use ($category) {
+                    return $category[0]->isVisible() ? true : null;
+                }
+            );
+        }
+        $category[0]->hover();
+    }
+
+    /**
      * Check is visible category in top menu by name
      *
      * @param string $categoryName
