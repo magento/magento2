@@ -11,7 +11,6 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Login.
  * Form for frontend login.
  */
 class Login extends Form
