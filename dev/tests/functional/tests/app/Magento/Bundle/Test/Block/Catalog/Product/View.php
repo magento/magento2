@@ -6,6 +6,7 @@
 
 namespace Magento\Bundle\Test\Block\Catalog\Product;
 
+use Magento\Bundle\Test\Block\Catalog\Product\View\Summary;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -45,18 +46,11 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     protected $newsletterFormSelector = '#newsletter-validate-detail[novalidate="novalidate"]';
 
     /**
-     * Selector for Bundle Summary section.
+     * Summary Block selector.
      *
      * @var string
      */
-    protected $bundleSummarySelector = '#bundle-summary > .bundle li div div';
-
-    /**
-     * Selector for Customized Bundle price block.
-     *
-     * @var string
-     */
-    protected $customizedBundlePriceSelector = '.bundle-info';
+    private $summaryBlockSelector = '#bundleSummary';
 
     /**
      * Get bundle options block.
@@ -68,6 +62,19 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         return $this->blockFactory->create(
             \Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle::class,
             ['element' => $this->_rootElement->find($this->bundleBlock, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
+     * Get bundle Summary block.
+     *
+     * @return Summary
+     */
+    public function getBundleSummaryBlock()
+    {
+        return $this->blockFactory->create(
+            Summary::class,
+            ['element' => $this->_rootElement->find($this->summaryBlockSelector)]
         );
     }
 
@@ -153,15 +160,5 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         }
 
         $this->getBundleBlock()->fillBundleOptions($optionsData);
-    }
-
-    /**
-     * Get Bundle Summary row items.
-     *
-     * @return \Magento\Mtf\Client\ElementInterface[]
-     */
-    public function getBundleSummary()
-    {
-        return $this->_rootElement->getElements($this->bundleSummarySelector, Locator::SELECTOR_CSS);
     }
 }
