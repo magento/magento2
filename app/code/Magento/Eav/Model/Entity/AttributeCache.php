@@ -9,8 +9,6 @@ namespace Magento\Eav\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Cache\StateInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -45,11 +43,6 @@ class AttributeCache
      * @var array
      */
     private $unsupportedTypes;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * AttributeCache constructor.
@@ -97,7 +90,7 @@ class AttributeCache
             $cacheKey = self::ATTRIBUTES_CACHE_PREFIX . $entityType . $suffix;
             $attributesData = $this->cache->load($cacheKey);
             if ($attributesData) {
-                $attributes = $this->getSerializer()->unserialize($attributesData);
+                $attributes = unserialize($attributesData);
                 $this->attributeInstances[$entityType . $suffix] = $attributes;
                 return $attributes;
             }
@@ -121,7 +114,7 @@ class AttributeCache
         $this->attributeInstances[$entityType . $suffix] = $attributes;
         if ($this->isAttributeCacheEnabled()) {
             $cacheKey = self::ATTRIBUTES_CACHE_PREFIX . $entityType . $suffix;
-            $attributesData = $this->getSerializer()->serialize($attributes);
+            $attributesData = serialize($attributes);
             $this->cache->save(
                 $attributesData,
                 $cacheKey,
@@ -152,20 +145,5 @@ class AttributeCache
             );
         }
         return true;
-    }
-
-    /**
-     * Retrieve handler which allows serialize/deserialize data
-     *
-     * @deprecated
-     * @return SerializerInterface
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = ObjectManager::getInstance()->get(Serialize::class);
-        }
-
-        return $this->serializer;
     }
 }

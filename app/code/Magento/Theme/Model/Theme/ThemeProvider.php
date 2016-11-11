@@ -6,8 +6,6 @@
 namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\App\DeploymentConfig;
 
@@ -47,11 +45,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     private $deploymentConfig;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * ThemeProvider constructor.
      *
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory
@@ -84,13 +77,13 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $theme = $this->cache->load('theme'. $fullPath);
         if ($theme) {
-            $this->themes[$fullPath] = $this->getSerializer()->unserialize($theme);
+            $this->themes[$fullPath] = unserialize($theme);
             return $this->themes[$fullPath];
         }
         $themeCollection = $this->collectionFactory->create();
         $item = $themeCollection->getThemeByFullPath($fullPath);
         if ($item->getId()) {
-            $themeData = $this->getSerializer()->serialize($item);
+            $themeData = serialize($item);
             $this->cache->save($themeData, 'theme' . $fullPath);
             $this->cache->save($themeData, 'theme-by-id-' . $item->getId());
             $this->themes[$fullPath] = $item;
@@ -122,14 +115,14 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         }
         $theme = $this->cache->load('theme-by-id-' . $themeId);
         if ($theme) {
-            $this->themes[$themeId] = $this->getSerializer()->unserialize($theme);
+            $this->themes[$themeId] = unserialize($theme);
             return $this->themes[$themeId];
         }
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = $this->themeFactory->create();
         $themeModel->load($themeId);
         if ($themeModel->getId()) {
-            $this->cache->save($this->getSerializer()->serialize($themeModel), 'theme-by-id-' . $themeId);
+            $this->cache->save(serialize($themeModel), 'theme-by-id-' . $themeId);
             $this->themes[$themeId] = $themeModel;
         }
         return $themeModel;
@@ -157,20 +150,5 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $this->deploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
         }
         return $this->deploymentConfig;
-    }
-
-    /**
-     * Retrieve handler which allows serialize/deserialize data
-     *
-     * @deprecated
-     * @return SerializerInterface
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = ObjectManager::getInstance()->get(Serialize::class);
-        }
-
-        return $this->serializer;
     }
 }

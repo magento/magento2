@@ -9,9 +9,6 @@ namespace Magento\User\Model\ResourceModel;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\User\Model\User as ModelUser;
 
 /**
@@ -36,11 +33,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * Construct
@@ -624,20 +616,5 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ->limit(1),
             [':user_id' => $userId]
         );
-    }
-
-    /**
-     * Retrieve handler which allows serialize/deserialize data
-     *
-     * @deprecated
-     * @return SerializerInterface
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = ObjectManager::getInstance()->get(Serialize::class);
-        }
-
-        return $this->serializer;
     }
 }
