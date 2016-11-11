@@ -68,6 +68,13 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
     protected $checkoutMethod;
 
     /**
+     * Shipping carrier and method.
+     *
+     * @var array
+     */
+    protected $shipping;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param AssertBillingAddressAbsentInPayment $assertBillingAddressAbsentInPayment
@@ -77,6 +84,8 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
      * @param string $checkoutMethod
      * @param array $products
      * @param array $prices
+     * @param array $shipping
+     *
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
@@ -88,7 +97,9 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         $checkoutMethod,
 
         array $products,
-        array $prices = []
+        array $prices = [],
+        array $shipping = []
+
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
@@ -99,6 +110,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         $this->checkoutMethod = $checkoutMethod;
         $this->products = $products;
         $this->prices = $prices;
+        $this->shipping = $shipping;
     }
 
     /**
@@ -112,7 +124,9 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
 
         $this->assertBillingAddressAbsentInPayment->processAssert($this->checkoutOnepage);
 
-        if ($this->checkoutMethod === 'guest') {
+        if ($this->checkoutMethod === 'guest' &&
+            empty($this->shipping['shipping_method']) &&
+            empty($this->shipping['shipping_service'])) {
             $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
         }
 

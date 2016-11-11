@@ -10,15 +10,14 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertBillingAddressAbsentInShoppingCart
- * Assert billing address is not present in selected payment method
+ * Assert billing address is not present in selected payment method.
  */
 class AssertBillingAddressAbsentInPayment extends AbstractConstraint
 {
     /**
-     * Assert billing address is not present in selected payment method
+     * Assert billing address is not present in selected payment method.
      *
-     * @param CheckoutOnepage $checkoutOnepage,
+     * @param CheckoutOnepage $checkoutOnepage
      * @return void
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage)
@@ -26,7 +25,8 @@ class AssertBillingAddressAbsentInPayment extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertFalse(
             $checkoutOnepage->getPaymentBlock()
                 ->getSelectedPaymentMethodBlock()
-                ->getBillingBlock()->isVisible(),
+                ->getBillingBlock()
+                ->isVisible(),
             'Billing address is present in payment method'
         );
     }
