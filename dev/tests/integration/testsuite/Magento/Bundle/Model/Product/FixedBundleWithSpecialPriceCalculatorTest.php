@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 use \Magento\Bundle\Api\Data\LinkInterface;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
+ * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_special_price.php
  * @magentoAppArea frontend
  */
 class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
@@ -52,23 +52,9 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         return [
             '
                 #1 Testing price for fixed bundle product 
-                without any discounts, sub items and options
-            ' => [
-                'strategy' => $this->getBundleConfiguration1(),
-                'expectedResults' => [
-                    // just product price
-                    'minimalPrice' => 110,
-
-                    // just product price
-                    'maximalPrice' => 110
-                ]
-            ],
-
-            '
-                #2 Testing price for fixed bundle product 
                 with special price and without any sub items and options
             ' => [
-                'strategy' => $this->getBundleConfiguration2(),
+                'strategy' => $this->getBundleConfiguration1(),
                 'expectedResults' => [
                     // 110 * 0.5
                     'minimalPrice' => 55,
@@ -79,78 +65,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #3 Testing price for fixed bundle product 
-                with fixed sub items, fixed options and without any discounts
-            ' => [
-                'strategy' => $this->getBundleConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED,
-                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
-                ),
-                'expectedResults' => [
-                    // 110 + 1 * 20 + 100
-                    'minimalPrice' => 230,
-
-                    // 110 + 1 * 20 + 100
-                    'maximalPrice' => 230
-                ]
-            ],
-
-            '
-                #4 Testing price for fixed bundle product 
-                with percent sub items, percent options and without any discounts
-            ' => [
-                'strategy' => $this->getBundleConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT,
-                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
-                ),
-                'expectedResults' => [
-                    // 110 + 110 * 0.2 + 110 * 1
-                    'minimalPrice' => 242,
-
-                    // 110 + 110 * 0.2 + 110 * 1
-                    'maximalPrice' => 242
-                ]
-            ],
-
-            '
-                #5 Testing price for fixed bundle product 
-                with fixed sub items, percent options and without any discounts
-            ' => [
-                'strategy' => $this->getBundleConfiguration3(
-                    LinkInterface::PRICE_TYPE_FIXED,
-                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
-                ),
-                'expectedResults' => [
-                    // 110 + 1 * 20 + 110 * 1
-                   'minimalPrice' => 240,
-
-                    // 110 + 1 * 20 + 110 * 1
-                   'maximalPrice' => 240
-                ]
-            ],
-
-            '
-                #6 Testing price for fixed bundle product 
-                with percent sub items, fixed options and without any discounts
-            ' => [
-                'strategy' => $this->getBundleConfiguration3(
-                    LinkInterface::PRICE_TYPE_PERCENT,
-                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
-                ),
-                'expectedResults' => [
-                    // 110 + 110 * 0.2 + 100
-                   'minimalPrice' => 232,
-
-                    // 110 + 110 * 0.2 + 100
-                   'maximalPrice' => 232
-                ]
-            ],
-
-            '
-                #7 Testing price for fixed bundle product 
+                #2 Testing price for fixed bundle product 
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategy' => $this->getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -164,10 +82,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #8 Testing price for fixed bundle product 
+                #3 Testing price for fixed bundle product 
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategy' => $this->getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -181,10 +99,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #9 Testing price for fixed bundle product 
+                #4 Testing price for fixed bundle product 
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategy' => $this->getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -198,10 +116,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #10 Testing price for fixed bundle product 
+                #5 Testing price for fixed bundle product 
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategy' => $this->getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -215,10 +133,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #11 Testing price for fixed bundle product 
+                #6 Testing price for fixed bundle product 
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategy' => $this->getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -232,10 +150,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #12 Testing price for fixed bundle product 
+                #7 Testing price for fixed bundle product 
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategy' => $this->getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -249,10 +167,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #13 Testing price for fixed bundle product 
+                #8 Testing price for fixed bundle product 
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategy' => $this->getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -266,10 +184,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #14 Testing price for fixed bundle product 
+                #9 Testing price for fixed bundle product 
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategy' => $this->getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -283,10 +201,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #15 Testing price for fixed bundle product 
+                #10 Testing price for fixed bundle product 
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategy' => $this->getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -300,10 +218,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #16 Testing price for fixed bundle product 
+                #11 Testing price for fixed bundle product 
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategy' => $this->getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -317,10 +235,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #17 Testing price for fixed bundle product 
+                #12 Testing price for fixed bundle product 
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategy' => $this->getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -334,10 +252,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #18 Testing price for fixed bundle product 
+                #13 Testing price for fixed bundle product 
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategy' => $this->getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -351,10 +269,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #19 Testing price for fixed bundle product 
+                #14 Testing price for fixed bundle product 
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategy' => $this->getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -368,10 +286,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #20 Testing price for fixed bundle product 
+                #15 Testing price for fixed bundle product 
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategy' => $this->getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -385,10 +303,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #21 Testing price for fixed bundle product 
+                #16 Testing price for fixed bundle product 
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategy' => $this->getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -402,10 +320,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #22 Testing price for fixed bundle product 
+                #17 Testing price for fixed bundle product 
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategy' => $this->getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -419,10 +337,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #23 Testing price for fixed bundle product 
+                #18 Testing price for fixed bundle product 
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration8(
+                'strategy' => $this->getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -436,10 +354,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #24 Testing price for fixed bundle product 
+                #19 Testing price for fixed bundle product 
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration8(
+                'strategy' => $this->getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -453,10 +371,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #25 Testing price for fixed bundle product 
+                #20 Testing price for fixed bundle product 
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration8(
+                'strategy' => $this->getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -470,10 +388,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #26 Testing price for fixed bundle product 
+                #21 Testing price for fixed bundle product 
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration8(
+                'strategy' => $this->getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -487,10 +405,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #27 Testing price for fixed bundle product 
+                #22 Testing price for fixed bundle product 
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration9(
+                'strategy' => $this->getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -504,10 +422,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #28 Testing price for fixed bundle product 
+                #23 Testing price for fixed bundle product 
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration9(
+                'strategy' => $this->getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -521,10 +439,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #29 Testing price for fixed bundle product 
+                #24 Testing price for fixed bundle product 
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration9(
+                'strategy' => $this->getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -538,10 +456,10 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #30 Testing price for fixed bundle product 
+                #25 Testing price for fixed bundle product 
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration9(
+                'strategy' => $this->getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -557,7 +475,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     }
 
     /**
-     * Fixed bundle product without any discounts, sub items and options
+     * Fixed bundle product with special price and without any sub items and options
      * @return array
      */
     private function getBundleConfiguration1()
@@ -566,73 +484,12 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     }
 
     /**
-     * Fixed bundle product with special price and without any sub items and options
-     * @return array
-     */
-    private function getBundleConfiguration2()
-    {
-        return [
-            [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-        ];
-    }
-
-    /**
-     * Fixed bundle product with required option, custom option and without any discounts
-     * @param $selectionsPriceType
-     * @param $customOptionsPriceType
-     * @return array
-     */
-    private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
-    {
-        $optionsData = [
-            [
-                'title' => 'Op1',
-                'required' => true,
-                'type' => 'checkbox',
-                'links' => [
-                    [
-                        'sku' => 'simple1',
-                        'qty' => 1,
-                        'price' => 20,
-                        'price_type' => $selectionsPriceType
-                    ],
-                ]
-            ],
-        ];
-
-        $customOptionsData = [
-            [
-                'price_type' => $customOptionsPriceType,
-                'title' => 'Test Field',
-                'type' => 'field',
-                'is_require' => 1,
-                'price' => 100,
-                'sku' => '1-text',
-            ]
-        ];
-
-        return [
-            [
-                'modifierName' => 'addSimpleProduct',
-                'data' => [$optionsData]
-            ],
-            [
-                'modifierName' => 'addCustomOption',
-                'data' => [$customOptionsData]
-            ],
-        ];
-    }
-
-    /**
      * Fixed bundle product with required option, custom option and with special price
      * @param $selectionsPriceType
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration4(
+    private function getBundleConfiguration2(
         $selectionsPriceType,
         $customOptionsPriceType
     ) {
@@ -665,10 +522,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -685,7 +538,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration5(
+    private function getBundleConfiguration3(
         $selectionsPriceType,
         $customOptionsPriceType
     ) {
@@ -718,10 +571,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -738,7 +587,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration6(
+    private function getBundleConfiguration4(
         $selectionsPriceType,
         $customOptionsPriceType
     ) {
@@ -777,10 +626,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -797,7 +642,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration7(
+    private function getBundleConfiguration5(
         $selectionsPriceType,
         $customOptionsPriceType
     ) {
@@ -836,10 +681,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -856,7 +697,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration8(
+    private function getBundleConfiguration6(
         $selectionsPriceType,
         $customOptionsPriceType
     ) {
@@ -895,10 +736,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -915,7 +752,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration9(
+    private function getBundleConfiguration7(
         $selectionsPriceType,
         $customOptionsPriceType
     ) {
@@ -973,10 +810,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
         return [
             [
-                'modifierName' => 'addSpecialPrice',
-                'data' => [50]
-            ],
-            [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
             ],
@@ -985,12 +818,5 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 'data' => [$customOptionsData]
             ],
         ];
-    }
-
-    protected function addSpecialPrice(\Magento\Catalog\Model\Product $bundleProduct, $discount)
-    {
-        $bundleProduct->setSpecialPrice($discount);
-
-        return $bundleProduct;
     }
 }

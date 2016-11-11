@@ -53,7 +53,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             $this->assertEquals(
                 $expectedResults['regularMaximalPrice'],
                 $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
-                'Failed to check minimal regular price on product'
+                'Failed to check maximal regular price on product'
             );
         }
     }

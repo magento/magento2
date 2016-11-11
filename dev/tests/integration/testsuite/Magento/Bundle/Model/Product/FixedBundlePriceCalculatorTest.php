@@ -116,7 +116,75 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     // 110 + 30
                     'maximalPrice' => 140
                 ]
-            ]
+            ],
+
+            '
+                #5 Testing price for fixed bundle product 
+                with fixed sub items, fixed options and without any discounts
+            ' => [
+                'strategy' => $this->getBundleConfiguration3(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                ),
+                'expectedResults' => [
+                    // 110 + 1 * 20 + 100
+                    'minimalPrice' => 230,
+
+                    // 110 + 1 * 20 + 100
+                    'maximalPrice' => 230
+                ]
+            ],
+
+            '
+                #6 Testing price for fixed bundle product 
+                with percent sub items, percent options and without any discounts
+            ' => [
+                'strategy' => $this->getBundleConfiguration3(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                ),
+                'expectedResults' => [
+                    // 110 + 110 * 0.2 + 110 * 1
+                    'minimalPrice' => 242,
+
+                    // 110 + 110 * 0.2 + 110 * 1
+                    'maximalPrice' => 242
+                ]
+            ],
+
+            '
+                #7 Testing price for fixed bundle product 
+                with fixed sub items, percent options and without any discounts
+            ' => [
+                'strategy' => $this->getBundleConfiguration3(
+                    LinkInterface::PRICE_TYPE_FIXED,
+                    self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
+                ),
+                'expectedResults' => [
+                    // 110 + 1 * 20 + 110 * 1
+                    'minimalPrice' => 240,
+
+                    // 110 + 1 * 20 + 110 * 1
+                    'maximalPrice' => 240
+                ]
+            ],
+
+            '
+                #8 Testing price for fixed bundle product 
+                with percent sub items, fixed options and without any discounts
+            ' => [
+                'strategy' => $this->getBundleConfiguration3(
+                    LinkInterface::PRICE_TYPE_PERCENT,
+                    self::CUSTOM_OPTION_PRICE_TYPE_FIXED
+                ),
+                'expectedResults' => [
+                    // 110 + 110 * 0.2 + 100
+                    'minimalPrice' => 232,
+
+                    // 110 + 110 * 0.2 + 100
+                    'maximalPrice' => 232
+                ]
+            ],
         ];
     }
 
@@ -272,6 +340,53 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             [
                 'modifierName' => 'addSimpleProduct',
                 'data' => [$optionsData]
+            ],
+        ];
+    }
+
+    /**
+     * Fixed bundle product with required option, custom option and without any discounts
+     * @param $selectionsPriceType
+     * @param $customOptionsPriceType
+     * @return array
+     */
+    private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    {
+        $optionsData = [
+            [
+                'title' => 'Op1',
+                'required' => true,
+                'type' => 'checkbox',
+                'links' => [
+                    [
+                        'sku' => 'simple1',
+                        'qty' => 1,
+                        'price' => 20,
+                        'price_type' => $selectionsPriceType
+                    ],
+                ]
+            ],
+        ];
+
+        $customOptionsData = [
+            [
+                'price_type' => $customOptionsPriceType,
+                'title' => 'Test Field',
+                'type' => 'field',
+                'is_require' => 1,
+                'price' => 100,
+                'sku' => '1-text',
+            ]
+        ];
+
+        return [
+            [
+                'modifierName' => 'addSimpleProduct',
+                'data' => [$optionsData]
+            ],
+            [
+                'modifierName' => 'addCustomOption',
+                'data' => [$customOptionsData]
             ],
         ];
     }
