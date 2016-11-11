@@ -100,6 +100,7 @@ class Conditions extends Template implements RendererInterface
     public function render(AbstractElement $element)
     {
         $this->element = $element;
+        $this->rule->getConditions()->setJsFormObject($this->getHtmlId());
         return $this->toHtml();
     }
 
