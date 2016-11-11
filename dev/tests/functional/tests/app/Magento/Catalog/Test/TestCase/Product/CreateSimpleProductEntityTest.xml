@@ -180,19 +180,29 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation10">
-            <data name="description" xsi:type="string">Create product that is in stock</data>
+        <variation name="CreateSimpleProductEntityTestVariation10" summary="Create in stock product and check threshold" ticketId="MAGETWO-43345">
+            <data name="configData" xsi:type="string">inventory_threshold_5</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10009</data>
-            <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
-            <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">59</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="threshold" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="qty" xsi:type="number">4</item>
+                    <item name="is_message_displayed" xsi:type="boolean">false</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="qty" xsi:type="number">1</item>
+                    <item name="is_message_displayed" xsi:type="boolean">true</item>
+                    <item name="expected" xsi:type="number">5</item>
+                </item>
+            </data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryThreshold" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation11">
             <data name="description" xsi:type="string">Create product that is out stock</data>
@@ -208,19 +218,21 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation12">
-            <data name="description" xsi:type="string">Create product that visible only in search</data>
+        <variation name="CreateSimpleProductEntityTestVariation12" summary="Create product that visible only in search and check min/max qty allowed in the shopping cart" ticketId="MAGETWO-43376, MAGETWO-43359">
+            <data name="configData" xsi:type="string">inventory_min_qty_3, inventory_max_qty_5</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10011</data>
-            <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
-            <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">61</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">138</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
+            <data name="minQty" xsi:type="string">3</data>
+            <data name="maxQty" xsi:type="string">5</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMinAllowedQty" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInventoryMaxAllowedQty" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation13">
             <data name="description" xsi:type="string">Create simple product and check search by sku</data>

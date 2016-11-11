@@ -121,9 +121,9 @@ class Messages extends Block
      */
     public function getErrorMessage()
     {
-        return $this->_rootElement
-            ->find($this->errorMessage, Locator::SELECTOR_CSS)
-            ->getText();
+        $this->waitForElementVisible($this->errorMessage);
+
+        return $this->_rootElement->find($this->errorMessage)->getText();
     }
 
     /**
@@ -164,6 +164,16 @@ class Messages extends Block
     public function assertErrorMessage()
     {
         return $this->waitForElementVisible($this->errorMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
+     * Check for success message.
+     *
+     * @return bool
+     */
+    public function assertSuccessMessage()
+    {
+        return $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS);
     }
 
     /**
