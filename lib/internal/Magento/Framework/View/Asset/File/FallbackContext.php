@@ -14,11 +14,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FallbackContext extends Context
 {
     /**
-     * Secure path
-     */
-    const SECURE_PATH = 'secure';
-
-    /**
      * @var string
      */
     private $area;
@@ -34,23 +29,16 @@ class FallbackContext extends Context
     private $locale;
 
     /**
-     * @var bool
-     */
-    private $isSecure;
-
-    /**
      * @param string $baseUrl
      * @param string $areaType
      * @param string $themePath
      * @param string $localeCode
-     * @param bool $isSecure
      */
-    public function __construct($baseUrl, $areaType, $themePath, $localeCode, $isSecure = false)
+    public function __construct($baseUrl, $areaType, $themePath, $localeCode)
     {
         $this->area = $areaType;
         $this->theme = $themePath;
         $this->locale = $localeCode;
-        $this->isSecure = $isSecure;
         parent::__construct($baseUrl, DirectoryList::STATIC_VIEW, $this->generatePath());
     }
 
@@ -103,6 +91,6 @@ class FallbackContext extends Context
      */
     public function getConfigPath()
     {
-        return $this->getPath() . ($this->isSecure ? '/' . self::SECURE_PATH : '');
+        return $this->getPath();
     }
 }
