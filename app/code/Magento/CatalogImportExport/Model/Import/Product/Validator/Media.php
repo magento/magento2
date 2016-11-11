@@ -16,8 +16,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
 
     const ADDITIONAL_IMAGES = 'additional_images';
 
-    const ADDITIONAL_IMAGES_DELIMITER = ',';
-
     /** @var array */
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
@@ -82,8 +80,9 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                 }
             }
         }
+        $separator = $this->context->getMultipleValueSeparator();
         if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
-            foreach (explode(self::ADDITIONAL_IMAGES_DELIMITER, $value[self::ADDITIONAL_IMAGES]) as $image) {
+            foreach (explode($separator, $value[self::ADDITIONAL_IMAGES]) as $image) {
                 if (!$this->checkPath($image) && !$this->checkValidUrl($image)) {
                     $this->_addMessages(
                         [
