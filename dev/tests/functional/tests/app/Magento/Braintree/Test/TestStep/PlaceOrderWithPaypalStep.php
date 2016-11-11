@@ -124,9 +124,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
 
         $this->assertBillingAddressAbsentInPayment->processAssert($this->checkoutOnepage);
 
-        if ($this->checkoutMethod === 'guest' &&
-            empty($this->shipping['shipping_method']) &&
-            empty($this->shipping['shipping_service'])) {
+        if ($this->checkoutMethod === 'guest' && empty($this->shipping)) {
             $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
         }
 
