@@ -6,10 +6,10 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
+use Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox;
 
 /**
  * Fill billing information.
@@ -76,7 +76,7 @@ class FillBillingInformationStep implements TestStepInterface
     /**
      * Fill billing address.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {
@@ -91,5 +91,8 @@ class FillBillingInformationStep implements TestStepInterface
             }
             $selectedPaymentMethod->getBillingBlock()->fillBilling($this->billingAddress);
         }
+        return [
+            'billingAddress' => $this->billingAddress
+        ];
     }
 }

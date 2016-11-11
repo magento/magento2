@@ -45,12 +45,15 @@ class FillShippingAddressStep implements TestStepInterface
     /**
      * Fill shipping address.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {
         if ($this->shippingAddress) {
             $this->checkoutOnepage->getShippingBlock()->fill($this->shippingAddress);
         }
+        return [
+            'shippingAddress' => $this->shippingAddress
+        ];
     }
 }
