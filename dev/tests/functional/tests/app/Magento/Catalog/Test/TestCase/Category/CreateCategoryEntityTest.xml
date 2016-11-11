@@ -86,7 +86,9 @@
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
             <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
             <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
+            <data name="filterByPath" xsi:type="string">request_path</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
