@@ -124,12 +124,18 @@ class BlockRepository implements BlockRepositoryInterface
      * Load Block data by given Block Identity
      *
      * @param string $blockId
+     * @param int|null $storeId
      * @return Block
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($blockId)
+    public function getById($blockId, $storeId = null)
     {
         $block = $this->blockFactory->create();
+
+        if (!is_null($storeId)) {
+            $block->setStoreId($storeId);
+        }
+
         $this->resource->load($block, $blockId);
         if (!$block->getId()) {
             throw new NoSuchEntityException(__('CMS Block with id "%1" does not exist.', $blockId));
@@ -196,13 +202,14 @@ class BlockRepository implements BlockRepositoryInterface
      * Delete Block by given Block Identity
      *
      * @param string $blockId
+     * @param int|null $storeId
      * @return bool
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
      */
-    public function deleteById($blockId)
+    public function deleteById($blockId, $storeId = null)
     {
-        return $this->delete($this->getById($blockId));
+        return $this->delete($this->getById($blockId, $storeId));
     }
 
     /**

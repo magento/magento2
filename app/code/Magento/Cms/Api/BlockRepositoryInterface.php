@@ -26,10 +26,11 @@ interface BlockRepositoryInterface
      * Retrieve block.
      *
      * @param int $blockId
+     * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($blockId);
+    public function getById($blockId, $storeId = null);
 
     /**
      * Retrieve blocks matching the specified criteria.
@@ -53,9 +54,10 @@ interface BlockRepositoryInterface
      * Delete block by ID.
      *
      * @param int $blockId
+     * @param int|null $storeId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($blockId);
+    public function deleteById($blockId, $storeId = null);
 }
