@@ -138,7 +138,7 @@ class PageRepository implements PageRepositoryInterface
     {
         $page = $this->pageFactory->create();
 
-        if (!is_null($storeId)) {
+        if ($storeId === null) {
             $page->setStoreId($storeId);
         }
 

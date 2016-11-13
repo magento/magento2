@@ -132,7 +132,7 @@ class BlockRepository implements BlockRepositoryInterface
     {
         $block = $this->blockFactory->create();
 
-        if (!is_null($storeId)) {
+        if ($storeId === null) {
             $block->setStoreId($storeId);
         }
 
