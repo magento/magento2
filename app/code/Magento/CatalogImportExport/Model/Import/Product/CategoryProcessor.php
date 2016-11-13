@@ -108,7 +108,16 @@ class CategoryProcessor
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
-        $category->save();
+        try{
+            $category->save();
+        }catch (\Magento\Framework\Exception\AlreadyExistsException $e){
+            // Category already exists, use it:
+            $urlPath = $category->getData('url_path');
+            $category = $this->categoryFactory->create()->loadByAttribute('url_path', $urlPath);
+        }
+
+
+
         $this->categoriesCache[$category->getId()] = $category;
 
         return $category->getId();
