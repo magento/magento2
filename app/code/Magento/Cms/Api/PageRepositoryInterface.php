@@ -26,7 +26,7 @@ interface PageRepositoryInterface
      * Retrieve page.
      *
      * @param int $pageId
-     * @param null|int $storeId
+     * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\PageInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
