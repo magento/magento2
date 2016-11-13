@@ -16,7 +16,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation2_RootCategory_AllFields">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create root category with all fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -57,7 +57,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation4_Subcategory_AllFields">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create not anchor subcategory specifying all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -94,7 +94,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation5_Anchor_MostOfFields">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -155,7 +154,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation9_ThreeNesting">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="description" xsi:type="string">Create category with three nesting</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">two_nested_categories</data>
