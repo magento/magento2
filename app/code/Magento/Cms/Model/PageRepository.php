@@ -130,12 +130,18 @@ class PageRepository implements PageRepositoryInterface
      * Load Page data by given Page Identity
      *
      * @param string $pageId
+     * @param int|null $storeId
      * @return Page
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($pageId)
+    public function getById($pageId, $storeId = null)
     {
         $page = $this->pageFactory->create();
+
+        if (!is_null($storeId)) {
+            $page->setStoreId($storeId);
+        }
+
         $page->load($pageId);
         if (!$page->getId()) {
             throw new NoSuchEntityException(__('CMS Page with id "%1" does not exist.', $pageId));
@@ -205,13 +211,14 @@ class PageRepository implements PageRepositoryInterface
      * Delete Page by given Page Identity
      *
      * @param string $pageId
+     * @param int|null $storeId
      * @return bool
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
      */
-    public function deleteById($pageId)
+    public function deleteById($pageId, $storeId = null)
     {
-        return $this->delete($this->getById($pageId));
+        return $this->delete($this->getById($pageId, $storeId));
     }
 
     /**

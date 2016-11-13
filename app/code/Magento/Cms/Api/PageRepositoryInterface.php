@@ -26,10 +26,11 @@ interface PageRepositoryInterface
      * Retrieve page.
      *
      * @param int $pageId
+     * @param null|int $storeId
      * @return \Magento\Cms\Api\Data\PageInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($pageId);
+    public function getById($pageId, $storeId = null);
 
     /**
      * Retrieve pages matching the specified criteria.
@@ -53,9 +54,10 @@ interface PageRepositoryInterface
      * Delete page by ID.
      *
      * @param int $pageId
+     * @param int|null $storeId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($pageId);
+    public function deleteById($pageId, $storeId = null);
 }
