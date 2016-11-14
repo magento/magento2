@@ -38,10 +38,14 @@ class ApplyConfigurableProductCatalogPriceRulesTest extends ApplyCatalogPriceRul
      */
     protected function getAttribute(FixtureInterface $product)
     {
-        $attributes = $product->getDataFieldConfig('configurable_attributes_data')['source']
-            ->getAttributesData()['attribute_key_0'];
-        $result['%attribute_id%'] = $attributes['attribute_code'];
-        $result['%attribute_value%'] = $attributes['options']['option_key_' . $this->promo]['id'];
-        return $result;
+        if ($product->hasData('configurable_attributes_data')) {
+            $attributes = $product->getDataFieldConfig('configurable_attributes_data')['source']
+                ->getAttributesData()['attribute_key_0'];
+            $result['%attribute_id%'] = $attributes['attribute_code'];
+            $result['%attribute_value%'] = $attributes['options']['option_key_' . $this->promo]['id'];
+            return $result;
+        } else {
+            parent::getAttribute($product);
+        }
     }
 }

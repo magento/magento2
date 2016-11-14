@@ -7,7 +7,6 @@
 namespace Magento\CatalogRule\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Command\Cli\Cron;
@@ -102,12 +101,15 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
     {
         $conditionEntity = explode('|', trim($catalogPriceRule['data']['rule'], '[]'))[0];
         $actionName = 'get' . $conditionEntity;
-        if (method_exists(__CLASS__, $actionName)) {
+        if (method_exists($this, $actionName)) {
             $result = $this->$actionName($product);
             foreach ($result as $key => $value) {
                 $catalogPriceRule['data']['rule'] = str_replace($key, $value, $catalogPriceRule['data']['rule']);
             }
             return $catalogPriceRule;
+        } else {
+            $message = sprintf('Method "%s" does not exist in %s', $actionName, get_class($this));
+            throw new \BadMethodCallException($message);
         }
     }
 
