@@ -40,9 +40,7 @@
 </div>
     <script>
         require(["Magento_Sales/order/create/form"], function(){
-        <?php if($_methodsCount == 1):?>
-            order.switchPaymentMethod('<?php /* @escapeNotVerified */ echo $block->getSelectedMethodCode(); ?>');
-        <?php else: ?>
+        <?php if($_methodsCount != 1):?>
             order.setPaymentMethod('<?php /* @escapeNotVerified */ echo $block->getSelectedMethodCode(); ?>');
         <?php endif; ?>
         });
