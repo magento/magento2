@@ -5,12 +5,16 @@
  */
 namespace Magento\Catalog\Model\Category;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
@@ -113,6 +117,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $categoryFactory;
 
     /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
      * DataProvider constructor
      *
      * @param string $name
@@ -151,8 +165,87 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
+
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->meta = $this->prepareMeta($this->meta);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMeta()
+    {
+        $meta = parent::getMeta();
+        $meta = $this->prepareMeta($meta);
+        $meta = $this->addUseDefaultValueCheckbox($this->getCurrentCategory(), $meta);
+        $meta = $this->resolveParentInheritance($this->getCurrentCategory(), $meta);
+
+        return $meta;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $meta
+     * @return array
+     */
+    private function addUseDefaultValueCheckbox(Category $category, array $meta)
+    {
+        /** @var EavAttributeInterface $attribute */
+        foreach ($category->getAttributes() as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $canDisplayUseDefault = $attribute->getScope() != EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                && $category->getId()
+                && $category->getStoreId();
+            $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
+
+            if (
+                !$attributePath
+                || !$canDisplayUseDefault
+                || in_array($attributeCode, $this->elementsWithUseConfigSetting
+                )
+            ) {
+                continue;
+            }
+
+            $meta = $this->getArrayManager()->merge(
+                [$attributePath, 'arguments/data/config'],
+                $meta,
+                [
+                    'service' => [
+                        'template' => 'ui/form/element/helper/service',
+                    ],
+                    'disabled' => !$this->getScopeOverriddenValue()->containsValue(
+                        CategoryInterface::class,
+                        $category,
+                        $attributeCode,
+                        $this->request->getParam($this->requestScopeFieldName, Store::DEFAULT_STORE_ID)
+                    )
+                ]
+            );
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Removes not necessary inheritance fields
+     *
+     * @param Category $category
+     * @param array $meta
+     * @return array
+     */
+    private function resolveParentInheritance(Category $category, array $meta)
+    {
+        if (!$category->getParentId() || !$this->getArrayManager()->findPath('custom_use_parent_settings', $meta)) {
+            return $meta;
+        }
+
+        $meta = $this->getArrayManager()->merge(
+            [$this->getArrayManager()->findPath('custom_use_parent_settings', $meta), 'arguments/data/config'],
+            $meta,
+            ['visible' => false]
+        );
+
+        return $meta;
     }
 
     /**
@@ -204,7 +297,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $category = $this->getCurrentCategory();
         if ($category) {
             $categoryData = $category->getData();
-            $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
             $categoryData = $this->convertValues($category, $categoryData);
@@ -292,6 +384,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Catalog\Model\Category $category
      * @param array $categoryData
      * @return array
+     * @deprecated
      */
     protected function addUseDefaultSettings($category, $categoryData)
     {
@@ -406,15 +499,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $result['use_config.available_sort_by']['default'] = true;
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
-        if ($this->request->getParam('store') && $this->request->getParam('id')) {
-            $result['use_default.url_key']['checked'] = true;
-            $result['use_default.url_key']['default'] = true;
-            $result['use_default.url_key']['visible'] = true;
-        } else {
-            $result['use_default.url_key']['checked'] = false;
-            $result['use_default.url_key']['default'] = false;
-            $result['use_default.url_key']['visible'] = false;
-        }
 
         return $result;
     }
@@ -454,7 +538,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                     'url_key',
                     'url_key_create_redirect',
-                    'use_default.url_key',
                     'url_key_group',
                     'meta_title',
                     'meta_keywords',
@@ -483,5 +566,39 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                 ],
         ];
+    }
+
+    /**
+     * Retrieve scope overridden value
+     *
+     * @return ScopeOverriddenValue
+     * @deprecated
+     */
+    private function getScopeOverriddenValue()
+    {
+        if (null === $this->scopeOverriddenValue) {
+            $this->scopeOverriddenValue = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                ScopeOverriddenValue::class
+            );
+        }
+
+        return $this->scopeOverriddenValue;
+    }
+
+    /**
+     * Retrieve array manager
+     *
+     * @return ArrayManager
+     * @deprecated
+     */
+    private function getArrayManager()
+    {
+        if (null === $this->arrayManager) {
+            $this->arrayManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                ArrayManager::class
+            );
+        }
+
+        return $this->arrayManager;
     }
 }
