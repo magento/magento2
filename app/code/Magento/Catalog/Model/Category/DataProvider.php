@@ -176,8 +176,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = parent::getMeta();
         $meta = $this->prepareMeta($meta);
-        $meta = $this->addUseDefaultValueCheckbox($this->getCurrentCategory(), $meta);
-        $meta = $this->resolveParentInheritance($this->getCurrentCategory(), $meta);
+
+        $category = $this->getCurrentCategory();
+
+        if ($category) {
+            $meta = $this->addUseDefaultValueCheckbox($category, $meta);
+            $meta = $this->resolveParentInheritance($category, $meta);
+        }
 
         return $meta;
     }
