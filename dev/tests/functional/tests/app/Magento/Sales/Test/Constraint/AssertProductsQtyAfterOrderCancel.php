@@ -22,11 +22,6 @@ use Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm;
 class AssertProductsQtyAfterOrderCancel extends AbstractConstraint
 {
     /**
-     * @var FixtureFactory
-     */
-    protected $fixtureFactory;
-
-    /**
      * Skip fields for create product fixture.
      *
      * @var array
@@ -58,31 +53,14 @@ class AssertProductsQtyAfterOrderCancel extends AbstractConstraint
         AssertProductForm $assertProductForm,
         AssertConfigurableProductForm $assertConfigurableProductForm
     ) {
-        $this->fixtureFactory = $fixtureFactory;
         for ($i = 0; $i < count($order->getEntityId()['products']); $i++) {
             $product = $order->getEntityId()['products'][$i];
             $productData = $product->getData();
             if ($product instanceof BundleProduct) {
-                $bundleSelections = $product->getDataFieldConfig('bundle_selections')['source']->getProducts();
-                foreach ($bundleSelections as $key => $selection) {
-                    $valueName = $productData['checkout_data']['options']['bundle_options'][$key]['value']['name'];
-                    foreach ($selection as $item) {
-                        if (strpos($item->getName(), $valueName) !== false) {
-                            $assertProductForm->processAssert(
-                                $this->fixtureFactory->create(
-                                    get_class($product),
-                                    ['data' => array_diff_key($item->getData(), array_flip($this->skipFields))]
-                                ),
-                                $productGrid,
-                                $productPage
-                            );
-                            break;
-                        }
-                    }
-                }
+                $this->assertBundleProduct($product, $productGrid, $productPage, $fixtureFactory, $assertProductForm);
             } elseif ($product instanceof ConfigurableProduct) {
                 $assertConfigurableProductForm->processAssert(
-                    $this->fixtureFactory->create(
+                    $fixtureFactory->create(
                         get_class($product),
                         ['data' => array_diff_key($productData, array_flip($this->skipFields))]
                     ),
@@ -91,13 +69,50 @@ class AssertProductsQtyAfterOrderCancel extends AbstractConstraint
                 );
             } else {
                 $assertProductForm->processAssert(
-                    $this->fixtureFactory->create(
+                    $fixtureFactory->create(
                         get_class($product),
                         ['data' => array_diff_key($productData, array_flip($this->skipFields))]
                     ),
                     $productGrid,
                     $productPage
                 );
+            }
+        }
+    }
+
+    /**
+     * Assert quantity of products that are part of the bundle product.
+     *
+     * @param BundleProduct $product
+     * @param CatalogProductIndex $productGrid
+     * @param CatalogProductEdit $productPage
+     * @param FixtureFactory $fixtureFactory
+     * @param AssertProductForm $assertProductForm
+     * @return void
+     */
+    public function assertBundleProduct(
+        BundleProduct $product,
+        CatalogProductIndex $productGrid,
+        CatalogProductEdit $productPage,
+        FixtureFactory $fixtureFactory,
+        AssertProductForm $assertProductForm
+    ) {
+        $productData = $product->getData();
+        $bundleSelections = $product->getDataFieldConfig('bundle_selections')['source']->getProducts();
+        foreach ($bundleSelections as $key => $selection) {
+            $valueName = $productData['checkout_data']['options']['bundle_options'][$key]['value']['name'];
+            foreach ($selection as $item) {
+                if (strpos($item->getName(), $valueName) !== false) {
+                    $assertProductForm->processAssert(
+                        $fixtureFactory->create(
+                            get_class($product),
+                            ['data' => array_diff_key($item->getData(), array_flip($this->skipFields))]
+                        ),
+                        $productGrid,
+                        $productPage
+                    );
+                    break;
+                }
             }
         }
     }

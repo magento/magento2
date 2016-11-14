@@ -21,7 +21,7 @@ use Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm;
 class AssertProductsQtyAfterReorder extends AbstractConstraint
 {
     /**
-     * Assert form data equals fixture data.
+     * Assert products quantity after placing new order with the same products.
      *
      * @param OrderInjectable $order
      * @param CatalogProductIndex $productGrid
