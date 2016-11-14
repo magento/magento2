@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Unit\ObjectManager\Config;
+namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 use Magento\Framework\ObjectManager\Config\Compiled as CompiledConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
