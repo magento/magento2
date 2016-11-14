@@ -10,7 +10,6 @@ use Magento\Checkout\Test\Constraint\AssertBillingAddressAbsentInPayment;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -54,38 +53,13 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
     private $products;
 
     /**
-     * Customer fixture.
-     *
-     * @var Customer
-     */
-    protected $customer;
-
-    /**
-     * Checkout method.
-     *
-     * @var string
-     */
-    protected $checkoutMethod;
-
-    /**
-     * Shipping carrier and method.
-     *
-     * @var array
-     */
-    protected $shipping;
-
-    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param AssertBillingAddressAbsentInPayment $assertBillingAddressAbsentInPayment
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
-     * @param Customer $customer
-     * @param string $checkoutMethod
      * @param array $products
      * @param array $prices
-     * @param array $shipping
-     *
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
@@ -93,24 +67,16 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         AssertBillingAddressAbsentInPayment $assertBillingAddressAbsentInPayment,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
-        Customer $customer = null,
-        $checkoutMethod,
-
         array $products,
-        array $prices = [],
-        array $shipping = []
-
+        array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
         $this->assertBillingAddressAbsentInPayment = $assertBillingAddressAbsentInPayment;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
-        $this->customer = $customer;
-        $this->checkoutMethod = $checkoutMethod;
         $this->products = $products;
         $this->prices = $prices;
-        $this->shipping = $shipping;
     }
 
     /**
@@ -123,10 +89,6 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         }
 
         $this->assertBillingAddressAbsentInPayment->processAssert($this->checkoutOnepage);
-
-        if ($this->checkoutMethod === 'guest' && empty($this->shipping)) {
-            $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
-        }
 
         $parentWindow = $this->checkoutOnepage->getPaymentBlock()
             ->getSelectedPaymentMethodBlock()
