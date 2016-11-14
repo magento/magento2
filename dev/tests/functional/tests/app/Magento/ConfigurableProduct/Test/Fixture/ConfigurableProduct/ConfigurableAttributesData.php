@@ -129,7 +129,6 @@ class ConfigurableAttributesData extends DataSource
         foreach ($this->attributes as $attributeKey => $attribute) {
             $attributeData = $attribute->getData();
             $options = [];
-
             foreach ($attributeData['options'] as $key => $option) {
                 $options['option_key_' . $key] = $option;
             }

@@ -7,6 +7,7 @@
 namespace Magento\CatalogRule\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Command\Cli\Cron;
@@ -36,6 +37,13 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
     /* end tags */
 
     /**
+     * Index number of promo product.
+     *
+     * @var int
+     */
+    protected $promo;
+
+    /**
      * Apply catalog price rules.
      *
      * @param array $catalogRules
@@ -45,6 +53,7 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
      * @param bool $isCronEnabled
      * @param Customer $customer
      * @param array $products
+     * @param int $promo
      * @return FixtureInterface[]
      */
     public function test(
@@ -54,8 +63,10 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
         Cron $cron,
         $isCronEnabled = false,
         Customer $customer = null,
-        array $products = null
+        array $products = [],
+        $promo = 0
     ) {
+        $this->promo = $promo;
         if ($customer !== null) {
             $customer->persist();
         }
@@ -87,29 +98,44 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
      * @param array $catalogPriceRule
      * @return array
      */
-    private function prepareCondition(FixtureInterface $product, array $catalogPriceRule)
+    protected function prepareCondition(FixtureInterface $product, array $catalogPriceRule)
     {
-        $result = [];
         $conditionEntity = explode('|', trim($catalogPriceRule['data']['rule'], '[]'))[0];
-
-        switch ($conditionEntity) {
-            case 'Category':
-                $result['%category_id%'] = $product->getDataFieldConfig('category_ids')['source']->getIds()[0];
-                break;
-            case 'Attribute':
-                /** @var \Magento\Catalog\Test\Fixture\CatalogProductAttribute[] $attrs */
-                $attributes = $product->getDataFieldConfig('attribute_set_id')['source']
-                    ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']->getAttributes();
-
-                $result['%attribute_id%'] = $attributes[0]->getAttributeCode();
-                $result['%attribute_value%'] = $attributes[0]->getOptions()[0]['id'];
-                break;
+        $actionName = 'get' . $conditionEntity;
+        if (method_exists(__CLASS__, $actionName)) {
+            $result = $this->$actionName($product);
+            foreach ($result as $key => $value) {
+                $catalogPriceRule['data']['rule'] = str_replace($key, $value, $catalogPriceRule['data']['rule']);
+            }
+            return $catalogPriceRule;
         }
-        foreach ($result as $key => $value) {
-            $catalogPriceRule['data']['rule'] = str_replace($key, $value, $catalogPriceRule['data']['rule']);
-        }
+    }
 
-        return $catalogPriceRule;
+    /**
+     * Add category_id to catalog price rule.
+     *
+     * @param FixtureInterface $product
+     * @return array
+     */
+    protected function getCategory(FixtureInterface $product)
+    {
+        $result['%category_id%'] = $product->getDataFieldConfig('category_ids')['source']->getIds()[0];
+        return $result;
+    }
+
+    /**
+     * Add attribute_id to catalog price rule.
+     *
+     * @param FixtureInterface $product
+     * @return array
+     */
+    protected function getAttribute(FixtureInterface $product)
+    {
+        $attributes = $product->getDataFieldConfig('attribute_set_id')['source']
+            ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']->getAttributes();
+        $result['%attribute_id%'] = $attributes[0]->getAttributeCode();
+        $result['%attribute_value%'] = $attributes[0]->getOptions()[$this->promo]['id'];
+        return $result;
     }
 
     /**
@@ -119,7 +145,7 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
      * @param Customer $customer
      * @return array
      */
-    private function applyCustomerGroup(array $catalogPriceRule, Customer $customer)
+    protected function applyCustomerGroup(array $catalogPriceRule, Customer $customer)
     {
         /** @var \Magento\Customer\Test\Fixture\CustomerGroup $customerGroup */
         $customerGroup = $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup();
@@ -136,7 +162,7 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
      * @param Customer $customer
      * @return CatalogRule
      */
-    private function createCatalogPriceRule(
+    protected function createCatalogPriceRule(
         array $catalogPriceRule,
         FixtureInterface $product,
         Customer $customer = null
