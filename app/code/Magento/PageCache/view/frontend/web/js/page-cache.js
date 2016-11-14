@@ -24,6 +24,15 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
+            if ($.nodeName(element, "iframe")) {
+                var a = document.createElement('a');
+                a.href = $(element).prop('src');
+
+                if (a.hostname != window.location.hostname) {
+                    return;
+                }
+            }
+
             $(element).contents().each(function (index, el) {
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
