@@ -74,6 +74,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
     /**
      * Test cases for current test
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTestCases()
     {

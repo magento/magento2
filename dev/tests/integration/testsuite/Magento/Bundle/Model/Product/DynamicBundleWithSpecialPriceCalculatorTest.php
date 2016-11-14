@@ -305,7 +305,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         ];
     }
 
-
     /**
      * Dynamic bundle with one simple product with special price
      * @return array
