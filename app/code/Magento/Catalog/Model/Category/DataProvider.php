@@ -200,8 +200,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (
                 !$attributePath
                 || !$canDisplayUseDefault
-                || in_array($attributeCode, $this->elementsWithUseConfigSetting
-                )
+                || in_array($attributeCode, $this->elementsWithUseConfigSetting)
             ) {
                 continue;
             }
