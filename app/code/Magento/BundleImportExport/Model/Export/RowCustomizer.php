@@ -9,7 +9,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
-use Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Model\Import as ImportModel;
 
 /**
@@ -291,10 +290,7 @@ class RowCustomizer implements RowCustomizerInterface
     protected function cleanNotBundleAdditionalAttributes($dataRow)
     {
         if (!empty($dataRow['additional_attributes'])) {
-            $additionalAttributes = explode(
-                ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                $dataRow['additional_attributes']
-            );
+            $additionalAttributes = $this->parseAdditionalAttributes($dataRow['additional_attributes']);
             $dataRow['additional_attributes'] = $this->getNotBundleAttributes($additionalAttributes);
         }
 
@@ -309,17 +305,35 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getNotBundleAttributes($additionalAttributes)
     {
-        $cleanedAdditionalAttributes = '';
-        foreach ($additionalAttributes as $attribute) {
-            list($attributeCode, $attributeValue) = explode(ImportProductModel::PAIR_NAME_VALUE_SEPARATOR, $attribute);
-            if (!in_array('bundle_' . $attributeCode, $this->bundleColumns)) {
-                $cleanedAdditionalAttributes .= $attributeCode
-                    . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-                    . $attributeValue
-                    . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        $filteredAttributes = [];
+        foreach ($additionalAttributes as $code => $value) {
+            if (!in_array('bundle_' . $code, $this->bundleColumns)) {
+                $filteredAttributes[] = $code . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $value;
             }
         }
+        return implode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $filteredAttributes);
+    }
 
-        return rtrim($cleanedAdditionalAttributes, ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR);
+    /**
+     * Retrieves additional attributes as array code=>value.
+     *
+     * @param string $additionalAttributes
+     * @return array
+     */
+    private function parseAdditionalAttributes($additionalAttributes)
+    {
+        $attributeNameValuePairs = explode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
+        $preparedAttributes = [];
+        $code = '';
+        foreach ($attributeNameValuePairs as $attributeData) {
+            //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
+            if (strpos($attributeData, ImportProductModel::PAIR_NAME_VALUE_SEPARATOR) === false && $code) {
+                $preparedAttributes[$code] .= ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR . $attributeData;
+            } else {
+                list($code, $value) = explode(ImportProductModel::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
+                $preparedAttributes[$code] = $value;
+            }
+        }
+        return $preparedAttributes;
     }
 }
