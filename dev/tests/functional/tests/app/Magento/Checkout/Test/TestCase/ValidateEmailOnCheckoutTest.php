@@ -34,6 +34,17 @@ class ValidateEmailOnCheckoutTest extends Injectable
     const MVP = 'yes';
     /* end tags */
 
+    /**
+     * Validate email on checkout.
+     *
+     * @param CatalogProductSimple $product
+     * @param CheckoutCart $cartPage
+     * @param CatalogProductView $catalogProductView
+     * @param BrowserInterface $browser
+     * @param CheckoutOnepage $checkoutOnepage
+     * @param Customer $customer
+     * @return void
+     */
     public function test(
         CatalogProductSimple $product,
         CheckoutCart $cartPage,
@@ -48,7 +59,7 @@ class ValidateEmailOnCheckoutTest extends Injectable
         $cartPage->open();
         $cartPage->getCartBlock()->clearShoppingCart();
 
-        //Step
+        //Steps
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $productView = $catalogProductView->getViewBlock();
         $productView->fillOptions($product);

@@ -16,17 +16,13 @@ class AssertEmailToolTips extends AbstractConstraint
 {
     /**
      * Email tooltip message.
-     *
-     * @var string
      */
-    private $emailTooltip = 'We\'ll send your order confirmation here.';
+    const EMAIL_TOOLTIP = 'We\'ll send your order confirmation here.';
 
     /**
      * Email instructions message.
-     *
-     * @var string
      */
-    private $emailInstructions = 'You can create an account after checkout.';
+    const EMAIL_INSTRUCTIONS = 'You can create an account after checkout.';
 
     /**
      * Assert that email field tooltips are present.
@@ -38,13 +34,13 @@ class AssertEmailToolTips extends AbstractConstraint
         CheckoutOnepage $checkoutOnepage
     ) {
         \PHPUnit_Framework_Assert::assertEquals(
-            $this->emailTooltip,
+            self::EMAIL_TOOLTIP,
             $checkoutOnepage->getShippingBlock()->getEmailTooltip(),
             'Email tooltip is not correct.'
         );
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $this->emailInstructions,
+            self::EMAIL_INSTRUCTIONS,
             $checkoutOnepage->getShippingBlock()->getEmailInstructions(),
             'Email instructions are not correct.'
         );

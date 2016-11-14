@@ -16,10 +16,8 @@ class AssertEmailErrorValidationMessage extends AbstractConstraint
 {
     /**
      * Email validation message.
-     *
-     * @var string
      */
-    private $emailValidationMessage = 'Please enter a valid email address (Ex: johndoe@domain.com).';
+    const EMAIL_VALIDATION_MESSAGE = 'Please enter a valid email address (Ex: johndoe@domain.com).';
 
     /**
      * Assert that email validation message is correct.
@@ -31,7 +29,7 @@ class AssertEmailErrorValidationMessage extends AbstractConstraint
         CheckoutOnepage $checkoutOnepage
     ) {
         \PHPUnit_Framework_Assert::assertEquals(
-            $this->emailValidationMessage,
+            self::EMAIL_VALIDATION_MESSAGE,
             $checkoutOnepage->getShippingBlock()->getEmailError(),
             'Email validation message is not correct.'
         );
