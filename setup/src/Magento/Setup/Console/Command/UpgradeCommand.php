@@ -71,7 +71,7 @@ class UpgradeCommand extends AbstractSetupCommand
         $installer->installSchema();
         $installer->installDataFixtures();
         if (!$keepGenerated) {
-            $output->writeln('<info>Please re-run Magento compile command</info>');
+            $output->writeln('<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>');
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;

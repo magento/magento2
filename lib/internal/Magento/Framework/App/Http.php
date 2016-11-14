@@ -241,8 +241,7 @@ class Http implements \Magento\Framework\AppInterface
                 . "because the Magento setup directory cannot be accessed. \n"
                 . 'You can install Magento using either the command line or you must restore access '
                 . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
-            $newMessage .= 'If you are using the sample nginx configuration, please go to '
-                . $this->_request->getScheme(). '://' . $this->_request->getHttpHost() . $setupInfo->getUrl();
+
             throw new \Exception($newMessage, 0, $exception);
         }
     }

@@ -253,10 +253,7 @@
     </vars>
 
     <vars module="Magento_ConfigurableProduct">
-        <var name="change_only_base_image">true</var>
-    </vars>
-    <vars module="Magento_Swatches">
-        <var name="change_only_base_image">true</var>
+        <var name="gallery_switch_strategy">prepend</var>
     </vars>
 
     <vars module="Js_Bundle">
