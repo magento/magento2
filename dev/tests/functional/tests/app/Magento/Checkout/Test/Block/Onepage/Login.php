@@ -99,7 +99,8 @@ class Login extends Form
     public function fillGuestFields(FixtureInterface $customer)
     {
         $mapping = $this->dataMapping();
-        $this->_rootElement->find($mapping['email']['selector'], $mapping['email']['strategy'])->setValue($customer->getEmail());
+        $this->_rootElement->find($mapping['email']['selector'], $mapping['email']['strategy'])
+            ->setValue($customer->getEmail());
     }
 
     /**
