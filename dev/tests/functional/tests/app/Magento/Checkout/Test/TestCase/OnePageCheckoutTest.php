@@ -33,9 +33,8 @@ use Magento\Mtf\TestCase\Scenario;
  * 14. Perform assertions.
  *
  * @group One_Page_Checkout
- * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429, MAGETWO-42598
+ * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429, MAGETWO-49917, MAGETWO-27485
  * @ZephyrId MAGETWO-12444, MAGETWO-12848, MAGETWO-12849, MAGETWO-12850
- * @ZephyrId MAGETWO-42547, MAGETWO-42599, MAGETWO-49917, MAGETWO-27485
  */
 class OnePageCheckoutTest extends Scenario
 {

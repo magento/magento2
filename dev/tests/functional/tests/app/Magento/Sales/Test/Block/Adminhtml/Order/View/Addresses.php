@@ -9,7 +9,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Block for information about adresses on order page.
+ * Block for information about addresses on order page.
  */
 class Addresses extends Block
 {
@@ -18,7 +18,7 @@ class Addresses extends Block
      *
      * @var string
      */
-    protected $billingAddress = '.order-billing-address address';
+    private $billingAddress = '.order-billing-address address';
 
     /**
      * New address button selector.
@@ -32,7 +32,7 @@ class Addresses extends Block
      *
      * @var string
      */
-    protected $shippingAddress = '.order-shipping-address address';
+    private $shippingAddress = '.order-shipping-address address';
 
     /**
      * Get customer's billing address from the data inside block.
@@ -41,7 +41,7 @@ class Addresses extends Block
      */
     public function getCustomerBillingAddress()
     {
-        return $this->_rootElement->find($this->billingAddress)->getText();
+        return $this->_rootElement->find($this->billingAddress, Locator::SELECTOR_CSS)->getText();
     }
 
     /**
@@ -51,7 +51,7 @@ class Addresses extends Block
      */
     public function getCustomerShippingAddress()
     {
-        return $this->_rootElement->find($this->shippingAddress)->getText();
+        return $this->_rootElement->find($this->shippingAddress, Locator::SELECTOR_CSS)->getText();
     }
 
     /**

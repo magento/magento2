@@ -418,7 +418,6 @@
             <data name="address/data/country_id" xsi:type="string">United States</data>
             <data name="address/data/region_id" xsi:type="string">California</data>
             <data name="address/data/postcode" xsi:type="string">95814</data>
-            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
             <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />

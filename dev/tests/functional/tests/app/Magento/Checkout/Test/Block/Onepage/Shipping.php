@@ -142,6 +142,17 @@ class Shipping extends Form
     }
 
     /**
+     * Checks if new address button is visible.
+     *
+     * @return bool
+     */
+    public function isPopupNewAddressButtonVisible()
+    {
+        $button = $this->_rootElement->find($this->popupSelector);
+        return $button->isVisible();
+    }
+
+    /**
      * Clicks new address button.
      *
      * @return void
