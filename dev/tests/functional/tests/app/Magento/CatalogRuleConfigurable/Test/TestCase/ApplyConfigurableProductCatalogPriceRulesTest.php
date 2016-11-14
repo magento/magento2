@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\TestCase;
+namespace Magento\CatalogRuleConfigurable\Test\TestCase;
 
 use Magento\CatalogRule\Test\TestCase\ApplyCatalogPriceRulesTest;
-
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Command\Cli\Cron;
@@ -23,10 +22,10 @@ use Magento\Mtf\Fixture\FixtureInterface;
  *
  * Steps:
  * 1. Apply all created rules.
- * 2. Create simple product.
+ * 2. Create configurable product.
  * 3. Perform all assertions.
  *
- * @group Catalog_Price_Rules
+ * @group Catalog_Rule_Configurable
  * @ZephyrId MAGETWO-24780
  */
 class ApplyConfigurableProductCatalogPriceRulesTest extends ApplyCatalogPriceRulesTest

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright ɠ2016 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\ConfigurableProduct\Test\TestCase\ApplyConfigurableProductCatalogPriceRulesTest" summary="Apply Catalog Price Rules " ticketId="MAGETWO-47186">
+    <testCase name="Magento\CatalogRuleConfigurable\Test\TestCase\ApplyConfigurableProductCatalogPriceRulesTest" summary="Apply Catalog Price Rules">
         <variation name="ApplyCatalogRuleForComfigurableProductWithOptions1" summary="Apply Catalog Rule For Configurable Product With Promo Simple Product" ticketId="MAGETWO-47186">
             <data name="products/0" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_S</data>
             <data name="products/1" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_M</data>
