@@ -13,6 +13,9 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 
 class UpgradeData implements UpgradeDataInterface
 {
+    /**
+     * @deprecated
+     */
     const PRIVACY_COOKIE_PAGE_ID = 4;
 
     /**
@@ -234,7 +237,10 @@ class UpgradeData implements UpgradeDataInterface
     </table>
 </div>
 EOD;
-            $privacyAndCookiePolicyPage = $this->createPage()->load(self::PRIVACY_COOKIE_PAGE_ID);
+            $privacyAndCookiePolicyPage = $this->createPage()->load(
+                'privacy-policy-cookie-restriction-mode',
+                'identifier'
+            );
             $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
             if ($privacyAndCookiePolicyPageId) {
                 $privacyAndCookiePolicyPage->setContent($newPageContent);
