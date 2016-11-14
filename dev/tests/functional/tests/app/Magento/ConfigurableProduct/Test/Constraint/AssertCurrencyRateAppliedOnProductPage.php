@@ -56,7 +56,8 @@ class AssertCurrencyRateAppliedOnProductPage extends AbstractConstraint
      * @param string $price
      * @param string $currency [optional]
      */
-    public function assertPrice(CatalogProductView $view, $price, $currency = '') {
+    public function assertPrice(CatalogProductView $view, $price, $currency = '')
+    {
         \PHPUnit_Framework_Assert::assertEquals(
             $price,
             $view->getViewBlock()->getPriceBlock()->getPrice($currency),
