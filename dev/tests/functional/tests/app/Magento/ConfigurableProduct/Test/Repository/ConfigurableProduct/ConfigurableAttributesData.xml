@@ -461,8 +461,8 @@
                 <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::attribute_type_dropdown_two_options</item>
             </field>
             <field name="products" xsi:type="array">
-                <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::product_79_99</item>
-                <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::product_20_01</item>
+                <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::product_with_price_79_99</item>
+                <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::product_with_price_20_01</item>
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">

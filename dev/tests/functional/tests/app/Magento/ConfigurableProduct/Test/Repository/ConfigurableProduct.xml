@@ -715,9 +715,6 @@
                     <item name="dataset" xsi:type="string">default</item>
                 </item>
             </field>
-            <!--<field name="custom_options" xsi:type="array">
-                <item name="dataset" xsi:type="string">drop_down_with_three_options</item>
-            </field>-->
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">configurable_the_first_option</item>
             </field>

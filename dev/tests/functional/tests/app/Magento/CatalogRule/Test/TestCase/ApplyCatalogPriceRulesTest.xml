@@ -114,7 +114,6 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRuleForSimpleProductWithCustomOptions" summary="Apply Catalog Rule for Simple Product With Custom Options" ticketId="MAGETWO-23038">
-            <data name="products/0" xsi:type="string">catalogProductSimple::no_custom_options</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::with_default_custom_option</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::with_fixed_custom_option</data>
             <data name="products/2" xsi:type="string">catalogProductSimple::with_percent_custom_option</data>

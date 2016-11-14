@@ -1493,7 +1493,7 @@
             </field>
         </dataset>
 
-        <dataset name="product_20_01">
+        <dataset name="product_with_price_20_01">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -1523,7 +1523,7 @@
             </field>
         </dataset>
 
-        <dataset name="product_79_99">
+        <dataset name="product_with_price_79_99">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
