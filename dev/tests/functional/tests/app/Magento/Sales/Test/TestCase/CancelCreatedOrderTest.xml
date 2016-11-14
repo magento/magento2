@@ -7,8 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CancelCreatedOrderTest" summary="Cancel Created Order for Offline Payment Methods" ticketId="MAGETWO-28191">
-        <variation name="CancelCreatedOrderTestVariationWithCheckMoneyOrderPaymentMethod" summary="Cancel order with check/money order payment method and check status on storefront">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+        <variation name="CancelCreatedOrderTestVariationWithCheckMoneyOrderPaymentMethod" summary="Cancel order with check/money order payment method and check status on storefront" ticketId="MAGETWO-13647,MAGETWO-43318">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::low_stock_product,catalogProductVirtual::virtual_low_stock,bundleProduct::bundle_low_stock,configurableProduct::configurable_low_stock</data>
             <data name="status" xsi:type="string">Canceled</data>
@@ -54,7 +53,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
-        <variation name="CancelCreatedOrderTestVariationProductQtyWithoutStockDecrease" summary="Check product qty after placing an order with Decrease Stock When Order is Placed = No">
+        <variation name="CancelCreatedOrderTestVariationProductQtyWithoutStockDecrease" summary="Check product qty after placing an order with Decrease Stock When Order is Placed = No" ticketId="MAGETWO-43321">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::low_stock_product</data>
             <data name="configData" xsi:type="string">decrease_stock_after_order_no</data>
