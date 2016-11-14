@@ -51,6 +51,8 @@ class InvalidationOnScheduledIndexingTest extends Injectable
     private $browser;
 
     /**
+     * Fixture factory.
+     *
      * @var FixtureFactory
      */
     private $fixtureFactory;
