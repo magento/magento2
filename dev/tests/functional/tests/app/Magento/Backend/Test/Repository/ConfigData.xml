@@ -188,6 +188,7 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+
         <dataset name="enable_hsts">
             <field name="web/secure/enable_hsts" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>

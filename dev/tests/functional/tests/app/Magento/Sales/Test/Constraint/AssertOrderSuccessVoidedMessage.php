@@ -11,7 +11,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that success message about order void is present.
- *
  */
 class AssertOrderSuccessVoidedMessage extends AbstractConstraint
 {

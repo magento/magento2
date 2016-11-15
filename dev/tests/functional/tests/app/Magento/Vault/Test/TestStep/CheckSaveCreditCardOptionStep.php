@@ -12,7 +12,7 @@ use Magento\Vault\Test\Constraint\AssertSaveCreditCardOptionNotPresent;
 /**
  * Check if customer cannot save credit card for later use if vault is disabled.
  */
-class checkSaveCreditCardOptionStep implements TestStepInterface
+class CheckSaveCreditCardOptionStep implements TestStepInterface
 {
     /**
      * Onepage checkout page.
