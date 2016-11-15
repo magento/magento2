@@ -11,6 +11,7 @@
         <block name="topmenu" class="Magento\Theme\Test\Block\Html\Topmenu" locator="[data-action='navigation']" strategy="css selector" />
         <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector" />
         <block name="footerBlock" class="Magento\Theme\Test\Block\Html\Footer" locator="footer.page-footer" strategy="css selector" />
+        <block name="logoBlock" class="Magento\Theme\Test\Block\Html\Logo" locator=".header .logo" strategy="css selector" />
         <block name="linksBlock" class="Magento\Theme\Test\Block\Links" locator=".header .links" strategy="css selector" />
         <block name="storeSwitcherBlock" class="Magento\Store\Test\Block\Switcher" locator="[data-ui-id='language-switcher']" strategy="css selector" />
         <block name="currencyBlock" class="Magento\Directory\Test\Block\Currency\Switcher" locator=".switcher.currency" strategy="css selector" />
