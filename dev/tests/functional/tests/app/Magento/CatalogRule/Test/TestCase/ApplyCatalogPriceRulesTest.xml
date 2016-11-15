@@ -3,7 +3,7 @@
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
- *//
+ */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\ApplyCatalogPriceRulesTest" summary="Apply Catalog Price Rules " ticketId="MAGETWO-24780">
