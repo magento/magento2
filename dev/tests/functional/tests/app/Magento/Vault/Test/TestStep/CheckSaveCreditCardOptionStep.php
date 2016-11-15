@@ -38,7 +38,7 @@ class checkSaveCreditCardOptionStep implements TestStepInterface
     /**
      * If vault is enabled for payment method.
      *
-     * @var bool
+     * @var null|bool
      */
     private $isVaultEnabled;
 
@@ -46,13 +46,13 @@ class checkSaveCreditCardOptionStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertSaveCreditCardOptionNotPresent $assertSaveCreditCardOptionNotPresent
      * @param array $payment
-     * @param bool $isVaultEnabled
+     * @param null|bool $isVaultEnabled
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertSaveCreditCardOptionNotPresent $assertSaveCreditCardOptionNotPresent,
         array $payment,
-        $isVaultEnabled
+        $isVaultEnabled = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertSaveCreditCardOptionNotPresent = $assertSaveCreditCardOptionNotPresent;

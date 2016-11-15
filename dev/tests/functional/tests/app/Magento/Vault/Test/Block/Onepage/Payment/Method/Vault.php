@@ -38,7 +38,7 @@ class Vault extends Method
     public function saveCreditCard($paymentMethod, $creditCardSave)
     {
         $saveCard = sprintf($this->vaultCheckbox, $paymentMethod);
-        $this->_rootElement->find($saveCard, 'checkbox')->setValue($creditCardSave);
+        $this->_rootElement->find($saveCard, Locator::SELECTOR_CSS, 'checkbox')->setValue($creditCardSave);
     }
 
     /**
@@ -50,7 +50,7 @@ class Vault extends Method
     public function isVaultVisible($paymentMethod)
     {
         $saveCard = sprintf($this->vaultCheckbox, $paymentMethod);
-        return $this->_rootElement->find($saveCard, 'checkbox')->isVisible();
+        return $this->_rootElement->find($saveCard, Locator::SELECTOR_CSS, 'checkbox')->isVisible();
     }
 
     /**
