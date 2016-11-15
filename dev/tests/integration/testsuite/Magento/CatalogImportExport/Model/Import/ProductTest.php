@@ -362,8 +362,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             );
             $productAfterImport->load($productBeforeImport->getId());
             $this->assertEquals(
-                @strtotime($row['news_from_date']),
-                @strtotime($productAfterImport->getNewsFromDate())
+                @strtotime(date('m/d/Y', @strtotime($row['news_from_date']))),
+ 		        @strtotime($productAfterImport->getNewsFromDate())
+            );
+            $this->assertEquals(
+                @strtotime($row['news_to_date']),
+                @strtotime($productAfterImport->getNewsToDate())
             );
             unset($productAfterImport);
         }

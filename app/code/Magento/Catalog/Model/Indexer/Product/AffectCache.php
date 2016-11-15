@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 /**
  * Class AffectCache
+ * @deprecated
  */
 class AffectCache
 {

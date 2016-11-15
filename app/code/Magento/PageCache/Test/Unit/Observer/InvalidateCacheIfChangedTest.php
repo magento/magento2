@@ -6,6 +6,10 @@
  */
 namespace Magento\PageCache\Test\Unit\Observer;
 
+/**
+ * Class InvalidateCacheIfChangedTest
+ * @deprecated 
+ */
 class InvalidateCacheIfChangedTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\PageCache\Observer\InvalidateCacheIfChanged */

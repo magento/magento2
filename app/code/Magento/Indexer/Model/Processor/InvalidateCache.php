@@ -8,6 +8,7 @@ namespace Magento\Indexer\Model\Processor;
 
 /**
  * Class InvalidateCache
+ * @deprecated
  */
 class InvalidateCache
 {

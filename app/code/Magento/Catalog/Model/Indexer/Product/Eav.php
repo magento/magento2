@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
+use Magento\Framework\Indexer\CacheContext;
+
 class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -21,6 +23,11 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full
      */
     protected $_productEavIndexerFull;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    private $cacheContext;
 
     /**
      * @param Eav\Action\Row $productEavIndexerRow
@@ -46,6 +53,7 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
     public function execute($ids)
     {
         $this->_productEavIndexerRows->execute($ids);
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
     }
 
     /**
@@ -56,6 +64,12 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
     public function executeFull()
     {
         $this->_productEavIndexerFull->execute();
+        $this->getCacheContext()->registerTags(
+            [
+                \Magento\Catalog\Model\Category::CACHE_TAG,
+                \Magento\Catalog\Model\Product::CACHE_TAG
+            ]
+        );
     }
 
     /**
@@ -78,5 +92,20 @@ class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framew
     public function executeRow($id)
     {
         $this->_productEavIndexerRow->execute($id);
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
     }
 }

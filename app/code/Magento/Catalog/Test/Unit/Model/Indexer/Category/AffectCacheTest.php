@@ -8,6 +8,10 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category;
 
+/**
+ * Class AffectCacheTest
+ * @deprecated
+ */
 class AffectCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
