@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\RecentlyComparedProducts">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="renders" xsi:type="array">
+                    <item name="bundle" xsi:type="array">
+                        <item name="class" xsi:type="string">\Magento\Bundle\Test\Block\Adminhtml\Product\Composite\Configure</item>
+                        <item name="locator" xsi:type="string">//ancestor::body//*[contains(@class, "modal-slide") and contains(@class, "_show")]</item>
+                        <item name="strategy" xsi:type="string">xpath</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
