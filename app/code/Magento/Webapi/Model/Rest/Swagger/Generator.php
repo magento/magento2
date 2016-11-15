@@ -341,7 +341,7 @@ class Generator extends AbstractSchemaGenerator
 
         if ($bodySchema) {
             $bodyParam = [];
-            $bodyParam['name'] = '$body';
+            $bodyParam['name'] = 'body';
             $bodyParam['in'] = 'body';
             $bodyParam['schema'] = $bodySchema;
             $parameters[] = $bodyParam;
