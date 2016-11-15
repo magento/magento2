@@ -32,6 +32,8 @@ use Magento\Mtf\TestStep\TestStepFactory;
  * 6. Sign out.
  *
  * @ZephyrId MAGETWO-45381
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckoutWthPersistentShoppingCartTest extends Injectable
 {
