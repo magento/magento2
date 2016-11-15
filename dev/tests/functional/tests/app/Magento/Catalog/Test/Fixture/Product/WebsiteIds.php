@@ -86,7 +86,7 @@ class WebsiteIds extends DataSource
                 $this->data[] = $website->getName();
                 $this->websites[] = $website;
                 $this->stores[] = $store;
-            }  elseif ($dataset instanceof Store) {
+            } elseif ($dataset instanceof Store) {
                 if (!$dataset->getStoreId()) {
                     $dataset->persist();
                 }
