@@ -208,7 +208,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         return $this->serializer;
     }
 
-
     /**
      * Initialize resource model
      *
