@@ -81,7 +81,7 @@ class SuggestElement extends SimpleElement
             function () use ($searchedItem) {
                 return $searchedItem->isVisible();
             }
-            );
+        );
         $searchedItem->click();
         $closeButton = $this->find($this->closeButton);
         if ($closeButton->isVisible()) {
