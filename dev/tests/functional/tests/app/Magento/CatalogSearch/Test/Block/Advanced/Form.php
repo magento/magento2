@@ -86,12 +86,19 @@ class Form extends ParentForm
             /** @var CatalogProductAttribute $attribute */
             $attribute = $fixture->getDataFieldConfig('custom_attribute')['source']->getAttribute();
             $attributeType = $attribute->getFrontendInput();
+            if ($attributeType == 'Text Area') {
+                $attributeType = 'Text Field';
+            }
             $attributeCode = $attribute->getAttributeCode();
         }
         if ($this->hasRender($attributeType)) {
             $element = $this->_rootElement->find(sprintf($this->customAttributeSelector, $attributeCode));
             $arguments = ['fixture' => $fixture, 'element' => $element, 'mapping' => $mapping];
             $this->callRender($attributeType, 'fill', $arguments);
+        } elseif ($attributeType == 'Price') {
+            $value = $data['custom_attribute']['value'];
+            $this->_rootElement->find('#' . $attributeCode)->setValue($value);
+            $this->_rootElement->find('#' . $attributeCode . '_to')->setValue($value);
         } else {
             $this->_fill($mapping, $element);
         }

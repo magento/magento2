@@ -37,6 +37,7 @@
             <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
@@ -139,6 +140,7 @@
             <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal" />
@@ -169,6 +171,7 @@
             <data name="attributeValue" xsi:type="number">15</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />

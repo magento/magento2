@@ -77,6 +77,11 @@ class SuggestElement extends SimpleElement
         }
         $this->keys([$value]);
         $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+        $this->waitUntil(
+            function () use ($searchedItem) {
+                return $searchedItem->isVisible();
+            }
+            );
         $searchedItem->click();
         $closeButton = $this->find($this->closeButton);
         if ($closeButton->isVisible()) {
