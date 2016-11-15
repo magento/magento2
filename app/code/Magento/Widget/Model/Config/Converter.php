@@ -44,7 +44,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     case 'parameters':
                         /** @var $parameter \DOMNode */
                         foreach ($widgetSubNode->childNodes as $parameter) {
-                            if ($parameter->nodeName === '#text') {
+                            if (in_array($parameter->nodeName, ['#text', '#comment'])) {
                                 continue;
                             }
                             $subNodeAttributes = $parameter->attributes;
@@ -57,7 +57,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                             $widgetArray['supported_containers'] = [];
                         }
                         foreach ($widgetSubNode->childNodes as $container) {
-                            if ($container->nodeName === '#text') {
+                            if (in_array($container->nodeName, ['#text', '#comment'])) {
                                 continue;
                             }
                             $widgetArray['supported_containers'] = array_merge(
