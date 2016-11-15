@@ -61,5 +61,21 @@
             <field name="code" xsi:type="string">code_%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
         </dataset>
+        <dataset name="new">
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">new</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_%isolation%</field>
+            <field name="code" xsi:type="string">new_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
+        <dataset name="new2">
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">new2</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_2_%isolation%</field>
+            <field name="code" xsi:type="string">new2_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
     </repository>
 </config>

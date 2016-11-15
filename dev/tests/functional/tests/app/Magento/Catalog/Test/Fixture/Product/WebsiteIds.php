@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Fixture\Product;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Prepare websites.
@@ -72,7 +73,7 @@ class WebsiteIds extends DataSource
         }
 
         foreach ($this->fixtureData as $dataset) {
-            if (isset($dataset['dataset'])) {
+            if (is_array($dataset) && isset($dataset['dataset'])) {
                 $store = $this->fixtureFactory->createByCode('store', $dataset);
 
                 if (!$store->getStoreId()) {
@@ -85,6 +86,17 @@ class WebsiteIds extends DataSource
                 $this->data[] = $website->getName();
                 $this->websites[] = $website;
                 $this->stores[] = $store;
+            }  elseif ($dataset instanceof Store) {
+                if (!$dataset->getStoreId()) {
+                    $dataset->persist();
+                }
+
+                $website = $dataset->getDataFieldConfig('group_id')['source']
+                    ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
+
+                $this->data[] = $website->getName();
+                $this->websites[] = $website;
+                $this->stores[] = $dataset;
             }
         }
 

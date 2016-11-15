@@ -37,5 +37,23 @@
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>
         </dataset>
+        <dataset name="new">
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">new</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_Group_%isolation%</field>
+            <field name="root_category_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
+        <dataset name="new2">
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">new2</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_Group_2_%isolation%</field>
+            <field name="root_category_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">root_category</item>
+            </field>
+        </dataset>
     </repository>
 </config>
