@@ -21,4 +21,7 @@
             <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Mail\TransportInterface">
+        <plugin name="disableSending" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
+    </type>
 </config>
