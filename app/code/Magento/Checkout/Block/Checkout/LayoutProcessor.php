@@ -360,9 +360,9 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * Get active carriers list.
+     * Retrieve Shipping Configuration.
      *
-     * @return array
+     * @return \Magento\Shipping\Model\Config
      * @deprecated
      */
     private function getShippingConfig()
