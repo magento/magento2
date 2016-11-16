@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Test class for \Magento\CatalogWidget\Block\Product\Widget\Conditions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConditionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -178,6 +179,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testRender()
     {
