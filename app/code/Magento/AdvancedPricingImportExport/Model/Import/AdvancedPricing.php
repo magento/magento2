@@ -542,19 +542,24 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function processCountExistingPrices($prices, $table)
     {
+        $oldSkus = $this->retrieveOldSkus();
+        $existProductIds = array_intersect_key($oldSkus, $prices);
+        if (!count($existProductIds)) {
+            return $this;
+        }
+
         $tableName = $this->_resourceFactory->create()->getTable($table);
         $productEntityLinkField = $this->getProductEntityLinkField();
         $existingPrices = $this->_connection->fetchAssoc(
             $this->_connection->select()->from(
                 $tableName,
                 ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
-            )
+            )->where($productEntityLinkField . ' IN (?)', $existProductIds)
         );
-        $oldSkus = $this->retrieveOldSkus();
         foreach ($existingPrices as $existingPrice) {
-            foreach ($oldSkus as $sku => $productId) {
-                if ($existingPrice[$productEntityLinkField] == $productId && isset($prices[$sku])) {
-                    $this->incrementCounterUpdated($prices[$sku], $existingPrice);
+            foreach ($prices as $sku => $skuPrices) {
+                if (isset($oldSkus[$sku]) && $existingPrice[$productEntityLinkField] == $oldSkus[$sku]) {
+                    $this->incrementCounterUpdated($skuPrices, $existingPrice);
                 }
             }
         }
