@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\CreateStoreEntityTest" summary="Create Store View" ticketId="MAGETWO-27647">
-        <variation name="CreateStoreEntityTestVariation1">
+        <variation name="CreateStoreEntityTestVariation1" ticketId="MAGETWO-17475">
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">store_name_%isolation%</data>
@@ -15,6 +15,7 @@
             <data name="store/data/is_active" xsi:type="string">Enabled</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNoDeleteButton" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend" />
         </variation>
         <variation name="CreateStoreEntityTestVariation2">
