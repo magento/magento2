@@ -134,10 +134,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function applySelectionOnTargetProviderDataProvider()
     {
         return [
-            [[1, 2, 3], false , 1, 'in'],
+            [[1, 2, 3], 'false' , 0, 'in'],
             [[1, 2, 3], [1, 2, 3] , 1, 'nin'],
-            [false, [1, 2, 3] , 1, 'nin'],
-            [false, false , 0, '']
+            ['false', [1, 2, 3] , 1, 'nin'],
+            ['false', 'false' , 0, '']
         ];
     }
 
@@ -184,10 +184,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testGetCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
     {
         $this->setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected);
-        $this->requestMock->expects($this->at(2))
+        $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('namespace')
             ->willReturn('');
+        $this->requestMock->expects($this->at(2))
+            ->method('getParam')
+            ->with(Filter::SELECTED_PARAM)
+            ->willReturn($selectedIds);
+        $this->requestMock->expects($this->at(3))
+            ->method('getParam')
+            ->with(Filter::EXCLUDED_PARAM)
+            ->willReturn($excludedIds);
         $this->assertEquals($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
     }
 
