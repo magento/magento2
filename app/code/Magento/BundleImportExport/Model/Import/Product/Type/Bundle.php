@@ -369,6 +369,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();
+                    $this->insertRelations();
                     $this->clear();
                 }
             }
@@ -574,6 +575,41 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             }
         }
         return $insertValues;
+    }
+
+    /**
+     * Insert realtions.
+     *
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     */
+    protected function insertRelations()
+    {
+        $relations = [];
+        foreach ($this->_cachedOptions as $parentProductId => $options) {
+            foreach ($options as $option) {
+                foreach ($option['selections'] as $selection) {
+                    $productId = null;
+                    if (!isset($selection['parent_product_id'])) {
+                        if (isset($this->_cachedSkuToProducts[$selection['sku']])) {
+                            $productId = $this->_cachedSkuToProducts[$selection['sku']];
+                        }
+                    } else {
+                        $productId = $selection['product_id'];
+                    }
+
+                    if ($productId) {
+                        $relations[] = ['parent_id' => $parentProductId, 'child_id' => $productId];
+                    }
+                }
+            }
+        }
+        if (!empty($relations)) {
+            $this->connection->insertOnDuplicate(
+                $this->_resource->getTableName('catalog_product_relation'),
+                $relations
+            );
+        }
+        return $this;
     }
 
     /**
