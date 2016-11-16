@@ -52,13 +52,6 @@ class Shipping extends Form
     protected $estimationFields = ['country_id', 'region_id', 'region', 'postcode'];
 
     /**
-     * Country element in shipping estimation form.
-     *
-     * @var string
-     */
-    private $countryElement = '//select[@name="country_id"]';
-
-    /**
      * Selector for top destinations in country field.
      *
      * @var string
@@ -99,13 +92,18 @@ class Shipping extends Form
     public function getTopCountries()
     {
         $this->openEstimateShippingAndTax();
-        $this->waitForElementVisible($this->countryElement, Locator::SELECTOR_XPATH);
+        $mapping = $this->dataMapping(array_flip(['country_id']));
+        $countryField = $this->getElement($this->_rootElement, $mapping['country_id']);
+        $this->_rootElement->waitUntil(
+            function () use ($countryField) {
+                return $countryField->isVisible() ? true : null;
+            }
+        );
         return array_map(
             function ($option) {
                 return $option->getAttribute('value');
             },
-            $this->_rootElement->find($this->countryElement, Locator::SELECTOR_XPATH)
-                ->getElements($this->topOptions, Locator::SELECTOR_XPATH)
+            $countryField->getElements($this->topOptions, Locator::SELECTOR_XPATH)
         );
     }
 
