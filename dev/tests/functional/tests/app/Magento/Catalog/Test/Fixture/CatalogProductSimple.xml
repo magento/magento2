@@ -36,8 +36,8 @@
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
         <field name="has_options" is_required="0" />
-        <field name="image" is_required="0" />
-        <field name="image_label" is_required="0" />
+        <field name="image" is_required="0" group="gallery" source="Magento\Catalog\Test\Fixture\Product\Image" />
+        <field name="image_label" group="gallery" is_required="0" />
         <field name="manufacturer" is_required="0" />
         <field name="media_gallery" is_required="0" />
         <field name="meta_description" is_required="0" group="search-engine-optimization" />

@@ -29,5 +29,6 @@
 
             <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"/>
         </div>
+        <render args="$data.service.template" if="$data.hasService()"/>
     </div>
 </div>

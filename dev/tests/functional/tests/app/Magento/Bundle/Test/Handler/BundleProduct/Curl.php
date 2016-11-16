@@ -68,6 +68,10 @@ class Curl extends ProductCurl implements BundleProductInterface
             'gift_message_available' => [
                 'Yes' => 1,
                 'No' => 0
+            ],
+            'user_defined' => [
+                'Yes' => 1,
+                'No' => 0
             ]
         ];
     }
