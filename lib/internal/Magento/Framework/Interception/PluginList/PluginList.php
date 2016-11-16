@@ -276,8 +276,8 @@ class PluginList extends Scoped implements InterceptionPluginList
             $data = $this->_cache->load($cacheId);
             if ($data) {
                 list($this->_data, $this->_inherited, $this->_processed) = unserialize($data);
-                foreach ($this->_scopePriorityScheme as $scope) {
-                    $this->_loadedScopes[$scope] = true;
+                foreach ($this->_scopePriorityScheme as $scopeCode) {
+                    $this->_loadedScopes[$scopeCode] = true;
                 }
             } else {
                 $virtualTypes = [];
@@ -285,18 +285,17 @@ class PluginList extends Scoped implements InterceptionPluginList
                     if (false == isset($this->_loadedScopes[$scopeCode])) {
                         $data = $this->_reader->read($scopeCode);
                         unset($data['preferences']);
-                        if (!count($data)) {
-                            continue;
-                        }
-                        $this->_inherited = [];
-                        $this->_processed = [];
-                        $this->merge($data);
-                        $this->_loadedScopes[$scopeCode] = true;
-                        foreach ($data as $class => $config) {
-                            if (isset($config['type'])) {
-                                $virtualTypes[] = $class;
+                        if (count($data) > 0) {
+                            $this->_inherited = [];
+                            $this->_processed = [];
+                            $this->merge($data);
+                            foreach ($data as $class => $config) {
+                                if (isset($config['type'])) {
+                                    $virtualTypes[] = $class;
+                                }
                             }
                         }
+                        $this->_loadedScopes[$scopeCode] = true;
                     }
                     if ($this->isCurrentScope($scopeCode)) {
                         break;
