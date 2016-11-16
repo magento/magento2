@@ -7,16 +7,13 @@
 namespace Magento\Store\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\User\Test\Fixture\User;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
- * Preconditions:
+ * Steps:
  * 1. Enable 'Add Store Code to Urls'.
  * 2. Log out from Admin.
- *
- * Steps:
- * 1. Log in to Admin.
- * 2. Perform all assertions.
+ * 3. Perform all assertions.
  *
  * @ZephyrId MAGETWO-42720
  */
@@ -34,21 +31,40 @@ class AccessAdminWithStoreCodeInUrlTest extends Injectable
     private $configData;
 
     /**
-     * Log out from Admin and log in again.
+     * Step factory.
      *
-     * @param string $configData
-     * @param User $user
+     * @var TestStepFactory
+     */
+    private $stepFactory;
+
+    /**
+     * Inject step factory.
+     *
+     * @param TestStepFactory $stepFactory
      * @return void
      */
-    public function test($configData, User $user)
+    public function __inject(TestStepFactory $stepFactory)
     {
-        //Preconditions
+        $this->stepFactory = $stepFactory;
+    }
+
+    /**
+     * Set config and log out from Admin.
+     *
+     * @param string $configData
+     * @return void
+     */
+    public function test($configData)
+    {
         $this->configData = $configData;
-        $this->objectManager->create(
+        $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
-        $user->persist();
+        $this->stepFactory->create(
+            \Magento\User\Test\TestStep\LogoutUserOnBackendStep::class,
+            ['configData' => $this->configData]
+        )->run();
     }
 
     /**
@@ -58,7 +74,7 @@ class AccessAdminWithStoreCodeInUrlTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create(
+        $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();

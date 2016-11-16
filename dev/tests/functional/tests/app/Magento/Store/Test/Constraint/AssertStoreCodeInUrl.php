@@ -16,19 +16,20 @@ use Magento\Mtf\Client\BrowserInterface;
 class AssertStoreCodeInUrl extends AbstractConstraint
 {
     /**
-     * Assert store code in the url of logo image.
+     * Assert store code in the home page url.
      *
      * @param CmsIndex $cmsIndex
      * @param BrowserInterface $browser
-     * @param $storeCode
+     * @param string $storeCode
      * @return void
      */
     public function processAssert(CmsIndex $cmsIndex, BrowserInterface $browser, $storeCode)
     {
         $cmsIndex->open();
         $cmsIndex->getLogoBlock()->clickOnLogo();
-        \PHPUnit_Framework_Assert::assertTrue(
-            strpos($browser->getUrl(), '/' . $storeCode) !== false,
+        \PHPUnit_Framework_Assert::assertEquals(
+            $_ENV['app_frontend_url'] . $storeCode . '/',
+            $browser->getUrl(),
             sprintf('Store code \'%s\' is not present in the url: %s', $storeCode, $browser->getUrl())
         );
     }

@@ -7,7 +7,6 @@
 namespace Magento\Theme\Test\Block\Html;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Logo block.
