@@ -52,6 +52,20 @@ class Shipping extends Form
     protected $estimationFields = ['country_id', 'region_id', 'region', 'postcode'];
 
     /**
+     * Country element in shipping estimation form.
+     *
+     * @var string
+     */
+    private $countryElement = '//select[@name="country_id"]';
+
+    /**
+     * Selector for top destinations in country field.
+     *
+     * @var string
+     */
+    private $topOptions = './option[@value="delimiter"]/preceding-sibling::option[string(@value)]';
+
+    /**
      * Block wait element.
      *
      * @var string
@@ -59,7 +73,7 @@ class Shipping extends Form
     protected $blockWaitElement = '._block-content-loading';
 
     /**
-     * Get shipping price selector for exclude and include price
+     * Get shipping price selector for exclude and include price.
      *
      * @var string
      */
@@ -75,6 +89,24 @@ class Shipping extends Form
         if (!$this->_rootElement->find($this->formWrapper)->isVisible()) {
             $this->_rootElement->find($this->openForm)->click();
         }
+    }
+
+    /**
+     * Get countries displayed at the top of country element.
+     *
+     * @return array
+     */
+    public function getTopCountries()
+    {
+        $this->openEstimateShippingAndTax();
+        $this->waitForElementVisible($this->countryElement, Locator::SELECTOR_XPATH);
+        return array_map(
+            function ($option) {
+                return $option->getAttribute('value');
+            },
+            $this->_rootElement->find($this->countryElement, Locator::SELECTOR_XPATH)
+                ->getElements($this->topOptions, Locator::SELECTOR_XPATH)
+        );
     }
 
     /**
@@ -168,7 +200,7 @@ class Shipping extends Form
     }
 
     /**
-     * Wait for common shipping price block to appear
+     * Wait for common shipping price block to appear.
      *
      * @return void
      */
