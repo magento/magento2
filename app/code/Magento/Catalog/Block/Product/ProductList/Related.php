@@ -126,8 +126,11 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     public function getIdentities()
     {
         $identities = [];
-        foreach ($this->getItems() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
+        $items = $this->getItems();
+        if ( !empty( $items ) ) {
+            foreach ($items as $item) {
+                $identities = array_merge($identities, $item->getIdentities());
+            }
         }
         return $identities;
     }
