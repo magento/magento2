@@ -2022,18 +2022,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_product_entity_media_gallery',
-                    'entity_id',
-                    'catalog_product_entity',
-                    'entity_id'
-                ),
-                'entity_id',
-                $installer->getTable('catalog_product_entity'),
-                'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
             ->setComment(
                 'Catalog Product Media Gallery Attribute Backend Table'
             );
