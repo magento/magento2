@@ -148,7 +148,7 @@ class Configuration implements StockConfigurationInterface
      */
     public function getDefaultScopeId()
     {
-        return (int) $this->storeManager->getWebsite()->getId();
+        return 1;
     }
 
     /**
