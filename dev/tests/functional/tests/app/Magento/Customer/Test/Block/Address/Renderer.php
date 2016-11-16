@@ -53,7 +53,6 @@ class Renderer
                     . "{{city}}, {{{$region}}}, {{postcode}}\n{{country_id}}\n{{depend}}T: {{telephone}}{{/depend}}"
                     . "{{depend}}\nF: {{fax}}{{/depend}}{{depend}}\nVAT: {{vat_id}}{{/depend}}";
                 break;
-            case "oneline":
             case "html_without_company":
                 $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}\n{{/depend}}{{street}}\n"
@@ -64,6 +63,7 @@ class Renderer
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{/depend}}{{street}}, "
                     . "{{city}}, {{{$region}}} {{postcode}}, {{country_id}}";
                 break;
+            case "oneline":
             default:
                 $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
                     . "{{lastname}}{{depend}} {{suffix}}{{/depend}}, {{street}}, "
