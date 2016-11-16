@@ -34,7 +34,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->configMock = $helper->getObject(\Magento\Sales\Model\Order\Config::class,
+        $this->configMock = $helper->getObject(
+            \Magento\Sales\Model\Order\Config::class,
             [
                 'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
             ]
