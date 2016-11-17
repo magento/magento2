@@ -9,7 +9,6 @@ namespace Magento\UrlRewrite\Test\Constraint;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
@@ -54,6 +53,25 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     ) {
         $this->urlRewriteIndex = $urlRewriteIndex;
         $urlRewriteIndex->open();
+        if ($redirectType == 'No') {
+            if ($parentCategory && $childCategory) {
+                $categoryId = $childCategory->getId();
+            } else {
+                $categoryId = $category->getId() ?
+                    $category->getId() :
+                    $this->retrieveCategoryById($webApi, $category->getData('parent_id'))['children'];
+            }
+            $urlPath = $nestingLevel ?
+                $this->getNestingPath($category, $nestingLevel) :
+                strtolower($category->getUrlKey() . '.html');
+
+            $filter = [
+                'request_path' => $urlPath,
+                'target_path' => 'catalog/category/view/id/' . $categoryId,
+                'redirect_type' => self::REDIRECT_TYPE_NO
+            ];
+            return $this->rowVisibleAssertion($filter);
+        }
         if ($parentCategory && $childCategory) {
             $urlPath = strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
 
@@ -65,22 +83,6 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
         } else {
             $filter = [$filterByPath => strtolower($category->getUrlKey())];
         }
-        $this->rowVisibleAssertion($filter);
-
-        if ($parentCategory && $childCategory) {
-            $categoryId = $childCategory->getId();
-        } else {
-            $categoryId = $this->retrieveCategoryById($webApi, $category->getData('parent_id'))['children'];
-        }
-        $urlPath = $nestingLevel ?
-            $this->getNestingPath($category, $nestingLevel) :
-            strtolower($category->getUrlKey() . '.html');
-
-        $filter = [
-            'request_path' => $urlPath,
-            'target_path' => 'catalog/category/view/id/' . $categoryId,
-            'redirect_type' => self::REDIRECT_TYPE_NO
-        ];
         $this->rowVisibleAssertion($filter);
     }
 
@@ -118,7 +120,7 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     }
 
     /**
-     * Retrieve category by id.
+     * Retrieve category by parent id.
      *
      * @param WebapiDecorator $webApi
      * @param $id
