@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Persistent\Test\TestCase\CheckoutWthPersistentShoppingCartTest" summary="Checkout with Persistent Shopping Cart" ticketId="MAGETWO-45381">
+    <testCase name="Magento\Persistent\Test\TestCase\CheckoutWithPersistentShoppingCartTest" summary="Checkout with Persistent Shopping Cart" ticketId="MAGETWO-45381">
         <variation name="RedirectCustomerToCheckoutTestVariation1" summary="Checkout with Persistent Shopping Cart">
             <data name="issue" xsi:type="string">MAGETWO-59976: Customer can't open Product on Storefront if Persistent Cart is enabled</data>
             <data name="customer/dataset" xsi:type="string">register_customer</data>

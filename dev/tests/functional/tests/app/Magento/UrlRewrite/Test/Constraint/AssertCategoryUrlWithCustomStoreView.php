@@ -14,6 +14,7 @@ use Magento\Store\Test\Fixture\Store;
 
 /**
  * Class AssertCategoryUrlWithCustomStoreView.
+ * Assert that Category URL key has been changed after changing Category parent.
  */
 class AssertCategoryUrlWithCustomStoreView extends AbstractConstraint
 {
