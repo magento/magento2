@@ -34,6 +34,13 @@ class SynonymGroupGrid extends DataGrid
             'selector' => '[name="scope_id"]',
             'input' => 'simplifiedselect'
         ],
+        'group_id' => [
+            'selector' => '[name="group_id"]',
+        ],
+        'website_id' => [
+            'selector' => '[name="website_id"]',
+            'input' => 'select',
+        ],
     ];
 
     /**
