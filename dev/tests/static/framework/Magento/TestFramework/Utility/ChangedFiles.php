@@ -79,7 +79,7 @@ class ChangedFiles
         $directory = new \RecursiveDirectoryIterator(BP . '/setup');
         $recursiveIterator = new \RecursiveIteratorIterator($directory);
         $regexIterator = new \RegexIterator($recursiveIterator, '/.*php^/', \RegexIterator::GET_MATCH);
-        foreach($regexIterator as $file) {
+        foreach ($regexIterator as $file) {
             $files = array_merge($files, $file);
         }
         return \Magento\Framework\App\Utility\Files::composeDataSets($files);

@@ -37,7 +37,6 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
         $this->componentRegistrar = new ComponentRegistrar();
     }
 
-
     /**
      * Read fixtures into memory as arrays
      *
