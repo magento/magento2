@@ -3,9 +3,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 namespace Magento\Framework\Interception\Test\Unit\Config;
-
-use Magento\Framework\Serialize\SerializerInterface;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -17,45 +16,38 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $configScopeMock;
+    protected $configScopeMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $readerMock;
+    protected $readerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheMock;
+    protected $cacheMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $omConfigMock;
+    protected $omConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $definitionMock;
+    protected $definitionMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $relationsMock;
-
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $serializerMock;
-
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
-    private $objectManagerHelper;
+    protected $relationsMock;
 
     protected function setUp()
     {
@@ -75,8 +67,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManager\RelationsInterface::class
         );
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     /**
@@ -141,22 +131,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
         $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
 
-        $this->serializerMock->expects($this->once())
-            ->method('serialize');
-
-        $this->serializerMock->expects($this->never())->method('unserialize');
-
-        $model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Interception\Config\Config::class,
-            [
-                'reader' => $this->readerMock,
-                'scopeList' => $this->configScopeMock,
-                'cache' => $this->cacheMock,
-                'relations' => $this->relationsMock,
-                'omConfig' => $this->omConfigMock,
-                'classDefinitions' => $this->definitionMock,
-                'serializer' => $this->serializerMock,
-            ]
+        $model = new \Magento\Framework\Interception\Config\Config(
+            $this->readerMock,
+            $this->configScopeMock,
+            $this->cacheMock,
+            $this->relationsMock,
+            $this->omConfigMock,
+            $this->definitionMock,
+            'interception'
         );
 
         $this->assertEquals($expectedResult, $model->hasPlugins($type));
@@ -181,32 +163,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         $this->readerMock->expects($this->never())->method('read');
         $this->cacheMock->expects($this->never())->method('save');
-        $serializedValue = 'serializedData';
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with($cacheId)
-            ->will($this->returnValue($serializedValue));
-
-        $this->serializerMock->expects($this->never())->method('serialize');
-        $this->serializerMock->expects($this->once())
-            ->method('unserialize')
-            ->with($serializedValue)
-            ->willReturn($interceptionData);
-
-        $model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Interception\Config\Config::class,
-            [
-                'reader' => $this->readerMock,
-                'scopeList' => $this->configScopeMock,
-                'cache' => $this->cacheMock,
-                'relations' => $this->objectManagerHelper->getObject(
-                    \Magento\Framework\ObjectManager\Relations\Runtime::class
-                ),
-                'omConfig' => $this->omConfigMock,
-                'classDefinitions' => $this->definitionMock,
-                'cacheId' => $cacheId,
-                'serializer' => $this->serializerMock,
-            ]
+            ->will($this->returnValue(serialize($interceptionData)));
+        $model = new \Magento\Framework\Interception\Config\Config(
+            $this->readerMock,
+            $this->configScopeMock,
+            $this->cacheMock,
+            new \Magento\Framework\ObjectManager\Relations\Runtime(),
+            $this->omConfigMock,
+            $this->definitionMock,
+            $cacheId
         );
 
         $this->assertEquals($expectedResult, $model->hasPlugins($type));

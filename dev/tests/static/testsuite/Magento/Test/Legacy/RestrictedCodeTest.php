@@ -124,7 +124,7 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
      * @param array $pathInfo
      * @return string
      */
-    protected function getExcludedFilePath($pathInfo)
+    private function getExcludedFilePath($pathInfo)
     {
         $componentRegistrar = new ComponentRegistrar();
         if ($pathInfo['type'] != 'setup') {
