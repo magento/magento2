@@ -62,14 +62,7 @@ class Storage
      */
     public function beforeDeleteByData(StorageInterface $object, array $data)
     {
-        $toRemove = [];
-        $records = $this->urlFinder->findAllByData($data);
-        foreach ($records as $record) {
-            $toRemove[] = $record->getUrlRewriteId();
-        }
-        if ($toRemove) {
-            $this->productFactory->create()->getResource()->removeMultiple($toRemove);
-        }
+        $this->productFactory->create()->getResource()->removeMultipleByEntityStore($data);
     }
 
     /**

@@ -84,19 +84,35 @@ class UrlRewriteHandler
             foreach ($collection as $product) {
                 $product->setStoreId($storeId);
                 $product->setData('save_rewrites_history', $saveRewriteHistory);
-                $productUrls = array_merge($productUrls, $this->productUrlRewriteGenerator->generate($product));
+                $urls = $this->productUrlRewriteGenerator->generate($product, $category->getEntityId());
+                foreach ($urls as $url) {
+                    $productUrls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+                }
+                unset($urls);
             }
         } else {
-            $productUrls = array_merge(
-                $productUrls,
-                $this->getCategoryProductsUrlRewrites($category, $storeId, $saveRewriteHistory)
+            $urls = $this->getCategoryProductsUrlRewrites(
+                $category,
+                $storeId,
+                $saveRewriteHistory,
+                $category->getEntityId()
             );
+            foreach ($urls as $url) {
+                $productUrls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+            }
+            unset($urls);
         }
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $productUrls = array_merge(
-                $productUrls,
-                $this->getCategoryProductsUrlRewrites($childCategory, $storeId, $saveRewriteHistory)
+            $urls = $this->getCategoryProductsUrlRewrites(
+                $childCategory,
+                $storeId,
+                $saveRewriteHistory,
+                $category->getEntityId()
             );
+            foreach ($urls as $url) {
+                $productUrls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+            }
+            unset($urls);
         }
         return $productUrls;
     }
@@ -105,10 +121,15 @@ class UrlRewriteHandler
      * @param Category $category
      * @param int $storeId
      * @param bool $saveRewriteHistory
+     * @param int|null $rootCategoryId
      * @return UrlRewrite[]
      */
-    public function getCategoryProductsUrlRewrites(Category $category, $storeId, $saveRewriteHistory)
-    {
+    public function getCategoryProductsUrlRewrites(
+        Category $category,
+        $storeId,
+        $saveRewriteHistory,
+        $rootCategoryId = null
+    ) {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
@@ -123,10 +144,11 @@ class UrlRewriteHandler
             $this->isSkippedProduct[] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
-            $productUrls = array_merge(
-                $productUrls,
-                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category)
-            );
+            $urls = $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId);
+            foreach ($urls as $url) {
+                $productUrls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+            }
+            unset($urls);
         }
         return $productUrls;
     }

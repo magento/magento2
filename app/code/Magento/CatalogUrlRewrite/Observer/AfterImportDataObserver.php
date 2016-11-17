@@ -20,6 +20,7 @@ use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Visibility;
+
 /**
  * Class AfterImportDataObserver
  *
@@ -261,19 +262,25 @@ class AfterImportDataObserver implements ObserverInterface
         /**
          * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
          */
-        $urls = array_merge(
-            $this->canonicalUrlRewriteGenerate(),
-            $this->categoriesUrlRewriteGenerate(),
-            $this->currentUrlRewritesRegenerate()
-        );
-
-        /* Reduce duplicates. Last wins */
         $result = [];
+        $urls = $this->canonicalUrlRewriteGenerate();
         foreach ($urls as $url) {
-            $result[$url->getTargetPath() . '-' . $url->getStoreId()] = $url;
+            $result[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
         }
+        unset($urls);
+        $urls = $this->categoriesUrlRewriteGenerate();
+        foreach ($urls as $url) {
+            $result[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($urls);
+        $urls = $this->currentUrlRewritesRegenerate();
+        foreach ($urls as $url) {
+            $result[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($urls);
         $this->productCategories = null;
 
+        unset($this->products);
         $this->products = [];
         return $result;
     }

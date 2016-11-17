@@ -21,9 +21,6 @@ class CategoryUrlRewriteGenerator
     /** @var StoreViewService */
     protected $storeViewService;
 
-    /** @var \Magento\Catalog\Model\Category */
-    protected $category;
-
     /** @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator */
     protected $canonicalUrlRewriteGenerator;
 
@@ -60,37 +57,47 @@ class CategoryUrlRewriteGenerator
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Magento\Catalog\Model\Category $category
+     * @param bool $overrideStoreUrls
+     * @param int|null $rootCategoryId
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate($category, $overrideStoreUrls = false)
+    public function generate(Category $category, $overrideStoreUrls = false, $rootCategoryId = null)
     {
-        $this->category = $category;
-        $this->overrideStoreUrls = $overrideStoreUrls;
+        if ($rootCategoryId === null) {
+            $rootCategoryId = $category->getEntityId();
+        }
 
-        $storeId = $this->category->getStoreId();
+        $storeId = $category->getStoreId();
         $urls = $this->isGlobalScope($storeId)
-            ? $this->generateForGlobalScope()
-            : $this->generateForSpecificStoreView($storeId);
+            ? $this->generateForGlobalScope($category, $rootCategoryId, $overrideStoreUrls)
+            : $this->generateForSpecificStoreView($category, $storeId, $rootCategoryId);
 
-        $this->category = null;
         return $urls;
     }
 
     /**
      * Generate list of urls for global scope
      *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param bool $overrideStoreUrls
+     * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generateForGlobalScope()
+    protected function generateForGlobalScope(Category $category, $overrideStoreUrls, $rootCategoryId = null)
     {
         $urls = [];
-        $categoryId = $this->category->getId();
-        foreach ($this->category->getStoreIds() as $storeId) {
+        $categoryId = $category->getId();
+        foreach ($category->getStoreIds() as $storeId) {
             if (!$this->isGlobalScope($storeId)
-                && $this->isOverrideUrlsForStore($storeId, $categoryId)
+                && $this->isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls)
             ) {
-                $this->updateCategoryUrlForStore($storeId);
-                $urls = array_merge($urls, $this->generateForSpecificStoreView($storeId));
+                $this->updateCategoryUrlForStore($category, $storeId);
+                $specificStoreArray = $this->generateForSpecificStoreView($category, $storeId, $rootCategoryId);
+                foreach ($specificStoreArray as $url) {
+                    $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+                }
+                unset($specificStoreArray);
             }
         }
         return $urls;
@@ -99,11 +106,12 @@ class CategoryUrlRewriteGenerator
     /**
      * @param int $storeId
      * @param int $categoryId
+     * @param bool $overrideStoreUrls
      * @return bool
      */
-    protected function isOverrideUrlsForStore($storeId, $categoryId)
+    protected function isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls)
     {
-        return $this->overrideStoreUrls || !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+        return $overrideStoreUrls || !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
             $storeId,
             $categoryId,
             Category::ENTITY
@@ -113,13 +121,14 @@ class CategoryUrlRewriteGenerator
     /**
      * Override url key and url path for category in specific Store
      *
+     * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return void
      */
-    protected function updateCategoryUrlForStore($storeId)
+    protected function updateCategoryUrlForStore(Category $category, $storeId)
     {
-        $category = $this->categoryRepository->get($this->category->getId(), $storeId);
-        $this->category->addData(['url_key' => $category->getUrlKey(), 'url_path' => $category->getUrlPath()]);
+        $object = $this->categoryRepository->get($category->getId(), $storeId);
+        $category->addData(['url_key' => $object->getUrlKey(), 'url_path' => $object->getUrlPath()]);
     }
 
     /**
@@ -136,16 +145,31 @@ class CategoryUrlRewriteGenerator
     /**
      * Generate list of urls per store
      *
+     * @param \Magento\Catalog\Model\Category $category
      * @param string $storeId
+     * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generateForSpecificStoreView($storeId)
+    protected function generateForSpecificStoreView(Category $category, $storeId, $rootCategoryId = null)
     {
-        $urls = array_merge(
-            $this->canonicalUrlRewriteGenerator->generate($storeId, $this->category),
-            $this->childrenUrlRewriteGenerator->generate($storeId, $this->category),
-            $this->currentUrlRewritesRegenerator->generate($storeId, $this->category)
-        );
+        $urls = [];
+        $canonicalUrl = $this->canonicalUrlRewriteGenerator->generate($storeId, $category);
+        foreach ($canonicalUrl as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($canonicalUrl);
+
+        $childrenUrl = $this->childrenUrlRewriteGenerator->generate($storeId, $category, $rootCategoryId);
+        foreach ($childrenUrl as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($childrenUrl);
+
+        $currentUrl = $this->currentUrlRewritesRegenerator->generate($storeId, $category, $rootCategoryId);
+        foreach ($currentUrl as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($currentUrl);
         return $urls;
     }
 }

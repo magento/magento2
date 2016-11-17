@@ -7,6 +7,7 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 class ChildrenUrlRewriteGenerator
 {
@@ -33,18 +34,22 @@ class ChildrenUrlRewriteGenerator
      *
      * @param int $storeId
      * @param \Magento\Catalog\Model\Category $category
+     * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate($storeId, Category $category)
+    public function generate($storeId, Category $category, $rootCategoryId = null)
     {
         $urls = [];
-        foreach ($this->childrenCategoriesProvider->getChildren($category) as $childCategory) {
+        foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
             $childCategory->setStoreId($storeId);
             $childCategory->setData('save_rewrites_history', $category->getData('save_rewrites_history'));
-            $urls = array_merge(
-                $urls,
-                $this->categoryUrlRewriteGeneratorFactory->create()->generate($childCategory)
-            );
+            /** @var CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator */
+            $categoryUrlRewriteGenerator = $this->categoryUrlRewriteGeneratorFactory->create();
+            $urlRewrites = $categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId);
+            foreach ($urlRewrites as $url) {
+                $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+            }
+            unset($urlRewrites);
         }
         return $urls;
     }

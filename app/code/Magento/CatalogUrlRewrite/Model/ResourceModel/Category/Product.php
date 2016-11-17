@@ -6,6 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Model\ResourceModel\Category;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\UrlRewrite\Model\Storage\DbStorage;
 
 class Product extends AbstractDb
 {
@@ -55,6 +56,8 @@ class Product extends AbstractDb
     }
 
     /**
+     * Removes data by primary key
+     *
      * @param array $removeData
      * @return int
      */
@@ -64,5 +67,36 @@ class Product extends AbstractDb
             $this->getTable(self::TABLE_NAME),
             ['url_rewrite_id in (?)' => $removeData]
         );
+    }
+
+    /**
+     * Removes data by entities from url_rewrite table using a select
+     *
+     * @param array $removeData
+     * @return int
+     */
+    public function removeMultipleByEntityStore(array $removeData)
+    {
+        return $this->getConnection()->delete(
+            $this->getTable(self::TABLE_NAME),
+            ['url_rewrite_id in (?)' => $this->prepareSelect($removeData)]
+        );
+    }
+
+    /**
+     * Prepare select statement for specific filter
+     *
+     * @param array $data
+     * @return \Magento\Framework\DB\Select
+     */
+    protected function prepareSelect($data)
+    {
+        $select = $this->getConnection()->select();
+        $select->from($this->getTable(DbStorage::TABLE_NAME), 'url_rewrite_id');
+
+        foreach ($data as $column => $value) {
+            $select->where($this->getConnection()->quoteIdentifier($column) . ' IN (?)', $value);
+        }
+        return $select;
     }
 }

@@ -97,20 +97,27 @@ class ProductScopeRewriteGenerator
     /**
      * Generate url rewrites for global scope
      *
+     * @param \Magento\Framework\Data\Collection|\Magento\Catalog\Model\Category[] $productCategories
      * @param Product $product
-     * @param \Magento\Framework\Data\Collection $productCategories
+     * @param int|null $rootCategoryId
      * @return array
      */
-    public function generateForGlobalScope($productCategories, Product $product)
+    public function generateForGlobalScope($productCategories, Product $product, $rootCategoryId = null)
     {
         $urls = [];
         $productId = $product->getEntityId();
 
         foreach ($product->getStoreIds() as $id) {
-            if (!$this->isGlobalScope($id)
-                && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $productId, Product::ENTITY)
-            ) {
-                $urls = array_merge($urls, $this->generateForSpecificStoreView($id, $productCategories, $product));
+            if (!$this->isGlobalScope($id) &&
+                !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+                    $id,
+                    $productId,
+                    Product::ENTITY
+                )) {
+                $urls = array_merge(
+                    $urls,
+                    $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId)
+                );
             }
         }
 
@@ -121,11 +128,12 @@ class ProductScopeRewriteGenerator
      * Generate list of urls for specific store view
      *
      * @param int $storeId
-     * @param \Magento\Framework\Data\Collection $productCategories
+     * @param \Magento\Framework\Data\Collection|Category[] $productCategories
      * @param \Magento\Catalog\Model\Product $product
+     * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generateForSpecificStoreView($storeId, $productCategories, Product $product)
+    public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
     {
         $categories = [];
         foreach ($productCategories as $category) {
@@ -137,20 +145,37 @@ class ProductScopeRewriteGenerator
         /**
          * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
          */
-        $urls = array_merge(
-            $this->canonicalUrlRewriteGenerator->generate($storeId, $product),
-            $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories),
-            $this->currentUrlRewritesRegenerator->generate($storeId, $product, $productCategories),
-            $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-        );
-
-        /* Reduce duplicates. Last wins */
-        $result = [];
-        foreach ($urls as $url) {
-            $result[$url->getTargetPath() . '-' . $url->getStoreId()] = $url;
+        $urls =[];
+        $canonicalUrl = $this->canonicalUrlRewriteGenerator->generate($storeId, $product);
+        foreach ($canonicalUrl as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
         }
-        $this->productCategories = null;
-        return $result;
+        unset($canonicalUrl);
+
+        $categories = $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories);
+        foreach ($categories as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($categories);
+
+        $currentUrl = $this->currentUrlRewritesRegenerator->generate(
+            $storeId,
+            $product,
+            $productCategories,
+            $rootCategoryId
+        );
+        foreach ($currentUrl as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($currentUrl);
+
+        $anchor = $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories);
+        foreach ($anchor as $url) {
+            $urls[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
+        }
+        unset($anchor);
+
+        return $urls;
     }
 
     /**

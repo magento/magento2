@@ -10,7 +10,7 @@
         <observer name="category_save_rewrites_history_setter" instance="Magento\CatalogUrlRewrite\Observer\CategorySaveRewritesHistorySetterObserver"/>
     </event>
     <event name="catalog_category_save_after">
-        <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteSavingObserver"/>
+        <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteInMemorySavingObserver"/>
     </event>
     <event name="catalog_product_import_bunch_save_after">
         <observer name="catalog_product_import_rewrites_generation" instance="Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver"/>
