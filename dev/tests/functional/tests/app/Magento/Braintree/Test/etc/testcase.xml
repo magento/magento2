@@ -106,8 +106,8 @@
         <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrderWithPaypal" />
         <step name="placeOrderWithPaypal" module="Magento_Braintree" next="createInvoice" />
-        <step name="createInvoice" module="Magento_Sales" next="createBraintreeCreditMemo" />
-        <step name="createBraintreeCreditMemo" module="Magento_Braintree" />
+        <step name="createInvoice" module="Magento_Sales" next="createOnlineCreditMemo" />
+        <step name="createOnlineCreditMemo" module="Magento_Sales" />
     </scenario>
     <scenario name="SaveUseDeleteVaultForPaypalBraintreeTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
