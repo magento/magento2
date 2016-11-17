@@ -77,9 +77,9 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603, MAGETWO-43282, MAGETWO-43318">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="expectedQty/0" xsi:type="string">0</data>
+            <data name="expectedStockStatus/0" xsi:type="string">out of stock</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
@@ -94,8 +94,8 @@
             <data name="configData" xsi:type="string">banktransfer_specificcountry_gb, can_subtract_and_can_back_in_stock</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInAdminPanel" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsQtyAndStockStatusInAdminPanel" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />

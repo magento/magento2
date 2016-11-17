@@ -12,7 +12,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert product stock status.
+ * Class AssertProductOutOfStock.
  */
 class AssertProductOutOfStock extends AbstractConstraint
 {
@@ -22,58 +22,22 @@ class AssertProductOutOfStock extends AbstractConstraint
     const STOCK_AVAILABILITY = 'out of stock';
 
     /**
-     * Browser instance.
-     *
-     * @var BrowserInterface
-     */
-    private $browser;
-
-    /**
-     * Catalog product page.
-     *
-     * @var CatalogProductView
-     */
-    private $catalogProductView;
-
-    /**
      * Assert that Out of Stock status is displayed on product page.
      *
      * @param CatalogProductView $catalogProductView
      * @param BrowserInterface $browser
      * @param FixtureInterface $product
-     * @param array $products
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         BrowserInterface $browser,
-        FixtureInterface $product = null,
-        array $products = null
+        FixtureInterface $product
     ) {
-        $this->catalogProductView = $catalogProductView;
-        $this->browser = $browser;
-        if ($product) {
-            $this->stockStatusAssertion($product);
-        }
-        if ($products) {
-            foreach ($products as $product) {
-                $this->stockStatusAssertion($product);
-            }
-        }
-    }
-
-    /**
-     * Assert product stock status.
-     *
-     * @param FixtureInterface $product
-     * @return void
-     */
-    private function stockStatusAssertion(FixtureInterface $product)
-    {
-        $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         \PHPUnit_Framework_Assert::assertEquals(
             self::STOCK_AVAILABILITY,
-            $this->catalogProductView->getViewBlock()->stockAvailability(),
+            $catalogProductView->getViewBlock()->stockAvailability(),
             'Control \'' . self::STOCK_AVAILABILITY . '\' is not visible.'
         );
     }
