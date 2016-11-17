@@ -174,9 +174,9 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
                     if (strpos($path, $directory) === 0) {
                         if (preg_match($fileExtensions, $path)) {
                             // skip unit tests
-//                            if (preg_match('#' . preg_quote('Test/Unit', '#') . '#', $path)) {
-//                                return false;
-//                            }
+                            if (preg_match('#' . preg_quote('Test/Unit', '#') . '#', $path)) {
+                                return false;
+                            }
                             return true;
                         }
                     }
