@@ -36,28 +36,28 @@ class CheckSaveCreditCardOptionStep implements TestStepInterface
     private $payment;
 
     /**
-     * If vault is enabled for payment method.
+     * If 'Save for later use' checkbox is present in credit acrd form.
      *
      * @var null|bool
      */
-    private $isVaultEnabled;
+    private $isVaultPresent;
 
     /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertSaveCreditCardOptionNotPresent $assertSaveCreditCardOptionNotPresent
      * @param array $payment
-     * @param null|bool $isVaultEnabled
+     * @param null|bool $isVaultPresent
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertSaveCreditCardOptionNotPresent $assertSaveCreditCardOptionNotPresent,
         array $payment,
-        $isVaultEnabled = null
+        $isVaultPresent = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertSaveCreditCardOptionNotPresent = $assertSaveCreditCardOptionNotPresent;
         $this->payment = $payment;
-        $this->isVaultEnabled = $isVaultEnabled;
+        $this->isVaultPresent = $isVaultPresent;
     }
 
     /**
@@ -67,7 +67,7 @@ class CheckSaveCreditCardOptionStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->isVaultEnabled === false) {
+        if ($this->isVaultPresent === false) {
             $this->assertSaveCreditCardOptionNotPresent->processAssert(
                 $this->checkoutOnepage,
                 $this->payment['method']
