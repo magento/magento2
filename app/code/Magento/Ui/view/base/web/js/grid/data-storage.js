@@ -20,6 +20,7 @@ define([
                 method: 'GET',
                 dataType: 'json'
             },
+            dataNamespace: '',
             data: {}
         },
 
@@ -29,7 +30,15 @@ define([
          * @returns {DataStorage} Chainable.
          */
         initConfig: function () {
+            var namespace;
+
             this._super();
+
+            namespace = this.dataNamespace;
+
+            if (typeof namespace === 'string') {
+                this.dataNamespace = namespace ? [namespace] : [];
+            }
 
             this._requests = [];
 
@@ -77,10 +86,12 @@ define([
          * @returns {jQueryPromise}
          */
         getData: function (params, options) {
-            var cachedRequest = this.getRequest(params);
+            var cachedRequest;
 
-            if (params && params.filters && params.filters['store_id']) {
-                cachedRequest = false;
+            if (this.hasNamespaceChanged(params)) {
+                this.clearRequests();
+            } else {
+                cachedRequest = this.getRequest(params);
             }
 
             options = options || {};
@@ -88,6 +99,28 @@ define([
             return !options.refresh && cachedRequest ?
                 this.getRequestData(cachedRequest) :
                 this.requestData(params);
+        },
+
+        /**
+         * Tells whether one of the parameters defined in the "dataNamespace" has
+         * changed since the last request.
+         *
+         * @param {Object} params - Request parameters.
+         * @returns {Boolean}
+         */
+        hasNamespaceChanged: function (params) {
+            var lastRequest = _.last(this._requests),
+                paths,
+                diff;
+
+            if (!lastRequest) {
+                return false;
+            }
+
+            diff = utils.compare(lastRequest.params, params);
+            paths = _.pluck(diff.changes, 'path').concat(_.keys(diff.containers));
+
+            return _.intersection(this.dataNamespace, paths).length > 0;
         },
 
         /**
