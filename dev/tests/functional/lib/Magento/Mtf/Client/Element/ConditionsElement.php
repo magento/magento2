@@ -521,7 +521,7 @@ class ConditionsElement extends SimpleElement
      * Param wait loader.
      *
      * @param ElementInterface $element
-     * @return void
+     * @return bool|null
      */
     protected function waitForCondition(ElementInterface $element)
     {
