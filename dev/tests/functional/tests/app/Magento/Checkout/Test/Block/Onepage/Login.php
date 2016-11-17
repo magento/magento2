@@ -91,6 +91,20 @@ class Login extends Form
     }
 
     /**
+     * Fill required fields for guest checkout.
+     *
+     * @param FixtureInterface $customer
+     * @return void
+     */
+    public function fillGuestFields(FixtureInterface $customer)
+    {
+        $mapping = $this->dataMapping();
+        $this->_rootElement->find($mapping['email']['selector'], $mapping['email']['strategy'])
+            ->setValue($customer->getEmail());
+        $this->waitForElementNotVisible($this->loadingMask);
+    }
+
+    /**
      * Click continue on checkout method block.
      *
      * @return void
