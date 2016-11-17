@@ -23,7 +23,6 @@ class ChangedFiles
      */
     public static function getPhpFiles($changedFilesList)
     {
-        $fileHelper = \Magento\Framework\App\Utility\Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
             $phpFiles = [];
             foreach (glob($changedFilesList) as $listFile) {
@@ -37,18 +36,26 @@ class ChangedFiles
             );
             if (!empty($phpFiles)) {
                 $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
-                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles(
-                    Files::INCLUDE_APP_CODE
-                    | Files::INCLUDE_PUB_CODE
-                    | Files::INCLUDE_LIBS
-                    | Files::INCLUDE_TEMPLATES
-                    | Files::INCLUDE_TESTS
-                    | Files::AS_DATA_SET
-                    | Files::INCLUDE_NON_CLASSES
-                ));
+                $phpFiles = array_intersect_key($phpFiles, self::getExistingPhpFiles());
             }
         } else {
-            $phpFiles = $fileHelper->getPhpFiles(
+            $phpFiles = self::getExistingPhpFiles();
+        }
+
+        return $phpFiles;
+    }
+
+    /**
+     * Get list of existing PHP files
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private static function getExistingPhpFiles()
+    {
+        $fileUtilities = \Magento\Framework\App\Utility\Files::init();
+        return array_merge(
+            $fileUtilities->getPhpFiles(
                 Files::INCLUDE_APP_CODE
                 | Files::INCLUDE_PUB_CODE
                 | Files::INCLUDE_LIBS
@@ -56,9 +63,25 @@ class ChangedFiles
                 | Files::INCLUDE_TESTS
                 | Files::AS_DATA_SET
                 | Files::INCLUDE_NON_CLASSES
-            );
-        }
+            ),
+            self::getSetupPhpFiles()
+        );
+    }
 
-        return $phpFiles;
+    /**
+     * Get list of PHP files in setup application
+     *
+     * @return array
+     */
+    private static function getSetupPhpFiles()
+    {
+        $files = [];
+        $directory = new \RecursiveDirectoryIterator(BP . '/setup');
+        $recursiveIterator = new \RecursiveIteratorIterator($directory);
+        $regexIterator = new \RegexIterator($recursiveIterator, '/.*php^/', \RegexIterator::GET_MATCH);
+        foreach ($regexIterator as $file) {
+            $files = array_merge($files, $file);
+        }
+        return \Magento\Framework\App\Utility\Files::composeDataSets($files);
     }
 }
