@@ -50,7 +50,7 @@
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
         </variation>
-        <variation name="CreateStoreEntityTestVariation5" ticketId="MAGETWO-17475">
+        <variation name="CreateStoreEntityTestVariation5" summary="Check the absence of delete button" ticketId="MAGETWO-17475">
             <data name="store/dataset" xsi:type="string">custom_store</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
