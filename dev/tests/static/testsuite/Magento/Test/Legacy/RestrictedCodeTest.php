@@ -17,7 +17,7 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected static $_classes = [];
+    private static $_classes = [];
     /**#@-*/
 
     /**
@@ -25,7 +25,18 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected static $_fixtureFiles = [];
+    private static $_fixtureFiles = [];
+
+    /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    protected function setUp()
+    {
+        $this->componentRegistrar = new ComponentRegistrar();
+    }
+
 
     /**
      * Read fixtures into memory as arrays
@@ -126,9 +137,8 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
      */
     private function getExcludedFilePath($pathInfo)
     {
-        $componentRegistrar = new ComponentRegistrar();
         if ($pathInfo['type'] != 'setup') {
-            return $componentRegistrar->getPath($pathInfo['type'], $pathInfo['name']) . '/' . $pathInfo['path'];
+            return $this->componentRegistrar->getPath($pathInfo['type'], $pathInfo['name']) . '/' . $pathInfo['path'];
         }
         return BP . '/setup/' . $pathInfo['path'];
     }
