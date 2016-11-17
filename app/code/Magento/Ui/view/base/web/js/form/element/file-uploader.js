@@ -72,6 +72,7 @@ define([
 
             this.value(value);
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
