@@ -94,13 +94,17 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         }
         $found = false;
         foreach ($existingMediaGalleryEntries as $key => $existingEntry) {
+            $entryTypes = (array)$entry->getTypes();
+            $existingEntryTypes = (array)$existingMediaGalleryEntries[$key]->getTypes();
+            $intersectEntryTypes = array_intersect($entryTypes, $existingEntryTypes);
+            $existingMediaGalleryEntries[$key]->setTypes(array_diff($existingEntryTypes, $intersectEntryTypes));
+
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
                 if ($entry->getFile()) {
                     $entry->setId(null);
                 }
                 $existingMediaGalleryEntries[$key] = $entry;
-                break;
             }
         }
         if (!$found) {
