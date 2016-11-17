@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="Guest Checkout with PayPal Payflow Pro credit card">
+        <variation name="OnePageCheckoutPayflowProVariation1" summary="Guest Checkout with PayPal Payflow Pro credit card" ticketId="MAGETWO-60583">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">payflowpro</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">15.83</item>
+            </data>
+            <data name="creditCardClass" xsi:type="string">credit_card</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="isVaultEnabled" xsi:type="boolean">false</data>
+            <data name="configData" xsi:type="string">payflowpro</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+        </variation>
+    </testCase>
+</config>

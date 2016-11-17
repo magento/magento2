@@ -64,4 +64,7 @@
         <step name="useVaultPaymentToken" module="Magento_Vault" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
     </scenario>
+    <scenario name="OnePageCheckoutTest">
+        <step name="checkSaveCreditCardOption" module="Magento_Vault" prev="selectPaymentMethod" next="placeOrder" />
+    </scenario>
 </config>
