@@ -107,11 +107,11 @@ class Bundle extends Block
 
             /** @var SimpleElement $optionElement */
             $optionElement = $listFormOptions[$title];
-            $getTypeData = 'get' . $this->optionNameConvert($option['type']) . 'Data';
+            $getTypeData = 'get' . $this->optionNameConvert($option['frontend_type']) . 'Data';
 
             $optionData = $this->$getTypeData($optionElement);
             $optionData['title'] = $title;
-            $optionData['type'] = $option['type'];
+            $optionData['type'] = $option['frontend_type'];
             $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()
                 ? 'Yes'
                 : 'No';
@@ -266,7 +266,7 @@ class Bundle extends Block
             /** @var Option $optionBlock */
             $optionBlock = $this->blockFactory->create(
                 'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\\'
-                . $this->optionNameConvert($option['type']),
+                . $this->optionNameConvert($option['frontend_type']),
                 ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
             );
             $optionBlock->fillOption($option['value']);

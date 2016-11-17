@@ -243,8 +243,15 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
-            //
-            onlyMainImg: false,
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace',
 
             // whether swatches are rendered in product list or on product page
             inProductList: false
@@ -264,6 +271,8 @@ define([
          */
         _init: function () {
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                // store unsorted attributes
+                this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
                 $(this.element).trigger('swatch.initialized');
@@ -293,11 +302,9 @@ define([
                     this.element.parents('.product-item-info');
 
             if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
@@ -617,6 +624,7 @@ define([
                 $parent.attr('option-selected', $this.attr('option-id')).find('.selected').removeClass('selected');
                 $label.text($this.attr('option-label'));
                 $input.val($this.attr('option-id'));
+                $input.attr('data-attr-name', this._getAttributeCodeById(attributeId));
                 $this.addClass('selected');
                 $widget._toggleCheckedAttributes($this, $wrapper);
             }
@@ -631,6 +639,19 @@ define([
 
             $widget._LoadProductMedia();
             $input.trigger('change');
+        },
+
+        /**
+         * Get human readable attribute code (eg. size, color) by it ID from configuration
+         *
+         * @param {Number} attributeId
+         * @returns {*}
+         * @private
+         */
+        _getAttributeCodeById: function (attributeId) {
+            var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+
+            return attribute ? attribute.code : attributeId;
         },
 
         /**
@@ -1016,26 +1037,27 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
-                updateImg,
-                imagesToUpdate,
+                initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
-                item;
+                imagesToUpdate,
+                isInitial;
 
             if (isProductViewExist) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.onlyMainImg) {
-                    updateImg = imagesToUpdate.filter(function (img) {
-                        return img.isMain;
-                    });
-                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
-                    gallery.updateDataByIndex(0, item);
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
 
-                    gallery.seek(1);
-                } else {
-                    gallery.updateData(imagesToUpdate);
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
                 }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -1104,13 +1126,24 @@ define([
                 params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
                 selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
-                    var attribute = this.options.jsonConfig.attributes[attributeId];
+                    var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
 
                     return attribute ? attribute.code : attributeId;
                 }.bind(this)));
             }
 
             return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         }
     });
 

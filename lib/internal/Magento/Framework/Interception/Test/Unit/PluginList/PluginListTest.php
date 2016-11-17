@@ -288,4 +288,33 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(null, $this->object->getNext('Type', 'method'));
     }
+
+    /**
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
+     */
+    public function testLoadScopeDataWithEmptyData()
+    {
+        $this->_objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnArgument(0));
+        $this->_configScopeMock->expects($this->any())
+            ->method('getCurrentScope')
+            ->will($this->returnValue('emptyscope'));
+
+        $this->assertEquals(
+            [4 => ['simple_plugin']],
+            $this->_model->getNext(
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                'getName'
+            )
+        );
+        $this->assertEquals(
+            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
+            $this->_model->getPlugin(
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                'simple_plugin'
+            )
+        );
+    }
 }
