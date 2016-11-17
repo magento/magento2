@@ -52,6 +52,8 @@ class Test extends AuthorizenetResponse
      */
     public function isApproved()
     {
+        $this->security('check');
+        Security::security();
         return $this->getXResponseCode() == \Magento\Authorizenet\Model\Directpost::RESPONSE_CODE_APPROVED;
     }
 }
