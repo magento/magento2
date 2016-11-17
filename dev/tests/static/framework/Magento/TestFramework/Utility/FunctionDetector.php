@@ -37,9 +37,11 @@ class FunctionDetector
         $result = [];
         $regexp = $this->composeRegexp($functions);
         if ($regexp) {
+            $file = file($fileName);
+            array_unshift($file, '');
             $lines = preg_grep(
                 $regexp,
-                file($fileName)
+                $file
             );
             foreach ($lines as $lineNumber => $line) {
                 if (preg_match_all($regexp, $line, $matches)) {

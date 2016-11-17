@@ -132,7 +132,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
             $result .= sprintf(
                 "Functions '%s' are not secure in %s. \n\tSuggested replacement:\n%s",
                 implode(', ', $detectedFunctions),
-                $fileName . ':' . ($lineNumber + 1),
+                $fileName . ':' . $lineNumber,
                 $replacementString
             );
         }
