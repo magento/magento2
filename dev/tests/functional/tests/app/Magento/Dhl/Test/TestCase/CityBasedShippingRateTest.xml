@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Shipping\Test\TestCase\CityBasedShippingRateTest" summary="OnePageCheckout within Offline Payment Method and Fedex shipping method">
+        <variation name="CityBasedShippingRateTestVariation2" summary="Use DHL International (EU) Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12850">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="address/dataset" xsi:type="string">DE_address</data>
+            <data name="shippingAddresses/0/dataset" xsi:type="string">DE_address</data>
+            <data name="shippingAddresses/1/dataset" xsi:type="string">DE_address_Frankfurt</data>
+            <data name="shipping/shipping_service" xsi:type="string">DHL</data>
+            <data name="shipping/shipping_method" xsi:type="string">Express easy</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Express easy</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
+        </variation>
+    </testCase>
+</config>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Shipping\Test\TestCase\CityBasedShippingRateTest" summary="OnePageCheckout within Offline Payment Method and Fedex shipping method">
+        <!--<variation name="CityBasedShippingRateTestVariation1" summary="Use FedEx Shipping rates are reloaded based on City field value" ticketId="MAGETWO-56124">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="addresses/address/dataset" xsi:type="string">US_address_1</data>
+            <data name="shippingAddresses/0/dataset" xsi:type="string">KE_Nairobi</data>
+            <data name="shippingAddresses/1/dataset" xsi:type="string">KE_Mombasa</data>
+            <data name="shipping/shipping_service" xsi:type="string">Federal Express</data>
+            <data name="shipping/shipping_method" xsi:type="string">Ground</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Ground</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
+        </variation>-->
+    </testCase>
+</config>
