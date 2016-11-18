@@ -25,7 +25,7 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param DataObject $row
      * @return string
      */
-    public function _getValue(\Magento\Framework\DataObject $row)
+    public function _getValue(DataObject $row)
     {
         if (null === $this->getColumn()->getFormat()) {
             return $this->getSimpleValue($row);
@@ -39,7 +39,7 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param DataObject $row
      * @return string
      */
-    private function getSimpleValue($row)
+    private function getSimpleValue(DataObject $row)
     {
         $data = parent::_getValue($row);
         $value = null === $data ? $this->getColumn()->getDefault() : $data;
@@ -55,7 +55,7 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param DataObject $row
      * @return string
      */
-    private function getFormattedValue($row)
+    private function getFormattedValue(DataObject $row)
     {
         $value = $this->getColumn()->getFormat() ?: null;
         if (true === $this->getColumn()->getTranslate()) {

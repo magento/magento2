@@ -9,15 +9,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
-use Magento\User\Model\User;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Backend\Model\Locale\Manager;
-use Magento\Framework\TranslateInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 
-/**
- * @magentoAppIsolation enabled
- * @magentoAppArea adminhtml
- */
 class TextTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,20 +19,30 @@ class TextTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * @var RendererInterface
+     */
+    private $origRenderer;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        /** @var User $user */
-        $user = $this->objectManager->get(User::class);
-        /** @var Session $session */
-        $session = $this->objectManager->get(Session::class);
-        $session->setUser($user);
-        /** @var Manager $localeManager */
-        $localeManager = $this->objectManager->get(Manager::class);
-        $localeManager->switchBackendInterfaceLocale('fr_FR');
-        /** @var TranslateInterface $translate */
-        $translate = $this->objectManager->get(TranslateInterface::class);
-        $translate->loadData(null, true);
+        $this->origRenderer = Phrase::getRenderer();
+        /** @var RendererInterface|PHPUnit_Framework_MockObject_MockObject $rendererMock */
+        $rendererMock = $this->getMock(RendererInterface::class);
+        $rendererMock->expects($this->any())
+            ->method('render')
+            ->willReturnCallback(
+                function ($input) {
+                    return end($input) . ' translated';
+                }
+            );
+        Phrase::setRenderer($rendererMock);
+    }
+
+    protected function tearDown()
+    {
+        Phrase::setRenderer($this->origRenderer);
     }
 
     /**
@@ -83,9 +87,9 @@ class TextTest extends \PHPUnit_Framework_TestCase
                     'translate' => true
                 ],
                 [
-                    'title' => 'Need to be translated'
+                    'title' => 'String'
                 ],
-                'Translated'
+                'String translated'
             ],
             [
                 [
@@ -109,22 +113,22 @@ class TextTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'format' => 'Name: $customer_name, email: $subscriber_email',
+                    'format' => '$customer_name, email: $subscriber_email',
                     'translate' => true
                 ],
                 [
                     'customer_name' => 'John Doe',
                     'subscriber_email' => 'john@doe.com'
                 ],
-                'Nom: John Doe, email: john@doe.com'
+                'John Doe, email: john@doe.com translated'
             ],
             [
                 [
-                    'format' => 'Need to be translated',
+                    'format' => 'String',
                     'translate' => true
                 ],
                 [],
-                'Translated'
+                'String translated'
             ],
             [
                 [
