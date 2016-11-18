@@ -34,19 +34,19 @@ return [
         ]
     ],
     'eval' => [
-        'replacement' => 'No suggested replacement',
+        'replacement' => '',
         'exclude' => []
     ],
     'md5' => [
-        'replacement' => 'No suggested replacement',
+        'replacement' => '',
         'exclude' => []
     ],
     'srand' => [
-        'replacement' => 'No suggested replacement',
+        'replacement' => '',
         'exclude' => []
     ],
     'mt_srand' => [
-        'replacement' => 'No suggested replacement',
+        'replacement' => '',
         'exclude' => []
     ],
 ];

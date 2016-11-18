@@ -29,13 +29,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     private static $jsUnsecureFunctions = [];
 
     /**
-     * Function replacements
-     *
-     * @var array
-     */
-    private static $functionReplacements = [];
-
-    /**
      * File extensions pattern to search for
      *
      * @var string
@@ -51,12 +44,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     {
         self::loadData(self::$phpUnsecureFunctions, 'unsecure_php_functions*.php');
         self::loadData(self::$jsUnsecureFunctions, 'unsecure_js_functions*.php');
-        foreach (self::$phpUnsecureFunctions as $functionName => $data) {
-            self::$functionReplacements[$functionName] = $data['replacement'];
-        }
-        foreach (self::$jsUnsecureFunctions as $functionName => $data) {
-            self::$functionReplacements[$functionName] = $data['replacement'];
-        }
     }
 
     /**
@@ -108,13 +95,13 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $functionDetector = new FunctionDetector();
         $invoker(
-            function ($fileName) use ($functionDetector) {
-                $functions = $this->getFunctions($fileName);
-                $lines = $functionDetector->detectFunctions($fileName, array_keys($functions));
+            function ($fileFullPath) use ($functionDetector) {
+                $functions = $this->getFunctions($fileFullPath);
+                $lines = $functionDetector->detectFunctions($fileFullPath, array_keys($functions));
 
                 $message = '';
                 if (!empty($lines)) {
-                    $message = $this->composeMessage($fileName, $lines);
+                    $message = $this->composeMessage($fileFullPath, $lines, $functions);
                 }
                 $this->assertEmpty(
                     $lines,
@@ -125,19 +112,35 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function composeMessage($fileName, $lines)
+    /**
+     * Compose message
+     *
+     * @param string $fileFullPath
+     * @param array $lines
+     * @param array $functionRules
+     * @return string
+     */
+    private function composeMessage($fileFullPath, $lines, $functionRules)
     {
         $result = '';
         foreach ($lines as $lineNumber => $detectedFunctions) {
-            $replacements = array_intersect_key(self::$functionReplacements, array_flip($detectedFunctions));
+            $detectedFunctionRules = array_intersect_key($functionRules, array_flip($detectedFunctions));
             $replacementString = '';
-            foreach ($replacements as $function => $replacement) {
+            foreach ($detectedFunctionRules as $function => $functionRule) {
+                $replacement = $functionRule['replacement'];
+                if (is_array($replacement)) {
+                    $replacement = array_unique($replacement);
+                    $replacement = count($replacement) > 1 ?
+                        "[\n\t\t\t" . implode("\n\t\t\t", $replacement) . "\n\t\t]" :
+                        $replacement[0];
+                }
+                $replacement = empty($replacement) ? 'No suggested replacement at this time' : $replacement;
                 $replacementString .= "\t\t'$function' => '$replacement'\n";
             }
             $result .= sprintf(
                 "Functions '%s' are not secure in %s. \n\tSuggested replacement:\n%s",
                 implode(', ', $detectedFunctions),
-                $fileName . ':' . $lineNumber,
+                $fileFullPath . ':' . $lineNumber,
                 $replacementString
             );
         }
@@ -193,24 +196,24 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get functions by file extension
+     * Get functions for the given file
      *
-     * @param string $fileName
+     * @param string $fileFullPath
      * @return array
      */
-    private function getFunctions($fileName)
+    private function getFunctions($fileFullPath)
     {
-        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $fileExtension = pathinfo($fileFullPath, PATHINFO_EXTENSION);
         $functions = [];
         if ($fileExtension == 'php') {
             $functions = self::$phpUnsecureFunctions;
         } elseif ($fileExtension == 'js') {
             $functions = self::$jsUnsecureFunctions;
         } elseif ($fileExtension == 'phtml') {
-            $functions = self::$phpUnsecureFunctions + self::$jsUnsecureFunctions;
+            $functions = array_merge_recursive(self::$phpUnsecureFunctions, self::$jsUnsecureFunctions);
         }
         foreach ($functions as $function => $functionRules) {
-            if (in_array($fileName, $functionRules['exclude'])) {
+            if (in_array($fileFullPath, $functionRules['exclude'])) {
                 unset($functions[$function]);
             }
         }

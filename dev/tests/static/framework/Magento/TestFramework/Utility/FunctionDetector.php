@@ -27,16 +27,16 @@ class FunctionDetector
      *      ],
      *  ]
      *
-     * @param string $filePath
+     * @param string $fileFullPath
      * @param string[] $functions
      * @return array
      */
-    public function detectFunctions($filePath, $functions)
+    public function detectFunctions($fileFullPath, $functions)
     {
         $result = [];
         $regexp = $this->composeRegexp($functions);
         if ($regexp) {
-            $file = file($filePath);
+            $file = file($fileFullPath);
             array_unshift($file, '');
             $lines = preg_grep(
                 $regexp,
