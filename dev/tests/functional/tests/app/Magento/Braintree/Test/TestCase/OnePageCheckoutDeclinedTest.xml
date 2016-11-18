@@ -22,5 +22,20 @@
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderFailedMessage" />
         </variation>
+        <variation name="OnePageCheckoutBraintreeDeclinedTestVariation2" summary="Checkout with Braintree Credit Card configured with incorrect credentials" ticketId="MAGETWO-46244">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
+            <data name="configData" xsi:type="string">braintree, braintree_incorrect_merchant_account_id</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderFailedMessage" />
+        </variation>
     </testCase>
 </config>
