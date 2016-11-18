@@ -17,7 +17,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
-            <data name="errorMessage" xsi:type="string">Transaction has been declined. Please try again later.</data>
+            <data name="expectedErrorMessage" xsi:type="string">Transaction has been declined. Please try again later.</data>
             <data name="configData" xsi:type="string">braintree_fraud_tool_enabled_account, braintree_fraudprotection</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -33,7 +33,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
-            <data name="errorMessage" xsi:type="string">Sorry, but something went wrong</data>
+            <data name="expectedErrorMessage" xsi:type="string">Sorry, but something went wrong</data>
             <data name="configData" xsi:type="string">braintree, braintree_incorrect_merchant_account_id</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
