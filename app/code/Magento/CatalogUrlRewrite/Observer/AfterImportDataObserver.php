@@ -20,6 +20,8 @@ use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\ObjectManager;
+use Magento\UrlRewrite\Model\ArrayMerger;
 
 /**
  * Class AfterImportDataObserver
@@ -97,6 +99,9 @@ class AfterImportDataObserver implements ObserverInterface
         'visibility',
     ];
 
+    /** @var \Magento\UrlRewrite\Model\ArrayMerger */
+    private $arrayMerger;
+
     /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
@@ -106,6 +111,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
+     * @param \Magento\UrlRewrite\Model\ArrayMerger|null $arrayMerger
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,7 +123,8 @@ class AfterImportDataObserver implements ObserverInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        ArrayMerger $arrayMerger = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -127,6 +134,7 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
+        $this->arrayMerger = $arrayMerger ?: ObjectManager::getInstance()->get(ArrayMerger::class);
     }
 
     /**
@@ -259,30 +267,14 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
-        /**
-         * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-         */
-        $result = [];
-        $urls = $this->canonicalUrlRewriteGenerate();
-        foreach ($urls as $url) {
-            $result[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
-        }
-        unset($urls);
-        $urls = $this->categoriesUrlRewriteGenerate();
-        foreach ($urls as $url) {
-            $result[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
-        }
-        unset($urls);
-        $urls = $this->currentUrlRewritesRegenerate();
-        foreach ($urls as $url) {
-            $result[$url->getRequestPath() . '_' . $url->getStoreId()] = $url;
-        }
-        unset($urls);
+        $this->arrayMerger->addData($this->canonicalUrlRewriteGenerate());
+        $this->arrayMerger->addData($this->categoriesUrlRewriteGenerate());
+        $this->arrayMerger->addData($this->currentUrlRewritesRegenerate());
         $this->productCategories = null;
 
         unset($this->products);
         $this->products = [];
-        return $result;
+        return $this->arrayMerger->getResetData();
     }
 
     /**
