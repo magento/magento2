@@ -12,19 +12,20 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
- * 1. All type products is created.
+ * 1. All type products is created
  *
  * Steps:
- * 1. Navigate to frontend.
- * 2. Open test product page.
- * 3. Add to cart test product.
- * 4. Perform all asserts.
+ * 1. Navigate to frontend
+ * 2. Open test product page
+ * 3. Add to cart test product
+ * 4. Perform all asserts
  *
  * @group Shopping_Cart
- * @ZephyrId MAGETWO-25382
+ * @ZephyrId MAGETWO-25382, MAGETWO-42677
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
 {
@@ -34,76 +35,86 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Browser interface.
+     * Browser interface
      *
      * @var BrowserInterface
      */
-    private $browser;
+    protected $browser;
 
     /**
-     * Fixture factory.
+     * Fixture factory
      *
      * @var FixtureFactory
      */
-    private $fixtureFactory;
+    protected $fixtureFactory;
 
     /**
-     * Catalog product view page.
+     * Catalog product view page
      *
      * @var CatalogProductView
      */
-    private $catalogProductView;
+    protected $catalogProductView;
 
     /**
-     * Checkout cart page.
+     * Checkout cart page
      *
      * @var CheckoutCart
      */
     protected $cartPage;
 
     /**
-     * Config settings.
+     * Configuration data.
      *
      * @var string
      */
     private $configData;
 
     /**
-     * Prepare test data.
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
+
+    /**
+     * Prepare test data
      *
      * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $cartPage
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __prepare(
         BrowserInterface $browser,
         FixtureFactory $fixtureFactory,
         CatalogProductView $catalogProductView,
-        CheckoutCart $cartPage
+        CheckoutCart $cartPage,
+        TestStepFactory $testStepFactory
     ) {
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductView = $catalogProductView;
         $this->cartPage = $cartPage;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
-     * Run test add products to shopping cart.
+     * Run test add products to shopping cart
      *
      * @param array $productsData
      * @param array $cart
-     * @param string|null $configData [optional]
+     * @param string $configData
      * @return array
      */
     public function test(array $productsData, array $cart, $configData = null)
     {
         // Preconditions
         $this->configData = $configData;
-        $this->objectManager->create(
+        $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData]
+            ['configData' => $configData]
         )->run();
         $products = $this->prepareProducts($productsData);
 
@@ -115,7 +126,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Create products.
+     * Create products
      *
      * @param array $productList
      * @return array
@@ -132,7 +143,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Add products to cart.
+     * Add products to cart
      *
      * @param array $products
      * @return void
@@ -147,13 +158,13 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Reset config settings to default.
+     * Clean data after running test.
      *
      * @return void
      */
     public function tearDown()
     {
-        $this->objectManager->create(
+        $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();

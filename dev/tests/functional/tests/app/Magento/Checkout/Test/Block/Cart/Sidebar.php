@@ -172,6 +172,16 @@ class Sidebar extends Block
     }
 
     /**
+     * Get qty of items in minicart.
+     *
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return (int) $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
      * Get subtotal.
      *
      * @return string

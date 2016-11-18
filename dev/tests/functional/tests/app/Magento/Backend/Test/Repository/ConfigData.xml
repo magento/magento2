@@ -150,15 +150,6 @@
             </field>
         </dataset>
 
-        <dataset name="log_to_file">
-            <field name="dev/debug/debug_logging" xsi:type="array">
-                <item name="scope" xsi:type="string">default</item>
-                <item name="scope_id" xsi:type="number">0</item>
-                <item name="label" xsi:type="string">Yes</item>
-                <item name="value" xsi:type="number">1</item>
-            </field>
-        </dataset>
-
         <dataset name="enable_https_frontend_admin">
             <field name="web/secure/use_in_frontend" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -173,7 +164,6 @@
                 <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
-
         <dataset name="enable_https_frontend_admin_rollback">
             <field name="web/secure/use_in_frontend" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -188,7 +178,6 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
-
         <dataset name="enable_hsts">
             <field name="web/secure/enable_hsts" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -254,26 +243,6 @@
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
-            </field>
-        </dataset>
-
-        <dataset name="top_destinations_DE_ES_GB">
-            <field name="general/country/destinations" xsi:type="array">
-                <item name="scope" xsi:type="string">default</item>
-                <item name="scope_id" xsi:type="number">0</item>
-                <item name="value" xsi:type="array">
-                    <item name="Germany" xsi:type="string">DE</item>
-                    <item name="Spain" xsi:type="string">ES</item>
-                    <item name="United Kingdom" xsi:type="string">GB</item>
-                </item>
-            </field>
-        </dataset>
-
-        <dataset name="top_destinations_DE_ES_GB_rollback">
-            <field name="general/country/destinations" xsi:type="array">
-                <item name="scope" xsi:type="string">default</item>
-                <item name="scope_id" xsi:type="number">0</item>
-                <item name="value" xsi:type="string"></item>
             </field>
         </dataset>
     </repository>
