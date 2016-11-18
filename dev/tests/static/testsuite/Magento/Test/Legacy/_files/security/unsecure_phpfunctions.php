@@ -1,13 +1,22 @@
 <?php
 /**
- * Classes that are restricted to use directly.
- * A <replacement> will be suggested to be used instead.
- * Use <whitelist> to specify files and directories that are allowed to use restricted classes.
- *
- * Format: array(<class_name>, <replacement>[, array(<whitelist>)]])
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * Functions that are not secure to use.
+ * A <replacement> will be suggested to be used instead.
+ * Use <exclude> to specify files and directories that are allowed to use function.
+ *
+ * Format: [
+ *      <class_name> => [
+ *          'replacement' => <replacement>,
+ *          'exclude' => [
+ *              <exclude>,
+ *              <exclude>,
+ *          ]
+ *      ]
  */
 return [
     'unserialize' => [

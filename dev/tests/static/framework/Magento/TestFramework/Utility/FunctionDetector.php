@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\TestFramework\Utility;
 
 /**
@@ -28,16 +27,16 @@ class FunctionDetector
      *      ],
      *  ]
      *
-     * @param string $fileName
+     * @param string $filePath
      * @param string[] $functions
      * @return array
      */
-    public function detectFunctions($fileName, $functions)
+    public function detectFunctions($filePath, $functions)
     {
         $result = [];
         $regexp = $this->composeRegexp($functions);
         if ($regexp) {
-            $file = file($fileName);
+            $file = file($filePath);
             array_unshift($file, '');
             $lines = preg_grep(
                 $regexp,

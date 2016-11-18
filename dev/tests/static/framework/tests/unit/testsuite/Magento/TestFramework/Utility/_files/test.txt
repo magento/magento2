@@ -3,13 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorizenet\Model\Directpost;
-
-use Magento\Authorizenet\Model\Response as AuthorizenetResponse;
-use Magento\Framework\Encryption\Helper\Security;
+namespace Magento\Authorizenet\Model\Security;
 
 /**
- * Authorize.net response model for DirectPost model
+ * security
  */
 class Test extends AuthorizenetResponse
 {
@@ -24,10 +21,6 @@ class Test extends AuthorizenetResponse
      */
     public function checkSecurity($merchantMd5, $merchantApiLogin, $amount, $transactionId)
     {
-        if (!$amount) {
-            $amount = '0.00';
-        }
-
         return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));
     }
 
@@ -40,20 +33,14 @@ class Test extends AuthorizenetResponse
      */
     public function security($merchantMd5, $merchantApiLogin)
     {
-        $hash = $this->generateHash(security($merchantMd5), $merchantApiLogin, $this->getXAmount(), $this->getXTransId());
-
+        $hash = $this->generateHash(security($merchantMd5), $merchantApiLogin, $this->getXAmount());
+        security(
+            'something'
+        );
         return Security::compareStrings($hash, $this->getData('x_MD5_Hash'));
-    }
 
-    /**
-     * Return if this is approved response from Authorize.net auth request.
-     *
-     * @return bool
-     */
-    public function isApproved()
-    {
         $this->security('check');
         Security::security();
-        return $this->getXResponseCode() == \Magento\Authorizenet\Model\Directpost::RESPONSE_CODE_APPROVED;
+        return $this->getXResponseCode() == \Magento\Authorizenet\Model\Security::RESPONSE_CODE_APPROVED;
     }
 }

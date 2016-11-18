@@ -9,13 +9,14 @@ class FunctionDetectorTest extends \PHPUnit_Framework_TestCase
 {
     public function testDetectFunctions()
     {
-        $fixturePath = __DIR__ . '/_files/test.php';
+        $fixturePath = __DIR__ . '/_files/test.txt';
         $expectedResults = [
-            31 => ['strtoupper', 'md5'],
-            43 => ['security'],
+            24 => ['strtoupper', 'md5'],
+            36 => ['security'],
+            37 => ['security'],
         ];
         $functionDetector = new FunctionDetector();
         $lines = $functionDetector->detectFunctions($fixturePath, ['security', 'md5', 'test', 'strtoupper']);
-        self::assertEquals($expectedResults, $lines);
+        $this->assertEquals($expectedResults, $lines);
     }
 }

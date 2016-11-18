@@ -15,14 +15,14 @@ use Magento\TestFramework\Utility\FunctionDetector;
 class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Lists of restricted entities from fixtures
+     * Php unsecure functions
      *
      * @var array
      */
     private static $phpUnsecureFunctions = [];
 
     /**
-     * JS unsecure functions to detect
+     * JS unsecure functions
      *
      * @var array
      */
@@ -36,13 +36,21 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     private static $functionReplacements = [];
 
     /**
+     * File extensions pattern to search for
+     *
+     * @var string
+     */
+    private $fileExtensions = '/\.(php|phtml|js)$/';
+
+    /**
      * Read fixtures into memory as arrays
+     *
      * @return void
      */
     public static function setUpBeforeClass()
     {
-        self::_loadData(self::$phpUnsecureFunctions, 'unsecure_phpfunctions*.php');
-        self::_loadData(self::$jsUnsecureFunctions, 'unsecure_jsfunctions*.php');
+        self::loadData(self::$phpUnsecureFunctions, 'unsecure_phpfunctions*.php');
+        self::loadData(self::$jsUnsecureFunctions, 'unsecure_jsfunctions*.php');
         foreach (self::$phpUnsecureFunctions as $functionName => $data) {
             self::$functionReplacements[$functionName] = $data['replacement'];
         }
@@ -58,7 +66,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
      * @param string $filePattern
      * @return void
      */
-    private static function _loadData(array &$data, $filePattern)
+    private static function loadData(array &$data, $filePattern)
     {
         foreach (glob(__DIR__ . '/_files/security/' . $filePattern) as $file) {
             $data = array_merge_recursive($data, self::_readList($file));
@@ -85,13 +93,6 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     {
         return include $file;
     }
-
-    /**
-     * File extensions pattern to search for
-     *
-     * @var string
-     */
-    private $fileExtensions = '/\.(php|phtml|js)$/';
 
     /**
      * Detect unsecure functions usage for changed files in whitelist with the exception of blacklist
