@@ -41,16 +41,6 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $pageSearchResult;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
-     */
-    protected $dataHelper;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Reflection\DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page\Collection
      */
     protected $collection;
@@ -73,14 +63,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->pageResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectProcessor = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $pageDataFactory = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -114,9 +97,6 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $pageFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->page);
-        $pageDataFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->pageData);
         $pageSearchResultFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->pageSearchResult);
@@ -125,14 +105,9 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->collection);
         /**
          * @var \Magento\Cms\Model\PageFactory $pageFactory
-         * @var \Magento\Cms\Api\Data\PageInterfaceFactory $pageDataFactory
          * @var \Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory $pageSearchResultFactory
          * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
          */
-
-        $this->dataHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMockForAbstractClass();
@@ -140,11 +115,8 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = new PageRepository(
             $this->pageResource,
             $pageFactory,
-            $pageDataFactory,
             $collectionFactory,
             $pageSearchResultFactory,
-            $this->dataHelper,
-            $this->dataObjectProcessor,
             $this->storeManager,
             $this->collectionProcessor
         );
@@ -240,11 +212,14 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
         $criteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)->getMock();
-
+        $itemsMock = $this->getMockBuilder(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->collection->addItem($this->page);
         $this->collection->expects($this->once())
             ->method('getSize')
             ->willReturn($total);
+        $this->collection->expects($this->once())
+                ->method('getItems')
+                ->willReturn([$itemsMock]);
 
         $this->collectionProcessor->expects($this->once())
             ->method('process')
@@ -261,21 +236,12 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->pageSearchResult->expects($this->once())
             ->method('setItems')
-            ->with(['someData'])
+            ->with([$itemsMock])
             ->willReturnSelf();
 
         $this->page->expects($this->once())
             ->method('getData')
             ->willReturn(['data']);
-
-        $this->dataHelper->expects($this->once())
-            ->method('populateWithArray')
-            ->with($this->pageData, ['data'], \Magento\Cms\Api\Data\PageInterface::class);
-
-        $this->dataObjectProcessor->expects($this->once())
-            ->method('buildOutputDataArray')
-            ->with($this->pageData, \Magento\Cms\Api\Data\PageInterface::class)
-            ->willReturn('someData');
 
         $this->assertEquals($this->pageSearchResult, $this->repository->getList($criteria));
     }
