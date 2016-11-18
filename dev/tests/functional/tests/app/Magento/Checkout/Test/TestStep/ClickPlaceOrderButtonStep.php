@@ -19,7 +19,7 @@ class ClickPlaceOrderButtonStep implements TestStepInterface
      *
      * @var CheckoutOnepage
      */
-    protected $checkoutOnepage;
+    private $checkoutOnepage;
 
     /**
      * @param CheckoutOnepage $checkoutOnepage
