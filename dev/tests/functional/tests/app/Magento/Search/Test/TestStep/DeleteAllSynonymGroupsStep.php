@@ -22,6 +22,8 @@ class DeleteAllSynonymGroupsStep implements TestStepInterface
     private $synonymGroupIndex;
 
     /**
+     * Constructor.
+     *
      * @construct
      * @param SynonymGroupIndex $synonymGroupIndex
      */

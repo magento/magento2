@@ -21,7 +21,6 @@ class AssertSynonymGroupsSearch extends AbstractConstraint
      * @param array $searchQueries
      * @param SynonymGroupIndex $synonymGroupIndex
      * @return void
-     *
      */
     public function processAssert(array $synonymGroups, array $searchQueries, SynonymGroupIndex $synonymGroupIndex)
     {
