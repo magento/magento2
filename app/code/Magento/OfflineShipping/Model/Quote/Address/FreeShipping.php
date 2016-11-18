@@ -5,8 +5,6 @@
  */
 namespace Magento\OfflineShipping\Model\Quote\Address;
 
-use Magento\Quote\Model\Quote\Address;
-
 class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInterface
 {
     /**
@@ -66,10 +64,14 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
             $itemFreeShipping = (bool)$item->getFreeShipping();
             $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
 
+            if ($addressFreeShipping && !$item->getAddress()->getFreeShipping()) {
+                $item->getAddress()->setFreeShipping(true);
+            }
+
             /** Parent free shipping we apply to all children*/
             $this->applyToChildren($item, $itemFreeShipping);
         }
-        return $addressFreeShipping;
+        return (bool)$quote->getShippingAddress()->getFreeShipping();
     }
 
     /**
