@@ -254,12 +254,18 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $data = parent::getData($key, $index);
             if ($data === null) {
                 /** Try to find necessary data in custom attributes */
-                $data = parent::getData(self::CUSTOM_ATTRIBUTES . "/{$key}", $index);
+                $data = isset($this->_data[self::CUSTOM_ATTRIBUTES][$key])
+                    ? $this->_data[self::CUSTOM_ATTRIBUTES][$key]
+                    : null;
                 if ($data instanceof \Magento\Framework\Api\AttributeValue) {
                     $data = $data->getValue();
                 }
+                if (null !== $index && isset($data[$index])) {
+                    return $data[$index];
+                }
             }
         }
+
         return $data;
     }
 

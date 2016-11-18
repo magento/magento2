@@ -5,10 +5,21 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-  <type name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertBillingAddressAbsentInPayment">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
 </config>
