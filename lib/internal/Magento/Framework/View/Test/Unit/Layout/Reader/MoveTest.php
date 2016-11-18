@@ -75,9 +75,9 @@ class MoveTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'move_before' => [
-                'element' => new \Magento\Framework\View\Layout\Element('
-                    <move element="product" destination="product.info" before="before.block" as="as.product.info"/>
-                '),
+                'element' => new \Magento\Framework\View\Layout\Element(
+                    '<move element="product" destination="product.info" before="before.block" as="as.product.info"/>'
+                ),
                 'destination' => 'product.info',
                 'siblingName' => 'before.block',
                 'isAfter' => false,
@@ -85,9 +85,9 @@ class MoveTest extends \PHPUnit_Framework_TestCase
                 'parentElement' => new \Magento\Framework\View\Layout\Element('<element/>'),
             ],
             'move_after' => [
-                'element' => new \Magento\Framework\View\Layout\Element('
-                    <move element="product" destination="product.info" after="after.block" as="as.product.info"/>
-                '),
+                'element' => new \Magento\Framework\View\Layout\Element(
+                    '<move element="product" destination="product.info" after="after.block" as="as.product.info"/>'
+                ),
                 'destination' => 'product.info',
                 'siblingName' => 'after.block',
                 'isAfter' => true,
