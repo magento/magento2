@@ -17,10 +17,11 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
-            <data name="configData" xsi:type="string">braintree, braintree_advanced_protection</data>
+            <data name="errorMessage" xsi:type="string">Transaction has been declined. Please try again later.</data>
+            <data name="configData" xsi:type="string">braintree_fraud_tool_enabled_account, braintree_fraudprotection</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderFailedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>
         <variation name="OnePageCheckoutBraintreeDeclinedTestVariation2" summary="Checkout with Braintree Credit Card configured with incorrect credentials" ticketId="MAGETWO-46244">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
@@ -31,11 +32,12 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
-            <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="errorMessage" xsi:type="string">Sorry, but something went wrong</data>
             <data name="configData" xsi:type="string">braintree, braintree_incorrect_merchant_account_id</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderFailedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>
     </testCase>
 </config>

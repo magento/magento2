@@ -22,7 +22,7 @@
             <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
-    <type name="Magento\Checkout\Test\Constraint\AssertOrderFailedMessage">
+    <type name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>

@@ -12,23 +12,19 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert that error message is correct.
  */
-class AssertOrderFailedMessage extends AbstractConstraint
+class AssertCheckoutErrorMessage extends AbstractConstraint
 {
-    /**
-     * Error message on checkout.
-     */
-    const ERROR_MESSAGE = 'Transaction has been declined. Please try again later.';
-
     /**
      * Assert that error message is correct.
      *
      * @param CheckoutOnepage $checkoutOnepage
+     * @param string $errorMessage
      * @return void
      */
-    public function processAssert(CheckoutOnepage $checkoutOnepage)
+    public function processAssert(CheckoutOnepage $checkoutOnepage, $errorMessage)
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            self::ERROR_MESSAGE,
+            $errorMessage,
             $checkoutOnepage->getMessagesBlock()->getErrorMessage(),
             'Wrong error message is displayed.'
         );
