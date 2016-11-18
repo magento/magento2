@@ -204,11 +204,26 @@
         </dataset>
 
         <dataset name="braintree_paypal_sale">
+            <field name="payment/braintree_section/braintree/active_braintree_paypal" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
             <field name="payment/braintree_section/braintree/braintree_paypal/payment_action" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Authorize and Capture</item>
                 <item name="value" xsi:type="string">authorize_capture</item>
+            </field>
+        </dataset>
+
+        <dataset name="braintree_paypal_sale_rollback">
+            <field name="payment/braintree_section/braintree/active_braintree_paypal" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
 
