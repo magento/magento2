@@ -49,8 +49,8 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::loadData(self::$phpUnsecureFunctions, 'unsecure_phpfunctions*.php');
-        self::loadData(self::$jsUnsecureFunctions, 'unsecure_jsfunctions*.php');
+        self::loadData(self::$phpUnsecureFunctions, 'unsecure_php_functions*.php');
+        self::loadData(self::$jsUnsecureFunctions, 'unsecure_js_functions*.php');
         foreach (self::$phpUnsecureFunctions as $functionName => $data) {
             self::$functionReplacements[$functionName] = $data['replacement'];
         }
@@ -76,8 +76,12 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
             $excludes = $value['exclude'];
             $excludePaths = [];
             foreach ($excludes as $exclude) {
-                $excludePaths[] = $componentRegistrar->getPath($exclude['type'], $exclude['name'])
-                    . '/' . $exclude['path'];
+                if ('setup' == $exclude['type']) {
+                    $excludePaths[] = BP . '/setup/' . $exclude['path'];
+                } else {
+                    $excludePaths[] = $componentRegistrar->getPath($exclude['type'], $exclude['name'])
+                        . '/' . $exclude['path'];
+                }
             }
             $data[$key]['exclude'] = $excludePaths;
         }
