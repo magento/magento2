@@ -1617,9 +1617,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($columnData['PRIMARY'] === true) {
             $options['primary'] = true;
         }
-        if ($columnData['DEFAULT'] !== null)
-            && $type != Table::TYPE_TEXT
-        ) {
+        if ($columnData['DEFAULT'] !== null && $type != Table::TYPE_TEXT) {
             $options['default'] = $this->quote($columnData['DEFAULT']);
         }
         if (strlen($columnData['SCALE']) > 0) {
