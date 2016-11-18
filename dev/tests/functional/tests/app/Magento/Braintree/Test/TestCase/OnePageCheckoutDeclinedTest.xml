@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutDeclinedTest" summary="Error message during OnePageCheckout">
+        <variation name="OnePageCheckoutBraintreeDeclinedTestVariation1" summary="Registered Checkout with Braintree Credit Card from Storefront with Advanced Fraud Protection failed" ticketId="MAGETWO-46469">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
+            <data name="configData" xsi:type="string">braintree, braintree_advanced_protection</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderFailedMessage" />
+        </variation>
+    </testCase>
+</config>
