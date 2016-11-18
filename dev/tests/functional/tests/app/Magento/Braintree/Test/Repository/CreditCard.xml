@@ -13,14 +13,23 @@
             <field name="credit_card_exp_year" xsi:type="string">2020</field>
             <field name="cvv" xsi:type="string">123</field>
         </dataset>
+
         <dataset name="visa_braintree_3dsecure">
             <field name="credit_card_number" xsi:type="string">4000000000000002</field>
             <field name="credit_card_exp_month" xsi:type="string">01</field>
             <field name="credit_card_exp_year" xsi:type="string">20</field>
             <field name="cvv" xsi:type="string">123</field>
         </dataset>
+
         <dataset name="visa_braintree_3dsecure_failed">
             <field name="credit_card_number" xsi:type="string">4000000000000028</field>
+            <field name="credit_card_exp_month" xsi:type="string">01</field>
+            <field name="credit_card_exp_year" xsi:type="string">2020</field>
+            <field name="cvv" xsi:type="string">123</field>
+        </dataset>
+
+        <dataset name="visa_braintree_fraud_rejected">
+            <field name="credit_card_number" xsi:type="string">4000111111111511</field>
             <field name="credit_card_exp_month" xsi:type="string">01</field>
             <field name="credit_card_exp_year" xsi:type="string">2020</field>
             <field name="cvv" xsi:type="string">123</field>
