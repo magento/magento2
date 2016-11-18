@@ -3,26 +3,28 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
-use Magento\Framework\DataObject as MagentoObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $bundleProductPriceFactory;
 
-    /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $jsonEncoder;
 
-    /** @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $catalogProduct;
 
     /**
@@ -30,7 +32,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     private $eventManager;
 
-    /** @var  \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $product;
 
     /**
@@ -86,6 +90,15 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 'catalogProduct' => $this->catalogProduct
             ]
         );
+
+        $ruleProcessor = $this->getMockBuilder(
+            \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class
+        )->disableOriginalConstructor()->getMock();
+        $objectHelper->setBackwardCompatibleProperty(
+            $this->bundleBlock,
+            'catalogRuleProcessor',
+            $ruleProcessor
+        );
     }
 
     public function testGetOptionHtmlNoRenderer()
@@ -138,7 +151,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $options = [];
         $finalPriceMock = $this->getPriceMock(
             [
-                'getPriceWithoutOption' => new MagentoObject(
+                'getPriceWithoutOption' => new \Magento\Framework\DataObject(
                     [
                         'value' => 100,
                         'base_amount' => 100,
@@ -148,7 +161,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         );
         $regularPriceMock = $this->getPriceMock(
             [
-                'getAmount' => new MagentoObject(
+                'getAmount' => new \Magento\Framework\DataObject(
                     [
                         'value' => 110,
                         'base_amount' => 110,
@@ -183,7 +196,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 'Selection 1',
                 23,
                 [
-                    ['price' => new MagentoObject(['base_amount' => $baseAmount, 'value' => $basePriceValue])]
+                    ['price' => new \Magento\Framework\DataObject(
+                        ['base_amount' => $baseAmount, 'value' => $basePriceValue]
+                    )]
                 ],
                 true,
                 true
@@ -211,7 +226,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         ];
         $finalPriceMock = $this->getPriceMock(
             [
-                'getPriceWithoutOption' => new MagentoObject(
+                'getPriceWithoutOption' => new \Magento\Framework\DataObject(
                     [
                         'value' => 100,
                         'base_amount' => 100,
@@ -221,7 +236,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         );
         $regularPriceMock = $this->getPriceMock(
             [
-                'getAmount' => new MagentoObject(
+                'getAmount' => new \Magento\Framework\DataObject(
                     [
                         'value' => 110,
                         'base_amount' => 110,
@@ -269,7 +284,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      * @param array $options
      * @param \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject $priceInfo
      * @param string $priceType
-     * @return BundleBlock
+     * @return void
      */
     private function updateBundleBlock($options, $priceInfo, $priceType)
     {
@@ -281,6 +296,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->method('appendSelections')
             ->willReturn($options);
 
+        $selectionCollection = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectionCollection->expects($this->once())->method('addTierPriceData');
+
         $typeInstance = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -290,6 +310,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $typeInstance->expects($this->any())
             ->method('getStoreFilter')
             ->willReturn(true);
+        $typeInstance->expects($this->once())
+            ->method('getSelectionsCollection')
+            ->willReturn($selectionCollection);
 
         $this->product->expects($this->any())
             ->method('getTypeInstance')
@@ -368,7 +391,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 ->with($selectionAmount['item'])
                 ->will(
                     $this->returnValue(
-                        new MagentoObject(
+                        new \Magento\Framework\DataObject(
                             [
                                 'value' => $selectionAmount['value'],
                                 'base_amount' => $selectionAmount['base_amount'],
@@ -486,8 +509,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($optionCollection);
         $typeInstance->expects($this->any())->method('getStoreFilter')->willReturn(true);
         $typeInstance->expects($this->any())->method('getOptionsCollection')->willReturn($optionCollection);
-        $typeInstance->expects($this->any())->method('getOptionsIds')->willReturn([1,2]);
-        $typeInstance->expects($this->once())->method('getSelectionsCollection')->with([1,2], $this->product)
+        $typeInstance->expects($this->any())->method('getOptionsIds')->willReturn([1, 2]);
+        $typeInstance->expects($this->once())->method('getSelectionsCollection')->with([1, 2], $this->product)
             ->willReturn($selectionConnection);
         $this->product->expects($this->any())
             ->method('getTypeInstance')->willReturn($typeInstance);

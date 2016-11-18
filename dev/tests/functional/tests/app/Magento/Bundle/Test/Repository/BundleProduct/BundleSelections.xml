@@ -623,6 +623,56 @@
             </field>
         </dataset>
 
+        <dataset name="required_three_fixed_options_with_qty">
+            <field name="bundle_options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="title" xsi:type="string">Drop-down Option</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="frontend_type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">Yes</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_price_value" xsi:type="string">10.00</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                                <item name="selection_qty" xsi:type="string">1</item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_price_value" xsi:type="string">20.00</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                                <item name="selection_qty" xsi:type="string">2</item>
+                            </item>
+                        </item>
+                        <item name="2" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_price_value" xsi:type="string">30.00</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                                <item name="selection_qty" xsi:type="string">3</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::simple</item>
+                    <item name="1" xsi:type="string">catalogProductSimple::product_15_dollar</item>
+                    <item name="2" xsi:type="string">catalogProductSimple::product_40_dollar</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="dynamic_with_two_required_options_assigned_products_with_special_price">
             <field name="bundle_options" xsi:type="array">
                 <item name="0" xsi:type="array">

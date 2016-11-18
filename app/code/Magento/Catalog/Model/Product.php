@@ -1616,6 +1616,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isSalable()
     {
+        if ($this->hasData('salable') && !$this->_catalogProduct->getSkipSaleableCheck()) {
+            return $this->getData('salable');
+        }
         $this->_eventManager->dispatch('catalog_product_is_salable_before', ['product' => $this]);
 
         $salable = $this->isAvailable();
@@ -1625,6 +1628,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             'catalog_product_is_salable_after',
             ['product' => $this, 'salable' => $object]
         );
+        $this->setData('salable', $object->getIsSalable());
         return $object->getIsSalable();
     }
 
