@@ -56,7 +56,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     private static function loadData(array &$data, $filePattern)
     {
         foreach (glob(__DIR__ . '/_files/security/' . $filePattern) as $file) {
-            $data = array_merge_recursive($data, self::_readList($file));
+            $data = array_merge_recursive($data, self::readList($file));
         }
         $componentRegistrar = new ComponentRegistrar();
         foreach ($data as $key => $value) {
@@ -80,7 +80,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
      * @param string $file
      * @return array
      */
-    private static function _readList($file)
+    private static function readList($file)
     {
         return include $file;
     }
