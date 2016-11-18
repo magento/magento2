@@ -79,6 +79,24 @@
             </field>
         </dataset>
 
+        <dataset name="braintree_advanced_protection">
+            <field name="payment/braintree_section/braintree/braintree_advanced/fraudprotection" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="braintree_advanced_protection_rollback">
+            <field name="payment/braintree_section/braintree/braintree_advanced/fraudprotection" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
         <dataset name="braintree_3d_secure_rollback">
             <field name="payment/braintree_section/braintree/braintree_3dsecure/verify_3dsecure" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
