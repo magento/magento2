@@ -129,7 +129,7 @@ class ShoppingCartPerCustomerTest extends Injectable
      * @param Customer $customer
      * @param array $checkoutData
      * @param array $products
-     * @return array
+     * @return \Magento\Checkout\Test\Fixture\Cart|null
      */
     private function prepareShoppingCart(Customer $customer, array $checkoutData, array $products)
     {
