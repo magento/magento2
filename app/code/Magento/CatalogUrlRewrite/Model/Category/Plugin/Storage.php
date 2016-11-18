@@ -5,30 +5,30 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin;
 
-use Magento\CatalogUrlRewrite\Model\Category\ProductFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 
 class Storage
 {
     /** @var UrlFinderInterface */
     protected $urlFinder;
 
-    /** @var ProductFactory */
-    protected $productFactory;
+    /** @var Product */
+    protected $productResource;
 
     /**
      * @param UrlFinderInterface $urlFinder
-     * @param ProductFactory $productFactory
+     * @param Product $productResource
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        ProductFactory $productFactory
+        Product $productResource
     ) {
         $this->urlFinder = $urlFinder;
-        $this->productFactory = $productFactory;
+        $this->productResource = $productResource;
     }
 
     /**
@@ -50,7 +50,7 @@ class Storage
             ];
         }
         if ($toSave) {
-            $this->productFactory->create()->getResource()->saveMultiple($toSave);
+            $this->productResource->saveMultiple($toSave);
         }
     }
 
@@ -62,7 +62,7 @@ class Storage
      */
     public function beforeDeleteByData(StorageInterface $object, array $data)
     {
-        $this->productFactory->create()->getResource()->removeMultipleByEntityStore($data);
+        $this->productResource->removeMultipleByFiler($data);
     }
 
     /**

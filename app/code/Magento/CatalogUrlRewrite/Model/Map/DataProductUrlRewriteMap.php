@@ -20,17 +20,11 @@ class DataProductUrlRewriteMap implements DataMapInterface
     /** @var string[] */
     private $data = [];
 
-    /** @var UrlRewrite */
-    private $urlRewritePlaceholder;
-
     /** @var DataMapPoolInterface */
     private $dataMapPool;
 
     /** @var ResourceConnection */
     private $connection;
-
-    /** @var UrlRewriteFactory */
-    private $urlRewriteFactory;
 
     /** @var TemporaryTableService */
     private $temporaryTableService;
@@ -49,16 +43,11 @@ class DataProductUrlRewriteMap implements DataMapInterface
     ) {
         $this->connection = $connection;
         $this->dataMapPool = $dataMapPool;
-        $this->urlRewriteFactory = $urlRewriteFactory;
         $this->temporaryTableService = $temporaryTableService;
-        $this->urlRewritePlaceholder = $this->urlRewriteFactory->create();
     }
 
     /**
-     * Gets all data from a map identified by a category Id
-     *
-     * @param int $categoryId
-     * @return array
+     * {@inheritdoc}
      */
     public function getData($categoryId)
     {
@@ -105,10 +94,7 @@ class DataProductUrlRewriteMap implements DataMapInterface
     }
 
     /**
-     * Resets current map and it's dependencies
-     *
-     * @param int $categoryId
-     * @return $this
+     * {@inheritdoc}
      */
     public function resetData($categoryId)
     {
@@ -118,6 +104,5 @@ class DataProductUrlRewriteMap implements DataMapInterface
         }
         unset($this->data);
         $this->data = [];
-        return $this;
     }
 }

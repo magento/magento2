@@ -55,10 +55,7 @@ class CategoryUrlRewriteMap implements MapInterface
     }
 
     /**
-     * Gets the results from a map by identifiers
-     *
-     * @param array $identifiers
-     * @return UrlRewrite[]
+     * {@inheritdoc}
      */
     public function getByIdentifiers($identifiers)
     {

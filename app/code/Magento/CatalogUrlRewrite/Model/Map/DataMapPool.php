@@ -34,11 +34,7 @@ class DataMapPool implements DataMapPoolInterface
     }
 
     /**
-     * Gets a map by instance and category Id
-     *
-     * @param string $instanceName
-     * @param int $categoryId
-     * @return DataMapInterface
+     * {@inheritdoc}
      */
     public function getDataMap($instanceName, $categoryId)
     {
@@ -55,11 +51,7 @@ class DataMapPool implements DataMapPoolInterface
     }
 
     /**
-     * Resets a map by instance and category Id
-     *
-     * @param string $instanceName
-     * @param int $categoryId
-     * @return $this
+     * {@inheritdoc}
      */
     public function resetDataMap($instanceName, $categoryId)
     {
@@ -68,6 +60,5 @@ class DataMapPool implements DataMapPoolInterface
             $this->dataArray[$key]->resetData($categoryId);
             unset($this->dataArray[$key]);
         }
-        return $this;
     }
 }

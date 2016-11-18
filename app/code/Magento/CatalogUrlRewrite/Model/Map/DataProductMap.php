@@ -26,7 +26,6 @@ class DataProductMap implements DataMapInterface
     private $connection;
 
     /**
-     * Constructor
      * @param CollectionFactory $collectionFactory
      * @param DataMapPoolInterface $dataMapPool
      * @param ResourceConnection $connection
@@ -42,10 +41,7 @@ class DataProductMap implements DataMapInterface
     }
 
     /**
-     * Gets all data from a map identified by a category Id
-     *
-     * @param int $categoryId
-     * @return array
+     * {@inheritdoc}
      */
     public function getData($categoryId)
     {
@@ -82,10 +78,7 @@ class DataProductMap implements DataMapInterface
     }
 
     /**
-     * Resets current map and it's dependencies
-     *
-     * @param int $categoryId
-     * @return $this
+     * {@inheritdoc}
      */
     public function resetData($categoryId)
     {

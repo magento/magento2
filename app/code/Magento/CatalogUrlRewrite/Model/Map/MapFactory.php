@@ -29,11 +29,7 @@ class MapFactory implements MapFactoryInterface
     }
 
     /**
-     * Creates a client map
-     *
-     * @param string $instanceName
-     * @param int $categoryId
-     * @return MapInterface
+     * {@inheritdoc}
      */
     public function create($instanceName, $categoryId)
     {

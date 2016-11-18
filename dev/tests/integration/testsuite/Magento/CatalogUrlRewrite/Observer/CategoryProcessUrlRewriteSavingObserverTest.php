@@ -151,7 +151,6 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Tes
         /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->load(3);
-        var_dump($category->getData('is_anchor'));
         $category->setData('is_anchor', false);
         $category->save();
         $expected = [

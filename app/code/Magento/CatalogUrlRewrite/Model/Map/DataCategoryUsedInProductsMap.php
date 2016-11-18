@@ -23,7 +23,7 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
 
     /**
      * @param ResourceConnection $connection
-     * @param DataMapPoolInterface $dataMapPool,
+     * @param DataMapPoolInterface $dataMapPool
      */
     public function __construct(
         ResourceConnection $connection,
@@ -34,10 +34,7 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
     }
 
     /**
-     * Gets all data from a map identified by a category Id
-     *
-     * @param int $categoryId
-     * @return array
+     * {@inheritdoc}
      */
     public function getData($categoryId)
     {
@@ -76,10 +73,7 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
     }
 
     /**
-     * Resets current map and it's dependencies
-     *
-     * @param int $categoryId
-     * @return $this
+     * {@inheritdoc}
      */
     public function resetData($categoryId)
     {
@@ -87,6 +81,5 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
         $this->dataMapPool->resetDataMap(DataCategoryMap::class, $categoryId);
         unset($this->data);
         $this->data = [];
-        return $this;
     }
 }

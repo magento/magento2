@@ -7,7 +7,6 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
 
 /**
  * Interface for a data map
- *
  */
 interface DataMapInterface
 {
@@ -23,7 +22,7 @@ interface DataMapInterface
      * Resets current map and it's dependencies
      *
      * @param int $categoryId
-     * @return $this
+     * @return void
      */
     public function resetData($categoryId);
 }

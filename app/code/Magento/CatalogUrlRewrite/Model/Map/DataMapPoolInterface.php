@@ -24,7 +24,7 @@ interface DataMapPoolInterface
      *
      * @param string $instanceName
      * @param int $categoryId
-     * @return $this
+     * @return void
      */
     public function resetDataMap($instanceName, $categoryId);
 }

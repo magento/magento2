@@ -32,11 +32,7 @@ class MapPool implements MapPoolInterface
     }
 
     /**
-     * Gets map instance identified by category id
-     *
-     * @param string $instanceName
-     * @param int $categoryId
-     * @return MapInterface
+     * {@inheritdoc}
      */
     public function getMap($instanceName, $categoryId)
     {

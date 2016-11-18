@@ -72,14 +72,14 @@ class Product extends AbstractDb
     /**
      * Removes data by entities from url_rewrite table using a select
      *
-     * @param array $removeData
+     * @param array $filter
      * @return int
      */
-    public function removeMultipleByEntityStore(array $removeData)
+    public function removeMultipleByFiler(array $filter)
     {
         return $this->getConnection()->delete(
             $this->getTable(self::TABLE_NAME),
-            ['url_rewrite_id in (?)' => $this->prepareSelect($removeData)]
+            ['url_rewrite_id in (?)' => $this->prepareSelect($filter)]
         );
     }
 
@@ -89,7 +89,7 @@ class Product extends AbstractDb
      * @param array $data
      * @return \Magento\Framework\DB\Select
      */
-    protected function prepareSelect($data)
+    private function prepareSelect($data)
     {
         $select = $this->getConnection()->select();
         $select->from($this->getTable(DbStorage::TABLE_NAME), 'url_rewrite_id');

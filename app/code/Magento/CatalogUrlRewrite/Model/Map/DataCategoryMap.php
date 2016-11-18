@@ -5,8 +5,10 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Map that holds data for category ids and it's subcategories ids
@@ -16,23 +18,32 @@ class DataCategoryMap implements DataMapInterface
     /** @var array */
     private $data = [];
 
-    /** @var CategoryFactory */
-    private $categoryFactory;
+    /** @var CategoryRepository */
+    private $categoryRepository;
+
+    /** @var Collection */
+    private $collection;
+
+    /** @var Category */
+    private $categoryResource;
 
     /**
-     * @param CategoryFactory $categoryFactory
+     * @param CategoryRepository $categoryRepository
+     * @param Collection $collection
+     * @param Category $categoryResource
      */
     public function __construct(
-        CategoryFactory $categoryFactory
+        CategoryRepository $categoryRepository,
+        Collection $collection,
+        Category $categoryResource
     ) {
-        $this->categoryFactory = $categoryFactory;
+        $this->categoryRepository = $categoryRepository;
+        $this->collection = $collection;
+        $this->categoryResource = $categoryResource;
     }
 
     /**
-     * Gets all data from a map identified by a category Id
-     *
-     * @param int $categoryId
-     * @return array
+     * {@inheritdoc}
      */
     public function getData($categoryId)
     {
@@ -50,38 +61,33 @@ class DataCategoryMap implements DataMapInterface
      */
     private function queryData($categoryId)
     {
-        $category = $this->categoryFactory->create()->load($categoryId);
-        return $category->getResourceCollection()
-            ->addIdFilter($this->getAllCategoryChildrenIds($category))
+        $category = $this->categoryRepository->get($categoryId);
+        return $this->collection->addIdFilter($this->getAllCategoryChildrenIds($category))
             ->getAllIds();
     }
 
     /**
      * Queries sub-categories ids from a category
      *
-     * @param Category $category
+     * @param CategoryInterface $category
      * @return int[]
      */
     private function getAllCategoryChildrenIds($category)
     {
-        $connection = $category->getResource()->getConnection();
+        $connection = $this->categoryResource->getConnection();
         $select = $connection->select()
-            ->from($category->getResource()->getEntityTable(), 'entity_id')
+            ->from($this->categoryResource->getEntityTable(), 'entity_id')
             ->where($connection->quoteIdentifier('path') . ' LIKE :c_path');
         $bind = ['c_path' => $category->getPath() . '%'];
         return $connection->fetchCol($select, $bind);
     }
 
     /**
-     * Resets current map
-     *
-     * @param int $categoryId
-     * @return $this
+     * {@inheritdoc}
      */
     public function resetData($categoryId)
     {
         unset($this->data);
         $this->data = [];
-        return $this;
     }
 }
