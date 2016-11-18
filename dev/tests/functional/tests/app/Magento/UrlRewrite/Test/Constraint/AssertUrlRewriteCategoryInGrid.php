@@ -53,25 +53,21 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     ) {
         $this->urlRewriteIndex = $urlRewriteIndex;
         $urlRewriteIndex->open();
-        if ($redirectType == 'No') {
-            if ($parentCategory && $childCategory) {
-                $categoryId = $childCategory->getId();
-            } else {
-                $categoryId = $category->getId() ?
-                    $category->getId() :
-                    $this->retrieveCategoryById($webApi, $category->getData('parent_id'))['children'];
-            }
-            $urlPath = $nestingLevel ?
-                $this->getNestingPath($category, $nestingLevel) :
-                strtolower($category->getUrlKey() . '.html');
+        $categoryId = ($childCategory ? $childCategory->getId() : $category->getId())
+            ? $category->getId()
+            : $this->getCategoryId($webApi, $category->getData('parent_id'));
 
-            $filter = [
-                'request_path' => $urlPath,
-                'target_path' => 'catalog/category/view/id/' . $categoryId,
-                'redirect_type' => self::REDIRECT_TYPE_NO
-            ];
-            return $this->rowVisibleAssertion($filter);
+        $filter = [
+            'request_path' => $this->getNestingPath($category, $nestingLevel),
+            'target_path' => 'catalog/category/view/id/' . $categoryId,
+            'redirect_type' => self::REDIRECT_TYPE_NO
+        ];
+        $this->rowVisibleAssertion($filter);
+
+        if ($redirectType == 'No') {
+            return;
         }
+
         if ($parentCategory && $childCategory) {
             $urlPath = strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
 
@@ -110,6 +106,9 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
      */
     private function getNestingPath(Category $category, $nestingLevel)
     {
+        if ($nestingLevel === null) {
+            return strtolower($category->getUrlKey() . '.html');
+        }
         $filterByRequestPathCondition = [];
         for ($nestingIterator = 0; $nestingIterator < $nestingLevel; $nestingIterator++) {
             $filterByRequestPathCondition[] = $category->getUrlKey();
@@ -120,19 +119,21 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     }
 
     /**
-     * Retrieve category by parent id.
+     * Return category id by parent id.
      *
      * @param WebapiDecorator $webApi
-     * @param $id
-     * @return mixed
+     * @param int $id
+     * @return integer|string
      */
-    public function retrieveCategoryById(WebapiDecorator $webApi, $id)
+    public function getCategoryId(WebapiDecorator $webApi, $id)
     {
         $url = $_ENV['app_frontend_url'] . 'rest/all/V1/categories/' . $id;
         $webApi->write($url, [], WebapiDecorator::GET);
         $response = json_decode($webApi->read(), true);
         $webApi->close();
-        return $response;
+        preg_match('/(\d+)$/', $response['children'], $ids);
+
+        return isset($ids[0]) ? $ids[0] : '';
     }
 
     /**
