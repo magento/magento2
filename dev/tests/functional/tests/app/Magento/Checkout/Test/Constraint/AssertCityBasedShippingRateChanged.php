@@ -22,6 +22,8 @@ class AssertCityBasedShippingRateChanged extends AbstractConstraint
     private $waitElement = '.loading-mask';
 
     /**
+     * Onepage Checkout page.
+     *
      * @var CheckoutOnepage
      */
     private $checkoutOnepage;
@@ -50,12 +52,7 @@ class AssertCityBasedShippingRateChanged extends AbstractConstraint
      */
     protected function waitLoader()
     {
-        $shippingBlock = $this->checkoutOnepage->getShippingBlock();
-        return (bool)$shippingBlock->waitUntil(
-            function () use ($shippingBlock) {
-                return $shippingBlock->find($this->waitElement)->isVisible() ? true : null;
-            }
-        );
+        return $this->checkoutOnepage->getShippingBlock()->waitForElementVisible($this->waitElement);
     }
 
     /**

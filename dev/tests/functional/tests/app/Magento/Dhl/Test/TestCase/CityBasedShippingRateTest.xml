@@ -6,9 +6,9 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Shipping\Test\TestCase\CityBasedShippingRateTest" summary="OnePageCheckout within Offline Payment Method and Fedex shipping method">
-        <variation name="CityBasedShippingRateTestVariation2" summary="Use DHL International (EU) Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12850">
-            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+    <testCase name="Magento\Shipping\Test\TestCase\CityBasedShippingRateTest" summary="Shipping rates can be reloaded based on changes in City field value">
+        <variation name="CityBasedShippingRateDHLTestVariation2" summary="Shipping rates can be reloaded based on changes in City field value" ticketId="MAGETWO-56124">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">default</data>
