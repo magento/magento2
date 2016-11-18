@@ -11,28 +11,17 @@ use Magento\Mtf\TestCase\Scenario;
 /**
  * Preconditions:
  * 1. Configure shipping method.
- * 2. Configure payment method.
- * 3. Create products.
- * 4. Create and setup customer.
- * 5. Create sales rule according to dataset.
+ * 2. Create products.
+ * 3. Create and setup customer.
  *
  * Steps:
  * 1. Go to Frontend.
  * 2. Add products to the cart.
- * 3. Apply discounts in shopping cart according to dataset.
- * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
- * 5. Click the 'Get a Quote' button.
- * 6. In the section appeared select Shipping method, click the 'Update Total' button.
- * 7. Click the 'Proceed to Checkout' button.
- * 8. Select checkout method according to dataset.
- * 9. Fill billing information and select the 'Ship to this address' option.
- * 10. Select shipping method.
- * 11. Select payment method (use reward points and store credit if available).
- * 12. Verify order total on review step.
- * 13. Place order.
- * 14. Perform assertions.
+ * 3. Click the 'Proceed to Checkout' button.
+ * 4. Fill shipping information.
+ * 5. Perform assertions.
  *
- * @group Order_Management
+ * @group Shipping
  * @ZephyrId MAGETWO-56124
  */
 class CityBasedShippingRateTest extends Scenario
@@ -40,6 +29,7 @@ class CityBasedShippingRateTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

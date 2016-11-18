@@ -7,19 +7,38 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Shipping\Test\TestCase\CityBasedShippingRateTest" summary="Shipping rates can be reloaded based on changes in City field value">
-        <variation name="CityBasedShippingRateDHLTestVariation2" summary="Shipping rates can be reloaded based on changes in City field value" ticketId="MAGETWO-56124">
+        <variation name="CityBasedShippingRateDHLTestVariation" summary="Shipping rates can be reloaded based on changes in City field value for DHL shipping method" ticketId="MAGETWO-56124">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
-            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="address/dataset" xsi:type="string">DE_address</data>
-            <data name="shippingAddresses/0/dataset" xsi:type="string">DE_address</data>
-            <data name="shippingAddresses/1/dataset" xsi:type="string">DE_address_Frankfurt</data>
-            <data name="shipping/shipping_service" xsi:type="string">DHL</data>
-            <data name="shipping/shipping_method" xsi:type="string">Express easy</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Express easy</data>
-            <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
+            <data name="shippingMethod/shipping_service" xsi:type="string">DHL</data>
+            <data name="shippingMethod/shipping_method" xsi:type="string">Express easy</data>
+            <data name="clearShippingAddress/postcode" xsi:type="string" />
+            <data name="clearShippingAddress/city" xsi:type="string" />
+            <data name="clearShippingAddress/country_id" xsi:type="string" />
+            <data name="shippingAddresses/0/country_id" xsi:type="string">Kenya</data>
+            <data name="shippingAddresses/1/country_id" xsi:type="string">Kenya</data>
+            <data name="shippingAddresses/1/postcode" xsi:type="string">12345</data>
+            <data name="shippingAddresses/2/country_id" xsi:type="string">Kenya</data>
+            <data name="shippingAddresses/2/postcode" xsi:type="string">12345</data>
+            <data name="shippingAddresses/2/city" xsi:type="string">Nairobi</data>
+            <data name="shippingAddresses/3/country_id" xsi:type="string">Kenya</data>
+            <data name="shippingAddresses/3/postcode" xsi:type="string">12345</data>
+            <data name="shippingAddresses/3/city" xsi:type="string">Mombasa</data>
+            <data name="shippingAddresses/4/country_id" xsi:type="string">Kenya</data>
+            <data name="shippingAddresses/4/city" xsi:type="string">Mombasa</data>
+            <data name="shippingAddresses/5/country_id" xsi:type="string">Kenya</data>
+            <data name="shippingAddresses/5/city" xsi:type="string">Nairobi</data>
+            <data name="isShippingAvailable" xsi:type="array">
+                <item name="0" xsi:type="boolean">false</item>
+                <item name="1" xsi:type="boolean">false</item>
+                <item name="2" xsi:type="boolean">true</item>
+                <item name="3" xsi:type="boolean">true</item>
+                <item name="4" xsi:type="boolean">true</item>
+                <item name="5" xsi:type="boolean">true</item>
+            </data>
+            <data name="configData" xsi:type="string">dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
         </variation>
     </testCase>
 </config>

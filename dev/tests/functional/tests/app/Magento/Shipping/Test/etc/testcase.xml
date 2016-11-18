@@ -13,6 +13,6 @@
         <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddresses" />
-        <step name="fillShippingAddresses" module="Magento_Checkout" />
+        <step name="fillShippingAddresses" module="Magento_Shipping" />
     </scenario>
 </config>
