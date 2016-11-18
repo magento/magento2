@@ -25,7 +25,7 @@ class AssertSynonymGroupsSearch extends AbstractConstraint
     public function processAssert(array $synonymGroups, array $searchQueries, SynonymGroupIndex $synonymGroupIndex)
     {
         $synonymGroupIndex->open();
-        foreach ($searchQueries as $index => $query) {
+        foreach ($searchQueries as $query) {
             $synonymGroupIndex->getSynonymGroupGrid()->fullTextSearch($query['query']);
             foreach ($query['results'] as $key => $result) {
                 \PHPUnit_Framework_Assert::assertEquals(
@@ -43,8 +43,8 @@ class AssertSynonymGroupsSearch extends AbstractConstraint
                     )
                 );
             }
+            $synonymGroupIndex->getSynonymGroupGrid()->resetFilter();
         }
-        $synonymGroupIndex->getSynonymGroupGrid()->resetFilter();
     }
 
     /**
