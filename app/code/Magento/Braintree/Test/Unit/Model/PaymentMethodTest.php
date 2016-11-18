@@ -470,7 +470,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                     'getCustomerEmail',
                     'getCustomerId',
                     'getStoreId',
-                    'getTotalDue'
+                    'getBaseTotalDue'
                 ]
             )->getMock();
 
@@ -493,7 +493,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
         $orderMock->expects(static::any())
-            ->method('getTotalDue')
+            ->method('getBaseTotalDue')
             ->willReturn(self::TOTAL_AMOUNT);
 
         $this->orderRepository->expects(static::any())
@@ -1696,7 +1696,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $order = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
             ->getMockForAbstractClass();
         $order->expects(static::any())
-            ->method('getTotalDue')
+            ->method('getBaseTotalDue')
             ->willReturn(self::TOTAL_AMOUNT);
         $this->orderRepository->expects(static::any())
             ->method('get')
