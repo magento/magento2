@@ -23,7 +23,7 @@ abstract class AbstractPrice implements PriceInterface
     const PRICE_CODE = 'abstract_price';
 
     /**
-     * @var AmountInterface
+     * @var AmountInterface[]
      */
     protected $amount;
 

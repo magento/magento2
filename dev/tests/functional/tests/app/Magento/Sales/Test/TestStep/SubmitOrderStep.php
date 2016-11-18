@@ -23,21 +23,42 @@ class SubmitOrderStep implements TestStepInterface
      *
      * @var OrderCreateIndex
      */
-    protected $orderCreateIndex;
+    private $orderCreateIndex;
 
     /**
      * Sales order view.
      *
      * @var SalesOrderView
      */
-    protected $salesOrderView;
+    private $salesOrderView;
 
     /**
      * Factory for fixtures.
      *
      * @var FixtureFactory
      */
-    protected $fixtureFactory;
+    private $fixtureFactory;
+
+    /**
+     * Customer fixture.
+     *
+     * @var Customer
+     */
+    private $customer;
+
+    /**
+     * Billing Address fixture.
+     *
+     * @var Address
+     */
+    private $billingAddress;
+
+    /**
+     * Products fixtures.
+     *
+     * @var array|\Magento\Mtf\Fixture\FixtureInterface[]
+     */
+    private $products;
 
     /**
      * @constructor
