@@ -218,8 +218,8 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getSize')
             ->willReturn($total);
         $this->collection->expects($this->once())
-                ->method('getItems')
-                ->willReturn([$itemsMock]);
+            ->method('getItems')
+            ->willReturn([$itemsMock]);
 
         $this->collectionProcessor->expects($this->once())
             ->method('process')
