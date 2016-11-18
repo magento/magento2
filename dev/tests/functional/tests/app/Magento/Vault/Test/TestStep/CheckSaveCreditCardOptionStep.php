@@ -36,7 +36,7 @@ class CheckSaveCreditCardOptionStep implements TestStepInterface
     private $payment;
 
     /**
-     * If 'Save for later use' checkbox is present in credit acrd form.
+     * If 'Save for later use' checkbox is present in credit card form.
      *
      * @var null|bool
      */
