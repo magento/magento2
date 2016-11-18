@@ -52,25 +52,35 @@ class SelectCheckoutMethodStep implements TestStepInterface
     private $clickProceedToCheckoutStep;
 
     /**
+     * Shipping carrier and method.
+     *
+     * @var array
+     */
+    protected $shipping;
+
+    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param Customer $customer
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
      * @param ClickProceedToCheckoutStep $clickProceedToCheckoutStep
      * @param string $checkoutMethod
+     * @param array $shipping
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         Customer $customer,
         LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
         ClickProceedToCheckoutStep $clickProceedToCheckoutStep,
-        $checkoutMethod
+        $checkoutMethod,
+        array $shipping = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->customer = $customer;
         $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
         $this->clickProceedToCheckoutStep = $clickProceedToCheckoutStep;
         $this->checkoutMethod = $checkoutMethod;
+        $this->shipping = $shipping;
     }
 
     /**
@@ -86,6 +96,10 @@ class SelectCheckoutMethodStep implements TestStepInterface
                 $this->clickProceedToCheckoutStep->run();
             } else {
                 $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
+            }
+        } elseif ($this->checkoutMethod === 'guest') {
+            if (empty($this->shipping)) {
+                $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
             }
         }
     }
