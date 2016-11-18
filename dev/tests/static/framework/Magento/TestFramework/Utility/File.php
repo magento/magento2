@@ -51,7 +51,7 @@ class File
     }
 
     /**
-     * Get list of existing PHP files
+     * Get list of PHP files
      *
      * @param int $flags
      * @return array
