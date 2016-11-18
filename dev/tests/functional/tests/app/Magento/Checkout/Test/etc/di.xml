@@ -12,6 +12,11 @@
             <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertBillingAddressAbsentInPayment">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
     <type name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
