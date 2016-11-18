@@ -20,7 +20,7 @@ define([
                 method: 'GET',
                 dataType: 'json'
             },
-            dataNamespace: '',
+            dataScope: '',
             data: {}
         },
 
@@ -30,14 +30,14 @@ define([
          * @returns {DataStorage} Chainable.
          */
         initConfig: function () {
-            var namespace;
+            var scope;
 
             this._super();
 
-            namespace = this.dataNamespace;
+            scope = this.dataScope;
 
-            if (typeof namespace === 'string') {
-                this.dataNamespace = namespace ? [namespace] : [];
+            if (typeof scope === 'string') {
+                this.dataScope = scope ? [scope] : [];
             }
 
             this._requests = [];
@@ -88,7 +88,7 @@ define([
         getData: function (params, options) {
             var cachedRequest;
 
-            if (this.hasNamespaceChanged(params)) {
+            if (this.hasScopeChanged(params)) {
                 this.clearRequests();
             } else {
                 cachedRequest = this.getRequest(params);
@@ -102,15 +102,15 @@ define([
         },
 
         /**
-         * Tells whether one of the parameters defined in the "dataNamespace" has
+         * Tells whether one of the parameters defined in the "dataScope" has
          * changed since the last request.
          *
          * @param {Object} params - Request parameters.
          * @returns {Boolean}
          */
-        hasNamespaceChanged: function (params) {
+        hasScopeChanged: function (params) {
             var lastRequest = _.last(this._requests),
-                paths,
+                keys,
                 diff;
 
             if (!lastRequest) {
@@ -118,9 +118,11 @@ define([
             }
 
             diff = utils.compare(lastRequest.params, params);
-            paths = _.pluck(diff.changes, 'path').concat(_.keys(diff.containers));
 
-            return _.intersection(this.dataNamespace, paths).length > 0;
+            keys = _.pluck(diff.changes, 'path');
+            keys = keys.concat(Object.keys(diff.containers));
+
+            return _.intersection(this.dataScope, keys).length > 0;
         },
 
         /**
