@@ -22,9 +22,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * No Such Entity Exception
      */
-    const NO_SUCH_ENTITY_EXCEPTION = '\Magento\Framework\Exception\NoSuchEntityException';
-    const INPUT_EXCEPTION = '\Magento\Framework\Exception\InputException';
-    const SEARCH_CRITERIA = '\Magento\Framework\Api\SearchCriteria';
+    const NO_SUCH_ENTITY_EXCEPTION = \Magento\Framework\Exception\NoSuchEntityException::class;
+    const INPUT_EXCEPTION = \Magento\Framework\Exception\InputException::class;
+    const SEARCH_CRITERIA = \Magento\Framework\Api\SearchCriteria::class;
 
     /**
      * Retrieve class properties
@@ -135,6 +135,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         return
             str_replace('Interface', '', $this->getSourceClassName()) . 'SearchResultInterfaceFactory';
     }
+
     /**
      * Returns source persistor class name
      *
@@ -143,9 +144,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getPersistorClassName()
     {
         $target = $this->getSourceClassName();
-//        if (substr($target, -9) == 'Interface') {
-//            $target = substr($target, 1, strlen($target) -9);
-//        }
+        // if (substr($target, -9) == 'Interface') {
+        // $target = substr($target, 1, strlen($target) -9);
+        // }
         return $target . 'Persistor';
     }
 
