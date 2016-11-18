@@ -10,9 +10,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\AdvancedResult;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Fixture\CatalogProductVirtual;
-use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 
 /**
  * Assert product can be added to cart from search results page.
@@ -48,14 +45,13 @@ class AssertProductAddedToCartFromSearchResults extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
         $resultPage->getListProductBlock()->getProductItem($product)->clickAddToCart();
 
-        $message = '';
-        if ($product instanceof CatalogProductSimple || $product instanceof CatalogProductVirtual
-            || $product instanceof GroupedProduct) {
-            $message = $resultPage->getMessagesBlock()->getSuccessMessage();
-        } else {
+        if (isset($product->getCheckoutData()['options'])) {
             $catalogProductView->getViewBlock()->addToCart($product);
             $message = $catalogProductView->getMessagesBlock()->getSuccessMessage();
+        } else {
+            $message = $resultPage->getMessagesBlock()->getSuccessMessage();
         }
+
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, $productName),
             $message
