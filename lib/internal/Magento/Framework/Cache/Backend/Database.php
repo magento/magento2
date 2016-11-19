@@ -199,7 +199,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $data            Datas to cache
      * @param string $id              Cache id
      * @param string[] $tags          Array of strings, the cache record will be tagged by each string entry
-     * @param int|bool $specificLifetime  Integer to set a specific lifetime or null  for infinite lifetime
+     * @param int|bool $specificLifetime  Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
