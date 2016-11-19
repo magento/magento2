@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\SalesRule\Test\TestCase\ApplySeveralSalesRuleEntityTest" summary="Apply Several Sales Rules" ticketId="MAGETWO-45883">
         <variation name="ApplySeveralSalesRuleEntityTestVariation1" summary="Rules with same priority, both are applied">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="salesRules/rule1" xsi:type="string">active_sales_rule_product_subselection</data>
             <data name="salesRules/rule2" xsi:type="string">active_sales_rule_product_attribute</data>
             <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
@@ -31,6 +32,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="ApplySeveralSalesRuleEntityTestVariation3" summary="Rules with different priority, both are applied">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="salesRules/rule1" xsi:type="string">active_sales_rule_product_attribute</data>
             <data name="salesRules/rule2" xsi:type="string">active_sales_total_items</data>
             <data name="cartPrice/sub_total" xsi:type="string">250.00</data>
@@ -43,6 +45,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="ApplySeveralSalesRuleEntityTestVariation4" summary="Rules with different priority, none are applied">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="salesRules/rule1" xsi:type="string">active_sales_rule_row_total</data>
             <data name="salesRules/rule2" xsi:type="string">active_sales_total_items</data>
             <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>

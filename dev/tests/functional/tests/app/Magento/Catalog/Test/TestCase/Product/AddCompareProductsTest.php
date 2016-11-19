@@ -29,6 +29,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

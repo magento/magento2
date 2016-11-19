@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest" summary="Create Bundle Product" ticketId="MAGETWO-24118">
         <variation name="CreateBundleProductEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create default bundle with dynamic options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -44,7 +45,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotSearchableBySku" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation3">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="description" xsi:type="string">Create dynamic bundle with price randle and all types options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -74,6 +75,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create fixed bundle</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -97,6 +99,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create fixed bundle with all types options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -161,6 +164,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation7" summary="Check bundle dynamic product with tier price">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">Yes</data>
@@ -187,6 +191,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertTierPriceOnBundleProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create dynamic bundle with special price</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
@@ -236,6 +241,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation11">
+            <data name="issue" xsi:type="string">MAGETWO-52788: Dynamic Rows: support status being changed</data>
             <data name="description" xsi:type="string">Create fixed product with checkout first option</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
@@ -334,6 +340,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation17" summary="Create fixed bundle product with tier price and custom options with fixed and percent price">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">No</data>
@@ -359,6 +366,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductInCart" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation18" summary="Create dynamic bundle product with tier price for sub-item">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">Yes</data>
@@ -394,6 +402,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation21" summary="Create default fixed bundle with custom Website">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">No</data>
@@ -445,6 +454,18 @@
             <data name="product/data/bundle_selections/dataset" xsi:type="string">dynamic_with_two_required_options_assigned_products_with_special_price</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
+        </variation>
+        <variation name="CreateBundleProductEntityTestVariation25" summary="Create Bundle (dynamic) Product with one require option with one item" ticketId="MAGETWO-59841">
+            <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+            <data name="product/data/price_type" xsi:type="string">Yes</data>
+            <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+            <data name="product/data/shipment_type" xsi:type="string">Together</data>
+            <data name="product/data/bundle_selections/dataset" xsi:type="string">one_required_option_with_one_item</data>
+            <data name="product/data/checkout_data/dataset" xsi:type="string">one_required_option_with_one_item</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceCalculatedOnProductPage" />
         </variation>
     </testCase>
 </config>

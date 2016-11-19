@@ -19,7 +19,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation2">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1, stable:no</data>
             <data name="widget/data/code" xsi:type="string">CMS Page Link</data>
             <data name="widget/data/theme_id" xsi:type="string">Magento Luma</data>
             <data name="widget/data/title" xsi:type="string">Title_%isolation%</data>
@@ -42,7 +42,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyViewedProducts" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation4">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
             <data name="widget/data/code" xsi:type="string">Recently Compared Products</data>
             <data name="widget/data/theme_id" xsi:type="string">Magento Luma</data>
             <data name="widget/data/title" xsi:type="string">Title_%isolation%</data>
@@ -53,7 +53,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyComparedProducts" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation5">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
             <data name="widget/data/code" xsi:type="string">Catalog Category Link</data>
             <data name="widget/data/theme_id" xsi:type="string">Magento Luma</data>
             <data name="widget/data/title" xsi:type="string">Title_%isolation%</data>
@@ -76,6 +76,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetProductLink" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation7" summary="Assert widget with disabled block_html cache type">
+            <data name="issue" xsi:type="string">MAGETWO-58146: There is no cache invalidate popup after creating widget with disabled block_html cache type</data>
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="caches/block_html" xsi:type="string">Disabled</data>
             <data name="widget/data/code" xsi:type="string">CMS Static Block</data>
@@ -91,6 +92,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetOnFrontendInCatalog" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation8" summary="Assert widget with invalidated block_html cache type">
+            <data name="issue" xsi:type="string">MAGETWO-58146: There is no cache invalidate popup after creating widget with disabled block_html cache type</data>
             <data name="tag" xsi:type="string">severity:S3</data>
             <data name="caches/block_html" xsi:type="string">Invalidated</data>
             <data name="widget/data/code" xsi:type="string">Catalog Category Link</data>
@@ -106,7 +108,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetAbsentOnFrontendHome" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation9" summary="Create Catalog New Products List type widget">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
             <data name="widget/data/code" xsi:type="string">Catalog New Products List</data>
             <data name="widget/data/theme_id" xsi:type="string">Magento Luma</data>
             <data name="widget/data/title" xsi:type="string">Title_%isolation%</data>

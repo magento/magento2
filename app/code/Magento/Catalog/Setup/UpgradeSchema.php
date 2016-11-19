@@ -61,7 +61,54 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.1.2', '<')) {
+            $this->addSourceEntityIdToProductEavIndex($setup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * Add the column 'source_id' to the Product EAV index tables.
+     * It allows to identify which entity was used to create value in the index.
+     * It is useful to identify original entity in a composite products.
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addSourceEntityIdToProductEavIndex(SchemaSetupInterface $setup)
+    {
+        $tables = [
+            'catalog_product_index_eav',
+            'catalog_product_index_eav_idx',
+            'catalog_product_index_eav_tmp',
+            'catalog_product_index_eav_decimal',
+            'catalog_product_index_eav_decimal_idx',
+            'catalog_product_index_eav_decimal_tmp',
+        ];
+        $connection = $setup->getConnection();
+        foreach ($tables as $tableName) {
+            $tableName = $setup->getTable($tableName);
+            $connection->addColumn(
+                $tableName,
+                'source_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => 0,
+                    'comment' => 'Original entity Id for attribute value',
+                ]
+            );
+            $connection->dropIndex($tableName, $connection->getPrimaryKeyName($tableName));
+            $primaryKeyFields = ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'];
+            $setup->getConnection()->addIndex(
+                $tableName,
+                $connection->getIndexName($tableName, $primaryKeyFields),
+                $primaryKeyFields,
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
+            );
+        }
     }
 
     /**

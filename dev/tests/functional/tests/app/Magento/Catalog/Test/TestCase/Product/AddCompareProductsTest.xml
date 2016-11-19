@@ -10,6 +10,7 @@
         <variation name="AddCompareProductsTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products</data>
             <data name="isCustomerLoggedIn" xsi:type="string">No</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareBlockOnCmsPage" />
