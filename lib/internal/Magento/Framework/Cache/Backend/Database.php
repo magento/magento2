@@ -224,7 +224,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 'create_time'
             )},\n                    {$connection->quoteIdentifier(
                 'update_time'
-            )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n                    
+            )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n
             {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
 
                 $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
