@@ -9,6 +9,8 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
+use \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile;
+
 class FileSystemTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,7 +39,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     protected $_staticFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var EmailTemplateFile|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_emailTemplateFileResolution;
 
@@ -77,7 +79,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_emailTemplateFileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class,
+            EmailTemplateFile::class,
             [],
             [],
             '',
