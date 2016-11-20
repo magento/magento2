@@ -430,6 +430,9 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareDataForUpdate()
     {
         $connectionMock = $this->getMock(AdapterInterface::class, [], [], '', false);
