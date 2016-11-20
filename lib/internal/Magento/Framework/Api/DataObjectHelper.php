@@ -144,6 +144,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function setComplexValue(
         $dataObject,
