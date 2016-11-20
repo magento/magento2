@@ -66,7 +66,7 @@ class Gallery extends AbstractElement
         $html .= '<tbody class="gallery">';
 
         $i = 0;
-        if (!is_null($this->getValue())) {
+        if ($this->getValue() !== null) {
             foreach ($this->getValue() as $image) {
                 $i++;
                 $html .= '<tr class="gallery">';
@@ -108,7 +108,8 @@ class Gallery extends AbstractElement
                             'file'
                         ) . ' ></td>';
                 }
-                $html .= '<td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="' .
+                $html .= '<td class="gallery" align="center" style="vertical-align:bottom;">' .
+                    '<input type="input" name="' .
                     parent::getName() .
                     '[position][' .
                     $image->getValueId() .
@@ -122,7 +123,8 @@ class Gallery extends AbstractElement
                     $this->_getUiId(
                         'position-' . $image->getValueId()
                     ) . '/></td>';
-                $html .= '<td class="gallery" align="center" style="vertical-align:bottom;"><input type="checkbox" name="' .
+                $html .= '<td class="gallery" align="center" style="vertical-align:bottom;">' .
+                    '<input type="checkbox" name="' .
                     parent::getName() .
                     '[delete][' .
                     $image->getValueId() .
@@ -140,7 +142,9 @@ class Gallery extends AbstractElement
             }
         }
         if ($i == 0) {
-            $html .= '<script type="text/javascript">document.getElementById("gallery_thead").style.visibility="hidden";</script>';
+            $html .= '<script type="text/javascript">' .
+                'document.getElementById("gallery_thead").style.visibility="hidden";' .
+                '</script>';
         }
 
         $html .= '</tbody></table>';
