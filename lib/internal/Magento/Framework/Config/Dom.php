@@ -113,7 +113,7 @@ class Dom
     /**
      * Retrieve array of xml errors
      *
-     * @param $errorFormat
+     * @param string $errorFormat
      * @return string[]
      */
     private static function getXmlErrors($errorFormat)
