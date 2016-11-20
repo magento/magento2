@@ -498,7 +498,9 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $abstractModelMock->afterLoad();
         $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $newData = ['value' => 'Test Value New'];
-        $this->_model->expects($this->atLeastOnce())->method('_prepareDataForTable')->will($this->returnValue($newData));
+        $this->_model->expects($this->atLeastOnce())
+            ->method('_prepareDataForTable')
+            ->will($this->returnValue($newData));
         $abstractModelMock->addData($newData);
         $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $abstractModelMock->isObjectNew(false);
@@ -568,7 +570,6 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
         $idFieldName = 'id_field_name';
         $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id']);
-
 
         // Test expectations
         //      Only get object's id field name if not PK autoincrement
