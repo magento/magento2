@@ -14,16 +14,16 @@ class ClassB
 class ClassC
 {
 }
-interface InterfaceA
+interface FirstInterface
 {
 }
-class ImplementationOfInterfaceA implements InterfaceA
+class ImplementationOfFirstInterface implements FirstInterface
 {
 }
-interface InterfaceB
+interface SecondInterface
 {
 }
-class ImplementationOfInterfaceB implements InterfaceB
+class ImplementationOfSecondInterface implements SecondInterface
 {
 }
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
@@ -44,12 +44,12 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_exC;
 
     /**
-     * @var InterfaceA
+     * @var FirstInterface
      */
     protected $_interfaceA;
 
     /**
-     * @var ImplementationOfInterfaceB
+     * @var ImplementationOfSecondInterface
      */
     protected $_implOfBInterface;
 
@@ -57,8 +57,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \ClassA $exA,
         \ClassB $exB,
         \ClassC $exC,
-        \InterfaceA $interfaceA,
-        \ImplementationOfInterfaceB $implOfBInterface
+        \FirstInterface $interfaceA,
+        \ImplementationOfSecondInterface $implOfBInterface
     ) {
         $this->_exA = $exA;
         $this->_exB = $exB;
