@@ -15,6 +15,11 @@ use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Mysql test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
