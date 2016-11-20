@@ -14,6 +14,8 @@ use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterfac
 
 /**
  * Class Compiler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Compiler implements CompilerInterface
 {
