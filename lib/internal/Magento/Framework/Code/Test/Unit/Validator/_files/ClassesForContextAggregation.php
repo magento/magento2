@@ -17,16 +17,16 @@ class ClassThird
 class ClassD
 {
 }
-interface FirstInterface
+interface ThirdInterface
 {
 }
-class ImplementationOfFirstInterface implements FirstInterface
+class ImplementationOfThirdInterface implements ThirdInterface
 {
 }
-interface SecondInterface
+interface FourthInterface
 {
 }
-class ImplementationOfSecondInterface implements SecondInterface
+class ImplementationOfFourthInterface implements FourthInterface
 {
 }
 class ContextFirst implements \Magento\Framework\ObjectManager\ContextInterface
@@ -47,12 +47,12 @@ class ContextFirst implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_exC;
 
     /**
-     * @var FirstInterface
+     * @var ThirdInterface
      */
     protected $_interfaceA;
 
     /**
-     * @var ImplementationOfSecondInterface
+     * @var ImplementationOfFourthInterface
      */
     protected $_implOfBInterface;
 
@@ -60,15 +60,15 @@ class ContextFirst implements \Magento\Framework\ObjectManager\ContextInterface
      * @param ClassFirst $exA
      * @param ClassSecond $exB
      * @param ClassThird $exC
-     * @param FirstInterface $interfaceA
-     * @param ImplementationOfSecondInterface $implOfBInterface
+     * @param ThirdInterface $interfaceA
+     * @param ImplementationOfFourthInterface $implOfBInterface
      */
     public function __construct(
         \ClassFirst $exA,
         \ClassSecond $exB,
         \ClassThird $exC,
-        \FirstInterface $interfaceA,
-        \ImplementationOfSecondInterface $implOfBInterface
+        \ThirdInterface $interfaceA,
+        \ImplementationOfFourthInterface $implOfBInterface
     ) {
         $this->_exA = $exA;
         $this->_exB = $exB;
@@ -107,15 +107,15 @@ class ClassArgumentWithInterfaceImplementation
     protected $_context;
 
     /**
-     * @var ImplementationOfFirstInterface
+     * @var ImplementationOfThirdInterface
      */
     protected $_exA;
 
     /**
      * @param ContextFirst $context
-     * @param ImplementationOfFirstInterface $exA
+     * @param ImplementationOfThirdInterface $exA
      */
-    public function __construct(\ContextFirst $context, \ImplementationOfFirstInterface $exA)
+    public function __construct(\ContextFirst $context, \ImplementationOfThirdInterface $exA)
     {
         $this->_context = $context;
         $this->_exA = $exA;
@@ -129,15 +129,15 @@ class ClassArgumentWithInterface
     protected $_context;
 
     /**
-     * @var SecondInterface
+     * @var FourthInterface
      */
     protected $_exB;
 
     /**
      * @param ContextFirst $context
-     * @param SecondInterface $exB
+     * @param FourthInterface $exB
      */
-    public function __construct(\ContextFirst $context, \SecondInterface $exB)
+    public function __construct(\ContextFirst $context, \FourthInterface $exB)
     {
         $this->_context = $context;
         $this->_exB = $exB;
@@ -151,15 +151,15 @@ class ClassArgumentWithAlreadyInjectedInterface
     protected $_context;
 
     /**
-     * @var FirstInterface
+     * @var ThirdInterface
      */
     protected $_exA;
 
     /**
      * @param ContextFirst $context
-     * @param FirstInterface $exA
+     * @param ThirdInterface $exA
      */
-    public function __construct(\ContextFirst $context, \FirstInterface $exA)
+    public function __construct(\ContextFirst $context, \ThirdInterface $exA)
     {
         $this->_context = $context;
         $this->_exA = $exA;
