@@ -7,6 +7,7 @@
 -->
 <ruleset name="Magento">
     <description>Magento coding standard.</description>
+    <rule ref="PSR2"/>
     <rule ref="Zend.Files.ClosingTag"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
@@ -19,9 +20,7 @@
     </rule>
     <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
     <rule ref="Generic.PHP.DisallowShortOpenTag"/>
-    <rule ref="PEAR.Classes.ClassDeclaration">
-        <exclude-pattern>*/_files/*</exclude-pattern>
-    </rule>
+    <rule ref="PEAR.Classes.ClassDeclaration"/>
     <rule ref="PEAR.Functions.FunctionDeclaration"/>
     <rule ref="Squiz.Scope.MethodScope"/>
     <rule ref="Generic.Functions.CallTimePassByReference"/>
