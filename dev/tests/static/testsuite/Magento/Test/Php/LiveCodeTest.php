@@ -115,37 +115,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run the PSR2 code sniffs on the code
-     *
-     * @TODO: combine with testCodeStyle
-     * @return void
-     */
-    public function testCodeStylePsr2()
-    {
-        $reportFile = self::$reportDir . '/phpcs_psr2_report.txt';
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer('PSR2', $reportFile, $wrapper);
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        if (version_compare($wrapper->version(), '1.4.7') === -1) {
-            $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
-        }
-
-        $result = $codeSniffer->run(self::getWhitelist());
-
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
-        $this->assertEquals(
-            0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
-        );
-    }
-
-    /**
      * Run the magento specific coding standards on the code
      *
      * @return void
@@ -155,9 +124,15 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $wrapper = new Wrapper();
         $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/phpcs'), $reportFile, $wrapper);
+
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
+
+        if (version_compare($wrapper->version(), '1.4.7') === -1) {
+            $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
+        }
+
         $codeSniffer->setExtensions(['php', 'phtml']);
         $result = $codeSniffer->run(self::getWhitelist(['php', 'phtml']));
 
