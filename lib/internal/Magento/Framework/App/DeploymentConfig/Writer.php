@@ -15,6 +15,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Deployment configuration writer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Writer
 {
