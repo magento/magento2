@@ -106,7 +106,8 @@ class Filesystem extends AbstractBackup
 
         $filesInfo = $fsHelper->getInfo(
             $this->getRootDir(),
-            \Magento\Framework\Backup\Filesystem\Helper::INFO_READABLE | \Magento\Framework\Backup\Filesystem\Helper::INFO_SIZE,
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_READABLE |
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_SIZE,
             $this->getIgnorePaths()
         );
 
