@@ -11,6 +11,7 @@ use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValid
 use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncompatibleInterface;
 use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncorrectSubject;
 use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ExtraParameters;
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed;
 
 class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -135,7 +136,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateInvalidProceed()
     {
         $this->model->validate(
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed::class,
+            InvalidProceed::class,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
         );
     }
