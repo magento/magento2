@@ -17,6 +17,7 @@ use Zend\Uri\UriInterface;
  * HTTP Request
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Request extends \Zend\Http\PhpEnvironment\Request
 {
