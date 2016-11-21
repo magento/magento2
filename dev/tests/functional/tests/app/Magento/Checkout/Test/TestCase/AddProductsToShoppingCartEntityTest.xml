@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\AddProductsToShoppingCartEntityTest" summary="Add Products to Shopping Cart" ticketId="MAGETWO-25382">
         <variation name="AddProductsToShoppingCartEntityTestVariation1" ticketId="MAGETWO-42677">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="cart/data/grand_total" xsi:type="string">210</data>
             <data name="cart/data/subtotal" xsi:type="string">200</data>
@@ -99,8 +98,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
-        <variation name="AddProductsToShoppingCartEntityTestVariation8" ticketId="MAGETWO-42677">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+        <variation name="AddProductsToShoppingCartEntityTestVariation8" summary="Enable https in backend and add products of different types to cart" ticketId="MAGETWO-42677">
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
