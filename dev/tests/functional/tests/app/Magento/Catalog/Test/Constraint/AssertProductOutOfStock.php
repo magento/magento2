@@ -12,7 +12,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductOutOfStock.
+ * Assert product stock status.
  */
 class AssertProductOutOfStock extends AbstractConstraint
 {
