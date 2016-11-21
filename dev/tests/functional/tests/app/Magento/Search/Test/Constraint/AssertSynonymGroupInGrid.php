@@ -9,8 +9,6 @@ namespace Magento\Search\Test\Constraint;
 use Magento\Search\Test\Fixture\SynonymGroup;
 use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Util\Protocol\CurlTransport;
-use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
  * Assert that created Synonym Group can be found in grid.
@@ -18,7 +16,9 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 class AssertSynonymGroupInGrid extends AbstractConstraint
 {
     /**
-     * @var Filter
+     * Filters array mapping.
+     *
+     * @var array
      */
     private $filter;
 
@@ -64,41 +64,13 @@ class AssertSynonymGroupInGrid extends AbstractConstraint
         $data = $synonymGroup->getData();
         $this->filter = [
             'synonyms' => $data['synonyms'],
-            'website_id' => isset($synonymFilter['data']['website_id'])
-                ? $synonymFilter['data']['website_id']
+            'website_id' => isset($synonymFilter['data']['website'])
+                ? $synonymFilter['data']['website']
                 : '',
-            'group_id' => isset($synonymFilter['data']['group_id'])
-                ? $this->getGroupId($data['synonyms'])
+            'group_id' => isset($synonymFilter['data']['id'])
+                ? $synonymFilter['data']['id']
                 : '',
         ];
-    }
-
-    /**
-     * Get group id by synonym.
-     *
-     * @param string $synonym
-     * @return int|null
-     */
-    public function getGroupId($synonym)
-    {
-        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
-        $data = [
-            'namespace' => 'search_synonyms_grid',
-            'filters' => [
-                'placeholder' => true,
-                'synonyms' => $synonym
-            ],
-            'isAjax' => true
-        ];
-        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->get(\Magento\Mtf\Config\DataInterface::class);
-        $curl = new BackendDecorator(new CurlTransport(), $config);
-
-        $curl->write($url, $data);
-        $response = $curl->read();
-        $curl->close();
-
-        preg_match('/search_synonyms_grid_data_source.+items.+"group_id":"(\d+)"/', $response, $match);
-        return empty($match[1]) ? null : $match[1];
     }
 
     /**
