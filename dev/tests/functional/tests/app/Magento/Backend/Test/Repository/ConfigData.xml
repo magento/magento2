@@ -164,6 +164,7 @@
                 <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
+
         <dataset name="enable_https_frontend_admin_rollback">
             <field name="web/secure/use_in_frontend" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
