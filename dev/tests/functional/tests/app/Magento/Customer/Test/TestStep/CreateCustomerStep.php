@@ -46,7 +46,9 @@ class CreateCustomerStep implements TestStepInterface
     {
         $this->logoutCustomerOnFrontend = $logout;
         $this->customer = $customer;
-        if ($checkoutMethod === 'register' || $checkoutMethod === 'guest') {
+        if ($checkoutMethod === 'register'
+            || $checkoutMethod === 'guest'
+            || $checkoutMethod === 'register_before_checkout') {
             $this->persistCustomer = false;
         }
     }

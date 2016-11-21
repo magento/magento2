@@ -41,6 +41,7 @@
         <field name="use_config_price_range" is_required="0" group="display_setting" />
         <field name="layered_navigation_price_step" is_required="0" group="display_setting" />
         <field name="url_key" group="seo" />
+        <field name="use_default_url_key" group="seo" />
         <field name="meta_title" is_required="" group="seo" />
         <field name="meta_keywords" is_required="" group="seo" />
         <field name="meta_description" is_required="" group="seo" />
