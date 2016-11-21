@@ -28,6 +28,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 class GridFullTextSearchTest extends Injectable
 {
     /* tags */
+    const SEVERITY = 'S2';
     const STABLE = 'no';
     const MVP = 'no';
     /* end tags */
