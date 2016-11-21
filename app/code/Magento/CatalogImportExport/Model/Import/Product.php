@@ -2296,7 +2296,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $sku = $rowData[self::COL_SKU];
 
-        if (isset($this->_oldSku[$sku])) {
+        $isNewProduct = !isset($this->_oldSku[$sku]) || (Import::BEHAVIOR_REPLACE == $this->getBehavior());
+        if (!$isNewProduct) {
             // can we get all necessary data from existent DB product?
             // check for supported type of existing product
             if (isset($this->_productTypeModels[$this->_oldSku[$sku]['type_id']])) {
@@ -2346,7 +2347,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowAttributesValid = $this->_productTypeModels[$newSku['type_id']]->isRowValid(
                 $rowData,
                 $rowNum,
-                !isset($this->_oldSku[$sku])
+                $isNewProduct
             );
             if (!$rowAttributesValid && self::SCOPE_DEFAULT == $rowScope) {
                 // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
