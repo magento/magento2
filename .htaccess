@@ -93,24 +93,24 @@
 ## http://developer.yahoo.com/performance/rules.html#gzip
 
     # Insert filter on all content
-    ###SetOutputFilter DEFLATE
+    SetOutputFilter DEFLATE
     # Insert filter on selected content types only
-    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
 
     # Netscape 4.x has some problems...
-    #BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
 
     # Netscape 4.06-4.08 have some more problems
-    #BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
 
     # MSIE masquerades as Netscape, but it is fine
-    #BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 
     # Don't compress images
-    #SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
 
     # Make sure proxies don't deliver the wrong content
-    #Header append Vary User-Agent env=!dont-vary
+    Header append Vary User-Agent env=!dont-vary
 
 </IfModule>
 
@@ -192,9 +192,17 @@
 ## Add default Expires header
 ## http://developer.yahoo.com/performance/rules.html#expires
 
-    ExpiresDefault "access plus 1 year"
-    ExpiresByType text/html A0
-    ExpiresByType text/plain A0
+    ExpiresActive On
+    ExpiresByType image/jpg "access 1 year"
+    ExpiresByType image/jpeg "access 1 year"
+    ExpiresByType image/gif "access 1 year"
+    ExpiresByType image/png "access 1 year"
+    ExpiresByType text/css "access 1 month"
+    ExpiresByType application/pdf "access 1 month"
+    ExpiresByType application/x-javascript "access 1 month"
+    ExpiresByType application/x-shockwave-flash "access 1 month"
+    ExpiresByType image/x-icon "access 1 year"
+    ExpiresDefault "access 2 days"
 
 </IfModule>
 
