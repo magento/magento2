@@ -76,7 +76,7 @@ class CacheInvalidationTest extends Injectable
      *
      * @param CatalogProductSimple $product
      * @param Store $store
-     * @return void
+     * @return array
      */
     public function test(
         CatalogProductSimple $product,

@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Client\BrowserInterface;
