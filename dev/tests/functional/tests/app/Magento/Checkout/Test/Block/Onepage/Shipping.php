@@ -37,6 +37,13 @@ class Shipping extends Form
     private $addressModalBlock = '//*[@id="opc-new-shipping-address"]/../..';
 
     /**
+     * Selected Shipping Address block CSS Selector
+     * 
+     * @var string
+     */
+    private $selectedShippingAddressBlock = '.shipping-address-item.selected-item';
+
+    /**
      * Click on "New Address" button.
      *
      * @return void
@@ -68,5 +75,15 @@ class Shipping extends Form
     public function getRequiredFields()
     {
         return $this->_rootElement->getElements("div .field._required");
+    }
+
+    /**
+     * Get content of selected Shipping Address Block.
+     *
+     * @return string
+     */
+    public function getSelectedShippingAddressContent()
+    {
+        return $this->_rootElement->find($this->selectedShippingAddressBlock)->getText();
     }
 }
