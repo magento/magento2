@@ -36,12 +36,11 @@ class TopToolbar extends Block
     /**
      * Get all available method of sorting product
      *
-     * @return array|string
+     * @return array
      */
     public function getSortType()
     {
         $content = $this->_rootElement->find($this->sorter)->getText();
-        preg_match_all('/\w+\s?\w+/', $content, $matches);
-        return $matches[0];
+        return explode("\n", $content);
     }
 }
