@@ -11,9 +11,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  */
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
