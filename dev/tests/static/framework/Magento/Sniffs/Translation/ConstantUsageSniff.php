@@ -30,7 +30,7 @@ class ConstantUsageSniff extends \Generic_Sniffs_Files_LineLengthSniff
         $previousLineMatch = preg_match($previousLineRegexp, $this->previousLineContent) !== 0;
         $this->previousLineContent = $lineContent;
         $error = 'Constants are not allowed as the first argument of translation function, use string literal instead';
-        $constantRegexp = '[^\'"]+::[A-Z_0-9]+.*';
+        $constantRegexp = '[^\$\'"]+::[A-Z_0-9]+.*';
         if ($currentLineMatch) {
             $variableRegexp = "~__\({$constantRegexp}\)|Phrase\({$constantRegexp}\)~";
             if (preg_match($variableRegexp, $lineContent) !== 0) {
