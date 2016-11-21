@@ -121,7 +121,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->setMethods([
                 'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
-                'getId', 'getIncrementId'
+                'getId', 'getIncrementId', 'getBaseCurrencyCode'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -163,6 +163,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('getBaseCurrencyCode')
+            ->willReturn('USD');
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($this->addressBillingMock);

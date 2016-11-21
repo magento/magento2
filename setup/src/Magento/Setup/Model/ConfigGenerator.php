@@ -237,7 +237,10 @@ class ConfigGenerator
     public function createModeConfig()
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
-        $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
+        if ($this->deploymentConfig->get(State::PARAM_MODE) === null) {
+            $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
+        }
+
         return $configData;
     }
 

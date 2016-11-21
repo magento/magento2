@@ -256,6 +256,37 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
 
         $this->subscriber->subscribeCustomerById($customerId);
     }
+    
+    public function testSubscribeCustomerById1()
+    {
+        $customerId = 1;
+        $customerDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMock();
+        $this->customerRepository->expects($this->atLeastOnce())
+            ->method('getById')
+            ->with($customerId)->willReturn($customerDataMock);
+        $this->resource->expects($this->atLeastOnce())
+            ->method('loadByCustomerData')
+            ->with($customerDataMock)
+            ->willReturn(
+                [
+                    'subscriber_id' => 1,
+                    'subscriber_status' => 3
+                ]
+            );
+        $customerDataMock->expects($this->atLeastOnce())->method('getId')->willReturn('id');
+        $this->resource->expects($this->atLeastOnce())->method('save')->willReturnSelf();
+        $customerDataMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $customerDataMock->expects($this->once())->method('getEmail')->willReturn('email');
+        $this->sendEmailCheck();
+        $this->customerAccountManagement->expects($this->once())
+            ->method('getConfirmationStatus')
+            ->willReturn(\Magento\Customer\Api\AccountManagementInterface::ACCOUNT_CONFIRMATION_NOT_REQUIRED);
+        $this->scopeConfig->expects($this->atLeastOnce())->method('getValue')->with()->willReturn(true);
+
+        $this->subscriber->subscribeCustomerById($customerId);
+        $this->assertEquals(\Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE, $this->subscriber->getStatus());
+    }
 
     public function testUnsubscribe()
     {
