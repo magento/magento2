@@ -50,8 +50,11 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     public function merge(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
         $mergedContent = $this->composeMergedContent($assetsToMerge, $resultAsset);
+        $filePath = $resultAsset->getPath();
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $dir->writeFile($resultAsset->getPath(), $mergedContent);
+        $tmpDir = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
+        $tmpDir->writeFile($filePath, $mergedContent);
+        $tmpDir->renameFile($filePath, $filePath, $dir);
     }
 
     /**
