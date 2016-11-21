@@ -17,8 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCmsPagesDisabledOnFrontend extends AbstractConstraint
 {
-    const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
-
     /**
      * Assert that created CMS pages with 'Status' - Disabled display with '404 Not Found' message on Frontend.
      *
