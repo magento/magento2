@@ -16,11 +16,23 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class Grid extends DataGrid
 {
     /**
+     * Action button (located above the Grid).
+     *
+     * @var string
+     */
+    protected $actionButton = 'button.action-select';
+
+    /**
      * Select action toggle.
      *
      * @var string
      */
     protected $selectAction = '.action-select';
+
+    /**
+     * @var string
+     */
+    protected $rowById = "//input[@data-action='select-row' and @value='%s']//ancestor::tr";
 
     /**
      * Filters array mapping.
