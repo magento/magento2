@@ -15,7 +15,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 class AssertProductsQtyAndStockStatusInAdminPanel extends AbstractConstraint
 {
     /**
-     * Assert that Out of Stock status is displayed on product page.
+     * Assert products qty and stock status in admin panel.
      *
      * @param CatalogProductEdit $catalogProductEdit
      * @param array $products
@@ -46,7 +46,7 @@ class AssertProductsQtyAndStockStatusInAdminPanel extends AbstractConstraint
             \PHPUnit_Framework_Assert::assertEquals(
                 $actualQtyAndStockStatus,
                 $expectedQtyAndStockStatus,
-                'Expected and actual products qty are not equal.'
+                'Expected and actual products qty and status are not equal.'
             );
         }
     }
@@ -58,6 +58,6 @@ class AssertProductsQtyAndStockStatusInAdminPanel extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Expected and actual products qty are equal.';
+        return 'Expected and actual products qty and status are equal.';
     }
 }
