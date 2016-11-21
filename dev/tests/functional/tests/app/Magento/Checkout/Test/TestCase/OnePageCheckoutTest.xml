@@ -7,6 +7,34 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="OnePageCheckout within Offline Payment Methods" ticketId="MAGETWO-27485">
+        <variation name="OnePageCheckoutUsingLoginPopup" summary="Customer is redirected to checkout on login if guest is disabled, flow for existed Customer" ticketId="MAGETWO-49916">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, disable_guest_checkout, disable_customer_redirect_after_logging</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
+        <variation name="OnePageCheckoutUsingRegisterLink" summary="Customer is redirected to checkout on login if guest is disabled, flow with registration new Customer" ticketId="MAGETWO-49917">
+            <data name="issue" xsi:type="string">MAGETWO-59816: Redirect works improperly in a browser incognito mode</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">register_customer</data>
+            <data name="checkoutMethod" xsi:type="string">register_before_checkout</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, disable_guest_checkout, disable_customer_redirect_after_logging, enable_https_frontend_only</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
         <variation name="OnePageCheckoutTestVariation1" summary="Checkout as UK guest with virtual product and downloadable product using coupon for not logged in customers">
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
@@ -168,12 +196,13 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
-        <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with Tier Prices">
+        <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with different shipping/billing address and Tier Prices" ticketId="MAGETWO-42604">
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_order_qty_3</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_2_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -183,6 +212,7 @@
             <data name="configData" xsi:type="string">banktransfer_specificcountry_gb</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types">
@@ -203,7 +233,88 @@
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+        </variation>
+        <variation name="OnePageCheckoutUsingSingInLink" summary="Login during checkout using 'Sign In' link" ticketId="MAGETWO-42547">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">customer_UK_US_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">sign_in</data>
+            <data name="shippingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">1</item>
+            </data>
+            <data name="billingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">1</item>
+            </data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+        </variation>
+        <variation name="OnePageCheckoutUsingNonDefaultAddress" summary="Checkout as Customer using non default address" ticketId="MAGETWO-42602">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">customer_US_DE_UK</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">1</item>
+            </data>
+            <data name="billingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">2</item>
+            </data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+        </variation>
+        <variation name="OnePageCheckoutUsingNewAddress" summary="Checkout as Customer using New address" ticketId="MAGETWO-42601">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">sign_in</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="billingCheckboxState" xsi:type="string">Yes</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+        </variation>
+        <variation name="OnePageCheckoutTestVariation11" summary="Checkout as Customer using default address" ticketId="MAGETWO-42600, MAGETWO-42546">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">customer_UK_US_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">0</item>
+            </data>
+            <data name="billingAddressCustomer" xsi:type="array">
+                <item name="added" xsi:type="number">0</item>
+            </data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
         </variation>
     </testCase>
 </config>

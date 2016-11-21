@@ -10,12 +10,12 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * One page checkout status shipping method block
+ * One page checkout status shipping method block.
  */
 class Method extends Block
 {
     /**
-     * Shipping method selector
+     * Shipping method selector.
      *
      * @var string
      */
