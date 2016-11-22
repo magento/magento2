@@ -30,6 +30,7 @@ class AssertCustomerForm extends AbstractConstraint
         'id',
         'password',
         'password_confirmation',
+        'current_password',
         'is_subscribed',
         'address'
     ];
