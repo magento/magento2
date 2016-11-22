@@ -38,4 +38,26 @@ class Grid extends AbstractGrid
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
     }
+
+    /**
+     * Get rows data.
+     *
+     * @param array $columns
+     * @return array
+     */
+    public function getRowsData(array $columns)
+    {
+        $data = [];
+        $rows = $this->_rootElement->getElements($this->rowItem);
+        foreach ($rows as $row) {
+            $rowData = [];
+            foreach ($columns as $columnName) {
+                $rowData[$columnName] = trim($row->find('.col-' . $columnName)->getText());
+            }
+
+            $data[] = $rowData;
+        }
+
+        return $data;
+    }
 }
