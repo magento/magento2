@@ -24,109 +24,74 @@ class ConstantUsageSniffTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $line
-     * @dataProvider checkLineLengthCorrectArguments
+     * @param string $file
+     * @param int $numIncorrectUsages
+     * @dataProvider processDataProvider
      */
-    public function testCheckLineLengthCorrectArguments($line)
+    public function testProcessIncorrectArguments($file, $numIncorrectUsages)
     {
-        $this->fileMock->expects($this->never())
-            ->method('addError');
-        $this->checkLineLength(10, $line);
-    }
-
-    /**
-     * @return array
-     */
-    public function checkLineLengthCorrectArguments()
-    {
-        return [
-            [
-                '__($item)'
-            ],
-            [
-                '__($item[ConfigConverter::KEY_TITLE])'
-            ],
-            [
-                '__($item[\'value\'])'
-            ],
-            [
-                '__($item->getValue())'
-            ],
-            [
-                'Phrase($item)'
-            ],
-            [
-                'Phrase($item[ConfigConverter::KEY_TITLE])'
-            ],
-            [
-                'Phrase($item[\'value\'])'
-            ],
-            [
-                'Phrase($item->getValue())'
-            ],
-            [
-                '\Magento\Framework\Phrase($item)'
-            ]
-        ];
-    }
-
-    /**
-     * @param string $line
-     * @dataProvider checkLineLengthIncorrectArguments
-     */
-    public function testCheckLineLengthIncorrectArguments($line)
-    {
-        $lineNumber = 10;
+        $stackPtr = 10;
+        $fileContent = file_get_contents(__DIR__ . '/_files/' . $file);
+        $tokens = $this->tokenizeString($fileContent);
         $this->fileMock->expects($this->once())
+            ->method('findPrevious')
+            ->with(
+                T_OPEN_TAG,
+                $stackPtr - 1
+            )
+            ->willReturn(false);
+        $this->fileMock->expects($this->once())
+            ->method('getTokens')
+            ->willReturn($tokens);
+        $this->fileMock->eolChar = 2;
+        $this->fileMock->numTokens = count($tokens);
+        $this->fileMock->expects($this->exactly($numIncorrectUsages))
             ->method('addError')
             ->with(
                 'Constants are not allowed as the first argument of translation function, use string literal instead',
-                $lineNumber,
+                $this->anything(),
                 'VariableTranslation'
             );
-        $this->checkLineLength($lineNumber, $line);
+        $this->constantUsageSniff->process($this->fileMock, $stackPtr);
+    }
+
+    /**
+     * Get tokens for a string
+     *
+     * @param string $fileContent
+     * @return array
+     */
+    private function tokenizeString($fileContent)
+    {
+        $lineNumber = 1;
+        $tokens = token_get_all($fileContent);
+        $snifferTokens = [];
+        for ($i = 0; $i < count($tokens); $i++) {
+            $content = is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+            $snifferTokens[$i]['line'] = $lineNumber;
+            $snifferTokens[$i]['content'] = $content;
+            $trimmedContent = trim($content, ' ');
+            if ($trimmedContent == PHP_EOL || $trimmedContent == PHP_EOL . PHP_EOL) {
+                $lineNumber++;
+            }
+        }
+        return $snifferTokens;
     }
 
     /**
      * @return array
      */
-    public function checkLineLengthIncorrectArguments()
+    public function processDataProvider()
     {
         return [
             [
-                '$item[ConfigConverter::KEY_TITLE] = __(Converter::KEY_TITLE)'
+                'incorrect_arguments.txt',
+                9
             ],
             [
-                '$item[ConfigConverter::KEY_TITLE] = __(self::KEY_TITLE)'
-            ],
-            [
-                '$item[ConfigConverter::KEY_TITLE] = __(\Magento\Support\Model\Report\Config\Converter::KEY_TITLE)'
-            ],
-            [
-                'Phrase(Converter::KEY_TITLE)'
-            ],
-            [
-                'Phrase(self::KEY_TITLE)'
-            ],
-            [
-                'Phrase(\Magento\Support\Model\Report\Config\Converter::KEY_TITLE)'
-            ],
-            [
-                '\Magento\Framework\Phrase(Converter::KEY_TITLE)'
+                'correct_arguments.txt',
+                0
             ]
         ];
-    }
-
-    /**
-     * Call checkLineLength method
-     *
-     * @param int $lineNumber
-     * @param string $line
-     */
-    private function checkLineLength($lineNumber, $line)
-    {
-        $reflectionMethod = new \ReflectionMethod(ConstantUsageSniff::class, 'checkLineLength');
-        $reflectionMethod->setAccessible(true);
-        $reflectionMethod->invoke($this->constantUsageSniff, $this->fileMock, $lineNumber, $line);
     }
 }

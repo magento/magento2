@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$item[ConfigConverter::KEY_TITLE] = __(Converter::KEY_TITLE)
+
+$item[ConfigConverter::KEY_TITLE] = __(self::KEY_TITLE)
+
+$item[ConfigConverter::KEY_TITLE] = __(\Magento\Support\Model\Report\Config\Converter::KEY_TITLE)
+
+$item[ConfigConverter::KEY_TITLE] = __(
+    Converter::KEY_TITLE
+)
+
+Phrase(Converter::KEY_TITLE)
+
+Phrase(self::KEY_TITLE)
+
+Phrase(\Magento\Support\Model\Report\Config\Converter::KEY_TITLE)
+
+\Magento\Framework\Phrase(Converter::KEY_TITLE)
+
+\Magento\Framework\Phrase(
+    Converter::KEY_TITLE
+)
