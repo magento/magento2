@@ -27,6 +27,7 @@ interface AdapterInterface
      *
      * @return string
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @codingStandardsIgnoreLine
      */
     public function __();
 }

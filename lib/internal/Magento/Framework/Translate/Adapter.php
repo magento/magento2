@@ -33,6 +33,7 @@ class Adapter extends AbstractAdapter
      * Translate message string.
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @codingStandardsIgnoreLine
      * @return string
      */
     public function __()
