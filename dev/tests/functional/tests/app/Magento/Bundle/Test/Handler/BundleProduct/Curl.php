@@ -63,6 +63,10 @@ class Curl extends ProductCurl implements BundleProductInterface
             'selection_price_type' => [
                 'Fixed' => 0,
                 'Percent' => 1,
+            ],
+            'user_defined' => [
+                'Yes' => 1,
+                'No' => 0
             ]
         ];
     }

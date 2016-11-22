@@ -28,5 +28,9 @@
         <getProductName>
             <selector>td.col-name</selector>
         </getProductName>
+        <user_defined>
+            <selector>[class$='is-user-defined-qty']</selector>
+            <input>checkbox</input>
+        </user_defined>
     </fields>
 </mapping>
