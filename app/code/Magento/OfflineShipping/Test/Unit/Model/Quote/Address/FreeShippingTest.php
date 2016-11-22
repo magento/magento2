@@ -35,8 +35,8 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = new \Magento\OfflineShipping\Model\Quote\Address\FreeShipping(
-           $this->storeManagerMock,
-           $this->calculatorMock
+            $this->storeManagerMock,
+            $this->calculatorMock
         );
     }
 
