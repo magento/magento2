@@ -74,7 +74,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Invalid [\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item] $subject type
+     * @expectedExceptionMessage $subject type
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
     public function testValidateIncorrectSubjectType()
