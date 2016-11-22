@@ -30,11 +30,6 @@ class Grid extends DataGrid
     protected $selectAction = '.action-select';
 
     /**
-     * @var string
-     */
-    protected $rowById = "//input[@data-action='select-row' and @value='%s']//ancestor::tr";
-
-    /**
      * Filters array mapping.
      *
      * @var array

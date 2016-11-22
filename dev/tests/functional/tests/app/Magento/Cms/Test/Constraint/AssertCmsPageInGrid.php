@@ -20,12 +20,14 @@ class AssertCmsPageInGrid extends AbstractConstraint
      *
      * @param CmsPageIndex $cmsIndex
      * @param CmsPage $cms
+     * @param string $expectedStatus [optional]
      * @return void
      */
-    public function processAssert(CmsPageIndex $cmsIndex, CmsPage $cms)
+    public function processAssert(CmsPageIndex $cmsIndex, CmsPage $cms, $expectedStatus = '')
     {
         $filter = [
             'title' => $cms->getTitle(),
+            'is_active' => $expectedStatus
         ];
         $cmsIndex->open();
         \PHPUnit_Framework_Assert::assertTrue(
