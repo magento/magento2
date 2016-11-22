@@ -25,7 +25,7 @@ class State1 extends AbstractState
      *
      * @var string
      */
-    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable';
+    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable, log_to_file';
 
     /**
      * @construct

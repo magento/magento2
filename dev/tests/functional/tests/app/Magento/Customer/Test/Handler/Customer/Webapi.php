@@ -33,7 +33,8 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         ],
         'country_id' => [
             'United States' => 'US',
-            'United Kingdom' => 'GB'
+            'United Kingdom' => 'GB',
+            'Germany' => 'DE'
         ],
         'region_id' => [
             'California' => 12,

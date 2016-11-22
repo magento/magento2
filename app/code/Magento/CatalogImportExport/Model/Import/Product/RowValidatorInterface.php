@@ -45,6 +45,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_TIER_PRICE_GROUP = 'tierPriceGroupInvalid';
 
+    const ERROR_INVALID_TIER_PRICE_TYPE = 'tierPriceTypeInvalid';
+
     const ERROR_TIER_DATA_INCOMPLETE = 'tierPriceDataIsIncomplete';
 
     const ERROR_SKU_NOT_FOUND_FOR_DELETE = 'skuNotFoundToDelete';
