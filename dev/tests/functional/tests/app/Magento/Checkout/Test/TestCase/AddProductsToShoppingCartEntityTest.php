@@ -76,7 +76,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     private $flushCache;
 
     /**
-     * Prepare test data
+     * Prepare test data.
      *
      * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
@@ -97,7 +97,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Run test add products to shopping cart
+     * Run test add products to shopping cart.
      *
      * @param array $productsData
      * @param array $cart
@@ -124,7 +124,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Create products
+     * Create products.
      *
      * @param array $productList
      * @return array
@@ -141,7 +141,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Add products to cart
+     * Add products to cart.
      *
      * @param array $products
      * @return void

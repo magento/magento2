@@ -23,6 +23,7 @@ class AssertMyCartLinkRedirect extends AbstractConstraint
      * Assert that customer is redirected to the shopping cart page after clicking on My Cart link.
      *
      * @param CmsIndex $cmsIndex
+     * @return void
      */
     public function processAssert(CmsIndex $cmsIndex)
     {
