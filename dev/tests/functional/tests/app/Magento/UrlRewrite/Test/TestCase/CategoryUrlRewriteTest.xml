@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\UrlRewrite\Test\TestCase\CategoryUrlRewriteTest" summary="Check url rewrites in catalog categories after changing url key for store view and moving category." ticketId="MAGETWO-45385">
+        <variation name="CategoryUrlRewriteTestVariation1">
+            <data name="storeView/dataset" xsi:type="string">custom</data>
+            <data name="childCategory/dataset" xsi:type="string">default</data>
+            <data name="childCategory/data/category_products/dataset" xsi:type="string">catalogProductSimple::default</data>
+            <data name="parentCategory/dataset" xsi:type="string">default</data>
+            <data name="parentCategory/data/category_products/dataset" xsi:type="string">catalogProductSimple::default</data>
+            <data name="categoryUpdates/data/use_default_url_key" xsi:type="string">No</data>
+            <data name="categoryUpdates/data/url_key" xsi:type="string">UrlKey%isolation%</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertCategoryUrlWithCustomStoreView" />
+        </variation>
+    </testCase>
+</config>

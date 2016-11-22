@@ -133,4 +133,19 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         }
         $this->getBundleBlock()->fillBundleOptions($bundleCheckoutData);
     }
+
+    /**
+     * Fill in the custom option data.
+     *
+     * @param array $optionsData
+     * @return void
+     */
+    public function fillOptionsWithCustomData(array $optionsData = [])
+    {
+        if (!$this->getBundleBlock()->isVisible()) {
+            $this->clickCustomize();
+        }
+
+        $this->getBundleBlock()->fillBundleOptions($optionsData);
+    }
 }

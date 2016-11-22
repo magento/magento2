@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Locator;
-use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments\Grid;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions\Grid;
 
 /**
  * Transactions tab.
