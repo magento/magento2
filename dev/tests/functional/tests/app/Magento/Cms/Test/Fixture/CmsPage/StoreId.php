@@ -8,8 +8,6 @@ namespace Magento\Cms\Test\Fixture\CmsPage;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Store\Test\Fixture\Store;
-use Magento\Store\Test\Fixture\StoreGroup;
 
 /**
  * Cms Page store id scope.
@@ -19,13 +17,14 @@ class StoreId extends DataSource
     /**
      * Store fixture.
      *
-     * @var Store
+     * @var \Magento\Store\Test\Fixture\Store
      */
     public $store;
 
     /**
      * Constructor.
      *
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array|string $data [optional]
@@ -36,7 +35,7 @@ class StoreId extends DataSource
 
         if (is_array($data) && isset($data['dataset'])) {
             $store = $fixtureFactory->createByCode('store', $data);
-            /** @var Store $store */
+            /** @var \Magento\Store\Test\Fixture\Store $store */
             if (!$store->getStoreId()) {
                 $store->persist();
             }
