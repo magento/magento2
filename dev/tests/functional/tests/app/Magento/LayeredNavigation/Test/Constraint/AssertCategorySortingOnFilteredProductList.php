@@ -62,18 +62,16 @@ class AssertCategorySortingOnFilteredProductList extends AbstractConstraint
             }
         }
         $catalogCategoryView->getTopToolbar()->applySorting($sortBy);
-        if (isset($sortBy['field']) && $sortBy['field'] == 'Product Name') {
-            \PHPUnit_Framework_Assert::assertEquals(
-                array_map(
-                    function ($index) {
-                        return $this->products[$index]->getName();
-                    },
-                    array_values($filteredIndexes)
-                ),
-                $catalogCategoryView->getListProductBlock()->getProductNames(),
-                'Products are filtered or sorted incorrectly.'
-            );
-        }
+        \PHPUnit_Framework_Assert::assertEquals(
+            array_map(
+                function ($index) {
+                    return $this->products[$index]->getName();
+                },
+                array_values($filteredIndexes)
+            ),
+            $catalogCategoryView->getListProductBlock()->getProductNames(),
+            'Products are filtered or sorted incorrectly.'
+        );
         $catalogCategoryView->getLayeredNavigationBlock()->clearAll();
     }
 

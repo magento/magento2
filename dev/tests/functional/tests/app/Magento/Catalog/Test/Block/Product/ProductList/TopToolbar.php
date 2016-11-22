@@ -10,7 +10,6 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class TopToolbar.
  * Top toolbar the product list page.
  */
 class TopToolbar extends Block
