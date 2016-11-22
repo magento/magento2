@@ -27,11 +27,6 @@ class UpgradeData implements UpgradeDataInterface
     private static $salesConnectionName = 'sales';
 
     /**
-     * @var AdapterInterface
-     */
-    private $connection;
-
-    /**
      * @inheritdoc
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
@@ -74,5 +69,4 @@ class UpgradeData implements UpgradeDataInterface
 
         $setup->endSetup();
     }
-
 }
