@@ -25,7 +25,7 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|WriteInterface
      */
-    protected $writeDir;
+    protected $staticDir;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|WriteInterface
@@ -41,12 +41,12 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     {
         $this->cssUrlResolver = $this->getMock(\Magento\Framework\View\Url\CssResolver::class);
         $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->writeDir = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->staticDir = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
         $this->tmpDir = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturnMap([
-                [DirectoryList::STATIC_VIEW, \Magento\Framework\Filesystem\DriverPool::FILE, $this->writeDir],
+                [DirectoryList::STATIC_VIEW, \Magento\Framework\Filesystem\DriverPool::FILE, $this->staticDir],
                 [DirectoryList::TMP, \Magento\Framework\Filesystem\DriverPool::FILE, $this->tmpDir],
             ]);
         $this->resultAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
@@ -56,9 +56,9 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     public function testMergeNoAssets()
     {
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
-        $this->writeDir->expects($this->never())->method('writeFile');
+        $this->staticDir->expects($this->never())->method('writeFile');
         $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result', '');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->writeDir);
+        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->staticDir);
         $this->object->merge([], $this->resultAsset);
     }
 
@@ -66,9 +66,9 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     {
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
         $assets = $this->prepareAssetsToMerge([' one', 'two']); // note leading space intentionally
-        $this->writeDir->expects($this->never())->method('writeFile');
+        $this->staticDir->expects($this->never())->method('writeFile');
         $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result', 'onetwo');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->writeDir);
+        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 
@@ -86,9 +86,9 @@ class DirectTest extends \PHPUnit_Framework_TestCase
             ->method('aggregateImportDirectives')
             ->with('12')
             ->will($this->returnValue('1020'));
-        $this->writeDir->expects($this->never())->method('writeFile');
+        $this->staticDir->expects($this->never())->method('writeFile');
         $this->tmpDir->expects($this->once())->method('writeFile')->with('foo/result', '1020');
-        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->writeDir);
+        $this->tmpDir->expects($this->once())->method('renameFile')->with('foo/result', 'foo/result', $this->staticDir);
         $this->object->merge($assets, $this->resultAsset);
     }
 
