@@ -477,8 +477,11 @@ class ConditionsElement extends SimpleElement
      */
     protected function parseTopLevelCondition($condition)
     {
-        if (preg_match_all('/([^|]+)\|?/', $condition, $match) === false) {
+        if (!preg_match_all('/([^|]+\|?)/', $condition, $match)) {
             throw new \Exception('Bad format condition');
+        }
+        foreach ($match[1] as $key => $value) {
+            $match[1][$key] = rtrim($value, '|');
         }
 
         return [
