@@ -12,7 +12,6 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
@@ -25,7 +24,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
  * 4. Perform all asserts
  *
  * @group Shopping_Cart
- * @ZephyrId MAGETWO-25382, MAGETWO-42677
+ * @ZephyrId MAGETWO-25382
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
 {
@@ -63,18 +62,18 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     protected $cartPage;
 
     /**
-     * Configuration data.
+     * Configuration settings.
      *
      * @var string
      */
     private $configData;
 
     /**
-     * Factory for Test Steps.
+     * Should cache be flushed.
      *
-     * @var TestStepFactory
+     * @var bool
      */
-    private $testStepFactory;
+    private $flushCache;
 
     /**
      * Prepare test data
@@ -83,21 +82,18 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $cartPage
-     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __prepare(
         BrowserInterface $browser,
         FixtureFactory $fixtureFactory,
         CatalogProductView $catalogProductView,
-        CheckoutCart $cartPage,
-        TestStepFactory $testStepFactory
+        CheckoutCart $cartPage
     ) {
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductView = $catalogProductView;
         $this->cartPage = $cartPage;
-        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -105,16 +101,18 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      *
      * @param array $productsData
      * @param array $cart
-     * @param string $configData
+     * @param string|null $configData [optional]
+     * @param bool $flushCache [optional]
      * @return array
      */
-    public function test(array $productsData, array $cart, $configData = null)
+    public function test(array $productsData, array $cart, $configData = null, $flushCache = false)
     {
         // Preconditions
         $this->configData = $configData;
-        $this->testStepFactory->create(
+        $this->flushCache = $flushCache;
+        $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $configData]
+            ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
         $products = $this->prepareProducts($productsData);
 
@@ -158,15 +156,15 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Clean data after running test.
+     * Restore configuration settings.
      *
      * @return void
      */
     public function tearDown()
     {
-        $this->testStepFactory->create(
+        $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData, 'rollback' => true]
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
     }
 }
