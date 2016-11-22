@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityMultipleStoreViewsTest" summary="Page cache for different CMS pages on multiple store views" ticketId="MTO-87">
+    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityMultipleStoreViewsTest" summary="Page cache for different CMS pages on multiple store views" ticketId="MAGETWO-52467">
         <variation name="CreateCmsPageEntityMultipleStoreViewsTestVariation1">
             <data name="cmsPages/0/is_active" xsi:type="string">Yes</data>
             <data name="cmsPages/0/title" xsi:type="string">NewCmsPage</data>
