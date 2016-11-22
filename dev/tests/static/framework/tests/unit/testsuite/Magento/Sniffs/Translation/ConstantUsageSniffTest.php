@@ -43,7 +43,6 @@ class ConstantUsageSniffTest extends \PHPUnit_Framework_TestCase
         $this->fileMock->expects($this->once())
             ->method('getTokens')
             ->willReturn($tokens);
-        $this->fileMock->eolChar = 2;
         $this->fileMock->numTokens = count($tokens);
         $this->fileMock->expects($this->exactly($numIncorrectUsages))
             ->method('addError')

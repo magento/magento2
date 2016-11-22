@@ -27,7 +27,7 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
     }
 
     /**
-     * Copied from \Generic_Sniffs_Files_LineLengthSniff
+     * Copied from \Generic_Sniffs_Files_LineLengthSniff, minor changes made
      *
      * {@inheritDoc}
      */
@@ -35,7 +35,7 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        // Make sure this is the first open tag.
+        // Make sure this is the first open tag
         $previousOpenTag = $phpcsFile->findPrevious(T_OPEN_TAG, ($stackPtr - 1));
         if ($previousOpenTag !== false) {
             return;
@@ -45,19 +45,16 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
         $currentLineContent = '';
         $currentLine = 1;
 
-        $trim = (strlen($phpcsFile->eolChar) * -1);
         for (; $tokenCount < $phpcsFile->numTokens; $tokenCount++) {
             if ($tokens[$tokenCount]['line'] === $currentLine) {
                 $currentLineContent .= $tokens[$tokenCount]['content'];
             } else {
-                $currentLineContent = substr($currentLineContent, 0, $trim);
                 $this->checkIfFirstArgumentConstant($phpcsFile, ($tokenCount - 1), $currentLineContent);
                 $currentLineContent = $tokens[$tokenCount]['content'];
                 $currentLine++;
             }
         }
 
-        $currentLineContent = substr($currentLineContent, 0, $trim);
         $this->checkIfFirstArgumentConstant($phpcsFile, ($tokenCount - 1), $currentLineContent);
     }
 
