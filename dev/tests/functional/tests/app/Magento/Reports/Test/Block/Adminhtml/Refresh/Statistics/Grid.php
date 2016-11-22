@@ -10,20 +10,19 @@ use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Grid
- * Refresh statistics grid
+ * Refresh statistics grid.
  */
 class Grid extends AbstractGrid
 {
     /**
-     * An element locator which allows to select entities in grid
+     * An element locator which allows to select entities in grid.
      *
      * @var string
      */
     protected $selectItem = '//tr[td[contains(@class,"col-report") and normalize-space(.)="%s"]]//input';
 
     /**
-     * Search for item and select it
+     * Search for item and select it.
      *
      * @param array $filter
      * @throws \Exception

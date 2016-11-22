@@ -14,7 +14,11 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertLifetimeStatisticsUpdatedMessage extends AbstractConstraint
 {
+    /**
+     * Lifetime statistics updated message.
+     */
     const LIFETIME_STATISTICS_UPDATED_MESSAGE = 'You refreshed lifetime statistics.';
+
     /**
      * Assert that correct success message is displayed after refreshing reports lifetime statistics.
      *

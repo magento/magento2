@@ -14,7 +14,11 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertRecentStatisticsUpdatedMessage extends AbstractConstraint
 {
+    /**
+     * Recent statistics updated message.
+     */
     const RECENT_STATISTICS_UPDATED_MESSAGE = 'Recent statistics have been updated.';
+
     /**
      * Assert that correct success message is displayed after refreshing recent reports statistics.
      *
