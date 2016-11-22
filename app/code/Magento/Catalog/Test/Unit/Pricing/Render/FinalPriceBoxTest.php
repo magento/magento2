@@ -62,7 +62,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $this->product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
-            ['getPriceInfo', '__wakeup', 'getCanShowPrice'],
+            ['getPriceInfo', '__wakeup', 'getCanShowPrice', 'isSalable'],
             [],
             '',
             false
@@ -169,12 +169,22 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->product))
             ->will($this->returnValue(false));
 
+        $this->product->expects($this->once())->method('isSalable')->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
         $this->assertStringStartsWith('<div', $result);
         //assert css_selector
         $this->assertRegExp('/[final_price]/', $result);
+    }
+
+    public function testNotSalableItem()
+    {
+        $this->product->expects($this->once())->method('isSalable')->willReturn(false);
+        $result = $this->object->toHtml();
+
+        $this->assertEmpty($result);
     }
 
     public function testRenderMsrpEnabled()
@@ -211,6 +221,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with('msrp_price', $this->product, $arguments)
             ->will($this->returnValue($priceBoxRender));
 
+        $this->product->expects($this->once())->method('isSalable')->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
@@ -229,6 +241,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->with($this->equalTo('msrp_price'))
             ->will($this->throwException(new \InvalidArgumentException()));
+
+        $this->product->expects($this->once())->method('isSalable')->willReturn(true);
 
         $result = $this->object->toHtml();
 
