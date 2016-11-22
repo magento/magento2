@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\User\Test\TestCase\UnlockAdminUserTest" summary="Unlock admin user" ticketId="MAGETWO-12484">
+        <variation name="UnlockAdminUserTestVariation1">
+            <data name="configData" xsi:type="string">two_attempts_before_lock</data>
+            <data name="customAdmin/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <data name="incorrectPassword" xsi:type="string">honey boo boo</data>
+            <data name="attempts" xsi:type="string">3</data>
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+        </variation>
+    </testCase>
+</config>
