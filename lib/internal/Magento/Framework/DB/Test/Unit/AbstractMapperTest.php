@@ -246,9 +246,9 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
 
         if (is_array($field)) {
             $resultCondition = '(' . implode(
-                    ') ' . \Magento\Framework\DB\Select::SQL_OR . ' (',
-                    array_fill(0, count($field), $resultCondition)
-                ) . ')';
+                ') ' . \Magento\Framework\DB\Select::SQL_OR . ' (',
+                array_fill(0, count($field), $resultCondition)
+            ) . ')';
         }
 
         $this->selectMock->expects($this->once())
