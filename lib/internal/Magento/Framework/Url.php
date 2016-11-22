@@ -39,14 +39,15 @@ use Magento\Framework\Url\HostChecker;
  * - query_array: array('param1'=>'value1', 'param2'=>'value2')
  * - fragment: (#)'fragment-anchor'
  *
+ * @codingStandardsIgnoreStart
  * URL structure:
  *
- * @codingStandardsIgnoreLine
- * https://user:password@host:443/base_path/[base_script][scopeview_path]route_name/controller_name/action_name/param1/value1?query_param=query_value#fragment @
+ * https://user:password@host:443/base_path/[base_script][scopeview_path]route_name/controller_name/action_name/param1/value1?query_param=query_value#fragment
  *       \__________A___________/\____________________________________B_____________________________________/
  * \__________________C___________________/              \__________________D_________________/ \_____E_____/
  * \_____________F______________/                        \___________________________G______________________/
  * \___________________________________________________H____________________________________________________/
+ * @codingStandardsIgnoreEnd
  *
  * - A: authority
  * - B: path
@@ -141,12 +142,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     /**
      * @var \Magento\Framework\Url\RouteParamsResolverFactory
      */
-
     private $_routeParamsResolverFactory;
+
     /**
      * @var \Magento\Framework\Url\ScopeResolverInterface
      */
-    
     protected $_scopeResolver;
 
     /**
