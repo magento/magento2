@@ -159,6 +159,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param string $body
      * @return string Request as text
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codingStandardsIgnoreLine
      */
     public function write($method, $url, $http_ver = '1.1', $headers = [], $body = '')
     {
