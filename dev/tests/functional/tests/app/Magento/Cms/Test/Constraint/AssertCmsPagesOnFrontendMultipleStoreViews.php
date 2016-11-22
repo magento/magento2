@@ -35,16 +35,14 @@ class AssertCmsPagesOnFrontendMultipleStoreViews extends AbstractConstraint
     ) {
         foreach ($cmsPages as $cmsPage) {
             $browser->open($_ENV['app_frontend_url'] . $cmsPage->getIdentifier());
-            $storeName = substr(strrchr($cmsPage->getStoreId(), "/"), 1);
+            $storeName = $cmsPage->getDataFieldConfig('store_id')['source']->getStore()->getData()['name'];
             $cmsIndex->getStoreSwitcherBlock()->selectStoreView($storeName);
-            $fixtureContent = $cmsPage->getContent();
             \PHPUnit_Framework_Assert::assertContains(
-                $displayContent != null ? $displayContent : $fixtureContent['content'],
+                $displayContent != null ? $displayContent : $cmsPage->getContent()['content'],
                 $frontCmsPage->getCmsPageBlock()->getPageContent(),
                 'Wrong content page ' . $cmsPage->getTitle() . ' is displayed on store ' . $storeName . '.'
             );
         }
-
     }
 
     /**

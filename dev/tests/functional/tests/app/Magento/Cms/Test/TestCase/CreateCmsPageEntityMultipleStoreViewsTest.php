@@ -9,7 +9,6 @@ namespace Magento\Cms\Test\TestCase;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Cms\Test\Fixture\CmsPage;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -24,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Verify created CMS Page.
  *
  * @group CMS_Content
- * @ZephyrId MTO-87
+ * @ZephyrId MAGETWO-52467
  */
 class CreateCmsPageEntityMultipleStoreViewsTest extends Injectable
 {
@@ -68,23 +67,14 @@ class CreateCmsPageEntityMultipleStoreViewsTest extends Injectable
      * Page cache for different CMS pages on multiple store views.
      *
      * @param array $cmsPages
-     * @param array $stores
      * @return array
      */
-    public function test(array $cmsPages, array $stores)
+    public function test(array $cmsPages)
     {
         // Steps
         $cmsPageFixtures = [];
-        $storeFixtures = [];
         $identifier = 'identifier_' . time();
         foreach ($cmsPages as $id => $cmsPage) {
-            if (isset($stores[$id])) {
-                $storeFixture = $this->fixtureFactory->createByCode('store', $stores[$id]);
-                $storeFixture->persist();
-                $storeFixtures[] = $storeFixture;
-                $cmsPage['store_id'] = $storeFixture->getGroupId() . '/' . $storeFixture->getName();
-            }
-
             $cmsPage['identifier'] = $identifier;
             $cmsPageFixture = $this->fixtureFactory->createByCode('cmsPage', ['data' => $cmsPage]);
             $cmsPageFixtures[] = $cmsPageFixture;
