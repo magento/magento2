@@ -51,7 +51,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend" />
         </variation>
-        <variation name="UpdateCategoryEntityTestVariation5_ChangeCategoryUrlOnStoreView" summary="Update URL Key with custom Store View.">
+        <variation name="UpdateCategoryEntityTestVariation5_ChangeCategoryUrlOnStoreView" summary="Update URL Key with custom Store View." ticketId="MAGETWO-16471">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
             <data name="category/data/use_default_url_key" xsi:type="string">No</data>
