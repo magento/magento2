@@ -61,7 +61,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $price;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface
+     * | \PHPUnit_Framework_MockObject_MockObject
      */
     private $salableResolverMock;
 
@@ -98,12 +99,9 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
 
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->getMockForAbstractClass();
-
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
         $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore', 'getCode'])
             ->getMockForAbstractClass();
