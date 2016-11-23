@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Perform all assertions.
  *
  * @group Layered_Navigation
- * @ZephyrId MAGETWO-12419
+ * @ZephyrId MAGETWO-12419, MAGETWO-30617, MAGETWO-30700, MAGETWO-30702, MAGETWO-30703
  */
 class FilterProductListTest extends Injectable
 {
