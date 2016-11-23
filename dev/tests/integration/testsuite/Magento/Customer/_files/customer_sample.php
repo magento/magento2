@@ -3,8 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Customer\Model\CustomerRegistry;
+
 /** @var \Magento\Customer\Model\Customer $customer */
 $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(CustomerRegistry::class);
 
 $customerData = [
     'group_id' => 1,
@@ -66,3 +71,4 @@ $addressThree->setData($addressThreeData);
 $customer->addAddress($addressThree);
 
 $customer->save();
+$customerRegistry->remove($customer->getId());

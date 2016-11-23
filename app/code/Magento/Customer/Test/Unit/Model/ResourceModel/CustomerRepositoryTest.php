@@ -88,7 +88,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->customerResourceModel =
             $this->getMock('Magento\Customer\Model\ResourceModel\Customer', [], [], '', false);
@@ -314,6 +314,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method("remove")
+            ->with($customerId);
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)
@@ -795,13 +798,12 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
         $this->assertTrue($this->model->deleteById($customerId));
     }
-
 
     public function testDelete()
     {
@@ -824,7 +826,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 

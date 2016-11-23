@@ -894,6 +894,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $addressShippingExpected = $this->addressRepository->save($addressShipping);
         $addressBillingExpected = $this->addressRepository->save($addressBilling);
 
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $this->objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry->remove(1);
+
         // Call api under test
         $shippingResponse = $this->accountManagement->getDefaultShippingAddress($customerId);
         $billingResponse = $this->accountManagement->getDefaultBillingAddress($customerId);
