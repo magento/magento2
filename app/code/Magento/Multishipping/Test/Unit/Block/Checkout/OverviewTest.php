@@ -52,6 +52,11 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
      */
     protected $quoteMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlBuilderMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -83,13 +88,15 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
         $this->checkoutMock =
             $this->getMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class, [], [], '', false);
         $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Multishipping\Block\Checkout\Overview::class,
             [
                 'priceCurrency' => $this->priceCurrencyMock,
                 'totalsCollector' => $this->totalsCollectorMock,
                 'totalsReader' => $this->totalsReaderMock,
-                'multishipping' => $this->checkoutMock
+                'multishipping' => $this->checkoutMock,
+                'urlBuilder' => $this->urlBuilderMock
             ]
         );
     }
@@ -188,5 +195,12 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteMock, [])
             ->willReturn([$totalMock]);
         return $totalMock;
+    }
+
+    public function testGetVirtualProductEditUrl()
+    {
+        $url = 'http://example.com';
+        $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart', [])->willReturn($url);
+        $this->assertEquals($url, $this->model->getVirtualProductEditUrl());
     }
 }
