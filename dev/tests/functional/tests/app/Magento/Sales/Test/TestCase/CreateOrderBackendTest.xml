@@ -7,16 +7,16 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendTest" summary="Create Order from Admin within Offline Payment Methods" ticketId="MAGETWO-28696">
-        <variation name="CreateOrderBackendTestVariation1">
+        <variation name="CreateOrderBackendTestVariation1" ticketId="MAGETWO-17063">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Cash on Delivery payment method</data>
-            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::with_one_custom_option</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">565.00</item>
+                <item name="grandTotal" xsi:type="string">425.00</item>
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <data name="status" xsi:type="string">Pending</data>
