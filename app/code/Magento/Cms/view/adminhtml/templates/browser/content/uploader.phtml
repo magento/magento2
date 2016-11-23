@@ -29,7 +29,8 @@ require([
     'jquery',
     'mage/template',
     'jquery/file-uploader',
-    'domReady!'
+    'domReady!',
+    'mage/translate'
 ], function ($, mageTemplate) {
     $('#<?php echo $block->getHtmlId() ?> .fileupload').fileupload({
         dataType: 'json',

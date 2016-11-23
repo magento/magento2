@@ -219,7 +219,7 @@ define([
                         var msg = response.error_message;
                         if (msg) {
                             alert({
-                                content: $.mage.__(msg)
+                                content: msg
                             });
                         }
                     }
