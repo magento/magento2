@@ -22,8 +22,6 @@ class StoreId extends DataSource
     public $store;
 
     /**
-     * Constructor.
-     *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
