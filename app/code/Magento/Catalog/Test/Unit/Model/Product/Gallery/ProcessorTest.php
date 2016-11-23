@@ -197,4 +197,56 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             [false]
         ];
     }
+
+    /**
+     * @param int $setDataExpectsCalls
+     * @param string|null $setDataArgument
+     * @param array|string $mediaAttribute
+     * @dataProvider clearMediaAttributeDataProvider
+     */
+    public function testClearMediaAttribute($setDataExpectsCalls, $setDataArgument, $mediaAttribute)
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->exactly($setDataExpectsCalls))
+            ->method('setData')
+            ->with($setDataArgument, 'no_selection');
+
+        $this->mediaConfig->expects($this->once())
+            ->method('getMediaAttributeCodes')
+            ->willReturn(['image', 'small_image']);
+
+        $this->assertSame($this->model, $this->model->clearMediaAttribute($productMock, $mediaAttribute));
+    }
+
+    /**
+     * @return array
+     */
+    public function clearMediaAttributeDataProvider()
+    {
+        return [
+            [
+                'setDataExpectsCalls' => 1,
+                'setDataArgument' => 'image',
+                'mediaAttribute' => 'image',
+            ],
+            [
+                'setDataExpectsCalls' => 1,
+                'setDataArgument' => 'image',
+                'mediaAttribute' => ['image'],
+            ],
+            [
+                'setDataExpectsCalls' => 0,
+                'setDataArgument' => null,
+                'mediaAttribute' => 'some_image',
+            ],
+            [
+                'setDataExpectsCalls' => 0,
+                'setDataArgument' => null,
+                'mediaAttribute' => ['some_image'],
+            ],
+        ];
+    }
 }
