@@ -22,7 +22,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
-    const XML_PATH_DISPLAY_BILLING_ADDRESS_ON = 'checkout/options/display_billing_address_on';
+    /**
+     * @deprecated Need to be replaced by constant
+     * @var string
+     */
+    private $xmlPathDisplayBillingAddressOn = 'checkout/options/display_billing_address_on';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -414,7 +418,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isDisplayBillingOnPaymentMethodAvailable()
     {
         return (bool) !$this->scopeConfig->getValue(
-            self::XML_PATH_DISPLAY_BILLING_ADDRESS_ON,
+            $this->xmlPathDisplayBillingAddressOn,
             ScopeInterface::SCOPE_STORE
         );
     }
