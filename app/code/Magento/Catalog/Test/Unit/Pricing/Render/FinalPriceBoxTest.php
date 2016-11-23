@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+
 /**
  * Class FinalPriceBoxTest
  *
@@ -83,9 +85,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->priceBox = $this->getMock(\Magento\Framework\Pricing\Render\PriceBox::class, [], [], '', false);
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
-        $this->layout->expects($this->any())
-            ->method('getBlock')
-            ->will($this->returnValue($this->priceBox));
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
         $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
             ->getMockForAbstractClass();
@@ -149,16 +149,9 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->salableResolverMock = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['isSalable']
-        );
+        $this->salableResolverMock = $this->getMockBuilder(SalableResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->object = $objectManager->getObject(
             \Magento\Catalog\Pricing\Render\FinalPriceBox::class,

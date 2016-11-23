@@ -72,7 +72,8 @@ class FinalPriceBox extends BasePriceBox
     private function getSalableResolver()
     {
         if ($this->salableResolver === null) {
-            $this->salableResolver = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface::class);
+            $this->salableResolver = \Magento\Framework\App\ObjectManager::getInstance()->
+            get(\Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface::class);
         }
         return $this->salableResolver;
     }
