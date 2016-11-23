@@ -189,7 +189,11 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testNotSalableItem()
     {
-        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(false);
+        $this->salableResolverMock
+            ->expects($this->once())
+            ->method('isSalable')
+            ->with($this->product)
+            ->willReturn(false);
         $result = $this->object->toHtml();
 
         $this->assertEmpty($result);
