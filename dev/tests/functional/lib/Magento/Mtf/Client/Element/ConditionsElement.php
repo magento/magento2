@@ -477,11 +477,8 @@ class ConditionsElement extends SimpleElement
      */
     protected function parseTopLevelCondition($condition)
     {
-        if (!preg_match_all('/([^|]+\|?)/', $condition, $match)) {
+        if (preg_match_all('/([^|]+)\|?/', $condition, $match) === false) {
             throw new \Exception('Bad format condition');
-        }
-        foreach ($match[1] as $key => $value) {
-            $match[1][$key] = rtrim($value, '|');
         }
 
         return [
@@ -524,7 +521,7 @@ class ConditionsElement extends SimpleElement
      * Param wait loader.
      *
      * @param ElementInterface $element
-     * @return bool|null
+     * @return void
      */
     protected function waitForCondition(ElementInterface $element)
     {
