@@ -26,10 +26,5 @@
         <postcode>
             <selector>#zip</selector>
         </postcode>
-        <!--
-        <custom_attribute>
-            <selector>[id="%attribute_code%"]</selector>
-        </custom_attribute>
-        -->
     </fields>
 </mapping>
