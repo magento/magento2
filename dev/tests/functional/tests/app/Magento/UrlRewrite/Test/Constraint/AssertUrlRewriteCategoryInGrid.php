@@ -101,7 +101,7 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
      * Return nesting url path.
      *
      * @param Category $category
-     * @param $nestingLevel
+     * @param int $nestingLevel
      * @return string
      */
     private function getNestingPath(Category $category, $nestingLevel)
