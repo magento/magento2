@@ -68,7 +68,7 @@ define([
             target = registry.async(targetName);
 
             if (target && typeof target === 'function' && actionName) {
-                params.unshift(actionName);
+                if(params.indexOf(actionName) === -1) params.unshift(actionName);
                 target.apply(target, params);
             }
         },
