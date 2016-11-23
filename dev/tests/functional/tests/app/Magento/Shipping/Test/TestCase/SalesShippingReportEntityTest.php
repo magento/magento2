@@ -51,11 +51,10 @@ class SalesShippingReportEntityTest extends Injectable
         $initialShippingResult = $salesShippingReport->getGridBlock()->getLastResult();
         $initialShippingTotalResult = $salesShippingReport->getGridBlock()->getTotalResult();
         $order->persist();
-        $shipment = $this->objectManager->create(
+        $this->objectManager->create(
             \Magento\Sales\Test\TestStep\CreateShipmentStep::class,
             ['order' => $order]
-        );
-        $shipment->run();
+        )->run();
 
         return [
             'initialShippingResult' => $initialShippingResult,

@@ -32,8 +32,7 @@ abstract class AbstractAssertShippingReportResult extends AbstractConstraint
     protected $order;
 
     /**
-     * Constructor.
-     *
+     * @constructor
      * @param ObjectManager $objectManager
      * @param EventManagerInterface $eventManager
      * @param SalesShippingReport $salesShippingReport
