@@ -85,14 +85,14 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('Country'),
-                'options' => $this->countryCollection->loadByStore()->toOptionArray(),
+                'options' => [],
                 'value' => null
             ],
             'region_id' => [
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('State/Province'),
-                'options' => $this->regionCollection->load()->toOptionArray(),
+                'options' => [],
                 'value' => null
             ],
             'postcode' => [
@@ -102,6 +102,13 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'value' => null
             ]
         ];
+
+        if (!isset($jsLayout['components']['checkoutProvider']['dictionaries'])) {
+            $jsLayout['components']['checkoutProvider']['dictionaries'] = [
+                'country_id' => $this->countryCollection->loadByStore()->toOptionArray(),
+                'region_id' => $this->regionCollection->addAllowedCountriesFilter()->toOptionArray(),
+            ];
+        }
 
         if (isset($jsLayout['components']['block-summary']['children']['block-shipping']['children']
             ['address-fieldsets']['children'])

@@ -121,7 +121,7 @@ define([
                     {
                         value: 'valLast'
                     }];
-                model.caption = false;
+                model.caption('');
                 expect(model.normalizeData('')).toEqual('valFirst');
             });
         });
