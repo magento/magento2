@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <credit_card_type>
+            <input>select</input>
+            <selector>#credit_card_type</selector>
+        </credit_card_type>
+        <credit_card_number>
+            <selector>#credit_card_number</selector>
+        </credit_card_number>
+        <credit_card_exp_month>
+            <selector>[name=expiryMonth]</selector>
+        </credit_card_exp_month>
+        <credit_card_exp_year>
+            <selector>[name=expiryYear]</selector>
+        </credit_card_exp_year>
+        <cvv>
+            <selector>[name=cvv2]</selector>
+        </cvv>
+    </fields>
+</mapping>
