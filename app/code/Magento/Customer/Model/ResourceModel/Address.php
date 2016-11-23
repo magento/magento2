@@ -29,6 +29,16 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     protected $customerRepository;
 
     /**
+     * @var DeleteRelation
+     */
+    protected $deleteRelation;
+
+    /**
+     * @var CustomerRegistry
+     */
+    protected $customerRegistry;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
@@ -124,7 +134,10 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     private function getDeleteRelation()
     {
-        return ObjectManager::getInstance()->get(DeleteRelation::class);
+        if ($this->deleteRelation === null) {
+            $this->deleteRelation = ObjectManager::getInstance()->get(DeleteRelation::class);
+        }
+        return $this->deleteRelation;
     }
 
     /**
@@ -133,7 +146,10 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     private function getCustomerRegistry()
     {
-        return ObjectManager::getInstance()->get(CustomerRegistry::class);
+        if ($this->customerRegistry === null) {
+            $this->customerRegistry = ObjectManager::getInstance()->get(CustomerRegistry::class);
+        }
+        return $this->customerRegistry;
     }
 
     /**

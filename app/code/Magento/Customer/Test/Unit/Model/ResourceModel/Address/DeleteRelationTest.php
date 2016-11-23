@@ -19,7 +19,7 @@ class DeleteRelationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customerFactoryMock = $this->getMock(
-            'Magento\Customer\Model\CustomerFactory',
+            \Magento\Customer\Model\CustomerFactory::class,
             ['create'],
             [],
             '',
@@ -49,7 +49,7 @@ class DeleteRelationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $addressResource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
