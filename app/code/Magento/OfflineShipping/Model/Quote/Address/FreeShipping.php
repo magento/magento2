@@ -46,7 +46,8 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
             $quote->getCustomerGroupId(),
             $quote->getCouponCode()
         );
-
+        $shippingAddress = $quote->getShippingAddress();
+        $shippingAddress->setFreeShipping(0);
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {
@@ -71,7 +72,7 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
             /** Parent free shipping we apply to all children*/
             $this->applyToChildren($item, $itemFreeShipping);
         }
-        return (bool)$quote->getShippingAddress()->getFreeShipping();
+        return (bool)$shippingAddress->getFreeShipping();
     }
 
     /**

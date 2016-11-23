@@ -6,6 +6,8 @@
 
 namespace Magento\OfflineShipping\Test\Unit\Model\Quote\Address;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 class FreeShippingTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -51,6 +53,7 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
         $storeId = 100;
         $websiteId = 200;
         $customerGroupId = 300;
+        $objectManagerMock = new ObjectManagerHelper($this);
         $quoteMock = $this->getMock(
             \Magento\Quote\Model\Quote::class,
             ['getShippingAddress', 'getStoreId', 'getCustomerGroupId', 'getCouponCode'],
@@ -92,18 +95,9 @@ class FreeShippingTest extends \PHPUnit_Framework_TestCase
         $this->calculatorMock->expects($this->exactly(2))->method('processFreeShipping')->willReturnSelf();
         $itemMock->expects($this->once())->method('getFreeShipping')->willReturn(true);
 
-        $addressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getFreeShipping', 'setFreeShipping'],
-            [],
-            '',
-            false
-        );
-        $itemMock->expects($this->exactly(2))->method('getAddress')->willReturn($addressMock);
-        $addressMock->expects($this->at(1))->method('getFreeShipping')->willReturn(false);
-        $addressMock->expects($this->at(2))->method('getFreeShipping')->willReturn(true);
-        $addressMock->expects($this->once())->method('setFreeShipping')->with(true)->willReturnSelf();
+        $addressMock = $objectManagerMock->getObject(\Magento\Quote\Model\Quote\Address::class);
         $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
+        $itemMock->expects($this->exactly(2))->method('getAddress')->willReturn($addressMock);
 
         $itemMock->expects($this->once())->method('getHasChildren')->willReturn(true);
         $itemMock->expects($this->once())->method('isChildrenCalculated')->willReturn(true);
