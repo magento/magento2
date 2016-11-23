@@ -382,5 +382,22 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="not_required_text_option">
+            <field name="0" xsi:type="array">
+                <item name="title" xsi:type="string">Test1 option %isolation%</item>
+                <item name="is_require" xsi:type="string">No</item>
+                <item name="type" xsi:type="string">Text/Field</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="price" xsi:type="string">10</item>
+                        <item name="price_type" xsi:type="string">Fixed</item>
+                        <item name="sku" xsi:type="string">sku1_%isolation%</item>
+                        <item name="max_characters" xsi:type="string">45</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
     </repository>
 </config>
