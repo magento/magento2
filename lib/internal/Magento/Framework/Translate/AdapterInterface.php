@@ -22,12 +22,13 @@ interface AdapterInterface
      */
     public function translate($messageId, $locale = null);
 
+    // @codingStandardsIgnoreStart
     /**
      * Translate string
      *
      * @return string
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @codingStandardsIgnoreLine
      */
     public function __();
+    // @codingStandardsIgnoreEnd
 }

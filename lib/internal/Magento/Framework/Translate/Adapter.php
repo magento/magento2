@@ -29,11 +29,11 @@ class Adapter extends AbstractAdapter
         }
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Translate message string.
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @codingStandardsIgnoreLine
      * @return string
      */
     public function __()
@@ -46,4 +46,5 @@ class Adapter extends AbstractAdapter
         }
         return $string;
     }
+    // @codingStandardsIgnoreEnd
 }

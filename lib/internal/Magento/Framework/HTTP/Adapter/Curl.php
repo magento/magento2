@@ -149,6 +149,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         return $this->_applyConfig();
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Send request to the remote server
      *
@@ -159,7 +160,6 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param string $body
      * @return string Request as text
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @codingStandardsIgnoreLine
      */
     public function write($method, $url, $http_ver = '1.1', $headers = [], $body = '')
     {
@@ -190,6 +190,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
 
         return $body;
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Read response from server
