@@ -17,7 +17,7 @@
         <block name="paymentBlock" class="Magento\Checkout\Test\Block\Onepage\Payment" locator="#checkout-step-payment" strategy="css selector" />
         <block name="discountCodesBlock" class="Magento\Checkout\Test\Block\Onepage\Payment\DiscountCodes" locator=".discount-code" strategy="css selector" />
         <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator=".opc-block-summary" strategy="css selector" />
-        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="//*[@id='checkout']//div[@data-role='checkout-messages' and .//div]" strategy="xpath" />
         <block name="customAddressBlock" class="Magento\Checkout\Test\Block\Onepage\CustomAddress" locator=".checkout-billing-address" strategy="css selector" />
     </page>
 </config>
