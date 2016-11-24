@@ -16,9 +16,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Message about authorized amount in order.
+     * Pattern of message about authorized amount in order.
      */
-    const AUTHORIZED_AMOUNT = 'Authorized amount of $';
+    const AUTHORIZED_AMOUNT_PATTERN = '/([a-zA-Z\"\s]*)Authorized amount of \W+%S.([a-zA-Z0-9\"\s\:]*)/';
 
     /**
      * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
@@ -40,8 +40,8 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 
         $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
 
-        \PHPUnit_Framework_Assert::assertContains(
-            self::AUTHORIZED_AMOUNT . $prices['grandTotal'],
+        \PHPUnit_Framework_Assert::assertRegExp(
+            sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
             $actualAuthorizedAmount,
             'Incorrect authorized amount value for the order #' . $orderId
         );
