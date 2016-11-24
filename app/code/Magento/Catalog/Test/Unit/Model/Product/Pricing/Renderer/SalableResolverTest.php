@@ -30,8 +30,7 @@ class SalableResolverTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver::class,
-            []
+            \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver::class
         );
     }
 
@@ -47,19 +46,19 @@ class SalableResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->expects($this->any())
             ->method('getCanShowPrice')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->product->expects($this->any())->method('isSalable')->willReturn(true);
 
         $result = $this->object->isSalable($this->product);
-        $this->assertNotFalse($result);
+        $this->assertTrue($result);
     }
 
     public function testNotSalableItem()
     {
         $this->product->expects($this->any())
             ->method('getCanShowPrice')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->product->expects($this->any())->method('isSalable')->willReturn(false);
 

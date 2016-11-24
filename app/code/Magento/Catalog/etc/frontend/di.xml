@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface" type="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver"/>
     <virtualType name="Magento\Catalog\Model\ResourceModel\Category\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
             <argument name="cacheTags" xsi:type="array">

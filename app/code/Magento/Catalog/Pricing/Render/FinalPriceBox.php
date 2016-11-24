@@ -11,6 +11,10 @@ use Magento\Framework\Pricing\Render;
 use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
 use Magento\Msrp\Pricing\Price\MsrpPrice;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Render\RendererPool;
 
 /**
  * Class for final_price rendering
@@ -21,16 +25,38 @@ use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 class FinalPriceBox extends BasePriceBox
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface
+     * @var SalableResolverInterface
      */
     private $salableResolver;
+
+    /**
+     * @param Context $context
+     * @param SaleableInterface $saleableItem
+     * @param PriceInterface $price
+     * @param RendererPool $rendererPool
+     * @param array $data
+     * @param SalableResolverInterface $salableResolver
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __construct(
+        Context $context,
+        SaleableInterface $saleableItem,
+        PriceInterface $price,
+        RendererPool $rendererPool,
+        array $data = [],
+        SalableResolverInterface $salableResolver = null
+    ) {
+        parent::__construct($context, $saleableItem, $price, $rendererPool);
+        $this->salableResolver = $salableResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SalableResolverInterface::class);
+    }
 
     /**
      * @return string
      */
     protected function _toHtml()
     {
-        if (!$this->getSalableResolver()->isSalable($this->getSaleableItem())) {
+        if (!$this->salableResolver->isSalable($this->getSaleableItem())) {
             return '';
         }
 
@@ -60,22 +86,6 @@ class FinalPriceBox extends BasePriceBox
         }
 
         return $this->wrapResult($result);
-    }
-
-    /**
-     * The getter function to get the new SalableResolver dependency
-     *
-     * @return \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface
-     *
-     * @deprecated
-     */
-    private function getSalableResolver()
-    {
-        if ($this->salableResolver === null) {
-            $this->salableResolver = \Magento\Framework\App\ObjectManager::getInstance()->
-            get(\Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface::class);
-        }
-        return $this->salableResolver;
     }
 
     /**
