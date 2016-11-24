@@ -52,18 +52,24 @@ define(
                 var self = this;
 
                 if (this.validateHandler() && additionalValidators.validate()) {
-                    fullScreenLoader.startLoader();
                     this.isPlaceOrderActionAllowed(false);
-                    $.when(setPaymentInformationAction(this.messageContainer, {
-                        'method': self.getCode()
-                    })).done(function () {
-                        self.placeOrderHandler().fail(function () {
+                    fullScreenLoader.startLoader();
+                    $.when(
+                        setPaymentInformationAction(this.messageContainer, {'method': self.getCode()})
+                    ).done(
+                        function () {
+                            self.placeOrderHandler().fail(
+                                function () {
+                                    fullScreenLoader.stopLoader();
+                                }
+                            );
+                        }
+                    ).always(
+                        function () {
+                            self.isPlaceOrderActionAllowed(true);
                             fullScreenLoader.stopLoader();
-                        });
-                    }).fail(function () {
-                        fullScreenLoader.stopLoader();
-                        self.isPlaceOrderActionAllowed(true);
-                    });
+                        }
+                    );
                 }
             }
         });
