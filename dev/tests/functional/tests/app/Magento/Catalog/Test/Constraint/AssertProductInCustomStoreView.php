@@ -4,25 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Downloadable\Test\Constraint;
+namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractAssertForm;
-use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that Downloadable Product is present on Custom Store and absent on Main Store.
+ * Assert that product name is correct in Custom adn Default store views.
  */
-class AssertDownloadableProductOnCustomStoreView extends AbstractAssertForm
+class AssertProductInCustomStoreView extends AbstractAssertForm
 {
-    /**
-     * Message on the product page 404.
-     */
-    const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
-
     /**
      * Product view.
      *
@@ -45,13 +40,12 @@ class AssertDownloadableProductOnCustomStoreView extends AbstractAssertForm
     private $cmsIndexPage;
 
     /**
-     * Assert Product is present on Custom Store and absent on Main Store:
-     * 1. Product is absent on Main Store.
-     * 2. Product is present on Custom Store.
+     * Assert that product name is correct in Custom adn Default store views.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
-     * @param DownloadableProduct $changedProduct
+     * @param FixtureInterface $product
+     * @param FixtureInterface $initialProduct
      * @param Store $store
      * @param CmsIndex $cmsIndexPage
      * @return void
@@ -59,7 +53,8 @@ class AssertDownloadableProductOnCustomStoreView extends AbstractAssertForm
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
-        DownloadableProduct $changedProduct,
+        FixtureInterface $product,
+        FixtureInterface $initialProduct,
         Store $store,
         CmsIndex $cmsIndexPage
     ) {
@@ -67,45 +62,45 @@ class AssertDownloadableProductOnCustomStoreView extends AbstractAssertForm
         $this->cmsIndexPage = $cmsIndexPage;
         $this->productViewPage = $catalogProductView;
 
-        $this->verifyProductOnMainStore($changedProduct);
-        $this->verifyProductOnCustomStore($changedProduct, $store);
+        $this->verifyProductOnMainStore($initialProduct);
+        $this->verifyProductOnCustomStore($product, $store);
     }
 
     /**
-     * Verify Product is absent on Main Store.
+     * Verify product name in default store view.
      *
-     * @param DownloadableProduct $product
+     * @param FixtureInterface $initialProduct
      * @return void
      */
-    protected function verifyProductOnMainStore(DownloadableProduct $product)
+    protected function verifyProductOnMainStore(FixtureInterface $initialProduct)
     {
-        $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $this->browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
 
         \PHPUnit_Framework_Assert::assertEquals(
-            self::NOT_FOUND_MESSAGE,
-            $this->productViewPage->getTitleBlock()->getTitle(),
-            'Product ' . $product->getName() . ' is available on Main Store, but should not.'
+            $initialProduct->getName(),
+            $this->productViewPage->getViewBlock()->getProductName(),
+            'Product ' . $initialProduct->getName() . ' is incorrect.'
         );
     }
 
     /**
-     * Verify Product is present on assigned custom store.
+     * Verify product name in custom store view.
      *
-     * @param DownloadableProduct $product
+     * @param FixtureInterface $updatedProduct
      * @param Store $store
      * @return void
      */
-    protected function verifyProductOnCustomStore(DownloadableProduct $product, Store $store)
+    protected function verifyProductOnCustomStore(FixtureInterface $updatedProduct, Store $store)
     {
         $this->cmsIndexPage->getStoreSwitcherBlock()->selectStoreView($store->getName());
         $this->cmsIndexPage->getLinksBlock()->waitWelcomeMessage();
 
-        $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $this->browser->open($_ENV['app_frontend_url'] . $updatedProduct->getUrlKey() . '.html');
 
             \PHPUnit_Framework_Assert::assertEquals(
-                $product->getName(),
+                $updatedProduct->getName(),
                 $this->productViewPage->getViewBlock()->getProductName(),
-                'Product ' . $product->getName() . ' is not available on ' . $store->getName() . ' store.'
+                'Product ' . $updatedProduct->getName() . ' is not available on ' . $store->getName() . ' store.'
             );
     }
 
@@ -116,6 +111,6 @@ class AssertDownloadableProductOnCustomStoreView extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Product on product view page displayed in appropriate Store.';
+        return 'Product is displayed correctly in default and custom store views.';
     }
 }

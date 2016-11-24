@@ -49,13 +49,6 @@ class UpdateDownloadableProductEntityTest extends Injectable
     private $product;
 
     /**
-     * Store fixture.
-     *
-     * @var Store
-     */
-    private $store;
-
-    /**
      * Product page with a grid.
      *
      * @var CatalogProductIndex
@@ -68,6 +61,13 @@ class UpdateDownloadableProductEntityTest extends Injectable
      * @var CatalogProductEdit
      */
     private $catalogProductEdit;
+
+    /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
 
     /**
      * Persist category.
@@ -89,7 +89,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductEdit $catalogProductEditPage
      * @param FixtureFactory $fixtureFactory
-     * @return void
+     * @return array
      */
     public function __inject(
         CatalogProductIndex $catalogProductIndexNewPage,
@@ -101,8 +101,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
             ['dataset' => 'default']
         );
         $this->product->persist();
-        $this->store = $fixtureFactory->createByCode('store', ['dataset' => 'custom']);
-        $this->store->persist();
+        $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndexNewPage;
         $this->catalogProductEdit = $catalogProductEditPage;
     }
@@ -112,21 +111,40 @@ class UpdateDownloadableProductEntityTest extends Injectable
      *
      * @param DownloadableProduct $product
      * @param Category $category
-     * @param bool|int $customStore [optional]
+     * @param string $storeDataset [optional]
+     * @param int $storesCount [optional]
+     * @param int|null $storeIndexToUpdate [optional]
      * @return array
      */
-    public function test(DownloadableProduct $product, Category $category, $customStore = null)
-    {
-        // Steps
+    public function test(
+        DownloadableProduct $product,
+        Category $category,
+        $storeDataset = '',
+        $storesCount = 0,
+        $storeIndexToUpdate = null
+    ) {
+        // Preconditions
+        $stores = [];
+        if ($storeDataset) {
+            for ($i = 0; $i < $storesCount; $i++) {
+                $stores[$i] = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
+                $stores[$i]->persist();
+            }
+        }
+
+        // Test steps
         $filter = ['sku' => $this->product->getSku()];
         $this->catalogProductIndex->open()->getProductGrid()->searchAndOpen($filter);
-        if ($customStore) {
-            $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($this->store);
+        if ($storeDataset && $storeIndexToUpdate !== null) {
+            $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($stores[$storeIndexToUpdate]);
         }
         $productBlockForm = $this->catalogProductEdit->getProductForm();
         $productBlockForm->fill($product, null, $category);
         $this->catalogProductEdit->getFormPageActions()->save();
 
-        return ['store' => $this->store, 'product' => $this->product, 'changedProduct' => $product];
+        return [
+            'store' => $storeDataset ? $stores[$storeIndexToUpdate] : '',
+            'initialProduct' => $this->product
+        ];
     }
 }
