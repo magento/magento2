@@ -61,6 +61,13 @@ class Tree extends Block
     protected $header = 'header';
 
     /**
+     * Xpath locator for category in tree.
+     *
+     * @var string
+     */
+    protected $categoryInTree = '//*[@class="x-tree-node-ct"]/li/div/a/span[contains(text(), "%s")]/..';
+
+    /**
      * Get backend abstract block.
      *
      * @return Template
@@ -151,6 +158,26 @@ class Tree extends Block
         $categoryPath = implode('/', $categoryPath);
         return $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')
             ->isElementVisible($categoryPath);
+    }
+
+    /**
+     * Assign child category to the parent.
+     *
+     * @param string $parentCategoryName
+     * @param string $childCategoryName
+     *
+     * @return void
+     */
+    public function assignCategory($parentCategoryName, $childCategoryName)
+    {
+        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)->click();
+        $this->getTemplateBlock()->waitLoader();
+        $targetElement = $this->_rootElement->find(
+            sprintf($this->categoryInTree, $parentCategoryName),
+            Locator::SELECTOR_XPATH
+        );
+        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)
+            ->dragAndDrop($targetElement);
     }
 
     /**

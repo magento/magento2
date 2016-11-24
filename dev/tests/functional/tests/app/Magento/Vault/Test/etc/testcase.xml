@@ -56,7 +56,8 @@
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
-        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="checkSaveCreditCardOption" />
+        <step name="checkSaveCreditCardOption" module="Magento_Vault" next="fillBillingInformation" />
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="openOrder" />
         <step name="openOrder" module="Magento_Sales" next="reorder" />

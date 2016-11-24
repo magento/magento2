@@ -317,6 +317,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation18">
+            <data name="issue" xsi:type="string">MAGETWO-60470: [Import Custom options] An error occurs on attempt to save the product with imported options</data>
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
