@@ -17,14 +17,16 @@ class ImagesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        $this->productMock->expects($this->once())->method('getId')->willReturn(2051);
-        $actualResult = $this->getModel()->modifyData($this->getSampleData());
-        $this->assertSame('', $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
+        return $this->objectManager->getObject(Images::class, [
+            'locator' => $this->locatorMock,
+        ]);
     }
 
     public function testModifyData()
     {
-        $this->assertSame($this->getSampleData(), $this->getModel()->modifyData($this->getSampleData()));
+        $this->productMock->expects($this->once())->method('getId')->willReturn(2051);
+        $actualResult = $this->getModel()->modifyData($this->getSampleData());
+        $this->assertSame('', $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
     }
 
     public function testModifyMeta()
