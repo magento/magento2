@@ -7,7 +7,6 @@
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\ObjectManagerInterface;
@@ -410,36 +409,5 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($this->uut->save() instanceof Uut);
-    }
-}
-
-/**
- * Pattern type: Public Morozov
- */
-class Uut extends AbstractCollection
-{
-    public function wereFieldsToSelectChanged()
-    {
-        return $this->_fieldsToSelectChanged;
-    }
-
-    public function getFieldsToSelect()
-    {
-        return $this->_fieldsToSelect;
-    }
-
-    public function setFieldsToSelect(array $fields)
-    {
-        $this->_fieldsToSelect = $fields;
-    }
-
-    public function setResource($resource)
-    {
-        $this->_resource = $resource;
-    }
-
-    public function getJoinedTables()
-    {
-        return $this->_joinedTables;
     }
 }

@@ -183,21 +183,3 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
     }
 }
-
-class ActionFake extends Action
-{
-    /**
-     * Fake action to check a method call from a parent
-     */
-    public function execute()
-    {
-        $this->_forward(
-            ActionTest::ACTION_NAME,
-            ActionTest::CONTROLLER_NAME,
-            ActionTest::MODULE_NAME,
-            ActionTest::$actionParams
-        );
-        $this->_redirect(ActionTest::FULL_ACTION_NAME, ActionTest::$actionParams);
-        return;
-    }
-}
