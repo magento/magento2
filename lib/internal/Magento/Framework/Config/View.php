@@ -152,7 +152,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     {
         $idAttributes = [
             '/view/vars' => 'module',
-            '/view/vars/var' => 'name',
+            '/view/vars/(var/)*var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
         foreach ($this->xpath as $attribute) {
