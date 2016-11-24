@@ -34,14 +34,6 @@ class SalableResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSalableItemDoesntExists()
-    {
-        $this->product = null;
-
-        $result = $this->object->isSalable($this->product);
-        $this->assertFalse($result);
-    }
-
     public function testSalableItem()
     {
         $this->product->expects($this->any())

@@ -36,7 +36,6 @@ class FinalPriceBox extends BasePriceBox
      * @param RendererPool $rendererPool
      * @param array $data
      * @param SalableResolverInterface $salableResolver
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -46,7 +45,7 @@ class FinalPriceBox extends BasePriceBox
         array $data = [],
         SalableResolverInterface $salableResolver = null
     ) {
-        parent::__construct($context, $saleableItem, $price, $rendererPool);
+        parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
         $this->salableResolver = $salableResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(SalableResolverInterface::class);
     }
