@@ -14,13 +14,13 @@
             <data name="category/data/url_key_create_redirect" xsi:type="string">No</data>
             <data name="filterByPath" xsi:type="string">request_path</data>
             <data name="redirectType" xsi:type="string">No</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesCategoryInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesCategoriesInGrid" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation2" summary="Update top category url and create redirect">
             <data name="initialCategory/dataset" xsi:type="string">three_nested_categories</data>
             <data name="nestingLevel" xsi:type="number">3</data>
             <data name="category/data/url_key" xsi:type="string">cat1-rewrite%isolation%</data>
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesCategoryInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesCategoriesInGrid" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesRedirectInGrid" />
         </variation>
     </testCase>

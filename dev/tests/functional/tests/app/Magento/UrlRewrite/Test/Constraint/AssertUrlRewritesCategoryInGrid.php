@@ -14,7 +14,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 /**
  * Assert that category url rewrites are present in grid.
  */
-class AssertUrlRewritesCategoryInGrid extends AbstractConstraint
+class AssertUrlRewritesCategoriesInGrid extends AbstractConstraint
 {
     /**
      * Assert that category url rewrites are present in grid.

@@ -59,7 +59,7 @@ class UpdateTopCategoryEntityTest extends Injectable
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
      * @param FixtureFactory $fixtureFactory
-     * @return array
+     * @return void
      */
     public function __inject(
         CatalogCategoryIndex $catalogCategoryIndex,
