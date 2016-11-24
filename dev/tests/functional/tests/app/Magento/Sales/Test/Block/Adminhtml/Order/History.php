@@ -57,6 +57,13 @@ class History extends Block
     protected $refundedAmount = '//div[@class="note-list-comment"][contains(text(), "We refunded")]';
 
     /**
+     * Voided Amount.
+     *
+     * @var string
+     */
+    protected $voidedAmount = '//div[@class="note-list-comment"][contains(text(), "Voided authorization")]';
+
+    /**
      * Note list locator.
      *
      * @var string
@@ -115,6 +122,17 @@ class History extends Block
             $result[] = $refundedComment->getText();
         }
         return $result;
+    }
+
+    /**
+     * Get the voided amount from the comments history.
+     *
+     * @return string
+     */
+    public function getVoidedAmount()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->voidedAmount, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

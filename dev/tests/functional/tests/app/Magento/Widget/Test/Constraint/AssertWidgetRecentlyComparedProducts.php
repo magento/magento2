@@ -118,6 +118,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
     protected function removeCompareProducts()
     {
         $this->cmsIndex->open();
+        $this->cmsIndex->getCompareLinkBlock()->waitForCompareProductsLinks();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
         $this->catalogProductCompare->getCompareProductsBlock()->removeAllProducts();
     }

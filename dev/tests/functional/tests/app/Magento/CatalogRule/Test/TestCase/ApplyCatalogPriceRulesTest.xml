@@ -11,7 +11,7 @@
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="catalogRules/0/dataset" xsi:type="string">catalog_price_rule_priority_0</data>
             <data name="catalogRules/1/dataset" xsi:type="string">catalog_price_rule_priority_2</data>
-            <data name="product/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_for_salesrule_2</data>
             <data name="cartPrice/sub_total" xsi:type="string">15</data>
             <data name="cartPrice/grand_total" xsi:type="string">20</data>
             <data name="productPrice/0/discount_amount" xsi:type="string">35</data>
@@ -26,7 +26,7 @@
             <data name="catalogRules/0/dataset" xsi:type="string">catalog_price_rule_priority_0</data>
             <data name="catalogRules/1/dataset" xsi:type="string">catalog_price_rule_priority_1_stop_further_rules</data>
             <data name="catalogRules/2/dataset" xsi:type="string">catalog_price_rule_priority_2</data>
-            <data name="product/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_for_salesrule_2</data>
             <data name="cartPrice/sub_total" xsi:type="string">20</data>
             <data name="cartPrice/grand_total" xsi:type="string">25</data>
             <data name="productPrice/0/discount_amount" xsi:type="string">30</data>
@@ -40,7 +40,7 @@
         <variation name="ApplyCatalogRules_WithExpireDate" summary="Apply Catalog Price rule with Expire Date and Catalog Price Rule with Start Date">
             <data name="catalogRules/0/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
             <data name="catalogRules/1/dataset" xsi:type="string">active_catalog_rule</data>
-            <data name="product/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_for_salesrule_2</data>
             <data name="cartPrice/sub_total" xsi:type="string">45</data>
             <data name="cartPrice/grand_total" xsi:type="string">50</data>
             <data name="productPrice/0/discount_amount" xsi:type="string">5</data>
@@ -53,7 +53,7 @@
         </variation>
         <variation name="ApplyCatalogRule_ForGuestUsers_ByProductAttribute_AdjustPriceToValue" summary="Apply Catalog Price Rule with Product Attribute in Condition" ticketId="MAGETWO-30095">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
-            <data name="product/dataset" xsi:type="string">product_with_custom_color_attribute</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_with_custom_color_attribute</data>
             <data name="catalogRules/0/data/name" xsi:type="string">Catalog Price Rule %isolation%</data>
             <data name="catalogRules/0/data/is_active" xsi:type="string">Active</data>
             <data name="catalogRules/0/data/website_ids/option_0" xsi:type="string">Main Website</data>
@@ -72,7 +72,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRule_ForGuestUsers_AdjustPriceToPercentage" summary="Apply Catalog Price Rule for Guest Users with Adjust Price to Percentage" ticketId="MAGETWO-23036">
-            <data name="product/dataset" xsi:type="string">MAGETWO-23036</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::MAGETWO-23036</data>
             <data name="catalogRules/0/data/name" xsi:type="string">rule_name%isolation%</data>
             <data name="catalogRules/0/data/is_active" xsi:type="string">Active</data>
             <data name="catalogRules/0/data/website_ids/option_0" xsi:type="string">Main Website</data>
@@ -93,7 +93,7 @@
         <variation name="ApplyCatalogRule_ForNewCustomerGroup" summary="Apply Catalog Price Rules to Specific Customer Group" ticketId="MAGETWO-12908">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
-            <data name="product/dataset" xsi:type="string">simple_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
             <data name="catalogRules/0/data/name" xsi:type="string">rule_name%isolation%</data>
             <data name="catalogRules/0/data/is_active" xsi:type="string">Active</data>
             <data name="catalogRules/0/data/website_ids/option_0" xsi:type="string">Main Website</data>
@@ -112,6 +112,39 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+        </variation>
+        <variation name="ApplyCatalogRuleForSimpleProductWithCustomOptions" summary="Apply Catalog Rule for Simple Product With Custom Options" ticketId="MAGETWO-23038">
+            <data name="products/0" xsi:type="string">catalogProductSimple::with_default_custom_option</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::with_fixed_custom_option</data>
+            <data name="products/2" xsi:type="string">catalogProductSimple::with_percent_custom_option</data>
+            <data name="customer/dataset" xsi:type="string">customer_US</data>
+            <data name="catalogRules/0/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
+            <data name="catalogRules/0/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogRules/0/data/website_ids/option_0" xsi:type="string">Main Website</data>
+            <data name="customer/data/group_id/dataset" xsi:type="string">default</data>
+            <data name="catalogRules/0/data/simple_action" xsi:type="string">Apply as percentage of original</data>
+            <data name="catalogRules/0/data/discount_amount" xsi:type="string">13</data>
+            <data name="catalogRules/0/data/stop_rules_processing" xsi:type="string">Yes</data>
+            <data name="cartPrice/sub_total" xsi:type="string">164.99</data>
+            <data name="cartPrice/grand_total" xsi:type="string">179.99</data>
+            <data name="productPrice/0/discount_amount" xsi:type="string">7.38</data>
+            <data name="productPrice/1/discount_amount" xsi:type="string">8.04</data>
+            <data name="productPrice/2/discount_amount" xsi:type="string">7.38</data>
+            <data name="productPrice/0/special" xsi:type="string">49.40</data>
+            <data name="productPrice/1/special" xsi:type="string">53.85</data>
+            <data name="productPrice/2/special" xsi:type="string">61.74</data>
+            <data name="productPrice/0/sub_total" xsi:type="string">49.40</data>
+            <data name="productPrice/1/sub_total" xsi:type="string">61.74</data>
+            <data name="productPrice/2/sub_total" xsi:type="string">53.85</data>
+            <data name="productPrice/0/regular" xsi:type="string">56.78</data>
+            <data name="productPrice/1/regular" xsi:type="string">61.98</data>
+            <data name="productPrice/2/regular" xsi:type="string">69.12</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="payment/method" xsi:type="string">free</data>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedOnepageCheckout" />
         </variation>
     </testCase>
 </config>
