@@ -87,7 +87,8 @@
     </scenario>
     <scenario name="OnePageCheckoutHostedProTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
-        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
         <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
