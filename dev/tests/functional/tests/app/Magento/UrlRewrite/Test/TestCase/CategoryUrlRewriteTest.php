@@ -74,7 +74,7 @@ class CategoryUrlRewriteTest extends Injectable
      */
     public function test(Store $storeView, Category $childCategory, Category $parentCategory, Category $categoryUpdates)
     {
-        //Preconditions:
+        // Preconditions:
         $storeView->persist();
         $parentCategory->persist();
         $childCategory->persist();

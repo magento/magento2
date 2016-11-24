@@ -35,7 +35,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CheckoutWthPersistentShoppingCartTest extends Injectable
+class CheckoutWithPersistentShoppingCartTest extends Injectable
 {
     /**
      * Config data.

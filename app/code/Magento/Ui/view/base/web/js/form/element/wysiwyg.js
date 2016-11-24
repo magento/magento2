@@ -93,7 +93,7 @@ define([
             /* eslint-disable no-undef */
             if (tinyMCE) {
                 _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
-                    controls[property].setDisabled(status);
+                    controls[property.id].setDisabled(status);
                 });
 
                 tinyMCE.activeEditor.getBody().setAttribute('contenteditable', !status);

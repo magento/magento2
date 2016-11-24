@@ -23,6 +23,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
+            <data name="isVaultEnabled" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure_not_triggered_due_threshold</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -46,6 +47,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
+            <data name="isVaultEnabled" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure_uk</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -69,6 +71,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="isVaultEnabled" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test, severity:S0</data>
@@ -96,6 +99,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="isVaultEnabled" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree, braintree_sale</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
