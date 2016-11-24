@@ -38,7 +38,6 @@ class HostedPro extends Method
      */
     private $creditCardForm = '#formCreditCard';
 
-
     /**
      * Fill credit card data in PayPal iframe form.
      *

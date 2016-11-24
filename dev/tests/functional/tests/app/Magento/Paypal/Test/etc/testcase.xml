@@ -92,7 +92,7 @@
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
         <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
-        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
         <step name="placeOrderWithHostedPro" module="Magento_Paypal" />

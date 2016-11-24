@@ -24,7 +24,8 @@
             <data name="creditCardClass" xsi:type="string">credit_card_hostedpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_hosted_pro</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
-            <data name="configData" xsi:type="string">hosted_pro</data>
+            <data name="configData" xsi:type="string">hosted_pro, config_base_currency_gb</data>
+            <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />

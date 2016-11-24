@@ -101,7 +101,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             [
                 'data' => [
                     'entity_id' => ['products' => $this->products],
-                    'orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()
+                    'id' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()
                 ]
             ]
         );
