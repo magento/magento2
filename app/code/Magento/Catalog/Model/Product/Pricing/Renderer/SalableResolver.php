@@ -7,12 +7,12 @@
 namespace Magento\Catalog\Model\Product\Pricing\Renderer;
 
 /**
- * Resolvers checks whether product is available for sale or not
+ * Resolvers check whether product available for sale or not
  */
 class SalableResolver implements SalableResolverInterface
 {
     /**
-     * Check whether product is available for sale
+     * Check whether product available for sale
      *
      * @param \Magento\Framework\Pricing\SaleableInterface $salableItem
      * @return boolean
