@@ -84,9 +84,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'getProductCategories',
-                'dataHasChangedFor',
-                'getVisibility'
+                'getProductCategories'
             ])
             ->getMock();
 
@@ -98,24 +96,58 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
 
     }
 
-    public function testVisibility()
+    /**
+     * @dataProvider visibilityProvider
+     * @param integer $before
+     * @param integer $after
+     */
+    public function testVisibility($before, $after)
     {
+        $this->product->setOrigData('visibility', $before);
+        $this->product->setData('visibility', $after);
+
         $this->productUrlRewriteGenerator->expects(static::once())
             ->method('generate')
             ->with($this->product)
-            ->willReturn([]);
-        $this->urlPersist->expects(static::atLeastOnce())
+            ->willReturn(['test']);
+        $this->urlPersist->expects(static::once())
             ->method('replace')
-            ->with([]);
-        $this->product->expects(static::atLeastOnce())
-            ->method('getVisibility')
-            ->willReturn(Visibility::VISIBILITY_IN_CATALOG);
-        $this->product->expects(static::atLeastOnce())
-            ->method('dataHasChangedFor')
-            ->willReturnMap([
-                ['visibility', true],
-            ]);
+            ->with(['test']);
 
         $this->productProcessUrlRewriteSavingObserver->execute($this->observer);
+    }
+
+    public function visibilityProvider()
+    {
+        return [
+            ['origData' => Visibility::VISIBILITY_NOT_VISIBLE, 'data' => Visibility::VISIBILITY_IN_CATALOG],
+            ['origData' => null, 'data' => Visibility::VISIBILITY_IN_CATALOG],
+            ['origData' => Visibility::VISIBILITY_BOTH, 'data' => Visibility::VISIBILITY_IN_SEARCH],
+        ];
+    }
+
+    /**
+     * @dataProvider notVisibilityProvider
+     * @param integer $before
+     * @param integer $after
+     */
+    public function testNotVisibility($before, $after)
+    {
+        $this->product->setOrigData('visibility', $before);
+        $this->product->setData('visibility', $after);
+
+        $this->productUrlRewriteGenerator->expects(static::never())->method('generate');
+        $this->urlPersist->expects(static::never())->method('replace');
+
+        $this->productProcessUrlRewriteSavingObserver->execute($this->observer);
+    }
+
+    public function notVisibilityProvider()
+    {
+        return [
+            ['origData' => Visibility::VISIBILITY_IN_SEARCH, 'data' => Visibility::VISIBILITY_IN_SEARCH],
+            ['origData' => Visibility::VISIBILITY_IN_CATALOG, 'data' => Visibility::VISIBILITY_NOT_VISIBLE],
+            ['origData' => null, 'data' => Visibility::VISIBILITY_NOT_VISIBLE],
+        ];
     }
 }
