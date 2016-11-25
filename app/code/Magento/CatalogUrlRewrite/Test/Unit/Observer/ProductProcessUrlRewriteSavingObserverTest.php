@@ -18,9 +18,6 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 /**
  * Class ProductProcessUrlRewriteSavingObserver
- *
- * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,19 +37,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
     protected $observer;
 
     /**
-     * @var Event|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $event;
-
-    /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $product;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /**
      * @var ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -72,8 +59,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productProcessUrlRewriteSavingObserver = $this->objectManagerHelper->getObject(
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->productProcessUrlRewriteSavingObserver = $objectManagerHelper->getObject(
             ProductProcessUrlRewriteSavingObserver::class,
             [
                 'productUrlRewriteGenerator' => $this->productUrlRewriteGenerator,
@@ -88,11 +75,11 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
             ])
             ->getMock();
 
-        $this->event = $this->getMock(Event::class, ['getProduct'], [], '', false);
-        $this->event->method('getProduct')->willReturn($this->product);
+        $event = $this->getMock(Event::class, ['getProduct'], [], '', false);
+        $event->method('getProduct')->willReturn($this->product);
 
         $this->observer = $this->getMock(Observer::class, ['getEvent'], [], '', false);
-        $this->observer->method('getEvent')->willReturn($this->event);
+        $this->observer->method('getEvent')->willReturn($event);
 
     }
 
