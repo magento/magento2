@@ -61,8 +61,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $price;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface
-     * | \PHPUnit_Framework_MockObject_MockObject
+     * @var SalableResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $salableResolverMock;
 
