@@ -90,9 +90,9 @@ class Processor implements ContentProcessorInterface
             if (trim($content) === '') {
                 $this->logger->warning('Parsed less file is empty: ' .  $path);
                 return '';
+            } else {
+                return $content;
             }
-
-            return $content;
         } catch (\Exception $e) {
             throw new ContentProcessorException(new Phrase($e->getMessage()));
         }
