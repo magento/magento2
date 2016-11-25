@@ -21,7 +21,7 @@
             </data>
             <data name="creditCardClass" xsi:type="string">credit_card</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
-            <data name="isVaultEnabled" xsi:type="boolean">false</data>
+            <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">payflowpro</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />

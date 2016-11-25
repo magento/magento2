@@ -60,13 +60,6 @@ class SelectCheckoutMethodStep implements TestStepInterface
     private $customerAccountCreatePage;
 
     /**
-     * Shipping carrier and method.
-     *
-     * @var array
-     */
-    protected $shipping;
-
-    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param CustomerAccountCreate $customerAccountCreatePage
@@ -74,7 +67,6 @@ class SelectCheckoutMethodStep implements TestStepInterface
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
      * @param ClickProceedToCheckoutStep $clickProceedToCheckoutStep
      * @param string $checkoutMethod
-     * @param array $shipping
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
@@ -82,8 +74,7 @@ class SelectCheckoutMethodStep implements TestStepInterface
         Customer $customer,
         LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
         ClickProceedToCheckoutStep $clickProceedToCheckoutStep,
-        $checkoutMethod,
-        array $shipping = []
+        $checkoutMethod
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->customerAccountCreatePage = $customerAccountCreatePage;
@@ -91,7 +82,6 @@ class SelectCheckoutMethodStep implements TestStepInterface
         $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
         $this->clickProceedToCheckoutStep = $clickProceedToCheckoutStep;
         $this->checkoutMethod = $checkoutMethod;
-        $this->shipping = $shipping;
     }
 
     /**
@@ -120,9 +110,7 @@ class SelectCheckoutMethodStep implements TestStepInterface
                 $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
             }
         } elseif ($this->checkoutMethod === 'guest') {
-            if (empty($this->shipping)) {
-                $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
-            }
+            $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
         } elseif ($this->checkoutMethod === 'sign_in') {
             $this->checkoutOnepage->getAuthenticationWrapperBlock()->signInLinkClick();
             $this->checkoutOnepage->getAuthenticationWrapperBlock()->loginCustomer($this->customer);

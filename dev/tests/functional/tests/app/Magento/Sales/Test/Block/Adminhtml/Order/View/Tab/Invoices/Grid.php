@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices;
 /**
  * Invoices grid on order view page.
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
 {
     /**
      * Locator value for link in action column.
@@ -33,6 +33,9 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $filters = [
         'id' => [
             'selector' => 'input[name="increment_id"]',
+        ],
+        'order_id' => [
+            'selector' => 'input[name="order_increment_id"]',
         ],
         'status' => [
             'selector' => 'select[name="state"]',
