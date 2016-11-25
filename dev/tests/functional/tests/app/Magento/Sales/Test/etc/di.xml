@@ -8,32 +8,87 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid">
         <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus">
         <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage">
         <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderMassOnHoldSuccessMessage">
         <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory">
         <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory">
         <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertVoidInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderSuccessVoidedMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertInvoiceItems">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertTransactionStatus">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
 </config>

@@ -20,6 +20,7 @@
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="vault/method" xsi:type="string">braintree_cc_vault</data>
+            <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintree, braintree_use_vault</data>

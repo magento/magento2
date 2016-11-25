@@ -191,20 +191,33 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'testProduct';
         $entryMock = $this->getMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
+        $entrySecondId = 43;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
         $existingEntryMock = $this->getMock(
             \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
         );
+        $existingSecondEntryMock = $this->getMock(
+            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+        );
+
         $existingEntryMock->expects($this->once())->method('getId')->willReturn($entryId);
+        $existingEntryMock->expects($this->once())->method('getTypes')->willReturn(['small_image']);
+        $existingEntryMock->expects($this->once())->method('setTypes')->with(['small_image']);
+        $existingSecondEntryMock->expects($this->once())->method('getId')->willReturn($entrySecondId);
+        $existingSecondEntryMock->expects($this->once())->method('getTypes')->willReturn(['image']);
+        $existingSecondEntryMock->expects($this->once())->method('setTypes')->with([]);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
-            ->willReturn([$existingEntryMock]);
-        $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
+            ->willReturn([$existingEntryMock, $existingSecondEntryMock]);
+
+        $entryMock->expects($this->exactly(2))->method('getId')->willReturn($entryId);
         $entryMock->expects($this->once())->method('getFile')->willReturn("base64");
         $entryMock->expects($this->once())->method('setId')->with(null);
+        $entryMock->expects($this->exactly(2))->method('getTypes')->willReturn(['image']);
 
         $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
-            ->willReturn([$entryMock]);
+            ->with([$entryMock, $existingSecondEntryMock])
+            ->willReturnSelf();
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $this->assertTrue($this->model->update($productSku, $entryMock));
     }

@@ -28,6 +28,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 class GridSortingTest extends Injectable
 {
     /* tags */
+    const SEVERITY = 'S2';
     const MVP = 'no';
     /* end tags */
 

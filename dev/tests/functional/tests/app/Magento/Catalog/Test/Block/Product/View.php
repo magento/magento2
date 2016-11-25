@@ -522,14 +522,16 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Check id media gallery is visible for the product.
+     * Check if media gallery is visible for the product.
      *
      * @return bool
      */
     public function isGalleryVisible()
     {
         $this->waitForElementNotVisible($this->galleryLoader);
-        return $this->_rootElement->find($this->mediaGallery)->isVisible();
+        $this->waitForElementVisible($this->mediaGallery);
+
+        return true;
     }
 
     /**

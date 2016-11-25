@@ -14,9 +14,12 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds;
 
 /**
  * Product form on backend product page.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductForm extends FormSections
 {
@@ -49,6 +52,13 @@ class ProductForm extends FormSections
     protected $attributeBlock = '[data-index="%s"]';
 
     /**
+     * NewCategoryIds block selector.
+     *
+     * @var string
+     */
+    protected $newCategoryModalForm = '.product_form_product_form_create_category_modal';
+
+    /**
      * Magento form loader.
      *
      * @var string
@@ -70,8 +80,6 @@ class ProductForm extends FormSections
      * @param FixtureInterface|null $category
      * @return $this
      * @throws \Exception
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
@@ -88,9 +96,14 @@ class ProductForm extends FormSections
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
             $sections = $this->getFixtureFieldsByContainers($product);
-
+            $category = $product->hasData('category_ids')
+                ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0] : $category;
             if ($category) {
-                $sections['product-details']['category_ids']['value'] = $category->getName();
+                if ((int)$category->getId()) {
+                    $sections['product-details']['category_ids']['value'] = $category->getName();
+                } else {
+                    $this->getNewCategoryModalForm()->addNewCategory($category);
+                }
             }
             $this->fillContainers($sections, $element);
         }
@@ -190,6 +203,19 @@ class ProductForm extends FormSections
         return $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm::class,
             ['element' => $this->browser->find($this->newAttributeModal)]
+        );
+    }
+
+    /**
+     * Get New Category Modal Form.
+     *
+     * @return NewCategoryIds
+     */
+    public function getNewCategoryModalForm()
+    {
+        return $this->blockFactory->create(
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds::class,
+            ['element' => $this->browser->find($this->newCategoryModalForm)]
         );
     }
 
