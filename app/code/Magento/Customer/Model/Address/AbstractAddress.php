@@ -304,17 +304,19 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param array $value
      * @return string
      */
-    protected function _implodeArrayValues(array $value)
+    protected function _implodeArrayValues($value)
     {
-        $isScalar = true;
-        foreach ($value as $val) {
-            if (!is_scalar($val)) {
-                $isScalar = false;
+        if (is_array($value)) {
+            $isScalar = true;
+            foreach ($value as $val) {
+                if (!is_scalar($val)) {
+                    $isScalar = false;
+                }
             }
-        }
 
-        if ($isScalar) {
-            $value = trim(implode("\n", $value));
+            if ($isScalar) {
+                $value = trim(implode("\n", $value));
+            }
         }
 
         return $value;
