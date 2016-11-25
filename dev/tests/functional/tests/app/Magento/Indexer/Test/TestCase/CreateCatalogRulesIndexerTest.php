@@ -50,6 +50,7 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
      * @param string|null $indexers
      * @return array
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function test(
         Indexer $cli,
