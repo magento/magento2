@@ -2369,6 +2369,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     }
                 }
                 $cType .= sprintf('(%d,%d)', $precision, $scale);
+                if (!empty($options['UNSIGNED'])) {
+                    $cUnsigned = true;
+                }
                 break;
             case Table::TYPE_TEXT:
             case Table::TYPE_BLOB:
