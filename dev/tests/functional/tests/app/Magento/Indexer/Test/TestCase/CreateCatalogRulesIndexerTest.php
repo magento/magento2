@@ -21,7 +21,6 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\CatalogRule\Test\TestCase\AbstractCatalogRuleEntityTest;
 
-
 /**
  * Catalog rules indexer test.
  *
@@ -92,8 +91,14 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
         $cron->run();
         $cron->run();
         $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
-        $assertCatalogPriceRuleAppliedProductPage
-            ->processAssert($catalogProductViewPage, $cmsIndexPage, $catalogCategoryViewPage, $products, $productPrice1, $customer);
+        $assertCatalogPriceRuleAppliedProductPage->processAssert(
+            $catalogProductViewPage,
+            $cmsIndexPage,
+            $catalogCategoryViewPage,
+            $products,
+            $productPrice1,
+            $customer
+        );
         $this->catalogRuleIndex->open();
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule);
@@ -105,14 +110,28 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
         $cron->run();
         $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
         $assertCatalogPriceRuleAppliedProductPage
-            ->processAssert($catalogProductViewPage, $cmsIndexPage, $catalogCategoryViewPage, $products, $productPrice2, $customer);
+            ->processAssert(
+                $catalogProductViewPage,
+                $cmsIndexPage,
+                $catalogCategoryViewPage,
+                $products,
+                $productPrice2,
+                $customer
+            );
         $this->catalogRuleIndex->open();
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getFormPageActions()->delete();
         $this->catalogRuleNew->getModalBlock()->acceptAlert();
         $assertIndexerStatus->processAssert($indexManagement, $indexers, false);
         $assertCatalogPriceRuleAppliedProductPage
-            ->processAssert($catalogProductViewPage, $cmsIndexPage, $catalogCategoryViewPage, $products, $productPrice2, $customer);
+            ->processAssert(
+                $catalogProductViewPage,
+                $cmsIndexPage,
+                $catalogCategoryViewPage,
+                $products,
+                $productPrice2,
+                $customer
+            );
         $cron->run();
         $cron->run();
         $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
