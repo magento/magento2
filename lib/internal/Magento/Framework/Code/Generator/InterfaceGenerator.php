@@ -37,7 +37,7 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
         }
 
         $output .= self::LINE_FEED . '{' . self::LINE_FEED . self::LINE_FEED
-            . $this->generateMethods() . self::LINE_FEED . '}' . self::LINE_FEED;
+            . $this->generateMethods() . '}' . self::LINE_FEED;
 
         return $output;
     }
