@@ -11,8 +11,11 @@ use Magento\Framework\DB;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Stdlib;
 
+// @codingStandardsIgnoreStart
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 {
+    // @codingStandardsIgnoreEnd
+
     /**
      * @var Stdlib\StringUtils
      */

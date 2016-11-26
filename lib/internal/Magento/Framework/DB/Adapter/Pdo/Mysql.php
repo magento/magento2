@@ -27,6 +27,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 
+// @codingStandardsIgnoreStart
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -35,6 +36,8 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
+    // @codingStandardsIgnoreEnd
+
     const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
     const DATETIME_FORMAT       = 'Y-m-d H:i:s';
     const DATE_FORMAT           = 'Y-m-d';

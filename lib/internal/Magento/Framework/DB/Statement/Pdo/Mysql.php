@@ -13,8 +13,11 @@ namespace Magento\Framework\DB\Statement\Pdo;
 
 use Magento\Framework\DB\Statement\Parameter;
 
+// @codingStandardsIgnoreStart
 class Mysql extends \Zend_Db_Statement_Pdo
 {
+    // @codingStandardsIgnoreEnd
+
     /**
      * Executes statement with binding values to it.
      * Allows transferring specific options to DB driver.
