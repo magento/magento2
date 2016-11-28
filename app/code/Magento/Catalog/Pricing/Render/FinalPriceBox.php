@@ -60,18 +60,8 @@ class FinalPriceBox extends BasePriceBox
         }
 
         $result = parent::_toHtml();
-
-        try {
-            /** @var MsrpPrice $msrpPriceType */
-            $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
-        } catch (\InvalidArgumentException $e) {
-            $this->_logger->critical($e);
-            return $this->wrapResult($result);
-        }
-
         //Renders MSRP in case it is enabled
-        $product = $this->getSaleableItem();
-        if ($msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product)) {
+        if ($this->isMsrpPriceApplicable()) {
             /** @var BasePriceBox $msrpBlock */
             $msrpBlock = $this->rendererPool->createPriceRender(
                 MsrpPrice::PRICE_CODE,
@@ -85,6 +75,25 @@ class FinalPriceBox extends BasePriceBox
         }
 
         return $this->wrapResult($result);
+    }
+
+    /**
+     * Check is MSRP applicable for the current product.
+     *
+     * @return bool
+     */
+    protected function isMsrpPriceApplicable()
+    {
+        try {
+            /** @var MsrpPrice $msrpPriceType */
+            $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
+        } catch (\InvalidArgumentException $e) {
+            $this->_logger->critical($e);
+            return false;
+        }
+
+        $product = $this->getSaleableItem();
+        return $msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product);
     }
 
     /**
