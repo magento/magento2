@@ -17,51 +17,48 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     *\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $uiComponentFactoryMock;
 
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $filterBuilderMock;
 
-    /** @var Filter */
+    /** @var \Magento\Ui\Component\MassAction\Filter */
     private $filter;
 
     /**
-     * @var ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     *\PHPUnit_Framework_MockObject_MockObject
      */
     private $dataProviderMock;
 
     /**
-     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     *\PHPUnit_Framework_MockObject_MockObject
      */
     private $abstractDbMock;
 
     /**
-     * @var SearchResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $searchResultMock;
 
     /**
-     * @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit_Framework_MockObject_MockObject
      */
     private $uiComponentMock;
 
