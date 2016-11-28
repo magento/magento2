@@ -4,24 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-$item[ConfigConverter::KEY_TITLE] = __(Converter::KEY_TITLE)
+__(Class::CONSTANT)
 
-$item[ConfigConverter::KEY_TITLE] = __(self::KEY_TITLE)
+__(self::CONSTANT)
 
-$item[ConfigConverter::KEY_TITLE] = __(\Magento\Support\Model\Report\Config\Converter::KEY_TITLE)
+__(\Namespace\Class::CONSTANT)
 
-$item[ConfigConverter::KEY_TITLE] = __(
-    Converter::KEY_TITLE
+__(
+    Class::CONSTANT
 )
 
-Phrase(Converter::KEY_TITLE)
+Phrase(Class::CONSTANT)
 
-Phrase(self::KEY_TITLE)
+Phrase(self::CONSTANT)
 
-Phrase(\Magento\Support\Model\Report\Config\Converter::KEY_TITLE)
+Phrase(\Namespace\Class::CONSTANT)
 
-\Magento\Framework\Phrase(Converter::KEY_TITLE)
+\Magento\Framework\Phrase(Class::CONSTANT)
 
 \Magento\Framework\Phrase(
-    Converter::KEY_TITLE
+    Class::CONSTANT
 )

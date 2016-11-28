@@ -4,26 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-$item[ConfigConverter::KEY_TITLE] = __($item)
+__($variable)
 
-$item[ConfigConverter::KEY_TITLE] = __($item[Converter::KEY_TITLE])
+__($variable[Class::CONSTANT])
 
-$item[ConfigConverter::KEY_TITLE] = __($item['\Magento\Support\Model\Report\Config\Converter::KEY_TITLE'])
+__($variable[\Namespace\Class::CONSTANT])
 
-$item[ConfigConverter::KEY_TITLE] = __($item['value'])
+__($variable['value'])
 
-$item[ConfigConverter::KEY_TITLE] = __(
-    $item
+__(
+    $variable
 )
 
-Phrase($item)
+Phrase($variable)
 
-Phrase($item[Converter::KEY_TITLE])
+Phrase($variable[Class::CONSTANT])
 
-Phrase($item['\Magento\Support\Model\Report\Config\Converter::KEY_TITLE'])
+Phrase($variable[\Namespace\Class::CONSTANT])
 
-\Magento\Framework\Phrase($item['value'])
+\Magento\Framework\Phrase($variable['value'])
 
 \Magento\Framework\Phrase(
-    $item[Converter::KEY_TITLE]
+    $variable[Class::CONSTANT]
 )
