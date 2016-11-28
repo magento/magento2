@@ -35,7 +35,7 @@
                                     id="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     value="<?php echo $block->escapeHtmlAttr($_option->getId()) ?>"
                                     class="radio"
-                                    data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}"
+                                    data-validate="{required:true, messages:{required:'<?php echo __('Please select one of each of the ratings above.'); ?>'}}"
                                     aria-labelledby="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_rating_label <?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
                                 <label
                                     class="rating-<?php echo $block->escapeHtmlAttr($iterator); ?>"
