@@ -64,43 +64,14 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
             ->with('serializedData')
             ->willReturn(['unserializedData']);
 
-        $this->mockObjectManager(
-            [\Magento\Framework\Serialize\SerializerInterface::class => $this->serializerMock]
-        );
-
         $this->config = $this->objectManager->getObject(
             \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig::class,
             [
                 'reader' => $this->reader,
-                'cache' => $this->cache
+                'cache' => $this->cache,
+                'serializer' => $this->serializerMock,
             ]
         );
-    }
-
-    protected function tearDown()
-    {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
-    }
-
-    /**
-     * Mock application object manager to return configured dependencies.
-     *
-     * @param array $dependencies
-     * @return void
-     */
-    private function mockObjectManager($dependencies)
-    {
-        $dependencyMap = [];
-        foreach ($dependencies as $type => $instance) {
-            $dependencyMap[] = [$type, $instance];
-        }
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($dependencyMap));
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**
