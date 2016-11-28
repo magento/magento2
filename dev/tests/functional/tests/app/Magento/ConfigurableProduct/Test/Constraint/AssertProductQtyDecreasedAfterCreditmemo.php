@@ -98,7 +98,7 @@ class AssertProductQtyDecreasedAfterCreditmemo extends AbstractConstraint
         }
         $productKey = trim($productKey);
         $optionProduct = $productData['configurable_attributes_data']['matrix'][$productKey];
-        $optionProduct['qty'] -= ($checkoutDataQty - $data['items_data'][$index]['qty']);
+        $optionProduct['quantity_and_stock_status']['qty'] -= ($checkoutDataQty - $data['items_data'][$index]['qty']);
         $productData = $optionProduct;
 
         $productData = array_diff_key($productData, array_flip($this->skipFields));
