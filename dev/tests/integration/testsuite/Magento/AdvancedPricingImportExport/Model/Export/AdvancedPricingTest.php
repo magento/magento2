@@ -59,7 +59,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         $csvfile = uniqid('importexport_') . '.csv';
 
-        $this->exportData($csvfile);
+        $exportContent = $this->exportData($csvfile);
+        $this->assertDiscountTypes($exportContent);
+
         $this->importData($csvfile);
 
         while ($index > 0) {
@@ -70,6 +72,24 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
+    }
+
+    /**
+     * Assert for correct tier prices discount types.
+     *
+     * @param string $exportContent
+     * @return void
+     */
+    private function assertDiscountTypes($exportContent)
+    {
+        $this->assertContains(
+            '2.0000,8.0000,Fixed',
+            $exportContent
+        );
+        $this->assertContains(
+            '10.0000,50.00,Discount',
+            $exportContent
+        );
     }
 
     /**
