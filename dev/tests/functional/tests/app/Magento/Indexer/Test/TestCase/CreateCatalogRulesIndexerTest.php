@@ -196,13 +196,12 @@ class CreateCatalogRulesIndexerTest extends Injectable
         }
         $catalogPriceRuleOriginal->persist();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
-        $this->assertCatalogPriceRuleNotAppliedProductPage
-            ->processAssert(
-                $this->catalogProductViewPage,
-                $this->cmsIndexPage,
-                $this->catalogCategoryViewPage,
-                $products
-            );
+        $this->assertCatalogPriceRuleNotAppliedProductPage->processAssert(
+            $this->catalogProductViewPage,
+            $this->cmsIndexPage,
+            $this->catalogCategoryViewPage,
+            $products
+        );
         $filter = [
             'name' => $catalogPriceRuleOriginal->getName(),
             'rule_id' => $catalogPriceRuleOriginal->getId(),
@@ -226,49 +225,45 @@ class CreateCatalogRulesIndexerTest extends Injectable
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule);
         $this->catalogRuleNew->getFormPageActions()->saveAndApply();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, false);
-        $this->assertCatalogPriceRuleNotAppliedProductPage
-            ->processAssert(
-                $this->catalogProductViewPage,
-                $this->cmsIndexPage,
-                $this->catalogCategoryViewPage,
-                $products
-            );
+        $this->assertCatalogPriceRuleNotAppliedProductPage->processAssert(
+            $this->catalogProductViewPage,
+            $this->cmsIndexPage,
+            $this->catalogCategoryViewPage,
+            $products
+        );
         $cron->run();
         $cron->run();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
-        $this->assertCatalogPriceRuleAppliedProductPage
-            ->processAssert(
-                $this->catalogProductViewPage,
-                $this->cmsIndexPage,
-                $this->catalogCategoryViewPage,
-                $products,
-                $productPrice2,
-                $customer
-            );
+        $this->assertCatalogPriceRuleAppliedProductPage->processAssert(
+            $this->catalogProductViewPage,
+            $this->cmsIndexPage,
+            $this->catalogCategoryViewPage,
+            $products,
+            $productPrice2,
+            $customer
+        );
         $this->catalogRuleIndex->open();
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getFormPageActions()->delete();
         $this->catalogRuleNew->getModalBlock()->acceptAlert();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, false);
-        $this->assertCatalogPriceRuleAppliedProductPage
-            ->processAssert(
-                $this->catalogProductViewPage,
-                $this->cmsIndexPage,
-                $this->catalogCategoryViewPage,
-                $products,
-                $productPrice2,
-                $customer
-            );
+        $this->assertCatalogPriceRuleAppliedProductPage->processAssert(
+            $this->catalogProductViewPage,
+            $this->cmsIndexPage,
+            $this->catalogCategoryViewPage,
+            $products,
+            $productPrice2,
+            $customer
+        );
         $cron->run();
         $cron->run();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
-        $this->assertCatalogPriceRuleNotAppliedProductPage
-            ->processAssert(
-                $this->catalogProductViewPage,
-                $this->cmsIndexPage,
-                $this->catalogCategoryViewPage,
-                $products
-            );
+        $this->assertCatalogPriceRuleNotAppliedProductPage->processAssert(
+            $this->catalogProductViewPage,
+            $this->cmsIndexPage,
+            $this->catalogCategoryViewPage,
+            $products
+        );
     }
 
     /**
