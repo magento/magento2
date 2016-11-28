@@ -11,6 +11,7 @@ use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 use Magento\Paypal\Test\Fixture\CreditCardHostedPro;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
@@ -62,10 +63,18 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
     private $creditCard;
 
     /**
+     * Curl transport on webapi.
+     *
+     * @var WebapiDecorator
+     */
+    private $decorator;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param CreditCardHostedPro $creditCard
+     * @param WebapiDecorator $decorator
      * @param array $payment
      * @param array $products
      */
@@ -74,6 +83,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
         CreditCardHostedPro $creditCard,
+        WebapiDecorator $decorator,
         array $payment,
         array $products
     ) {
@@ -81,6 +91,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->creditCard = $creditCard;
+        $this->decorator = $decorator;
         $this->payment = $payment;
         $this->products = $products;
     }
@@ -92,22 +103,23 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
      */
     public function run()
     {
+        $attempts = 1;
         $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod($this->payment);
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
         $this->checkoutOnepage->getHostedProBlock()->fillPaymentData($this->creditCard);
+        while ($this->checkoutOnepage->getHostedProBlock()->isErrorMessageVisible() && $attempts <= 3) {
+            $this->checkoutOnepage->getHostedProBlock()->fillPaymentData($this->creditCard);
+            $attempts++;
+        }
         /** @var OrderInjectable $order */
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
             [
                 'data' => [
-                    'entity_id' => ['products' => $this->products],
-                    'id' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()
+                    'entity_id' => ['products' => $this->products]
                 ]
             ]
         );
-        return [
-            'orderId' => $order->getId(),
-            'order' => $order
-        ];
+        return ['order' => $order];
     }
 }

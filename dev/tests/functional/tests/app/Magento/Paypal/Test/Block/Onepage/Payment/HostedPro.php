@@ -7,6 +7,7 @@
 namespace Magento\Paypal\Test\Block\Onepage\Payment;
 
 use Magento\Checkout\Test\Block\Onepage\Payment\Method;
+use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\ObjectManager;
@@ -39,6 +40,13 @@ class HostedPro extends Method
     private $creditCardForm = '#formCreditCard';
 
     /**
+     * Error message selector.
+     *
+     * @var string
+     */
+    private $errorMessage = '#messageBox';
+
+    /**
      * Fill credit card data in PayPal iframe form.
      *
      * @param FixtureInterface $creditCard
@@ -46,19 +54,45 @@ class HostedPro extends Method
      */
     public function fillPaymentData(FixtureInterface $creditCard)
     {
+        $iframeRootElement = $this->switchToPaypalFrame();
+        /** @var Cc $formBlock */
+        $formBlock = $this->blockFactory->create(
+            Cc::class,
+            ['element' => $this->_rootElement->find($this->creditCardForm)]
+        );
+        $formBlock->fill($creditCard, $iframeRootElement);
+        $iframeRootElement->find($this->payNowButton)->click();
+        $this->browser->switchToFrame();
+    }
+
+    /**
+     * Check if error message is appeared.
+     *
+     * @return bool
+     */
+    public function isErrorMessageVisible()
+    {
+        $isErrorMessageVisible = false;
+        if ($this->_rootElement->find($this->paypalIframe)->isPresent()) {
+            $iframeRootElement = $this->switchToPaypalFrame();
+            $isErrorMessageVisible = $iframeRootElement->find($this->errorMessage)->isVisible();
+            $this->browser->switchToFrame();
+        }
+        return $isErrorMessageVisible;
+    }
+
+    /**
+     * Change the focus to a PayPal frame.
+     *
+     * @return ElementInterface
+     */
+    private function switchToPaypalFrame()
+    {
         $iframeLocator = ObjectManager::getInstance()->create(
             Locator::class,
             ['value' => $this->paypalIframe]
         );
         $this->browser->switchToFrame($iframeLocator);
-        /** @var \Magento\Payment\Test\Block\Form\Cc $formBlock */
-        $formBlock = $this->blockFactory->create(
-            Cc::class,
-            ['element' => $this->_rootElement->find($this->creditCardForm)]
-        );
-        $iframeRootElement = $this->browser->find('body');
-        $formBlock->fill($creditCard, $iframeRootElement);
-        $iframeRootElement->find($this->payNowButton)->click();
-        $this->browser->switchToFrame();
+        return $this->browser->find('body');
     }
 }

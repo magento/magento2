@@ -7,7 +7,6 @@
 namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,20 +23,16 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
      * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
-     * @param OrderIndex $salesOrder
      * @param string $orderId
      * @param array $prices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
-        OrderIndex $salesOrder,
         $orderId,
         array $prices
     ) {
-        $salesOrder->open();
-        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
-
+        $salesOrderView->open(['order_id' => $orderId]);
         $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
 
         \PHPUnit_Framework_Assert::assertRegExp(

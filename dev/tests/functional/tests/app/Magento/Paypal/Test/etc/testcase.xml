@@ -59,7 +59,7 @@
         <step name="selectPaymentMethod" module="Magento_Checkout" next="continueToPaypal" />
         <step name="continueToPaypal" module="Magento_Paypal" next="continuePaypalCheckout" />
         <step name="continuePaypalCheckout" module="Magento_Paypal" next="getPlacedOrderId" />
-        <step name="getPlacedOrderId" module="Magento_Paypal" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" />
     </scenario>
     <scenario name="ConflictResolutionTest" firstStep="checkExpressConfig">
         <step name="checkExpressConfig" module="Magento_Paypal" next="checkBraintreeConfig" />
@@ -95,6 +95,7 @@
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
-        <step name="placeOrderWithHostedPro" module="Magento_Paypal" />
+        <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="getPlacedOrderId" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" />
     </scenario>
 </config>
