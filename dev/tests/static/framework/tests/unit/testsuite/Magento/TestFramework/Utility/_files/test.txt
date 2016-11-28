@@ -1,46 +1,9 @@
-<?php
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
-namespace Magento\Authorizenet\Model\Security;
-
-/**
- * security
- */
-class Test extends AuthorizenetResponse
-{
-    /**
-     * Generates an Md5 hash to compare against AuthNet's.
-     *
-     * @param string $merchantMd5
-     * @param string $merchantApiLogin
-     * @param string $amount
-     * @param string $transactionId
-     * @return string
-     */
-    public function checkSecurity($merchantMd5, $merchantApiLogin, $amount, $transactionId)
-    {
-        return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));
-    }
-
-    /**
-     * Return if is valid order id.
-     *
-     * @param string $merchantMd5
-     * @param string $merchantApiLogin
-     * @return bool
-     */
-    public function security($merchantMd5, $merchantApiLogin)
-    {
-        $hash = $this->generateHash(security($merchantMd5), $merchantApiLogin, $this->getXAmount());
-        security(
-            'something'
-        );
-        return Security::compareStrings($hash, $this->getData('x_MD5_Hash'));
-
-        $this->security('check');
-        Security::security();
-        return $this->getXResponseCode() == \Magento\Authorizenet\Model\Security::RESPONSE_CODE_APPROVED;
-    }
-}
+strtoupper(strtolower($foo . $bar))
+function foo($merchantMd5, $merchantApiLogin)
+$this->generateHash(foo($bar), $foo)
+foo(
+    'bar'
+)
+Foo::bar($foo, $this->getData('bar'))
+$this->foo('bar')
+Foo::foo()

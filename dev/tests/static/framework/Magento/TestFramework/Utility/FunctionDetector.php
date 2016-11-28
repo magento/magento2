@@ -6,7 +6,7 @@
 namespace Magento\TestFramework\Utility;
 
 /**
- * A helper detects functions
+ * Check if one or more functions are used in the file
  */
 class FunctionDetector
 {
@@ -27,16 +27,16 @@ class FunctionDetector
      *      ],
      *  ]
      *
-     * @param string $fileFullPath
+     * @param string $filePath
      * @param string[] $functions
      * @return array
      */
-    public function detectFunctions($fileFullPath, $functions)
+    public function detect($filePath, $functions)
     {
         $result = [];
         $regexp = $this->composeRegexp($functions);
         if ($regexp) {
-            $file = file($fileFullPath);
+            $file = file($filePath);
             array_unshift($file, '');
             $lines = preg_grep(
                 $regexp,

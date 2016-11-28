@@ -97,7 +97,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         $invoker(
             function ($fileFullPath) use ($functionDetector) {
                 $functions = $this->getFunctions($fileFullPath);
-                $lines = $functionDetector->detectFunctions($fileFullPath, array_keys($functions));
+                $lines = $functionDetector->detect($fileFullPath, array_keys($functions));
 
                 $message = '';
                 if (!empty($lines)) {

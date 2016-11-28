@@ -46,54 +46,20 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetPhpFilesWithoutSetup()
+    public function testGetPhpFiles()
     {
         $appFiles = [
             'file1',
             'file2'
         ];
+        $setupFiles = [
+            'file3'
+        ];
         $expected = [
             'file1' => ['file1'],
-            'file2' => ['file2']
+            'file2' => ['file2'],
+            'file3' => ['file3']
         ];
-        $this->regexIteratorFactoryMock->expects($this->never())
-            ->method('create');
-        $this->fileUtilitiesMock->expects($this->once())
-            ->method('getPhpFiles')
-            ->with(
-                File::INCLUDE_APP_CODE
-                | File::INCLUDE_PUB_CODE
-                | File::INCLUDE_LIBS
-                | File::INCLUDE_TEMPLATES
-                | File::INCLUDE_TESTS
-                | File::INCLUDE_NON_CLASSES
-            )
-            ->willReturn($appFiles);
-        $actual = $this->file->getPhpFiles(
-            File::INCLUDE_APP_CODE
-            | File::INCLUDE_PUB_CODE
-            | File::INCLUDE_LIBS
-            | File::INCLUDE_TEMPLATES
-            | File::INCLUDE_TESTS
-            | File::INCLUDE_NON_CLASSES
-            | File::AS_DATA_SET
-        );
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @param array $appFiles
-     * @param array$setupFiles
-     * @param int $flags
-     * @param array $expected
-     * @dataProvider getPhpFilesWithSetupDataProvider
-     */
-    public function testGetPhpFilesWithSetup(
-        $appFiles,
-        $setupFiles,
-        $flags,
-        $expected
-    ) {
         $iteratorMock = $this->getMock(\IteratorAggregate::class, [], [], '', false);
         $iteratorMock->expects($this->any())
             ->method('getIterator')
@@ -104,61 +70,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->fileUtilitiesMock->expects($this->once())
             ->method('getPhpFiles')
             ->with(
-                File::INCLUDE_APP_CODE
-                | File::INCLUDE_PUB_CODE
-                | File::INCLUDE_LIBS
-                | File::INCLUDE_TEMPLATES
-                | File::INCLUDE_TESTS
-                | File::INCLUDE_SETUP
-                | File::INCLUDE_NON_CLASSES
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::INCLUDE_NON_CLASSES
             )
             ->willReturn($appFiles);
-        $this->assertEquals($expected, $this->file->getPhpFiles($flags));
-    }
-
-    /**
-     * @return array
-     */
-    public function getPhpFilesWithSetupDataProvider()
-    {
-        $flags = File::INCLUDE_APP_CODE
-            | File::INCLUDE_PUB_CODE
-            | File::INCLUDE_LIBS
-            | File::INCLUDE_TEMPLATES
-            | File::INCLUDE_TESTS
-            | File::INCLUDE_SETUP
-            | File::INCLUDE_NON_CLASSES;
-        return [
-            [
-                [
-                    'file1',
-                    'file2'
-                ],
-                [
-                    'file3'
-                ],
-                $flags | File::AS_DATA_SET,
-                [
-                    'file1' => ['file1'],
-                    'file2' => ['file2'],
-                    'file3' => ['file3']
-                ]
-            ],
-            [
-                [
-                    'file1',
-                    'file2'
-                ],
-                [
-                    'file3'
-                ],
-                $flags,
-                [
-                    'file1',
-                    'file2',
-                    'file3'
-                ]
-            ]
-        ];
+        $this->assertEquals($expected, $this->file->getPhpFiles());
     }
 }

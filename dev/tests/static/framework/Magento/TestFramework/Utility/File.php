@@ -13,19 +13,6 @@ use Magento\TestFramework\Utility\File\RegexIteratorFactory;
  */
 class File
 {
-    /**@#+
-     * File types offset flags
-     */
-    const INCLUDE_APP_CODE = Files::INCLUDE_APP_CODE;
-    const INCLUDE_PUB_CODE = Files::INCLUDE_PUB_CODE;
-    const INCLUDE_LIBS = Files::INCLUDE_LIBS;
-    const INCLUDE_TEMPLATES = Files::INCLUDE_TEMPLATES;
-    const INCLUDE_TESTS = Files::INCLUDE_TESTS;
-    const INCLUDE_SETUP = 128;
-    const INCLUDE_NON_CLASSES = Files::INCLUDE_NON_CLASSES;
-    const AS_DATA_SET = Files::AS_DATA_SET;
-    /**#@-*/
-
     /**
      * @var RegexIteratorFactory
      */
@@ -53,29 +40,23 @@ class File
     /**
      * Get list of PHP files
      *
-     * @param int $flags
      * @return array
      * @throws \Exception
      */
-    public function getPhpFiles(
-        $flags = self::INCLUDE_APP_CODE
-        | self::INCLUDE_PUB_CODE
-        | self::INCLUDE_LIBS
-        | self::INCLUDE_TEMPLATES
-        | self::INCLUDE_TESTS
-        | self::INCLUDE_SETUP
-        | self::INCLUDE_NON_CLASSES
-        | self::AS_DATA_SET
-    ) {
+    public function getPhpFiles()
+    {
         $files = array_merge(
-            $this->fileUtilities->getPhpFiles((2147483647 - self::AS_DATA_SET) & $flags),
-            $this->getSetupPhpFiles($flags)
+            $this->fileUtilities->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::INCLUDE_NON_CLASSES
+            ),
+            $this->getSetupPhpFiles()
         );
-
-        if ($flags & self::AS_DATA_SET) {
-            return Files::composeDataSets($files);
-        }
-        return $files;
+        return Files::composeDataSets($files);
     }
 
     /**
@@ -84,17 +65,15 @@ class File
      * @param int $flags
      * @return array
      */
-    private function getSetupPhpFiles($flags)
+    private function getSetupPhpFiles()
     {
         $files = [];
-        if ($flags & self::INCLUDE_SETUP) {
-            $regexIterator = $this->regexIteratorFactory->create(
-                BP . '/setup',
-                '/.*php^/'
-            );
-            foreach ($regexIterator as $file) {
-                $files = array_merge($files, [$file]);
-            }
+        $regexIterator = $this->regexIteratorFactory->create(
+            BP . '/setup',
+            '/.*php^/'
+        );
+        foreach ($regexIterator as $file) {
+            $files = array_merge($files, [$file]);
         }
         return $files;
     }
