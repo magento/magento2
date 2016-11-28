@@ -122,7 +122,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * @param int|null $sslVersion
      */
-    public function __construct($sslVersion = null)
+    public function __construct($sslVersion = self::SSL_VERSION)
     {
         $this->sslVersion = $sslVersion;
     }
@@ -383,7 +383,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
         $this->curlOption(CURLOPT_HEADERFUNCTION, [$this, 'parseHeaders']);
-        $this->setSSLVersion($this->sslVersion);
+        $this->curlOption(CURLOPT_SSLVERSION, $this->sslVersion);
 
         if (count($this->_curlUserOptions)) {
             foreach ($this->_curlUserOptions as $k => $v) {
@@ -495,20 +495,5 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     public function setOption($name, $value)
     {
         $this->_curlUserOptions[$name] = $value;
-    }
-
-    /**
-     * Set ssl version to specified version or default
-     *
-     * @param int $sslVersion
-     * @return void
-     */
-    private function setSSLVersion($sslVersion)
-    {
-        if ($sslVersion) {
-            $this->sslVersion = $sslVersion;
-        } else {
-            $this->sslVersion = self::SSL_VERSION;
-        }
     }
 }
