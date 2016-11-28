@@ -1060,4 +1060,113 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
             $product2->getData('multiselect_attribute'));
     }
+
+    /**
+     * @param array $row
+     * @param string|null $behavior
+     * @param bool $expectedResult
+     * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @dataProvider validateRowDataProvider
+     */
+    public function testValidateRow(array $row, $behavior, $expectedResult)
+    {
+        $this->_model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
+        $this->assertSame($expectedResult, $this->_model->validateRow($row, 1));
+    }
+
+    /**
+     * @return array
+     */
+    public function validateRowDataProvider()
+    {
+        return [
+            [
+                'row' => ['sku' => 'simple products'],
+                'behavior' => null,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => 'simple products absent'],
+                'behavior' => null,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => 'simple products absent',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => null,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => 'simple products'],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => 'simple products absent'],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => 'simple products absent',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => 'simple products'],
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'expectedResult' => true,
+            ],
+            [
+                'row' => ['sku' => 'simple products absent'],
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => ['sku' => 'simple products'],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => ['sku' => 'simple products absent'],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => 'simple products absent',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => false,
+            ],
+            [
+                'row' => [
+                    'sku' => 'simple products',
+                    'name' => 'Test',
+                    'product_type' => 'simple',
+                    '_attribute_set' => 'Default',
+                    'price' => 10.20,
+                ],
+                'behavior' => Import::BEHAVIOR_REPLACE,
+                'expectedResult' => true,
+            ],
+        ];
+    }
 }
