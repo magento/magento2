@@ -325,6 +325,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $this->items = [];
         $this->errorStatistics = [];
         $this->invalidRows = [];
+        $this->skippedRows = [];
 
         return $this;
     }
