@@ -19,20 +19,118 @@ use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\CatalogRule\Test\TestCase\AbstractCatalogRuleEntityTest;
+use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
+use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
+use Magento\Catalog\Test\TestStep\CreateProductsStep;
 
 /**
  * Catalog rules indexer test.
  *
+ * Preconditions:
+ * 1. Create several products and categories.
+ * 2. All indexers are reindexed and in READY state.
+ *
+ * Steps:
+ * 1. Create catalog rule.
+ * 2. Call an assert AssertIndexerStatus.
+ * 3. Call an assert AssertCatalogPriceRuleNotAppliedProductPage.
+ * 4. Apply catalog rule.
+ * 5. Run cron twice.
+ * 6. Call an assert AssertIndexerStatus.
+ * 7. Call an assert AssertCatalogPriceRuleAppliedProductPage.
+ * 8. Update catalog rule for new discount.
+ * 9. Call an assert AssertIndexerStatus.
+ * 10. Call an assert AssertCatalogPriceRuleNotAppliedProductPage.
+ * 11. Run cron twice.
+ * 12. Call an assert AssertIndexerStatus.
+ * 13. Call an assert AssertCatalogPriceRuleAppliedProductPageDelete.
+ * 14. Delete catalog rule.
+ * 15. Call an assert AssertIndexerStatus.
+ * 16. Call an assert AssertCatalogPriceRuleAppliedProductPage.
+ * 17. Run cron twice.
+ * 18. Call an assert AssertIndexerStatus.
+ * 19. Call an assert AssertCatalogPriceRuleNotAppliedProductPage.
+ *
  * @ZephyrId MAGETWO-39072
  */
-class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
+class CreateCatalogRulesIndexerTest extends Injectable
 {
     /**
-     * Catalog rules indexer test.
+     * Catalog rule index page.
      *
-     * @param Indexer $cli
+     * @var CatalogRuleIndex
+     */
+    private $catalogRuleIndex;
+
+    /**
+     * New catalog rule page.
+     *
+     * @var CatalogRuleNew
+     */
+    private $catalogRuleNew;
+
+    /**
+     * Index management page.
+     *
+     * @var IndexManagement
+     */
+    private $indexManagement;
+
+    /**
+     * Cms index page.
+     *
+     * @var CmsIndex
+     */
+    private $cmsIndexPage;
+
+    /**
+     * Catalog product view page.
+     *
+     * @var CatalogProductView
+     */
+    private $catalogProductViewPage;
+
+    /**
+     * Catalog category view page.
+     *
+     * @var CatalogCategoryView
+     */
+    private $catalogCategoryViewPage;
+
+    /**
+     * Assert indexer status.
+     *
+     * @var AssertIndexerStatus
+     */
+    private $assertIndexerStatus;
+
+    /**
+     * Assert catalog price rule is not applied on product page.
+     *
+     * @var AssertCatalogPriceRuleNotAppliedProductPage
+     */
+    private $assertCatalogPriceRuleNotAppliedProductPage;
+
+    /**
+     * Assert catalog price rule applied on product page.
+     *
+     * @var AssertCatalogPriceRuleAppliedProductPage
+     */
+    private $assertCatalogPriceRuleAppliedProductPage;
+
+    /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $stepFactory;
+
+    /**
+     * Injection data.
+     *
      * @param IndexManagement $indexManagement
+     * @param CatalogRuleIndex $catalogRuleIndex
+     * @param CatalogRuleNew $catalogRuleNew
      * @param CmsIndex $cmsIndexPage
      * @param CatalogProductView $catalogProductViewPage
      * @param CatalogCategoryView $catalogCategoryViewPage
@@ -40,6 +138,36 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
      * @param AssertCatalogPriceRuleNotAppliedProductPage $assertCatalogPriceRuleNotAppliedProductPage
      * @param AssertCatalogPriceRuleAppliedProductPage $assertCatalogPriceRuleAppliedProductPage
      * @param TestStepFactory $stepFactory
+     * @return void
+     */
+    public function __inject(
+        IndexManagement $indexManagement,
+        CatalogRuleIndex $catalogRuleIndex,
+        CatalogRuleNew $catalogRuleNew,
+        CmsIndex $cmsIndexPage,
+        CatalogProductView $catalogProductViewPage,
+        CatalogCategoryView $catalogCategoryViewPage,
+        AssertIndexerStatus $assertIndexerStatus,
+        AssertCatalogPriceRuleNotAppliedProductPage $assertCatalogPriceRuleNotAppliedProductPage,
+        AssertCatalogPriceRuleAppliedProductPage $assertCatalogPriceRuleAppliedProductPage,
+        TestStepFactory $stepFactory
+    ) {
+        $this->indexManagement = $indexManagement;
+        $this->catalogRuleIndex = $catalogRuleIndex;
+        $this->catalogRuleNew = $catalogRuleNew;
+        $this->cmsIndexPage = $cmsIndexPage;
+        $this->catalogProductViewPage = $catalogProductViewPage;
+        $this->catalogCategoryViewPage = $catalogCategoryViewPage;
+        $this->assertIndexerStatus = $assertIndexerStatus;
+        $this->assertCatalogPriceRuleNotAppliedProductPage = $assertCatalogPriceRuleNotAppliedProductPage;
+        $this->assertCatalogPriceRuleAppliedProductPage = $assertCatalogPriceRuleAppliedProductPage;
+        $this->stepFactory = $stepFactory;
+    }
+
+    /**
+     * Catalog rules indexer test.
+     *
+     * @param Indexer $cli
      * @param CatalogRule $catalogPriceRule
      * @param CatalogRule $catalogPriceRuleOriginal
      * @param Cron $cron
@@ -48,20 +176,10 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
      * @param Customer|null $customer
      * @param array|null $products
      * @param string|null $indexers
-     * @return array
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @return void
      */
     public function test(
         Indexer $cli,
-        IndexManagement $indexManagement,
-        CmsIndex $cmsIndexPage,
-        CatalogProductView $catalogProductViewPage,
-        CatalogCategoryView $catalogCategoryViewPage,
-        AssertIndexerStatus $assertIndexerStatus,
-        AssertCatalogPriceRuleNotAppliedProductPage $assertCatalogPriceRuleNotAppliedProductPage,
-        AssertCatalogPriceRuleAppliedProductPage $assertCatalogPriceRuleAppliedProductPage,
-        TestStepFactory $stepFactory,
         CatalogRule $catalogPriceRule,
         CatalogRule $catalogPriceRuleOriginal,
         Cron $cron,
@@ -71,18 +189,20 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
         array $products = null,
         $indexers = null
     ) {
-        $products = $stepFactory->create(
-            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
-            ['products' => $products]
-        )->run()['products'];
+        $products = $this->stepFactory->create(CreateProductsStep::class, ['products' => $products])->run()['products'];
         $cli->reindex();
         if ($customer !== null) {
             $customer->persist();
         }
         $catalogPriceRuleOriginal->persist();
-        $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
-        $assertCatalogPriceRuleNotAppliedProductPage
-            ->processAssert($catalogProductViewPage, $cmsIndexPage, $catalogCategoryViewPage, $products);
+        $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
+        $this->assertCatalogPriceRuleNotAppliedProductPage
+            ->processAssert(
+                $this->catalogProductViewPage,
+                $this->cmsIndexPage,
+                $this->catalogCategoryViewPage,
+                $products
+            );
         $filter = [
             'name' => $catalogPriceRuleOriginal->getName(),
             'rule_id' => $catalogPriceRuleOriginal->getId(),
@@ -92,11 +212,11 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getFormPageActions()->saveAndApply();
         $cron->run();
         $cron->run();
-        $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
-        $assertCatalogPriceRuleAppliedProductPage->processAssert(
-            $catalogProductViewPage,
-            $cmsIndexPage,
-            $catalogCategoryViewPage,
+        $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
+        $this->assertCatalogPriceRuleAppliedProductPage->processAssert(
+            $this->catalogProductViewPage,
+            $this->cmsIndexPage,
+            $this->catalogCategoryViewPage,
             $products,
             $productPrice1,
             $customer
@@ -105,17 +225,22 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule);
         $this->catalogRuleNew->getFormPageActions()->saveAndApply();
-        $assertIndexerStatus->processAssert($indexManagement, $indexers, false);
-        $assertCatalogPriceRuleNotAppliedProductPage
-            ->processAssert($catalogProductViewPage, $cmsIndexPage, $catalogCategoryViewPage, $products);
-        $cron->run();
-        $cron->run();
-        $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
-        $assertCatalogPriceRuleAppliedProductPage
+        $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, false);
+        $this->assertCatalogPriceRuleNotAppliedProductPage
             ->processAssert(
-                $catalogProductViewPage,
-                $cmsIndexPage,
-                $catalogCategoryViewPage,
+                $this->catalogProductViewPage,
+                $this->cmsIndexPage,
+                $this->catalogCategoryViewPage,
+                $products
+            );
+        $cron->run();
+        $cron->run();
+        $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
+        $this->assertCatalogPriceRuleAppliedProductPage
+            ->processAssert(
+                $this->catalogProductViewPage,
+                $this->cmsIndexPage,
+                $this->catalogCategoryViewPage,
                 $products,
                 $productPrice2,
                 $customer
@@ -124,22 +249,35 @@ class CreateCatalogRulesIndexerTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getFormPageActions()->delete();
         $this->catalogRuleNew->getModalBlock()->acceptAlert();
-        $assertIndexerStatus->processAssert($indexManagement, $indexers, false);
-        $assertCatalogPriceRuleAppliedProductPage
+        $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, false);
+        $this->assertCatalogPriceRuleAppliedProductPage
             ->processAssert(
-                $catalogProductViewPage,
-                $cmsIndexPage,
-                $catalogCategoryViewPage,
+                $this->catalogProductViewPage,
+                $this->cmsIndexPage,
+                $this->catalogCategoryViewPage,
                 $products,
                 $productPrice2,
                 $customer
             );
         $cron->run();
         $cron->run();
-        $assertIndexerStatus->processAssert($indexManagement, $indexers, true);
-        $assertCatalogPriceRuleNotAppliedProductPage
-            ->processAssert($catalogProductViewPage, $cmsIndexPage, $catalogCategoryViewPage, $products);
+        $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
+        $this->assertCatalogPriceRuleNotAppliedProductPage
+            ->processAssert(
+                $this->catalogProductViewPage,
+                $this->cmsIndexPage,
+                $this->catalogCategoryViewPage,
+                $products
+            );
+    }
 
-        return ['products' => $products];
+    /**
+     * Clear data after test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->objectManager->create(\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep::class)->run();
     }
 }
