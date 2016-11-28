@@ -298,11 +298,11 @@ class Processor
         if (is_array($mediaAttribute)) {
             foreach ($mediaAttribute as $attribute) {
                 if (in_array($attribute, $mediaAttributeCodes)) {
-                    $product->setData($attribute, null);
+                    $product->setData($attribute, 'no_selection');
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
-            $product->setData($mediaAttribute, null);
+            $product->setData($mediaAttribute, 'no_selection');
         }
 
         return $this;
