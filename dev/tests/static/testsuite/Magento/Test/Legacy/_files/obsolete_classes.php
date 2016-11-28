@@ -3826,8 +3826,8 @@ return [
     ],
     ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
     [
-        'Magento\Setup\Console\Command\DeployStaticContentCommand',
-        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand',
+        'Magento\Setup\Console\Command\DeployStaticContentCommand'
     ],
     [
         'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
