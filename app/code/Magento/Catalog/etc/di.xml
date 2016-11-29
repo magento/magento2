@@ -48,6 +48,8 @@
     <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
+    <preference for="Magento\Catalog\Model\Product\Media\ConfigInterface" type="Magento\Catalog\Model\Product\Media\Config"/>
+    <preference for="Magento\Framework\View\Asset\ContextInterface" type="Magento\Catalog\Model\View\Asset\Image\Context"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
