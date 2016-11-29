@@ -12,6 +12,7 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
@@ -24,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Perform all asserts
  *
  * @group Shopping_Cart
- * @ZephyrId MAGETWO-25382
+ * @ZephyrId MAGETWO-25382, MAGETWO-42677
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
 {
@@ -62,11 +63,18 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     protected $cartPage;
 
     /**
-     * Configuration settings.
+     * Configuration data.
      *
      * @var string
      */
     private $configData;
+
+    /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
 
     /**
      * Should cache be flushed.
@@ -82,18 +90,21 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $cartPage
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __prepare(
         BrowserInterface $browser,
         FixtureFactory $fixtureFactory,
         CatalogProductView $catalogProductView,
-        CheckoutCart $cartPage
+        CheckoutCart $cartPage,
+        TestStepFactory $testStepFactory
     ) {
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductView = $catalogProductView;
         $this->cartPage = $cartPage;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -156,15 +167,15 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Restore configuration settings.
+     * Clean data after running test.
      *
      * @return void
      */
     public function tearDown()
     {
-        $this->objectManager->create(
+        $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
+            ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }
 }
