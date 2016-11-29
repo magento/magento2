@@ -127,11 +127,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     private function getModel()
     {
-        $this->eavEntityMock->expects($this->once())
+        $this->eavEntityMock->expects($this->any())
             ->method('getAttributeCollection')
             ->willReturn([]);
 
-        $this->eavConfig->expects($this->once())
+        $this->eavConfig->expects($this->any())
             ->method('getEntityType')
             ->with('catalog_category')
             ->willReturn($this->eavEntityMock);
@@ -199,11 +199,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 ['', null, $categoryData],
                 ['image', null, $categoryData['image']],
             ]);
-        $categoryMock->expects($this->once())
+        $categoryMock->expects($this->any())
             ->method('getExistsStoreValueFlag')
             ->with('url_key')
             ->willReturn(false);
-        $categoryMock->expects($this->once())
+        $categoryMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         $categoryMock->expects($this->once())
@@ -273,11 +273,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 ['', null, $categoryData],
                 ['image', null, $categoryData['image']],
             ]);
-        $categoryMock->expects($this->once())
+        $categoryMock->expects($this->any())
             ->method('getExistsStoreValueFlag')
             ->with('url_key')
             ->willReturn(false);
-        $categoryMock->expects($this->once())
+        $categoryMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         $categoryMock->expects($this->once())
