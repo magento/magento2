@@ -335,10 +335,6 @@ class Cart extends DataObject implements CartInterface
             );
         }
 
-        if (!$request->hasQty()) {
-            $request->setQty(1);
-        }
-
         $this->getRequestInfoFilter()->filter($request);
         return $request;
     }
@@ -364,7 +360,7 @@ class Cart extends DataObject implements CartInterface
             //If product was not found in cart and there is set minimal qty for it
             if ($minimumQty
                 && $minimumQty > 0
-                && $request->getQty() < $minimumQty
+                && !$request->getQty()
                 && !$this->getQuote()->hasProductId($productId)
             ) {
                 $request->setQty($minimumQty);
@@ -704,7 +700,7 @@ class Cart extends DataObject implements CartInterface
                 // If product was not found in cart and there is set minimal qty for it
                 if ($minimumQty
                     && $minimumQty > 0
-                    && $request->getQty() < $minimumQty
+                    && !$request->getQty()
                     && !$this->getQuote()->hasProductId($productId)
                 ) {
                     $request->setQty($minimumQty);
