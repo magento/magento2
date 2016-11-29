@@ -11,6 +11,11 @@
             <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
