@@ -98,4 +98,19 @@
         <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="getPlacedOrderId" />
         <step name="getPlacedOrderId" module="Magento_Checkout" />
     </scenario>
+    <scenario name="CloseSalesWithHostedProTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
+        <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="getPlacedOrderId" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" next="createShipment" />
+        <step name="createShipment" module="Magento_Sales" />
+    </scenario>
 </config>
