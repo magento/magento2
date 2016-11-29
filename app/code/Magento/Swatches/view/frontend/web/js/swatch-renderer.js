@@ -259,6 +259,9 @@ define([
             // whether swatches are rendered in product list or on product page
             inProductList: false,
 
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price',
+
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
@@ -836,6 +839,12 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
+
+            if (result.oldPrice.amount != result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
 
             if (result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
