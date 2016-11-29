@@ -91,18 +91,20 @@ class PlaceOrderStep implements TestStepInterface
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
+        $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
             [
                 'data' => [
-                    'entity_id' => ['products' => $this->products]
+                    'id' => $orderId,
+                    'entity_id' => ['products' => $this->products],
                 ]
             ]
         );
 
         return [
-            'orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId(),
-            'order' => $order
+            'orderId' => $orderId,
+            'order' => $order,
         ];
     }
 }

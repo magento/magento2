@@ -37,8 +37,10 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
         $orderStatus = $statusToCheck == null ? $status : $statusToCheck;
 
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         \PHPUnit_Framework_Assert::assertEquals(
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
+            $infoTab->getOrderStatus(),
             $orderStatus
         );
     }

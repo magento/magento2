@@ -30,8 +30,11 @@ class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
+
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         \PHPUnit_Framework_Assert::assertContains(
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
+            $infoTab->getOrderStatus(),
             $salesOrderView->getOrderHistoryBlock()->getStatus()
         );
     }
