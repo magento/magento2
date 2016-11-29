@@ -110,6 +110,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
             ['origData' => Visibility::VISIBILITY_NOT_VISIBLE, 'data' => Visibility::VISIBILITY_IN_CATALOG],
             ['origData' => null, 'data' => Visibility::VISIBILITY_IN_CATALOG],
             ['origData' => Visibility::VISIBILITY_BOTH, 'data' => Visibility::VISIBILITY_IN_SEARCH],
+            ['origData' => Visibility::VISIBILITY_IN_CATALOG, 'data' => Visibility::VISIBILITY_NOT_VISIBLE],
+            ['origData' => null, 'data' => Visibility::VISIBILITY_NOT_VISIBLE],
         ];
     }
 
@@ -133,8 +135,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
     {
         return [
             ['origData' => Visibility::VISIBILITY_IN_SEARCH, 'data' => Visibility::VISIBILITY_IN_SEARCH],
-            ['origData' => Visibility::VISIBILITY_IN_CATALOG, 'data' => Visibility::VISIBILITY_NOT_VISIBLE],
-            ['origData' => null, 'data' => Visibility::VISIBILITY_NOT_VISIBLE],
         ];
     }
 }
