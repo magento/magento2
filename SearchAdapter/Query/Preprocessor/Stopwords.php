@@ -5,15 +5,10 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Query\Preprocessor;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
-use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 use Magento\Framework\Module\Dir;
-use Magento\Framework\Serialize\SerializerInterface;
 
 class Stopwords implements PreprocessorInterface
 {
@@ -28,12 +23,12 @@ class Stopwords implements PreprocessorInterface
     const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var LocaleResolver
+     * @var \Magento\Framework\Locale\Resolver
      */
     protected $localeResolver;
 
@@ -43,7 +38,7 @@ class Stopwords implements PreprocessorInterface
     protected $readFactory;
 
     /**
-     * @var ConfigCache
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $configCache;
 
@@ -53,7 +48,7 @@ class Stopwords implements PreprocessorInterface
     protected $esConfig;
 
     /**
-     * @var ModuleDirReader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $moduleDirReader;
 
@@ -68,29 +63,29 @@ class Stopwords implements PreprocessorInterface
     private $stopwordsDirectory;
 
     /**
-     * @var SerializerInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
 
     /**
      * Initialize dependencies.
      *
-     * @param StoreManagerInterface $storeManager
-     * @param LocaleResolver $localeResolver
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\Resolver $localeResolver
      * @param ReadFactory $readFactory
-     * @param ConfigCache $configCache
+     * @param \Magento\Framework\App\Cache\Type\Config $configCache
      * @param EsConfigInterface $esConfig
-     * @param ModuleDirReader $moduleDirReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleDirReader
      * @param string $stopwordsModule
      * @param string $stopwordsDirectory
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        LocaleResolver $localeResolver,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\Resolver $localeResolver,
         ReadFactory $readFactory,
-        ConfigCache $configCache,
+        \Magento\Framework\App\Cache\Type\Config $configCache,
         EsConfigInterface $esConfig,
-        ModuleDirReader $moduleDirReader,
+        \Magento\Framework\Module\Dir\Reader $moduleDirReader,
         $stopwordsModule = '',
         $stopwordsDirectory = ''
     ) {
@@ -156,14 +151,14 @@ class Stopwords implements PreprocessorInterface
     /**
      * Get serializer
      *
-     * @return SerializerInterface
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
     private function getSerializer()
     {
         if (null === $this->serializer) {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
         return $this->serializer;
     }
