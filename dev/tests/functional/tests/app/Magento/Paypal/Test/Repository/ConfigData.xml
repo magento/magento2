@@ -15,7 +15,6 @@
                 <item name="value" xsi:type="string">GB</item>
             </field>
         </dataset>
-
         <dataset name="merchant_country_gb_rollback">
             <field name="paypal/general/merchant_country" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
