@@ -840,7 +840,7 @@ define([
                 }
             );
 
-            if (result.oldPrice.amount != result.finalPrice.amount) {
+            if (result.oldPrice.amount !== result.finalPrice.amount) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
