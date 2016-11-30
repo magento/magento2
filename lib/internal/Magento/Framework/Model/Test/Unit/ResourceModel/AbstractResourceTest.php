@@ -36,14 +36,14 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $arguments
-     * @param string $expectation
+     * @param string $expected
      * @param array|string|int $serializeCalledWith
      * @param int $numSerializeCalled
      * @dataProvider serializeFieldsDataProvider
      */
     public function testSerializeFields(
         array $arguments,
-        $expectation,
+        $expected,
         $serializeCalledWith,
         $numSerializeCalled = 1
     ) {
@@ -52,9 +52,9 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $this->serializerMock->expects($this->exactly($numSerializeCalled))
             ->method('serialize')
             ->with($serializeCalledWith)
-            ->willReturn($expectation);
+            ->willReturn($expected);
         $this->abstractResource->_serializeField($dataObject, $field, $defaultValue, $unsetEmpty);
-        $this->assertEquals($expectation, $dataObject->getData($field));
+        $this->assertEquals($expected, $dataObject->getData($field));
     }
 
     /**
@@ -107,20 +107,19 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $arguments
-     * @param array|string|int|boolean $expectation
-     * @param int $numUnserializeCalled
+     * @param array|string|int|boolean $expected
      * @dataProvider unserializeFieldsDataProvider
      */
-    public function testUnserializeFields(array $arguments, $expectation, $numUnserializeCalled = 1)
+    public function testUnserializeFields(array $arguments, $expected)
     {
         /** @var DataObject $dataObject */
         list($dataObject, $field, $defaultValue) = $arguments;
-        $this->serializerMock->expects($this->exactly($numUnserializeCalled))
+        $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with($dataObject->getData($field))
-            ->willReturn($expectation);
+            ->willReturn($expected);
         $this->abstractResource->_unserializeField($dataObject, $field, $defaultValue);
-        $this->assertEquals($expectation, $dataObject->getData($field));
+        $this->assertEquals($expected, $dataObject->getData($field));
     }
 
     /**
@@ -135,7 +134,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
                 'integer' => '969',
                 'empty_with_default' => '""',
                 'not_serialized_string' => 'i am string',
-                'serialized_boolean_false' => false
+                'serialized_boolean_false' => 'false'
             ]
         );
         return [
@@ -162,7 +161,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             [
                 [$dataObject, 'serialized_boolean_false', null],
                 false,
-                0
             ]
         ];
     }
