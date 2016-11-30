@@ -35,6 +35,20 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Read information about all websites
+     *
+     * @return array
+     */
+    public function readAlllWebsites()
+    {
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('store_website'));
+
+        return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
      * Validate website code before object save
      *
      * @param \Magento\Framework\Model\AbstractModel $object

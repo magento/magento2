@@ -100,13 +100,13 @@ class RuntimeConfigSource implements ConfigSourceInterface
         if ($this->canUseDatabase()) {
             switch ($scopePool) {
                 case 'websites':
-                    $data = $this->getWebsitesData($scopeCode);
+                    $data['websites'] = $this->getWebsitesData($scopeCode);
                     break;
                 case 'groups':
-                    $data = $this->getGroupsData($scopeCode);
+                    $data['groups'] = $this->getGroupsData($scopeCode);
                     break;
                 case 'stores':
-                    $data = $this->getStoresData($scopeCode);
+                    $data['stores'] = $this->getStoresData($scopeCode);
                     break;
                 default:
                     $data = [
@@ -127,10 +127,10 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     private function getWebsitesData($code = null)
     {
-        if ($code) {
+        if ($code !== null) {
             $website = $this->websiteFactory->create();
             $website->load($code);
-            $data = $website->getData();
+            $data[$code] = $website->getData();
         } else {
             $collection = $this->websiteCollectionFactory->create();
             $collection->setLoadDefault(true);
@@ -148,10 +148,10 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     private function getGroupsData($id = null)
     {
-        if ($id) {
+        if ($id !== null) {
             $group = $this->groupFactory->create();
             $group->load($id);
-            $data = $group->getData();
+            $data[$id] = $group->getData();
         } else {
             $collection = $this->groupCollectionFactory->create();
             $collection->setLoadDefault(true);
@@ -169,10 +169,16 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     private function getStoresData($code = null)
     {
-        if ($code) {
+        if ($code !== null) {
             $store = $this->storeFactory->create();
-            $store->load($code, 'code');
-            $data = $store->getData();
+
+            if (is_numeric($code)) {
+                $store->load($code);
+            } else {
+                $store->load($code, 'code');
+            }
+
+            $data[$code] = $store->getData();
         } else {
             $collection = $this->storeCollectionFactory->create();
             $collection->setLoadDefault(true);
