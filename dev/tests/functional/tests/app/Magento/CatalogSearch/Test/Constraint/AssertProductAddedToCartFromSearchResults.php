@@ -44,7 +44,7 @@ class AssertProductAddedToCartFromSearchResults extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name $productName was not found.");
         $resultPage->getListProductBlock()->getProductItem($product)->clickAddToCart();
-
+        $catalogProductView->getViewBlock()->waitLoader();
         if (isset($product->getCheckoutData()['options'])) {
             $catalogProductView->getViewBlock()->addToCart($product);
             $message = $catalogProductView->getMessagesBlock()->getSuccessMessage();
