@@ -191,7 +191,10 @@ define([
             mediaGalleryInitial: [{}],
 
             //
-            onlyMainImg: false
+            onlyMainImg: false,
+
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price'
         },
 
         /**
@@ -688,6 +691,11 @@ define([
                 }
             );
 
+            if (result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
         },
 
         /**
