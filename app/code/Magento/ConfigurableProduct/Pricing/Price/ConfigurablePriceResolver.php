@@ -53,8 +53,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
 
     /**
      * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
-     * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return float|null
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {
@@ -64,12 +63,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
             $price = $price ? min($price, $productPrice) : $productPrice;
         }
-        if ($price === null) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Configurable product "%1" does not have sub-products', $product->getSku())
-            );
-        }
 
-        return (float)$price;
+        return $price === null ? null : (float)$price;
     }
 }
