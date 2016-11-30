@@ -19,7 +19,6 @@
                 <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
             <data name="payment/method" xsi:type="string">payflowpro</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_admin</data>
             <data name="creditCard/dataset" xsi:type="string">visa_empty</data>
             <data name="creditCardSave" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_vault</data>
