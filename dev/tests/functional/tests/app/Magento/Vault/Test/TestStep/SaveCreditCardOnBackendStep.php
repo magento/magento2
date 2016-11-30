@@ -5,13 +5,12 @@
  */
 namespace Magento\Vault\Test\TestStep;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Payment\Test\Fixture\CreditCard;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
- * Class SaveCreditCardOnBackendStep
+ * Save credit card during order placement from Admin.
  */
 class SaveCreditCardOnBackendStep implements TestStepInterface
 {
@@ -44,22 +43,18 @@ class SaveCreditCardOnBackendStep implements TestStepInterface
     /**
      * @param OrderCreateIndex $orderCreateIndex
      * @param array $payment
-     * @param FixtureFactory $fixtureFactory
-     * @param $creditCardClass
-     * @param array $creditCard
+     * @param CreditCard $creditCard
      * @param string $creditCardSave
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
         array $payment,
-        FixtureFactory $fixtureFactory,
-        $creditCardClass,
-        array $creditCard,
+        CreditCard $creditCard,
         $creditCardSave = 'No'
     ) {
         $this->orderCreatePage = $orderCreateIndex;
         $this->payment = $payment;
-        $this->creditCard = $fixtureFactory->createByCode($creditCardClass, ['dataset' => $creditCard['dataset']]);
+        $this->creditCard = $creditCard;
         $this->creditCardSave = $creditCardSave;
     }
 

@@ -7,61 +7,52 @@
 namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
- * Class SelectPaymentMethodStep
- * Selecting payment method
+ * Selecting payment method.
  */
 class SelectPaymentMethodStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Payment information
+     * Payment information.
      *
      * @var string
      */
     protected $payment;
 
     /**
-     * Credit card information
+     * Credit card information.
      *
      * @var string
      */
     protected $creditCard;
 
     /**
-     * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $payment
-     * @param FixtureFactory $fixtureFactory
-     * @param string $creditCardClass
-     * @param array|CreditCard|null $creditCard
+     * @param CreditCard|null $creditCard
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         array $payment,
-        FixtureFactory $fixtureFactory,
-        $creditCardClass = 'credit_card',
-        $creditCard = null
+        CreditCard $creditCard = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->payment = $payment;
-        if (isset($creditCard['dataset'])) {
-            $this->creditCard = $fixtureFactory->createByCode($creditCardClass, ['dataset' => $creditCard['dataset']]);
-        }
+        $this->creditCard = $creditCard;
     }
 
     /**
-     * Run step that selecting payment method
+     * Run step that selecting payment method.
      *
      * @return void
      */
