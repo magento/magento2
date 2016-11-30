@@ -3,32 +3,59 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
+define([
+    'jquery',
+    'underscore',
+    'mage/smart-keyboard-handler',
+    'jquery/ui',
+    'jquery/jquery.parsequery',
+    'mage/validation/validation'
+], function ($, _, keyboardHandler) {
     'use strict';
 
     /**
-     * Parse params
-     * @param {String} query
-     * @returns {{}}
+     * Extend form validation to support swatch accessibility
      */
-    $.parseParams = function (query) {
-        var re = /([^&=]+)=?([^&]*)/g,
-            decodeRE = /\+/g,  // Regex for replacing addition symbol with a space
-            decode = function (str) {
-                return decodeURIComponent(str.replace(decodeRE, " "));
-            },
-            params = {}, e;
+    $.widget('mage.validation', $.mage.validation, {
+        /**
+         * Handle form with swatches validation. Focus on first invalid swatch block.
+         *
+         * @param {jQuery.Event} event
+         * @param {Object} validation
+         */
+        listenFormValidateHandler: function (event, validation) {
+            var swatchWrapper, firstActive, swatches, swatch, successList, errorList, firstSwatch;
 
-        while (e = re.exec(query)) {
-            var k = decode(e[1]), v = decode(e[2]);
-            if (k.substring(k.length - 2) === '[]') {
-                k = k.substring(0, k.length - 2);
-                (params[k] || (params[k] = [])).push(v);
+            this._superApply(arguments);
+
+            swatchWrapper = '.swatch-attribute-options';
+            swatches = $(event.target).find(swatchWrapper);
+
+            if (!swatches.length) {
+                return;
             }
-            else params[k] = v;
+
+            swatch = '.swatch-attribute';
+            firstActive = $(validation.errorList[0].element || []);
+            successList = validation.successList;
+            errorList = validation.errorList;
+            firstSwatch = $(firstActive).parent(swatch).find(swatchWrapper);
+
+            keyboardHandler.focus(swatches);
+
+            $.each(successList, function (index, item) {
+                $(item).parent(swatch).find(swatchWrapper).attr('aria-invalid', false);
+            });
+
+            $.each(errorList, function (index, item) {
+                $(item.element).parent(swatch).find(swatchWrapper).attr('aria-invalid', true);
+            });
+
+            if (firstSwatch.length) {
+                $(firstSwatch).focus();
+            }
         }
-        return params;
-    };
+    });
 
     /**
      * Render tooltips by attributes (only to up).
@@ -38,10 +65,10 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
      *  - option-tooltip-thumb
      *  - option-tooltip-value
      */
-    $.widget('custom.SwatchRendererTooltip', {
+    $.widget('mage.SwatchRendererTooltip', {
         options: {
             delay: 200,                             //how much ms before tooltip to show
-            tooltip_class: 'swatch-option-tooltip'  //configurable, but remember about css
+            tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
         },
 
         /**
@@ -50,52 +77,60 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         _init: function () {
             var $widget = this,
                 $this = this.element,
-                $element = $('.' + $widget.options.tooltip_class),
+                $element = $('.' + $widget.options.tooltipClass),
                 timer,
                 type = parseInt($this.attr('option-type'), 10),
                 label = $this.attr('option-label'),
                 thumb = $this.attr('option-tooltip-thumb'),
-                value = $this.attr('option-tooltip-value');
+                value = $this.attr('option-tooltip-value'),
+                $image,
+                $title,
+                $corner;
 
-            if ($element.size() == 0) {
-                $element = $('<div class="' + $widget.options.tooltip_class + '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>');
+            if (!$element.size()) {
+                $element = $('<div class="' +
+                    $widget.options.tooltipClass +
+                    '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
+                );
                 $('body').append($element);
             }
 
-            var $image = $element.find('.image'),
-                $title = $element.find('.title'),
-                $corner = $element.find('.corner');
+            $image = $element.find('.image');
+            $title = $element.find('.title');
+            $corner = $element.find('.corner');
 
             $this.hover(function () {
                 if (!$this.hasClass('disabled')) {
                     timer = setTimeout(
                         function () {
+                            var leftOpt = null,
+                                leftCorner = 0,
+                                left,
+                                $window;
 
-                            // Image
-                            if (type == 2) {
+                            if (type === 2) {
+                                // Image
                                 $image.css({
                                     'background': 'url("' + thumb + '") no-repeat center', //Background case
                                     'background-size': 'initial'
                                 });
                                 $image.show();
-                            }
-
-                            // Color
-                            else if (type == 1) {
-                                $image.css({background: value});
+                            } else if (type === 1) {
+                                // Color
+                                $image.css({
+                                    background: value
+                                });
                                 $image.show();
-                            }
-
-                            // Textual or Clear
-                            else if (type == 0 || type == 3) {
+                            } else if (type === 0 || type === 3) {
+                                // Default
                                 $image.hide();
                             }
 
                             $title.text(label);
 
-                            var leftOpt = $this.offset().left,
-                                left = leftOpt + ($this.width() / 2) - ($element.width() / 2),
-                                $window = $(window);
+                            leftOpt = $this.offset().left;
+                            left = leftOpt + $this.width() / 2 - $element.width() / 2;
+                            $window = $(window);
 
                             // the numbers (5 and 5) is magick constants for offset from left or right page
                             if (left < 0) {
@@ -105,11 +140,12 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                             }
 
                             // the numbers (6,  3 and 18) is magick constants for offset tooltip
-                            var leftCorner = 0;
+                            leftCorner = 0;
+
                             if ($element.width() < $this.width()) {
                                 leftCorner = $element.width() / 2 - 3;
                             } else {
-                                leftCorner = (leftOpt > left ? leftOpt - left : left - leftOpt) + ($this.width() / 2) - 6;
+                                leftCorner = (leftOpt > left ? leftOpt - left : left - leftOpt) + $this.width() / 2 - 6;
                             }
 
                             $corner.css({
@@ -127,6 +163,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 $element.hide();
                 clearTimeout(timer);
             });
+
             $(document).on('tap', function () {
                 $element.hide();
                 clearTimeout(timer);
@@ -151,7 +188,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
      *  - selectorProduct (selector for product container)
      *  - selectorProductPrice (selector for change price)
      */
-    $.widget('custom.SwatchRenderer', {
+    $.widget('mage.SwatchRenderer', {
         options: {
             classes: {
                 attributeClass: 'swatch-attribute',
@@ -164,16 +201,60 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 moreButton: 'swatch-more',
                 loader: 'swatch-option-loading'
             },
-            jsonConfig: {},                                    // option's json config
-            jsonSwatchConfig: {},                              // swatch's json config
-            selectorProduct: '.product-info-main',             // selector of parental block of prices and swatches (need to know where to seek for price block)
-            selectorProductPrice: '[data-role=priceBox]',      // selector of price wrapper (need to know where set price)
-            numberToShow: false,                               // number of controls to show (false or zero = show all)
-            onlySwatches: false,                               // show only swatch controls
-            enableControlLabel: true,                          // enable label for control
-            moreButtonText: 'More',                            // text for more button
-            mediaCallback: '',                                 // Callback url for media
-            mediaGalleryInitial: [{}]                          // Cache for BaseProduct images. Needed when option unset
+            // option's json config
+            jsonConfig: {},
+
+            // swatch's json config
+            jsonSwatchConfig: {},
+
+            // selector of parental block of prices and swatches (need to know where to seek for price block)
+            selectorProduct: '.product-info-main',
+
+            // selector of price wrapper (need to know where set price)
+            selectorProductPrice: '[data-role=priceBox]',
+
+            //selector of product images gallery wrapper
+            mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
+
+            // selector of category product tile wrapper
+            selectorProductTile: '.product-item',
+
+            // number of controls to show (false or zero = show all)
+            numberToShow: false,
+
+            // show only swatch controls
+            onlySwatches: false,
+
+            // enable label for control
+            enableControlLabel: true,
+
+            // control label id
+            controlLabelId: '',
+
+            // text for more button
+            moreButtonText: 'More',
+
+            // Callback url for media
+            mediaCallback: '',
+
+            // Local media cache
+            mediaCache: {},
+
+            // Cache for BaseProduct images. Needed when option unset
+            mediaGalleryInitial: [{}],
+
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace',
+
+            // whether swatches are rendered in product list or on product page
+            inProductList: false
         },
 
         /**
@@ -189,12 +270,24 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * @private
          */
         _init: function () {
-            if (this.options.jsonConfig != '' && this.options.jsonSwatchConfig != '') {
+            if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                // store unsorted attributes
+                this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
+                this._sortAttributes();
                 this._RenderControls();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+        },
+
+        /**
+         * @private
+         */
+        _sortAttributes: function () {
+            this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
+                return attribute.position;
+            });
         },
 
         /**
@@ -209,16 +302,17 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     this.element.parents('.product-item-info');
 
             if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
+
+            this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
+            this.inProductList = this.productForm.length > 0;
         },
 
         /**
@@ -236,9 +330,11 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
             $.each(this.options.jsonConfig.attributes, function () {
                 var item = this,
-                    options = $widget._RenderSwatchOptions(item),
+                    controlLabelId = 'option-label-' + item.code + '-' + item.id,
+                    options = $widget._RenderSwatchOptions(item, controlLabelId),
                     select = $widget._RenderSwatchSelect(item, chooseText),
                     input = $widget._RenderFormInput(item),
+                    listLabel = '',
                     label = '';
 
                 // Show only swatch controls
@@ -248,14 +344,35 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
                 if ($widget.options.enableControlLabel) {
                     label +=
-                        '<span class="' + classes.attributeLabelClass + '">' + item.label + '</span>' +
+                        '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
+                        item.label +
+                        '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
+                }
+
+                if ($widget.inProductList) {
+                    $widget.productForm.append(input);
+                    input = '';
+                    listLabel = 'aria-label="' + item.label + '"';
+                } else {
+                    listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
 
                 // Create new control
                 container.append(
-                    '<div class="' + classes.attributeClass + ' ' + item.code + '" attribute-code="' + item.code + '" attribute-id="' + item.id + '">' + label +
-                    '<div class="' + classes.attributeOptionsWrapper + ' clearfix">' + options + select + '</div>' + input + '</div>'
+                    '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
+                    'attribute-code="' + item.code + '" ' +
+                    'attribute-id="' + item.id + '">' +
+                    label +
+                    '<div aria-activedescendant="" ' +
+                    'tabindex="0" ' +
+                    'aria-invalid="false" ' +
+                    'aria-required="true" ' +
+                    'role="listbox" ' + listLabel +
+                    'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
+                    options + select +
+                    '</div>' + input +
+                    '</div>'
                 );
 
                 $widget.optionsMap[item.id] = {};
@@ -264,7 +381,10 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 $.each(item.options, function () {
                     if (this.products.length > 0) {
                         $widget.optionsMap[item.id][this.id] = {
-                            price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
+                            price: parseInt(
+                                $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
+                                10
+                            ),
                             products: this.products
                         };
                     }
@@ -286,79 +406,90 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             $widget._Rewind(container);
 
             //Emulate click on all swatches from Request
-            $widget._EmulateSelected();
+            $widget._EmulateSelected($.parseQuery());
+            $widget._EmulateSelected($widget._getSelectedAttributes());
         },
 
         /**
          * Render swatch options by part of config
          *
-         * @param config
-         * @returns {string}
+         * @param {Object} config
+         * @param {String} controlId
+         * @returns {String}
          * @private
          */
-        _RenderSwatchOptions: function (config) {
-            if (!this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
-                return '';
-            }
-
+        _RenderSwatchOptions: function (config, controlId) {
             var optionConfig = this.options.jsonSwatchConfig[config.id],
                 optionClass = this.options.classes.optionClass,
-                moreLimit = this.options.numberToShow,
+                moreLimit = parseInt(this.options.numberToShow, 10),
                 moreClass = this.options.classes.moreButton,
                 moreText = this.options.moreButtonText,
                 countAttributes = 0,
                 html = '';
 
+            if (!this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
+                return '';
+            }
+
             $.each(config.options, function () {
+                var id,
+                    type,
+                    value,
+                    thumb,
+                    label,
+                    attr;
+
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
                 }
 
                 // Add more button
-                if (moreLimit != false && moreLimit == countAttributes++) {
+                if (moreLimit === countAttributes++) {
                     html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
                 }
 
-                var id = this.id,
-                    type = optionConfig[id].type,
-                    value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '',
-                    thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '',
-                    label = this.label ? this.label : '',
-                    attr =
-                        ' option-type="' + type + '"' +
-                        ' option-id="' + id + '"' +
-                        ' option-label="' + label + '"' +
-                        ' option-tooltip-thumb="' + thumb + '"' +
-                        ' option-tooltip-value="' + value + '"';
+                id = this.id;
+                type = parseInt(optionConfig[id].type, 10);
+                value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
+                thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
+                label = this.label ? this.label : '';
+                attr =
+                    ' id="' + controlId + '-item-' + id + '"' +
+                    ' aria-checked="false"' +
+                    ' aria-describedby="' + controlId + '"' +
+                    ' tabindex="0"' +
+                    ' option-type="' + type + '"' +
+                    ' option-id="' + id + '"' +
+                    ' option-label="' + label + '"' +
+                    ' aria-label="' + label + '"' +
+                    ' option-tooltip-thumb="' + thumb + '"' +
+                    ' option-tooltip-value="' + value + '"' +
+                    ' role="option"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
                 }
 
-                // Text
-                if (type == 0) {
-                    html += '<div class="' + optionClass + ' text" ' + attr + '>' + (value ? value : label) + '</div>';
-                }
-
-                // Color
-                else if (type == 1) {
+                if (type === 0) {
+                    // Text
+                    html += '<div class="' + optionClass + ' text" ' + attr + '>' + (value ? value : label) +
+                        '</div>';
+                } else if (type === 1) {
+                    // Color
                     html += '<div class="' + optionClass + ' color" ' + attr +
-                        '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
-                }
-
-                // Image
-                else if (type == 2) {
+                        ' style="background: ' + value +
+                        ' no-repeat center; background-size: initial;">' + '' +
+                        '</div>';
+                } else if (type === 2) {
+                    // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
-                }
-
-                // Clear
-                else if (type == 3) {
+                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' +
+                        '</div>';
+                } else if (type === 3) {
+                    // Clear
                     html += '<div class="' + optionClass + '" ' + attr + '></div>';
-                }
-
-                // Default
-                else {
+                } else {
+                    // Default
                     html += '<div class="' + optionClass + '" ' + attr + '>' + label + '</div>';
                 }
             });
@@ -369,17 +500,19 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Render select by part of config
          *
-         * @param config
-         * @param chooseText
-         * @returns {string}
+         * @param {Object} config
+         * @param {String} chooseText
+         * @returns {String}
          * @private
          */
         _RenderSwatchSelect: function (config, chooseText) {
+            var html;
+
             if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
                 return '';
             }
 
-            var html =
+            html =
                 '<select class="' + this.options.classes.selectClass + ' ' + config.code + '">' +
                 '<option value="0" option-id="0">' + chooseText + '</option>';
 
@@ -403,14 +536,16 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * Input for submit form.
          * This control shouldn't have "type=hidden", "display: none" for validation work :(
          *
-         * @param config
+         * @param {Object} config
          * @private
          */
         _RenderFormInput: function (config) {
-            return '<input class="' + this.options.classes.attributeInput + '" ' +
+            return '<input class="' + this.options.classes.attributeInput + ' super-attribute-select" ' +
                 'name="super_attribute[' + config.id + ']" ' +
+                'type="text" ' +
                 'value="" ' +
-                'data-validate="{required:true}" ' +
+                'data-selector="super_attribute[' + config.id + ']" ' +
+                'data-validate="{required: true}" ' +
                 'aria-required="true" ' +
                 'aria-invalid="true" ' +
                 'style="visibility: hidden; position:absolute; left:-1000px">';
@@ -422,35 +557,60 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * @private
          */
         _EventListener: function () {
+            var $widget = this,
+                options = this.options.classes,
+                target;
 
-            var $widget = this;
-
-            $widget.element.on('click', '.' + this.options.classes.optionClass, function () {
+            $widget.element.on('click', '.' + options.optionClass, function () {
                 return $widget._OnClick($(this), $widget);
             });
 
-            $widget.element.on('change', '.' + this.options.classes.selectClass, function () {
+            $widget.element.on('change', '.' + options.selectClass, function () {
                 return $widget._OnChange($(this), $widget);
             });
 
-            $widget.element.on('click', '.' + this.options.classes.moreButton, function (e) {
+            $widget.element.on('click', '.' + options.moreButton, function (e) {
                 e.preventDefault();
+
                 return $widget._OnMoreClick($(this));
+            });
+
+            $widget.element.on('keydown', function (e) {
+                if (e.which === 13) {
+                    target = $(e.target);
+
+                    if (target.is('.' + options.optionClass)) {
+                        return $widget._OnClick(target, $widget);
+                    } else if (target.is('.' + options.selectClass)) {
+                        return $widget._OnChange(target, $widget);
+                    } else if (target.is('.' + options.moreButton)) {
+                        e.preventDefault();
+
+                        return $widget._OnMoreClick(target);
+                    }
+                }
             });
         },
 
         /**
          * Event for swatch options
          *
-         * @param $this
-         * @param $widget
+         * @param {Object} $this
+         * @param {Object} $widget
          * @private
          */
         _OnClick: function ($this, $widget) {
-
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
+                $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
+                attributeId = $parent.attr('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.inProductList) {
+                $input = $widget.productForm.find(
+                    '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
+                );
+            }
 
             if ($this.hasClass('disabled')) {
                 return;
@@ -460,11 +620,14 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 $parent.removeAttr('option-selected').find('.selected').removeClass('selected');
                 $input.val('');
                 $label.text('');
+                $this.attr('aria-checked', false);
             } else {
                 $parent.attr('option-selected', $this.attr('option-id')).find('.selected').removeClass('selected');
                 $label.text($this.attr('option-label'));
                 $input.val($this.attr('option-id'));
+                $input.attr('data-attr-name', this._getAttributeCodeById(attributeId));
                 $this.addClass('selected');
+                $widget._toggleCheckedAttributes($this, $wrapper);
             }
 
             $widget._Rebuild();
@@ -476,18 +639,52 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             }
 
             $widget._LoadProductMedia();
+            $input.trigger('change');
+        },
+
+        /**
+         * Get human readable attribute code (eg. size, color) by it ID from configuration
+         *
+         * @param {Number} attributeId
+         * @returns {*}
+         * @private
+         */
+        _getAttributeCodeById: function (attributeId) {
+            var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+
+            return attribute ? attribute.code : attributeId;
+        },
+
+        /**
+         * Toggle accessibility attributes
+         *
+         * @param {Object} $this
+         * @param {Object} $wrapper
+         * @private
+         */
+        _toggleCheckedAttributes: function ($this, $wrapper) {
+            $wrapper.attr('aria-activedescendant', $this.attr('id'))
+                .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
+            $this.attr('aria-checked', true);
         },
 
         /**
          * Event for select
          *
-         * @param $this
-         * @param $widget
+         * @param {Object} $this
+         * @param {Object} $widget
          * @private
          */
         _OnChange: function ($this, $widget) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
+                attributeId = $parent.attr('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.productForm.length > 0) {
+                $input = $widget.productForm.find(
+                    '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
+                );
+            }
 
             if ($this.val() > 0) {
                 $parent.attr('option-selected', $this.val());
@@ -500,12 +697,13 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             $widget._Rebuild();
             $widget._UpdatePrice();
             $widget._LoadProductMedia();
+            $input.trigger('change');
         },
 
         /**
          * Event for more switcher
          *
-         * @param $this
+         * @param {Object} $this
          * @private
          */
         _OnMoreClick: function ($this) {
@@ -548,22 +746,22 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() == 1 && selected.first().attr('attribute-id') == id) {
+                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
                 $this.find('[option-id]').each(function () {
-                    var $this = $(this),
-                        option = $this.attr('option-id');
+                    var $element = $(this),
+                        option = $element.attr('option-id');
 
                     if (!$widget.optionsMap.hasOwnProperty(id) || !$widget.optionsMap[id].hasOwnProperty(option) ||
-                        $this.hasClass('selected') ||
-                        $this.is(':selected')) {
+                        $element.hasClass('selected') ||
+                        $element.is(':selected')) {
                         return;
                     }
 
                     if (_.intersection(products, $widget.optionsMap[id][option].products).length <= 0) {
-                        $this.attr('disabled', true).addClass('disabled');
+                        $element.attr('disabled', true).addClass('disabled');
                     }
                 });
             });
@@ -581,10 +779,10 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
             // Generate intersection of products
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var id = $(this).attr('attribute-id');
-                var option = $(this).attr('option-selected');
+                var id = $(this).attr('attribute-id'),
+                    option = $(this).attr('option-selected');
 
-                if ($skipAttributeId != undefined && $skipAttributeId == id) {
+                if ($skipAttributeId !== undefined && $skipAttributeId === id) {
                     return;
                 }
 
@@ -592,7 +790,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     return;
                 }
 
-                if (products.length == 0) {
+                if (products.length === 0) {
                     products = $widget.optionsMap[id][option].products;
                 } else {
                     products = _.intersection(products, $widget.optionsMap[id][option].products);
@@ -615,10 +813,9 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 result;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var attributeId = $(this).attr('attribute-id'),
-                    selectedOptionId = $(this).attr('option-selected');
+                var attributeId = $(this).attr('attribute-id');
 
-                options[attributeId] = selectedOptionId;
+                options[attributeId] = $(this).attr('option-selected');
             });
 
             result = $widget.options.jsonConfig.optionPrices[_.findKey($widget.options.jsonConfig.index, options)];
@@ -629,13 +826,14 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
-
         },
 
         /**
          * Get prices
+         *
          * @param {Object} newPrices
-         * @returns {Object}
+         * @param {Object} displayPrices
+         * @returns {*}
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
@@ -663,7 +861,23 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             var $widget = this,
                 $this = $widget.element,
                 attributes = {},
-                productId = 0;
+                productId = 0,
+                mediaCallData,
+                mediaCacheKey,
+
+                /**
+                 * Processes product media data
+                 *
+                 * @param {Object} data
+                 * @returns void
+                 */
+                mediaSuccessCallback = function (data) {
+                    if (!(mediaCacheKey in $widget.options.mediaCache)) {
+                        $widget.options.mediaCache[mediaCacheKey] = data;
+                    }
+                    $widget._ProductMediaCallback($this, data);
+                    $widget._DisableProductMediaLoader($this);
+                };
 
             if (!$widget.options.mediaCallback) {
                 return;
@@ -671,6 +885,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
             $this.find('[option-selected]').each(function () {
                 var $selected = $(this);
+
                 attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
             });
 
@@ -683,27 +898,34 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     .find('.price-box.price-final_price').attr('data-product-id');
             }
 
-            var additional = $.parseParams(window.location.search.substring(1));
+            mediaCallData = {
+                'product_id': productId,
+                'attributes': attributes,
+                'additional': $.parseQuery()
+            };
+            mediaCacheKey = JSON.stringify(mediaCallData);
 
-            $widget._XhrKiller();
-            $widget._EnableProductMediaLoader($this);
-            $widget.xhr = $.post(
-                $widget.options.mediaCallback,
-                {product_id: productId, attributes: attributes, isAjax: true, additional: additional},
-                function (data) {
-                    $widget._ProductMediaCallback($this, data);
-                    $widget._DisableProductMediaLoader($this);
-                },
-                'json'
-            ).done(function () {
+            if (mediaCacheKey in $widget.options.mediaCache) {
+                mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
+            } else {
+                mediaCallData.isAjax = true;
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
+                $widget.xhr = $.post(
+                    $widget.options.mediaCallback,
+                    mediaCallData,
+                    mediaSuccessCallback,
+                    'json'
+                ).done(function () {
                     $widget._XhrKiller();
                 });
+            }
         },
 
         /**
          * Enable loader
          *
-         * @param $this
+         * @param {Object} $this
          * @private
          */
         _EnableProductMediaLoader: function ($this) {
@@ -722,7 +944,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Disable loader
          *
-         * @param $this
+         * @param {Object} $this
          * @private
          */
         _DisableProductMediaLoader: function ($this) {
@@ -741,49 +963,71 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Callback for product media
          *
-         * @param $this
-         * @param response
+         * @param {Object} $this
+         * @param {String} response
          * @private
          */
         _ProductMediaCallback: function ($this, response) {
             var isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist
-                    ? $this.parents('.column.main')
-                    : $this.parents('.product-item-info'),
+                $main = isProductViewExist ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
+
+                /**
+                 * Check whether object supported or not
+                 *
+                 * @param {Object} e
+                 * @returns {*|Boolean}
+                 */
                 support = function (e) {
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if ($widget._ObjectLength(response) < 1) {
+            if (_.size($widget) < 1 || !support(response)) {
                 this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
                 return;
             }
 
-            if (support(response)) {
-                images.push({
-                    full: response.large,
-                    img: response.medium,
-                    thumb: response.small
-                });
+            images.push({
+                full: response.large,
+                img: response.medium,
+                thumb: response.small,
+                isMain: true
+            });
 
-                if (response.hasOwnProperty('gallery')) {
-                    $.each(response.gallery, function () {
-                        if (!support(this) || response.large === this.large) {
-                            return;
-                        }
-                        images.push({
-                            full: this.large,
-                            img: this.medium,
-                            thumb: this.small
-                        });
+            if (response.hasOwnProperty('gallery')) {
+                $.each(response.gallery, function () {
+                    if (!support(this) || response.large === this.large) {
+                        return;
+                    }
+                    images.push({
+                        full: this.large,
+                        img: this.medium,
+                        thumb: this.small
                     });
-                }
+                });
             }
 
             this.updateBaseImage(images, $main, isProductViewExist);
+        },
+
+        /**
+         * Check if images to update are initial and set their type
+         * @param {Array} images
+         */
+        _setImageType: function (images) {
+            var initial = this.options.mediaGalleryInitial[0].img;
+
+            if (images[0].img === initial) {
+                images = $.extend(true, [], this.options.mediaGalleryInitial);
+            } else {
+                images.map(function (img) {
+                    img.type = 'image';
+                });
+            }
+
+            return images;
         },
 
         /**
@@ -793,13 +1037,28 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * @param {Boolean} isProductViewExist
          */
         updateBaseImage: function (images, context, isProductViewExist) {
-            var justAnImage = images[0];
+            var justAnImage = images[0],
+                initialImages = this.options.mediaGalleryInitial,
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
+                imagesToUpdate,
+                isInitial;
 
             if (isProductViewExist) {
-                context
-                    .find('[data-gallery-role=gallery-placeholder]')
-                    .data('gallery')
-                    .updateData(images);
+                imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
+
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
+
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -821,18 +1080,14 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
         /**
          * Emulate mouse click on all swatches that should be selected
-         *
+         * @param {Object} [selectedAttributes]
          * @private
          */
-        _EmulateSelected: function () {
-            var $widget = this,
-                $this = $widget.element,
-                request = $.parseParams(window.location.search.substring(1));
-
-            $.each(request, function (key, value) {
-                $this.find('.' + $widget.options.classes.attributeClass
-                    + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
-            });
+        _EmulateSelected: function (selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
+                this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+            }, this));
         },
 
         /**
@@ -843,7 +1098,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         _EmulateSelectedByAttributeId: function (selectedAttributes) {
             $.each(selectedAttributes, $.proxy(function (attributeId, optionId) {
                 var elem = this.element.find('.' + this.options.classes.attributeClass +
-                    '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
+                        '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
                     parentInput = elem.parent();
 
                 if (elem.hasClass('selected')) {
@@ -860,21 +1115,38 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         },
 
         /**
-         * Returns an array/object's length
-         * @param obj
-         * @returns {number}
+         * Get default options values settings with either URL query parameters
          * @private
          */
-        _ObjectLength: function (obj) {
-            var size = 0,
-                key;
+        _getSelectedAttributes: function () {
+            var hashIndex = window.location.href.indexOf('#'),
+                selectedAttributes = {},
+                params;
 
-            for (key in obj) {
-                if (obj.hasOwnProperty(key)) size++;
+            if (hashIndex !== -1) {
+                params = $.parseQuery(window.location.href.substr(hashIndex + 1));
+
+                selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
+                    var attribute = this.options.jsonConfig.mappedAttributes[attributeId];
+
+                    return attribute ? attribute.code : attributeId;
+                }.bind(this)));
             }
 
-            return size;
+            return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         }
     });
-    return $.custom.SwatchRenderer;
+
+    return $.mage.SwatchRenderer;
 });
