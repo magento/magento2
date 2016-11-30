@@ -279,7 +279,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
     {
         $objectFailed = new \Magento\Framework\DataObject();
         $objectFailed->setData('error', true);
-        $objectFailed->setData('error_messages', __('Cannot place order.'));
+        $objectFailed->setData('error_messages', __('Unable to place order. Please try again later.'));
 
         return [
             [
