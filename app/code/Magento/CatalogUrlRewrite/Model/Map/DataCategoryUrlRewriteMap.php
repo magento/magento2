@@ -89,7 +89,7 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
                     ]
                 )
             );
-        $mapName = $this->temporaryTableService->createTemporaryTable(
+        $mapName = $this->temporaryTableService->createFromSelect(
             $select,
             $this->connection->getConnection(),
             [
