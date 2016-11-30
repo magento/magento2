@@ -37,16 +37,21 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $arguments
      * @param string $expectation
+     * @param array|string|int $serializeCalledWith
      * @param int $numSerializeCalled
      * @dataProvider serializeFieldsDataProvider
      */
-    public function testSerializeFields(array $arguments, $expectation, $numSerializeCalled = 1)
-    {
+    public function testSerializeFields(
+        array $arguments,
+        $expectation,
+        $serializeCalledWith,
+        $numSerializeCalled = 1
+    ) {
         /** @var DataObject $dataObject */
         list($dataObject, $field, $defaultValue, $unsetEmpty) = $arguments;
         $this->serializerMock->expects($this->exactly($numSerializeCalled))
             ->method('serialize')
-            ->with($dataObject->getData($field))
+            ->with($serializeCalledWith)
             ->willReturn($expectation);
         $this->abstractResource->_serializeField($dataObject, $field, $defaultValue, $unsetEmpty);
         $this->assertEquals($expectation, $dataObject->getData($field));
@@ -57,46 +62,60 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function serializeFieldsDataProvider()
     {
+        $array = ['a', 'b', 'c'];
+        $string = 'i am string';
+        $integer = 969;
+        $empty = '';
         $dataObject = new DataObject(
             [
-                'array' => ['a', 'b', 'c'],
-                'string' => 'i am string',
-                'int' => 969,
-                'empty_value' => '',
-                'empty_value_with_default' => ''
+                'array' => $array,
+                'string' => $string,
+                'integer' => $integer,
+                'empty' => $empty,
+                'empty_with_default' => ''
             ]
         );
         return [
             [
                 [$dataObject, 'array', null, false],
-                '["a","b","c"]'
+                '["a","b","c"]',
+                $array
             ],
             [
                 [$dataObject, 'string', null, false],
-                '"i am string"'
+                '"i am string"',
+                $string
             ],
             [
-                [$dataObject, 'int', null, false],
-                '969'
+                [$dataObject, 'integer', null, false],
+                '969',
+                $integer
             ],
             [
-                [$dataObject, 'empty_value', null, true],
+                [$dataObject, 'empty', null, true],
                 null,
+                $empty,
                 0
+            ],
+            [
+                [$dataObject, 'empty_with_default', 'default', false],
+                '"default"',
+                'default'
             ]
         ];
     }
 
     /**
      * @param array $arguments
-     * @param mixed $expectation
+     * @param array|string|int|boolean $expectation
+     * @param int $numUnserializeCalled
      * @dataProvider unserializeFieldsDataProvider
      */
-    public function testUnserializeFields(array $arguments, $expectation)
+    public function testUnserializeFields(array $arguments, $expectation, $numUnserializeCalled = 1)
     {
         /** @var DataObject $dataObject */
         list($dataObject, $field, $defaultValue) = $arguments;
-        $this->serializerMock->expects($this->once())
+        $this->serializerMock->expects($this->exactly($numUnserializeCalled))
             ->method('unserialize')
             ->with($dataObject->getData($field))
             ->willReturn($expectation);
@@ -113,10 +132,10 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             [
                 'array' => '["a","b","c"]',
                 'string' => '"i am string"',
-                'int' => '969',
-                'empty_value_with_default' => '""',
+                'integer' => '969',
+                'empty_with_default' => '""',
                 'not_serialized_string' => 'i am string',
-                'serialized_boolean_false' => 'false'
+                'serialized_boolean_false' => false
             ]
         );
         return [
@@ -129,8 +148,21 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
                 'i am string'
             ],
             [
-                [$dataObject, 'int', null],
+                [$dataObject, 'integer', null],
                 969
+            ],
+            [
+                [$dataObject, 'empty_with_default', 'default', false],
+                'default'
+            ],
+            [
+                [$dataObject, 'not_serialized_string', null],
+                'i am string'
+            ],
+            [
+                [$dataObject, 'serialized_boolean_false', null],
+                false,
+                0
             ]
         ];
     }
@@ -194,7 +226,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
         $this->abstractResource->commit();
     }
-    
+
     public function testCommitNotCompletedTransaction()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */

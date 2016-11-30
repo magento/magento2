@@ -8,7 +8,6 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Serialize\Serializer\Json;
 
 class AbstractResourceStub extends AbstractResource
 {
@@ -16,11 +15,6 @@ class AbstractResourceStub extends AbstractResource
      * @var AdapterInterface
      */
     private $connectionAdapter;
-
-    /**
-     * @var Json
-     */
-    protected $serializer;
 
     /**
      * Resource initialization
