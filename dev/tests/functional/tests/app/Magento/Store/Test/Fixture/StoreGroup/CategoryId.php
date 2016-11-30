@@ -16,11 +16,11 @@ use Magento\Catalog\Test\Fixture\Category;
 class CategoryId extends DataSource
 {
     /**
-     * Category fixture
+     * Category fixture.
      *
      * @var Category
      */
-    protected $category;
+    private $category;
 
     /**
      * @constructor
@@ -31,9 +31,9 @@ class CategoryId extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['fixture']) || isset($data['category'])) {
-            $this->category = isset($data['fixture']) ? $data['fixture'] : $data['category'];
-            $this->data = $this->category->getName();
+        if (isset($data['category']) && $data['category'] instanceof Category) {
+            $this->category = $data['category'];
+            $this->data = $data['category']->getName();
         } elseif (isset($data['dataset'])) {
             $category = $fixtureFactory->createByCode('category', ['dataset' => $data['dataset']]);
             /** @var Category $category */
@@ -46,7 +46,7 @@ class CategoryId extends DataSource
     }
 
     /**
-     * Return Category fixture
+     * Return Category fixture.
      *
      * @return Category
      */
