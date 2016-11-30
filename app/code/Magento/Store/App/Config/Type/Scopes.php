@@ -44,7 +44,7 @@ class Scopes implements ConfigTypeInterface
      */
     public function get($path = '')
     {
-        if (!$this->data->getData($path)) {
+        if (!$this->data->getData($path) || empty($path)) {
             $this->data->addData($this->source->get($path));
         }
 
