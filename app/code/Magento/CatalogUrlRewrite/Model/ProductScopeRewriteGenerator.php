@@ -112,7 +112,6 @@ class ProductScopeRewriteGenerator
      */
     public function generateForGlobalScope($productCategories, Product $product, $rootCategoryId = null)
     {
-        $urls = [];
         $productId = $product->getEntityId();
 
         foreach ($product->getStoreIds() as $id) {

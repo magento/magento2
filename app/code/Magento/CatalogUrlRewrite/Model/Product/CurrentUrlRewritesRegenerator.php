@@ -14,7 +14,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\CatalogUrlRewrite\Model\Map\ProductUrlRewriteMap;
+use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap;
 use Magento\CatalogUrlRewrite\Model\Map\MapPoolInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\ArrayMerger;
@@ -72,12 +72,13 @@ class CurrentUrlRewritesRegenerator
     public function generate($storeId, Product $product, ObjectRegistry $productCategories, $rootCategoryId = null)
     {
         if ($rootCategoryId) {
-            $productUrlRewriteMap = $this->mapPool->getMap(ProductUrlRewriteMap::class, $rootCategoryId);
+            $productUrlRewriteMap = $this->mapPool->getMap(UrlRewriteMap::class, $rootCategoryId);
 
             $currentUrlRewrites = $productUrlRewriteMap->getByIdentifiers(
                 [
                     UrlRewrite::STORE_ID => $storeId,
-                    UrlRewrite::ENTITY_ID => $product->getEntityId()
+                    UrlRewrite::ENTITY_ID => $product->getEntityId(),
+                    UrlRewrite::ENTITY_TYPE => UrlRewriteMap::ENTITY_TYPE_PRODUCT,
                 ]
             );
         } else {
@@ -85,7 +86,7 @@ class CurrentUrlRewritesRegenerator
                 [
                     UrlRewrite::STORE_ID => $storeId,
                     UrlRewrite::ENTITY_ID => $product->getEntityId(),
-                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteMap::ENTITY_TYPE,
+                    UrlRewrite::ENTITY_TYPE => UrlRewriteMap::ENTITY_TYPE_PRODUCT,
                 ]
             );
         }

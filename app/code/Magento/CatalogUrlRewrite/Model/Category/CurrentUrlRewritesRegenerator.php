@@ -12,7 +12,7 @@ use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\CatalogUrlRewrite\Model\Map\CategoryUrlRewriteMap;
+use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap;
 use Magento\CatalogUrlRewrite\Model\Map\MapPoolInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\ArrayMerger;
@@ -66,13 +66,14 @@ class CurrentUrlRewritesRegenerator
     public function generate($storeId, Category $category, $rootCategoryId = null)
     {
         if ($rootCategoryId) {
-            $categoryUrlRewriteMap = $this->mapPool->getMap(CategoryUrlRewriteMap::class, $rootCategoryId);
+            $categoryUrlRewriteMap = $this->mapPool->getMap(UrlRewriteMap::class, $rootCategoryId);
 
             /** @var UrlRewrite[] $currentUrlRewrites */
             $currentUrlRewrites = $categoryUrlRewriteMap->getByIdentifiers(
                 [
                     UrlRewrite::STORE_ID => $storeId,
-                    UrlRewrite::ENTITY_ID => $category->getEntityId()
+                    UrlRewrite::ENTITY_ID => $category->getEntityId(),
+                    UrlRewrite::ENTITY_TYPE => UrlRewriteMap::ENTITY_TYPE_CATEGORY,
                 ]
             );
         } else {
@@ -80,7 +81,7 @@ class CurrentUrlRewritesRegenerator
                 [
                     UrlRewrite::STORE_ID => $storeId,
                     UrlRewrite::ENTITY_ID => $category->getEntityId(),
-                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteMap::ENTITY_TYPE,
+                    UrlRewrite::ENTITY_TYPE => UrlRewriteMap::ENTITY_TYPE_CATEGORY,
                 ]
             );
         }
