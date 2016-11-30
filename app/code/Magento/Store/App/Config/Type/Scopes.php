@@ -44,7 +44,9 @@ class Scopes implements ConfigTypeInterface
      */
     public function get($path = '')
     {
-        if (!$this->data->getData($path) || empty($path)) {
+        $patchChunks = explode("/", $path);
+
+        if (!$this->data->getData($path) || count($patchChunks) == 1) {
             $this->data->addData($this->source->get($path));
         }
 
