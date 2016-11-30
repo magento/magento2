@@ -10,7 +10,7 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
  * Precondition:
@@ -42,13 +42,6 @@ class ShoppingCartPerCustomerTest extends Injectable
     private $checkoutCart;
 
     /**
-     * Admin cache page.
-     *
-     * @var AdminCache
-     */
-    private $adminCache;
-
-    /**
      * Fixture factory.
      *
      * @var FixtureFactory
@@ -56,21 +49,28 @@ class ShoppingCartPerCustomerTest extends Injectable
     private $fixtureFactory;
 
     /**
+     * Cli command to do operations with cache.
+     *
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * Inject data.
      *
      * @param CheckoutCart $checkoutCart
-     * @param AdminCache $adminCache
      * @param FixtureFactory $fixtureFactory
+     * @param Cache $cache
      * @return void
      */
     public function __inject(
         CheckoutCart $checkoutCart,
-        AdminCache $adminCache,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        Cache $cache
     ) {
         $this->checkoutCart = $checkoutCart;
-        $this->adminCache = $adminCache;
         $this->fixtureFactory = $fixtureFactory;
+        $this->cache = $cache;
     }
 
     /**
@@ -87,10 +87,7 @@ class ShoppingCartPerCustomerTest extends Injectable
         array $checkoutData
     ) {
         //Preconditions
-        $this->adminCache->open();
-        $this->adminCache->getActionsBlock()->flushMagentoCache();
-        $this->adminCache->getMessagesBlock()->waitSuccessMessage();
-
+        $this->cache->flush();
         $products = $this->objectManager->create(
             \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $productsData]
