@@ -7,103 +7,131 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var AbstractResourceStub
+     */
+    private $abstractResource;
+
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    protected function setUp()
+    {
+        $objectManager = new ObjectManager($this);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->abstractResource,
+            'serializer',
+            $this->serializerMock
+        );
+    }
+
+    /**
      * @param array $arguments
      * @param string $expectation
-     * @dataProvider serializableFieldsDataProvider
+     * @param int $numSerializeCalled
+     * @dataProvider serializeFieldsDataProvider
      */
-    public function testSerializeFields(array $arguments, $expectation)
+    public function testSerializeFields(array $arguments, $expectation, $numSerializeCalled = 1)
     {
         /** @var DataObject $dataObject */
         list($dataObject, $field, $defaultValue, $unsetEmpty) = $arguments;
-
-        $abstractResource = new AbstractResourceStub();
-
-        $abstractResource->_serializeField($dataObject, $field, $defaultValue, $unsetEmpty);
-
-        static::assertEquals($expectation, $dataObject->getDataByKey($field));
+        $this->serializerMock->expects($this->exactly($numSerializeCalled))
+            ->method('serialize')
+            ->with($dataObject->getData($field))
+            ->willReturn($expectation);
+        $this->abstractResource->_serializeField($dataObject, $field, $defaultValue, $unsetEmpty);
+        $this->assertEquals($expectation, $dataObject->getData($field));
     }
 
     /**
      * @return array
      */
-    public function serializableFieldsDataProvider()
+    public function serializeFieldsDataProvider()
     {
         $dataObject = new DataObject(
             [
-                'object' => new \stdClass(),
                 'array' => ['a', 'b', 'c'],
                 'string' => 'i am string',
                 'int' => 969,
-                'serialized_object' => 'O:8:"stdClass":0:{}',
                 'empty_value' => '',
                 'empty_value_with_default' => ''
             ]
         );
-
         return [
-            [[$dataObject, 'object', null, false], serialize($dataObject->getDataByKey('object'))],
-            [[$dataObject, 'array', null, false], serialize($dataObject->getDataByKey('array'))],
-            [[$dataObject, 'string', null, false], serialize($dataObject->getDataByKey('string'))],
-            [[$dataObject, 'int', null, false], serialize($dataObject->getDataByKey('int'))],
             [
-                [$dataObject, 'serialized_object', null, false],
-                serialize($dataObject->getDataByKey('serialized_object'))
+                [$dataObject, 'array', null, false],
+                '["a","b","c"]'
             ],
-            [[$dataObject, 'empty_value', null, true], null],
-            [[$dataObject, 'empty_value_with_default', new \stdClass(), false], 'O:8:"stdClass":0:{}'],
+            [
+                [$dataObject, 'string', null, false],
+                '"i am string"'
+            ],
+            [
+                [$dataObject, 'int', null, false],
+                '969'
+            ],
+            [
+                [$dataObject, 'empty_value', null, true],
+                null,
+                0
+            ]
         ];
     }
 
     /**
      * @param array $arguments
      * @param mixed $expectation
-     * @dataProvider unserializableFieldsDataProvider
+     * @dataProvider unserializeFieldsDataProvider
      */
     public function testUnserializeFields(array $arguments, $expectation)
     {
         /** @var DataObject $dataObject */
         list($dataObject, $field, $defaultValue) = $arguments;
-
-        $abstractResource = new AbstractResourceStub();
-
-        $abstractResource->_unserializeField($dataObject, $field, $defaultValue);
-
-        static::assertEquals($expectation, $dataObject->getDataByKey($field));
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($dataObject->getData($field))
+            ->willReturn($expectation);
+        $this->abstractResource->_unserializeField($dataObject, $field, $defaultValue);
+        $this->assertEquals($expectation, $dataObject->getData($field));
     }
 
     /**
      * @return array
      */
-    public function unserializableFieldsDataProvider()
+    public function unserializeFieldsDataProvider()
     {
         $dataObject = new DataObject(
             [
-                'object' => serialize(new \stdClass()),
-                'array' => serialize(['a', 'b', 'c']),
-                'string' => serialize('i am string'),
-                'int' => serialize(969),
-                'serialized_object' => serialize('O:8:"stdClass":0:{}'),
-                'empty_value_with_default' => serialize(''),
+                'array' => '["a","b","c"]',
+                'string' => '"i am string"',
+                'int' => '969',
+                'empty_value_with_default' => '""',
                 'not_serialized_string' => 'i am string',
-                'serialized_boolean_false' => serialize(false)
+                'serialized_boolean_false' => 'false'
             ]
         );
-
-        $defaultValue = new \stdClass();
-
         return [
-            [[$dataObject, 'object', null], unserialize($dataObject->getDataByKey('object'))],
-            [[$dataObject, 'array', null], unserialize($dataObject->getDataByKey('array'))],
-            [[$dataObject, 'string', null], unserialize($dataObject->getDataByKey('string'))],
-            [[$dataObject, 'int', null], unserialize($dataObject->getDataByKey('int'))],
-            [[$dataObject, 'serialized_object', null], unserialize($dataObject->getDataByKey('serialized_object'))],
-            [[$dataObject, 'empty_value_with_default', $defaultValue], $defaultValue],
-            [[$dataObject, 'not_serialized_string', null], 'i am string'],
-            [[$dataObject, 'serialized_boolean_false', null], false]
+            [
+                [$dataObject, 'array', null],
+                ['a', 'b', 'c']
+            ],
+            [
+                [$dataObject, 'string', null],
+                'i am string'
+            ],
+            [
+                [$dataObject, 'int', null],
+                969
+            ]
         ];
     }
     
@@ -116,32 +144,31 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $abstractResource = new AbstractResourceStub();
-        $abstractResource->setConnection($connection);
-        $abstractResource->addCommitCallback(
+        $this->abstractResource->setConnection($connection);
+        $this->abstractResource->addCommitCallback(
             function () use ($closureExpectation) {
                 $closureExpectation->setData(1);
             }
         );
 
-        $abstractResource->addCommitCallback(
+        $this->abstractResource->addCommitCallback(
             function () use ($closureExpectation) {
                 $closureExpectation->getData();
             }
         );
 
-        $connection->expects(static::once())
+        $connection->expects($this->once())
             ->method('commit');
-        $connection->expects(static::once())
+        $connection->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(0);
-        $closureExpectation->expects(static::once())
+        $closureExpectation->expects($this->once())
             ->method('setData')
             ->with(1);
-        $closureExpectation->expects(static::once())
+        $closureExpectation->expects($this->once())
             ->method('getData');
 
-        $abstractResource->commit();
+        $this->abstractResource->commit();
     }
 
     /**
@@ -152,21 +179,20 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
         $connection = $this->getMock(AdapterInterface::class);
 
-        $abstractResource = new AbstractResourceStub();
-        $abstractResource->setConnection($connection);
-        $abstractResource->addCommitCallback(
+        $this->abstractResource->setConnection($connection);
+        $this->abstractResource->addCommitCallback(
             function () {
                 throw new \Exception();
             }
         );
 
-        $connection->expects(static::once())
+        $connection->expects($this->once())
             ->method('commit');
-        $connection->expects(static::once())
+        $connection->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(0);
 
-        $abstractResource->commit();
+        $this->abstractResource->commit();
     }
     
     public function testCommitNotCompletedTransaction()
@@ -178,24 +204,23 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $abstractResource = new AbstractResourceStub();
-        $abstractResource->setConnection($connection);
-        $abstractResource->addCommitCallback(
+        $this->abstractResource->setConnection($connection);
+        $this->abstractResource->addCommitCallback(
             function () use ($closureExpectation) {
                 $closureExpectation->setData(1);
             }
         );
 
-        $connection->expects(static::once())
+        $connection->expects($this->once())
             ->method('commit');
-        $connection->expects(static::once())
+        $connection->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(1);
 
-        $closureExpectation->expects(static::never())
+        $closureExpectation->expects($this->never())
             ->method('setData')
             ->with(1);
 
-        $abstractResource->commit();
+        $this->abstractResource->commit();
     }
 }
