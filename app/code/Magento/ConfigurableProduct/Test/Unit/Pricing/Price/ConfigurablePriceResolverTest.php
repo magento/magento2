@@ -53,8 +53,6 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * situation: There are no used products, thus there are no prices
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testResolvePriceWithNoPrices()
     {
@@ -62,11 +60,11 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Product::class
         )->disableOriginalConstructor()->getMock();
 
-        $product->expects($this->once())->method('getSku')->willReturn('Kiwi');
+        $product->expects($this->never())->method('getSku');
 
         $this->lowestPriceOptionsProvider->expects($this->once())->method('getProducts')->willReturn([]);
 
-        $this->resolver->resolvePrice($product);
+        $this->assertNull($this->resolver->resolvePrice($product));
     }
 
     /**
