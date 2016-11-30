@@ -7,6 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock;
 
 /**
  * Order information tab block.
@@ -40,12 +41,12 @@ class Info extends Tab
     /**
      * Returns Payment Information block.
      *
-     * @return \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock
+     * @return PaymentInfoBlock
      */
     public function getPaymentInfoBlock()
     {
         return $this->blockFactory->create(
-            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock::class,
+            PaymentInfoBlock::class,
             ['element' => $this->_rootElement->find($this->paymentInfoBlockSelector)]
         );
     }

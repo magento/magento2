@@ -49,7 +49,11 @@
                 <item name="Triggered Fraud Filters" xsi:type="string">Under review by Fraud Service</item>
                 <item name="International AVS response" xsi:type="string">#N: No Details matched</item>
             </data>
+            <data name="status" xsi:type="string">Processing</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
         </variation>
     </testCase>

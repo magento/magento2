@@ -9,19 +9,22 @@ namespace Magento\Braintree\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
+/**
+ * Assert that 3D Secure information is present on order page in Admin.
+ */
 class Assert3dSecureInfoIsPresent extends AbstractConstraint
 {
     /**
-     * Assert that 3D Secure information is  present on order page in Admin.
+     * Assert that 3D Secure information is present on order page in Admin.
      *
-     * @param SalesOrderView $salesOrderForm
+     * @param SalesOrderView $salesOrderView
      * @param array $paymentInformation
      * @return void
      */
-    public function processAssert(SalesOrderView $salesOrderForm, array $paymentInformation)
+    public function processAssert(SalesOrderView $salesOrderView, array $paymentInformation)
     {
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
-        $infoTab = $salesOrderForm->getOrderForm()->openTab('info')->getTab('info');
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         $actualPaymentInformation = $infoTab->getPaymentInfoBlock()->getData();
         foreach ($paymentInformation as $key => $value) {
             \PHPUnit_Framework_Assert::assertArrayHasKey(

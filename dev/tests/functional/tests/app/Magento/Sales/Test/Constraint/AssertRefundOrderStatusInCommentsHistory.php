@@ -11,7 +11,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Class AssertRefundOrderStatusInCommentsHistory
+ * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
  */
 class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
 {

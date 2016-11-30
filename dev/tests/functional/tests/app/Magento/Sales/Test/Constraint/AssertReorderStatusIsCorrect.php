@@ -12,13 +12,12 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertReorderStatusIsCorrect
- * Assert that status is correct on order page in backend
+ * Assert that status is correct on order page in admin panel.
  */
 class AssertReorderStatusIsCorrect extends AbstractConstraint
 {
     /**
-     * Assert that status is correct on order page in backend (same with value of orderStatus variable)
+     * Assert that status is correct on order page in admin panel (same with value of orderStatus variable).
      *
      * @param string $previousOrderStatus
      * @param OrderInjectable $order
@@ -45,7 +44,7 @@ class AssertReorderStatusIsCorrect extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
