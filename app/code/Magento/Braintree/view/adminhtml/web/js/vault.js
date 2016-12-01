@@ -28,7 +28,7 @@ define([
             self.$selector = $('#' + self.selector);
             self.$container =  $('#' + self.container);
             self.$selector.on(
-                'setVaultNotActive',
+                'setVaultNotActive.' + self.getCode(),
                 function () {
                     self.$selector.off('submitOrder.' + self.getCode());
                 }

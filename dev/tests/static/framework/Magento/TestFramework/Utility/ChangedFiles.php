@@ -3,10 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\TestFramework\Utility;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\TestFramework\Utility\File\RegexIteratorFactory;
 
 /**
  * A helper to gather various changed files
@@ -23,7 +23,7 @@ class ChangedFiles
      */
     public static function getPhpFiles($changedFilesList)
     {
-        $fileHelper = \Magento\Framework\App\Utility\Files::init();
+        $fileUtilities = new File(Files::init(), new RegexIteratorFactory());
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
             $phpFiles = [];
             foreach (glob($changedFilesList) as $listFile) {
@@ -36,27 +36,11 @@ class ChangedFiles
                 }
             );
             if (!empty($phpFiles)) {
-                $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
-                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles(
-                    Files::INCLUDE_APP_CODE
-                    | Files::INCLUDE_PUB_CODE
-                    | Files::INCLUDE_LIBS
-                    | Files::INCLUDE_TEMPLATES
-                    | Files::INCLUDE_TESTS
-                    | Files::AS_DATA_SET
-                    | Files::INCLUDE_NON_CLASSES
-                ));
+                $phpFiles = Files::composeDataSets($phpFiles);
+                $phpFiles = array_intersect_key($phpFiles, $fileUtilities->getPhpFiles());
             }
         } else {
-            $phpFiles = $fileHelper->getPhpFiles(
-                Files::INCLUDE_APP_CODE
-                | Files::INCLUDE_PUB_CODE
-                | Files::INCLUDE_LIBS
-                | Files::INCLUDE_TEMPLATES
-                | Files::INCLUDE_TESTS
-                | Files::AS_DATA_SET
-                | Files::INCLUDE_NON_CLASSES
-            );
+            $phpFiles = $fileUtilities->getPhpFiles();
         }
 
         return $phpFiles;
