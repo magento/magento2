@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save
@@ -26,6 +27,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $layoutFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -43,6 +49,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+
+        if ($this->storeManager == null){
+            $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
+        }
     }
 
     /**
@@ -82,6 +92,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $storeId = $this->getRequest()->getParam('store');
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
         if ($data) {
