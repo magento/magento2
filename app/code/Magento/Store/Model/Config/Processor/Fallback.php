@@ -6,6 +6,7 @@
 namespace Magento\Store\Model\Config\Processor;
 
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -42,14 +43,21 @@ class Fallback implements PostProcessorInterface
      * @var array
      */
     private $websiteData = [];
+
     /**
      * @var Store
      */
     private $storeResource;
+
     /**
      * @var Website
      */
     private $websiteResource;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * Fallback constructor.
@@ -59,12 +67,14 @@ class Fallback implements PostProcessorInterface
         Scopes $scopes,
         ResourceConnection $resourceConnection,
         Store $storeResource,
-        Website $websiteResource
+        Website $websiteResource,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->scopes = $scopes;
         $this->resourceConnection = $resourceConnection;
         $this->storeResource = $storeResource;
         $this->websiteResource = $websiteResource;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -72,8 +82,13 @@ class Fallback implements PostProcessorInterface
      */
     public function process(array $data)
     {
-        $this->storeData = $this->storeResource->readAllStores();
-        $this->websiteData = $this->websiteResource->readAllWebsites();
+        if ($this->deploymentConfig->isDbAvailable()) {//read only from db
+            $this->storeData = $this->storeResource->readAllStores();
+            $this->websiteData = $this->websiteResource->readAllWebsites();
+        } else {
+            $this->storeData = $this->scopes->get('stores');
+            $this->websiteData = $this->scopes->get('websites');
+        }
 
         $defaultConfig = isset($data['default']) ? $data['default'] : [];
         $result = [
