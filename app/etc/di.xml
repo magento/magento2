@@ -956,11 +956,6 @@
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\ScopePool">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Config\Initial">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\Config\Initial\Reader\Proxy</argument>

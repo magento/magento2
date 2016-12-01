@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Setup\Module\I18n\Locale;
 
 /**
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterTest extends \PHPUnit_Framework_TestCase

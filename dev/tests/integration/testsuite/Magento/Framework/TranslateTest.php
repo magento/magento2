@@ -9,6 +9,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
+ * @magentoAppIsolation enabled
+ * @magentoCache all disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TranslateTest extends \PHPUnit_Framework_TestCase

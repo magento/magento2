@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Class AttributeCache
@@ -120,7 +121,7 @@ class AttributeCache
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
-                    \Magento\Framework\App\Config\ScopePool::CACHE_TAG
+                    \Magento\Config\App\Config\Type\System::CACHE_TAG
                 ]
             );
         }
