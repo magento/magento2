@@ -35,16 +35,20 @@ class FunctionDetector
     {
         $result = [];
         $regexp = $this->composeRegexp($functions);
+
         if ($regexp) {
+            $fileContent = \Magento\TestFramework\Utility\ChangedFiles::getChangedContent($filePath);
+            $matches = preg_grep($regexp, explode("\n", $fileContent));
             $file = file($filePath);
-            array_unshift($file, '');
-            $lines = preg_grep(
-                $regexp,
-                $file
-            );
-            foreach ($lines as $lineNumber => $line) {
-                if (preg_match_all($regexp, $line, $matches)) {
-                    $result[$lineNumber] = $matches[1];
+            if (!empty($matches)) {
+                foreach ($matches as $line) {
+                    $actualFunctions = [];
+                    foreach ($functions as $function) {
+                        if (false !== strpos($line, $function)) {
+                            $actualFunctions[] = $function;
+                        }
+                    }
+                    $result[array_search($line . "\n", $file) + 1] = $actualFunctions;
                 }
             }
         }
