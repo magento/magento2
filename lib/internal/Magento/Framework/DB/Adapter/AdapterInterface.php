@@ -256,7 +256,7 @@ interface AdapterInterface
      * @param string $columnName
      * @param array|string $definition  string specific or universal array DB Server definition
      * @param string $schemaName
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return true|\Zend_Db_Statement_Pdo
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null);
 
