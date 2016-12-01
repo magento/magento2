@@ -154,11 +154,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private function prepareGetJsonSwatchConfig()
     {
         $product1 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $product1->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
         $product1->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(1);
 
         $product2 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $product2->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
         $product2->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(3);
 
         $simpleProducts = [$product1, $product2];
@@ -169,7 +167,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $configurableType->expects($this->atLeastOnce())->method('getUsedProducts')->with($this->product, null)
+        $configurableType->expects($this->atLeastOnce())->method('getSalableUsedProducts')->with($this->product, null)
             ->willReturn($simpleProducts);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 

@@ -343,8 +343,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->attributeColFactory,
             $this->typeFactory,
             $this->linkTypeProvider,
-            $this->rowCustomizer,
-            $this->metadataPool
+            $this->rowCustomizer
         );
 
         $this->object = new StubProduct();

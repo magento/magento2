@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Helper;
 
+use Magento\Braintree\Model\Adminhtml\System\Config\Country as CountryConfig;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 
 /**
@@ -13,12 +14,12 @@ use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 class Country
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
+     * @var CollectionFactory
      */
     private $collectionFactory;
 
     /**
-     * @var \Magento\Braintree\Model\Adminhtml\System\Config\Country
+     * @var CountryConfig
      */
     private $countryConfig;
 
@@ -28,13 +29,11 @@ class Country
     private $countries;
 
     /**
-     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $factory
-     * @param \Magento\Braintree\Model\Adminhtml\System\Config\Country $countryConfig
+     * @param CollectionFactory $factory
+     * @param CountryConfig $countryConfig
      */
-    public function __construct(
-        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $factory,
-        \Magento\Braintree\Model\Adminhtml\System\Config\Country $countryConfig
-    ) {
+    public function __construct(CollectionFactory $factory, CountryConfig $countryConfig)
+    {
         $this->collectionFactory = $factory;
         $this->countryConfig = $countryConfig;
     }
@@ -52,6 +51,7 @@ class Country
                 ->loadData()
                 ->toOptionArray(false);
         }
+
         return $this->countries;
     }
 }

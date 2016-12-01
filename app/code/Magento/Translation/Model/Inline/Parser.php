@@ -127,6 +127,15 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     private $cacheManager;
 
     /**
+     * @var array
+     */
+    private $cacheTypes = [
+        \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
+        \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+        \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER
+    ];
+
+    /**
      * @return \Magento\Translation\Model\Inline\CacheManager
      *
      * @deprecated
@@ -178,7 +187,10 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         if (!$this->_translateInline->isAllowed()) {
             return ['inline' => 'not allowed'];
         }
-        $this->_appCache->invalidate(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER);
+
+        foreach ($this->cacheTypes as $cacheType) {
+            $this->_appCache->invalidate($cacheType);
+        }
 
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);

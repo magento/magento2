@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
  */
 class ScopePool
 {
@@ -50,6 +52,11 @@ class ScopePool
     private $request;
 
     /**
+     * @var ScopeCodeResolver
+     */
+    private $scopeCodeResolver;
+
+    /**
      * @param \Magento\Framework\App\Config\Scope\ReaderPoolInterface $readerPool
      * @param DataFactory $dataFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -71,14 +78,27 @@ class ScopePool
     }
 
     /**
+     * @deprecated
      * @return RequestInterface
      */
     private function getRequest()
     {
         if ($this->request === null) {
-            $this->request = \Magento\Framework\App\ObjectManager::getInstance()->get(RequestInterface::class);
+            $this->request = ObjectManager::getInstance()->get(RequestInterface::class);
         }
         return $this->request;
+    }
+
+    /**
+     * @deprecated
+     * @return ScopeCodeResolver
+     */
+    public function getScopeCodeResolver()
+    {
+        if ($this->scopeCodeResolver === null) {
+            $this->scopeCodeResolver = ObjectManager::getInstance()->get(ScopeCodeResolver::class);
+        }
+        return $this->scopeCodeResolver;
     }
     
     /**
@@ -113,6 +133,7 @@ class ScopePool
                 } else {
                     $data = $reader->read($scopeCode);
                 }
+
                 $this->_cache->save(serialize($data), $cacheKey, [self::CACHE_TAG]);
             }
             $this->_scopes[$code] = $this->_dataFactory->create(['data' => $data]);
@@ -140,17 +161,6 @@ class ScopePool
      */
     protected function _getScopeCode($scopeType, $scopeCode)
     {
-        if (($scopeCode === null || is_numeric($scopeCode))
-            && $scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-        ) {
-            $scopeResolver = $this->_scopeResolverPool->get($scopeType);
-            $scopeCode = $scopeResolver->getScope($scopeCode);
-        }
-
-        if ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
-            $scopeCode = $scopeCode->getCode();
-        }
-
-        return $scopeCode;
+        return $this->getScopeCodeResolver()->resolve($scopeType, $scopeCode);
     }
 }
