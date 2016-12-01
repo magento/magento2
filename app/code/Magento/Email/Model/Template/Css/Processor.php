@@ -8,6 +8,9 @@ namespace Magento\Email\Model\Template\Css;
 use Magento\Framework\View\Asset\NotationResolver\Variable;
 use Magento\Framework\View\Asset\Repository;
 
+/**
+ * Class for processing css placeholders
+ */
 class Processor
 {
     /**

@@ -8,6 +8,7 @@ namespace Magento\Framework;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * @magentoAppIsolation enabled
  * @magentoCache all disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

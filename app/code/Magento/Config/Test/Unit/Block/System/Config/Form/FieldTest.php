@@ -5,6 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form;
 
+/**
+ * Test how class render field html element in Stores Configuration
+ *
+ * @package Magento\Config\Test\Unit\Block\System\Config\Form
+ */
 class FieldTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -69,6 +74,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
                 'getScope',
                 'getScopeLabel',
                 'getInherit',
+                'getIsDisableInheritance',
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
                 'setDisabled',
@@ -185,6 +191,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_elementMock->expects($this->any())->method('getCanUseWebsiteValue')->will($this->returnValue(true));
         $this->_elementMock->expects($this->any())->method('getCanUseDefaultValue')->will($this->returnValue(true));
         $this->_elementMock->expects($this->once())->method('setDisabled')->with(true);
+        $this->_elementMock->expects($this->once())->method('getIsDisableInheritance')->willReturn(true);
 
         $expected = '<td class="use-default">';
         $expected .= '<input id="' .
@@ -192,7 +199,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             '_inherit" name="' .
             $this->_testData['name'] .
             '[inherit]" type="checkbox" value="1"' .
-            ' class="checkbox config-inherit" checked="checked"' .
+            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' .
             ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
 
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
