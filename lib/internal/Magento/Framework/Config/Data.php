@@ -48,21 +48,6 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $_data = [];
 
     /**
-     * @var ReaderInterface
-     */
-    private $reader;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var string
-     */
-    private $cacheId;
-
-    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -74,9 +59,10 @@ class Data implements \Magento\Framework\Config\DataInterface
         CacheInterface $cache,
         $cacheId
     ) {
-        $this->reader = $reader;
-        $this->cache = $cache;
-        $this->cacheId = $cacheId;
+        $this->_reader = $reader;
+        $this->_cache = $cache;
+        $this->_cacheId = $cacheId;
+
         $this->initData();
     }
 
@@ -86,10 +72,10 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     protected function initData()
     {
-        $data = $this->cache->load($this->cacheId);
+        $data = $this->_cache->load($this->_cacheId);
         if (false === $data) {
-            $data = $this->reader->read();
-            $this->cache->save(serialize($data), $this->cacheId, $this->cacheTags);
+            $data = $this->_reader->read();
+            $this->_cache->save(serialize($data), $this->_cacheId, $this->cacheTags);
         } else {
             $data = unserialize($data);
         }
@@ -137,6 +123,6 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     public function reset()
     {
-        $this->cache->remove($this->cacheId);
+        $this->_cache->remove($this->_cacheId);
     }
 }

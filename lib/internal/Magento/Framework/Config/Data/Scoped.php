@@ -15,27 +15,6 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_configScope;
 
     /**
-     * Configuration reader
-     *
-     * @var \Magento\Framework\Config\ReaderInterface
-     */
-    protected $_reader;
-
-    /**
-     * Configuration cache
-     *
-     * @var \Magento\Framework\Config\CacheInterface
-     */
-    protected $_cache;
-
-    /**
-     * Cache tag
-     *
-     * @var string
-     */
-    protected $_cacheId;
-
-    /**
      * Scope priority loading scheme
      *
      * @var string[]
@@ -63,8 +42,8 @@ class Scoped extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId
     ) {
-        $this->_reader = $reader;
         $this->_configScope = $configScope;
+        $this->_reader = $reader;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
     }
