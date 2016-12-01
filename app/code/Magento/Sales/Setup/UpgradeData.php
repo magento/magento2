@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Setup;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -25,15 +26,23 @@ class UpgradeData implements UpgradeDataInterface
     protected $eavConfig;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param SalesSetupFactory $salesSetupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param Json $serializer
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        Json $serializer
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -89,7 +98,45 @@ class UpgradeData implements UpgradeDataInterface
                 \Magento\Eav\Model\Entity\Increment\NumericValue::class
             );
         }
+
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+            $this->upgradeVersionTwoZeroFive($setup);
+        }
+
         $this->eavConfig->clear();
         $setup->endSetup();
+    }
+
+    /**
+     * Upgrade version 2.0.5
+     *
+     * @param ModuleDataSetupInterface $setup
+     */
+    private function upgradeVersionTwoZeroFive(ModuleDataSetupInterface $setup)
+    {
+        $orderItemTable = $setup->getTable('sales_order_item');
+
+        $select = $setup->getConnection()->select()->from(
+            $orderItemTable,
+            ['item_id', 'product_options']
+        )->where('product_options is not null');
+
+        $orderItems = $setup->getConnection()->fetchAll($select);
+        foreach ($orderItems as $orderItem) {
+            $bind = ['product_options' => $this->convertData($orderItem['product_options'])];
+            $where = ['item_id = ?' => (int)$orderItem['item_id']];
+            $setup->getConnection()->update($orderItemTable, $bind, $where);
+        }
+    }
+
+    /**
+     * Convert serialized data to json string
+     *
+     * @param string $data
+     * @return string
+     */
+    private function convertData($data)
+    {
+        return $this->serializer->serialize(unserialize($data));
     }
 }
