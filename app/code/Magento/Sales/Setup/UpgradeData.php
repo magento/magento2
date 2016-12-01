@@ -3,13 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Model\Config;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -18,12 +18,12 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @var SalesSetupFactory
      */
-    protected $salesSetupFactory;
+    private $salesSetupFactory;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
-    protected $eavConfig;
+    private $eavConfig;
 
     /**
      * @var Json
@@ -31,13 +31,15 @@ class UpgradeData implements UpgradeDataInterface
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param SalesSetupFactory $salesSetupFactory
-     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param Config $eavConfig
      * @param Json $serializer
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
-        \Magento\Eav\Model\Config $eavConfig,
+        Config $eavConfig,
         Json $serializer
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
@@ -47,90 +49,109 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-
-        /** @var SalesSetup $salesSetup */
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
-
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $salesSetup->updateEntityType(
-                \Magento\Sales\Model\Order::ENTITY,
-                'entity_model',
-                \Magento\Sales\Model\ResourceModel\Order::class
-            );
-            $salesSetup->updateEntityType(
-                \Magento\Sales\Model\Order::ENTITY,
-                'increment_model',
-                \Magento\Eav\Model\Entity\Increment\NumericValue::class
-            );
-            $salesSetup->updateEntityType(
-                'invoice',
-                'entity_model',
-                \Magento\Sales\Model\ResourceModel\Order::class
-            );
-            $salesSetup->updateEntityType(
-                'invoice',
-                'increment_model',
-                \Magento\Eav\Model\Entity\Increment\NumericValue::class
-            );
-            $salesSetup->updateEntityType(
-                'creditmemo',
-                'entity_model',
-                \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
-            );
-            $salesSetup->updateEntityType(
-                'creditmemo',
-                'increment_model',
-                \Magento\Eav\Model\Entity\Increment\NumericValue::class
-            );
-            $salesSetup->updateEntityType(
-                'shipment',
-                'entity_model',
-                \Magento\Sales\Model\ResourceModel\Order\Shipment::class
-            );
-            $salesSetup->updateEntityType(
-                'shipment',
-                'increment_model',
-                \Magento\Eav\Model\Entity\Increment\NumericValue::class
-            );
+            $this->upgradeToTwoZeroOne($salesSetup);
         }
-
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
-            $this->upgradeVersionTwoZeroFive($setup);
+            $this->upgradeToVersionTwoZeroFive($setup);
         }
-
         $this->eavConfig->clear();
         $setup->endSetup();
     }
 
     /**
-     * Upgrade version 2.0.5
+     * Upgrade to version 2.0.1
+     *
+     * @param SalesSetup $setup
+     * @return void
+     */
+    private function upgradeToTwoZeroOne(SalesSetup $setup)
+    {
+        $setup->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $setup->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $setup->updateEntityType(
+            'invoice',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $setup->updateEntityType(
+            'invoice',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $setup->updateEntityType(
+            'creditmemo',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
+        );
+        $setup->updateEntityType(
+            'creditmemo',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $setup->updateEntityType(
+            'shipment',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment::class
+        );
+        $setup->updateEntityType(
+            'shipment',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+    }
+
+    /**
+     * Upgrade to version 2.0.5
      *
      * @param ModuleDataSetupInterface $setup
+     * @return void
      */
-    private function upgradeVersionTwoZeroFive(ModuleDataSetupInterface $setup)
+    private function upgradeToVersionTwoZeroFive(ModuleDataSetupInterface $setup)
     {
-        $orderItemTable = $setup->getTable('sales_order_item');
+        $this->changeFieldFormat($setup, 'sales_order_item', 'item_id', 'product_options');
+        $this->changeFieldFormat($setup, 'quote_payment', 'payment_id', 'additional_information');
+    }
 
-        $select = $setup->getConnection()->select()->from(
-            $orderItemTable,
-            ['item_id', 'product_options']
-        )->where('product_options is not null');
-
-        $orderItems = $setup->getConnection()->fetchAll($select);
-        foreach ($orderItems as $orderItem) {
-            $bind = ['product_options' => $this->convertData($orderItem['product_options'])];
-            $where = ['item_id = ?' => (int)$orderItem['item_id']];
-            $setup->getConnection()->update($orderItemTable, $bind, $where);
+    /**
+     * Change format of the field for the table
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param string $tableName
+     * @param string $identifier
+     * @param string $field
+     * @return void
+     */
+    private function changeFieldFormat(ModuleDataSetupInterface $setup, $tableName, $identifier, $field)
+    {
+        $table = $setup->getTable($tableName);
+        $select = $setup->getConnection()
+            ->select()
+            ->from($table, [$identifier, $field])
+            ->where($field . ' IS NOT NULL');
+        $items = $setup->getConnection()->fetchAll($select);
+        foreach ($items as $item) {
+            $bind = [$field => $this->convertData($item[$field])];
+            $where = [$identifier . ' = ?' => (int) $item[$identifier]];
+            $setup->getConnection()->update($table, $bind, $where);
         }
     }
 
     /**
-     * Convert serialized data to json string
+     * Convert from serialized to json format
      *
      * @param string $data
      * @return string
