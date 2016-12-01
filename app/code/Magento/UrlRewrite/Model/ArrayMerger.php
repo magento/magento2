@@ -12,7 +12,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class ArrayMerger
 {
-
     /**
      * @var $rewritesArray[]
      */
@@ -38,7 +37,7 @@ class ArrayMerger
     }
 
     /**
-     * Retrieves data
+     * Returns the data added and resets the container to an empty array
      *
      * @return UrlRewrite[]
      */
