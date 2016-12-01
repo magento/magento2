@@ -266,7 +266,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection('write');
         $this->uploaderHelper = $uploaderHelper;
         $this->downloadableHelper = $downloadableHelper;
     }

@@ -6,6 +6,7 @@
 namespace Magento\Framework\Interception\Test\Unit\PluginList;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -38,14 +39,19 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
+    /**
      * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface||\PHPUnit_Framework_MockObject_MockObject
      */
-    private $loggerMock;
+    private $objectManagerMock;
 
     protected function setUp()
     {
@@ -66,8 +72,10 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnArgument(0));
+        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnArgument(0);
         $this->serializerMock = $this->getMock(SerializerInterface::class);
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
@@ -82,7 +90,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
                 'relations' => new \Magento\Framework\ObjectManager\Relations\Runtime(),
                 'omConfig' => $omConfigMock,
                 'definitions' => new \Magento\Framework\Interception\Definition\Runtime(),
-                'objectManager' => $objectManagerMock,
+                'objectManager' => $this->objectManagerMock,
                 'classDefinitions' => $definitions,
                 'scopePriorityScheme' => ['global'],
                 'cacheId' => 'interception',
@@ -234,7 +242,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadScopedDataNotCached()
     {
-        $this->configScopeMock->expects($this->exactly(2))
+        $this->configScopeMock->expects($this->exactly(3))
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
         $this->serializerMock->expects($this->once())
@@ -295,23 +303,23 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadScopeDataWithEmptyData()
     {
-        $this->_objectManagerMock->expects($this->any())
+        $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnArgument(0));
-        $this->_configScopeMock->expects($this->any())
+        $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->will($this->returnValue('emptyscope'));
 
         $this->assertEquals(
             [4 => ['simple_plugin']],
-            $this->_model->getNext(
+            $this->object->getNext(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'getName'
             )
         );
         $this->assertEquals(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
-            $this->_model->getPlugin(
+            $this->object->getPlugin(
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                 'simple_plugin'
             )

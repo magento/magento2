@@ -7,7 +7,6 @@
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';

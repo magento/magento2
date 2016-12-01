@@ -5,16 +5,8 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    private $objectManager;
-
     /**
      * @var \Magento\SalesRule\Model\Rule
      */
@@ -37,7 +29,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->coupon = $this->getMockBuilder(\Magento\SalesRule\Model\Coupon::class)
             ->disableOriginalConstructor()
@@ -64,7 +56,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->model = $this->objectManager->getObject(
+        $this->model = $objectManager->getObject(
             \Magento\SalesRule\Model\Rule::class,
             [
                 'couponFactory' => $couponFactory,
