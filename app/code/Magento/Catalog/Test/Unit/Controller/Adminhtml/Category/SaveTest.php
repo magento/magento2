@@ -326,7 +326,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getStore', 'getRootCategoryId']
+            ['getStore', 'getRootCategoryId', 'setCurrentStore']
         );
         /**
          * @var \Magento\Framework\View\Layout
@@ -364,6 +364,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        /**
+         * @var \Magento\Store\Model\Store
+         * |\PHPUnit_Framework_MockObject_MockObject $storeMock
+         */
+        $storeMock = $this->getMock(
+            \Magento\Store\Model\Store::class,
+            [
+                'getCode',
+            ],
+            [],
+            '',
+            false
+        );
+
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($resultRedirectMock));
@@ -379,6 +393,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
+
+        $storeMock->expects($this->once())
+            ->method('getCode')
+            ->will($this->returnValue('admin'));
+
+        $storeManagerMock->expects($this->once())
+            ->method('setCurrentStore')
+            ->with('admin');
+
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
             ->will($this->returnValue($categoryMock));
@@ -441,15 +464,23 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         if (!$parentId) {
             if ($storeId) {
-                $storeManagerMock->expects($this->once())
+                $storeManagerMock->expects($this->exactly(2))
                     ->method('getStore')
                     ->with($storeId)
-                    ->will($this->returnSelf());
+                    ->willReturnOnConsecutiveCalls(
+                        $storeMock,
+                        $this->returnSelf()
+                    );
                 $storeManagerMock->expects($this->once())
                     ->method('getRootCategoryId')
                     ->will($this->returnValue($rootCategoryId));
                 $parentId = $rootCategoryId;
             }
+        } else {
+            $storeManagerMock->expects($this->once())
+                ->method('getStore')
+                ->with($storeId)
+                ->will($this->returnValue($storeMock));
         }
         $categoryMock->expects($this->any())
             ->method('load')
