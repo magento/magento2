@@ -36,22 +36,64 @@ class FunctionDetector
         $result = [];
         $regexp = $this->composeRegexp($functions);
 
-        if ($regexp) {
-            $fileContent = \Magento\TestFramework\Utility\ChangedFiles::getChangedContent($filePath);
-            $matches = preg_grep($regexp, explode("\n", $fileContent));
-            $file = file($filePath);
-            if (!empty($matches)) {
-                foreach ($matches as $line) {
-                    $actualFunctions = [];
-                    foreach ($functions as $function) {
-                        if (false !== strpos($line, $function)) {
-                            $actualFunctions[] = $function;
-                        }
+        if (!$regexp) {
+            return $result;
+        }
+
+        $fileContent = \Magento\TestFramework\Utility\ChangedFiles::getChangedContent($filePath);
+        $file = file($filePath);
+
+        return $fileContent
+            ? $this->grepChangedContent($file, $regexp, $functions, $fileContent)
+            : $this->grepFile($file, $regexp);
+    }
+
+    /**
+     * Grep only changed content.
+     *
+     * @param array $file
+     * @param string $regexp
+     * @param string[] $functions
+     * @param string $fileContent
+     * @return array
+     */
+    public function grepChangedContent(array $file, $regexp, $functions, $fileContent)
+    {
+        $result = [];
+        $matches = preg_grep($regexp, explode("\n", $fileContent));
+        if (!empty($matches)) {
+            foreach ($matches as $line) {
+                $actualFunctions = [];
+                foreach ($functions as $function) {
+                    if (false !== strpos($line, $function)) {
+                        $actualFunctions[] = $function;
                     }
-                    $result[array_search($line . "\n", $file) + 1] = $actualFunctions;
                 }
+                $result[array_search($line . "\n", $file) + 1] = $actualFunctions;
             }
         }
+
+        return $result;
+    }
+
+    /**
+     * Grep File.
+     *
+     * @param array $file
+     * @param string $regexp
+     * @return array
+     */
+    public function grepFile(array $file, $regexp)
+    {
+        $result = [];
+        array_unshift($file, '');
+        $lines = preg_grep($regexp, $file);
+        foreach ($lines as $lineNumber => $line) {
+            if (preg_match_all($regexp, $line, $matches)) {
+                $result[$lineNumber] = $matches[1];
+            }
+        }
+
         return $result;
     }
 
