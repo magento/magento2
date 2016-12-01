@@ -14,6 +14,11 @@ namespace Magento\Store\Model\ResourceModel;
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var array
+     */
+    private $websitesCache;
+
+    /**
      * Define main table
      *
      * @return void
@@ -39,13 +44,17 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return array
      */
-    public function readAlllWebsites()
+    public function readAllWebsites()
     {
-        $select = $this->getConnection()
-            ->select()
-            ->from($this->getTable('store_website'));
+        if (!$this->websitesCache) {
+            $select = $this->getConnection()
+                ->select()
+                ->from($this->getTable('store_website'));
 
-        return $this->getConnection()->fetchAll($select);
+            $this->websitesCache = $this->getConnection()->fetchAll($select);
+        }
+
+        return $this->websitesCache;
     }
 
     /**

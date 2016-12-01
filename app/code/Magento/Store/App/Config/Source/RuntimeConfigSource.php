@@ -7,9 +7,12 @@ namespace Magento\Store\App\Config\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Store\Model\Group;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 use Magento\Store\Model\ResourceModel\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory as StoreCollectionFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\StoreFactory;
@@ -135,6 +138,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
             $collection = $this->websiteCollectionFactory->create();
             $collection->setLoadDefault(true);
             $data = [];
+            /** @var Website $website */
             foreach ($collection as $website) {
                 $data[$website->getCode()] = $website->getData();
             }
@@ -156,6 +160,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
             $collection = $this->groupCollectionFactory->create();
             $collection->setLoadDefault(true);
             $data = [];
+            /** @var Group $group */
             foreach ($collection as $group) {
                 $data[$group->getId()] = $group->getData();
             }
@@ -183,6 +188,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
             $collection = $this->storeCollectionFactory->create();
             $collection->setLoadDefault(true);
             $data = [];
+            /** @var Store $store */
             foreach ($collection as $store) {
                 $data[$store->getCode()] = $store->getData();
             }
