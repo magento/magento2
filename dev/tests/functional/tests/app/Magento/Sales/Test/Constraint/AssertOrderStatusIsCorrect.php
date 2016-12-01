@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -20,7 +19,7 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
      * Assert that status is correct on order page in Admin.
      *
      * @param string $status
-     * @param OrderInjectable $order
+     * @param string $orderId
      * @param OrderIndex $salesOrder
      * @param SalesOrderView $salesOrderView
      * @param string|null $statusToCheck
@@ -28,13 +27,13 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
      */
     public function processAssert(
         $status,
-        OrderInjectable $order,
+        $orderId,
         OrderIndex $salesOrder,
         SalesOrderView $salesOrderView,
         $statusToCheck = null
     ) {
         $salesOrder->open();
-        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
+        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
         $orderStatus = $statusToCheck == null ? $status : $statusToCheck;
 
         \PHPUnit_Framework_Assert::assertEquals(
