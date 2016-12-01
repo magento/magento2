@@ -34,10 +34,18 @@ class Fallback implements PostProcessorInterface
     private $resourceConnection;
 
     /**
+     * @var array
+     */
+    private $storeData = [];
+
+    /**
+     * @var array
+     */
+    private $websiteData = [];
+    /**
      * @var Store
      */
     private $storeResource;
-
     /**
      * @var Website
      */
@@ -64,6 +72,9 @@ class Fallback implements PostProcessorInterface
      */
     public function process(array $data)
     {
+        $this->storeData = $this->storeResource->readAllStores();
+        $this->websiteData = $this->websiteResource->readAllWebsites();
+
         $defaultConfig = isset($data['default']) ? $data['default'] : [];
         $result = [
             'default' => $defaultConfig,
@@ -92,8 +103,7 @@ class Fallback implements PostProcessorInterface
         array $websitesConfig
     ) {
         $result = [];
-        /** @var WebsiteInterface $website */
-        foreach ($this->websiteResource->readAllWebsites() as $website) {
+        foreach ($this->websiteData as $website) {
             $code = $website['code'];
             $id = $website['website_id'];
             $websiteConfig = isset($websitesConfig[$code]) ? $websitesConfig[$code] : [];
@@ -118,8 +128,7 @@ class Fallback implements PostProcessorInterface
     ) {
         $result = [];
 
-        /** @var StoreInterface $store */
-        foreach ($this->storeResource->readAllStores() as $store) {
+        foreach ($this->storeData as $store) {
             $code = $store['code'];
             $id = $store['store_id'];
             $websiteConfig = [];
@@ -142,8 +151,7 @@ class Fallback implements PostProcessorInterface
      */
     private function getWebsiteConfig(array $websites, $id)
     {
-        /** @var WebsiteInterface $website */
-        foreach ($this->websiteResource->readAllWebsites() as $website) {
+        foreach ($this->websiteData as $website) {
             if ($website['website_id'] == $id) {
                 $code = $website['website_id'];
                 return isset($websites[$code]) ? $websites[$code] : [];
