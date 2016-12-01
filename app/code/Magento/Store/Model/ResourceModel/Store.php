@@ -16,11 +16,6 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $configCache;
 
     /**
-     * @var array
-     */
-    private $storesCache;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      */
@@ -167,15 +162,11 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function readAllStores()
     {
-        if (!$this->storesCache) {
-            $select = $this->getConnection()
-                ->select()
-                ->from($this->getTable('store'));
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('store'));
 
-            $this->storesCache = $this->getConnection()->fetchAll($select);
-        }
-
-        return $this->storesCache;
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**

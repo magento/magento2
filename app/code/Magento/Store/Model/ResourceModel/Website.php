@@ -46,15 +46,11 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function readAllWebsites()
     {
-        if (!$this->websitesCache) {
-            $select = $this->getConnection()
-                ->select()
-                ->from($this->getTable('store_website'));
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('store_website'));
 
-            $this->websitesCache = $this->getConnection()->fetchAll($select);
-        }
-
-        return $this->websitesCache;
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
