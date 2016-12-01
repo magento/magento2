@@ -56,7 +56,7 @@ class ChangedFiles
      * Get changed content.
      *
      * @param string $fileName
-     * @return string|null
+     * @return string
      */
     public static function getChangedContent($fileName)
     {
@@ -65,7 +65,7 @@ class ChangedFiles
         $changedContent = file_get_contents(BP . sprintf(self::CHANGED_FILES_CONTENT_FILE, $extension));
         $data = json_decode($changedContent, true);
 
-        return isset($data[$fileName]) ? $data[$fileName] : [];
+        return isset($data[$fileName]) ? $data[$fileName] : '';
     }
 
     /**
