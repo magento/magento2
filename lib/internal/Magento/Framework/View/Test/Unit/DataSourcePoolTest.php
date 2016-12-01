@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit;
 
 use \Magento\Framework\View\DataSourcePool;
@@ -33,9 +31,11 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dataSourcePool = $objectManager->getObject(
-            \Magento\Framework\View\DataSourcePool::class, [
+            \Magento\Framework\View\DataSourcePool::class,
+            [
             'blockFactory' => $this->blockFactory
-        ]);
+            ]
+        );
     }
 
     /**

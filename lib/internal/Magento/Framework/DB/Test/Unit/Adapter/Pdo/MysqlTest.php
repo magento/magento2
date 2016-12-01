@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
  */
@@ -17,6 +15,11 @@ use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Mysql test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,12 +57,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-//        StringUtils $string,
-//        DateTime $dateTime,
-//        LoggerInterface $logger,
-//        SelectFactory $selectFactory,
-//        array $config = []
+        
         $this->_mockAdapter = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['beginTransaction', 'getTransactionLevel'],
@@ -470,7 +468,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         $connectionMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
+            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'],
+            [],
+            '',
+            false
         );
 
         $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));

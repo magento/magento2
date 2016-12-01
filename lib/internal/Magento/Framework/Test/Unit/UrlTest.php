@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Test\Unit;
+
 use Magento\Framework\Url\HostChecker;
 
 /**
@@ -647,7 +646,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'web/secure/base_url_secure_forced',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->scopeMock
             )
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')

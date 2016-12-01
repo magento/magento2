@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\Test\Unit;
 
 use \Magento\Framework\Mview\Config;
@@ -25,7 +23,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->dataMock = $this->getMock(
-            \Magento\Framework\Mview\Config\Data::class, [], [], '', false
+            \Magento\Framework\Mview\Config\Data::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->model = new Config(
             $this->dataMock

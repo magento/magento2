@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
 class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
@@ -58,7 +56,8 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_cacheMock = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $this->_model = new \Magento\Framework\App\ObjectManager\ConfigLoader(
-            $this->_cacheMock, $this->_readerFactoryMock
+            $this->_cacheMock,
+            $this->_readerFactoryMock
         );
     }
 

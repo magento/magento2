@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
@@ -120,12 +120,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         \Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy::class
                     ],
                     [
-                        'virtual_custom_item', \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                        'virtual_custom_item',
+                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
                     ],
                 ]
             ));
         $this->definitionMock->expects($this->any())->method('getClasses')->will($this->returnValue(
-            [\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class, \Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy::class,
+            [
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class,
+                \Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy::class,
             ]
         ));
         $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));

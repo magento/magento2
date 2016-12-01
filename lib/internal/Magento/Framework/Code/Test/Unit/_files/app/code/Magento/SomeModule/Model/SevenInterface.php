@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\SomeModule\Model;
 
 use Magento\SomeModule\Model\Two\Test as TestTwo;
@@ -43,6 +41,5 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
     public function testMethod2($data = 'test_default', $flag = true);
 
     public function testMethod3();
-
 
 }

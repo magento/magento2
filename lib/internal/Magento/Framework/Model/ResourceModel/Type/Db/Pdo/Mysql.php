@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
@@ -13,8 +11,11 @@ use Magento\Framework\DB;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Stdlib;
 
+// @codingStandardsIgnoreStart
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 {
+    // @codingStandardsIgnoreEnd
+
     /**
      * @var Stdlib\StringUtils
      */
@@ -31,7 +32,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected $connectionConfig;
 
     /**
-     * @var
+     * @var SelectFactory
      */
     protected $selectFactory;
 

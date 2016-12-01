@@ -188,7 +188,6 @@ class Chain
     {
         if ($this->contentType !== $this->targetContentType
                 && empty($this->compatibleTypes[$this->targetContentType][$this->contentType])) {
-
             throw new \LogicException(
                 "The requested asset type was '{$this->targetContentType}', but ended up with '{$this->contentType}'"
             );

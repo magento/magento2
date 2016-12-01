@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Config\Test\Unit\Composer;
 
 use \Magento\Framework\Config\Composer\Package;

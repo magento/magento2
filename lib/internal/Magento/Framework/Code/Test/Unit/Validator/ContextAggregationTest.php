@@ -51,7 +51,7 @@ class ContextAggregationTest extends \PHPUnit_Framework_TestCase
         $message = 'Incorrect dependency in class ClassArgumentWithAlreadyInjectedInterface in ' .
             $this->_fixturePath .
             PHP_EOL .
-            '\\InterfaceFirst already exists in context object';
+            '\\ThirdInterface already exists in context object';
 
         $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, $message);
         $this->_model->validate('ClassArgumentWithAlreadyInjectedInterface');

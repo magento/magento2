@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
 class ModuleTest extends \PHPUnit_Framework_TestCase
@@ -51,7 +49,10 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @dataProvider convertModuleNotationToPathModularSeparatorDataProvider
      */
     public function testConvertModuleNotationToPathModularSeparator(
-        $assetRelPath, $relatedFieldId, $similarRelPath, $expectedResult
+        $assetRelPath,
+        $relatedFieldId,
+        $similarRelPath,
+        $expectedResult
     ) {
         $similarAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $similarAsset->expects($this->any())

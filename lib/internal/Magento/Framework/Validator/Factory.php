@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
@@ -63,6 +61,8 @@ class Factory
 
     /**
      * Init cached list of validation files
+     *
+     * @return void
      */
     protected function _initializeConfigList()
     {
@@ -110,7 +110,9 @@ class Factory
         $this->_initializeConfigList();
         $this->_initializeDefaultTranslator();
         return $this->_objectManager->create(
-            \Magento\Framework\Validator\Config::class, ['configFiles' => $this->_configFiles]);
+            \Magento\Framework\Validator\Config::class,
+            ['configFiles' => $this->_configFiles]
+        );
     }
 
     /**

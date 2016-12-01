@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\ObjectManager\Test\Unit\Relations;
 
 require_once __DIR__ . '/../_files/Child.php';

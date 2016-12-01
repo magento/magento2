@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Extended version of \Magento\Framework\Archive\Tar that supports filtering
  *
@@ -23,14 +21,15 @@ class Tar extends \Magento\Framework\Archive\Tar
     protected $_skipFiles = [];
 
     /**
-     * Overridden \Magento\Framework\Archive\Tar::_createTar method that does the same actions as it's parent but filters
-     * files using \Magento\Framework\Backup\Filesystem\Iterator\Filter
+     * Overridden \Magento\Framework\Archive\Tar::_createTar method that does the same actions as it's parent but
+     * filters files using \Magento\Framework\Backup\Filesystem\Iterator\Filter
      *
      * @param bool $skipRoot
      * @param bool $finalize
      * @return void
      *
      * @see \Magento\Framework\Archive\Tar::_createTar()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {
@@ -41,7 +40,10 @@ class Tar extends \Magento\Framework\Archive\Tar
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_skipFiles);
+        $iterator = new \Magento\Framework\Backup\Filesystem\Iterator\Filter(
+            $filesystemIterator,
+            $this->_skipFiles
+        );
 
         foreach ($iterator as $item) {
             $this->_setCurrentFile($item->getPathname());

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin;
 
 class IncompatibleArgumentsCount
@@ -19,7 +17,9 @@ class IncompatibleArgumentsCount
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject, $name, $surname
+        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject,
+        $name,
+        $surname
     ) {
         return $name . $surname;
     }

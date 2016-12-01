@@ -58,7 +58,6 @@ class CallbackHandler
                 $this->logger->error($e->getMessage(), $e->getTrace());
                 throw $e;
             }
-
         }
     }
 

@@ -90,7 +90,6 @@ class MetadataPool
             throw new \Exception(sprintf('Unknown entity type: %s requested', $entityType));
         }
         if (!isset($this->registry[$entityType])) {
-
             $this->registry[$entityType] = $this->createMetadata($entityType);
         }
         return $this->registry[$entityType];

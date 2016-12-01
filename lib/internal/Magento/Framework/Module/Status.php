@@ -81,7 +81,7 @@ class Status
      * @param string[] $modulesToBeChanged
      * @param string[] $currentlyEnabledModules
      * @param bool $prettyMessage
-     *  
+     *
      * @return string[]
      */
     public function checkConstraints(

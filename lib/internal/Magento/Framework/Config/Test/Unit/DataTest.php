@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Config\Test\Unit;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $reader;
+
     /** @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cache;
+
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
 
@@ -36,7 +36,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())->method('read')->will($this->returnValue($data));
 
         $config = new \Magento\Framework\Config\Data(
-            $this->reader, $this->cache, $cacheid
+            $this->reader,
+            $this->cache,
+            $cacheid
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));

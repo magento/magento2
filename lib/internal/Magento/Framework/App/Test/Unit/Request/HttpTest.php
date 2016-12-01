@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -99,7 +97,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
@@ -283,7 +281,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -351,8 +348,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
-            ->willReturn($configOffloadHeader);
+            ->with(
+                \Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )->willReturn($configOffloadHeader);
 
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'sslOffloadHeader', null);

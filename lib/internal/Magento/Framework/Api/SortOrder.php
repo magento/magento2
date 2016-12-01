@@ -31,8 +31,7 @@ class SortOrder extends AbstractSimpleObject
             $this->validateDirection($this->getDirection());
         }
     }
-
-
+    
     /**
      * Get sorting field.
      *
@@ -78,7 +77,7 @@ class SortOrder extends AbstractSimpleObject
 
     /**
      * Validate direction argument ASC or DESC
-     * 
+     *
      * @param mixed $direction
      * @return null
      * @throws InputException

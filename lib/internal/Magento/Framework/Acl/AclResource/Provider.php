@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Acl\AclResource;
 
 class Provider implements ProviderInterface
@@ -24,8 +22,10 @@ class Provider implements ProviderInterface
      * @param \Magento\Framework\Config\ReaderInterface $configReader
      * @param TreeBuilder $resourceTreeBuilder
      */
-    public function __construct(\Magento\Framework\Config\ReaderInterface $configReader, TreeBuilder $resourceTreeBuilder)
-    {
+    public function __construct(
+        \Magento\Framework\Config\ReaderInterface $configReader,
+        TreeBuilder $resourceTreeBuilder
+    ) {
         $this->_configReader = $configReader;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
     }
@@ -37,7 +37,9 @@ class Provider implements ProviderInterface
     {
         $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
-            return $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
+            return $this->_resourceTreeBuilder->build(
+                $aclResourceConfig['config']['acl']['resources']
+            );
         }
         return [];
     }

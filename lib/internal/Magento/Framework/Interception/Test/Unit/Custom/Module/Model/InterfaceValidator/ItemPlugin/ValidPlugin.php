@@ -4,40 +4,42 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin;
+
+use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments;
 
 class ValidPlugin
 {
     /**
-     * @param \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject
+     * @param ItemWithArguments $subject
      * @param string $result
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject, $result
+        ItemWithArguments $subject,
+        $result
     ) {
         return $result . '!';
     }
 
     /**
-     * @param \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject
+     * @param ItemWithArguments $subject
      * @param $name
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject, $name
+        ItemWithArguments $subject,
+        $name
     ) {
         return '|' . $name;
     }
 
     /**
-     * @param \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject
+     * @param ItemWithArguments $subject
      * @param Closure $proceed
      * @param string $name
      * @return string
@@ -45,7 +47,7 @@ class ValidPlugin
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject,
+        ItemWithArguments $subject,
         \Closure $proceed,
         $name
     ) {

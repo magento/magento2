@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 
-
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\CustomJoinInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;

@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
-use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+
+use \Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use \Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Abstract Resource Collection
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
-    implements SourceProviderInterface
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
      * Model name
@@ -458,7 +457,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     public function getResource()
     {
         if (empty($this->_resource)) {
-            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create($this->getResourceModelName());
+            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create(
+                $this->getResourceModelName()
+            );
         }
         return $this->_resource;
     }

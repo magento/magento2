@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -79,16 +77,25 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->preProcessorPool = $this->getMock(
-            \Magento\Framework\View\Asset\PreProcessor\Pool::class, [], [], '', false
+            \Magento\Framework\View\Asset\PreProcessor\Pool::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->viewFileResolution = $this->getMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class, [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
 
         $this->chainFactory = $this->getMockBuilder(
-            \Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface::class)
+            \Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface::class
+        )
             ->getMock();
         $this->chain = $this->getMockBuilder(\Magento\Framework\View\Asset\PreProcessor\Chain::class)
             ->disableOriginalConstructor()

@@ -184,7 +184,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
-        } else if ($key == self::CUSTOM_ATTRIBUTES) {
+        } elseif ($key == self::CUSTOM_ATTRIBUTES) {
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }

@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
-
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()

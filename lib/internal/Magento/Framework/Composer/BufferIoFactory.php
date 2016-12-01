@@ -15,7 +15,7 @@ class BufferIoFactory
 {
     /**
      * Creates BufferIO instance
-     * 
+     *
      * @return BufferIO
      */
     public function create()

@@ -144,6 +144,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function setComplexValue(
         $dataObject,
@@ -176,7 +177,7 @@ class DataObjectHelper
         if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensibleDataInterface::class)) {
             $object = $this->objectFactory->create($returnType, []);
             $this->populateWithArray($object, $value, $returnType);
-        } else if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
+        } elseif (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
                     = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(

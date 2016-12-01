@@ -8,3 +8,4 @@
 body {background: url(body.gif);}
 p {background: url(1.gif?param);}
 h1 {background: url('../h1.gif#param');} h2 {background: url(../images/h2.gif?test);}
+

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\HTTP;
 
 /**
@@ -29,8 +27,10 @@ class Header
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\Stdlib\StringUtils $converter
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $httpRequest, \Magento\Framework\Stdlib\StringUtils $converter)
-    {
+    public function __construct(
+        \Magento\Framework\App\RequestInterface $httpRequest,
+        \Magento\Framework\Stdlib\StringUtils $converter
+    ) {
         $this->_request = $httpRequest;
         $this->_converter = $converter;
     }

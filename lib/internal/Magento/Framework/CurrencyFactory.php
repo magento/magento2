@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework;
 
 class CurrencyFactory
@@ -24,8 +22,10 @@ class CurrencyFactory
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(ObjectManagerInterface $objectManager, $instanceName = CurrencyInterface::class)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $instanceName = CurrencyInterface::class
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }

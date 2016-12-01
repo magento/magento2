@@ -7,6 +7,9 @@
 -->
 <ruleset name="Magento">
     <description>Magento coding standard.</description>
+    <!-- We don't want to test stub file for unit testing -->
+    <exclude-pattern>*/_files/*</exclude-pattern>
+    <rule ref="PSR2"/>
     <rule ref="Zend.Files.ClosingTag"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
