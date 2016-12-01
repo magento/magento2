@@ -7,6 +7,11 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class GrandTest
+ *
+ * @package Magento\Quote\Test\Unit\Model\Quote\Address\Total
+ */
 class GrandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,9 +22,14 @@ class GrandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Grand');
+        $this->model = $objectManager->getObject(
+            \Magento\Quote\Model\Quote\Address\Total\Grand::class
+        );
     }
 
+    /**
+     * Test case for quote totals collect
+     */
     public function testCollect()
     {
         $totals = [1, 2, 3.4];
@@ -28,20 +38,29 @@ class GrandTest extends \PHPUnit_Framework_TestCase
         $grandTotalBase = 15.7; // 4 + 5 + 6.7
 
         $totalMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address\Total',
-            ['getAllTotalAmounts', 'getAllBaseTotalAmounts', 'setGrandTotal', 'setBaseGrandTotal'],
+            \Magento\Quote\Model\Quote\Address\Total::class,
+            [
+                'getAllTotalAmounts',
+                'getAllBaseTotalAmounts',
+                'setGrandTotal',
+                'setBaseGrandTotal',
+                'getGrandTotal',
+                'getBaseGrandTotal'
+            ],
             [],
             '',
             false
         );
+        $totalMock->expects($this->once())->method('getGrandTotal')->willReturn(2);
+        $totalMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(2);
         $totalMock->expects($this->once())->method('getAllTotalAmounts')->willReturn($totals);
         $totalMock->expects($this->once())->method('getAllBaseTotalAmounts')->willReturn($totalsBase);
-        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal);
-        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase);
+        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal + 2);
+        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase + 2);
 
         $this->model->collect(
-            $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false),
-            $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface'),
+            $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false),
+            $this->getMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class),
             $totalMock
         );
     }
