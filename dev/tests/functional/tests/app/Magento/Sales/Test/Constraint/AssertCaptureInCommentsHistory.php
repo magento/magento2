@@ -26,17 +26,16 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
-     * @param OrderInjectable $order
+     * @param string $orderId
      * @param array $capturedPrices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        OrderInjectable $order,
+        $orderId,
         array $capturedPrices
     ) {
-        $orderId = $order->getId();
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 

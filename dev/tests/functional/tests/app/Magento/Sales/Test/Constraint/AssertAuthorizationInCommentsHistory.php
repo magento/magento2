@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -24,17 +24,19 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
      * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
-     * @param OrderInjectable $order,
+     * @param OrderIndex $salesOrder
+     * @param string $orderId
      * @param array $prices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
-        OrderInjectable $order,
+        OrderIndex $salesOrder,
+        $orderId,
         array $prices
     ) {
-        $orderId = $order->getId();
-        $salesOrderView->open(['order_id' => $orderId]);
+        $salesOrder->open();
+        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
         $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
 
         \PHPUnit_Framework_Assert::assertRegExp(
