@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Test\Block\Onepage;
 
 use Magento\Checkout\Test\Fixture\Checkout;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -93,14 +94,15 @@ class Login extends Form
     /**
      * Fill required fields for guest checkout.
      *
-     * @param FixtureInterface $customer
+     * @param Customer $customer
      * @return void
      */
-    public function fillGuestFields(FixtureInterface $customer)
+    public function fillGuestFields(Customer $customer)
     {
         $mapping = $this->dataMapping();
         $this->_rootElement->find($mapping['email']['selector'], $mapping['email']['strategy'])
             ->setValue($customer->getEmail());
+        $this->waitForElementNotVisible($this->loadingMask);
     }
 
     /**
