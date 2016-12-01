@@ -34,6 +34,13 @@ interface ConfigInterface
     public function getArguments($type);
 
     /**
+     * Returns entire arguments keyed by type
+     *
+     * @return array
+     */
+    public function getAllArguments();
+
+    /**
      * Check whether type is shared
      *
      * @param string $type

@@ -159,4 +159,14 @@ class Compiled implements ConfigInterface
     {
         return $this->preferences;
     }
+
+    /**
+     * Returns list on preferences
+     *
+     * @return array
+     */
+    public function getAllArguments()
+    {
+        return $this->arguments;
+    }
 }

@@ -20,6 +20,7 @@ use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
+use Magento\Framework\ObjectManager\ConfigInterface;
 
 /**
  * Deploy static content command
@@ -83,21 +84,29 @@ class DeployStaticContentCommand extends Command
     private $appState;
 
     /**
+     * @var \Magento\Framework\ObjectManager\ConfigInterface $config 
+     */
+    protected $config;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerFactory $objectManagerFactory
      * @param Locale $validator
      * @param ObjectManagerInterface $objectManager
+     * @param ConfigInterface $config
      * @throws \LogicException When the command name is empty
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         Locale $validator,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        ConfigInterface $config
     ) {
         $this->objectManagerFactory = $objectManagerFactory;
         $this->validator = $validator;
         $this->objectManager = $objectManager;
+        $this->config = $config;
 
         parent::__construct();
     }
@@ -490,10 +499,17 @@ class DeployStaticContentCommand extends Command
      */
     private function mockCache()
     {
+        $preferences = $this->config->getPreferences();
+        $instanceTypes = $this->config->getVirtualTypes();
+        $arguments = $this->config->getAllArguments();
+
+        //Swap out the cache class and maintain current preferences/instance types/arguments
+        $preferences[Cache::class] = DummyCache::class;
+
         $this->objectManager->configure([
-            'preferences' => [
-                Cache::class => DummyCache::class
-            ]
+            'preferences' => $preferences,
+            'arguments' => $arguments,
+            'instanceTypes' => $instanceTypes
         ]);
     }
 }

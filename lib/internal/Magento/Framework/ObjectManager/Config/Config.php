@@ -323,4 +323,14 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         return $this->_preferences;
     }
+
+    /**
+     * Returns list on preferences
+     *
+     * @return array
+     */
+    public function getAllArguments()
+    {
+        return $this->_arguments;
+    }
 }
