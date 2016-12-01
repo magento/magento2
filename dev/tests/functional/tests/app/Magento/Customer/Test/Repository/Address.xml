@@ -287,7 +287,6 @@
         </dataset>
 
         <dataset name="AVS_street_match_address">
-            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
