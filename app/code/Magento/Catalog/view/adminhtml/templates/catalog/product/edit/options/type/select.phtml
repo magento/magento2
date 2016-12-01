@@ -44,7 +44,7 @@
         <td class="col-name select-opt-title">
             <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][option_type_id]" type="hidden" value="<%- data.option_type_id %>">
             <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_is_delete" name="product[options][<%- data.id %>][values][<%- data.select_id %>][is_delete]" type="hidden" value="">
-            <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_title" <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled="disabled" <% } %> name="product[options][<%- data.id %>][values][<%- data.select_id %>][title]" class="required-entry input-text select-type-title <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled <% } %>" type="text" value="<%- data.title %>" data-store-label="<%- data.title %>"><%- data.checkboxScopeTitle %>
+            <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_title" <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled="disabled" <% } %> name="product[options][<%- data.id %>][values][<%- data.select_id %>][title]" class="required-entry input-text select-type-title <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled <% } %>" type="text" value="<%- data.title %>" data-store-label="<%- data.title %>"><%= data.checkboxScopeTitle %>
         </td>
         <?php if ($block->getCanReadPrice() !== false) : ?>
         <td class="col-price select-opt-price">
