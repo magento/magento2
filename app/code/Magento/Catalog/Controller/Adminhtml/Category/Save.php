@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
+
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -227,7 +228,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     private function getStoreManager()
     {
         if ($this->storeManager == null) {
-            $this->storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
         }
 
         return $this->storeManager;
