@@ -10,26 +10,20 @@ use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
- * 1. Configure shipping method.
- * 2. Configure payment method.
- * 3. Create products.
- * 4. Create sales rule according to dataset.
+ * 1. Order is placed via WPPHS.
  *
  * Steps:
- * 1. Go to Storefront.
- * 2. Add products to the cart.
- * 3. Click the 'Go to Checkout' button.
- * 4. Fill shipping information.
- * 5. Select shipping method.
- * 6. Click 'Next' button.
- * 7. Select Hosted Pro method.
- * 8. Click 'Continue' button.
- * 9. Specify credit card data in Paypal iframe.
- * 10. Click 'Pay Now' button.
+ * 1. Log in to Admin.
+ * 2. Go to Sales > Orders page.
+ * 3. Open order.
+ * 4. Click 'Ship' button and submit shipment.
+ * 5. Click 'Invoice' button.
+ * 6. Select Amount=Capture Online.
+ * 7. Click 'Submit Invoice' button.
  * 11. Perform assertions.
  *
  * @group Paypal
- * @ZephyrId MAGETWO-12971
+ * @ZephyrId MAGETWO-13016
  */
 class CloseSalesWithHostedProTest extends Scenario
 {
@@ -39,7 +33,7 @@ class CloseSalesWithHostedProTest extends Scenario
     /* end tags */
 
     /**
-     * Place order using PayPal Payments Pro Hosted Solution.
+     * Complete order paid PayPal Payments Pro Hosted Solution.
      *
      * @return void
      */

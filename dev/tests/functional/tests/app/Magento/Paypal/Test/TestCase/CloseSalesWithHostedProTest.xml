@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Paypal\Test\TestCase\CloseSalesWithHostedProTest" summary="Guest Checkout using PayPal Payments Pro Hosted Solution and Offline Shipping Method">
-        <variation name="OnePageCheckoutHostedProVariation1" summary="Guest Checkout using PayPal Payments Pro Hosted Solution and Offline Shipping Method" ticketId="MAGETWO-12971">
+    <testCase name="Magento\Paypal\Test\TestCase\CloseSalesWithHostedProTest" summary="Complete order paid with PayPal Payments Pro Hosted Solution">
+        <variation name="OnePageCheckoutHostedProVariation1" summary="Complete order paid with PayPal Payments Pro Hosted Solution" ticketId="MAGETWO-13016">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
