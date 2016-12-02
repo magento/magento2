@@ -148,7 +148,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
 
         if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
-            $setInfoData = $this->serializer->unserialize($cache);
+            $setInfoData = $this->getSerializer()->unserialize($cache);
         } else {
             $attributeSetData = $this->fetchAttributeSetData($setId);
 
@@ -164,7 +164,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             if ($this->eavConfig->isCacheEnabled()) {
                 $this->eavConfig->getCache()->save(
-                    $this->serializer->serialize($setInfoData),
+                    $this->getSerializer()->serialize($setInfoData),
                     $cacheKey,
                     [
                         \Magento\Eav\Model\Cache\Type::CACHE_TAG,
