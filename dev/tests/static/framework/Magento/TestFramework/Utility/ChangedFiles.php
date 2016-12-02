@@ -60,10 +60,14 @@ class ChangedFiles
      */
     public static function getChangedContent($fileName)
     {
+        $data = [];
         $extension = self::getFileExtension($fileName);
         $fileName = ltrim(str_replace(BP, '', $fileName), DIRECTORY_SEPARATOR);
-        $changedContent = file_get_contents(BP . sprintf(self::CHANGED_FILES_CONTENT_FILE, $extension));
-        $data = json_decode($changedContent, true);
+        $changedFilesContentFile = BP . sprintf(self::CHANGED_FILES_CONTENT_FILE, $extension);
+        if (file_exists($changedFilesContentFile)) {
+            $changedContent = file_get_contents($changedFilesContentFile);
+            $data = json_decode($changedContent, true);
+        }
 
         return isset($data[$fileName]) ? $data[$fileName] : '';
     }

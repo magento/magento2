@@ -56,7 +56,11 @@ function saveChangedFileContent(GitRepo $repo)
 {
     $changedFilesContentFileName = BP . Magento\TestFramework\Utility\ChangedFiles::CHANGED_FILES_CONTENT_FILE;
     foreach ($repo->getChangedContentFiles() as $key => $changedContentFile) {
-        file_put_contents(sprintf($changedFilesContentFileName, $key), json_encode($changedContentFile), FILE_APPEND);
+        $filePath = sprintf($changedFilesContentFileName, $key);
+        $oldContent = file_exists($filePath) ? file_get_contents($filePath) : '{}';
+        $oldData = json_decode($oldContent, true);
+        $data = array_merge($oldData, $changedContentFile);
+        file_put_contents($filePath, json_encode($data));
     }
 }
 
