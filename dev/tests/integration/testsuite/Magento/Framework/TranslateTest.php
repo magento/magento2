@@ -6,6 +6,7 @@
 namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
  * @magentoAppIsolation enabled
@@ -14,6 +15,9 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class TranslateTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\Translate */
+    private $translate;
+
     protected function setUp()
     {
         /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
@@ -37,6 +41,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->addSharedInstance($viewFileSystem, \Magento\Framework\View\FileSystem::class);
 
@@ -72,19 +77,31 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
 
-        $model = $objectManager->create(\Magento\Framework\Translate::class);
-        $objectManager->addSharedInstance($model, \Magento\Framework\Translate::class);
+        $this->translate = $objectManager->create(\Magento\Framework\Translate::class);
+        $objectManager->addSharedInstance($this->translate, \Magento\Framework\Translate::class);
         $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Composite::class);
         $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
-        \Magento\Framework\Phrase::setRenderer($objectManager->get(\Magento\Framework\Phrase\RendererInterface::class));
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
+        \Magento\Framework\Phrase::setRenderer(
+            $objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
+        );
+    }
+
+    public function testLoadData()
+    {
+        $data = $this->translate->loadData(null, true)->getData();
+        CacheCleaner::cleanAll();
+        $this->translate->loadData()->getData();
+        $dataCached = $this->translate->loadData()->getData();
+        $this->assertEquals($data, $dataCached);
     }
 
     /**
+     * @magentoCache all disabled
      * @dataProvider translateDataProvider
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
+        $this->translate->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
         $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
