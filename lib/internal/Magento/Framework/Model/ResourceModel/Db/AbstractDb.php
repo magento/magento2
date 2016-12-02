@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\App\ResourceConnection;
@@ -12,9 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Abstract resource model class
+ * Abstract resource model
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -133,20 +134,24 @@ abstract class AbstractDb extends AbstractResource
     protected $objectRelationProcessor;
 
     /**
-     * Class constructor
+     * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
+     * @param Json|null $serializer
      */
-    public function __construct(\Magento\Framework\Model\ResourceModel\Db\Context $context, $connectionName = null)
-    {
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        $connectionName = null,
+        Json $serializer = null
+    ) {
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
         if ($connectionName !== null) {
             $this->connectionName = $connectionName;
         }
-        parent::__construct();
+        parent::__construct($serializer);
     }
 
     /**

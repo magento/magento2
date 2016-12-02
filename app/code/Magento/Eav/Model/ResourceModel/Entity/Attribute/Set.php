@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * EAV cache ids
+     * EAV cache id
      */
     const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
 
@@ -47,10 +47,10 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connectionName = null,
         Json $serializer = null
     ) {
-        parent::__construct($context, $connectionName);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        parent::__construct($context, $connectionName, $serializer);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

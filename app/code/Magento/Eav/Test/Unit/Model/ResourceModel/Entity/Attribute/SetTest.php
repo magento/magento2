@@ -7,7 +7,7 @@ namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity\Attribute;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +50,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     protected $relationProcessor;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
@@ -88,7 +88,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMock(Json::class);
 
         $attributeGroupFactoryMock = $this->getMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory::class,
@@ -103,11 +103,10 @@ class SetTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $contextMock,
                 'attrGroupFactory' => $attributeGroupFactoryMock,
-                'eavConfig' => $this->eavConfigMock
+                'eavConfig' => $this->eavConfigMock,
+                'serializer' => $this->serializerMock
             ]
         );
-
-        $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $this->serializerMock);
 
         $this->typeMock = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
         $this->objectMock = $this->getMock(
