@@ -174,6 +174,9 @@ class AdvancedInventory extends AbstractModifier
                     'value' => '1',
                     'dataScope' => $fieldCode . '.is_in_stock',
                     'scopeLabel' => '[GLOBAL]',
+                    'imports' => [
+                        'visible' => '${$.provider}:data.product.stock_data.manage_stock',
+                    ],
                 ]
             );
             $this->meta = $this->arrayManager->merge(
