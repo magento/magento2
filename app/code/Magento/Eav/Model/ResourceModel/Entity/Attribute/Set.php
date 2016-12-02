@@ -5,9 +5,6 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
-
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -26,29 +23,20 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string|null $connectionName
-     * @param Json|null $serializer
-     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        $connectionName = null,
-        Json $serializer = null
+        $connectionName = null
     ) {
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        parent::__construct($context, $connectionName, $serializer);
+        parent::__construct($context, $connectionName);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
     }

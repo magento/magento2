@@ -11,7 +11,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Phrase;
-use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Abstract resource model
@@ -138,12 +137,10 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
-     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null,
-        Json $serializer = null
+        $connectionName = null
     ) {
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
@@ -151,7 +148,7 @@ abstract class AbstractDb extends AbstractResource
         if ($connectionName !== null) {
             $this->connectionName = $connectionName;
         }
-        parent::__construct($serializer);
+        parent::__construct();
     }
 
     /**

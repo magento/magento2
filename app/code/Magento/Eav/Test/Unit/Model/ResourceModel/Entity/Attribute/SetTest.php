@@ -103,10 +103,11 @@ class SetTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $contextMock,
                 'attrGroupFactory' => $attributeGroupFactoryMock,
-                'eavConfig' => $this->eavConfigMock,
-                'serializer' => $this->serializerMock
+                'eavConfig' => $this->eavConfigMock
             ]
         );
+
+        $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $this->serializerMock);
 
         $this->typeMock = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
         $this->objectMock = $this->getMock(

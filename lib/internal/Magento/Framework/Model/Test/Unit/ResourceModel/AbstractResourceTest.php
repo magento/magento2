@@ -26,11 +26,11 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->getMock(Json::class);
-        $this->abstractResource = $objectManager->getObject(
-            AbstractResourceStub::class,
-            [
-                'serializer' => $this->serializerMock
-            ]
+        $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->abstractResource,
+            'serializer',
+            $this->serializerMock
         );
     }
 

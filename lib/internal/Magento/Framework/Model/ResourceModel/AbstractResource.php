@@ -18,17 +18,13 @@ abstract class AbstractResource
     /**
      * @var Json
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * Constructor
-     *
-     * @param Json|null $serializer
      */
-    public function __construct(
-        Json $serializer = null
-    ) {
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+    public function __construct()
+    {
         /**
          * Please override this one instead of overriding real __construct constructor
          */
@@ -127,7 +123,7 @@ abstract class AbstractResource
         if (empty($value) && $unsetEmpty) {
             $object->unsetData($field);
         } else {
-            $object->setData($field, $this->serializer->serialize($value ?: $defaultValue));
+            $object->setData($field, $this->getSerializer()->serialize($value ?: $defaultValue));
         }
 
         return $this;
@@ -143,7 +139,7 @@ abstract class AbstractResource
      */
     protected function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
-        $value = $this->serializer->unserialize($object->getData($field));
+        $value = $this->getSerializer()->unserialize($object->getData($field));
         if (empty($value)) {
             $object->setData($field, $defaultValue);
         } else {
@@ -232,5 +228,19 @@ abstract class AbstractResource
             $columns = empty($fieldsetColumns) ? '*' : [$object->getIdFieldName()];
         }
         return $columns;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return Json
+     * @deprecated
+     */
+    protected function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 }
