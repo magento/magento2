@@ -39,6 +39,8 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      */
     protected function getSwatchAttributesData()
     {
+        $result = [];
+
         $swatchAttributeData = parent::getSwatchAttributesData();
         foreach ($swatchAttributeData as $attributeId => $item) {
             if (!empty($item['used_in_product_listing'])) {

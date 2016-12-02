@@ -41,7 +41,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
     $.widget('custom.SwatchRendererTooltip', {
         options: {
             delay: 200,                             //how much ms before tooltip to show
-            tooltip_class: 'swatch-option-tooltip'  //configurable, but remember about css
+            tooltip_class: 'swatch-option-tooltip' //configurable, but remember about css
         },
 
         /**
@@ -173,7 +173,20 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             enableControlLabel: true,                          // enable label for control
             moreButtonText: 'More',                            // text for more button
             mediaCallback: '',                                 // Callback url for media
-            mediaGalleryInitial: [{}]                          // Cache for BaseProduct images. Needed when option unset
+            mediaGalleryInitial: [{}],
+
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace',
+
+            //selector of product images gallery wrapper
+            mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',// Cache for BaseProduct images. Needed when option unset
         },
 
         /**
@@ -209,11 +222,9 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     this.element.parents('.product-item-info');
 
             if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
@@ -793,16 +804,49 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * @param {Boolean} isProductViewExist
          */
         updateBaseImage: function (images, context, isProductViewExist) {
-            var justAnImage = images[0];
+            var justAnImage = images[0],
+                initialImages = this.options.mediaGalleryInitial,
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
+                imagesToUpdate,
+                isInitial;
 
             if (isProductViewExist) {
-                context
-                    .find('[data-gallery-role=gallery-placeholder]')
-                    .data('gallery')
-                    .updateData(images);
+                imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
+
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
+
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Check if images to update are initial and set their type
+         * @param {Array} images
+         */
+        _setImageType: function (images) {
+            var initial = this.options.mediaGalleryInitial[0].img;
+
+            if (images[0].img === initial) {
+                images = $.extend(true, [], this.options.mediaGalleryInitial);
+            } else {
+                images.map(function (img) {
+                    img.type = 'image';
+                });
+            }
+
+            return images;
         },
 
         /**
@@ -874,6 +918,17 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             }
 
             return size;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         }
     });
     return $.custom.SwatchRenderer;

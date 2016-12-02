@@ -28,7 +28,17 @@ define([
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
-            slyOldPriceSelector: '.sly-old-price'
+            slyOldPriceSelector: '.sly-old-price',
+
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace'
         },
 
         /**
@@ -84,10 +94,9 @@ define([
 
             this.inputSimpleProduct = this.element.find(options.selectSimpleProduct);
 
-            gallery.on('gallery:loaded', function () {
-                var galleryObject = gallery.data('gallery');
-                options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-            });
+            gallery.data('gallery') ?
+                this._onGalleryLoaded(gallery) :
+                gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
         },
 
         /**
@@ -258,15 +267,28 @@ define([
          */
         _changeProductImage: function () {
             var images = this.options.spConfig.images[this.simpleProduct],
+                initialImages = this.options.mediaGalleryInitial,
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
             if (galleryObject) {
                 if (images) {
+                    if (this.options.gallerySwitchStrategy === 'prepend') {
+                        images = images.concat(initialImages);
+                    }
+
+                    images = $.extend(true, [], images);
+
+                    images.forEach(function (img) {
+                        img.type = 'image';
+                    });
+
                     galleryObject.updateData(images);
                 } else {
-                    galleryObject.updateData(this.options.mediaGalleryInitial);
-                }
+                    galleryObject.updateData(initialImages);
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();                }
             }
+
+            galleryObject.first();
         },
 
         /**
@@ -474,8 +496,18 @@ define([
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
-        }
+        },
 
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        }
     });
 
     return $.mage.configurable;

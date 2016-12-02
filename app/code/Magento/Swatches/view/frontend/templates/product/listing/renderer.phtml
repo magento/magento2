@@ -7,7 +7,7 @@
 <?php /** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */ ?>
 <div class="swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>"></div>
 <script>
-    require(["jquery", "jquery/ui", "Magento_Swatches/js/swatchRenderer"], function ($) {
+    require(["jquery", "jquery/ui", "Magento_Swatches/js/SwatchRenderer"], function ($) {
         $('.swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>').SwatchRenderer({
             selectorProduct: '.product-item-details',
             onlySwatches: true,
