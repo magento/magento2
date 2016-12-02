@@ -8,7 +8,7 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,19 +18,19 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     private $abstractResource;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
-        $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->abstractResource,
-            'serializer',
-            $this->serializerMock
+        $this->serializerMock = $this->getMock(Json::class);
+        $this->abstractResource = $objectManager->getObject(
+            AbstractResourceStub::class,
+            [
+                'serializer' => $this->serializerMock
+            ]
         );
     }
 

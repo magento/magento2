@@ -5,7 +5,8 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -25,26 +26,31 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @param Json|null $serializer
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        $connectionName = null
+        $connectionName = null,
+        Json $serializer = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -154,7 +160,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
 
         if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
-            $setInfoData = $this->getSerializer()->unserialize($cache);
+            $setInfoData = $this->serializer->unserialize($cache);
         } else {
             $attributeSetData = $this->fetchAttributeSetData($setId);
 
@@ -170,7 +176,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             if ($this->eavConfig->isCacheEnabled()) {
                 $this->eavConfig->getCache()->save(
-                    $this->getSerializer()->serialize($setInfoData),
+                    $this->serializer->serialize($setInfoData),
                     $cacheKey,
                     [
                         \Magento\Eav\Model\Cache\Type::CACHE_TAG,
@@ -234,20 +240,5 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
         return $connection->fetchAll($select, $bind);
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }
