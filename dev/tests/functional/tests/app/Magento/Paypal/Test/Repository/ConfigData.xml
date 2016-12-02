@@ -184,6 +184,59 @@
             </field>
         </dataset>
 
+        <dataset name="payments_advanced">
+            <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/business_account" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">PAYPAL_BUSINESS_ACCOUNT</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/partner" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_PARTNER</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/user" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_USER</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/pwd" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_PWD</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/vendor" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_VENDOR</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/sandbox_flag" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/payflow_advanced/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="payments_advanced_rollback">
+            <field name="payment/payflow_advanced/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
         <dataset name="payflowlink">
             <field name="payment/paypal_payment_gateways/payflow_link_us/payflow_link_required/payflow_link_payflow_link/business_account" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
