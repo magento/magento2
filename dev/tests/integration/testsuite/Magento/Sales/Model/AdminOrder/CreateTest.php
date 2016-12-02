@@ -53,6 +53,62 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product_with_additional_options.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testInitFromOrderAndCreateOrderFromQuoteWithAdditionalOptions()
+    {
+        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+
+        /** @var $order \Magento\Sales\Model\Order */
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
+        $order->loadByIncrementId('100000001');
+
+        /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
+        $orderCreate = $this->_model->initFromOrder($order);
+
+        $quoteItems = $orderCreate->getQuote()->getItemsCollection();
+
+        $this->assertEquals(1, $quoteItems->count());
+
+        $quoteItem = $quoteItems->getFirstItem();
+        $quoteItemOptions = $quoteItem->getOptionsByCode();
+
+        $this->assertEquals(
+            $serializer->serialize(['additional_option_key' => 'additional_option_value']),
+            $quoteItemOptions['additional_options']->getValue()
+        );
+
+        $session = Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session\Quote::class);
+        $session->setCustomerId(1);
+
+        $customer = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Customer::class);
+        $customer->load(1)->setDefaultBilling(null)->setDefaultShipping(null)->save();
+
+        $rate = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote\Address\Rate::class);
+        $rate->setCode('freeshipping_freeshipping');
+
+        $this->_model->getQuote()->getShippingAddress()->addShippingRate($rate);
+        $this->_model->setShippingAsBilling(0);
+        $this->_model->setPaymentData(['method' => 'checkmo']);
+
+        $newOrder = $this->_model->createOrder();
+        $newOrderItems = $newOrder->getItemsCollection();
+
+        $this->assertEquals(1, $newOrderItems->count());
+
+        $newOrderItem = $newOrderItems->getFirstItem();
+
+        $this->assertEquals(
+            ['additional_option_key' => 'additional_option_value'],
+            $newOrderItem->getProductOptionByCode('additional_options')
+        );
+    }
+    /**
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
      * @magentoDataFixture Magento/Sales/_files/order_shipping_address_same_as_billing.php
