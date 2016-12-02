@@ -72,7 +72,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $scope = null
     ) {
         $metadataForm = $this->getMetadataForm($entityType, $formCode, $scope);
+
+        /** @var array $formData */
         $formData = $metadataForm->extractData($this->getRequest(), $scope);
+        $formData = $metadataForm->compactData($formData);
 
         // Initialize additional attributes
         /** @var \Magento\Framework\DataObject $object */
@@ -81,11 +84,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         foreach ($additionalAttributes as $attributeCode) {
             $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
-
-        $result = $metadataForm->compactData($formData);
-
-        // Re-initialize additional attributes
-        $formData = array_replace($formData, $result);
 
         // Unset unused attributes
         $formAttributes = $metadataForm->getAttributes();

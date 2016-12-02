@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Exception as ProductException;
@@ -70,16 +71,22 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $validatorFile;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
-     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param File\ValidatorInfo $validatorInfo
      * @param File\ValidatorFile $validatorFile
+     * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
+     * @param \Magento\Framework\Escaper $escaper
      * @param array $data
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @param Filesystem $filesystem
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -90,12 +97,15 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
         \Magento\Framework\Escaper $escaper,
-        array $data = []
+        array $data = [],
+        Filesystem $filesystem = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
         $this->_escaper = $escaper;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
+        $this->filesystem = $filesystem ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Filesystem::class);
+        $this->_rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
         parent::__construct($checkoutSession, $scopeConfig, $data);
