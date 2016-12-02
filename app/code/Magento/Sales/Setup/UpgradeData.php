@@ -5,11 +5,9 @@
  */
 namespace Magento\Sales\Setup;
 
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Eav\Model\Config;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -21,12 +19,12 @@ class UpgradeData implements UpgradeDataInterface
     private $salesSetupFactory;
 
     /**
-     * @var Config
+     * @var \Magento\Eav\Model\Config
      */
     private $eavConfig;
 
     /**
-     * @var Json
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -34,13 +32,13 @@ class UpgradeData implements UpgradeDataInterface
      * Constructor
      *
      * @param SalesSetupFactory $salesSetupFactory
-     * @param Config $eavConfig
-     * @param Json $serializer
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
-        Config $eavConfig,
-        Json $serializer
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Serialize\Serializer\Json $serializer
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
