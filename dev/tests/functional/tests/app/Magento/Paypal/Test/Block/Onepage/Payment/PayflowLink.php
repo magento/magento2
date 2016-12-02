@@ -14,7 +14,7 @@ use Magento\Mtf\ObjectManager;
 use Magento\Paypal\Test\Block\Form\PayflowLink\Cc;
 
 /**
- * PayflowL ink credit card block.
+ * Payflow Link credit card block.
  */
 class PayflowLink extends Method
 {
