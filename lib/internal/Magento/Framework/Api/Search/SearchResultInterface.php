@@ -7,6 +7,11 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
+/**
+ * Interface SearchResultInterface
+ *
+ * @api
+ */
 interface SearchResultInterface extends SearchResultsInterface
 {
     /**#@+
@@ -48,4 +53,11 @@ interface SearchResultInterface extends SearchResultsInterface
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
      */
     public function getSearchCriteria();
+
+    /**
+     * Retrieve all ids from list
+     *
+     * @return int[]
+     */
+    public function getAllIds();
 }

@@ -12,12 +12,12 @@ use Magento\Framework\Code\GeneratedFiles;
 class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
      */
     private $directoryList;
 
     /**
-     * @var Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $writeInterface;
 

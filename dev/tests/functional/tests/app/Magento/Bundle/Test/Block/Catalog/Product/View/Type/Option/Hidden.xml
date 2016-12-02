@@ -8,8 +8,7 @@
 <mapping strict="1">
     <fields>
         <qty>
-            <selector>//input[contains(@class,"qty")]</selector>
-            <strategy>xpath</strategy>
+            <selector>input.qty</selector>
             <class>Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\Element\Qty</class>
         </qty>
     </fields>
