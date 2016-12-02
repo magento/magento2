@@ -5,11 +5,18 @@
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
@@ -74,16 +81,23 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(
-                \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
-                [
-                    'universalFactory' => $universalFactory,
-                    'storeManager' => $storeManager,
-                    'eavConfig' => $eavConfig,
-                    'fetchStrategy' => $fetchStrategy
-                ]
-            );
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $this->objectManager->getObject(
+            \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
+            [
+                'universalFactory' => $universalFactory,
+                'storeManager' => $storeManager,
+                'eavConfig' => $eavConfig,
+                'fetchStrategy' => $fetchStrategy,
+                'productLimitationFactory' => $productLimitationFactoryMock
+            ]
+        );
     }
 
     /**

@@ -13,6 +13,11 @@ use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class UpdateConfigurationsTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
+ */
 class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -69,10 +74,14 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterInitialize()
+    /**
+     * Prepare configurable matrix
+     *
+     * @return array
+     */
+    private function getConfigurableMatrix()
     {
-        $productMock = $this->getProductMock();
-        $configurableMatrix = [
+        return [
             [
                 'newProduct' => true,
                 'id' => 'product1'
@@ -109,6 +118,12 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'weight' => '5.55',
             ],
         ];
+    }
+
+    public function testAfterInitialize()
+    {
+        $productMock = $this->getProductMock();
+        $configurableMatrix = $this->getConfigurableMatrix();
         $configurations = [
             'product2' => [
                 'status' => 'simple2_status',
