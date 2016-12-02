@@ -7,9 +7,7 @@
 namespace Magento\Paypal\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Payment\Test\Fixture\CreditCard;
 use Magento\Sales\Test\Fixture\OrderInjectable;
@@ -27,13 +25,6 @@ class PlaceOrderWithPayflowLinkStep implements TestStepInterface
     private $checkoutOnepage;
 
     /**
-     * Onepage checkout success page.
-     *
-     * @var CheckoutOnepageSuccess
-     */
-    private $checkoutOnepageSuccess;
-
-    /**
      * Fixture factory.
      *
      * @var FixtureFactory
@@ -43,7 +34,7 @@ class PlaceOrderWithPayflowLinkStep implements TestStepInterface
     /**
      * Products fixtures.
      *
-     * @var FixtureInterface[]
+     * @var array
      */
     private $products;
 
@@ -63,7 +54,6 @@ class PlaceOrderWithPayflowLinkStep implements TestStepInterface
 
     /**
      * @param CheckoutOnepage $checkoutOnepage
-     * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param CreditCard $creditCard
      * @param array $payment
@@ -71,14 +61,12 @@ class PlaceOrderWithPayflowLinkStep implements TestStepInterface
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
         CreditCard $creditCard,
         array $payment,
         array $products
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->creditCard = $creditCard;
         $this->payment = $payment;
@@ -92,14 +80,10 @@ class PlaceOrderWithPayflowLinkStep implements TestStepInterface
      */
     public function run()
     {
-        $attempts = 1;
         $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod($this->payment);
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
         $this->checkoutOnepage->getPayflowLinkBlock()->fillPaymentData($this->creditCard);
-        while ($this->checkoutOnepage->getPayflowLinkBlock()->isErrorMessageVisible() && $attempts <= 3) {
-            $this->checkoutOnepage->getPayflowLinkBlock()->fillPaymentData($this->creditCard);
-            $attempts++;
-        }
+
         /** @var OrderInjectable $order */
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',

@@ -21,7 +21,6 @@
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
-            <data name="creditCardClass" xsi:type="string">credit_card</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">payflowlink</data>
