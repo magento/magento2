@@ -269,6 +269,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
 
         $infoInstance->setAdditionalInformation('cc_last4', $additionalData->getData('cc_last4'));
         $infoInstance->setAdditionalInformation('cc_token', $additionalData->getData('cc_token'));
+        $infoInstance->setAdditionalInformation('store_in_vault', $additionalData->getData('store_in_vault'));
         $infoInstance->setAdditionalInformation(
             'payment_method_nonce',
             $additionalData->getData('payment_method_nonce')
