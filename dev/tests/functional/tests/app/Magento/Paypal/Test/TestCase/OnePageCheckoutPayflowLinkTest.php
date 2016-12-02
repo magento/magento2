@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 1. Configure shipping method.
  * 2. Configure payment method.
  * 3. Create products.
- * 4. Create sales rule according to dataset.
+ * 4. Create tax rule according to dataset.
  *
  * Steps:
  * 1. Go to Storefront.

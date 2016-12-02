@@ -40,13 +40,6 @@ class PayflowLink extends Method
     private $creditCardForm = '#fieldsCC';
 
     /**
-     * Error message selector.
-     *
-     * @var string
-     */
-    private $errorMessage = '#messageBox'; //.message.notice
-
-    /**
      * Fill credit card data in PayPal iframe form.
      *
      * @param FixtureInterface $creditCard
@@ -63,22 +56,6 @@ class PayflowLink extends Method
         $formBlock->fill($creditCard, $iframeRootElement);
         $iframeRootElement->find($this->payNowButton)->click();
         $this->browser->switchToFrame();
-    }
-
-    /**
-     * Check if error message is appeared.
-     *
-     * @return bool
-     */
-    public function isErrorMessageVisible()
-    {
-        $isErrorMessageVisible = false;
-        if ($this->_rootElement->find($this->paypalIframe)->isPresent()) {
-            $iframeRootElement = $this->switchToPaypalFrame();
-            $isErrorMessageVisible = $iframeRootElement->find($this->errorMessage)->isVisible();
-            $this->browser->switchToFrame();
-        }
-        return $isErrorMessageVisible;
     }
 
     /**

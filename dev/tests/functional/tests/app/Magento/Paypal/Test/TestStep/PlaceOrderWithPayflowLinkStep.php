@@ -41,14 +41,14 @@ class PlaceOrderWithPayflowLinkStep implements TestStepInterface
     /**
      * Payment information.
      *
-     * @var string
+     * @var array
      */
     private $payment;
 
     /**
      * Credit card information.
      *
-     * @var string
+     * @var CreditCard
      */
     private $creditCard;
 
