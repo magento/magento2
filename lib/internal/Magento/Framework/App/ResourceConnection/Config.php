@@ -1,14 +1,16 @@
 <?php
 /**
- * Resource configuration. Uses application configuration to retrieve resource connection information.
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\ResourceConnection;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Resource configuration, uses application configuration to retrieve resource connection information
+ */
 class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
     /**
@@ -29,11 +31,14 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     private $initialized = false;
 
     /**
+     * Constructor
+     *
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -41,9 +46,10 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        $cacheId = 'resourcesCache'
+        $cacheId = 'resourcesCache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $configScope, $cache, $cacheId);
+        parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
         $this->deploymentConfig = $deploymentConfig;
     }
 

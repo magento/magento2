@@ -3,8 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Rule\Model;
+
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Abstract Rule entity data model
@@ -76,7 +78,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     protected $_localeDate;
 
     /**
-     * AbstractModel constructor.
+     * AbstractModel constructor
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -85,6 +87,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param ExtensionAttributesFactory|null $extensionFactory
+     * @param AttributeValueFactory|null $customAttributeFactory
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -93,15 +97,17 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ExtensionAttributesFactory $extensionFactory = null,
+        AttributeValueFactory $customAttributeFactory = null
     ) {
         $this->_formFactory = $formFactory;
         $this->_localeDate = $localeDate;
         parent::__construct(
             $context,
             $registry,
-            $this->getExtensionFactory(),
-            $this->getCustomAttributeFactory(),
+            $extensionFactory ?: $this->getExtensionFactory(),
+            $customAttributeFactory ?: $this->getCustomAttributeFactory(),
             $resource,
             $resourceCollection,
             $data
