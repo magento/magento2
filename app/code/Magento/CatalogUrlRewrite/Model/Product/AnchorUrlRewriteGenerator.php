@@ -55,7 +55,7 @@ class AnchorUrlRewriteGenerator
             $anchorCategoryIds = $category->getAnchorsAbove();
             if ($anchorCategoryIds) {
                 foreach ($anchorCategoryIds as $anchorCategoryId) {
-                    $anchorCategory = $this->categoryRepository->get($anchorCategoryId);
+                    $anchorCategory = $this->categoryRepository->get($anchorCategoryId, $storeId);
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($product->getId())

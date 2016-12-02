@@ -132,7 +132,8 @@ class ProductUrlRewriteGenerator
 
         $productCategories = $product->getCategoryCollection()
             ->addAttributeToSelect('url_key')
-            ->addAttributeToSelect('url_path');
+            ->addAttributeToSelect('url_path')
+            ->setStoreId($storeId);
 
         $urls = $this->isGlobalScope($storeId)
             ? $this->generateForGlobalScope($productCategories)
