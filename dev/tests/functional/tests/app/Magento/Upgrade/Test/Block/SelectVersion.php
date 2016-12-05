@@ -31,6 +31,13 @@ class SelectVersion extends Form
     protected $firstField = '#selectVersion';
 
     /**
+     * Other components loader selector
+     *
+     * @var string
+     */
+    private $loader = 'div[ng-show="updateComponents.yes && !upgradeProcessError"] > div.message.message-spinner';
+
+    /**
      * Click on 'Next' button.
      *
      * @return void
@@ -61,6 +68,7 @@ class SelectVersion extends Form
     public function chooseUpgradeOtherComponents()
     {
         $this->_rootElement->find("[for=yesUpdateComponents]", Locator::SELECTOR_CSS)->click();
-        $this->waitForElementVisible("[ng-show='componentsProcessed']");
+        $this->waitForElementVisible($this->loader);
+        $this->waitForElementNotVisible($this->loader);
     }
 }
