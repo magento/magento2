@@ -146,8 +146,13 @@ class Repository
         }
 
         if ($theme) {
-            $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $theme);
-            if (!$params['themeModel']) {
+            if (is_numeric($theme)) {
+                $params['themeModel'] = $this->getThemeProvider()->getThemeById($theme);
+            } else {
+                $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $theme);
+            }
+            
+            if (!$params['themeModel']->getId()) {
                 throw new \UnexpectedValueException("Could not find theme '$theme' for area '$area'");
             }
         } elseif (empty($params['themeModel'])) {
