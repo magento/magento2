@@ -211,6 +211,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('getShouldIgnoreValidation')
             ->willReturn(true);
+        $this->directoryData->expects($this->once())
+            ->method('getCountriesWithOptionalZip')
+            ->willReturn([1]);
 
         $this->repository->save($customerAddress);
     }
