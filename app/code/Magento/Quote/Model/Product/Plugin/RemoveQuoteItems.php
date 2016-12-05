@@ -22,18 +22,16 @@ class RemoveQuoteItems
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Closure $proceed
+     * @param \Magento\Catalog\Model\ResourceModel\Product $result
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return mixed
+     * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * TODO: reimplement with after plugin
      */
-    public function aroundDelete(
+    public function afterDelete(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Closure $proceed,
+        \Magento\Catalog\Model\ResourceModel\Product $result,
         \Magento\Catalog\Api\Data\ProductInterface $product
     ) {
-        $result = $proceed($product);
         $this->quoteItemsCleaner->execute($product);
         return $result;
     }
