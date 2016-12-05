@@ -16,40 +16,40 @@ use Magento\Mtf\Util\Command\Cli\StaticContent;
  * Verify that Merchant can configure secure URLs for Storefront and/or Admin panel in order to improve Store security.
  *
  * Preconditions:
- *  # SSL on server is configured.
- *  # Secure URLs are disabled for Storefront & Admin (out-of-the-box Magento state).
+ *  1. SSL on server is configured.
+ *  2. Secure URLs are disabled for Storefront & Admin (out-of-the-box Magento state).
  *
  * Steps:
- *  # Log in to Admin panel.
- *  # Go to "Stores > Configuration" page.
- *  # Select needed scope.
- *  # Go to "General > Web > Base URLs (Secure)" section.
- *  # Specify Base URL with Secure protocol in the same format as a Secure Base URL.
+ *  1. Log in to Admin panel.
+ *  2. Go to "Stores > Configuration" page.
+ *  3. Select needed scope.
+ *  4. Go to "General > Web > Base URLs (Secure)" section.
+ *  5. Specify Base URL with Secure protocol in the same format as a Secure Base URL.
  *    (i) Make sure that Secure Base URL ends with a "/".
- *  # Enable Secure URLs for Storefront if there is a need.
- *  # Enable Secure URLs for Admin if there is a need.
- *  # Save the Config & refresh invalidated caches (Configuration, Page Cache).
- *  # Deploy static view files.
+ *  6. Enable Secure URLs for Storefront if there is a need.
+ *  7. Enable Secure URLs for Admin if there is a need.
+ *  8. Save the Config & refresh invalidated caches (Configuration, Page Cache).
+ *  9. Deploy static view files.
  *
- *  # If Secure URLs for Storefront were enabled:
- *      # Assert that https is used all over the Storefront.
- *      # Assert that static content is deployed validly (ex: JS functionality works on Storefront).
- *      # Assert that Customer is redirected to https if trying to access the page directly via http.
- *  # If secure URLs for Storefront were disabled:
- *      # Assert that http is used all over the Storefront.
- *      # Assert that static content is deployed validly (ex: JS functionality works on Storefront).
+ *  10. If Secure URLs for Storefront were enabled:
+ *      1. Assert that https is used all over the Storefront.
+ *      2. Assert that static content is deployed validly (ex: JS functionality works on Storefront).
+ *      3. Assert that Customer is redirected to https if trying to access the page directly via http.
+ *  11. If secure URLs for Storefront were disabled:
+ *      1. Assert that http is used all over the Storefront.
+ *      2. Assert that static content is deployed validly (ex: JS functionality works on Storefront).
  *
- *  # If secure URLs for Admin were enabled:
- *      # Assert that https is used all over the Admin panel.
- *      # Assert that static content is deployed validly (ex: JS functionality works in Admin panel).
- *      # Assert that Merchant is redirected to https if trying to access the page directly via http.
- *  # If secure URLs for Admin were disabled:
- *      # Assert that http is used all over the Admin panel.
- *      # Assert that static content is deployed validly (ex: JS functionality works in Admin panel).
- *      # Assert that Merchant is redirected to http if trying to access the page directly via https.
+ *  12. If secure URLs for Admin were enabled:
+ *      1. Assert that https is used all over the Admin panel.
+ *      2. Assert that static content is deployed validly (ex: JS functionality works in Admin panel).
+ *      3. Assert that Merchant is redirected to https if trying to access the page directly via http.
+ *  13. If secure URLs for Admin were disabled:
+ *      1. Assert that http is used all over the Admin panel.
+ *      2. Assert that static content is deployed validly (ex: JS functionality works in Admin panel).
+ *      3. Assert that Merchant is redirected to http if trying to access the page directly via https.
  *
  * Postconditions:
- *  # Turn the Secure URLs usage off (with further cache refreshing & static content deploying).
+ *  1. Turn the Secure URLs usage off (with further cache refreshing & static content deploying).
  *
  * @ZephyrId MAGETWO-35408
  */
@@ -112,8 +112,8 @@ class ConfigureSecureUrlsTest extends Injectable
     /**
      * Test execution.
      *
-     * @param $configData
-     * @return $this
+     * @param string $configData
+     * @return void
      */
     public function test($configData)
     {

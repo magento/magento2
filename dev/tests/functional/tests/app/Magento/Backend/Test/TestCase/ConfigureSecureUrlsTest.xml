@@ -6,11 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Backend\Test\TestCase\EnableSecureUrlsTest" summary="Configure secure URLs" ticketId="MAGETWO-35408">
-        <variation name="http for Storefront, https for Admin" summary="http for Storefront, https for Admin" ticketId="MAGETWO-35408">
+    <testCase name="Magento\Backend\Test\TestCase\ConfigureSecureUrlsTest" summary="Configure secure URLs" ticketId="MAGETWO-35408">
+        <variation name="ConfigureSecureUrlsHttpForStorefrontHttpsForAdmin" summary="http for Storefront, https for Admin" ticketId="MAGETWO-35408">
             <data name="configData" xsi:type="string">disable_https_frontend_admin</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertHttpUsedOnFrontend"/>
-            <constraint name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnBackend"/>
+            <data name="navMenuPath" xsi:type="string">Marketing>Catalog Price Rule</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertHttpUsedOnFrontend" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnBackend" />
         </variation>
     </testCase>
 </config>
