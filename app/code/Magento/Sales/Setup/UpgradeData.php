@@ -122,6 +122,7 @@ class UpgradeData implements UpgradeDataInterface
     {
         $this->changeFieldFormat($setup, 'sales_order_item', 'item_id', 'product_options');
         $this->changeFieldFormat($setup, 'quote_payment', 'payment_id', 'additional_information');
+        $this->changeFieldFormat($setup, 'sales_order_payment', 'entity_id', 'additional_information');
     }
 
     /**
