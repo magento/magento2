@@ -285,7 +285,8 @@ define([
                     galleryObject.updateData(images);
                 } else {
                     galleryObject.updateData(initialImages);
-                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();                }
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                }
             }
 
             galleryObject.first();
