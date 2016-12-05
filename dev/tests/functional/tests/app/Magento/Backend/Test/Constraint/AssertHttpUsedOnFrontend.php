@@ -6,8 +6,6 @@
 
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Customer\Test\Fixture\Customer;
@@ -16,7 +14,6 @@ use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep as LogOutCustome
 
 /**
  * Assert that http is used all over the Storefront.
- * It would be great to assert somehow that browser console does not contain JS-related errors as well.
  */
 class AssertHttpUsedOnFrontend extends AbstractConstraint
 {
@@ -25,7 +22,7 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
      *
      * @var string
      */
-    private $unsecuredProtocol = 'http://';
+    private $unsecuredProtocol = \Magento\Framework\HTTP\PhpEnvironment\Request::SCHEME_HTTP;
 
     /**
      * Browser interface.
@@ -42,37 +39,18 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
     protected $customer;
 
     /**
-     * Prepare data for further validations execution.
-     *
-     * @param ObjectManager $objectManager
-     * @param EventManagerInterface $eventManager
-     * @param BrowserInterface $browser
-     * @param Customer $customer
-     * @param string $severity
-     * @param bool $active
-     */
-    public function __construct(
-        ObjectManager $objectManager,
-        EventManagerInterface $eventManager,
-        BrowserInterface $browser,
-        Customer $customer,
-        $severity = 'low',
-        $active = true
-    ) {
-        parent::__construct($objectManager, $eventManager, $severity, $active);
-        $this->browser = $browser;
-        $this->customer = $customer;
-
-        $this->customer->persist();
-    }
-
-    /**
      * Validations execution.
      *
+     * @param BrowserInterface $browser
+     * @param Customer $customer
      * @return void
      */
-    public function processAssert()
+    public function processAssert(BrowserInterface $browser, Customer $customer)
     {
+        $this->browser = $browser;
+        $this->customer = $customer;
+        $this->customer->persist();
+
         // Log in to Customer Account on Storefront to assert that http is used indeed.
         $this->objectManager->create(LogInCustomerOnStorefront::class, ['customer' => $this->customer])->run();
         $this->assertUsedProtocol($this->unsecuredProtocol);

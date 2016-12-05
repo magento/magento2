@@ -6,16 +6,12 @@
 
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
- * Assert that https protocol is used all over the Admin panel
- * It would be great if several different pages to validate are selected randomly in order to increase the coverage.
- * It would be great to assert somehow that browser console does not contain JS-related errors as well.
+ * Assert that https protocol is used all over the Admin panel.
  */
 class AssertHttpsUsedOnBackend extends AbstractConstraint
 {
@@ -24,14 +20,14 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      *
      * @var string
      */
-    private $securedProtocol = 'https://';
+    private $securedProtocol = \Magento\Framework\HTTP\PhpEnvironment\Request::SCHEME_HTTPS;
 
     /**
      * Unsecured protocol format.
      *
      * @var string
      */
-    private $unsecuredProtocol = 'http://';
+    private $unsecuredProtocol = \Magento\Framework\HTTP\PhpEnvironment\Request::SCHEME_HTTP;
 
     /**
      * Browser interface.
@@ -41,56 +37,21 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
     protected $browser;
 
     /**
-     * "Dashboard" page in Admin panel.
-     *
-     * @var Dashboard
-     */
-    protected $adminDashboardPage;
-
-    /**
-     * The list of Navigation Menu paths for Admin pages to verify.
-     *
-     * @var array
-     */
-    protected $pagesPaths;
-
-    /**
-     * Prepare data for further validations execution.
-     *
-     * @param ObjectManager $objectManager
-     * @param EventManagerInterface $eventManager
-     * @param BrowserInterface $browser
-     * @param Dashboard $adminDashboardPage
-     * @param string $severity
-     * @param bool $active
-     */
-    public function __construct(
-        ObjectManager $objectManager,
-        EventManagerInterface $eventManager,
-        BrowserInterface $browser,
-        Dashboard $adminDashboardPage,
-        $severity = 'low',
-        $active = true
-    ) {
-        parent::__construct($objectManager, $eventManager, $severity, $active);
-        $this->browser = $browser;
-        $this->adminDashboardPage = $adminDashboardPage;
-        $this->pagesPaths = ['Products>Catalog', 'Marketing>Catalog Price Rule'];
-    }
-
-    /**
      * Validations execution.
      *
+     * @param BrowserInterface $browser
+     * @param Dashboard $adminDashboardPage
+     * @param string $navMenuPath
      * @return void
      */
-    public function processAssert()
+    public function processAssert(BrowserInterface $browser, Dashboard $adminDashboardPage, $navMenuPath)
     {
-        // Open specified Admin pages using Navigation Menu to assert that JS is deployed validly as a part of statics.
-        foreach ($this->pagesPaths as $pagePath) {
-            $this->adminDashboardPage->open()->getMenuBlock()->navigate($pagePath);
-            $this->assertUsedProtocol($this->securedProtocol);
-            $this->assertDirectHttpUnavailable();
-        }
+        $this->browser = $browser;
+
+        // Open specified Admin page using Navigation Menu to assert that JS is deployed validly as a part of statics.
+        $adminDashboardPage->open()->getMenuBlock()->navigate($navMenuPath);
+        $this->assertUsedProtocol($this->securedProtocol);
+        $this->assertDirectHttpUnavailable();
     }
 
     /**
@@ -109,7 +70,6 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
     }
 
     /**
-     *
      * Assert that Merchant is redirected to https if trying to access the page directly via http.
      *
      * @return void
@@ -123,7 +83,6 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
             $this->browser->getUrl(),
             'Merchant is not redirected to https if tries to access the Admin panel page directly via http.'
         );
-
     }
 
     /**
@@ -133,6 +92,6 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Unsecured URLs are used for Storefront pages.';
+        return 'Secured URLs are used for Admin panel pages.';
     }
 }
