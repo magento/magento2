@@ -241,6 +241,40 @@
             <field name="telephone" xsi:type="string">333-33-333-33</field>
         </dataset>
 
+        <dataset name="DE_address_Frankfurt">
+            <field name="firstname" xsi:type="string">Jan</field>
+            <field name="lastname" xsi:type="string">Jansen</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Frankfurt</field>
+            <field name="street" xsi:type="string">Marzellenstrasse 13-17</field>
+            <field name="postcode" xsi:type="string">10789</field>
+            <field name="country_id" xsi:type="string">Germany</field>
+            <field name="region" xsi:type="string">Hessen</field>
+            <field name="telephone" xsi:type="string">333-33-333-33</field>
+        </dataset>
+
+        <dataset name="KE_Nairobi">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Nairobi</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">Kenya</field>
+            <field name="postcode" xsi:type="string">12345</field>
+        </dataset>
+
+        <dataset name="KE_Mombasa">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Mombasa</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">Kenya</field>
+            <field name="postcode" xsi:type="string">12345</field>
+        </dataset>
+
         <dataset name="customer_UK_US_addresses">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe%isolation%</field>

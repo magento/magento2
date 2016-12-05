@@ -45,11 +45,6 @@ class Store extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $this->_mutableConfig->setValue(
-            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-            $this->getValue(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
         $this->_cacheManager->clean();
         return parent::afterSave();
     }

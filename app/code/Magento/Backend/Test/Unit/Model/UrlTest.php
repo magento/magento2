@@ -3,16 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
-/**
- * Test class for \Magento\Backend\Model\Url
- */
 namespace Magento\Backend\Test\Unit\Model;
+
+use Magento\Framework\Url\HostChecker;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,10 +18,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var string
+     */
     protected $_areaFrontName = 'backendArea';
 
     /**
-     * Mock menu model
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_menuMock;
@@ -62,7 +61,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_paramsResolverMock;
+    protected $routeParamsResolverFactoryMock;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -75,6 +74,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_menuMock = $this->getMock(
             \Magento\Backend\Model\Menu::class,
             [],
@@ -141,25 +141,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_encryptor = $this->getMock(\Magento\Framework\Encryption\Encryptor::class, null, [], '', false);
-        $this->_paramsResolverMock = $this->getMock(
+        $routeParamsResolver = $this->getMock(\Magento\Framework\Url\RouteParamsResolver::class, [], [], '', false);
+        $this->routeParamsResolverFactoryMock = $this->getMock(
             \Magento\Framework\Url\RouteParamsResolverFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->_paramsResolverMock->expects(
-            $this->any()
-        )->method(
-            'create'
-        )->will(
-            $this->returnValue(
-                $this->getMock(\Magento\Framework\Url\RouteParamsResolver::class, [], [], '', false)
-            )
-        );
-        $this->_model = $helper->getObject(
+        $this->routeParamsResolverFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($routeParamsResolver);
+        /** @var HostChecker|\PHPUnit_Framework_MockObject_MockObject $hostCheckerMock */
+        $hostCheckerMock = $this->getMock(HostChecker::class, [], [], '', false);
+        $this->_model = $objectManager->getObject(
             \Magento\Backend\Model\Url::class,
             [
                 'scopeConfig' => $this->_scopeConfigMock,
@@ -168,31 +164,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'menuConfig' => $this->_menuConfigMock,
                 'authSession' => $this->_authSessionMock,
                 'encryptor' => $this->_encryptor,
-                'routeParamsResolverFactory' => $this->_paramsResolverMock
+                'routeParamsResolverFactory' => $this->routeParamsResolverFactoryMock,
+                'hostChecker' => $hostCheckerMock
             ]
         );
-        $this->_paramsResolverMock->expects(
-            $this->any()
-        )->method(
-            'create'
-        )->will(
-            $this->returnValue(
-                $this->getMock(\Magento\Framework\Url\RouteParamsResolver::class, [], [], '', false)
-            )
-        );
-        $this->_model = $helper->getObject(
-            \Magento\Backend\Model\Url::class,
-            [
-                'scopeConfig' => $this->_scopeConfigMock,
-                'backendHelper' => $helperMock,
-                'formKey' => $this->_formKey,
-                'menuConfig' => $this->_menuConfigMock,
-                'authSession' => $this->_authSessionMock,
-                'encryptor' => $this->_encryptor,
-                'routeParamsResolverFactory' => $this->_paramsResolverMock
-            ]
-        );
-
         $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->_model->setRequest($this->_requestMock);
     }
@@ -262,7 +237,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             [
                 'backendHelper' => $helperMock,
                 'authSession' => $this->_authSessionMock,
-                'routeParamsResolverFactory' => $this->_paramsResolverMock
+                'routeParamsResolverFactory' => $this->routeParamsResolverFactoryMock
             ]
         );
         $urlModel->getAreaFrontName();

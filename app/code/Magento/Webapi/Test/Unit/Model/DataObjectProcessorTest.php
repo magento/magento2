@@ -6,6 +6,8 @@
 
 namespace Magento\Webapi\Test\Unit\Model;
 
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Webapi\Model\Config as ModelConfig;
 
 class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
@@ -29,6 +31,17 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class),
                 'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
+        );
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
+            ->willReturn('serializedData');
+        $serializerMock->method('unserialize')
+            ->willReturn(['unserializedData']);
+
+        $objectManager->setBackwardCompatibleProperty(
+            $methodsMapProcessor,
+            'serializer',
+            $serializerMock
         );
         $this->dataObjectProcessor = $objectManager->getObject(
             \Magento\Framework\Reflection\DataObjectProcessor::class,

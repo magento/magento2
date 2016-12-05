@@ -5,60 +5,61 @@
  */
 namespace Magento\Store\Test\Unit\Model\Config\Processor;
 
-use Magento\Store\Model\Store;
-
+/**
+ * Class PlaceholderTest
+ */
 class PlaceholderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Store\Model\Config\Processor\Placeholder
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Config\Placeholder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    private $configPlaceholderMock;
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->_requestMock->expects(
+        $this->configPlaceholderMock = $this->getMock(
+            \Magento\Store\Model\Config\Placeholder::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->configPlaceholderMock->expects(
             $this->any()
         )->method(
-            'getDistroBaseUrl'
-        )->will(
-            $this->returnValue('http://localhost/')
+            'process'
+        )->withConsecutive(
+            [['key1' => 'value1']],
+            [['key2' => 'value2']]
+        )->willReturnOnConsecutiveCalls(
+            ['key1' => 'value1-processed'],
+            ['key2' => 'value2-processed']
         );
-        $this->_model = new \Magento\Store\Model\Config\Processor\Placeholder(
-            $this->_requestMock,
-            [
-                'unsecureBaseUrl' => Store::XML_PATH_UNSECURE_BASE_URL,
-                'secureBaseUrl' => Store::XML_PATH_SECURE_BASE_URL
-            ],
-            \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
-        );
+
+        $this->model = new \Magento\Store\Model\Config\Processor\Placeholder($this->configPlaceholderMock);
     }
 
     public function testProcess()
     {
         $data = [
-            'web' => [
-                'unsecure' => [
-                    'base_url' => 'http://localhost/',
-                    'base_link_url' => '{{unsecure_base_url}}website/de',
-                ],
-                'secure' => [
-                    'base_url' => 'https://localhost/',
-                    'base_link_url' => '{{secure_base_url}}website/de',
-                ],
-            ],
-            'path' => 'value',
-            'some_url' => '{{base_url}}some',
+            'default' => ['key1' => 'value1'],
+            'websites' => [
+                'code' => ['key2' => 'value2']
+            ]
         ];
-        $expectedResult = $data;
-        $expectedResult['web']['unsecure']['base_link_url'] = 'http://localhost/website/de';
-        $expectedResult['web']['secure']['base_link_url'] = 'https://localhost/website/de';
-        $expectedResult['some_url'] = 'http://localhost/some';
-        $this->assertEquals($expectedResult, $this->_model->process($data));
+        $expected = [
+            'default' => ['key1' => 'value1-processed'],
+            'websites' => [
+                'code' => ['key2' => 'value2-processed']
+            ]
+        ];
+
+        $this->assertEquals($expected, $this->model->process($data));
     }
 }
