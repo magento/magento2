@@ -35,7 +35,7 @@ class SelectVersion extends Form
      *
      * @var string
      */
-    protected $loader = 'div[ng-show="updateComponents.yes && !upgradeProcessError"] > div.message.message-spinner';
+    private $loader = 'div[ng-show="updateComponents.yes && !upgradeProcessError"] > div.message.message-spinner';
 
     /**
      * Click on 'Next' button.
