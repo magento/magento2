@@ -54,5 +54,15 @@
             <tag name="forward"/>
             <tag name="back"/>
         </observer>
+        <observer class="Magento\Mtf\System\Observer\SourceCode">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+        </observer>
     </preset>
 </config>
