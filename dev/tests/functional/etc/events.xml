@@ -43,4 +43,26 @@
             <tag name="webapi_failed" />
         </observer>
     </preset>
+    <preset name="debug" extends="base">
+        <observer class="Magento\Mtf\System\Observer\Screenshot">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\SourceCode">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+        </observer>
+    </preset>
 </config>
