@@ -112,10 +112,10 @@ class ProductScopeRewriteGenerator
             ) {
                 // before loading the category collection by looping it, clone it and set the correct store id,
                 // so we get the correct url_path & url_key for that specific store id
-                $storeSpecificproductCategories = clone $productCategories;
-                $storeSpecificproductCategories->setStoreId($id);
+                $storeSpecificProductCategories = clone $productCategories;
+                $storeSpecificProductCategories->setStoreId($id);
 
-                $urls = array_merge($urls, $this->generateForSpecificStoreView($id, $storeSpecificproductCategories, $product));
+                $urls = array_merge($urls, $this->generateForSpecificStoreView($id, $storeSpecificProductCategories, $product));
             }
         }
 
