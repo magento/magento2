@@ -128,6 +128,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setCustomer',
                 'getCountryModel',
                 'getShouldIgnoreValidation',
+                'validate',
                 'save',
                 'getDataModel',
                 'getCustomerId',
@@ -192,6 +193,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomer')
             ->with($this->customer);
         $this->address->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+        $this->address->expects($this->once())
             ->method('save');
         $this->addressRegistry->expects($this->once())
             ->method('push')
@@ -208,12 +212,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('getDataModel')
             ->willReturn($customerAddress);
-        $this->address->expects($this->once())
-            ->method('getShouldIgnoreValidation')
-            ->willReturn(true);
-        $this->address->expects($this->once())
-        ->method('validate')
-        ->willReturn(true);
 
         $this->repository->save($customerAddress);
     }
