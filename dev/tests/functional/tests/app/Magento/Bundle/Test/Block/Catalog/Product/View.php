@@ -95,6 +95,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         );
         $this->_rootElement->find($this->customizeButton)->click();
         $this->waitForElementVisible($this->addToCart);
+        $this->waitForElementVisible($this->visibleOptions, Locator::SELECTOR_XPATH);
     }
 
     /**

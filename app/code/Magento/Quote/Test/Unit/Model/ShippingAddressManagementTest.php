@@ -104,12 +104,6 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->prepareObjectManager([
-            [
-                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class,
-                $this->amountErrorMessageMock
-            ]
-        ]);
 
         $this->service = $this->objectManager->getObject(
             \Magento\Quote\Model\ShippingAddressManagement::class,
@@ -121,6 +115,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
                 'totalsCollector' => $this->totalsCollectorMock,
                 'addressRepository' => $this->addressRepository
             ]
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->service,
+            'minimumAmountErrorMessage',
+            $this->amountErrorMessageMock
         );
     }
 
@@ -374,21 +373,5 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->never())->method('getShippingAddress');
 
         $this->service->get('cartId');
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }
