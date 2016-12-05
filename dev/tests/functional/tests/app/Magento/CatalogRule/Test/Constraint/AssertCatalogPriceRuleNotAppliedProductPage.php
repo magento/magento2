@@ -7,7 +7,6 @@
 namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
@@ -24,24 +23,14 @@ class AssertCatalogPriceRuleNotAppliedProductPage extends AbstractConstraint
      * @param CmsIndex $cmsIndexPage
      * @param CatalogCategoryView $catalogCategoryViewPage
      * @param array $products
-     * @param Customer|null $customer
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductViewPage,
         CmsIndex $cmsIndexPage,
         CatalogCategoryView $catalogCategoryViewPage,
-        array $products,
-        Customer $customer = null
+        array $products
     ) {
-        if ($customer !== null) {
-            $this->objectManager->create(
-                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
-                ['customer' => $customer]
-            )->run();
-        } else {
-            $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
-        }
         $cmsIndexPage->open();
         foreach ($products as $product) {
             $categoryName = $product->getCategoryIds()[0];

@@ -196,6 +196,7 @@ class CreateCatalogRulesIndexerTest extends Injectable
         }
         $catalogPriceRuleOriginal->persist();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
         $this->assertCatalogPriceRuleNotAppliedProductPage->processAssert(
             $this->catalogProductViewPage,
             $this->cmsIndexPage,
@@ -225,6 +226,7 @@ class CreateCatalogRulesIndexerTest extends Injectable
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule);
         $this->catalogRuleNew->getFormPageActions()->saveAndApply();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, false);
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
         $this->assertCatalogPriceRuleNotAppliedProductPage->processAssert(
             $this->catalogProductViewPage,
             $this->cmsIndexPage,
@@ -258,6 +260,7 @@ class CreateCatalogRulesIndexerTest extends Injectable
         $cron->run();
         $cron->run();
         $this->assertIndexerStatus->processAssert($this->indexManagement, $indexers, true);
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
         $this->assertCatalogPriceRuleNotAppliedProductPage->processAssert(
             $this->catalogProductViewPage,
             $this->cmsIndexPage,
