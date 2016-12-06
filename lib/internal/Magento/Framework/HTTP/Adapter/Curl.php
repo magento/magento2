@@ -27,8 +27,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             | CURLPROTO_FTPS
         ),
         'verifypeer' => true,
-        'verifyhost' => 2,
-        'sslversion' => 6
+        'verifyhost' => 2
     ];
 
     /**
