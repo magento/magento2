@@ -132,14 +132,14 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="virtualFulltextCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+    <virtualType name="fulltextCollectionFactoryVirtual" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection</argument>
         </arguments>
     </virtualType>
     <type name="Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider">
         <arguments>
-            <argument name="collectionFactory" xsi:type="object">virtualFulltextCollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">fulltextCollectionFactoryVirtual</argument>
         </arguments>
     </type>
 
