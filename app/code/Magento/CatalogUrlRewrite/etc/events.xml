@@ -33,4 +33,7 @@
     <event name="catalog_category_move_after">
         <observer name="process_url_rewrite_moving" instance="Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteMovingObserver"/>
     </event>
+    <event name="catalog_product_to_website_change">
+        <observer name="catalog_product_to_website_change" instance="Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver"/>
+    </event>
 </config>
