@@ -469,6 +469,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Get serializer instance
      *
      * @return SerializerInterface
+     * @deprecated
      */
     private function getSerializer()
     {
