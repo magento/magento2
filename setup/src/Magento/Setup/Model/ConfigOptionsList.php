@@ -72,13 +72,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Session save handler',
                 ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
-            new SelectConfigOption(
-                ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
-                SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                DefinitionFactory::getSupportedFormats(),
-                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
-                'Type of definitions used by Object Manager'
-            ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,

@@ -1037,6 +1037,18 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Reinit Stores on after save
+     *
+     * @deprecated
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $this->_storeManager->reinitStores();
+        return parent::afterSave();
+    }
+
+    /**
      * @inheritdoc
      */
     public function setWebsiteId($websiteId)
@@ -1272,7 +1284,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**
