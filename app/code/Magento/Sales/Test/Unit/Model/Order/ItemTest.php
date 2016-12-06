@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use \Magento\Sales\Model\Order;
 
@@ -118,7 +119,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $qtyRefunded,
         $qtyShipped,
         $expectedStatus
-    ) {
+    )
+    {
         $this->model->setQtyBackordered($qtyBackOrdered);
         $this->model->setQtyCanceled($qtyCanceled);
         $this->model->setQtyInvoiced($qtyInvoiced);
@@ -172,5 +174,56 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $originalPrice = 5.55;
         $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::ORIGINAL_PRICE, $originalPrice);
         $this->assertEquals($originalPrice, $this->model->getOriginalPrice());
+    }
+
+    /**
+     * Test get product options with serialization
+     *
+     * @param array|string $options
+     * @param array $expectedResult
+     *
+     * @dataProvider getProductOptionsDataProvider
+     */
+    public function testGetProductOptions($options, $expectedResult)
+    {
+        $serializerMock = $this->getMock(SerializerInterface::class, [], ['unserialize'], '', false);
+        if (is_string($options)) {
+            $serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($expectedResult));
+        }
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
+        $this->model->setData('product_options', $options);
+        $result = $this->model->getProductOptions();
+        $this->assertSame($result, $expectedResult);
+    }
+
+    /**
+     * Data provider for testGetProductOptions
+     *
+     * @return array
+     */
+    public function getProductOptionsDataProvider()
+    {
+        return [
+            'array' => [
+                'options' => [
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ],
+                'expectedResult' => [
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ]
+            ],
+            'serialized' => [
+                'options' => json_encode([
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ]),
+                'expectedResult' => [
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ]
+            ]
+        ];
     }
 }

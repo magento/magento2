@@ -6,6 +6,8 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
@@ -94,6 +96,11 @@ class Item extends AbstractModel implements OrderItemInterface
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Initialize dependencies.
@@ -459,6 +466,19 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     /**
+     * Get serializer instance
+     *
+     * @return SerializerInterface
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(SerializerInterface::class);
+        }
+        return $this->serializer;
+    }
+
+    /**
      * Get product options array
      *
      * @return array
@@ -466,7 +486,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptions()
     {
         $data = $this->_getData('product_options');
-        return is_string($data) ? unserialize($data) : $data;
+        return is_string($data) ? $this->getSerializer()->unserialize($data) : $data;
     }
 
     /**
