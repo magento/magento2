@@ -15,11 +15,6 @@ use Magento\Framework\Setup\DataConverter\DataConverterInterface;
 class FieldDataConverterFactory
 {
     /**
-     * FieldDataConverter class name
-     */
-    const CLASS_NAME = FieldDataConverter::class;
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -39,13 +34,13 @@ class FieldDataConverterFactory
      * Create instance of FieldDataConverter
      *
      * @param AdapterInterface $connection
-     * @param DataConverterInterface $dataConverterClassName
+     * @param string $dataConverterClassName
      * @return FieldDataConverter
      */
-    public function create(AdapterInterface $connection, DataConverterInterface $dataConverterClassName)
+    public function create(AdapterInterface $connection, $dataConverterClassName)
     {
         return $this->objectManager->create(
-            self::CLASS_NAME,
+            FieldDataConverter::class,
             [
                 'connection' => $connection,
                 'dataConverter' => $this->objectManager->get($dataConverterClassName)
