@@ -432,8 +432,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $expectedException = new InputException();
                 $expectedException->addError(
                     __(
-                        '%fieldName is a required field.',
-                        ['fieldName' => Address::FIRSTNAME]
+                        'Please enter the first name.'
                     )
                 );
                 $this->assertInstanceOf('SoapFault', $e);
@@ -447,8 +446,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => '%fieldName is a required field.',
-                    'parameters' => ['fieldName' => Address::FIRSTNAME],
+                    'message' => 'Please enter the first name.',
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
