@@ -39,7 +39,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAdditionalOptionOnly()
     {
-        $additional_option_result = ['additional_option' => 1];
+        $additionalOptionResult = ['additional_option' => 1];
 
         $itemMock = $this->getMock(
             \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class,
@@ -64,7 +64,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         );
         $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
-        $this->serializer->expects($this->once())->method('unserialize')->willReturn($additional_option_result);
+        $this->serializer->expects($this->once())->method('unserialize')->willReturn($additionalOptionResult);
         $optionMock->expects($this->once())->method('getValue')->willReturn(null);
         $additionalOptionMock->expects($this->once())->method('getValue');
 
@@ -76,6 +76,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ]
         ));
 
-        $this->assertEquals($additional_option_result, $this->helper->getCustomOptions($itemMock));
+        $this->assertEquals($additionalOptionResult, $this->helper->getCustomOptions($itemMock));
     }
 }
