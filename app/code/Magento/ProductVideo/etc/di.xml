@@ -46,4 +46,11 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Gallery">
         <plugin name="external_video_media_resource_backend" type="Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend" />
     </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="catalog/product_video/youtube_api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
