@@ -47,7 +47,9 @@
         <observer class="Magento\Mtf\System\Observer\Screenshot">
             <tag name="exception"/>
             <tag name="failure"/>
+            <tag name="click_before"/>
             <tag name="click_after"/>
+            <tag name="set_value"/>
             <tag name="accept_alert_after"/>
             <tag name="dismiss_alert_after"/>
             <tag name="open_after"/>
@@ -57,7 +59,9 @@
         <observer class="Magento\Mtf\System\Observer\SourceCode">
             <tag name="exception"/>
             <tag name="failure"/>
+            <tag name="click_before"/>
             <tag name="click_after"/>
+            <tag name="set_value"/>
             <tag name="accept_alert_after"/>
             <tag name="dismiss_alert_after"/>
             <tag name="open_after"/>
