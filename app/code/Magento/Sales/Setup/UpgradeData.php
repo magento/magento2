@@ -24,25 +24,25 @@ class UpgradeData implements UpgradeDataInterface
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var \Magento\Framework\Setup\FieldDataConverterFactory
      */
-    private $serializer;
+    private $fieldDataConverterFactory;
 
     /**
      * Constructor
      *
      * @param SalesSetupFactory $salesSetupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\Framework\Setup\FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Serialize\Serializer\Json $serializer
+        \Magento\Framework\Setup\FieldDataConverterFactory $fieldDataConverterFactory
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
-        $this->serializer = $serializer;
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
     /**
@@ -120,45 +120,29 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function upgradeToVersionTwoZeroFive(ModuleDataSetupInterface $setup)
     {
-        $this->changeFieldFormat($setup, 'sales_order_item', 'item_id', 'product_options');
-        $this->changeFieldFormat($setup, 'quote_payment', 'payment_id', 'additional_information');
-        $this->changeFieldFormat($setup, 'sales_order_payment', 'entity_id', 'additional_information');
-        $this->changeFieldFormat($setup, 'sales_shipment', 'entity_id', 'packages');
-        $this->changeFieldFormat($setup, 'sales_payment_transaction', 'transaction_id', 'additional_information');
-    }
-
-    /**
-     * Change format of the field for the table
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param string $tableName
-     * @param string $identifier
-     * @param string $field
-     * @return void
-     */
-    private function changeFieldFormat(ModuleDataSetupInterface $setup, $tableName, $identifier, $field)
-    {
-        $table = $setup->getTable($tableName);
-        $select = $setup->getConnection()
-            ->select()
-            ->from($table, [$identifier, $field])
-            ->where($field . ' IS NOT NULL');
-        $items = $setup->getConnection()->fetchAll($select);
-        foreach ($items as $item) {
-            $bind = [$field => $this->convertData($item[$field])];
-            $where = [$identifier . ' = ?' => (int) $item[$identifier]];
-            $setup->getConnection()->update($table, $bind, $where);
-        }
-    }
-
-    /**
-     * Convert from serialized to json format
-     *
-     * @param string $data
-     * @return string
-     */
-    private function convertData($data)
-    {
-        return $this->serializer->serialize(unserialize($data));
+        $fieldDataConverter = $this->fieldDataConverterFactory->create(
+            $setup->getConnection(),
+            \Magento\Framework\Setup\DataConverter\SerializedToJson::class
+        );
+        $fieldDataConverter->convert(
+            $setup->getTable('quote_payment'),
+            'payment_id',
+            'additional_information'
+        );
+        $fieldDataConverter->convert(
+            $setup->getTable('sales_order_payment'),
+            'entity_id',
+            'additional_information'
+        );
+        $fieldDataConverter->convert(
+            $setup->getTable('sales_shipment'),
+            'entity_id',
+            'packages'
+        );
+        $fieldDataConverter->convert(
+            $setup->getTable('sales_payment_transaction'),
+            'transaction_id',
+            'additional_information'
+        );
     }
 }
