@@ -3,16 +3,28 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="customer_account_navigation">
-            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-customer-accounts-link">
+            <block class="Magento\Customer\Block\Account\Delimiter" name="customer-account-navigation-b2b-delimiter-1" template="Magento_Customer::account/navigation-delimiter.phtml">
+                <arguments>
+                    <argument name="sortOrder" xsi:type="number">10</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Customer\Block\Account\SortLinkInterface" name="customer-account-navigation-customer-accounts-link">
                 <arguments>
                     <argument name="path" xsi:type="string">customerhierarchy/account/index</argument>
                     <argument name="label" xsi:type="string">Customer Accounts</argument>
+                    <argument name="sortOrder" xsi:type="number">9</argument>
                 </arguments>
             </block>
-            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-customer-account-roles-link">
+            <block class="Magento\Customer\Block\Account\SortLinkInterface" name="customer-account-navigation-customer-account-roles-link">
                 <arguments>
                     <argument name="path" xsi:type="string">customerhierarchy/role/index</argument>
                     <argument name="label" xsi:type="string">Customer Account Roles</argument>
+                    <argument name="sortOrder" xsi:type="number">8</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Customer\Block\Account\Delimiter" name="customer-account-navigation-b2b-delimiter-2" template="Magento_Customer::account/navigation-delimiter.phtml">
+                <arguments>
+                    <argument name="sortOrder" xsi:type="number">7</argument>
                 </arguments>
             </block>
         </referenceBlock>

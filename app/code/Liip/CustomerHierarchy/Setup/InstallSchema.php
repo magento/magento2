@@ -12,6 +12,7 @@ class InstallSchema implements InstallSchemaInterface
     const CUSTOMER_HIERARCHY_TABLE = 'liip_customer_hierarchy';
     const CUSTOMER_PERMISSIONS_TABLE = 'liip_customer_permissions';
     const CUSTOMER_ROLES_TABLE = 'liip_customer_roles';
+    const CUSTOMER_ROLES_ACCOUNTS_TABLE = 'liip_customer_roles_accounts';
 
     /**
      * {@inheritdoc}
@@ -23,6 +24,7 @@ class InstallSchema implements InstallSchemaInterface
         $this->createHierarchyTable($setup);
         $this->createRolesTable($setup);
         $this->createPermissionsTable($setup);
+        $this->createRolesToAccountsTable($setup);
 
         $setup->endSetup();
     }
@@ -45,22 +47,8 @@ class InstallSchema implements InstallSchemaInterface
                 'parent_id',
                 Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false],
+                ['unsigned' => true, 'nullable' => true],
                 'Parent Customer ID'
-            )
-            ->addColumn(
-                'type',
-                Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false],
-                'Customer Type'
-            )
-            ->addColumn(
-                'path',
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false],
-                'Tree Path'
             )
             ->addForeignKey(
                 $setup->getFkName(
@@ -158,6 +146,41 @@ class InstallSchema implements InstallSchemaInterface
                 Table::ACTION_CASCADE
             )
             ->setComment('Customer Permissions Table');
+
+        $setup->getConnection()->createTable($table);
+    }
+
+    private function createRolesToAccountsTable(SchemaSetupInterface $setup)
+    {
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable(self::CUSTOMER_ROLES_ACCOUNTS_TABLE))
+            ->addColumn(
+                'role_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Role ID'
+            )
+            ->addColumn(
+                'customer_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Customer ID'
+            )
+            ->addForeignKey(
+                $setup->getFkName(
+                    self::CUSTOMER_ROLES_ACCOUNTS_TABLE,
+                    'role_id',
+                    $setup->getTable(self::CUSTOMER_ROLES_TABLE),
+                    'entity_id'
+                ),
+                'role_id',
+                $setup->getTable(self::CUSTOMER_ROLES_TABLE),
+                'entity_id',
+                Table::ACTION_CASCADE
+            )
+            ->setComment('Roles-Accounts Table');
 
         $setup->getConnection()->createTable($table);
     }

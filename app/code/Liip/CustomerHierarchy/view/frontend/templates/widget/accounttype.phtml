@@ -6,7 +6,7 @@
     <div class="control">
         <select id="<?php echo $block->escapeHtmlAttr($block->getFieldId('type')) ?>" name="<?php echo $block->escapeHtmlAttr($block->getFieldName('type')) ?>" title="<?php echo $block->escapeHtmlAttr(__('Account Type')) ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?>>
             <?php foreach ($block->getAccountTypeOptions() as $option):?>
-                <option value="<?php echo $block->escapeHtmlAttr($option['value']) ?>"<?php if ($option['value'] == $block->getAccountType()) echo ' selected="selected"' ?>><?php echo $block->escapeHtml(__($option['label'])) ?></option>
+                <option value="<?php echo $block->escapeHtmlAttr($option->getValue()) ?>"<?php if ($option->getValue() == $block->getAccountType()) echo ' selected="selected"' ?>><?php echo $block->escapeHtml(__($option->getLabel())) ?></option>
             <?php endforeach;?>
         </select>
     </div>

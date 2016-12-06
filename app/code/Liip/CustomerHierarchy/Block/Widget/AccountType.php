@@ -16,16 +16,7 @@ class AccountType extends AbstractWidget
      */
     public function getAccountTypeOptions()
     {
-        return [
-            [
-                'value' => 'private',
-                'label' => __('Private'),
-            ],
-            [
-                'value' => 'corporate',
-                'label' => __('Corporate'),
-            ],
-        ];
+        return $this->_getAttribute('type')->getOptions();
     }
 
     public function getAccountType()
