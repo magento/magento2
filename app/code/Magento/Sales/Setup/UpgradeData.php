@@ -125,19 +125,19 @@ class UpgradeData implements UpgradeDataInterface
             \Magento\Framework\Setup\DataConverter\SerializedToJson::class
         );
         $fieldDataConverter->convert(
-            $setup->getTable('quote_payment'),
-            'payment_id',
-            'additional_information'
-        );
-        $fieldDataConverter->convert(
-            $setup->getTable('sales_order_payment'),
-            'entity_id',
-            'additional_information'
+            $setup->getTable('sales_order_item'),
+            'item_id',
+            'product_options'
         );
         $fieldDataConverter->convert(
             $setup->getTable('sales_shipment'),
             'entity_id',
             'packages'
+        );
+        $fieldDataConverter->convert(
+            $setup->getTable('sales_order_payment'),
+            'entity_id',
+            'additional_information'
         );
         $fieldDataConverter->convert(
             $setup->getTable('sales_payment_transaction'),
