@@ -150,8 +150,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(
                 [
                     'One or more input exceptions have occurred.',
-                    'street is a required field.',
-                    'city is a required field.',
+                    'Please enter the street.',
+                    'Please enter the city.',
                 ]
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR

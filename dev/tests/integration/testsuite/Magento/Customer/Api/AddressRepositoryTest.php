@@ -207,8 +207,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(2, $errors);
-            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
-            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+            $this->assertEquals('Please enter the first name.', $errors[0]->getLogMessage());
+            $this->assertEquals('Please enter the last name.', $errors[1]->getLogMessage());
         }
     }
 
