@@ -223,6 +223,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 34;
         $addressId = 53;
+        $errors[] = __('Please enter the state/province.');
         $customerAddress = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\AddressInterface::class,
             [],
@@ -246,7 +247,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('updateData')
             ->with($customerAddress);
-        $this->prepareMocksForInvalidAddressValidation();
+        $this->address->expects($this->once())
+            ->method('validate')
+            ->willReturn($errors);
 
         $this->repository->save($customerAddress);
     }
@@ -259,6 +262,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 34;
         $addressId = 53;
+        $errors[] = __('region is a required field.');
         $customerAddress = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\AddressInterface::class,
             [],
@@ -282,60 +286,13 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('updateData')
             ->with($customerAddress);
-        $countryModel = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
-        $regionCollection = $this->getMock(
-            \Magento\Directory\Model\ResourceModel\Region\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
 
-        $this->address->expects($this->once())
-            ->method('getShouldIgnoreValidation')
-            ->willReturn(false);
-        $this->address->expects($this->atLeastOnce())
-            ->method('getCountryId')
-            ->willReturn(1);
-        $this->address->expects($this->once())
-            ->method('getFirstname')
-            ->willReturn('firstname');
-        $this->address->expects($this->once())
-            ->method('getLastname')
-            ->willReturn('lastname');
-        $this->address->expects($this->once())
-            ->method('getStreetLine')
-            ->with(1)
-            ->willReturn('street line');
-        $this->address->expects($this->once())
-            ->method('getCity')
-            ->willReturn('city');
-        $this->address->expects($this->once())
-            ->method('getTelephone')
-            ->willReturn('23423423423');
         $this->address->expects($this->never())
             ->method('getRegionId')
             ->willReturn(null);
-
-        $this->directoryData->expects($this->once())
-            ->method('getCountriesWithOptionalZip')
-            ->willReturn([1]);
         $this->address->expects($this->once())
-            ->method('getCountryModel')
-            ->willReturn($countryModel);
-        $countryModel->expects($this->once())
-            ->method('getRegionCollection')
-            ->willReturn($regionCollection);
-        $regionCollection->expects($this->once())
-            ->method('count')
-            ->willReturn(0);
-        $this->directoryData->expects($this->once())
-            ->method('isRegionRequired')
-            ->with(1)
-            ->willReturn(true);
-        $this->address->expects($this->once())
-            ->method('getRegion')
-            ->willReturn('');
+            ->method('validate')
+            ->willReturn($errors);
 
         $this->repository->save($customerAddress);
     }
@@ -348,6 +305,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 34;
         $addressId = 53;
+        $errors[] = __('regionId is a required field.');
         $customerAddress = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\AddressInterface::class,
             [],
@@ -379,106 +337,14 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $this->address->expects($this->once())
-            ->method('getShouldIgnoreValidation')
-            ->willReturn(false);
-        $this->address->expects($this->atLeastOnce())
-            ->method('getCountryId')
-            ->willReturn(1);
-        $this->address->expects($this->once())
-            ->method('getFirstname')
-            ->willReturn('firstname');
-        $this->address->expects($this->once())
-            ->method('getLastname')
-            ->willReturn('lastname');
-        $this->address->expects($this->once())
-            ->method('getStreetLine')
-            ->with(1)
-            ->willReturn('street line');
-        $this->address->expects($this->once())
-            ->method('getCity')
-            ->willReturn('city');
-        $this->address->expects($this->once())
-            ->method('getTelephone')
-            ->willReturn('23423423423');
-        $this->address->expects($this->once())
-            ->method('getRegionId')
-            ->willReturn(2);
-
-        $this->directoryData->expects($this->once())
-            ->method('getCountriesWithOptionalZip')
-            ->willReturn([1]);
-        $this->address->expects($this->once())
-            ->method('getCountryModel')
-            ->willReturn($countryModel);
-        $countryModel->expects($this->once())
-            ->method('getRegionCollection')
-            ->willReturn($regionCollection);
-        $regionCollection->expects($this->atLeastOnce())
-            ->method('count')
-            ->willReturn(2);
-        $regionCollection->expects($this->once())
-            ->method('getData')
-            ->willReturn([5, 6, 7, 8, 9]);
-        $this->directoryData->expects($this->once())
-            ->method('isRegionRequired')
-            ->with(1)
-            ->willReturn(true);
         $this->address->expects($this->never())
             ->method('getRegion')
             ->willReturn('');
+        $this->address->expects($this->once())
+            ->method('validate')
+            ->willReturn($errors);
 
         $this->repository->save($customerAddress);
-    }
-
-    protected function prepareMocksForInvalidAddressValidation()
-    {
-        $countryModel = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
-        $regionCollection = $this->getMock(
-            \Magento\Directory\Model\ResourceModel\Region\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->address->expects($this->once())
-            ->method('getShouldIgnoreValidation')
-            ->willReturn(false);
-        $this->address->expects($this->atLeastOnce())
-            ->method('getCountryId');
-        $this->address->expects($this->once())
-            ->method('getFirstname');
-        $this->address->expects($this->once())
-            ->method('getLastname');
-        $this->address->expects($this->once())
-            ->method('getStreetLine')
-            ->with(1);
-        $this->address->expects($this->once())
-            ->method('getCity');
-        $this->address->expects($this->once())
-            ->method('getTelephone');
-        $this->address->expects($this->never())
-            ->method('getRegionId')
-            ->willReturn(null);
-
-        $this->directoryData->expects($this->once())
-            ->method('getCountriesWithOptionalZip')
-            ->willReturn([]);
-        $this->address->expects($this->once())
-            ->method('getCountryModel')
-            ->willReturn($countryModel);
-        $countryModel->expects($this->once())
-            ->method('getRegionCollection')
-            ->willReturn($regionCollection);
-        $regionCollection->expects($this->once())
-            ->method('count')
-            ->willReturn(0);
-        $this->directoryData->expects($this->once())
-            ->method('isRegionRequired')
-            ->with(null)
-            ->willReturn(true);
     }
 
     public function testGetById()
