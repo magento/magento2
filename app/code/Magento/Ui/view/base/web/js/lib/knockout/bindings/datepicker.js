@@ -51,7 +51,12 @@ define([
 
             observable() && $(el).datepicker(
                 'setDate',
-                moment(observable(), utils.normalizeDate(config.options.dateFormat)).toDate()
+                moment(
+                    observable(),
+                    utils.normalizeDate(
+                        options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
+                    )
+                ).toDate()
             );
 
             $(el).blur();

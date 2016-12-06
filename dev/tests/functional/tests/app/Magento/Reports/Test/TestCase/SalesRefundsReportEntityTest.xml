@@ -20,6 +20,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult" />
         </variation>
         <variation name="SalesRefundsReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">assert refunds month report</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
@@ -32,6 +33,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertRefundReportIntervalResult" />
         </variation>
         <variation name="SalesRefundsReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">assert refund Daily report</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>

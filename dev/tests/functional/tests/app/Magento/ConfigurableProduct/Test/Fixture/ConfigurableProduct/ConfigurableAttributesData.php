@@ -277,10 +277,12 @@ class ConfigurableAttributesData extends DataSource
             $variationsMatrix = $this->addVariationMatrix($variationsMatrix, $attribute, $attributeKey);
         }
 
-        foreach ($data['matrix'] as $key => $value) {
-            if (isset($value['sku']) && $value['sku'] === '') {
-                unset($variationsMatrix[$key]['sku']);
-                unset($data['matrix'][$key]['sku']);
+        if (isset($data['matrix'])) {
+            foreach ($data['matrix'] as $key => $value) {
+                if (isset($value['sku']) && $value['sku'] === '') {
+                    unset($variationsMatrix[$key]['sku']);
+                    unset($data['matrix'][$key]['sku']);
+                }
             }
         }
 

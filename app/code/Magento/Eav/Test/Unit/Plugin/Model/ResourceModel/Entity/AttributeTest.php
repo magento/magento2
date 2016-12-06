@@ -3,111 +3,166 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Plugin\Model\ResourceModel\Entity;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
+use Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute as AttributeResourcePlugin;
+use Magento\Eav\Model\Cache\Type;
+use Magento\Eav\Model\Entity\Attribute;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cache;
+    /**
+     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheMock;
 
-    /** @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cacheState;
+    /**
+     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheStateMock;
 
-    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject */
-    protected $subject;
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    /**
+     * @var AttributeResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeResourceMock;
+
+    /**
+     * @var AttributeResourcePlugin
+     */
+    private $attributeResourcePlugin;
 
     protected function setUp()
     {
-        $this->cache = $this->getMock(\Magento\Framework\App\CacheInterface::class);
-        $this->cacheState = $this->getMock(\Magento\Framework\App\Cache\StateInterface::class);
-        $this->subject = $this->getMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class, [], [], '', false);
-    }
-
-    public function testGetStoreLabelsByAttributeIdOnCacheDisabled()
-    {
-        $this->cache->expects($this->never())->method('load');
-
-        $this->assertEquals(
-            'attributeId',
-            $this->getAttribute(false)->aroundGetStoreLabelsByAttributeId(
-                $this->subject,
-                $this->mockPluginProceed('attributeId'),
-               'attributeId'
-            )
+        $objectManager = new ObjectManager($this);
+        $this->cacheMock = $this->getMock(CacheInterface::class);
+        $this->cacheStateMock = $this->getMock(StateInterface::class);
+        $this->attributeResourceMock = $this->getMock(AttributeResource::class, [], [], '', false);
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->attributeResourcePlugin = $objectManager->getObject(
+            AttributeResourcePlugin::class,
+            [
+                'cache' => $this->cacheMock,
+                'cacheState' => $this->cacheStateMock,
+                'serializer' => $this->serializerMock
+            ]
         );
     }
 
-    public function testGetStoreLabelsByAttributeIdFromCache()
+    public function testAroundGetStoreLabelsByAttributeIdCacheIsDisabled()
     {
         $attributeId = 1;
-        $attributes = ['k' => 'v'];
-        $cacheId = \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute::STORE_LABEL_ATTRIBUTE . $attributeId;
-        $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(serialize($attributes));
+        $this->cacheMock->expects($this->never())
+            ->method('load');
+        $this->cacheStateMock->expects($this->exactly(2))
+            ->method('isEnabled')
+            ->with(Type::TYPE_IDENTIFIER)
+            ->willReturn(false);
+
+        $isProceedCalled = false;
+        // @SuppressWarnings(PHPMD.UnusedFormalParameter)
+        $proceed = function ($attributeId) use (&$isProceedCalled) {
+            $isProceedCalled = true;
+        };
+
+        $this->attributeResourcePlugin->aroundGetStoreLabelsByAttributeId(
+            $this->attributeResourceMock,
+            $proceed,
+            $attributeId
+        );
+        $this->assertTrue($isProceedCalled);
+    }
+
+    public function testAroundGetStoreLabelsByAttributeIdCacheExists()
+    {
+        $attributeId = 1;
+        $attributes = ['foo' => 'bar'];
+        $serializedAttributes = 'serialized attributes';
+        $cacheId = AttributeResourcePlugin::STORE_LABEL_ATTRIBUTE . $attributeId;
+        $this->cacheStateMock->expects($this->once())
+            ->method('isEnabled')
+            ->with(Type::TYPE_IDENTIFIER)
+            ->willReturn(true);
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with($cacheId)
+            ->willReturn($serializedAttributes);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedAttributes)
+            ->willReturn($attributes);
+
+        $isProceedCalled = false;
+        // @SuppressWarnings(PHPMD.UnusedFormalParameter)
+        $proceed = function ($attributeId) use (&$isProceedCalled) {
+            $isProceedCalled = true;
+        };
 
         $this->assertEquals(
             $attributes,
-            $this->getAttribute(true)->aroundGetStoreLabelsByAttributeId(
-                $this->subject,
-                $this->mockPluginProceed(),
+            $this->attributeResourcePlugin->aroundGetStoreLabelsByAttributeId(
+                $this->attributeResourceMock,
+                $proceed,
                 $attributeId
             )
         );
+        $this->assertFalse($isProceedCalled);
     }
 
-    public function testGetStoreLabelsByAttributeIdWithCacheSave()
+    public function testAroundGetStoreLabelsByAttributeIdCacheDoesNotExist()
     {
         $attributeId = 1;
-        $cacheId = \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute::STORE_LABEL_ATTRIBUTE . $attributeId;
-        $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
-        $this->cache->expects($this->any())->method('save')->with(
-            serialize([$attributeId]),
-            $cacheId,
-            [
-                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
-            ]
-        );
+        $attributes = ['foo' => 'bar'];
+        $serializedAttributes = 'serialized attributes';
+        $cacheId = AttributeResourcePlugin::STORE_LABEL_ATTRIBUTE . $attributeId;
+        $this->cacheStateMock->expects($this->exactly(2))
+            ->method('isEnabled')
+            ->with(Type::TYPE_IDENTIFIER)
+            ->willReturn(true);
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with($cacheId)
+            ->willReturn(false);
+        $this->serializerMock->expects($this->never())
+            ->method('unserialize')
+            ->with($serializedAttributes)
+            ->willReturn($attributes);
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($attributes)
+            ->willReturn($serializedAttributes);
+        $this->cacheMock->expects($this->once())
+            ->method('save')
+            ->with(
+                $serializedAttributes,
+                $cacheId,
+                [
+                    Type::CACHE_TAG,
+                    Attribute::CACHE_TAG
+                ]
+            );
+
+        // @SuppressWarnings(PHPMD.UnusedFormalParameter)
+        $proceed = function ($attributeId) use ($attributes) {
+            return $attributes;
+        };
 
         $this->assertEquals(
-            [$attributeId],
-            $this->getAttribute(true)->aroundGetStoreLabelsByAttributeId(
-                $this->subject,
-                $this->mockPluginProceed([$attributeId]),
+            $attributes,
+            $this->attributeResourcePlugin->aroundGetStoreLabelsByAttributeId(
+                $this->attributeResourceMock,
+                $proceed,
                 $attributeId
             )
         );
-    }
-
-    /**
-     * @param bool $cacheEnabledFlag
-     * @return \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute
-     */
-    protected function getAttribute($cacheEnabledFlag)
-    {
-        $this->cacheState->expects($this->any())->method('isEnabled')
-            ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)->willReturn($cacheEnabledFlag);
-        return (new ObjectManager($this))->getObject(
-            \Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute::class,
-            [
-                'cache' => $this->cache,
-                'cacheState' => $this->cacheState
-            ]
-        );
-    }
-
-    /**
-     * @param mixed $returnValue
-     * @return callable
-     */
-    protected function mockPluginProceed($returnValue = null)
-    {
-        return function () use ($returnValue) {
-            return $returnValue;
-        };
     }
 }

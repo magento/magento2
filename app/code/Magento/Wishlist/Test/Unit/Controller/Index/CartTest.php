@@ -159,7 +159,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParams', 'getParam', 'isAjax'])
+            ->setMethods(['getParams', 'getParam', 'isAjax', 'getPostValue'])
             ->getMockForAbstractClass();
 
         $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
@@ -829,6 +829,178 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())
             ->method('setQty')
             ->with(1)
+            ->willReturnSelf();
+
+        $this->urlMock->expects($this->at(0))
+            ->method('getUrl')
+            ->with('*/*', null)
+            ->willReturn($indexUrl);
+
+        $itemMock->expects($this->once())
+            ->method('getProductId')
+            ->willReturn($productId);
+
+        $this->urlMock->expects($this->at(1))
+            ->method('getUrl')
+            ->with('*/*/configure/', ['id' => $itemId, 'product_id' => $productId])
+            ->willReturn($configureUrl);
+
+        $optionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->optionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($optionMock);
+
+        $optionsMock = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Option\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionMock->expects($this->once())
+            ->method('getCollection')
+            ->willReturn($optionsMock);
+
+        $optionsMock->expects($this->once())
+            ->method('addItemFilter')
+            ->with([$itemId])
+            ->willReturnSelf();
+        $optionsMock->expects($this->once())
+            ->method('getOptionsByItem')
+            ->with($itemId)
+            ->willReturn($options);
+
+        $itemMock->expects($this->once())
+            ->method('setOptions')
+            ->with($options)
+            ->willReturnSelf();
+
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($params);
+
+        $buyRequestMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $itemMock->expects($this->once())
+            ->method('getBuyRequest')
+            ->willReturn($buyRequestMock);
+
+        $this->productHelperMock->expects($this->once())
+            ->method('addParamsToBuyRequest')
+            ->with($params, ['current_config' => $buyRequestMock])
+            ->willReturn($buyRequestMock);
+
+        $itemMock->expects($this->once())
+            ->method('mergeBuyRequest')
+            ->with($buyRequestMock)
+            ->willReturnSelf();
+        $itemMock->expects($this->once())
+            ->method('addToCart')
+            ->with($this->checkoutCartMock, true)
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addNotice')
+            ->with('message', null)
+            ->willReturnSelf();
+
+        $this->helperMock->expects($this->once())
+            ->method('calculate')
+            ->willReturnSelf();
+
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with($configureUrl)
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testExecuteWithEditQuantity()
+    {
+        $itemId = 2;
+        $wishlistId = 1;
+        $qty = 1;
+        $postQty = 2;
+        $productId = 4;
+        $indexUrl = 'index_url';
+        $configureUrl = 'configure_url';
+        $options = [5 => 'option'];
+        $params = ['item' => $itemId, 'qty' => $qty];
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
+
+        $itemMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'load',
+                    'getId',
+                    'getWishlistId',
+                    'setQty',
+                    'setOptions',
+                    'getBuyRequest',
+                    'mergeBuyRequest',
+                    'addToCart',
+                    'getProduct',
+                    'getProductId',
+                ]
+            )
+            ->getMock();
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('item', null)
+            ->willReturn($itemId);
+        $this->itemFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($itemMock);
+
+        $itemMock->expects($this->once())
+            ->method('load')
+            ->with($itemId, null)
+            ->willReturnSelf();
+        $itemMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($itemId);
+        $itemMock->expects($this->once())
+            ->method('getWishlistId')
+            ->willReturn($wishlistId);
+
+        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->wishlistProviderMock->expects($this->once())
+            ->method('getWishlist')
+            ->with($wishlistId)
+            ->willReturn($wishlistMock);
+
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('qty', null)
+            ->willReturn($qty);
+
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->with('qty')
+            ->willReturn($postQty);
+
+        $this->quantityProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($postQty)
+            ->willReturnArgument(0);
+
+        $itemMock->expects($this->once())
+            ->method('setQty')
+            ->with($postQty)
             ->willReturnSelf();
 
         $this->urlMock->expects($this->at(0))

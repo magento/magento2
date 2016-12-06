@@ -6,8 +6,14 @@
 
 namespace Magento\Quote\Api;
 
+use Magento\Framework\App\Config;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Class CartManagementTest
+ * @package Magento\Quote\Api
+ * @magentoAppIsolation enabled
+ */
 class CartManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
@@ -25,6 +31,8 @@ class CartManagementTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $appConfig = $this->objectManager->get(Config::class);
+        $appConfig->clean();
     }
 
     public function tearDown()

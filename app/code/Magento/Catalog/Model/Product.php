@@ -22,7 +22,6 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method Product setHasError(bool $value)
  * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
- * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
@@ -1617,6 +1616,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isSalable()
     {
+        if ($this->hasData('salable') && !$this->_catalogProduct->getSkipSaleableCheck()) {
+            return $this->getData('salable');
+        }
         $this->_eventManager->dispatch('catalog_product_is_salable_before', ['product' => $this]);
 
         $salable = $this->isAvailable();
@@ -1626,6 +1628,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             'catalog_product_is_salable_after',
             ['product' => $this, 'salable' => $object]
         );
+        $this->setData('salable', $object->getIsSalable());
         return $object->getIsSalable();
     }
 
@@ -2613,5 +2616,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
+    }
+
+    /**
+     * Set the associated products
+     *
+     * @param array $productIds
+     * @return $this
+     */
+    public function setAssociatedProductIds(array $productIds)
+    {
+        $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+        return $this;
     }
 }

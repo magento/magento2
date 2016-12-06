@@ -28,6 +28,7 @@ class ResetCurrencySymbolEntityTest extends AbstractCurrencySymbolEntityTest
 {
     /* tags */
     const MVP = 'no';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

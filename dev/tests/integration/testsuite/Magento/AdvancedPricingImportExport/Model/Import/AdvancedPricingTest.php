@@ -48,34 +48,52 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 [
                     'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
                     'value'             => '300.0000',
-                    'qty'               => '10.0000'
+                    'qty'               => '10.0000',
+                    'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '1',
                     'value'             => '11.0000',
-                    'qty'               => '11.0000'
+                    'qty'               => '11.0000',
+                    'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '3',
                     'value'             => '14.0000',
-                    'qty'               => '14.0000'
+                    'qty'               => '14.0000',
+                    'percentage_value'  => null
+                ],
+                [
+                    'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+                    'value'             => '160.5000',
+                    'qty'               => '20.0000',
+                    'percentage_value'  => '50.0000'
                 ]
             ],
             'AdvancedPricingSimple 2' => [
                 [
                     'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
                     'value'             => '1000000.0000',
-                    'qty'               => '100.0000'
+                    'qty'               => '100.0000',
+                    'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '0',
                     'value'             => '12.0000',
-                    'qty'               => '12.0000'
+                    'qty'               => '12.0000',
+                    'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '2',
                     'value'             => '13.0000',
-                    'qty'               => '13.0000'
+                    'qty'               => '13.0000',
+                    'percentage_value'  => null
+                ],
+                [
+                    'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+                    'value'             => '327.0000',
+                    'qty'               => '200.0000',
+                    'percentage_value'  => '50.0000'
                 ]
             ]
         ];
@@ -121,16 +139,38 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
-            $this->assertEquals(3, count($tierPriceCollection));
+            $this->assertEquals(4, count($tierPriceCollection));
+            $index = 0;
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
-                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getPercentageValue());
+                $this->checkPercentageDiscount($tierPrice, $sku, $index);
                 $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
+                $index ++;
             }
         }
+    }
+
+    /**
+     * Check percentage discount type.
+     *
+     * @param \Magento\Catalog\Model\Product\TierPrice $tierPrice
+     * @param string $sku
+     * @param int $index
+     * @return void
+     */
+    private function checkPercentageDiscount(
+        \Magento\Catalog\Model\Product\TierPrice $tierPrice,
+        $sku,
+        $index
+    ) {
+            $this->assertEquals(
+                $this->expectedTierPrice[$sku][$index]['percentage_value'],
+                $tierPrice->getExtensionAttributes()->getPercentageValue()
+            );
+            $tierPrice->setData('percentage_value', $tierPrice->getExtensionAttributes()->getPercentageValue());
     }
 
     /**
@@ -241,14 +281,16 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
-            $this->assertEquals(3, count($tierPriceCollection));
+            $this->assertEquals(4, count($tierPriceCollection));
+            $index = 0;
             /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
             foreach ($tierPriceCollection as $tierPrice) {
-                $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getPercentageValue());
+                $this->checkPercentageDiscount($tierPrice, $sku, $index);
                 $this->assertEquals(0, $tierPrice->getExtensionAttributes()->getWebsiteId());
                 $tierPriceData = $tierPrice->getData();
                 unset($tierPriceData['extension_attributes']);
                 $this->assertContains($tierPriceData, $this->expectedTierPrice[$sku]);
+                $index ++;
             }
         }
     }

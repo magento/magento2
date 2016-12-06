@@ -178,10 +178,7 @@ class Actions extends Block
     public function cancel()
     {
         $this->_rootElement->find($this->cancel)->click();
-        $element = $this->browser->find($this->confirmModal);
-        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
-        $modal->acceptAlert();
+        $this->acceptAlert();
     }
 
     /**
@@ -202,6 +199,7 @@ class Actions extends Block
     public function void()
     {
         $this->_rootElement->find($this->void)->click();
+        $this->acceptAlert();
     }
 
     /**
@@ -266,27 +264,36 @@ class Actions extends Block
     }
 
     /**
-     * Accept order
+     * Accept order.
+     *
      * @return void
      */
     public function accept()
     {
         $acceptPayment = '#accept_payment';
         $this->_rootElement->find($acceptPayment)->click();
-        $element = $this->browser->find($this->confirmModal);
-        /** @var Modal $modal */
-        $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
-        $modal->acceptAlert();
+        $this->acceptAlert();
     }
 
     /**
-     * Deny order
+     * Deny order.
+     *
      * @return void
      */
     public function deny()
     {
         $denyPayment = '#deny_payment';
         $this->_rootElement->find($denyPayment)->click();
+        $this->acceptAlert();
+    }
+
+    /**
+     * Accept alert.
+     *
+     * @return void
+     */
+    private function acceptAlert()
+    {
         $element = $this->browser->find($this->confirmModal);
         /** @var Modal $modal */
         $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);

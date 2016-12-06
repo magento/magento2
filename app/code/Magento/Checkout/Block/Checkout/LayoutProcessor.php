@@ -7,7 +7,11 @@ namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\StoreResolverInterface;
 
+/**
+ * Class LayoutProcessor
+ */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
@@ -34,6 +38,16 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @var Data
      */
     private $checkoutDataHelper;
+
+    /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
+     * @var \Magento\Shipping\Model\Config
+     */
+    private $shippingConfig;
 
     /**
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
@@ -146,6 +160,16 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 $elements
             );
         }
+        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['step-config']['children']['shipping-rates-validation']['children']
+        )) {
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['step-config']['children']['shipping-rates-validation']['children'] =
+                $this->processShippingChildrenComponents(
+                    $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+                    ['step-config']['children']['shipping-rates-validation']['children']
+                );
+        }
 
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
             ['children']['shippingAddress']['children']['shipping-address-fieldset']['children']
@@ -161,6 +185,26 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             );
         }
         return $jsLayout;
+    }
+
+    /**
+     * Process shipping configuration to exclude inactive carriers.
+     *
+     * @param array $shippingRatesLayout
+     * @return array
+     */
+    private function processShippingChildrenComponents($shippingRatesLayout)
+    {
+        $activeCarriers = $this->getShippingConfig()->getActiveCarriers(
+            $this->getStoreResolver()->getCurrentStoreId()
+        );
+        foreach (array_keys($shippingRatesLayout) as $carrierName) {
+            $carrierKey = str_replace('-rates-validation', '', $carrierName);
+            if (!array_key_exists($carrierKey, $activeCarriers)) {
+                unset($shippingRatesLayout[$carrierName]);
+            }
+        }
+        return $shippingRatesLayout;
     }
 
     /**
@@ -313,5 +357,35 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         }
 
         return $this->checkoutDataHelper;
+    }
+
+    /**
+     * Retrieve Shipping Configuration.
+     *
+     * @return \Magento\Shipping\Model\Config
+     * @deprecated
+     */
+    private function getShippingConfig()
+    {
+        if (!$this->shippingConfig) {
+            $this->shippingConfig = ObjectManager::getInstance()->get(\Magento\Shipping\Model\Config::class);
+        }
+
+        return $this->shippingConfig;
+    }
+
+    /**
+     * Get store resolver.
+     *
+     * @return StoreResolverInterface
+     * @deprecated
+     */
+    private function getStoreResolver()
+    {
+        if (!$this->storeResolver) {
+            $this->storeResolver = ObjectManager::getInstance()->get(StoreResolverInterface::class);
+        }
+
+        return $this->storeResolver;
     }
 }

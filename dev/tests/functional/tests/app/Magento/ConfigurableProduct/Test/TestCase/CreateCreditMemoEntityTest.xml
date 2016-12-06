@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest" summary="Create Credit Memo for Offline Payment Methods" ticketId="MAGETWO-59074">
+        <variation name="CreateCreditMemoEntityWithConfigurableTestVariation1" ticketId="MAGETWO-12447">
+            <data name="description" xsi:type="string">Assert items return to stock (partial refund)</data>
+            <data name="data/items_data/0/back_to_stock" xsi:type="string">Yes</data>
+            <data name="data/items_data/0/qty" xsi:type="string">1</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/entity_id/products" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_refund</data>
+            <data name="configData" xsi:type="string"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductQtyDecreasedAfterCreditmemo" />
+        </variation>
+    </testCase>
+</config>

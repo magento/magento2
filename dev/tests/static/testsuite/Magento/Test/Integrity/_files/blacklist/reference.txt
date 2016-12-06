@@ -115,3 +115,4 @@ DoubleColon
 \Magento\TestModuleMessageQueueConfiguration\AsyncHandler
 \Magento\TestModuleMessageQueueConfiguration\SyncHandler
 \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
+\Magento\Mtf\Client\ElementInterface
