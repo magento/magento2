@@ -276,17 +276,25 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->with($ccExpYear)
             ->willReturnSelf();
 
-        $this->infoInstanceMock->expects($this->atLeastOnce())
+        $this->infoInstanceMock->expects($this->at(0))
             ->method('setAdditionalInformation')
-            ->willReturnMap(
-                [
-                    ['device_data', $deviceData],
-                    ['cc_last4', $ccLast4],
-                    ['cc_token', $ccToken],
-                    ['payment_method_nonce', $paymentMethodNonce],
-                    ['store_in_vault', $storeInVault]
-                ]
-            );
+            ->with('device_data', $deviceData);
+
+        $this->infoInstanceMock->expects($this->at(1))
+            ->method('setAdditionalInformation')
+            ->with('cc_last4', $ccLast4);
+
+        $this->infoInstanceMock->expects($this->at(2))
+            ->method('setAdditionalInformation')
+            ->with('cc_token', $ccToken);
+
+        $this->infoInstanceMock->expects($this->at(3))
+            ->method('setAdditionalInformation')
+            ->with('store_in_vault', $storeInVault);
+
+        $this->infoInstanceMock->expects($this->at(4))
+            ->method('setAdditionalInformation')
+            ->with('payment_method_nonce', $paymentMethodNonce);
 
         $this->model->assignData($data);
     }
