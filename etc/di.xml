@@ -154,4 +154,13 @@
             <argument name="indexerId" xsi:type="const">\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID</argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="catalog/search/elasticsearch_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch_server_port" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch_index_prefix" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
