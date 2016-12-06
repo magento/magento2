@@ -26,6 +26,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'extended_acceptance_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**
@@ -47,7 +48,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
         // Preconditions
         $this->caches = $caches;
         $this->adjustCacheSettings();
-        
+
         // Steps
         $this->widgetInstanceIndex->open();
         $this->widgetInstanceIndex->getPageActionsBlock()->addNew();

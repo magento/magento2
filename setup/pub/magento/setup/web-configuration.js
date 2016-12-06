@@ -5,7 +5,7 @@
 
 'use strict';
 angular.module('web-configuration', ['ngStorage'])
-    .controller('webConfigurationController', ['$scope', '$state', '$localStorage', function ($scope, $state, $localStorage) {
+    .controller('webConfigurationController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
         $scope.config = {
             address: {
                 base_url: '',
@@ -68,12 +68,12 @@ angular.module('web-configuration', ['ngStorage'])
 
         $scope.$watch('config.address.base_url', function() {
             if (angular.equals($scope.config.https.text, '') || angular.isUndefined($scope.config.https.text)) {
-                $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+                $scope.config.https.text = $scope.config.address.base_url.replace('http://', 'https://');
             }
         });
 
         $scope.populateHttps = function() {
-            $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+            $scope.config.https.text = $scope.config.address.base_url.replace('http://', 'https://');
         };
 
         $scope.showEncryptKey = function() {
@@ -119,4 +119,28 @@ angular.module('web-configuration', ['ngStorage'])
                 $scope.webconfig.submitted = false;
             }
         });
+
+        // Validate URL
+        $scope.validateUrl = function () {
+            if (!$scope.webconfig.submitted) {
+                $http.post('index.php/url-check', $scope.config)
+                    .success(function (data) {
+                        $scope.validateUrl.result = data;
+                        if ($scope.validateUrl.result.successUrl && $scope.validateUrl.result.successSecureUrl) {
+                            $scope.nextState();
+                        }
+                        if (!$scope.validateUrl.result.successUrl) {
+                            $scope.webconfig.submitted = true;
+                            $scope.webconfig.base_url.$setValidity('url', false);
+                        }
+                        if (!$scope.validateUrl.result.successSecureUrl) {
+                            $scope.webconfig.submitted = true;
+                            $scope.webconfig.https.$setValidity('url', false);
+                        }
+                    })
+                    .error(function (data) {
+                        $scope.validateUrl.failed = data;
+                    });
+            }
+        };
     }]);

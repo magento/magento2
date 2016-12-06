@@ -10,7 +10,7 @@
         <referenceBlock name="sales.order.view">
             <block class="Magento\Shipping\Block\Tracking\Link" name="tracking-info-link" template="tracking/link.phtml">
                 <arguments>
-                    <argument name="label" xsi:type="string">Track your order</argument>
+                    <argument name="label" xsi:type="string" translate="true">Track your order</argument>
                 </arguments>
             </block>
         </referenceBlock>

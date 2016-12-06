@@ -36,6 +36,11 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     protected $_countryFactory;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Construct
      *
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
@@ -61,15 +66,30 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     {
         $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         if ($cache = $this->_configCacheType->load($cacheKey)) {
-            $options = unserialize($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             /** @var \Magento\Directory\Model\Country $country */
             $country = $this->_countryFactory->create();
             /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
             $collection = $country->getResourceCollection();
             $options = $collection->load()->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         return $options;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

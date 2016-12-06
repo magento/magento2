@@ -29,7 +29,7 @@
                         <input class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> checkbox product bundle option change-container-classname"
                                id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                                type="checkbox"
-                               <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"'?>
+                               <?php if ($_option->getRequired()) /* @escapeNotVerified */ echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"'?>
                                name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
                                data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
                                <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>

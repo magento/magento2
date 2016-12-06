@@ -145,7 +145,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
-        $select->expects($this->any())->method('columns')->will($this->returnValue($select));
+        $select->expects($this->any())->method('columns')->willReturnSelf();
 
         $response = $this->mapper->buildQuery($this->request);
 
@@ -165,7 +165,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('getSize')
             ->willReturn(self::REQUEST_LIMIT);
 
-        $select->expects($this->any())->method('columns')->will($this->returnValue($select));
+        $select->expects($this->any())->method('columns')->willReturnSelf();
 
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
@@ -522,9 +522,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ->willReturnSelf();
         }
 
-        $select->expects($isInternal ? $this->once() : $this->never())
+        $select->expects($this->any())
             ->method('limit')
-            ->with(self::REQUEST_LIMIT)
+            ->with($isInternal ? self::REQUEST_LIMIT : 10000000000)
             ->willReturnSelf();
         $select->expects($isInternal ? $this->once() : $this->never())
             ->method('order')

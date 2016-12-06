@@ -29,6 +29,7 @@ class DeleteWidgetEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

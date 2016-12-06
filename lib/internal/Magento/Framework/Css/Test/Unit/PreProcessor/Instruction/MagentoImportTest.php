@@ -8,6 +8,10 @@
 
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Instruction;
 
+use Magento\Framework\Css\PreProcessor\Instruction\MagentoImport;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -39,9 +43,9 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $themeList;
+    private $themeProvider;
 
     /**
      * @var \Magento\Framework\Css\PreProcessor\Instruction\Import
@@ -58,14 +62,14 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
         $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
         $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->themeList = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Theme\ListInterface::class);
-        $this->object = new \Magento\Framework\Css\PreProcessor\Instruction\MagentoImport(
-            $this->design,
-            $this->fileSource,
-            $this->errorHandler,
-            $this->assetRepo,
-            $this->themeList
-        );
+        $this->themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $this->object = (new ObjectManager($this))->getObject(MagentoImport::class, [
+            'design' => $this->design,
+            'fileSource' => $this->fileSource,
+            'errorHandler' => $this->errorHandler,
+            'assetRepo' => $this->assetRepo,
+            'themeProvider' => $this->themeProvider
+        ]);
     }
 
     /**
@@ -91,7 +95,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($relatedAsset));
         $relatedAsset->expects($this->once())->method('getContext')->will($this->returnValue($context));
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        $this->themeList->expects($this->once())->method('getThemeByFullPath')->will($this->returnValue($theme));
+        $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->will($this->returnValue($theme));
         $files = [];
         foreach ($foundFiles as $file) {
             $fileObject = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);

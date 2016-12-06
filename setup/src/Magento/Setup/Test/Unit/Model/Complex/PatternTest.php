@@ -42,8 +42,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
                     [
                         'id' => '%s',
                         'name' => 'Static',
-                        'calculated' => function ($index) {
-                            return $index * 10;
+                        'calculated' => function ($index, $generatedKey) {
+                            return $index * 10 + $generatedKey;
                         },
                     ],
                     [
@@ -53,7 +53,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase
                         'name' => 'yyy %s'
                     ],
                 ],
-                'ecpectedCount'      => 3,
+                'expectedCount'      => 3,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Static', 'calculated' => 10],
                     ['id' => '',  'name' => 'xxx 1',  'calculated' => ''],
@@ -68,7 +68,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase
                         'calculated' => 'calc %s',
                     ],
                 ],
-                'ecpectedCount' => 1,
+                'expectedCount' => 1,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Dynamic 1', 'calculated' => 'calc 1'],
                 ],

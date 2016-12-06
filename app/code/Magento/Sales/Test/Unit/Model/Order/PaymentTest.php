@@ -19,7 +19,15 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 {
     const TRANSACTION_ID = 'ewr34fM49V0';
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $mockContext;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderStateResolverMock;
 
     /**
      * @var Payment
@@ -59,6 +67,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Invoice | \PHPUnit_Framework_MockObject_MockObject $orderMock */
     private $invoiceMock;
 
+    /**
+     * @var string
+     */
     private $transactionId;
 
     /**
@@ -271,14 +282,19 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'getGrandTotal',
                 'getBaseGrandTotal',
                 'getDoTransaction',
-                'getInvoice'
+                'getInvoice',
+                'getOrder'
             ],
             [],
             '',
             false
         );
-
+        $this->orderStateResolverMock = $this->getMockBuilder(Order\OrderStateResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->payment = $this->initPayment();
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper->setBackwardCompatibleProperty($this->payment, 'orderStateResolver', $this->orderStateResolverMock);
         $this->payment->setMethod('any');
         $this->payment->setOrder($this->orderMock);
         $this->transactionId = self::TRANSACTION_ID;
@@ -1465,6 +1481,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects(static::once())
             ->method('getInvoice')
             ->willReturn($this->invoiceMock);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
 
         $captureTranId = self::TRANSACTION_ID . '-' . Transaction::TYPE_CAPTURE;
         $captureTransaction = $this->getMockBuilder(Transaction::class)
@@ -1499,7 +1518,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $status = 'status';
         $message = 'We refunded ' . $amount . ' online. Transaction ID: "' . $refundTranId . '"';
-        $this->mockGetDefaultStatus(Order::STATE_PROCESSING, $status);
+        $this->orderStateResolverMock->expects($this->once())->method('getStateForOrder')
+            ->with($this->orderMock)
+            ->willReturn(Order::STATE_CLOSED);
+        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status);
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
 
         static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
@@ -1526,7 +1548,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $partialAmount = 12.00;
 
         $this->orderMock->expects(static::exactly(2))
-            ->method('getTotalDue')
+            ->method('getBaseTotalDue')
             ->willReturn($amount);
 
         static::assertFalse($this->payment->isCaptureFinal($partialAmount));

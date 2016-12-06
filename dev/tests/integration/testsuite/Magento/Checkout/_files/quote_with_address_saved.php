@@ -11,7 +11,11 @@
 
 require 'quote_with_address.php';
 
-$quote->collectTotals()->save();
+
+$quoteRepository = \Magento\Framework\App\ObjectManager::getInstance()->get(
+    \Magento\Quote\Api\CartRepositoryInterface::class
+);
+$quoteRepository->save($quote);
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

@@ -21,7 +21,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
  * Class Pdfcreditmemos
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
+class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
 {
     /**
      * @var FileFactory

@@ -6,6 +6,7 @@
 
 namespace Magento\Cms\Test\TestCase;
 
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Cms\Test\Fixture\CmsPage as CmsPageFixture;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
@@ -29,6 +30,7 @@ class CreateCmsPageEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**
@@ -53,6 +55,13 @@ class CreateCmsPageEntityTest extends Injectable
     protected $fixtureFactory;
 
     /**
+     * Configuration data.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
      * Inject pages.
      *
      * @param CmsPageIndex $cmsIndex
@@ -72,10 +81,18 @@ class CreateCmsPageEntityTest extends Injectable
      *
      * @param array $data
      * @param string $fixtureType
+     * @param string $configData
      * @return array
      */
-    public function test(array $data, $fixtureType)
+    public function test(array $data, $fixtureType, $configData = '')
     {
+        $this->configData = $configData;
+
+        // Preconditions
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         // Steps
         $cms = $this->fixtureFactory->createByCode($fixtureType, ['data' => $data]);
         $this->cmsIndex->open();
@@ -84,5 +101,20 @@ class CreateCmsPageEntityTest extends Injectable
         $this->cmsPageNew->getPageMainActions()->save();
 
         return ['cms' => $cms];
+    }
+
+    /**
+     * Disable single store mode on config level.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        if ($this->configData) {
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => 'enable_single_store_mode', 'rollback' => true]
+            )->run();
+        }
     }
 }

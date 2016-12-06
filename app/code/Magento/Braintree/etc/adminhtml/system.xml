@@ -33,7 +33,7 @@
                         </requires>
                     </field>
                     <field id="braintree_cc_vault_active" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Vault enabled</label>
+                        <label>Vault Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_cc_vault/active</config_path>
                         <requires>
@@ -155,7 +155,7 @@
                             <comment>It is recommended to set this value to "PayPal" per store views.</comment>
                         </field>
                         <field id="braintree_paypal_vault_active" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Vault enabled</label>
+                            <label>Vault Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal_vault/active</config_path>
                             <requires>

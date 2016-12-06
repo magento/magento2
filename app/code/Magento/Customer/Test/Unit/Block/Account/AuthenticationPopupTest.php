@@ -16,10 +16,10 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var AuthenticationPopup */
+    /** @var \Magento\Customer\Block\Account\AuthenticationPopup */
     private $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     private $contextMock;
 
     /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -53,6 +53,24 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
+        $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaperMock->method('escapeHtml')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeHtml' . $string;
+                }
+            );
+        $escaperMock->method('escapeUrl')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeUrl' . $string;
+                }
+            );
+        $this->contextMock->expects($this->once())
+            ->method('getEscaper')
+            ->willReturn($escaperMock);
 
         $this->model = new AuthenticationPopup(
             $this->contextMock
@@ -110,10 +128,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 'reg',
                 'forgot',
                 [
-                    'autocomplete' => 'off',
-                    'customerRegisterUrl' => 'reg',
-                    'customerForgotPasswordUrl' => 'forgot',
-                    'baseUrl' => 'base',
+                    'autocomplete' => 'escapeHtmloff',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrlbase',
                 ],
             ],
             [
@@ -122,10 +140,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 'reg',
                 'forgot',
                 [
-                    'autocomplete' => 'on',
-                    'customerRegisterUrl' => 'reg',
-                    'customerForgotPasswordUrl' => 'forgot',
-                    'baseUrl' => '',
+                    'autocomplete' => 'escapeHtmlon',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrl',
                 ],
             ],
             [
@@ -134,10 +152,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 '',
                 'forgot',
                 [
-                    'autocomplete' => 'off',
-                    'customerRegisterUrl' => '',
-                    'customerForgotPasswordUrl' => 'forgot',
-                    'baseUrl' => 'base',
+                    'autocomplete' => 'escapeHtmloff',
+                    'customerRegisterUrl' => 'escapeUrl',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrlbase',
                 ],
             ],
             [
@@ -146,10 +164,10 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 'reg',
                 '',
                 [
-                    'autocomplete' => 'on',
-                    'customerRegisterUrl' => 'reg',
-                    'customerForgotPasswordUrl' => '',
-                    'baseUrl' => 'base',
+                    'autocomplete' => 'escapeHtmlon',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrl',
+                    'baseUrl' => 'escapeUrlbase',
                 ],
             ],
         ];

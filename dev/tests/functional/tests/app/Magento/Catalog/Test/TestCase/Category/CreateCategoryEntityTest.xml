@@ -16,6 +16,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation2_RootCategory_AllFields">
+            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create root category with all fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -39,8 +40,8 @@
             <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;catalog.leftnav&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
-            <data name="category/data/schedule_update_from" xsi:type="string">Jan 10, 2014</data>
-            <data name="category/data/schedule_update_to" xsi:type="string">Dec 31, 2024</data>
+            <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
+            <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
@@ -56,6 +57,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation4_Subcategory_AllFields">
+            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create not anchor subcategory specifying all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -82,9 +84,11 @@
             <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;content.aside&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
-            <data name="category/data/schedule_update_from" xsi:type="string">Jan 1, 2014</data>
-            <data name="category/data/schedule_update_to" xsi:type="string">Dec 31, 2024</data>
+            <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
+            <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
+            <data name="filterByPath" xsi:type="string">request_path</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />

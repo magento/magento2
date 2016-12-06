@@ -48,7 +48,7 @@ interface WriteInterface extends ReadInterface
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null);
 
     /**
-     * Creates symlink on a file and places it to destination
+     * Creates symlink on a file or directory and places it to destination
      *
      * @param string $path
      * @param string $destination

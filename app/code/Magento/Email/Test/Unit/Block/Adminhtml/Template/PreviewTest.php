@@ -84,9 +84,13 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs([
                 $scopeConfig
             ])
-            ->setMethods(null)
+            ->setMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
+        $appState->expects($this->any())
+            ->method('emulateAreaCode')
+            ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA, [$template, 'getProcessedTemplate'])
+            ->willReturn($template->getProcessedTemplate());
 
         $context = $this->getMock(
             \Magento\Backend\Block\Template\Context::class,

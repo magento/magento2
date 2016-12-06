@@ -57,6 +57,11 @@
                 </item>
             </argument>
             <argument name="baseController" xsi:type="string">some_value</argument>
+            <argument name="sortedList" xsi:type="array">
+                <item name="itemTwo" xsi:type="object" sortOrder="20">Instance_test_name_two</item>
+                <item name="itemOne" xsi:type="object">Instance_test_name_one</item>
+                <item name="itemThree" xsi:type="object" sortOrder="30">Instance_test_name_three</item>
+            </argument>
         </arguments>
     </type>
 </config>

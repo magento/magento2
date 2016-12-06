@@ -14,7 +14,7 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 <?php if (count($_items)):?>
 <div class="block review-list" id="customer-reviews">
     <div class="block-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Customer Reviews') ?></strong>
+        <strong><?php echo $block->escapeHtml(__('Customer Reviews')) ?></strong>
     </div>
     <div class="block-content">
         <div class="toolbar review-toolbar">
@@ -45,11 +45,11 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                 </div>
                 <div class="review-details">
                     <p class="review-author">
-                        <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Review by')?></span>
+                        <span class="review-details-label"><?php echo $block->escapeHtml(__('Review by'))?></span>
                         <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
                     </p>
                     <p class="review-date">
-                        <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Posted on') ?></span>
+                        <span class="review-details-label"><?php echo $block->escapeHtml(__('Posted on')) ?></span>
                         <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->escapeHtmlAttr($block->formatDate($_review->getCreatedAt(), $format)) ?>"><?php echo $block->escapeHtml($block->formatDate($_review->getCreatedAt(), $format)) ?></time>
                     </p>
                 </div>

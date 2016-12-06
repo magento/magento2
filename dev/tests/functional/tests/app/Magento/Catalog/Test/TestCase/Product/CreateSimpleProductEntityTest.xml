@@ -137,6 +137,7 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23030</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
@@ -157,6 +158,7 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23029</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
@@ -168,7 +170,7 @@
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
-            <data name="product/data/price/value" xsi:type="string">10008</data>
+            <data name="product/data/price/value" xsi:type="string">10008.88</data>
             <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">58</data>
@@ -238,6 +240,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation14">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create simple product and check visibility in category</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -255,6 +258,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation15">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with tax class and group price</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -303,6 +307,7 @@
             <data name="product/data/weight" xsi:type="string">66</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">143</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
@@ -312,6 +317,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation18">
+            <data name="issue" xsi:type="string">MAGETWO-60470: [Import Custom options] An error occurs on attempt to save the product with imported options</data>
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -324,6 +330,7 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">options_suite</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_options_suite</data>
             <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
+            <data name="issue" xsi:type="string">MAGETWO-58181: All kind of Custom Options have dynamic view on Bamboo</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
@@ -333,6 +340,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation19" summary="Create product with cross-sell products" ticketId="MAGETWO-29081">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -349,6 +357,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCrossSells" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation20" summary="Create product with up-sell products" ticketId="MAGETWO-29105">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -401,6 +410,7 @@
             <data name="product/data/sku" xsi:type="string">simple%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">345</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
@@ -460,6 +470,77 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
             <data name="product/data/country_of_manufacture" xsi:type="string">Antarctica</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+        </variation>
+        <variation name="CreateSimpleProductEntityTestVariation28" summary="Create product with tier price for not logged in customer">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">667</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">not_logged_in</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
+        </variation>
+        <variation name="CreateSimpleProductEntityTestVariation29" summary="Create Simple Product and assign it to custom website">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">200.20</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">668</data>
+            <data name="product/data/website_ids/0/dataset" xsi:type="string">custom_store</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite" />
+        </variation>
+        <variation name="CreateSimpleProductEntityWithEmptySkuMaskTest1"  summary="Create Simple Product Entity With Empty Sku Mask" ticketId="MAGETWO-58951">
+            <data name="configData" xsi:type="string">empty_product_mask_sku</data>
+            <data name="description" xsi:type="string">Create product with custom options(fixed price)</data>
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10000</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
+            <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
+            <data name="product/data/price/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+        </variation>
+        <variation name="CreateSimpleProductEntityWithTierPriceTestVariation1" summary="Create Simple Product with fixed tier price.">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100.00</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">555</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">custom_with_fixed_discount</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceInCart" />
+        </variation>
+        <variation name="CreateSimpleProductEntityWithTierPriceTestVariation2" summary="Create Simple Product with percentage tier price.">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">200.00</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">555</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">custom_with_percentage_discount</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceInCart" />
+        </variation>
+        <variation name="CreateSimpleProductEntityWithImageTestVariation1" summary="Create product with image and try to save it again">
+            <data name="product/data/image/0/file" xsi:type="string">Magento/Catalog/Test/_files/test1.png</data>
+            <data name="product/data/image/1/file" xsi:type="string">Magento/Catalog/Test/_files/test2.png</data>
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10</data>
+            <data name="product/data/weight" xsi:type="string">50</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">100</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductHasImageInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCanSaveProduct" />
         </variation>
     </testCase>
 </config>

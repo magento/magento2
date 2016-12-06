@@ -434,7 +434,7 @@ define([
         },
 
         applyCoupon : function(code){
-            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: true});
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
             this.orderItemChanged = false;
         },
 

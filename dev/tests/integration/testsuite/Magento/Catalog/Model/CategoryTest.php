@@ -276,6 +276,27 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     */
+    public function testSaveCategoryWithoutImage()
+    {
+        $model = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
+        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+
+        $model->setName('Test Category 100')
+            ->setParentId(2)
+            ->setLevel(2)
+            ->setAvailableSortBy(['position', 'name'])
+            ->setDefaultSortBy('name')
+            ->setIsActive(true)
+            ->setPosition(1)
+            ->isObjectNew(true);
+
+        $repository->save($model);
+        $this->assertEmpty($model->getImage());
+    }
+
+    /**
      * @magentoAppArea adminhtml
      */
     public function testDeleteChildren()

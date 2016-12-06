@@ -27,7 +27,7 @@ class CopyrightTest extends \PHPUnit_Framework_TestCase
 
     public function copyrightDataProvider()
     {
-        $blackList = include __DIR__ . '/_files/copyright/blacklist.php';
+        $blackList = $this->getFilesData('blacklist*.php');
 
         $changedFiles = [];
         foreach (glob(__DIR__ . '/../_files/changed_files*') as $listFile) {
@@ -55,5 +55,19 @@ class CopyrightTest extends \PHPUnit_Framework_TestCase
             }
         );
         return $changedFiles;
+    }
+
+    /**
+     * @param string $filePattern
+     * @return array
+     */
+    protected function getFilesData($filePattern)
+    {
+        $result = [];
+        foreach (glob(__DIR__ . '/_files/copyright/' . $filePattern) as $file) {
+            $fileData = include $file;
+            $result = array_merge($result, $fileData);
+        }
+        return $result;
     }
 }

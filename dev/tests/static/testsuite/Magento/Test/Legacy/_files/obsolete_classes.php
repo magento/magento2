@@ -785,6 +785,7 @@ return [
     ['Mage_Core_Model_Config_Fieldset', 'Magento\Core\Model\Fieldset\Config'],
     ['Mage_Core_Model_Config_Options', 'Magento\Framework\Filesystem'],
     ['Magento\Framework\App\Dir', 'Magento\Framework\Filesystem'],
+    ['Magento\Framework\EntityManager\CustomAttributesMapper'],
     ['Magento\Framework\Filesystem\Adapter\Local', 'Magento\Framework\Filesystem\Driver\File'],
     ['Magento\Framework\Filesystem\Adapter\Zlib', 'Magento\Framework\Filesystem\Driver\Zlib'],
     ['Magento\Framework\Filesystem\AdapterInterface'],
@@ -3825,8 +3826,8 @@ return [
     ],
     ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
     [
-        'Magento\Setup\Console\Command\DeployStaticContentCommand',
-        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand',
+        'Magento\Setup\Console\Command\DeployStaticContentCommand'
     ],
     [
         'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',

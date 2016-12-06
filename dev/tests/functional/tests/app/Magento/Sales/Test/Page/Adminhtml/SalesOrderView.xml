@@ -16,5 +16,7 @@
         <block name="orderHistoryBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\History" locator=".order-comments-history" strategy="css selector" />
         <block name="informationBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Info" locator=".order-account-information" strategy="css selector" />
         <block name="orderInfoBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info" locator="[data-ui-id='sales-order-tabs-tab-content-order-info']" strategy="css selector" />
+        <block name="orderInvoiceGrid" class="Magento\Sales\Test\Block\Adminhtml\Invoice\Grid" locator="//div[contains(@data-bind, 'sales_order_view_invoice_grid.sales_order_view_invoice_grid')]" strategy="xpath" />
+        <block name="addressesBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Addresses" locator=".admin__page-section.order-addresses" strategy="css selector" />
     </page>
 </config>

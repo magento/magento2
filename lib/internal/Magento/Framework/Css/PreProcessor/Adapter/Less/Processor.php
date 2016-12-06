@@ -81,9 +81,11 @@ class Processor implements ContentProcessorInterface
             }
 
             $tmpFilePath = $this->temporaryFile->createFile($path, $content);
-            $parser->parseFile($tmpFilePath, '');
 
+            gc_disable();
+            $parser->parseFile($tmpFilePath, '');
             $content = $parser->getCss();
+            gc_enable();
 
             if (trim($content) === '') {
                 $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;

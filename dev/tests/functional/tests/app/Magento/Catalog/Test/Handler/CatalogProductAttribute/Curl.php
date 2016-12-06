@@ -47,6 +47,14 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'No' => 0,
             'Yes' => 1,
         ],
+        'is_global' => [
+            'Store View' => '0',
+            'Global' => '1',
+        ],
+        'used_in_product_listing' => [
+            'No' => '0',
+            'Yes' => '1',
+        ],
     ];
 
     /**
@@ -76,6 +84,7 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             unset($data['options']);
         }
 
+        $data = $this->changeStructureOfTheData($data);
         $url = $_ENV['app_backend_url'] . 'catalog/product_attribute/save/back/edit';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, $data);
@@ -103,5 +112,14 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
         }
 
         return $resultData;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function changeStructureOfTheData(array $data)
+    {
+        return $data;
     }
 }

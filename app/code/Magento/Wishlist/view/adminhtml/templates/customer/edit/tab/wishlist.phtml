@@ -21,13 +21,13 @@
                     if (!urlParams) {
                         urlParams = '';
                     }
-                    var url = <?php echo $block->escapeJs($block->getJsObjectName()) ?>.url + '?ajax=true' + urlParams;
+                    var url = <?php echo $block->escapeJs($block->escapeUrl($block->getJsObjectName())) ?>.url + '?ajax=true' + urlParams;
                     new Ajax.Updater(
-                        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.containerId,
+                        <?php echo $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>.containerId,
                         url,
                         {
                             parameters: {form_key: FORM_KEY},
-                            onComplete: <?php echo $block->escapeJs($block->getJsObjectName()) ?>.initGrid.bind(<?php echo $block->escapeJs($block->getJsObjectName()) ?>),
+                            onComplete: <?php echo $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>.initGrid.bind(<?php echo $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>),
                         evalScripts:true
                 }
             );
@@ -50,7 +50,7 @@
         var self = this;
 
         confirm({
-            content: '<?php /* @escapeNotVerified */ echo __('Are you sure you want to remove this item?') ?>',
+            content: '<?php echo $block->escapeJs($block->escapeHtml(__('Are you sure you want to remove this item?'))) ?>',
             actions: {
                 confirm: function () {
                     self.reload('&delete=' + itemId);
@@ -63,8 +63,8 @@
     productConfigure.addListType(
         'wishlist',
         {
-            urlFetch: '<?php echo $block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure')) ?>',
-            urlConfirm: '<?php echo $block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/update')) ?>'
+            urlFetch: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
+            urlConfirm: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/update'))) ?>'
         }
     );
     //-->

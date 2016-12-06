@@ -275,6 +275,35 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
     }
 
+    /**
+     * Test creating product with all store code on single store
+     *
+     * @param array $fixtureProduct
+     * @dataProvider productCreationProvider
+     */
+    public function testCreateAllStoreCodeForSingleWebsite($fixtureProduct)
+    {
+        $response = $this->saveProduct($fixtureProduct, 'all');
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
+
+        foreach ($storeManager->getStores(true) as $store) {
+            $code = $store->getCode();
+            if ($code === Store::ADMIN_CODE) {
+                continue;
+            }
+            $this->assertArrayHasKey(
+                ProductInterface::SKU,
+                $this->getProduct($fixtureProduct[ProductInterface::SKU], $code)
+            );
+        }
+        $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
+    }
+
     public function testCreateInvalidPriceFormat()
     {
         $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
@@ -684,6 +713,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
+
+        $index = null;
+        foreach ($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'category_ids') {
+                $index = $key;
+                break;
+            }
+        }
+        $this->assertNotNull($index, 'Category information wasn\'t set');
+
+        $expectedResult = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ? ['string' => '2'] : ['2'];
+        $this->assertEquals($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);
     }
 
     /**

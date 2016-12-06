@@ -92,4 +92,9 @@ interface DeployStaticOptionsInterface
      * Force run of static deploy
      */
     const FORCE_RUN = 'force';
+
+    /**
+     * Symlink locale if it not customized
+     */
+    const SYMLINK_LOCALE = 'symlink-locale';
 }

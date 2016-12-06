@@ -34,7 +34,7 @@ class RatingElement extends SimpleElement
      *
      * @var string
      */
-    protected $ratingByNumber = './/*[@id="rating_detail"]//*[contains(@class,"field-rating")][%d]';
+    protected $ratingByNumber = './/*[contains(@class,"field-rating")][%d]';
 
     /**
      * Set rating value

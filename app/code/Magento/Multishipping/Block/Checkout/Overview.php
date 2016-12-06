@@ -297,7 +297,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getVirtualProductEditUrl()
     {
-        return $this->getUrl('*/cart');
+        return $this->getUrl('checkout/cart');
     }
 
     /**

@@ -316,9 +316,11 @@ define([
                 }, this);
             }
 
-            this.pagesChanged[this.currentPage()] =
-                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-            this.changed(_.some(this.pagesChanged));
+            if (this.defaultPagesState[this.currentPage()]) {
+                this.pagesChanged[this.currentPage()] =
+                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.changed(_.some(this.pagesChanged));
+            }
         },
 
         /**

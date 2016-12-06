@@ -1287,7 +1287,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             'adminhtml_checkout',
             $this->customerMapper->toFlatArray($customer),
             false,
-            CustomerForm::DONT_IGNORE_INVISIBLE
+            CustomerForm::IGNORE_INVISIBLE
         );
 
         return $customerForm;
@@ -1547,6 +1547,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function applyCoupon($code)
     {
         $code = trim((string)$code);
+        $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
+
+        if (empty($code)) {
+            $this->getQuote()->getShippingAddress()->setFreeShipping(null);
+        }
         $this->getQuote()->setCouponCode($code);
         $this->setRecollect(true);
 
@@ -1563,13 +1568,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         $customer = $this->getQuote()->getCustomer();
         $form = $this->_createCustomerForm($customer);
-        $customerData = $this->customerMapper->toFlatArray($customer);
 
         // emulate request
         $request = $form->prepareRequest($accountData);
         $data = $form->extractData($request);
         $data = $form->restoreData($data);
-        $data = array_merge($customerData, array_filter($data));
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
@@ -1578,6 +1581,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
 
+        $customerData = $this->customerMapper->toFlatArray($customer);
         foreach ($form->getAttributes() as $attribute) {
             $code = sprintf('customer_%s', $attribute->getAttributeCode());
             $data[$code] = isset($customerData[$attribute->getAttributeCode()])

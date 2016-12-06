@@ -21,6 +21,13 @@ class CompareLink extends Block
     protected $qtyCompareProducts = '.compare .counter.qty';
 
     /**
+     * Locator value for Compare Products link.
+     *
+     * @var string
+     */
+    protected $linkCompareProducts = '[data-role="compare-products-link"] a.compare';
+
+    /**
      * Get qty of Products in Compare list.
      *
      * @return string
@@ -31,5 +38,15 @@ class CompareLink extends Block
         $compareProductLink = $this->_rootElement->find($this->qtyCompareProducts);
         preg_match_all('/^\d+/', $compareProductLink->getText(), $matches);
         return $matches[0][0];
+    }
+
+    /**
+     * Wait for compare products link to appear
+     *
+     * @return void
+     */
+    public function waitForCompareProductsLinks()
+    {
+        $this->waitForElementVisible($this->linkCompareProducts);
     }
 }

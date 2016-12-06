@@ -14,12 +14,11 @@
 .payflow-settings-notice { border:1px solid #d1d0ce;padding:0 10px;margin: 0;}
 .payflow-settings-notice .important-label {color:#f00;}
 .payflow-settings-notice ul.options-list {list-style:disc;padding:0 2em;}
-.paypal-express-section .heading {display: inline-block; background: url("images/pp-logo-200px.png") no-repeat 0 50% / 18rem auto; padding-left: 20rem;}
-.paypal-express-section .button-container {display: inline-block; float: right;}
+.paypal-express-section .heading {background: url("images/pp-logo-200px.png") no-repeat 0 50% / 18rem auto; padding-left: 20rem;}
+.paypal-express-section .button-container {float: right;}
 .paypal-express-section .config-alt {background: url("images/pp-alt.png") no-repeat; height: 26px; margin: 0.5rem 0 0; width: 158px;}
 .paypal-express-section .link-more {margin-left: 5px;}
-.paypal-other-section .heading {display: inline-block;}
-.paypal-other-section .button-container {display: inline-block; float: right; margin: 1rem 0 0 !important;}
+.paypal-other-section .button-container {float: right; margin: 1rem 0 0 !important;}
 .paypal-other-section > .entry-edit-head > a::before {left: auto !important; right: 1.3rem !important;}
 .paypal-all-in-one-section > .entry-edit-head {background: url("images/AM_mc_vs_dc_ae.jpg") no-repeat scroll 0 50% / 18rem auto; padding-left: 18rem;}
 .paypal-gateways-section > .entry-edit-head {background: url("images/pp-payflow-mark.png") no-repeat scroll 0 50% / 18rem auto; padding-left: 18rem;}
@@ -27,7 +26,9 @@
 .paypal-top-section.active > .entry-edit-head.admin__collapsible-block {border-bottom: 1px solid #ccc;}
 .paypal-top-section > .admin__collapsible-block > a {font-size: 1.4rem; font-weight: normal; text-transform: uppercase;}
 .paypal-recommended-header > .admin__collapsible-block > a::before {content: "" !important;}
-.paypal-other-header > .admin__collapsible-block > a.open::before {content: "\25B2" !important;}
-.paypal-other-header > .admin__collapsible-block > a::before {color: #000; content: "\25BC" !important; font-size: 1rem; top: 2.2rem;}
+.paypal-other-header > .admin__collapsible-block > a::before {content: '' !important; width: 0; height: 0; border-color: transparent; border-top-color: #000; border-style: solid; border-width: .8rem .5rem 0 .5rem; margin-top:1px; transition: all .2s linear;}
+.paypal-other-header > .admin__collapsible-block > a.open::before {border-color: transparent; border-bottom-color: #000; border-width: 0 .5rem .8rem .5rem;}
 .paypal-other-header > .admin__collapsible-block > a {color: #007bdb !important; text-align: right;}
-.payments-other-header > .admin__collapsible-block > a::before {content: "" !important;}
+.payments-other-header > .admin__collapsible-block > a {display: inline-block;}
+.payments-other-header > .admin__collapsible-block > a::before {content: '' !important; width: 0; height: 0; border-color: transparent; border-top-color: #000; border-style: solid; border-width: .8rem .5rem 0 .5rem; margin-top:1px; transition: all .2s linear;}
+.payments-other-header > .admin__collapsible-block > a.open::before {border-color: transparent; border-bottom-color: #000; border-width: 0 .5rem .8rem .5rem;}

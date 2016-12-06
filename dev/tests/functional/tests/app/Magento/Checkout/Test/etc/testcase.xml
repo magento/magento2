@@ -22,4 +22,23 @@
         <step name="placeOrder" module="Magento_Checkout" next="createCustomerAccount" />
         <step name="createCustomerAccount" module="Magento_Checkout" />
     </scenario>
+    <scenario name="OnePageCheckoutJsValidationTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="ProceedToCheckout" />
+        <step name="ProceedToCheckout" module="Magento_Checkout" />
+    </scenario>
+    <scenario name="OnePageCheckoutDeclinedTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="clickPlaceOrderButton" />
+        <step name="clickPlaceOrderButton" module="Magento_Checkout" />
+    </scenario>
 </config>

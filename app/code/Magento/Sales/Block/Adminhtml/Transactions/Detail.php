@@ -131,7 +131,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
 
         $this->setOrderIncrementIdHtml($this->escapeHtml($this->_txn->getOrder()->getIncrementId()));
 
-        $this->setTxnTypeHtml($this->escapeHtml($this->_txn->getTxnType()));
+        $this->setTxnTypeHtml($this->escapeHtml(__($this->_txn->getTxnType())));
 
         $this->setOrderIdUrlHtml(
             $this->escapeHtml($this->getUrl('sales/order/view', ['order_id' => $this->_txn->getOrderId()]))

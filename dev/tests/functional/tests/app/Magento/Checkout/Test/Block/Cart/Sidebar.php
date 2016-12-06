@@ -37,6 +37,13 @@ class Sidebar extends Block
     protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
 
     /**
+     * Locator value for "Proceed to Checkout" button.
+     *
+     * @var string
+     */
+    private $proceedToCheckoutButton = '#top-cart-btn-checkout';
+
+    /**
      * Minicart items quantity
      *
      * @var string
@@ -114,6 +121,16 @@ class Sidebar extends Block
     {
         $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
             ->click();
+    }
+
+    /**
+     * Click "Proceed to Checkout" button.
+     *
+     * @return void
+     */
+    public function clickProceedToCheckoutButton()
+    {
+        $this->_rootElement->find($this->proceedToCheckoutButton)->click();
     }
 
     /**

@@ -55,6 +55,14 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->_redirect('sales_rule/*');
                 return;
             }
+            $model->getConditions()->setFormName('sales_rule_form');
+            $model->getConditions()->setJsFormObject(
+                $model->getConditionsFieldSetId($model->getConditions()->getFormName())
+            );
+            $model->getActions()->setFormName('sales_rule_form');
+            $model->getActions()->setJsFormObject(
+                $model->getActionsFieldSetId($model->getActions()->getFormName())
+            );
 
             $resultPage->getLayout()->getBlock('promo_sales_rule_edit_tab_coupons')->setCanShow(true);
         }
@@ -64,15 +72,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         if (!empty($data)) {
             $model->addData($data);
         }
-
-        $model->getConditions()->setFormName('sales_rule_form');
-        $model->getConditions()->setJsFormObject(
-            $model->getConditionsFieldSetId($model->getConditions()->getFormName())
-        );
-        $model->getActions()->setFormName('sales_rule_form');
-        $model->getActions()->setJsFormObject(
-            $model->getActionsFieldSetId($model->getActions()->getFormName())
-        );
 
         $this->_initAction();
 

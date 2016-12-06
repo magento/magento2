@@ -532,11 +532,24 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function isLast()
     {
-        foreach ($this->getAllItems() as $item) {
+        $items = $this->getAllItems();
+        foreach ($items as $item) {
             if (!$item->isLast()) {
                 return false;
             }
         }
+
+        if (empty($items)) {
+            $order = $this->getOrder();
+            if ($order) {
+                foreach ($order->getItems() as $orderItem) {
+                    if ($orderItem->canRefund()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         return true;
     }
 

@@ -20,8 +20,6 @@ class PaymentsPro extends Block
      * @var array
      */
     private $fields = [
-        'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_' .
-            'payflow_required_paypal_payflow_api_settings_business_account',
         'Partner' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_paypal_payflow_api_' .
             'settings_partner',
         'Vendor' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_paypal_payflow_api_' .
@@ -42,7 +40,7 @@ class PaymentsPro extends Block
             '_payflow',
         'Enable PayPal Credit' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_enable_' .
             'express_checkout_bml_payflow',
-        'Vault enabled' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_payflowpro_cc_vault' .
+        'Vault Enabled' => '#payment_us_paypal_group_all_in_one_wpp_usuk_paypal_payflow_required_payflowpro_cc_vault' .
             '_active'
     ];
 
@@ -60,8 +58,6 @@ class PaymentsPro extends Block
      */
     public function specifyCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])
-            ->setValue('test@test.com');
         $this->_rootElement->find($this->fields['Partner'])->setValue('1');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('1');
         $this->_rootElement->find($this->fields['User'])->setValue('1');
@@ -75,7 +71,6 @@ class PaymentsPro extends Block
      */
     public function clearCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])->setValue('');
         $this->_rootElement->find($this->fields['Partner'])->setValue('');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('');
         $this->_rootElement->find($this->fields['User'])->setValue('');

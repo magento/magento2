@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Reports\Test\TestCase\NewAccountsReportEntityTest" summary="New Accounts Report" ticketId="MAGETWO-27742">
         <variation name="NewAccountsReportEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="total" xsi:type="string">1</data>
             <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
@@ -16,6 +17,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult" />
         </variation>
         <variation name="NewAccountsReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="total" xsi:type="string">1</data>
             <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
@@ -24,6 +26,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult" />
         </variation>
         <variation name="NewAccountsReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="total" xsi:type="string">1</data>
             <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>

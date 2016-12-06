@@ -166,6 +166,9 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token);
         $request->setData('amt', $this->formatPrice($amount));
+        $request->setData('currency', $order->getBaseCurrencyCode());
+        $request->setData('taxamt', $this->formatPrice($order->getBaseTaxAmount()));
+        $request->setData('freightamt', $this->formatPrice($order->getBaseShippingAmount()));
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -183,6 +186,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->createPaymentToken($payment, $token);
 
         $payment->unsAdditionalInformation(self::CC_DETAILS);
+        $payment->unsAdditionalInformation(self::PNREF);
 
         return $this;
     }

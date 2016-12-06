@@ -35,6 +35,7 @@ class UpdateCmsPageRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**

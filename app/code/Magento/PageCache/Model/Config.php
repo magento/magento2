@@ -148,12 +148,17 @@ class Config
             ),
             '/* {{ ips }} */' => $this->_getAccessList(),
             '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions(),
-            // http headers get transformed by php `X-Forwarded-Proto: https` becomes $SERVER['HTTP_X_FORWARDED_PROTO'] = 'https'
+            // http headers get transformed by php `X-Forwarded-Proto: https`
+            // becomes $SERVER['HTTP_X_FORWARDED_PROTO'] = 'https'
             // Apache and Nginx drop all headers with underlines by default.
-            '/* {{ ssl_offloaded_header }} */' => str_replace('_', '-', $this->_scopeConfig->getValue(
-                \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
-
+            '/* {{ ssl_offloaded_header }} */' => str_replace(
+                '_',
+                '-',
+                $this->_scopeConfig->getValue(
+                    \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )
         ];
     }
 
@@ -176,6 +181,7 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!empty($accessList)) {
+            $result = [];
             $ips = explode(',', $accessList);
             foreach ($ips as $ip) {
                 $result[] = sprintf($tpl, trim($ip));

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest85">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="menuItem" xsi:type="string">Marketing > Site Map</data>
             <data name="pageTitle" xsi:type="string">Site Map</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>

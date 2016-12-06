@@ -70,7 +70,18 @@ return [
                         'instance' => 'NonExistingPluginClass',
                     ],
                 ],
+            ],
+            'typeWithoutInstance' => [
+                'plugins' => [
+                    'simple_plugin' => [],
+                ],
             ]
+        ]
+    ],
+    [
+        'emptyscope',
+        [
+
         ]
     ]
 ];

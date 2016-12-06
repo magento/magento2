@@ -6,6 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Backend\Block\Page $block */
 ?>
 <div id="preview" class="cms-revision-preview">
     <div class="toolbar">
@@ -15,7 +16,7 @@
         </div>
         <?php endif;?>
     </div>
-    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php /* @escapeNotVerified */ echo __('Preview') ?>" width="100%"></iframe>
+    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php echo $block->escapeHtmlAttr(__('Preview')) ?>" width="100%"></iframe>
     <?php echo $block->getChildHtml('preview_form'); ?>
 </div>
 

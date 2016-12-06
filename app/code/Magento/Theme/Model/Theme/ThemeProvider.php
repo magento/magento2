@@ -5,6 +5,13 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\App\DeploymentConfig;
+
+/**
+ * Provide data for theme grid and for theme edit page
+ */
 class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
 {
     /**
@@ -21,6 +28,21 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @var \Magento\Framework\App\CacheInterface
      */
     protected $cache;
+
+    /**
+     * @var \Magento\Framework\View\Design\ThemeInterface[]
+     */
+    private $themes;
+
+    /**
+     * @var ListInterface
+     */
+    private $themeList;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * ThemeProvider constructor.
@@ -44,10 +66,19 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeByFullPath($fullPath)
     {
+        if (isset($this->themes[$fullPath])) {
+            return $this->themes[$fullPath];
+        }
+
+        if (! $this->getDeploymentConfig()->isDbAvailable()) {
+            return $this->getThemeList()->getThemeByFullPath($fullPath);
+        }
+
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $theme = $this->cache->load('theme'. $fullPath);
         if ($theme) {
-            return unserialize($theme);
+            $this->themes[$fullPath] = unserialize($theme);
+            return $this->themes[$fullPath];
         }
         $themeCollection = $this->collectionFactory->create();
         $item = $themeCollection->getThemeByFullPath($fullPath);
@@ -55,7 +86,9 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $themeData = serialize($item);
             $this->cache->save($themeData, 'theme' . $fullPath);
             $this->cache->save($themeData, 'theme-by-id-' . $item->getId());
+            $this->themes[$fullPath] = $item;
         }
+
         return $item;
     }
 
@@ -77,16 +110,45 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeById($themeId)
     {
+        if (isset($this->themes[$themeId])) {
+            return $this->themes[$themeId];
+        }
         $theme = $this->cache->load('theme-by-id-' . $themeId);
         if ($theme) {
-            return unserialize($theme);
+            $this->themes[$themeId] = unserialize($theme);
+            return $this->themes[$themeId];
         }
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = $this->themeFactory->create();
         $themeModel->load($themeId);
         if ($themeModel->getId()) {
             $this->cache->save(serialize($themeModel), 'theme-by-id-' . $themeId);
+            $this->themes[$themeId] = $themeModel;
         }
         return $themeModel;
+    }
+
+    /**
+     * @deprecated
+     * @return ListInterface
+     */
+    private function getThemeList()
+    {
+        if ($this->themeList === null) {
+            $this->themeList = ObjectManager::getInstance()->get(ListInterface::class);
+        }
+        return $this->themeList;
+    }
+
+    /**
+     * @deprecated
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig()
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }

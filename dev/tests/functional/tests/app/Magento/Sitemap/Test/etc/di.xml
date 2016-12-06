@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapContent">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapFailFolderSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapFailPathSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapNotInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessDeleteMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessGenerateMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessSaveAndGenerateMessages">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+</config>

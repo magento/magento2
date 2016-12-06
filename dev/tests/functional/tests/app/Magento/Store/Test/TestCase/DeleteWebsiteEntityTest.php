@@ -38,6 +38,8 @@ class DeleteWebsiteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S3';
+    const STABLE = 'no';
     /* end tags */
 
     /**

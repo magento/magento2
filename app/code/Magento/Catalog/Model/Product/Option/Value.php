@@ -200,7 +200,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 'store_id',
                 $this->getOption()->getStoreId()
             );
-            $this->unsetData('option_type_id');
+
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());

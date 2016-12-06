@@ -1,0 +1,9 @@
+{
+  "name": "magento/module-second",
+  "description": "N/A",
+  "suggest": {
+    "magento/module-some-module": "Some Module:888.8.*"
+  },
+  "type": "magento2-module",
+  "version": "777.7.7"
+}

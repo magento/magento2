@@ -84,6 +84,17 @@ define([
                     }
 
                     if (res.backUrl) {
+                        var eventData = {
+                            'form': form,
+                            'redirectParameters': []
+                        }
+                        // trigger global event, so other modules will be able add parameters to redirect url
+                        $('body').trigger('catalogCategoryAddToCartRedirect', eventData);
+                        if (eventData.redirectParameters.length > 0) {
+                            var parameters = res.backUrl.split('#');
+                            parameters.push(eventData.redirectParameters.join('&'));
+                            res.backUrl = parameters.join('#');
+                        }
                         window.location = res.backUrl;
                         return;
                     }

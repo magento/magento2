@@ -93,6 +93,18 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Get cache key informative items.
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $parentData = parent::getCacheKeyInfo();
+        $parentData[] = $this->priceCurrency->getCurrencySymbol();
+        return $parentData;
+    }
+
+    /**
      * Get allowed attributes
      *
      * @return array
@@ -181,6 +193,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = [
             'attributes' => $attributesData['attributes'],
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
+            'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
             'prices' => [
                 'oldPrice' => [
@@ -217,7 +230,17 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
+            $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
+            $tierPriceModel =  $priceInfo->getPrice('tier_price');
+            $tierPricesList = $tierPriceModel->getTierPriceList();
+            foreach ($tierPricesList as $tierPrice) {
+                $tierPrices[] = [
+                    'qty' => $this->_registerJsPrice($tierPrice['price_qty']),
+                    'price' => $this->_registerJsPrice($tierPrice['price']->getValue()),
+                    'percentage' => $this->_registerJsPrice($tierPriceModel->getSavePercent($tierPrice['price'])),
+                ];
+            }
 
             $prices[$product->getId()] =
                 [
@@ -235,8 +258,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         'amount' => $this->_registerJsPrice(
                             $priceInfo->getPrice('final_price')->getAmount()->getValue()
                         ),
-                    ]
-                ];
+                    ],
+                    'tierPrices' => $tierPrices,
+                 ];
         }
         return $prices;
     }
@@ -250,5 +274,15 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected function _registerJsPrice($price)
     {
         return str_replace(',', '.', $price);
+    }
+
+    /**
+     * Should we generate "As low as" block or not
+     *
+     * @return bool
+     */
+    public function showMinimalPrice()
+    {
+        return true;
     }
 }

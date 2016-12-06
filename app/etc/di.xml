@@ -154,6 +154,7 @@
     <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
     <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
     <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
+    <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -955,11 +956,6 @@
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\ScopePool">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Config\Initial">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\Config\Initial\Reader\Proxy</argument>
@@ -1205,7 +1201,6 @@
         <arguments>
             <argument name="mappers" xsi:type="array">
                 <item name="mapper" xsi:type="object">Magento\Framework\EntityManager\Mapper</item>
-                <item name="customAttributesMapper" xsi:type="object">Magento\Framework\EntityManager\CustomAttributesMapper</item>
             </argument>
         </arguments>
     </type>

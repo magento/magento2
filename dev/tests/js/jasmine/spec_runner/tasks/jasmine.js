@@ -16,7 +16,6 @@ function init(config) {
     root         = config.root;
     port         = config.port;
     files        = config.files;
-    host         = _.template(config.host)({ port: port });
     themes       = config.themes;
 
     _.each(themes, function (themeData, themeName) {
@@ -26,7 +25,13 @@ function init(config) {
 
         _.extend(themeData, { root: root });
 
+        host    = _.template(config.host)({ port: port++ });
         render  = renderTemplate.bind(null, themeData);
+
+        if (config.singleTest) {
+            files.specs = [config.singleTest];
+        }
+
         specs   = files.specs.map(render);
         specs   = expand(specs).map(cutJsExtension);
         configs = files.requirejsConfigs.map(render);
@@ -37,6 +42,10 @@ function init(config) {
                 host: host,
                 template: render(files.template),
                 vendor: files.requireJs,
+                junit: {
+                    path: "var/log/js-unit/",
+                    consolidate: true
+                },
 
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)

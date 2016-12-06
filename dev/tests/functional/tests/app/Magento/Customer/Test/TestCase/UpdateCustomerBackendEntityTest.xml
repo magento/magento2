@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerBackendEntityTest" summary="Update Backend Customer" ticketId="MAGETWO-23881">
         <variation name="UpdateCustomerBackendEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
             <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
@@ -16,7 +17,7 @@
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">_Suffix%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob" xsi:type="string">Aug 1, 1986</data>
+            <data name="customer/data/dob" xsi:type="string">08/01/1986</data>
             <data name="customer/data/taxvat" xsi:type="string">123456789001</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
@@ -44,6 +45,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation3" summary="Address with alphanumeric zip">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
             <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
@@ -52,7 +54,7 @@
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">_JaneSuffix%isolation%</data>
             <data name="customer/data/email" xsi:type="string">Jane%isolation%@example.com</data>
-            <data name="customer/data/dob" xsi:type="string">Dec 1, 2000</data>
+            <data name="customer/data/dob" xsi:type="string">01/12/2000</data>
             <data name="customer/data/taxvat" xsi:type="string">987654321</data>
             <data name="customer/data/gender" xsi:type="string">Female</data>
             <data name="address/data/prefix" xsi:type="string">Prefix%isolation%_</data>

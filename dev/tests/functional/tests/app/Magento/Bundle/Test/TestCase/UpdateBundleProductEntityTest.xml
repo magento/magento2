@@ -73,5 +73,15 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
+        <variation name="UpdateBundleProductEntityTestVariation5" summary="Update Bundle (fixed) Product with custom option">
+            <data name="originalProduct/dataset" xsi:type="string">bundle_fixed_product</data>
+            <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">bundle_fixed_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+            <data name="product/data/price/dataset" xsi:type="string">fixed-756-custom-options</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
+        </variation>
     </testCase>
 </config>

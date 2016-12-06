@@ -9,8 +9,8 @@
 /** @var \Magento\Customer\Block\Widget\Taxvat $block */
 ?>
 <div class="field taxvat<?php if ($block->isRequired()) echo ' required'; ?>">
-    <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"><span><?php /* @escapeNotVerified */ echo __('Tax/VAT number') ?></span></label>
+    <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"><span><?php echo $block->escapeHtml(__('Tax/VAT number')) ?></span></label>
     <div class="control">
-        <input type="text" id="<?php echo $block->escapeHtmlAttr($block->getFieldId('taxvat')) ?>" name="<?php echo $block->escapeHtmlAttr($block->getFieldName('taxvat')) ?>" value="<?php echo $block->escapeHtmlAttr($block->getTaxvat()) ?>" title="<?php /* @escapeNotVerified */ echo __('Tax/VAT number') ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('taxvat')) ?>" <?php if ($block->isRequired()) echo ' data-validate="{required:true}"' ?>>
+        <input type="text" id="<?php echo $block->escapeHtmlAttr($block->getFieldId('taxvat')) ?>" name="<?php echo $block->escapeHtmlAttr($block->getFieldName('taxvat')) ?>" value="<?php echo $block->escapeHtmlAttr($block->getTaxvat()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Tax/VAT number')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('taxvat')) ?>" <?php if ($block->isRequired()) echo ' data-validate="{required:true}"' ?>>
     </div>
 </div>

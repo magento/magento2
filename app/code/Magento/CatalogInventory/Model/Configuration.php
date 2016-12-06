@@ -97,6 +97,11 @@ class Configuration implements StockConfigurationInterface
     const XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS = 'cataloginventory/options/display_product_stock_status';
 
     /**
+     * Threshold qty config path
+     */
+    const XML_PATH_STOCK_THRESHOLD_QTY = 'cataloginventory/options/stock_threshold_qty';
+
+    /**
      * @var ConfigInterface
      */
     protected $config;
@@ -380,6 +385,19 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_ITEM . $field,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @return string|null
+     */
+    public function getStockThresholdQty($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_STOCK_THRESHOLD_QTY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

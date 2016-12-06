@@ -80,7 +80,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         if (!$error) {
-            $this->messageManager->addSuccess(__('You moved the category'));
+            $this->messageManager->addSuccess(__('You moved the category.'));
         }
 
         $block->setMessages($this->messageManager->getMessages(true));

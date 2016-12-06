@@ -10,6 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Phrase;
 
 /**
  * Abstract resource model class
@@ -332,6 +334,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
+        $object->beforeLoad($value, $field);
         if ($field === null) {
             $field = $this->getIdFieldName();
         }
@@ -348,7 +351,10 @@ abstract class AbstractDb extends AbstractResource
 
         $this->unserializeFields($object);
         $this->_afterLoad($object);
-
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
+        
         return $this;
     }
 
@@ -375,6 +381,7 @@ abstract class AbstractDb extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
+     * @throws AlreadyExistsException
      * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
@@ -409,6 +416,10 @@ abstract class AbstractDb extends AbstractResource
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
+        } catch (DuplicateException $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);

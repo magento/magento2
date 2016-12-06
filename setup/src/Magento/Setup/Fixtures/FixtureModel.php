@@ -206,7 +206,9 @@ class FixtureModel
         if (!is_readable($filename)) {
             throw new \Exception("Profile configuration file `{$filename}` is not readable or does not exists.");
         }
-        $this->config = $this->fileParser->load($filename)->xmlToArray();
+        $this->fileParser->getDom()->load($filename);
+        $this->fileParser->getDom()->xinclude();
+        $this->config = $this->fileParser->xmlToArray();
     }
 
     /**
@@ -219,6 +221,12 @@ class FixtureModel
      */
     public function getValue($key, $default = null)
     {
-        return isset($this->config['config']['profile'][$key]) ? $this->config['config']['profile'][$key] : $default;
+        return isset($this->config['config']['profile'][$key]) ?
+            (
+                // Work around for how attributes are handled in the XML parser when injected via xinclude due to the
+                // files existing outside of the current working directory.
+                isset($this->config['config']['profile'][$key]['_value']) ?
+                    $this->config['config']['profile'][$key]['_value'] : $this->config['config']['profile'][$key]
+            ) : $default;
     }
 }

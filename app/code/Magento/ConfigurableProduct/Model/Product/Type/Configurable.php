@@ -898,9 +898,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $value = $value->getSource()->getOptionText($attributeValue);
                     } else {
                         $value = '';
+                        $attributeValue = '';
                     }
 
-                    $attributes[] = ['label' => $label, 'value' => $value];
+                    $attributes[] = [
+                        'label' => $label,
+                        'value' => $value,
+                        'option_id' => $attributeId,
+                        'option_value' => $attributeValue
+                        ];
                 }
             }
         }
@@ -1280,5 +1286,20 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $this->catalogConfig = ObjectManager::getInstance()->get(Config::class);
         }
         return $this->catalogConfig;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        $isAllCustomOptionsDisplayed = true;
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            $eavAttribute = $attribute->getProductAttribute();
+
+            $isAllCustomOptionsDisplayed = ($isAllCustomOptionsDisplayed && $eavAttribute->getUsedInProductListing());
+        }
+
+        return $isAllCustomOptionsDisplayed;
     }
 }

@@ -33,9 +33,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $url = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\UrlInterface::class);
         $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate');
         $this->_translateInline->processResponseBody($body, true);
-        $this->assertContains(
-            $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate'),
-            $body
+        $expected = str_replace(
+            [':', '/'],
+            ['\u003A', '\u002F'],
+            $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate')
         );
+        $this->assertContains($expected, $body);
     }
 }

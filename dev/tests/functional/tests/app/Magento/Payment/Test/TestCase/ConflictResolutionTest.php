@@ -16,6 +16,7 @@ class ConflictResolutionTest extends Scenario
     /* tags */
     const MVP = 'no';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**

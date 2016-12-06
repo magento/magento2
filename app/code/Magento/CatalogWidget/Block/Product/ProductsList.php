@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogWidget\Block\Product;
 
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Catalog Products List widget block
@@ -82,6 +81,11 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     protected $conditionsHelper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -144,6 +148,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         return [
             'CATALOG_PRODUCTS_LIST_WIDGET',
+            $this->getPriceCurrency()->getCurrencySymbol(),
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
@@ -350,5 +355,20 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     public function getTitle()
     {
         return $this->getData('title');
+    }
+
+    /**
+     * @return PriceCurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getPriceCurrency()
+    {
+        if ($this->priceCurrency === null) {
+            $this->priceCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(PriceCurrencyInterface::class);
+        }
+        return $this->priceCurrency;
+
     }
 }

@@ -28,7 +28,7 @@ $columns = $block->getColumns();
     </ol>
     <?php else: ?>
         <div class="message info empty">
-            <span><?php /* @escapeNotVerified */ echo __('This Wish List has no Items');?></span>
+            <span><?php echo $block->escapeHtml(__('This Wish List has no Items'));?></span>
         </div>
     <?php endif; ?>
 </div>

@@ -39,6 +39,7 @@ class UseVaultOnCheckoutTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

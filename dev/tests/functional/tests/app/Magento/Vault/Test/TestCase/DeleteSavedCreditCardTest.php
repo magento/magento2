@@ -32,6 +32,7 @@ class DeleteSavedCreditCardTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**
@@ -92,7 +93,7 @@ class DeleteSavedCreditCardTest extends Injectable
             }
             $this->fillShippingMethod($shipping);
             if ($key >= 2) { // if this order will be placed via stored credit card
-                $this->useSavedCreditCard($payment);
+                $this->useSavedCreditCard($payment['vault']);
             } else {
                 $this->selectPaymentMethod($payment, $payment['creditCardClass'], $payment['creditCard']);
                 $this->saveCreditCard($payment, $creditCardSave);
@@ -291,7 +292,7 @@ class DeleteSavedCreditCardTest extends Injectable
     {
         $useSavedCreditCardStep = ObjectManager::getInstance()->create(
             \Magento\Vault\Test\TestStep\UseSavedPaymentMethodStep::class,
-            ['payment' => $payment]
+            ['vault' => $payment]
         );
         $useSavedCreditCardStep->run();
     }

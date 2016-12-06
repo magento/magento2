@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Search\Test\TestCase\UpdateSynonymGroupEntityTest" summary="Update Synonym Groups" ticketId="MAGETWO-49412">
         <variation name="UpdateSynonymGroupEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="initialSynonymGroup/dataset" xsi:type="string">prepareMerge</data>
             <data name="description" xsi:type="string">Update Synonym Groups Successfully</data>
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="synonymGroup/data/synonyms" xsi:type="string">new_synonym_%isolation%</data>
             <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">all_store_views</data>
             <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />

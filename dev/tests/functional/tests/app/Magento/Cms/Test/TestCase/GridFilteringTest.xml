@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridFilteringTest" summary="Grid UI Component Filtering" ticketId="MAGETWO-41329">
         <variation name="CmsPageGridFiltering">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="description" xsi:type="string">Verify cms page grid filtering</data>
             <data name="itemsCount" xsi:type="string">2</data>
             <data name="fixtureName" xsi:type="string">cmsPage</data>
@@ -28,6 +29,7 @@
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="CmsBlockGridFiltering">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="description" xsi:type="string">Verify cms block grid filtering</data>
             <data name="itemsCount" xsi:type="string">2</data>
             <data name="fixtureName" xsi:type="string">cmsBlock</data>

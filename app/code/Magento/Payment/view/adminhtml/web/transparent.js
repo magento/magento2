@@ -6,12 +6,14 @@
 define([
     'jquery',
     'mage/template',
-    'Magento_Ui/js/modal/alert'
+    'Magento_Ui/js/modal/alert',
+    'Magento_Payment/js/model/credit-card-validation/validator'
 ], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.transparent', {
         options: {
+            editFormSelector: '#edit_form',
             hiddenFormTmpl:
                 '<form target="<%= data.target %>" action="<%= data.action %>"' +
                 'method="POST" hidden' +
@@ -33,37 +35,51 @@ define([
          * @private
          */
         _create: function () {
-
-            /**
-             * @param {Object} event
-             * @param {String} method
-             */
-            var prepare = function (event, method) {
-                if (method === this.options.gateway) {
-                    $('#edit_form')
-                        .off('submitOrder')
-                        .on('submitOrder.' +  this.options.gateway, this._orderSave.bind(this));
-                } else {
-                    $('#edit_form')
-                        .off('submitOrder.' + this.options.gateway);
-                }
-            },
-                $editForm = $('#edit_form');
-
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
-            $editForm.on('changePaymentMethod', prepare.bind(this));
 
-            $editForm.trigger(
-                'changePaymentMethod',
-                [
-                    $editForm.find(':radio[name="payment[method]"]:checked').val()
-                ]
-            );
+            $(this.options.editFormSelector).on('changePaymentMethod', this._setPlaceOrderHandler.bind(this));
+            $(this.options.editFormSelector).trigger('changePaymentMethod', [
+                $(this.options.editFormSelector).find(':radio[name="payment[method]"]:checked').val()
+            ]);
         },
 
         /**
-         * handler for Place Order button to call gateway for credit card validation
-         * Save order and generate post data for gateway call
+         * Handler for form submit.
+         *
+         * @param {Object} event
+         * @param {String} method
+         */
+        _setPlaceOrderHandler: function (event, method) {
+            if (method === this.options.gateway) {
+                $(this.options.editFormSelector)
+                    .off('submitOrder')
+                    .on('submitOrder.' +  this.options.gateway, this._placeOrderHandler.bind(this));
+            } else {
+                $(this.options.editFormSelector)
+                    .off('submitOrder.' + this.options.gateway);
+            }
+        },
+
+        /**
+         * Handler for form submit to call gateway for credit card validation.
+         *
+         * @return {Boolean}
+         * @private
+         */
+        _placeOrderHandler: function () {
+            if ($(this.options.editFormSelector).valid()) {
+                this._orderSave();
+            } else {
+                $('body').trigger('processStop');
+            }
+
+            return false;
+        },
+
+        /**
+         * Handler for Place Order button to call gateway for credit card validation.
+         * Save order and generate post data for gateway call.
+         *
          * @private
          */
         _orderSave: function () {
@@ -99,7 +115,8 @@ define([
         },
 
         /**
-         * Post data to gateway for credit card validation
+         * Post data to gateway for credit card validation.
+         *
          * @param {Object} response
          * @private
          */
@@ -136,7 +153,7 @@ define([
         },
 
         /**
-         * Add credit card fields to post data for gateway
+         * Add credit card fields to post data for gateway.
          *
          * @param {Object} response
          * @private

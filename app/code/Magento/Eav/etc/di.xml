@@ -93,9 +93,32 @@
     </virtualType>
     <type name="Magento\Eav\Model\AttributeRepository">
         <arguments>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeCollectionProcessor</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\AttributeCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="attribute_id" xsi:type="string">main_table.attribute_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="attribute_id" xsi:type="string">main_table.attribute_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="customFilters" xsi:type="array">
@@ -150,6 +173,14 @@
     <type name="Magento\Eav\Model\Attribute\GroupRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeGroupCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\CompositeMapper">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="mapper" xsi:type="object">Magento\Framework\EntityManager\Mapper</item>
+                <item name="customAttributesMapper" xsi:type="object">Magento\Eav\Model\CustomAttributesMapper</item>
+            </argument>
         </arguments>
     </type>
 </config>

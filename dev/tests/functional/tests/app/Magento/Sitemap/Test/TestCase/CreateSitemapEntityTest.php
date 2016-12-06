@@ -30,6 +30,7 @@ class CreateSitemapEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'extended_acceptance_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

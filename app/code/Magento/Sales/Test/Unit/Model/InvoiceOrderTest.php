@@ -14,19 +14,19 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
-use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\OrderValidatorInterface;
+use Magento\Sales\Model\Order\Validation\InvoiceOrderInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\InvoiceOrder;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class InvoiceOrderTest
- * 
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -48,14 +48,9 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
     private $invoiceDocumentFactoryMock;
 
     /**
-     * @var InvoiceValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceOrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $invoiceValidatorMock;
-
-    /**
-     * @var OrderValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $orderValidatorMock;
+    private $invoiceOrderValidatorMock;
 
     /**
      * @var PaymentAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -117,6 +112,11 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
      */
     private $loggerMock;
 
+    /**
+     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $errorMessagesMock;
+
     protected function setUp()
     {
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
@@ -128,14 +128,6 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->invoiceDocumentFactoryMock = $this->getMockBuilder(InvoiceDocumentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->invoiceValidatorMock = $this->getMockBuilder(InvoiceValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->orderValidatorMock = $this->getMockBuilder(OrderValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -183,22 +175,37 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->invoiceOrderValidatorMock = $this->getMockBuilder(InvoiceOrderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->errorMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->getMock();
+
         $this->invoiceOrder = new InvoiceOrder(
             $this->resourceConnectionMock,
             $this->orderRepositoryMock,
             $this->invoiceDocumentFactoryMock,
-            $this->invoiceValidatorMock,
-            $this->orderValidatorMock,
             $this->paymentAdapterMock,
             $this->orderStateResolverMock,
             $this->configMock,
             $this->invoiceRepositoryMock,
+            $this->invoiceOrderValidatorMock,
             $this->notifierInterfaceMock,
             $this->loggerMock
         );
     }
 
     /**
+     * @param int $orderId
+     * @param bool $capture
+     * @param array $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @throws \Magento\Sales\Exception\CouldNotInvoiceException
+     * @throws \Magento\Sales\Exception\DocumentValidationException
      * @dataProvider dataProvider
      */
     public function testOrderInvoice($orderId, $capture, $items, $notify, $appendComment)
@@ -207,11 +214,9 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->with('sales')
             ->willReturn($this->adapterInterface);
-
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
-
         $this->invoiceDocumentFactoryMock->expects($this->once())
             ->method('create')
             ->with(
@@ -221,66 +226,62 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
                 ($appendComment && $notify),
                 $this->invoiceCreationArgumentsMock
             )->willReturn($this->invoiceMock);
-
-        $this->invoiceValidatorMock->expects($this->once())
+        $this->invoiceOrderValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->invoiceMock)
-            ->willReturn([]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->orderMock)
-            ->willReturn([]);
-
+            ->with(
+                $this->orderMock,
+                $this->invoiceMock,
+                $capture,
+                $items,
+                $notify,
+                $appendComment,
+                $this->invoiceCommentCreationMock,
+                $this->invoiceCreationArgumentsMock
+            )
+            ->willReturn($this->errorMessagesMock);
+        $hasMessages = false;
+        $this->errorMessagesMock->expects($this->once())
+            ->method('hasMessages')->willReturn($hasMessages);
         $this->paymentAdapterMock->expects($this->once())
             ->method('pay')
             ->with($this->orderMock, $this->invoiceMock, $capture)
             ->willReturn($this->orderMock);
-
         $this->orderStateResolverMock->expects($this->once())
             ->method('getStateForOrder')
             ->with($this->orderMock, [OrderStateResolverInterface::IN_PROGRESS])
             ->willReturn(Order::STATE_PROCESSING);
-
         $this->orderMock->expects($this->once())
             ->method('setState')
             ->with(Order::STATE_PROCESSING)
             ->willReturnSelf();
-
         $this->orderMock->expects($this->once())
             ->method('getState')
             ->willReturn(Order::STATE_PROCESSING);
-
         $this->configMock->expects($this->once())
             ->method('getStateDefaultStatus')
             ->with(Order::STATE_PROCESSING)
             ->willReturn('Processing');
-
         $this->orderMock->expects($this->once())
             ->method('setStatus')
             ->with('Processing')
             ->willReturnSelf();
-
         $this->invoiceMock->expects($this->once())
             ->method('setState')
             ->with(\Magento\Sales\Model\Order\Invoice::STATE_PAID)
             ->willReturnSelf();
-
         $this->invoiceRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->invoiceMock)
             ->willReturn($this->invoiceMock);
-
         $this->orderRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->orderMock)
             ->willReturn($this->orderMock);
-
         if ($notify) {
             $this->notifierInterfaceMock->expects($this->once())
                 ->method('notify')
                 ->with($this->orderMock, $this->invoiceMock, $this->invoiceCommentCreationMock);
         }
-
         $this->invoiceMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn(2);
@@ -325,14 +326,25 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
                 $this->invoiceCreationArgumentsMock
             )->willReturn($this->invoiceMock);
 
-        $this->invoiceValidatorMock->expects($this->once())
+        $this->invoiceOrderValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->invoiceMock)
-            ->willReturn($errorMessages);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->orderMock)
-            ->willReturn([]);
+            ->with(
+                $this->orderMock,
+                $this->invoiceMock,
+                $capture,
+                $items,
+                $notify,
+                $appendComment,
+                $this->invoiceCommentCreationMock,
+                $this->invoiceCreationArgumentsMock
+            )
+            ->willReturn($this->errorMessagesMock);
+        $hasMessages = true;
+
+        $this->errorMessagesMock->expects($this->once())
+            ->method('hasMessages')->willReturn($hasMessages);
+        $this->errorMessagesMock->expects($this->once())
+            ->method('getMessages')->willReturn($errorMessages);
 
         $this->invoiceOrder->execute(
             $orderId,
@@ -374,16 +386,25 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
                 $this->invoiceCreationArgumentsMock
             )->willReturn($this->invoiceMock);
 
-        $this->invoiceValidatorMock->expects($this->once())
+        $this->invoiceOrderValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->invoiceMock)
-            ->willReturn([]);
-        $this->orderValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with($this->orderMock)
-            ->willReturn([]);
-        $e = new \Exception();
+            ->with(
+                $this->orderMock,
+                $this->invoiceMock,
+                $capture,
+                $items,
+                $notify,
+                $appendComment,
+                $this->invoiceCommentCreationMock,
+                $this->invoiceCreationArgumentsMock
+            )
+            ->willReturn($this->errorMessagesMock);
 
+        $hasMessages = false;
+        $this->errorMessagesMock->expects($this->once())
+            ->method('hasMessages')->willReturn($hasMessages);
+
+        $e = new \Exception();
         $this->paymentAdapterMock->expects($this->once())
             ->method('pay')
             ->with($this->orderMock, $this->invoiceMock, $capture)

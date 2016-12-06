@@ -39,12 +39,12 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'cms_page';
+    const CACHE_TAG = 'cms_p';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'cms_page';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names

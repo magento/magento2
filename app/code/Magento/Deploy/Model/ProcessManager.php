@@ -12,6 +12,20 @@ class ProcessManager
     private $processes = [];
 
     /**
+     * @var ProcessFactory
+     */
+    private $processFactory;
+
+    /**
+     * ProcessManager constructor.
+     * @param ProcessFactory $processFactory
+     */
+    public function __construct(ProcessFactory $processFactory)
+    {
+        $this->processFactory = $processFactory;
+    }
+
+    /**
      * Forks the currently running process.
      *
      * @param callable $handler
@@ -66,7 +80,7 @@ class ProcessManager
      */
     private function createProcess(callable $handler)
     {
-        return new Process($handler);
+        return $this->processFactory->create(['handler' => $handler]);
     }
 
     /**

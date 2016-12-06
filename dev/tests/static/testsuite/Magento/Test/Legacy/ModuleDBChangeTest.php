@@ -20,7 +20,12 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected static $changedFileList = '';
+    private static $changedFileList = '';
+
+    /**
+     * @var bool
+     */
+    private static $actualBranch = false;
 
     /**
      *  Set changed files paths and list for all projects
@@ -37,12 +42,14 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testModuleXmlFiles()
     {
-        preg_match_all('|etc/module\.xml$|mi', self::$changedFileList, $matches);
-        $this->assertEmpty(
-            reset($matches),
-            'module.xml changes for patch releases in non-actual branches are not allowed:' . PHP_EOL .
-            implode(PHP_EOL, array_values(reset($matches)))
-        );
+        if (!self::$actualBranch) {
+            preg_match_all('|etc/module\.xml$|mi', self::$changedFileList, $matches);
+            $this->assertEmpty(
+                reset($matches),
+                'module.xml changes for patch releases in non-actual branches are not allowed:' . PHP_EOL .
+                implode(PHP_EOL, array_values(reset($matches)))
+            );
+        }
     }
 
     /**
@@ -50,11 +57,13 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testModuleSetupFiles()
     {
-        preg_match_all('|app/code/Magento/[^/]+/Setup/[^/]+$|mi', self::$changedFileList, $matches);
-        $this->assertEmpty(
-            reset($matches),
-            'Code with changes for DB schema or data in non-actual branches are not allowed:' . PHP_EOL .
-            implode(PHP_EOL, array_values(reset($matches)))
-        );
+        if (!self::$actualBranch) {
+            preg_match_all('|app/code/Magento/[^/]+/Setup/[^/]+$|mi', self::$changedFileList, $matches);
+            $this->assertEmpty(
+                reset($matches),
+                'Code with changes for DB schema or data in non-actual branches are not allowed:' . PHP_EOL .
+                implode(PHP_EOL, array_values(reset($matches)))
+            );
+        }
     }
 }

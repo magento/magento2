@@ -78,17 +78,9 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
      */
     protected function _getHeaderTitleHtml($element)
     {
-        $html = '<div class="config-heading" ><div class="heading"><strong>' . $element->getLegend();
+        $html = '<div class="config-heading" >';
 
         $groupConfig = $element->getGroup();
-
-        $html .= '</strong>';
-
-        if ($element->getComment()) {
-            $html .= '<span class="heading-intro">' . $element->getComment() . '</span>';
-        }
-        $html .= '<div class="config-alt"></div>';
-        $html .= '</div>';
 
         $disabledAttributeString = $this->_isPaymentEnabled($element) ? '' : ' disabled="disabled"';
         $disabledClassString = $this->_isPaymentEnabled($element) ? '' : ' disabled';
@@ -122,6 +114,13 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
             ) . '</a>';
         }
 
+        $html .= '</div>';
+        $html .= '<div class="heading"><strong>' . $element->getLegend() . '</strong>';
+
+        if ($element->getComment()) {
+            $html .= '<span class="heading-intro">' . $element->getComment() . '</span>';
+        }
+        $html .= '<div class="config-alt"></div>';
         $html .= '</div></div>';
 
         return $html;
