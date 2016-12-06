@@ -329,14 +329,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('updateData')
             ->with($customerAddress);
-        $countryModel = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
-        $regionCollection = $this->getMock(
-            \Magento\Directory\Model\ResourceModel\Region\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
         $this->address->expects($this->never())
             ->method('getRegion')
             ->willReturn('');
