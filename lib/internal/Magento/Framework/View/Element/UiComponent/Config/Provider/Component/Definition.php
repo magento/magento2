@@ -40,6 +40,11 @@ class Definition
     protected $componentData;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param UiReaderInterface $uiReader
@@ -56,9 +61,9 @@ class Definition
         $cachedData = $this->cache->load(static::CACHE_ID);
         if ($cachedData === false) {
             $data = $uiReader->read();
-            $this->cache->save(serialize($data), static::CACHE_ID);
+            $this->cache->save($this->getSerializer()->serialize($data), static::CACHE_ID);
         } else {
-            $data = unserialize($cachedData);
+            $data = $this->getSerializer()->unserialize($cachedData);
         }
         $this->prepareComponentData($data);
     }
@@ -108,5 +113,20 @@ class Definition
         foreach ($componentsData as $name => $data) {
             $this->setComponentData($name, reset($data));
         }
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

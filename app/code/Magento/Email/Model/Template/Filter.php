@@ -217,31 +217,6 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
-     * @return Css\Processor
-     */
-    private function getCssProcessor()
-    {
-        if (!$this->cssProcessor) {
-            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
-        }
-        return $this->cssProcessor;
-    }
-
-    /**
-     * @deprecated
-     * @param string $dirType
-     * @return ReadInterface
-     */
-    private function getPubDirectory($dirType)
-    {
-        if (!$this->pubDirectory) {
-            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
-        }
-        return $this->pubDirectory;
-    }
-
-    /**
      * Set use absolute links flag
      *
      * @param bool $flag
@@ -331,6 +306,31 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->designParams = $designParams;
         return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return Css\Processor
+     */
+    private function getCssProcessor()
+    {
+        if (!$this->cssProcessor) {
+            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
+        }
+        return $this->cssProcessor;
+    }
+
+    /**
+     * @deprecated
+     * @param string $dirType
+     * @return ReadInterface
+     */
+    private function getPubDirectory($dirType)
+    {
+        if (!$this->pubDirectory) {
+            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
+        }
+        return $this->pubDirectory;
     }
 
     /**
