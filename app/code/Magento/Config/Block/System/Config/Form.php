@@ -325,6 +325,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $fieldPrefix
      * @param string $labelPrefix
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _initElement(
         \Magento\Config\Model\Config\Structure\Element\Field $field,

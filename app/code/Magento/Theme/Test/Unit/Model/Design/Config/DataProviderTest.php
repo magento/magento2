@@ -14,6 +14,9 @@ use Magento\Theme\Model\Design\Config\DataProvider;
 use Magento\Theme\Model\Design\Config\MetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**

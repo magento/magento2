@@ -22,6 +22,9 @@ class PhpFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $formatter->format($data, $comments));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function formatWithCommentDataProvider()
     {
         $array = [
