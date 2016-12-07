@@ -28,6 +28,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         ),
         'verifypeer' => true,
         'verifyhost' => 2,
+        'sslversion' => 6
     ];
 
     /**
@@ -53,6 +54,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         'protocols'    => CURLOPT_PROTOCOLS,
         'verifypeer'   => CURLOPT_SSL_VERIFYPEER,
         'verifyhost'   => CURLOPT_SSL_VERIFYHOST,
+        'sslversion'   => CURLOPT_SSLVERSION,
     ];
 
     /**

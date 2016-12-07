@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\MoveRecentlyComparedProductsOnOrderPageTest">
+        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariationWithConfigurableProduct1">
+            <data name="products/0" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <data name="products/1" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+        </variation>
+    </testCase>
+</config>

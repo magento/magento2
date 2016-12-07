@@ -80,6 +80,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store tax/display/type 1
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */

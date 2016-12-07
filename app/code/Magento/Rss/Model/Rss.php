@@ -5,13 +5,10 @@
  */
 namespace Magento\Rss\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Auth session model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 class Rss
 {
     /**
@@ -25,11 +22,22 @@ class Rss
     protected $cache;
 
     /**
-     * @param \Magento\Framework\App\CacheInterface $cache
+     * @var SerializerInterface
      */
-    public function __construct(\Magento\Framework\App\CacheInterface $cache)
-    {
+    private $serializer;
+
+    /**
+     * Rss constructor
+     *
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param SerializerInterface|null $serializer
+     */
+    public function __construct(
+        \Magento\Framework\App\CacheInterface $cache,
+        SerializerInterface $serializer = null
+    ) {
         $this->cache = $cache;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -46,14 +54,14 @@ class Rss
         }
 
         if ($cache) {
-            return unserialize($cache);
+            return $this->serializer->unserialize($cache);
         }
 
         $data = $this->dataProvider->getRssData();
 
         if ($this->dataProvider->getCacheKey() && $this->dataProvider->getCacheLifetime()) {
             $this->cache->save(
-                serialize($data),
+                $this->serializer->serialize($data),
                 $this->dataProvider->getCacheKey(),
                 ['rss'],
                 $this->dataProvider->getCacheLifetime()

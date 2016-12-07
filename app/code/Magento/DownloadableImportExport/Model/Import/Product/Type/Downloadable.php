@@ -7,7 +7,7 @@
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
-use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\EntityManager\MetadataPool;
 use \Magento\Store\Model\Store;
 
 /**
@@ -244,7 +244,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $downloadableHelper;
 
     /**
-     * Constructor
+     * Downloadable constructor
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
@@ -252,7 +252,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -260,12 +260,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
-        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
+        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
+        MetadataPool $metadataPool = null
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection('write');
         $this->uploaderHelper = $uploaderHelper;
         $this->downloadableHelper = $downloadableHelper;
     }

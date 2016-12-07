@@ -32,7 +32,8 @@ class Curl extends AbstractCurl implements CustomerInterface
     protected $mappingData = [
         'country_id' => [
             'United States' => 'US',
-            'United Kingdom' => 'GB'
+            'United Kingdom' => 'GB',
+            'Germany' => 'DE'
         ],
         'gender' => [
             'Male' => 1,
