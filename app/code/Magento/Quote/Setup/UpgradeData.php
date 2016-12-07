@@ -15,11 +15,6 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var Config
-     */
-    private $eavConfig;
-
-    /**
      * @var FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
@@ -27,14 +22,11 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Constructor
      *
-     * @param Config $eavConfig
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
-        Config $eavConfig,
         FieldDataConverterFactory $fieldDataConverterFactory
     ) {
-        $this->eavConfig = $eavConfig;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
@@ -46,7 +38,6 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.4', '<')) {
             $this->upgradeToVersionTwoZeroFour($setup);
         }
-        $this->eavConfig->clear();
     }
 
     /**
