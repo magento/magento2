@@ -43,11 +43,13 @@ class ExcludeList
      */
     public function get()
     {
-        return array_keys(array_filter(
-            $this->configs,
-            function ($value) {
-                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
-            })
+        return array_keys(
+            array_filter(
+                $this->configs,
+                function ($value) {
+                    return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                }
+            )
         );
     }
 }

@@ -10,6 +10,7 @@
         "magento/module-directory": "100.2.*",
         "magento/module-catalog-inventory": "100.2.*",
         "magento/module-quote": "100.2.*",
+        "magento/module-config": "100.2.*",
         "magento/framework": "100.2.*"
     },
     "type": "magento2-module",

@@ -17,6 +17,7 @@
         "magento/module-ui": "100.2.*",
         "magento/framework": "100.2.*",
         "magento/module-user": "100.2.*",
+        "magento/module-config": "100.2.*",
         "ext-gd": "*"
     },
     "suggest": {

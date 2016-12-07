@@ -9,7 +9,8 @@
         "magento/module-media-storage": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/framework": "100.2.*",
-        "magento/magento-composer-installer": "*"
+        "magento/magento-composer-installer": "*",
+        "magento/module-config": "100.2.*"
     },
     "suggest": {
         "magento/module-customer": "100.2.*"

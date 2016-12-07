@@ -10,6 +10,7 @@
         "magento/module-backend": "100.2.*",
         "magento/module-catalog-url-rewrite": "100.2.*",
         "magento/module-media-storage": "100.2.*",
+        "magento/module-config": "100.2.*",
         "magento/framework": "100.2.*"
     },
     "type": "magento2-module",

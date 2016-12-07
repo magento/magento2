@@ -108,7 +108,6 @@ class SettingChecker
         return null;
     }
 
-
     /**
      * Resolve path by scope and scope code
      *

@@ -11,7 +11,6 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 
@@ -62,7 +61,7 @@ class System implements ConfigTypeInterface
     private $fallback;
 
     /**
-     * @var Serialize
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -74,14 +73,14 @@ class System implements ConfigTypeInterface
      * @param FrontendInterface $cache
      * @param PreProcessorInterface $preProcessor
      * @param int $cachingNestedLevel
-     * @param Serialize $serializer
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         ConfigSourceInterface $source,
         PostProcessorInterface $postProcessor,
         Fallback $fallback,
         FrontendInterface $cache,
-        Serialize $serializer,
+        SerializerInterface $serializer,
         PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1
     ) {
