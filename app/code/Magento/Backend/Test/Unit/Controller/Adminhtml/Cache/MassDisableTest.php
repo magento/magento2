@@ -6,7 +6,7 @@
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Backend\Controller\Adminhtml\Cache\MassEnable;
+use Magento\Backend\Controller\Adminhtml\Cache\MassDisable;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\State;
 use Magento\Backend\App\Action\Context;
@@ -17,10 +17,10 @@ use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\App\Cache\TypeListInterface as CacheTypeList;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 
-class MassEnableTest extends \PHPUnit_Framework_TestCase
+class MassDisableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MassEnable
+     * @var MassDisable
      */
     private $controller;
 
@@ -107,7 +107,7 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->requestMock);
 
         $this->controller = $objectManagerHelper->getObject(
-            MassEnable::class,
+            MassDisable::class,
             [
                 'context' => $contextMock,
                 'cacheTypeList' => $this->cacheTypeListMock,
@@ -171,7 +171,7 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addException')
-            ->with($exception, 'An error occurred while enabling cache.')
+            ->with($exception, 'An error occurred while disabling cache.')
             ->willReturnSelf();
 
         $this->assertSame($this->redirectMock, $this->controller->execute());
@@ -201,16 +201,16 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
         $this->cacheStateMock->expects($this->once())
             ->method('isEnabled')
             ->with($cacheType)
-            ->willReturn(false);
+            ->willReturn(true);
         $this->cacheStateMock->expects($this->once())
             ->method('setEnabled')
-            ->with($cacheType, true);
+            ->with($cacheType, false);
         $this->cacheStateMock->expects($this->once())
             ->method('persist');
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with('1 cache type(s) enabled.')
+            ->with('1 cache type(s) disabled.')
             ->willReturnSelf();
 
         $this->assertSame($this->redirectMock, $this->controller->execute());
