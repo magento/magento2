@@ -322,7 +322,7 @@
                 </item>
             </argument>
         </column>
-        <column name="total_refunded" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="total_refunded" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>

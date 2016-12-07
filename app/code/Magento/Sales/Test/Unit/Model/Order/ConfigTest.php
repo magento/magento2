@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use \Magento\Sales\Model\Order\Config;
-
 /**
  * Class ConfigTest
  */
@@ -94,5 +92,41 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->salesConfig->getInvisibleOnFrontStatuses();
         $this->assertSame($expectedResult, $result);
+    }
+
+    public function testGetStateLabelByStateAndStatus()
+    {
+        $statuses = [
+            new \Magento\Framework\DataObject(
+                [
+                    'status' => 'fraud',
+                    'state' => 'processing',
+                    'label' => 'Suspected Fraud',
+                ]
+            ),
+            new \Magento\Framework\DataObject(
+                [
+                    'status' => 'processing',
+                    'state' => 'processing',
+                    'label' => 'Processing',
+                ]
+            )
+        ];
+        $collectionMock = $this->getMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
+            ['create', 'joinStates'],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->orderStatusCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($collectionMock));
+        $collectionMock->expects($this->once())
+            ->method('joinStates')
+            ->will($this->returnValue($statuses));
+        $result = $this->salesConfig->getStateLabelByStateAndStatus('processing', 'fraud');
+        $this->assertSame('Suspected Fraud', $result->getText());
     }
 }
