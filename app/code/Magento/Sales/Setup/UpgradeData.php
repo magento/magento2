@@ -5,16 +5,12 @@
  */
 namespace Magento\Sales\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-
-class UpgradeData implements UpgradeDataInterface
+class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
     /**
      * Sales setup factory
      *
-     * @var SalesSetupFactory
+     * @var \Magento\Sales\Setup\SalesSetupFactory
      */
     private $salesSetupFactory;
 
@@ -31,12 +27,12 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Constructor
      *
-     * @param SalesSetupFactory $salesSetupFactory
+     * @param \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
-        SalesSetupFactory $salesSetupFactory,
+        \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
     ) {
@@ -48,8 +44,10 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-    {
+    public function upgrade(
+        \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
+        \Magento\Framework\Setup\ModuleContextInterface $context
+    ) {
         $setup->startSetup();
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
@@ -65,10 +63,10 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Upgrade to version 2.0.1
      *
-     * @param SalesSetup $setup
+     * @param \Magento\Sales\Setup\SalesSetup $setup
      * @return void
      */
-    private function upgradeToTwoZeroOne(SalesSetup $setup)
+    private function upgradeToTwoZeroOne(\Magento\Sales\Setup\SalesSetup $setup)
     {
         $setup->updateEntityType(
             \Magento\Sales\Model\Order::ENTITY,
@@ -115,10 +113,10 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Upgrade to version 2.0.5
      *
-     * @param ModuleDataSetupInterface $setup
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $setup
      * @return void
      */
-    private function upgradeToVersionTwoZeroFive(ModuleDataSetupInterface $setup)
+    private function upgradeToVersionTwoZeroFive(\Magento\Framework\Setup\ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
             \Magento\Framework\DB\DataConverter\SerializedToJson::class
