@@ -135,11 +135,18 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         $this->uploader->expects($this->once())
             ->method('save')
             ->with('absolute/path/to/tmp/media')
-            ->willReturn(['file' => 'file.jpg', 'size' => '234234']);
+            ->willReturn([
+                'file' => 'file.jpg',
+                'size' => '234234',
+                'type' => 'image/jpg',
+                'name' => 'file.jpg',
+            ]);
         $this->assertEquals(
             [
                 'file' => 'file.jpg',
+                'name' => 'file.jpg',
                 'size' => '234234',
+                'type' => 'image/jpg',
                 'url' => 'http://magento2.com/pub/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
             ],
             $this->fileProcessor->saveToTmp($fieldCode)
