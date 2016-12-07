@@ -11,7 +11,9 @@
         "magento/module-search": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/framework": "100.2.*",
-        "elasticsearch/elasticsearch": "~2.0",
+        "elasticsearch/elasticsearch": "~2.0"
+    },
+    "suggest": {
         "magento/module-config": "100.2.*"
     },
     "type": "magento2-module",
