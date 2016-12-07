@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Config\Consumer;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface;
+use Magento\Framework\MessageQueue\Consumer\Config\CompositeReader as ConsumerConfigCompositeReader;
 
 /**
  * Plugin which provides access to consumers declared in queue config using consumer config interface.
@@ -15,38 +16,31 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 class ConfigReaderPlugin
 {
     /**
-     * @var QueueConfig
+     * @var ConfigInterface
      */
-    private $queueConfig;
+    private $config;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param QueueConfig $queueConfig
+     * @param ConfigInterface $config
      */
-    public function __construct(QueueConfig $queueConfig)
+    public function __construct(ConfigInterface $config)
     {
-        $this->queueConfig = $queueConfig;
+        $this->config = $config;
     }
 
     /**
      * Read values from queue config and make them available via consumer config.
      * 
-     * @param \Magento\Framework\MessageQueue\Consumer\Config\CompositeReader $subject
-     * @param \Closure $proceed
+     * @param ConsumerConfigCompositeReader $subject
+     * @param array $result
      * @param string|null $scope
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRead(
-        \Magento\Framework\MessageQueue\Consumer\Config\CompositeReader $subject,
-        \Closure $proceed,
-        $scope = null
-    ) {
-        $consumerConfigData = $proceed($scope);
-        $consumerConfigDataFromQueueConfig = $this->getConsumerConfigDataFromQueueConfig();
-        return array_merge($consumerConfigDataFromQueueConfig, $consumerConfigData);
+    public function afterRead(ConsumerConfigCompositeReader $subject, $result, $scope)
+    {
+        return array_merge($this->getConsumerConfigDataFromQueueConfig(), $result);
     }
 
     /**
@@ -57,14 +51,17 @@ class ConfigReaderPlugin
     private function getConsumerConfigDataFromQueueConfig()
     {
         $result = [];
-        foreach ($this->queueConfig->getConsumers() as $consumerData) {
+
+        foreach ($this->config->getConsumers() as $consumerData) {
             $consumerName = $consumerData['name'];
             $handlers = [];
+
             foreach ($consumerData['handlers'] as $topicHandlers) {
                 foreach ($topicHandlers as $handlerConfig) {
                     $handlers[] = $handlerConfig;
                 }
             }
+
             $result[$consumerName] = [
                 'name' => $consumerName,
                 'queue' => $consumerData['queue'],
@@ -74,6 +71,7 @@ class ConfigReaderPlugin
                 'maxMessages' => $consumerData['max_messages']
             ];
         }
+
         return $result;
     }
 }
