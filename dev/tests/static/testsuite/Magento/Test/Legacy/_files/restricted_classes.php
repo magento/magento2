@@ -48,11 +48,6 @@ return [
             [
                 'type' => 'library',
                 'name' => 'magento/framework',
-                'path' => 'DB/Adapter/Pdo/Mysql.php'
-            ],
-            [
-                'type' => 'library',
-                'name' => 'magento/framework',
                 'path' => 'App/ObjectManager/ConfigLoader/Compiled.php'
             ],
             [
@@ -68,6 +63,16 @@ return [
                 'type' => 'library',
                 'name' => 'magento/framework',
                 'path' => 'App/ObjectManager/ConfigLoader.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'DB/Adapter/Pdo/Mysql.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'DB/DataConverter/SerializedToJson.php'
             ],
             [
                 'type' => 'library',
