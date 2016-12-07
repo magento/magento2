@@ -24,7 +24,8 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Class ProductTest
- *
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -11,6 +11,9 @@
         "magento/module-backend": "100.2.*",
         "magento/module-media-storage": "100.2.*"
     },
+    "suggest": {
+        "magento/module-deploy": "100.2.*"
+    },
     "type": "magento2-module",
     "version": "100.2.0-dev",
     "license": [
