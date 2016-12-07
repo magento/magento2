@@ -50,7 +50,8 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Convert data for additional_information field in quote_payment table from serialized to JSON format
+     * Upgrade to version 2.0.4, convert data for additional_information field in quote_payment table from serialized
+     * to JSON format
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
