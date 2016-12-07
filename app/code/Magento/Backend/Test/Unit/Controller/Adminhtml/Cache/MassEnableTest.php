@@ -17,6 +17,9 @@ use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\App\Cache\TypeListInterface as CacheTypeList;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassEnableTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -131,7 +134,8 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->redirectMock, $this->controller->execute());
     }
 
-    public function testExecuteInvalidTypeCache() {
+    public function testExecuteInvalidTypeCache()
+    {
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
@@ -158,7 +162,8 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->redirectMock, $this->controller->execute());
     }
 
-    public function testExecuteWithException() {
+    public function testExecuteWithException()
+    {
         $exception = new \Exception();
 
         $this->stateMock->expects($this->once())
@@ -177,7 +182,8 @@ class MassEnableTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->redirectMock, $this->controller->execute());
     }
 
-    public function testExecuteSuccess() {
+    public function testExecuteSuccess()
+    {
         $cacheType = 'pageCache';
 
         $this->stateMock->expects($this->once())
