@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Setup\DataConverter;
+namespace Magento\Framework\DB\DataConverter;
 
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\Serializer\Json;

@@ -3,13 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Setup\Test\Unit;
+namespace Magento\Framework\DB\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Setup\FieldDataConverter;
-use Magento\Framework\Setup\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\FieldDataConverter;
+use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select;
 
 class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
