@@ -8,7 +8,6 @@ namespace Magento\Framework\DB\Test\Unit;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 
@@ -18,11 +17,6 @@ class FieldDataConverterFactoryTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerMock;
-
-    /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $connectionMock;
 
     /**
      * @var DataConverterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +32,6 @@ class FieldDataConverterFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
-        $this->connectionMock = $this->getMock(AdapterInterface::class);
         $this->dataConverterMock = $this->getMock(DataConverterInterface::class);
         $this->fieldDataConverterFactory = $objectManager->getObject(
             FieldDataConverterFactory::class,
@@ -61,14 +54,13 @@ class FieldDataConverterFactoryTest extends \PHPUnit_Framework_TestCase
             ->with(
                 FieldDataConverter::class,
                 [
-                    'connection' => $this->connectionMock,
                     'dataConverter' => $this->dataConverterMock
                 ]
             )
             ->willReturn($fieldDataConverterInstance);
         $this->assertEquals(
             $fieldDataConverterInstance,
-            $this->fieldDataConverterFactory->create($this->connectionMock, $dataConverterClassName)
+            $this->fieldDataConverterFactory->create($dataConverterClassName)
         );
     }
 }

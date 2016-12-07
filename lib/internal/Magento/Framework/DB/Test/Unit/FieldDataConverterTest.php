@@ -49,7 +49,6 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
         $this->fieldDataConverter = $objectManager->getObject(
             FieldDataConverter::class,
             [
-                'connection' => $this->connectionMock,
                 'queryGenerator' => $this->queryGeneratorMock,
                 'dataConverter' => $this->dataConverterMock
             ]
@@ -103,6 +102,6 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
                 [$field => $convertedValue],
                 [$identifier . ' = ?' => $rows[0][$identifier]]
             );
-        $this->fieldDataConverter->convert($table, $identifier, $field);
+        $this->fieldDataConverter->convert($this->connectionMock, $table, $identifier, $field);
     }
 }

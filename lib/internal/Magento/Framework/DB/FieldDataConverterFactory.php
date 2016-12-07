@@ -6,7 +6,6 @@
 namespace Magento\Framework\DB;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 
 /**
@@ -33,16 +32,14 @@ class FieldDataConverterFactory
     /**
      * Create instance of FieldDataConverter
      *
-     * @param AdapterInterface $connection
      * @param string $dataConverterClassName
      * @return FieldDataConverter
      */
-    public function create(AdapterInterface $connection, $dataConverterClassName)
+    public function create($dataConverterClassName)
     {
         return $this->objectManager->create(
             FieldDataConverter::class,
             [
-                'connection' => $connection,
                 'dataConverter' => $this->objectManager->get($dataConverterClassName)
             ]
         );
