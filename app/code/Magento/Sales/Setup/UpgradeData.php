@@ -109,7 +109,11 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
     }
 
     /**
-     * Upgrade to version 2.0.5
+     * Upgrade to version 2.0.5, convert data for the following fields from serialized to JSON format:
+     * sales_order_item.product_options
+     * sales_shipment.packages
+     * sales_order_payment.additional_information
+     * sales_payment_transaction.additional_information
      *
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $setup
      * @return void
