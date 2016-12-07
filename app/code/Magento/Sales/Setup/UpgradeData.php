@@ -48,7 +48,6 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
         \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
         \Magento\Framework\Setup\ModuleContextInterface $context
     ) {
-        $setup->startSetup();
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->upgradeToTwoZeroOne($salesSetup);
@@ -57,7 +56,6 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             $this->upgradeToVersionTwoZeroFive($setup);
         }
         $this->eavConfig->clear();
-        $setup->endSetup();
     }
 
     /**
