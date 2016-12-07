@@ -63,4 +63,62 @@ class SelectVersion extends Form
         $this->_rootElement->find("[for=yesUpdateComponents]", Locator::SELECTOR_CSS)->click();
         $this->waitForElementVisible("[ng-show='componentsProcessed']");
     }
+
+    /**
+     * Set maximum compatible sample data for each row
+     *
+     * @param string $sampleDataVersion
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function chooseVersionUpgradeOtherComponents($sampleDataVersion)
+    {
+        $perPageSelect= $this->_rootElement->find(
+            "select#perPage",
+            Locator::SELECTOR_CSS,
+            'select'
+        );
+        $fixtureVersion = $sampleDataVersion;
+        $fixtureVersion = '100.0.*';
+        $perPageSelect->setValue(200);
+        sleep(1);
+
+        $elementsArray= $this->_rootElement->getElements("table.data-grid tbody tr");
+
+        foreach ($elementsArray as $key => $rowElement) {
+            $textElement = $this->_rootElement->find(
+                "//table//tbody//tr[" . ($key + 1) . "]//td//*[contains(text(),'sample')]",
+                Locator::SELECTOR_XPATH
+            );
+            if (preg_match('/magento.+sample.+data/', $textElement->getText())) {
+                $selectElement = $this->_rootElement->find(
+                    '//table//tbody//tr[' . ($key +1) . ']//td//select',
+                    Locator::SELECTOR_XPATH,
+                    'select'
+                );
+
+                $fixtureVersion = str_replace('*', '[0-9]+', $fixtureVersion);
+                $toSelectValue = $selectElement->getValue();
+                $toSelectValueOriginal = $toSelectValue;
+                $toSelectVersion = '0';
+                foreach ($selectElement->getElements('option') as $option) {
+                    $optionText = $option->getText();
+                    if (preg_match('/' . $fixtureVersion .'/', $optionText)) {
+                        if (preg_match('/([0-9\.\-a-zA-Z]+)/', $optionText, $match)) {
+                            if (!empty($match) > 0) {
+                                if (version_compare($match[0], $toSelectVersion, '>')) {
+                                    $toSelectVersion =  $match[0];
+                                    $toSelectValue = $optionText;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($toSelectValue !== $toSelectValueOriginal) {
+                    $selectElement->setValue($toSelectValue);
+                }
+            }
+        }
+    }
 }
