@@ -82,6 +82,7 @@
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorCompositeProxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
         </arguments>
     </type>
     <virtualType name="modulesDataProviderProxy" type="Magento\Framework\App\Config\InitialConfigSource\Proxy">
@@ -181,11 +182,6 @@
             <argument name="types" xsi:type="array">
                 <item name="environment" xsi:type="string">Magento\Config\Model\Placeholder\Environment</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Config\App\Config\Type\System">
-        <arguments>
-            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
         </arguments>
     </type>
 </config>

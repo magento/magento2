@@ -9,9 +9,8 @@ use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
@@ -51,7 +50,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
     private $configType;
 
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
 
@@ -68,7 +67,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
             ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(Serialize::class)
+        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configType = new System(

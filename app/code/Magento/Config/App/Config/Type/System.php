@@ -17,7 +17,7 @@ use Magento\Store\Model\Config\Processor\Fallback;
 /**
  * Class process source, cache them and retrieve value by path
  *
- * @package Magento\Config\App\Config\Type
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class System implements ConfigTypeInterface
 {

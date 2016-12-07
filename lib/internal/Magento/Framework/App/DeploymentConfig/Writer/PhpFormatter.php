@@ -21,7 +21,7 @@ class PhpFormatter implements FormatterInterface
     public function format($data, array $comments = [])
     {
         if (!empty($comments) && is_array($data)) {
-            $elements = array();
+            $elements = [];
             foreach ($data as $key => $value) {
                 $comment = '  ';
                 if (!empty($comments[$key])) {
