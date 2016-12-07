@@ -40,11 +40,11 @@ class SerializedToJson implements DataConverterInterface
     /**
      * Convert from serialized to JSON format
      *
-     * @param string $string
+     * @param string $value
      * @return string
      */
-    public function convert($string)
+    public function convert($value)
     {
-        return $this->json->serialize($this->serialize->unserialize($string));
+        return $this->json->serialize($this->serialize->unserialize($value));
     }
 }
