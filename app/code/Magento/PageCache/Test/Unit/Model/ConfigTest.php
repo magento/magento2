@@ -129,7 +129,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->moduleReader->expects($this->once())
             ->method('getModuleDir')
             ->willReturn('/magento/app/code/Magento/PageCache');
-        $test = $this->_model->getVclFile(Config::VARNISH_3_CONFIGURATION_PATH);
+        $test = $this->_model->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 

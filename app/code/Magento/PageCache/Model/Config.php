@@ -51,9 +51,9 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to Varnish 3 config template path
+     * XML path to Varnish 5 config template path
      */
-    const VARNISH_3_CONFIGURATION_PATH = 'system/full_page_cache/varnish3/path';
+    const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
      * XML path to Varnish 4 config template path

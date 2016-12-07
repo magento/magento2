@@ -13,7 +13,7 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * Check Varnish export buttons
      * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export::_getElementHtml
-     * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish3::getVarnishVersion
+     * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish5::getVarnishVersion
      * @covers \Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4::getVarnishVersion
      */
     public function testExportButtons()

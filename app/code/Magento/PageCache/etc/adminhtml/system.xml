@@ -18,7 +18,7 @@
                     <label>Varnish Configuration</label>
                     <field id="access_list" type="text" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Access list</label>
-                        <comment>IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
+                        <comment>IPs access list separated with ',' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved.</comment>
                         <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
                         <depends>
@@ -49,15 +49,15 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button_version3" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="export_button_version4" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Export Configuration</label>
-                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish3</frontend_model>
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button_version4" type="button" sortOrder="36" showInDefault="1" showInWebsite="0" showInStore="0">
-                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
+                    <field id="export_button_version5" type="button" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish5</frontend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>
