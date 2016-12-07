@@ -77,6 +77,11 @@ return [
             [
                 'type' => 'library',
                 'name' => 'magento/framework',
+                'path' => 'DB/Test/Unit/DataConverter/SerializedToJsonTest.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
                 'path' => 'ObjectManager/Config/Compiled.php'
             ],
             [
