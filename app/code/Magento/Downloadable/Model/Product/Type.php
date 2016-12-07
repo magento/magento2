@@ -7,6 +7,8 @@ namespace Magento\Downloadable\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Downloadable product type model
@@ -64,6 +66,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @var JoinProcessorInterface
      */
     private $extensionAttributesJoinProcessor;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Construct
@@ -249,20 +256,39 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
         if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
-            $buyRequest = new \Magento\Framework\DataObject(unserialize($option->getValue()));
+            $buyRequest = new \Magento\Framework\DataObject(
+                $this->getSerializer()->unserialize($option->getValue())
+            );
             if (!$buyRequest->hasLinks()) {
                 if (!$product->getLinksPurchasedSeparately()) {
                     $allLinksIds = $this->_linksFactory->create()->addProductToFilter(
                         $product->getEntityId()
                     )->getAllIds();
                     $buyRequest->setLinks($allLinksIds);
-                    $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
+                    $product->addCustomOption(
+                        'info_buyRequest',
+                        $this->getSerializer()->serialize($buyRequest->getData())
+                    );
                 } else {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product link(s).'));
                 }
             }
         }
         return $this;
+    }
+
+    /**
+     * Get serializer instance
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 
     /**
