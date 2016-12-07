@@ -79,7 +79,6 @@ class SelectVersion extends Form
             'select'
         );
         $fixtureVersion = $sampleDataVersion;
-        $fixtureVersion = '100.0.*';
         $perPageSelect->setValue(200);
         sleep(1);
 
