@@ -183,4 +183,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\App\Config\Type\System">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
+        </arguments>
+    </type>
 </config>

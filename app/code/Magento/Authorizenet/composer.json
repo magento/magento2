@@ -10,8 +10,10 @@
         "magento/module-backend": "100.2.*",
         "magento/module-payment": "100.2.*",
         "magento/module-catalog": "101.1.*",
-        "magento/module-config": "100.2.*",
         "magento/framework": "100.2.*"
+    },
+    "suggest": {
+        "magento/module-config": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
