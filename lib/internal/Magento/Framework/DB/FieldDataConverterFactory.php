@@ -3,11 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Setup;
+namespace Magento\Framework\DB;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Setup\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\DataConverter\DataConverterInterface;
 
 /**
  * Create instance of FieldDataConverter with concrete implementation of DataConverterInterface
@@ -33,16 +32,14 @@ class FieldDataConverterFactory
     /**
      * Create instance of FieldDataConverter
      *
-     * @param AdapterInterface $connection
      * @param string $dataConverterClassName
      * @return FieldDataConverter
      */
-    public function create(AdapterInterface $connection, $dataConverterClassName)
+    public function create($dataConverterClassName)
     {
         return $this->objectManager->create(
             FieldDataConverter::class,
             [
-                'connection' => $connection,
                 'dataConverter' => $this->objectManager->get($dataConverterClassName)
             ]
         );
