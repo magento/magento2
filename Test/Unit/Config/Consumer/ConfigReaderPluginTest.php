@@ -95,6 +95,6 @@ class ConfigReaderPluginTest extends \PHPUnit_Framework_TestCase
             ->method('getConsumers')
             ->willReturn($consumers);
 
-        $this->assertEquals($finalResult, $this->plugin->afterRead($this->subjectMock, $result, 'scope'));
+        $this->assertEquals($finalResult, $this->plugin->afterRead($this->subjectMock, $result));
     }
 }

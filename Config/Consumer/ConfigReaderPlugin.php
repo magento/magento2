@@ -38,7 +38,7 @@ class ConfigReaderPlugin
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterRead(ConsumerConfigCompositeReader $subject, $result, $scope)
+    public function afterRead(ConsumerConfigCompositeReader $subject, $result, $scope = null)
     {
         return array_merge($this->getConsumerConfigDataFromQueueConfig(), $result);
     }
