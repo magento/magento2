@@ -8,28 +8,31 @@ namespace Magento\Quote\Setup;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Model\Config;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\DB\FieldDataConverterFactory
+     * @var FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+     * @param Config $eavConfig
+     * @param FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+        Config $eavConfig,
+        FieldDataConverterFactory $fieldDataConverterFactory
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
@@ -40,25 +43,21 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.4', '<')) {
             $this->upgradeToVersionTwoZeroFour($setup);
         }
         $this->eavConfig->clear();
-        $setup->endSetup();
     }
 
     /**
-     * Upgrade to version 2.0.4
+     * Convert data for additional_information field in quote_payment table from serialized to JSON format
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
     private function upgradeToVersionTwoZeroFour(ModuleDataSetupInterface $setup)
     {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Framework\DB\DataConverter\SerializedToJson::class
-        );
+        $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
             $setup->getConnection(),
             $setup->getTable('quote_payment'),
