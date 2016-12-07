@@ -17,72 +17,69 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Grid|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_gridMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_eventManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stateMock;
+
     protected function setUp()
     {
-        $this->_gridMock = $this->getMock(
-            \Magento\Backend\Block\Widget\Grid::class,
-            ['getId', 'getCollection'],
-            [],
-            '',
-            false
-        );
-        $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
+        $this->_gridMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->setMethods(['getId', 'getCollection'])
+            ->getMock();
+        $this->_gridMock->expects($this->any())
+            ->method('getId')
+            ->willReturn('test_grid');
 
-        $this->_layoutMock = $this->getMock(
-            \Magento\Framework\View\Layout::class,
-            ['getParentName', 'getBlock', 'helper'],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->_layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->setMethods(['getParentName', 'getBlock', 'helper'])
+            ->getMock();
+        $this->_layoutMock->expects($this->any())
+            ->method('getParentName')
+            ->with('test_grid_massaction')
+            ->willReturn('test_grid');
+        $this->_layoutMock->expects($this->any())
+            ->method('getBlock')
+            ->with('test_grid')
+            ->willReturn($this->_gridMock);
 
-        $this->_layoutMock->expects(
-            $this->any()
-        )->method(
-            'getParentName'
-        )->with(
-            'test_grid_massaction'
-        )->will(
-            $this->returnValue('test_grid')
-        );
-        $this->_layoutMock->expects(
-            $this->any()
-        )->method(
-            'getBlock'
-        )->with(
-            'test_grid'
-        )->will(
-            $this->returnValue($this->_gridMock)
-        );
+        $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->getMock();
 
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->_urlModelMock = $this->getMockBuilder(\Magento\Backend\Model\Url::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->getMock();
 
-        $this->_urlModelMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $this->stateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->getMock();
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -96,13 +93,13 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\Block\Widget\Grid\Massaction::class,
             $arguments
         );
+        $objectManagerHelper->setBackwardCompatibleProperty($this->_block, 'state', $this->stateMock);
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
     protected function tearDown()
     {
         unset($this->_layoutMock);
-        unset($this->_eventManagerMock);
         unset($this->_gridMock);
         unset($this->_urlModelMock);
         unset($this->_block);
@@ -124,26 +121,24 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $itemId
-     * @param $item
+     * @param string$itemId
+     * @param \Magento\Framework\DataObject $item
      * @param $expectedItem \Magento\Framework\DataObject
-     * @dataProvider itemsDataProvider
+     * @dataProvider itemsProcessingDataProvider
      */
     public function testItemsProcessing($itemId, $item, $expectedItem)
     {
-        $this->_urlModelMock->expects(
-            $this->any()
-        )->method(
-            'getBaseUrl'
-        )->will(
-            $this->returnValue('http://localhost/index.php')
-        );
+        $this->_urlModelMock->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn('http://localhost/index.php');
 
         $urlReturnValueMap = [
             ['*/*/test1', [], 'http://localhost/index.php/backend/admin/test/test1'],
             ['*/*/test2', [], 'http://localhost/index.php/backend/admin/test/test2'],
         ];
-        $this->_urlModelMock->expects($this->any())->method('getUrl')->will($this->returnValueMap($urlReturnValueMap));
+        $this->_urlModelMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturnMap($urlReturnValueMap);
 
         $this->_block->addItem($itemId, $item);
         $this->assertEquals(1, $this->_block->getCount());
@@ -157,7 +152,10 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_block->getItem($itemId));
     }
 
-    public function itemsDataProvider()
+    /**
+     * @return array
+     */
+    public function itemsProcessingDataProvider()
     {
         return [
             [
@@ -186,22 +184,17 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $param
-     * @param $expectedJson
-     * @param $expected
+     * @param string $param
+     * @param string $expectedJson
+     * @param array $expected
      * @dataProvider selectedDataProvider
      */
     public function testSelected($param, $expectedJson, $expected)
     {
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-            'getParam'
-        )->with(
-            $this->_block->getFormFieldNameInternal()
-        )->will(
-            $this->returnValue($param)
-        );
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->with($this->_block->getFormFieldNameInternal())
+            ->willReturn($param);
 
         $this->assertEquals($expectedJson, $this->_block->getSelectedJson());
         $this->assertEquals($expected, $this->_block->getSelected());
@@ -262,6 +255,9 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->_block->getGridIdsJson());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetGridIdsJsonWithUseSelectAll()
     {
         return [
@@ -277,6 +273,62 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
                 [1, 2, 3],
                 '1,2,3',
             ],
+        ];
+    }
+
+    /**
+     * @param string $itemId
+     * @param array|\Magento\Framework\DataObject $item
+     * @dataProvider addItemDataProvider
+     */
+    public function testAddItem($itemId, $item, $count, $mode)
+    {
+        $this->stateMock->expects($this->any())
+            ->method('getMode')
+            ->willReturn($mode);
+
+        $urlReturnValueMap = [
+            ['*/*/test1', [], 'http://localhost/index.php/backend/admin/test/test1'],
+            ['*/*/test2', [], 'http://localhost/index.php/backend/admin/test/test2'],
+        ];
+        $this->_urlModelMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturnMap($urlReturnValueMap);
+
+        $this->_block->addItem($itemId, $item);
+        $this->assertEquals($count, $this->_block->getCount());
+    }
+
+    /**
+     * @return array
+     */
+    public function addItemDataProvider()
+    {
+        return [
+            [
+                'itemId' => 'test1',
+                'item' => ['label' => 'Test 1', 'url' => '*/*/test1'],
+                'count' => 1,
+                'mode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+            ],
+            [
+                'itemId' => 'test2',
+                'item' => ['label' => 'Test 2', 'url' => '*/*/test2'],
+                'count' => 1,
+                'mode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+            ],
+            [
+                'itemId' => 'test1',
+                'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1', 'hideInProduction' => true],
+                'count' => 0,
+                'mode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+            ],
+            [
+                'itemId' => 'test2',
+                'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2', 'hideInProduction' => true],
+                'count' => 1,
+                'mode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+            ]
         ];
     }
 }

@@ -18,6 +18,24 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
      */
     public function execute()
     {
+        if ($this->isProduction()) {
+            $this->messageManager->addErrorMessage(__('You can\'t change status of cache type(s) in production mode'));
+        } else {
+            $this->enableCache();
+        }
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('adminhtml/*');
+    }
+
+    /**
+     * Enable cache
+     *
+     * @return void
+     */
+    private function enableCache()
+    {
         try {
             $types = $this->getRequest()->getParam('types');
             $updatedTypes = 0;
@@ -40,9 +58,5 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
         }
-
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('adminhtml/*');
     }
 }
