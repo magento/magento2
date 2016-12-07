@@ -24,7 +24,7 @@ class UpgradeData implements UpgradeDataInterface
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\Setup\FieldDataConverterFactory
+     * @var \Magento\Framework\DB\FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
 
@@ -33,12 +33,12 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param SalesSetupFactory $salesSetupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Setup\FieldDataConverterFactory $fieldDataConverterFactory
+     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Setup\FieldDataConverterFactory $fieldDataConverterFactory
+        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->eavConfig = $eavConfig;
@@ -121,25 +121,28 @@ class UpgradeData implements UpgradeDataInterface
     private function upgradeToVersionTwoZeroFive(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            $setup->getConnection(),
-            \Magento\Framework\Setup\DataConverter\SerializedToJson::class
+            \Magento\Framework\DB\DataConverter\SerializedToJson::class
         );
         $fieldDataConverter->convert(
+            $setup->getConnection(),
             $setup->getTable('sales_order_item'),
             'item_id',
             'product_options'
         );
         $fieldDataConverter->convert(
+            $setup->getConnection(),
             $setup->getTable('sales_shipment'),
             'entity_id',
             'packages'
         );
         $fieldDataConverter->convert(
+            $setup->getConnection(),
             $setup->getTable('sales_order_payment'),
             'entity_id',
             'additional_information'
         );
         $fieldDataConverter->convert(
+            $setup->getConnection(),
             $setup->getTable('sales_payment_transaction'),
             'transaction_id',
             'additional_information'
