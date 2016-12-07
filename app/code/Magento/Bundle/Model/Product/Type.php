@@ -11,6 +11,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Bundle Type Model
@@ -147,6 +148,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_stockState;
 
     /**
+     * Serializer
+     *
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -168,6 +176,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -192,7 +201,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState
+        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
+        SerializerInterface $serializer = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -206,6 +216,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -697,7 +709,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                     $result[] = $_result[0]->setParentProductId($product->getId())
                         ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
-                        ->addCustomOption('bundle_selection_attributes', serialize($attributes));
+                        ->addCustomOption('bundle_selection_attributes', $this->serializer->serialize($attributes));
 
                     if ($isStrictProcessMode) {
                         $_result[0]->setCartQty($qty);

@@ -6,6 +6,7 @@
 namespace Magento\Bundle\Block\Sales\Order\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Order item render block
@@ -14,6 +15,33 @@ use Magento\Catalog\Model\Product\Type\AbstractType;
  */
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
+    /**
+     * Serializer
+     *
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        array $data = [],
+        SerializerInterface $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SerializerInterface::class);
+
+        parent::__construct($context, $string, $productOptionFactory, $data);
+    }
+
     /**
      * @param mixed $item
      * @return bool
@@ -100,7 +128,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return unserialize($options['bundle_selection_attributes']);
+            return $this->serializer->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }

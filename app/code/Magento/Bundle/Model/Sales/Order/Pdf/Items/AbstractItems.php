@@ -6,12 +6,55 @@
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Sales Order Pdf Items renderer
  */
 abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
+    /**
+     * Serializer
+     *
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\Framework\Filesystem $filesystem ,
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Tax\Helper\Data $taxData,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filter\FilterManager $filterManager,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        SerializerInterface $serializer = null
+    ) {
+        $this->serializer = $serializer;
+
+        parent::__construct($context,
+            $registry,
+            $taxData,
+            $filesystem,
+            $filterManager,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+    }
+
     /**
      * Getting all available children for Invoice, Shipment or CreditMemo item
      *
@@ -157,7 +200,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return unserialize($options['bundle_selection_attributes']);
+            return $this->getSerializer()->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }
@@ -241,5 +284,20 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             return true;
         }
         return false;
+    }
+
+    /**
+     * The getter function to get serializer
+     *
+     * @return SerializerInterface
+     *
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

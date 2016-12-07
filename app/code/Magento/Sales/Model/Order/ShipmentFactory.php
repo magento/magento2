@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
@@ -36,18 +37,29 @@ class ShipmentFactory
     protected $instanceName;
 
     /**
+     * Serializer
+     *
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Factory constructor.
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
+        SerializerInterface $serializer = null
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;
         $this->instanceName = \Magento\Sales\Api\Data\ShipmentInterface::class;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SerializerInterface::class);
     }
 
     /**
@@ -100,7 +112,7 @@ class ShipmentFactory
                     $productOptions = $orderItem->getProductOptions();
 
                     if (isset($productOptions['bundle_selection_attributes'])) {
-                        $bundleSelectionAttributes = unserialize(
+                        $bundleSelectionAttributes = $this->serializer->unserialize(
                             $productOptions['bundle_selection_attributes']
                         );
 
