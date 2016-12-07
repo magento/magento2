@@ -49,9 +49,10 @@ class ConfigurablePrice extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_PRICE)
-            ?: $this->getGroupCodeByField($meta, self::CODE_GROUP_PRICE)
-        ) {
+        $groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_PRICE)
+            ?: $this->getGroupCodeByField($meta, self::CODE_GROUP_PRICE);
+
+        if ($groupCode && !empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
             if (!empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
                 $meta[$groupCode]['children'][self::CODE_GROUP_PRICE] = array_replace_recursive(
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
@@ -71,7 +72,9 @@ class ConfigurablePrice extends AbstractModifier
                     ]
                 );
             }
-            if (!empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
+            if (
+            !empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE]['children'][self::$advancedPricingButton])
+            ) {
                 $productTypeId = $this->locator->getProduct()->getTypeId();
                 $visibilityConfig = ($productTypeId === ConfigurableType::TYPE_CODE)
                     ? ['visible' => 0, 'disabled' => 1]
