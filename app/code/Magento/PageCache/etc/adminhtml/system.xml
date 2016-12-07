@@ -41,6 +41,14 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
+                    <field id="grace_period" type="text" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Grace period</label>
+                        <comment>Specify grace period in seconds for config file generation. If field is empty default value 86400 will be saved.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
                     <field id="export_button_version3" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Export Configuration</label>
                         <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish3</frontend_model>
