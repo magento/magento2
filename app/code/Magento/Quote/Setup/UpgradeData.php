@@ -17,7 +17,7 @@ class UpgradeData implements UpgradeDataInterface
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\Setup\FieldDataConverterFactory
+     * @var \Magento\Framework\DB\FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
 
@@ -25,11 +25,11 @@ class UpgradeData implements UpgradeDataInterface
      * Constructor
      *
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Setup\FieldDataConverterFactory $fieldDataConverterFactory
+     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Setup\FieldDataConverterFactory $fieldDataConverterFactory
+        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
@@ -57,10 +57,10 @@ class UpgradeData implements UpgradeDataInterface
     private function upgradeToVersionTwoZeroFour(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            $setup->getConnection(),
-            \Magento\Framework\Setup\DataConverter\SerializedToJson::class
+            \Magento\Framework\DB\DataConverter\SerializedToJson::class
         );
         $fieldDataConverter->convert(
+            $setup->getConnection(),
             $setup->getTable('quote_payment'),
             'payment_id',
             'additional_information'
