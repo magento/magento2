@@ -120,7 +120,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
         <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
