@@ -33,30 +33,29 @@ class ConfigReaderPlugin
      * Read values from queue config and make them available via topology config.
      *
      * @param \Magento\Framework\MessageQueue\Topology\Config\CompositeReader $subject
-     * @param \Closure $proceed
+     * @param array $result
      * @param string|null $scope
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRead(
+    public function afterRead(
         \Magento\Framework\MessageQueue\Topology\Config\CompositeReader $subject,
-        \Closure $proceed,
+        array $result,
         $scope = null
     ) {
-        $topologyConfigData = $proceed($scope);
         $topologyConfigDataFromQueueConfig = $this->getTopologyConfigDataFromQueueConfig();
         foreach ($topologyConfigDataFromQueueConfig as $exchangeKey => $exchangeConfig) {
-            if (isset($topologyConfigData[$exchangeKey])) {
-                $topologyConfigData[$exchangeKey]['bindings'] = array_merge(
+            if (isset($result[$exchangeKey])) {
+                $result[$exchangeKey]['bindings'] = array_merge(
                     $exchangeConfig['bindings'],
-                    $topologyConfigData[$exchangeKey]['bindings']
+                    $result[$exchangeKey]['bindings']
                 );
             } else {
-                $topologyConfigData[$exchangeKey] = $exchangeConfig;
+                $result[$exchangeKey] = $exchangeConfig;
             }
         }
-        return $topologyConfigData;
+        return $result;
     }
 
     /**
