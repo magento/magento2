@@ -7,7 +7,6 @@ namespace Magento\Downloadable\Test\Unit\Model\Product;
 
 use Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class TypeTest
@@ -73,7 +72,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $linkResource = $this->getMock(\Magento\Downloadable\Model\ResourceModel\Link::class, [], [], '', false);
         $this->linksFactory = $this->getMock(
             \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory::class,
-            [],
+            ['create'],
             [],
             '',
             false
