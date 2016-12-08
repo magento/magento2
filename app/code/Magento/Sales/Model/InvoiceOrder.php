@@ -12,13 +12,16 @@ use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Invoice\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
+use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\Order\Validation\InvoiceOrderInterface as InvoiceOrderValidator;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class InvoiceOrder
@@ -81,26 +84,31 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
+     * @param InvoiceValidatorInterface $invoiceValidator
+     * @param OrderValidatorInterface $orderValidator
      * @param PaymentAdapterInterface $paymentAdapter
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderConfig $config
      * @param InvoiceRepository $invoiceRepository
-     * @param InvoiceOrderValidator $invoiceOrderValidator
      * @param NotifierInterface $notifierInterface
      * @param LoggerInterface $logger
+     * @param InvoiceOrderValidator|null $invoiceOrderValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         OrderRepositoryInterface $orderRepository,
         InvoiceDocumentFactory $invoiceDocumentFactory,
+        InvoiceValidatorInterface $invoiceValidator,
+        OrderValidatorInterface $orderValidator,
         PaymentAdapterInterface $paymentAdapter,
         OrderStateResolverInterface $orderStateResolver,
         OrderConfig $config,
         InvoiceRepository $invoiceRepository,
-        InvoiceOrderValidator $invoiceOrderValidator,
         NotifierInterface $notifierInterface,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        InvoiceOrderValidator $invoiceOrderValidator = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
@@ -109,9 +117,11 @@ class InvoiceOrder implements InvoiceOrderInterface
         $this->orderStateResolver = $orderStateResolver;
         $this->config = $config;
         $this->invoiceRepository = $invoiceRepository;
-        $this->invoiceOrderValidator = $invoiceOrderValidator;
         $this->notifierInterface = $notifierInterface;
         $this->logger = $logger;
+        $this->invoiceOrderValidator = $invoiceOrderValidator ?: ObjectManager::getInstance()->get(
+            InvoiceOrderValidator::class
+        );
     }
 
     /**
