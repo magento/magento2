@@ -194,7 +194,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetProductOptions($options, $expectedResult)
     {
         if (is_string($options)) {
-            $this->serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($expectedResult));
+            $this->serializerMock->expects($this->once())
+                ->method('unserialize')
+                ->will($this->returnValue($expectedResult));
         }
         $this->model->setData('product_options', $options);
         $result = $this->model->getProductOptions();
