@@ -129,7 +129,7 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer
+        SerializerInterface $serializer = null
     ) {
         parent::__construct(
             $context,
