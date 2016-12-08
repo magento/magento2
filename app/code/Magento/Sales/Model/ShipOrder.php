@@ -90,6 +90,7 @@ class ShipOrder implements ShipOrderInterface
      * @param LoggerInterface $logger
      * @param ShipOrderValidator|null $shipOrderValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,

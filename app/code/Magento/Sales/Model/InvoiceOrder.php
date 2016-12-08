@@ -94,6 +94,7 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param LoggerInterface $logger
      * @param InvoiceOrderValidator|null $invoiceOrderValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,

@@ -21,6 +21,8 @@ class Config implements ConfigInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopePool
+     *
+     * @deprecated
      */
     protected $_scopePool;
 

@@ -19,16 +19,22 @@ class Placeholder implements PostProcessorInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
+     *
+     * @deprecated
      */
     protected $request;
 
     /**
      * @var string[]
+     *
+     * @deprecated
      */
     protected $urlPaths;
 
     /**
      * @var string
+     *
+     * @deprecated
      */
     protected $urlPlaceholder;
 
