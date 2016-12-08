@@ -147,7 +147,7 @@
             <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="billingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">0.00</item>
@@ -165,7 +165,7 @@
         <variation name="OnePageCheckoutTestVariation7" summary="Checkout as UK guest with condition available product qty = ordered product qty">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
