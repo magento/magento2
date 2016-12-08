@@ -9,6 +9,7 @@ namespace Magento\Store\Model\Config\Processor;
 
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
@@ -17,17 +18,42 @@ use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
 class Placeholder implements PostProcessorInterface
 {
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var string[]
+     */
+    protected $urlPaths;
+
+    /**
+     * @var string
+     */
+    protected $urlPlaceholder;
+
+    /**
      * @var ConfigPlaceholder
      */
     private $configPlaceholder;
 
     /**
      * Placeholder constructor.
-     * @param ConfigPlaceholder $configPlaceholder
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param string[] $urlPaths
+     * @param string $urlPlaceholder
+     * @param ConfigPlaceholder|null $configPlaceholder
      */
-    public function __construct(ConfigPlaceholder $configPlaceholder)
-    {
-        $this->configPlaceholder = $configPlaceholder;
+    public function __construct(
+        \Magento\Framework\App\RequestInterface $request,
+        $urlPaths,
+        $urlPlaceholder,
+        ConfigPlaceholder $configPlaceholder = null
+    ) {
+        $this->request = $request;
+        $this->urlPaths = $urlPaths;
+        $this->urlPlaceholder = $urlPlaceholder;
+        $this->configPlaceholder = $configPlaceholder ?: ObjectManager::getInstance()->get(ConfigPlaceholder::class);
     }
 
     /**

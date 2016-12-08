@@ -6,6 +6,9 @@
  */
 namespace Magento\Framework\App\Cache;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Cache\Tag\Resolver;
+
 /**
  * Automatic cache cleaner plugin
  */
@@ -37,18 +40,18 @@ class FlushCacheByTags
      * @param Type\FrontendPool $cachePool
      * @param StateInterface $cacheState
      * @param array $cacheList
-     * @param Tag\Resolver $tagResolver
+     * @param Tag\Resolver|null $tagResolver
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cachePool,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         array $cacheList,
-        \Magento\Framework\App\Cache\Tag\Resolver $tagResolver
+        \Magento\Framework\App\Cache\Tag\Resolver $tagResolver = null
     ) {
         $this->cachePool = $cachePool;
         $this->cacheState = $cacheState;
         $this->cacheList = $cacheList;
-        $this->tagResolver = $tagResolver;
+        $this->tagResolver = $tagResolver ?: ObjectManager::getInstance()->get(Resolver::class);
     }
 
     /**
