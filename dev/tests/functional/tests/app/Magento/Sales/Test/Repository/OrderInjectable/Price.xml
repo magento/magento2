@@ -50,5 +50,13 @@
                 <item name="grand_invoice_total" xsi:type="string">0</item>
             </field>
         </dataset>
+
+        <dataset name="full_flow">
+            <field name="0" xsi:type="array">
+                <item name="grand_creditmemo_total" xsi:type="string">565</item>
+                <item name="grand_invoice_total" xsi:type="string">565</item>
+                <item name="grand_order_total" xsi:type="string">565</item>
+            </field>
+        </dataset>
     </repository>
 </config>

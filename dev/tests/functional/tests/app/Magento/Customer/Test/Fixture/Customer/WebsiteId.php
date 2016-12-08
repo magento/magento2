@@ -4,29 +4,31 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Fixture\Product;
+namespace Magento\Customer\Test\Fixture\Customer;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Store\Test\Fixture\Website;
 
 /**
- * Prepare websites.
+ * Prepare website.
  */
-class WebsiteIds extends DataSource
+class WebsiteId extends DataSource
 {
     /**
-     * Store Fixtures.
+     * Store Fixture.
      *
-     * @var array
+     * @var Store
      */
-    private $stores = [];
+    private $store;
 
     /**
-     * Websites.
+     * Website.
      *
-     * @var array
+     * @var Website
      */
-    private $websites = [];
+    private $website;
 
     /**
      * Fixture Factory instance.
@@ -46,7 +48,7 @@ class WebsiteIds extends DataSource
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
-     * @param array|int $data
+     * @param array $data
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
@@ -71,9 +73,12 @@ class WebsiteIds extends DataSource
             throw new \Exception("Data must be set");
         }
 
-        foreach ($this->fixtureData as $dataset) {
-            if (isset($dataset['dataset'])) {
-                $store = $this->fixtureFactory->createByCode('store', $dataset);
+        if (isset($this->fixtureData['website'])) {
+            $this->website = $this->fixtureData['website'];
+            $this->data[] = $this->fixtureData['website']->getName();
+        } else {
+            if (isset($this->fixtureData['dataset'])) {
+                $store = $this->fixtureFactory->createByCode('store', $this->fixtureData);
 
                 if (!$store->getStoreId()) {
                     $store->persist();
@@ -83,35 +88,31 @@ class WebsiteIds extends DataSource
                     ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
 
                 $this->data[] = $website->getName();
-                $this->websites[] = $website;
-                $this->stores[] = $store;
-            }
-            if (isset($dataset['websites'])) {
-                foreach ($dataset['websites'] as $website) {
-                    $this->websites[] = $website;
-                }
+                $this->website = $website;
+                $this->store = $store;
             }
         }
+
         return parent::getData($key);
     }
 
     /**
-     * Return stores.
+     * Return store.
      *
-     * @return array
+     * @return Store
      */
-    public function getStores()
+    public function getStore()
     {
-        return $this->stores;
+        return $this->store;
     }
 
     /**
-     * Return website codes.
+     * Return website code.
      *
-     * @return array
+     * @return Website
      */
-    public function getWebsites()
+    public function getWebsite()
     {
-        return $this->websites;
+        return $this->website;
     }
 }
