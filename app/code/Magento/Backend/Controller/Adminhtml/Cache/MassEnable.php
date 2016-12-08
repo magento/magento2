@@ -8,9 +8,16 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
+    /**
+     * @var State
+     */
+    private $state;
+
     /**
      * Mass action for cache enabling
      *
@@ -18,7 +25,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
      */
     public function execute()
     {
-        if ($this->isProduction()) {
+        if ($this->getState()->getMode() === State::MODE_PRODUCTION) {
             $this->messageManager->addErrorMessage(__('You can\'t change status of cache type(s) in production mode'));
         } else {
             $this->enableCache();
@@ -58,5 +65,20 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
         }
+    }
+
+    /**
+     * Get State Instance
+     *
+     * @return State
+     * @deprecated
+     */
+    private function getState()
+    {
+        if ($this->state === null) {
+            $this->state = ObjectManager::getInstance()->get(State::class);
+        }
+
+        return $this->state;
     }
 }

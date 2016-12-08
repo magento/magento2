@@ -7,8 +7,6 @@ namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\State;
-use Magento\Framework\App\ObjectManager;
 
 abstract class Cache extends Action
 {
@@ -38,11 +36,6 @@ abstract class Cache extends Action
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
-
-    /**
-     * @var State
-     */
-    protected $state;
 
     /**
      * @param Action\Context $context
@@ -82,30 +75,5 @@ abstract class Cache extends Action
         if (count($invalidTypes) > 0) {
             throw new LocalizedException(__('Specified cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
         }
-    }
-
-    /**
-     * Check that production mode is enabled
-     *
-     * @return bool
-     */
-    protected function isProduction()
-    {
-        return $this->getState()->getMode() === State::MODE_PRODUCTION;
-    }
-
-    /**
-     * Get State Instance
-     *
-     * @return State
-     * @deprecated
-     */
-    private function getState()
-    {
-        if ($this->state === null) {
-            $this->state = ObjectManager::getInstance()->get(State::class);
-        }
-
-        return $this->state;
     }
 }
