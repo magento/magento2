@@ -140,15 +140,15 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'isProduction' => State::MODE_DEVELOPER,
+                'mageMode' => State::MODE_DEVELOPER,
                 'expectedCount' => 3,
             ],
             [
-                'isProduction' => State::MODE_DEFAULT,
+                'mageMode' => State::MODE_DEFAULT,
                 'expectedCount' => 3,
             ],
             [
-                'isProduction' => State::MODE_PRODUCTION,
+                'mageMode' => State::MODE_PRODUCTION,
                 'expectedCount' => 2,
             ],
         ];
