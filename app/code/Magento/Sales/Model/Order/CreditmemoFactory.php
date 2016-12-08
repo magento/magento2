@@ -23,7 +23,7 @@ class CreditmemoFactory
     protected $taxConfig;
 
     /**
-     * @var \Magento\Framework\Unserialize\Unserialize
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     protected $unserialize;
 
