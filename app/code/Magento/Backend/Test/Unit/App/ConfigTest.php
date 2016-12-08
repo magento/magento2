@@ -34,7 +34,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Backend\App\Config($this->appConfig);
+        $this->model = new \Magento\Backend\App\Config(
+            $this->getMock(\Magento\Framework\App\Config\ScopePool::class, [], [], '', false, false),
+            $this->appConfig
+        );
     }
 
     public function testGetValue()
