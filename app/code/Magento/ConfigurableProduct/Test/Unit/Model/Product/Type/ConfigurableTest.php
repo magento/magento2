@@ -565,6 +565,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSelectedAttributesInfo()
     {
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -581,7 +597,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize($this->attributeData));
+        $optionMock->expects($this->once())->method('getValue')->willReturn(json_encode($this->attributeData));
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($optionMock);
         $productMock->expects($this->once())->method('hasData')->willReturn(true);
         $productMock->expects($this->at(2))->method('getData')->willReturn(true);
@@ -620,7 +636,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($optionMock);
         $optionMock->expects($this->once())
             ->method('getValue')
-            ->willReturn(serialize(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']]));
+            ->willReturn(json_encode(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']]));
 
         $this->assertEquals($this->_model, $this->_model->checkProductBuyState($productMock));
     }
@@ -644,7 +660,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomOption')
             ->with('info_buyRequest')
             ->willReturn($optionMock);
-        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize([]));
+        $optionMock->expects($this->once())->method('getValue')->willReturn(json_encode([]));
 
         $this->_model->checkProductBuyState($productMock);
     }

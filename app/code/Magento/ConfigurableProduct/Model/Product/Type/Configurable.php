@@ -854,7 +854,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if ($attributesOption = $product->getCustomOption('attributes')) {
-            $data = unserialize($attributesOption->getValue());
+            $data = $this->serializer->unserialize($attributesOption->getValue());
             $this->getUsedProductAttributeIds($product);
 
             $usedAttributes = $product->getData($this->_usedAttributes);
@@ -936,7 +936,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 if ($subProduct) {
                     $subProductLinkFieldId = $subProduct->getId();
-                    $product->addCustomOption('attributes', serialize($attributes));
+                    $product->addCustomOption('attributes', $this->serializer->serialize($attributes));
                     $product->addCustomOption('product_qty_' . $subProductLinkFieldId, 1, $subProduct);
                     $product->addCustomOption('simple_product', $subProductLinkFieldId, $subProduct);
 
