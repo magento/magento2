@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Product\Plugin;
 
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+
 class RemoveQuoteItems
 {
     /**
@@ -21,15 +23,15 @@ class RemoveQuoteItems
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Magento\Catalog\Model\ResourceModel\Product $result
+     * @param ProductResource $subject
+     * @param ProductResource $result
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @return ProductResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete(
-        \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Magento\Catalog\Model\ResourceModel\Product $result,
+        ProductResource $subject,
+        ProductResource $result,
         \Magento\Catalog\Api\Data\ProductInterface $product
     ) {
         $this->quoteItemsCleaner->execute($product);
