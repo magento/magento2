@@ -32,14 +32,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderFactory;
 
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
 
+        $this->serializerMock = $this->getMock(SerializerInterface::class, [], ['unserialize'], '', false);
+
         $arguments = [
             'orderFactory' => $this->orderFactory,
+            'serializer' => $this->serializerMock
         ];
         $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, $arguments);
     }
@@ -119,8 +127,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $qtyRefunded,
         $qtyShipped,
         $expectedStatus
-    )
-    {
+    ) {
         $this->model->setQtyBackordered($qtyBackOrdered);
         $this->model->setQtyCanceled($qtyCanceled);
         $this->model->setQtyInvoiced($qtyInvoiced);
@@ -186,11 +193,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductOptions($options, $expectedResult)
     {
-        $serializerMock = $this->getMock(SerializerInterface::class, [], ['unserialize'], '', false);
         if (is_string($options)) {
-            $serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($expectedResult));
+            $this->serializerMock->expects($this->once())->method('unserialize')->will($this->returnValue($expectedResult));
         }
-        $this->objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
         $this->model->setData('product_options', $options);
         $result = $this->model->getProductOptions();
         $this->assertSame($result, $expectedResult);
