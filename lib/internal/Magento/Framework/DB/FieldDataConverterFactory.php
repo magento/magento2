@@ -6,7 +6,6 @@
 namespace Magento\Framework\DB;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\DataConverter\DataConverterInterface;
 
 /**
  * Create instance of FieldDataConverter with concrete implementation of DataConverterInterface
