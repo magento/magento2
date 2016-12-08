@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\Order\Creditmemo;
 
 /**
  * Interface for CreditMemo notifier.
- *
- * @api
  */
 interface NotifierInterface
 {
