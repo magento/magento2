@@ -47,13 +47,13 @@ class Placeholder implements PostProcessorInterface
      * Placeholder constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string[] $urlPaths
-     * @param string $urlPlaceholder
+     * @param string|null $urlPlaceholder
      * @param ConfigPlaceholder|null $configPlaceholder
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        $urlPaths,
-        $urlPlaceholder,
+        $urlPaths = [],
+        $urlPlaceholder = null,
         ConfigPlaceholder $configPlaceholder = null
     ) {
         $this->request = $request;
