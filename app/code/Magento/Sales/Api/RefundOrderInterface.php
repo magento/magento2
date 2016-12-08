@@ -7,7 +7,6 @@ namespace Magento\Sales\Api;
 
 /**
  * Interface RefundOrderInterface
- *
  */
 interface RefundOrderInterface
 {
