@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Config\Publisher;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface;
+use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader as PublisherConfigCompositeReader;
 
 /**
  * Plugin which provides access to publishers declared in queue config using publisher config interface.
@@ -15,60 +16,55 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 class ConfigReaderPlugin
 {
     /**
-     * @var QueueConfig
+     * @var ConfigInterface
      */
-    private $queueConfig;
+    private $config;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param QueueConfig $queueConfig
+     * @param ConfigInterface $config
      */
-    public function __construct(QueueConfig $queueConfig)
+    public function __construct(ConfigInterface $config)
     {
-        $this->queueConfig = $queueConfig;
+        $this->config = $config;
     }
 
     /**
-     * Read values from queue config and make them available via publisher config.
+     * Read values from queue config and make them available via publisher config
      *
-     * @param \Magento\Framework\MessageQueue\Publisher\Config\CompositeReader $subject
-     * @param \Closure $proceed
+     * @param PublisherConfigCompositeReader $subject
+     * @param array $result
      * @param string|null $scope
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRead(
-        \Magento\Framework\MessageQueue\Publisher\Config\CompositeReader $subject,
-        \Closure $proceed,
-        $scope = null
-    ) {
-        $publisherConfigData = $proceed($scope);
-        $publisherConfigDataFromQueueConfig = $this->getPublisherConfigDataFromQueueConfig();
-        return array_merge($publisherConfigDataFromQueueConfig, $publisherConfigData);
+    public function afterRead(PublisherConfigCompositeReader $subject, $result, $scope = null)
+    {
+        return array_merge($this->getPublisherConfigDataFromQueueConfig(), $result);
     }
 
     /**
-     * Get data from queue config in format compatible with publisher config data internal structure.
+     * Get data from queue config in format compatible with publisher config data internal structure
      *
      * @return array
      */
     private function getPublisherConfigDataFromQueueConfig()
     {
         $result = [];
-        foreach ($this->queueConfig->getBinds() as $bindingConfig) {
+
+        foreach ($this->config->getBinds() as $bindingConfig) {
             $topic = $bindingConfig['topic'];
             $result[$topic] = [
                 'topic' => $topic,
                 'connection' => [
-                    'name' => $this->queueConfig->getConnectionByTopic($topic),
+                    'name' => $this->config->getConnectionByTopic($topic),
                     'exchange' => $bindingConfig['exchange'],
                     'disabled' => false
                 ],
-                'disabled' => false,
+                'disabled' => false
             ];
         }
+
         return $result;
     }
 }
