@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fraud_protection" translate="label" type="text" sortOrder="410" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Fraud Protection</label>
+            <tab>sales</tab>
+            <resource>Magento_Sales::fraud_protection</resource>
+            <group id="signifyd" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Signifyd</label>
+                <field id="enable" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable this Solution</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>siginifyd/active</config_path>
+                </field>
+                <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API key</label>
+                    <comment><![CDATA[You will find this in <a href="http://signifyd.com/settings/teams" target="_blank">http://signifyd.com/settings/teams</a> after you create a Signifyd account]]></comment>
+                    <config_path>signifyd/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="api_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API URL</label>
+                    <config_path>signifyd/api_url</config_path>
+                    <comment>
+                        Don’t change unless asked to do so.
+                    </comment>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>signifyd/debug</config_path>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
