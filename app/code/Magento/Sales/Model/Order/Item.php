@@ -6,6 +6,8 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
@@ -96,6 +98,11 @@ class Item extends AbstractModel implements OrderItemInterface
     protected $_storeManager;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -108,6 +115,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param SerializerInterface $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,7 +128,8 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        SerializerInterface $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -134,6 +143,7 @@ class Item extends AbstractModel implements OrderItemInterface
         $this->_orderFactory = $orderFactory;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -466,7 +476,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptions()
     {
         $data = $this->_getData('product_options');
-        return is_string($data) ? unserialize($data) : $data;
+        return is_string($data) ? $this->serializer->unserialize($data) : $data;
     }
 
     /**
