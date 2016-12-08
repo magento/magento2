@@ -7,8 +7,6 @@ namespace Magento\Sales\Api;
 
 /**
  * Interface RefundInvoiceInterface
- *
- * @api
  */
 interface RefundInvoiceInterface
 {

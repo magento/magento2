@@ -36,7 +36,12 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
             ['key2' => 'value2-processed']
         );
 
-        $this->model = new \Magento\Store\Model\Config\Processor\Placeholder($this->configPlaceholderMock);
+        $this->model = new \Magento\Store\Model\Config\Processor\Placeholder(
+            $this->getMock(\Magento\Framework\App\RequestInterface::class),
+            [],
+            null,
+            $this->configPlaceholderMock
+        );
     }
 
     public function testProcess()

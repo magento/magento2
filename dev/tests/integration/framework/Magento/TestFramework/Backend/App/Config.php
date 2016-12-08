@@ -28,7 +28,10 @@ class Config extends \Magento\Backend\App\Config
      */
     public function __construct(\Magento\TestFramework\App\Config $appConfig, \Magento\TestFramework\App\MutableScopeConfig $mutableScopeConfig)
     {
-        parent::__construct($appConfig);
+        parent::__construct(
+            \Magento\TestFramework\ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ScopePool::class),
+            $appConfig
+        );
         $this->mutableScopeConfig = $mutableScopeConfig;
     }
 
