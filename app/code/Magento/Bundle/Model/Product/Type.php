@@ -11,6 +11,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Bundle Type Model
@@ -169,6 +170,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -207,6 +209,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -1011,9 +1014,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $productOptionIds = $this->getOptionsIds($product);
         $productSelections = $this->getSelectionsCollection($productOptionIds, $product);
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
-        $selectionIds = unserialize($selectionIds->getValue());
+        $selectionIds = $this->serializer->unserialize($selectionIds->getValue());
         $buyRequest = $product->getCustomOption('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject(unserialize($buyRequest->getValue()));
+        $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
         $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
