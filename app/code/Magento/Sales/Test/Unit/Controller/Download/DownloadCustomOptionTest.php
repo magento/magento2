@@ -5,6 +5,8 @@
  */
 
 namespace Magento\Sales\Test\Unit\Controller\Download;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Unserialize\Unserialize;
 
 /**
  * Class DownloadCustomOptionTest
@@ -55,7 +57,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Unserialize\Unserialize|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $unserializeMock;
+    protected $serializerMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
@@ -89,9 +91,9 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['downloadFile'])
             ->getMock();
 
-        $this->unserializeMock = $this->getMockBuilder(\Magento\Framework\Unserialize\Unserialize::class)
+        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['unserialize'])
+            ->setMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -151,7 +153,8 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                     'context'              => $contextMock,
                     'resultForwardFactory' => $resultForwardFactoryMock,
                     'download'             => $this->downloadMock,
-                    'unserialize'          => $this->unserializeMock
+                    'unserialize'          => $this->getMock(Unserialize::class, [], [], '', false),
+                    'serializer'           => $this->serializerMock
                 ]
             )
             ->getMock();
@@ -197,7 +200,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         } else {
             $unserializeResult = [self::SECRET_KEY => self::SECRET_KEY];
 
-            $this->unserializeMock->expects($this->once())
+            $this->serializerMock->expects($this->once())
                 ->method('unserialize')
                 ->with($itemOptionValues[self::OPTION_VALUE])
                 ->willReturn($unserializeResult);
@@ -321,7 +324,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $this->productOptionMock->expects($this->any())->method('getProductId')->willReturn(self::OPTION_PRODUCT_ID);
         $this->productOptionMock->expects($this->any())->method('getType')->willReturn(self::OPTION_TYPE);
 
-        $this->unserializeMock->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(self::OPTION_VALUE)
             ->willReturn([self::SECRET_KEY => 'bad_test_secret_key']);

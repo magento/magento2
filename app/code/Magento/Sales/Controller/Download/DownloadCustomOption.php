@@ -6,6 +6,8 @@
  */
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\Download;
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
@@ -26,25 +28,34 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 
     /**
      * @var Unserialize
+     * @deprecated
      */
     protected $unserialize;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param Download $download
      * @param Unserialize $unserialize
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
         Download $download,
-        Unserialize $unserialize
+        Unserialize $unserialize,
+        SerializerInterface $serializer = null
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->download = $download;
         $this->unserialize = $unserialize;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -88,7 +99,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         }
 
         try {
-            $info = $this->unserialize->unserialize($option->getValue());
+            $info = $this->serializer->unserialize($option->getValue());
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
