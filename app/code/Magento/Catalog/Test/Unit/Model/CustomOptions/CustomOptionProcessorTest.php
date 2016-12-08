@@ -126,6 +126,9 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->buyRequest, $this->processor->convertToBuyRequest($this->cartItem));
     }
 
+    /**
+     * @covers \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::getOptions()
+     */
     public function testProcessCustomOptions()
     {
         $optionId = 23;
@@ -136,9 +139,17 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getOptionByCode')
             ->with('info_buyRequest')
             ->willReturn($quoteItemOption);
-        $quoteItemOption->expects($this->once())
+        $quoteItemOption->expects($this->any())
             ->method('getValue')
-            ->willReturn('a:1:{s:7:"options";a:1:{i:' . $optionId . ';a:2:{i:0;s:1:"5";i:1;s:1:"6";}}} ');
+            ->willReturn('{"options":{"' . $optionId . '":["5","6"]}}');
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($quoteItemOption->getValue(), true));
+        $objectHelper->setBackwardCompatibleProperty($this->processor, 'serializer', $serializer);
         $this->customOptionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->customOption);

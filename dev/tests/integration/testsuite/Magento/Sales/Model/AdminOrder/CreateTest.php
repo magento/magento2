@@ -478,6 +478,33 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Sales\Model\AdminOrder\Create::moveQuoteItem()
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testMoveQuoteItemToCart()
+    {
+        $fixtureCustomerId = 1;
+
+        /** Preconditions */
+        /** @var \Magento\Backend\Model\Session\Quote $session */
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
+        $session->setCustomerId($fixtureCustomerId);
+        /** @var $quoteFixture \Magento\Quote\Model\Quote */
+        $quoteFixture = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
+        $quoteFixture->load('test01', 'reserved_order_id');
+        $quoteFixture->setCustomerIsGuest(false)->setCustomerId($fixtureCustomerId)->save();
+
+        $customerQuote = $this->_model->getCustomerCart();
+        $item = $customerQuote->getAllVisibleItems()[0];
+
+        $this->_model->moveQuoteItem($item, 'cart', 3);
+        $this->assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
+        $this->assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
+    }
+
+    /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer.php

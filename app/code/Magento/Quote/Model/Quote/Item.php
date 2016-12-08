@@ -176,6 +176,13 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     protected $stockRegistry;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory
@@ -808,12 +815,29 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject($option ? unserialize($option->getValue()) : []);
+        $data = $option ? $this->getSerializer()->unserialize($option->getValue()) : [];
+        $buyRequest = new \Magento\Framework\DataObject($data);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
 
         return $buyRequest;
+    }
+
+    /**
+     * Get Serializer interface.
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+
+        return $this->serializer;
     }
 
     /**

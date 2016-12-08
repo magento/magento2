@@ -29,6 +29,13 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     private $urlBuilder;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param DataObject\Factory $objectFactory
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
@@ -99,11 +106,27 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     protected function getOptions(CartItemInterface $cartItem)
     {
         $buyRequest = !empty($cartItem->getOptionByCode('info_buyRequest'))
-            ? unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
+            ? $this->getSerializer()->unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
             : null;
         return is_array($buyRequest) && isset($buyRequest['options'])
             ? $buyRequest['options']
             : [];
+    }
+
+    /**
+     * Get Serializer interface.
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+
+        return $this->serializer;
     }
 
     /**

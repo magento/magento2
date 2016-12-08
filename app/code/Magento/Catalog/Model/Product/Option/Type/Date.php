@@ -23,6 +23,13 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_localeDate;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -269,7 +276,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $confItem = $this->getConfigurationItem();
         $infoBuyRequest = $confItem->getOptionByCode('info_buyRequest');
         try {
-            $value = unserialize($infoBuyRequest->getValue());
+            $value = $this->getSerializer()->unserialize($infoBuyRequest->getValue());
             if (is_array($value) && isset($value['options']) && isset($value['options'][$this->getOption()->getId()])
             ) {
                 return $value['options'][$this->getOption()->getId()];
@@ -279,6 +286,22 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (\Exception $e) {
             return ['date_internal' => $optionValue];
         }
+    }
+
+    /**
+     * Get Serializer interface.
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+
+        return $this->serializer;
     }
 
     /**

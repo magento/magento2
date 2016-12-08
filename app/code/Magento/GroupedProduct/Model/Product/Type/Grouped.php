@@ -384,7 +384,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $_result[0]->addCustomOption('product_type', self::TYPE_CODE, $product);
                 $_result[0]->addCustomOption(
                     'info_buyRequest',
-                    serialize(
+                    $this->getSerializer()->serialize(
                         [
                             'super_product_config' => [
                                 'product_type' => self::TYPE_CODE,
@@ -402,7 +402,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if (!$isStrictProcessMode || count($associatedProductsInfo)) {
             $product->addCustomOption('product_type', self::TYPE_CODE, $product);
-            $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
+            $product->addCustomOption('info_buyRequest', $this->getSerializer()->serialize($buyRequest->getData()));
 
             $products[] = $product;
         }

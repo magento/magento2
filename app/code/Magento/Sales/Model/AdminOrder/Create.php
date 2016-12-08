@@ -225,6 +225,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $quoteFactory;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -794,7 +801,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
                         $info = $item->getOptionByCode('info_buyRequest');
                         if ($info) {
-                            $info = new \Magento\Framework\DataObject(unserialize($info->getValue()));
+                            $info = new \Magento\Framework\DataObject(
+                                $this->getSerializer()->unserialize($info->getValue())
+                            );
                             $info->setQty($qty);
                             $info->setOptions($this->_prepareOptionsForRequest($item));
                         } else {
@@ -870,6 +879,22 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         return $this;
+    }
+
+    /**
+     * Get Serializer interface.
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+
+        return $this->serializer;
     }
 
     /**

@@ -649,7 +649,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize($this->attributeData));
+        $optionMock->expects($this->any())->method('getValue')->willReturn(json_encode($this->attributeData, true));
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($optionMock->getValue(), true));
+        $this->_objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($optionMock);
         $productMock->expects($this->once())->method('hasData')->willReturn(true);
         $productMock->expects($this->at(2))->method('getData')->willReturn(true);
@@ -671,9 +678,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers \Magento\ConfigurableProduct\Model\Product\Type\Configurable::checkProductBuyState()
+     */
     public function testCheckProductBuyState()
     {
-        $this->markTestIncomplete('checkProductBuyState() method is not complete in parent class');
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getCustomOption', 'getSkipCheckRequiredOption'])
             ->disableOriginalConstructor()
@@ -688,20 +697,28 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomOption')
             ->with('info_buyRequest')
             ->willReturn($optionMock);
-        $optionMock->expects($this->once())
+        $optionMock->expects($this->any())
             ->method('getValue')
-            ->willReturn(serialize(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']]));
+            ->willReturn(json_encode(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']], true));
+
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($optionMock->getValue(), true));
+        $this->_objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
 
         $this->assertEquals($this->_model, $this->_model->checkProductBuyState($productMock));
     }
 
     /**
+     * @covers \Magento\ConfigurableProduct\Model\Product\Type\Configurable::checkProductBuyState()
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage You need to choose options for your item.
      */
     public function testCheckProductBuyStateException()
     {
-        $this->markTestIncomplete('checkProductBuyState() method is not complete in parent class');
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getCustomOption', 'getSkipCheckRequiredOption'])
             ->disableOriginalConstructor()
@@ -716,7 +733,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomOption')
             ->with('info_buyRequest')
             ->willReturn($optionMock);
-        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize([]));
+        $optionMock->expects($this->any())->method('getValue')->willReturn('{}');
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($optionMock->getValue(), true));
+        $this->_objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
 
         $this->_model->checkProductBuyState($productMock);
     }

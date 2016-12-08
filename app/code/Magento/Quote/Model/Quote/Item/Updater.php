@@ -33,6 +33,13 @@ class Updater
     protected $objectFactory;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param ProductFactory $productFactory
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
@@ -104,7 +111,7 @@ class Updater
         if ($infoBuyRequest) {
             $infoBuyRequest->setCustomPrice($itemPrice);
 
-            $infoBuyRequest->setValue(serialize($infoBuyRequest->getData()));
+            $infoBuyRequest->setValue($this->getSerializer()->serialize($infoBuyRequest->getData()));
             $infoBuyRequest->setCode('info_buyRequest');
             $infoBuyRequest->setProduct($item->getProduct());
 
@@ -128,7 +135,7 @@ class Updater
         if ($infoBuyRequest->hasData('custom_price')) {
             $infoBuyRequest->unsetData('custom_price');
 
-            $infoBuyRequest->setValue(serialize($infoBuyRequest->getData()));
+            $infoBuyRequest->setValue($this->getSerializer()->serialize($infoBuyRequest->getData()));
             $infoBuyRequest->setCode('info_buyRequest');
             $infoBuyRequest->setProduct($item->getProduct());
             $item->addOption($infoBuyRequest);
@@ -136,6 +143,22 @@ class Updater
 
         $item->unsetData('custom_price');
         $item->unsetData('original_custom_price');
+    }
+
+    /**
+     * Get Serializer interface.
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (!$this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+
+        return $this->serializer;
     }
 
     /**
