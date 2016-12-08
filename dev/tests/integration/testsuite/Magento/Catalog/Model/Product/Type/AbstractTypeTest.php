@@ -186,7 +186,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
         $this->assertEquals($product->getId(), $buyRequest->getProductId());
         $this->assertSame($product, $buyRequest->getProduct());
-        $this->assertEquals(serialize($requestData), $buyRequest->getValue());
+        $this->assertEquals(json_encode($requestData), $buyRequest->getValue());
     }
 
     /**

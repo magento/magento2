@@ -299,13 +299,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
+        $product->addCustomOption('attributes', json_encode([$attribute['attribute_id'] => $optionValueId]));
         $info = $this->model->getSelectedAttributesInfo($product);
         $this->assertEquals('Test Configurable', $info[0]['label']);
         $this->assertEquals('Option 1', $info[0]['value']);
     }
 
     /**
+     * @covers \Magento\ConfigurableProduct\Model\Product\Type\Configurable::getConfigurableAttributes()
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppIsolation enabled
      */
@@ -316,7 +317,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $this->product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
+        $this->product->addCustomOption('attributes', json_encode([$attribute['attribute_id'] => $optionValueId]));
 
         $configurableAttr = $this->model->getConfigurableAttributes($this->product);
         $attribute = $configurableAttr->getFirstItem();

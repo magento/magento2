@@ -183,7 +183,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     *
+     * @param \Magento\Framework\Cache\FrontendInterface $cache [optional]
+     * @param \Magento\Customer\Model\Session $customerSession [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -205,7 +207,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Cache\FrontendInterface $cache = null,
-        \Magento\Customer\Model\Session $customerSession = null
+        \Magento\Customer\Model\Session $customerSession = null,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -226,7 +229,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $filesystem,
             $coreRegistry,
             $logger,
-            $productRepository
+            $productRepository,
+            $serializer
         );
 
     }
@@ -883,7 +887,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if ($attributesOption = $product->getCustomOption('attributes')) {
-            $data = $this->getSerializer()->unserialize($attributesOption->getValue());
+            $data = $this->serializer->unserialize($attributesOption->getValue());
             $this->getUsedProductAttributeIds($product);
 
             $usedAttributes = $product->getData($this->_usedAttributes);
@@ -965,7 +969,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 if ($subProduct) {
                     $subProductLinkFieldId = $subProduct->getId();
-                    $product->addCustomOption('attributes', serialize($attributes));
+                    $product->addCustomOption('attributes', $this->serializer->serialize($attributes));
                     $product->addCustomOption('product_qty_' . $subProductLinkFieldId, 1, $subProduct);
                     $product->addCustomOption('simple_product', $subProductLinkFieldId, $subProduct);
 
@@ -1026,7 +1030,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
         if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
-            $buyRequest = new \Magento\Framework\DataObject($this->getSerializer()->unserialize($option->getValue()));
+            $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($option->getValue()));
             $attributes = $buyRequest->getSuperAttribute();
             if (is_array($attributes)) {
                 foreach ($attributes as $key => $val) {

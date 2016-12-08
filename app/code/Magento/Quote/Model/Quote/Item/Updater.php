@@ -43,15 +43,18 @@ class Updater
      * @param ProductFactory $productFactory
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      */
     public function __construct(
         ProductFactory $productFactory,
         FormatInterface $localeFormat,
-        ObjectFactory $objectFactory
+        ObjectFactory $objectFactory,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;
         $this->objectFactory = $objectFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -111,7 +114,7 @@ class Updater
         if ($infoBuyRequest) {
             $infoBuyRequest->setCustomPrice($itemPrice);
 
-            $infoBuyRequest->setValue($this->getSerializer()->serialize($infoBuyRequest->getData()));
+            $infoBuyRequest->setValue($this->serializer->serialize($infoBuyRequest->getData()));
             $infoBuyRequest->setCode('info_buyRequest');
             $infoBuyRequest->setProduct($item->getProduct());
 
@@ -135,7 +138,7 @@ class Updater
         if ($infoBuyRequest->hasData('custom_price')) {
             $infoBuyRequest->unsetData('custom_price');
 
-            $infoBuyRequest->setValue($this->getSerializer()->serialize($infoBuyRequest->getData()));
+            $infoBuyRequest->setValue($this->serializer->serialize($infoBuyRequest->getData()));
             $infoBuyRequest->setCode('info_buyRequest');
             $infoBuyRequest->setProduct($item->getProduct());
             $item->addOption($infoBuyRequest);
@@ -143,22 +146,6 @@ class Updater
 
         $item->unsetData('custom_price');
         $item->unsetData('original_custom_price');
-    }
-
-    /**
-     * Get Serializer interface.
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        }
-
-        return $this->serializer;
     }
 
     /**

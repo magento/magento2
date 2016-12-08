@@ -429,6 +429,13 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getData')
             ->will($this->returnValue($associatedProducts));
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['serialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn(json_encode($buyRequest->getData()));
+        $this->objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
 
         $this->assertEquals(
             [0 => $this->product],
@@ -540,6 +547,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['serialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn(json_encode($buyRequest->getData()));
+        $this->objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
+
         $cached = true;
         $this->product
             ->expects($this->atLeastOnce())
@@ -582,6 +597,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $buyRequest = new \Magento\Framework\DataObject();
         $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['serialize'])
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn(json_encode($buyRequest->getData()));
+        $this->objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
 
         $cached = true;
         $this->product
