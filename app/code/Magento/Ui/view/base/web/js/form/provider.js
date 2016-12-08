@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'uiElement',
@@ -83,17 +84,13 @@ define([
          * @param {String} parentPath
          */
         setData: function (oldData, newData, current, parentPath) {
-
-            /* eslint-disable eqeqeq */
             _.each(newData, function (val, key) {
                 if (_.isObject(val) || _.isArray(val)) {
                     this.setData(oldData[key], val, current[key], utils.fullPath(parentPath, key));
-                } else if (val != oldData[key] && oldData[key] == current[key]) {
+                } else if (val != oldData[key] && oldData[key] == current[key]) {//eslint-disable-line eqeqeq
                     this.set(utils.fullPath(parentPath, key), val);
                 }
             }, this);
-
-            /* eslint-enable eqeqeq */
         }
     });
 });

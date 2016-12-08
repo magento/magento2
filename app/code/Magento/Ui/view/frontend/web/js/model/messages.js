@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'ko',
     'uiClass'
@@ -9,8 +10,7 @@ define([
     'use strict';
 
     return Class.extend({
-
-
+        /** @inheritdoc */
         initialize: function () {
             this._super()
                 .initObservable();
@@ -18,7 +18,7 @@ define([
             return this;
         },
 
-
+        /** @inheritdoc */
         initObservable: function () {
             this.errorMessages = ko.observableArray([]);
             this.successMessages = ko.observableArray([]);
@@ -57,32 +57,56 @@ define([
             return true;
         },
 
-
+        /**
+         * Add success message.
+         *
+         * @param {Object} message
+         * @return {*|Boolean}
+         */
         addSuccessMessage: function (message) {
             return this.add(message, this.successMessages);
         },
 
-
+        /**
+         * Add error message.
+         *
+         * @param {Object} message
+         * @return {*|Boolean}
+         */
         addErrorMessage: function (message) {
             return this.add(message, this.errorMessages);
         },
 
-
+        /**
+         * Get error messages.
+         *
+         * @return {Array}
+         */
         getErrorMessages: function () {
             return this.errorMessages;
         },
 
-
+        /**
+         * Get success messages.
+         *
+         * @return {Array}
+         */
         getSuccessMessages: function () {
             return this.successMessages;
         },
 
-
+        /**
+         * CHeck if has messages.
+         *
+         * @return {Boolean}
+         */
         hasMessages: function () {
             return this.errorMessages().length > 0 || this.successMessages().length > 0;
         },
 
-
+        /**
+         * Cleat messages.
+         */
         clear: function () {
             this.errorMessages.removeAll();
             this.successMessages.removeAll();

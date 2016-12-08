@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable no-unused-vars */
 var config = {
     paths: {
         'ui/template': 'Magento_Ui/templates'

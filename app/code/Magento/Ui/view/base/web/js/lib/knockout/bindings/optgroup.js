@@ -21,7 +21,7 @@ define([
          * @param {*} element
          * @returns {Object}
          */
-        'init': function (element) {
+        init: function (element) {
             if (ko.utils.tagNameLower(element) !== 'select') {
                 throw new Error('options binding applies only to SELECT elements');
             }
@@ -42,9 +42,9 @@ define([
          * @param {*} valueAccessor
          * @param {*} allBindings
          */
-        'update': function (element, valueAccessor, allBindings) {
-            var selectWasPreviouslyEmpty = element.length == 0,
-                previousScrollTop = (!selectWasPreviouslyEmpty && element.multiple) ? element.scrollTop : null,
+        update: function (element, valueAccessor, allBindings) {
+            var selectWasPreviouslyEmpty = element.length === 0,
+                previousScrollTop = !selectWasPreviouslyEmpty && element.multiple ? element.scrollTop : null,
                 includeDestroyed = allBindings.get('optionsIncludeDestroyed'),
                 arrayToDomNodeChildrenOptions = {},
                 captionValue,
@@ -52,18 +52,22 @@ define([
                 filteredArray,
                 previousSelectedValues,
                 itemUpdate = false,
-                callback = setSelectionCallback,
-                nestedOptionsLevel = -1,
-                i, l;
+                callback = setSelectionCallback,//eslint-disable-line no-use-before-define
+                nestedOptionsLevel = -1;
 
             optionsText = ko.utils.unwrapObservable(allBindings.get('optionsText')) || 'text';
             optionsValue = ko.utils.unwrapObservable(allBindings.get('optionsValue')) || 'value';
             optionTitle = optionsText + 'title';
 
             if (element.multiple) {
-                previousSelectedValues = ko.utils.arrayMap(selectedOptions(), ko.selectExtensions.readValue);
+                previousSelectedValues = ko.utils.arrayMap(
+                    selectedOptions(),//eslint-disable-line no-use-before-define
+                    ko.selectExtensions.readValue)
+                ;
             } else {
-                previousSelectedValues = element.selectedIndex >= 0 ? [ko.selectExtensions.readValue(element.options[element.selectedIndex])] : [];
+                previousSelectedValues = element.selectedIndex >= 0 ?
+                    [ko.selectExtensions.readValue(element.options[element.selectedIndex])] :
+                    [];
             }
 
             if (unwrappedArray) {
@@ -77,9 +81,12 @@ define([
                         return false;
                     }
 
-                    return includeDestroyed || item === undefined || item === null || !ko.utils.unwrapObservable(item._destroy);
+                    return includeDestroyed ||
+                        item === undefined ||
+                        item === null ||
+                        !ko.utils.unwrapObservable(item._destroy);
                 });
-                filteredArray.map(recursivePathBuilder, null);
+                filteredArray.map(recursivePathBuilder, null);//eslint-disable-line no-use-before-define
             }
 
             /**
@@ -97,32 +104,50 @@ define([
                  * @param {*} newOptions
                  */
                 callback = function (arrayEntry, newOptions) {
-                    setSelectionCallback(arrayEntry, newOptions);
-                    ko.dependencyDetection.ignore(allBindings.get('optionsAfterRender'), null, [newOptions[0], arrayEntry !== captionPlaceholder ? arrayEntry : undefined]);
-                }
+                    setSelectionCallback(arrayEntry, newOptions);//eslint-disable-line no-use-before-define
+                    ko.dependencyDetection.ignore(
+                        allBindings.get('optionsAfterRender'),
+                        null,
+                        [newOptions[0],
+                        arrayEntry !== captionPlaceholder ? arrayEntry : undefined]
+                    );
+                };
             }
 
-            filteredArray = formatOptions(filteredArray);
-            ko.utils.setDomNodeChildrenFromArrayMapping(element, filteredArray, optionNodeFromArray, arrayToDomNodeChildrenOptions, callback);
+            filteredArray = formatOptions(filteredArray);//eslint-disable-line no-use-before-define
+            ko.utils.setDomNodeChildrenFromArrayMapping(
+                element,
+                filteredArray,
+                optionNodeFromArray,//eslint-disable-line no-use-before-define
+                arrayToDomNodeChildrenOptions,
+                callback
+            );
 
             ko.dependencyDetection.ignore(function () {
                 var selectionChanged;
 
                 if (allBindings.get('valueAllowUnset') && allBindings.has('value')) {
                     // The model value is authoritative, so make sure its value is the one selected
-                    ko.selectExtensions.writeValue(element, ko.utils.unwrapObservable(allBindings.get('value')), true /* allowUnset */);
+                    ko.selectExtensions.writeValue(
+                        element,
+                        ko.utils.unwrapObservable(allBindings.get('value')),
+                        true /* allowUnset */
+                    );
                 } else {
                     // Determine if the selection has changed as a result of updating the options list
                     if (element.multiple) {
                         // For a multiple-select box, compare the new selection count to the previous one
                         // But if nothing was selected before, the selection can't have changed
-                        selectionChanged = previousSelectedValues.length && selectedOptions().length < previousSelectedValues.length;
+                        selectionChanged = previousSelectedValues.length &&
+                            selectedOptions().length < //eslint-disable-line no-use-before-define
+                            previousSelectedValues.length;
                     } else {
                         // For a single-select box, compare the current value to the previous value
-                        // But if nothing was selected before or nothing is selected now, just look for a change in selection
-                        selectionChanged = (previousSelectedValues.length && element.selectedIndex >= 0) ?
-                            (ko.selectExtensions.readValue(element.options[element.selectedIndex]) !== previousSelectedValues[0])
-                            : (previousSelectedValues.length || element.selectedIndex >= 0);
+                        // But if nothing was selected before or nothing is selected now,
+                        // just look for a change in selection
+                        selectionChanged = previousSelectedValues.length && element.selectedIndex >= 0 ?
+                            ko.selectExtensions.readValue(element.options[element.selectedIndex]) !==
+                            previousSelectedValues[0] : previousSelectedValues.length || element.selectedIndex >= 0;
                     }
 
                     // Ensure consistency between model value and selected option.
@@ -134,9 +159,12 @@ define([
                 }
             });
 
+            /*eslint-enable max-len, no-use-before-define*/
+
             if (previousScrollTop && Math.abs(previousScrollTop - element.scrollTop) > 20) {
                 element.scrollTop = previousScrollTop;
             }
+
             /**
              *
              * @returns {*}
@@ -157,13 +185,13 @@ define([
             function applyToObject(object, predicate, defaultValue) {
                 var predicateType = typeof predicate;
 
-                if (predicateType === 'function') {   // Given a function; run it against the data value
+                if (predicateType === 'function') {   // run it against the data value
                     return predicate(object);
-                } else if (predicateType === 'string') { // Given a string; treat it as a property name on the data value
+                } else if (predicateType === 'string') { // treat it as a property name on the data value
                     return object[predicate];
-                } else {                      // Given no optionsText arg; use the data value itself
-                    return defaultValue;
                 }
+
+                return defaultValue;
             }
 
             /**
@@ -189,7 +217,8 @@ define([
                 var option;
 
                 if (oldOptions.length) {
-                    previousSelectedValues = oldOptions[0].selected ? [ko.selectExtensions.readValue(oldOptions[0])] : [];
+                    previousSelectedValues = oldOptions[0].selected ?
+                        [ko.selectExtensions.readValue(oldOptions[0])] : [];
                     itemUpdate = true;
                 }
 
@@ -219,10 +248,16 @@ define([
              * @param {*} newOptions
              */
             function setSelectionCallback(newOptions) {
+                var isSelected;
+
                 // IE6 doesn't like us to assign selection to OPTION nodes before they're added to the document.
                 // That's why we first added them without selection. Now it's time to set the selection.
                 if (previousSelectedValues.length) {
-                    var isSelected = ko.utils.arrayIndexOf(previousSelectedValues, ko.selectExtensions.readValue(newOptions.value)) >= 0;
+                    isSelected = ko.utils.arrayIndexOf(
+                        previousSelectedValues,
+                        ko.selectExtensions.readValue(newOptions.value)
+                    ) >= 0;
+
                     ko.utils.setOptionNodeSelectionState(newOptions.value, isSelected);
 
                     // If this option was changed from being selected during a single-item update, notify the change
@@ -234,20 +269,21 @@ define([
 
             /**
              *
-             * @param {*} string, times
+             * @param {*} string
+             * @param {*} times
              * @returns {Array}
              */
             function strPad(string, times) {
-                return  (new Array(times + 1)).join(string);
+                return (new Array(times + 1)).join(string);
             }
 
             /**
-             *
              * @param {*} options
              * @returns {Array}
              */
             function formatOptions(options) {
                 var res = [];
+
                 nestedOptionsLevel++;
 
                 if (!nestedOptionsLevel) { // zero level
@@ -255,7 +291,11 @@ define([
                     if (allBindings.has('optionsCaption')) {
                         captionValue = ko.utils.unwrapObservable(allBindings.get('optionsCaption'));
                         // If caption value is null or undefined, don't show a caption
-                        if (captionValue !== null && captionValue !== undefined && captionValue !== false) {
+                        if (//eslint-disable-line max-depth
+                            captionValue !== null &&
+                            captionValue !== undefined &&
+                            captionValue !== false
+                        ) {
                             res.push(captionPlaceholder);
                         }
                     }
@@ -264,7 +304,6 @@ define([
                 ko.utils.arrayForEach(options, function (option) {
                     var value = applyToObject(option, optionsValue, option),
                         label = applyToObject(option, optionsText, value) || '',
-                        title = applyToObject(option, optionsText, value) || '',
                         obj = {},
                         space = '\u2007\u2007\u2007';
 

@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'ko',
     'underscore',
@@ -10,6 +11,12 @@ define([
     'use strict';
 
     ko.bindingHandlers.mageInit = {
+        /**
+         * Initializes components assigned to HTML elements.
+         *
+         * @param {HTMLElement} el
+         * @param {Function} valueAccessor
+         */
         init: function (el, valueAccessor) {
             var data = valueAccessor();
 

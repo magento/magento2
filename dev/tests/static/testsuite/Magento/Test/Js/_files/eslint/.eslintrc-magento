@@ -3,6 +3,8 @@
         "amd": true,
         "browser": true,
         "jasmine": true,
+        "jquery": true,
+        "prototypejs": true,
         "node": true
     },
     "rules": {

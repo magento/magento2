@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery'
 ], function ($) {
@@ -11,14 +12,26 @@ define([
         spinner = $(selector);
 
     return {
+        /**
+         * Show spinner.
+         */
         show: function () {
             spinner.show();
         },
 
+        /**
+         * Hide spinner.
+         */
         hide: function () {
             spinner.hide();
         },
 
+        /**
+         * Get spinner by selector.
+         *
+         * @param {String} id
+         * @return {jQuery}
+         */
         get: function (id) {
             return $(selector + '[data-component="' + id + '"]');
         }
