@@ -98,6 +98,30 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         );
         $resourceProductMock->expects($this->any())->method('getEntityType')->will($this->returnValue($entityTypeMock));
 
+        $this->serializerMock = $this->getMock(
+            SerializerInterface::class,
+            [],
+            ['serialize', 'unserialize'],
+            '',
+            false
+        );
+
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $this->product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
             [
@@ -159,7 +183,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'linkFactory' => $linkFactory,
                 'eavConfig' => $eavConfigMock,
                 'typeHandler' => $this->typeHandler,
-
+                'serializer' => $this->serializerMock
             ]
         );
     }
@@ -201,8 +225,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())
             ->method('getEntityId')
             ->will($this->returnValue(123));
-
-        $this->initSerializerMock();
 
         $linksCollectionMock = $this->getMock(
             \Magento\Downloadable\Model\ResourceModel\Link\Collection::class,
@@ -251,40 +273,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('getLinksPurchasedSeparately')
             ->will($this->returnValue(true));
 
-        $this->initSerializerMock();
-
         $this->target->checkProductBuyState($this->product);
-    }
-
-    /**
-     * Initialize serializer mock
-     */
-    private function initSerializerMock()
-    {
-        $this->serializerMock = $this->getMock(
-            SerializerInterface::class,
-            [],
-            ['serialize', 'unserialize'],
-            '',
-            false
-        );
-
-        $this->serializerMock->expects($this->any())
-            ->method('serialize')
-            ->willReturnCallback(
-                function ($value) {
-                    return json_encode($value);
-                }
-            );
-
-        $this->serializerMock->expects($this->any())
-            ->method('unserialize')
-            ->willReturnCallback(
-                function ($value) {
-                    return json_decode($value, true);
-                }
-            );
-
-        $this->objectManager->setBackwardCompatibleProperty($this->target, 'serializer', $this->serializerMock);
     }
 }

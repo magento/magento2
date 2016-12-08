@@ -111,7 +111,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
-        JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        SerializerInterface $serializer = null
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;
@@ -121,6 +122,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $this->_linkFactory = $linkFactory;
         $this->typeHandler = $typeHandler;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -257,7 +259,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $option = $product->getCustomOption('info_buyRequest');
         if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
             $buyRequest = new \Magento\Framework\DataObject(
-                $this->getSerializer()->unserialize($option->getValue())
+                $this->serializer->unserialize($option->getValue())
             );
             if (!$buyRequest->hasLinks()) {
                 if (!$product->getLinksPurchasedSeparately()) {
@@ -267,7 +269,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                     $buyRequest->setLinks($allLinksIds);
                     $product->addCustomOption(
                         'info_buyRequest',
-                        $this->getSerializer()->serialize($buyRequest->getData())
+                        $this->serializer->serialize($buyRequest->getData())
                     );
                 } else {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product link(s).'));
@@ -275,20 +277,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             }
         }
         return $this;
-    }
-
-    /**
-     * Get serializer instance
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = ObjectManager::getInstance()->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 
     /**
