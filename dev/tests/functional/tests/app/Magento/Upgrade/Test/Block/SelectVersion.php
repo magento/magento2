@@ -125,10 +125,11 @@ class SelectVersion extends Form
      */
     private function canClickOnNextPage()
     {
-        return !$this->_rootElement->find(
-            ".admin__data-grid-pager .action-next",
-            Locator::SELECTOR_CSS
-        )->isDisabled();
+        $element = $this->_rootElement->find(".admin__data-grid-pager .action-next");
+        if ($element->isVisible()) {
+            return !$element->isDisabled();
+        }
+        return false;
     }
 
     /**
@@ -184,7 +185,7 @@ class SelectVersion extends Form
      */
     private function titleContainsSampleData($element)
     {
-        return preg_match('/magento\/*+sample-data/', $element->getText());
+        return preg_match('/magento\/.*sample-data/', $element->getText());
     }
 
     /**
@@ -194,8 +195,7 @@ class SelectVersion extends Form
      * @param string $sampleDataVersionForRegex
      * @return void
      */
-    private function setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersionForRegex)
-    {
+    private function setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersionForRegex) {
         $selectElement = $this->getSelectFromRow($rowIndex);
         $optionTextArray = [];
         foreach ($selectElement->getElements('option') as $option) {
@@ -206,16 +206,18 @@ class SelectVersion extends Form
             }
         }
 
-        uasort(
-            $optionTextArray,
-            function ($versionOne, $versionTwo) {
-                return version_compare($versionOne, $versionTwo) * -1;
-            }
-        );
+        if (!empty($optionTextArray)) {
+            uasort(
+                $optionTextArray,
+                function ($versionOne, $versionTwo) {
+                    return version_compare($versionOne, $versionTwo) * -1;
+                }
+            );
 
-        $toSelectVersion = key($optionTextArray);
-        if ($toSelectVersion !== $selectElement->getText()) {
-            $selectElement->setValue($optionTextArray[]);
+            $toSelectVersion = key($optionTextArray);
+            if ($toSelectVersion !== $selectElement->getText()) {
+                $selectElement->setValue($toSelectVersion);
+            }
         }
     }
 }
