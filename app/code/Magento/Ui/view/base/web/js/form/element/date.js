@@ -53,6 +53,12 @@ define([
             pickerDefaultDateFormat: 'MM/dd/y', // ICU Date Format
             pickerDefaultTimeFormat: 'h:mm a', // ICU Time Format
 
+            /**
+             * Moment compatible format used for moment conversion
+             * of date from datePicker
+             */
+            momentFormat: 'MM/DD/YYYY',
+
             elementTmpl: 'ui/form/element/date',
 
             listens: {
@@ -142,7 +148,7 @@ define([
                     formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.pickerDateTimeFormat);
+                    value = moment(shiftedValue, this.momentFormat);
                     value = value.format(this.outputDateFormat);
                 }
             } else {
@@ -160,7 +166,8 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
-
+            this.momentFormat = (this.options.dateFormat)? this.convertToMomentFormat(this.options.dateFormat) :
+                this.momentFormat;
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
@@ -175,6 +182,17 @@ define([
             this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
+        },
+
+        /**
+         * @param format PHP Format
+         * @returns {String} Moment compatible format
+         */
+        convertToMomentFormat: function (format){
+            var newFormat = format.replace(/yy|y/gi, 'YYYY'); // replace the year
+            newFormat = newFormat.replace(/dd|d/g, 'DD'); // replace the date
+            newFormat = newFormat.replace(/mm|m/g, 'MM'); //replace the month
+            return newFormat;
         }
     });
 });
