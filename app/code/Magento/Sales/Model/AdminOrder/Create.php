@@ -643,7 +643,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         [
                             'product' => $item->getProduct(),
                             'code' => 'additional_options',
-                            'value' => serialize($additionalOptions)
+                            'value' => $this->serializer->serialize($additionalOptions)
                         ]
                     )
                 );
@@ -1179,6 +1179,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Model\Quote\Item $item
      * @param array $options
      * @return $this
+     *
+     * @deprecated
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -1222,7 +1224,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     [
                         'product' => $item->getProduct(),
                         'code' => 'additional_options',
-                        'value' => serialize($options['additional_options'])
+                        'value' => $this->serializer->serialize($options['additional_options'])
                     ]
                 )
             );
@@ -1857,7 +1859,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
             $addOptions = $item->getOptionByCode('additional_options');
             if ($addOptions) {
-                $options['additional_options'] = unserialize($addOptions->getValue());
+                $options['additional_options'] = $this->serializer->unserialize($addOptions->getValue());
             }
             $item->setProductOrderOptions($options);
         }

@@ -11,7 +11,6 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -294,12 +293,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelectedAttributesInfo()
     {
+        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+
         $product = $this->productRepository->getById(1, true);
         $attributes = $this->model->getConfigurableAttributesAsArray($product);
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption('attributes', json_encode([$attribute['attribute_id'] => $optionValueId]));
+        $product->addCustomOption('attributes',
+            $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
+        );
+
         $info = $this->model->getSelectedAttributesInfo($product);
         $this->assertEquals('Test Configurable', $info[0]['label']);
         $this->assertEquals('Option 1', $info[0]['value']);
@@ -312,12 +317,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelectedAttributesInfoForStore()
     {
+        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+
         $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
 
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $this->product->addCustomOption('attributes', json_encode([$attribute['attribute_id'] => $optionValueId]));
+        $this->product->addCustomOption(
+            'attributes',
+            $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
+        );
 
         $configurableAttr = $this->model->getConfigurableAttributes($this->product);
         $attribute = $configurableAttr->getFirstItem();
