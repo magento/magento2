@@ -419,7 +419,7 @@ class Data
         foreach ($swatchCollection as $item) {
             if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
                 $swatches[$item['option_id']] = $item->getData();
-            } elseif ($item['store_id'] == $currentStoreId && $item['value']) {
+            } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
                 $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
             } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
                 $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();
