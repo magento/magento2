@@ -11,11 +11,14 @@ use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\ShipOrderInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
+use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order\Shipment\NotifierInterface;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface;
 use Magento\Sales\Model\Order\Validation\ShipOrderInterface as ShipOrderValidator;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ShipOrder
@@ -77,37 +80,46 @@ class ShipOrder implements ShipOrderInterface
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param ShipmentDocumentFactory $shipmentDocumentFactory
+     * @param ShipmentValidatorInterface $shipmentValidator
+     * @param OrderValidatorInterface $orderValidator
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderConfig $config
      * @param ShipmentRepositoryInterface $shipmentRepository
-     * @param ShipOrderValidator $shipOrderValidator
      * @param NotifierInterface $notifierInterface
      * @param OrderRegistrarInterface $orderRegistrar
-     * @param LoggerInterface $logger
+     * @param LoggerInterface $logger,
+     * @param ShipOrderValidator|null $shipOrderValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         OrderRepositoryInterface $orderRepository,
         ShipmentDocumentFactory $shipmentDocumentFactory,
+        ShipmentValidatorInterface $shipmentValidator,
+        OrderValidatorInterface $orderValidator,
         OrderStateResolverInterface $orderStateResolver,
         OrderConfig $config,
         ShipmentRepositoryInterface $shipmentRepository,
-        ShipOrderValidator $shipOrderValidator,
         NotifierInterface $notifierInterface,
         OrderRegistrarInterface $orderRegistrar,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ShipOrderValidator $shipOrderValidator = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
         $this->shipmentDocumentFactory = $shipmentDocumentFactory;
+        $this->shipmentValidator = $shipmentValidator;
+        $this->orderValidator = $orderValidator;
         $this->orderStateResolver = $orderStateResolver;
         $this->config = $config;
         $this->shipmentRepository = $shipmentRepository;
-        $this->shipOrderValidator = $shipOrderValidator;
         $this->notifierInterface = $notifierInterface;
         $this->logger = $logger;
         $this->orderRegistrar = $orderRegistrar;
+        $this->shipOrderValidator = $shipOrderValidator ?: ObjectManager::getInstance()->get(
+            ShipOrderValidator::class
+        );
     }
 
     /**

@@ -29,3 +29,4 @@ Shipping,Shipping
 "Please specify a shipping method.","Please specify a shipping method."
 "Please check the billing address information. %1","Please check the billing address information. %1"
 "Please select a valid payment method.","Please select a valid payment method."
+"Unable to place order. Please try again later.","Unable to place order. Please try again later."

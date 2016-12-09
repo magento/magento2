@@ -263,7 +263,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     {
         if (is_array($key)) {
             $key = $this->_implodeArrayField($key);
-        } elseif (is_array($value) && !empty($value) && $this->isAddressMultilineAttribute($key)) {
+        } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         }
         return parent::setData($key, $value);
@@ -291,7 +291,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected function _implodeArrayField(array $data)
     {
         foreach ($data as $key => $value) {
-            if (is_array($value) && !empty($value) && $this->isAddressMultilineAttribute($key)) {
+            if (is_array($value) && $this->isAddressMultilineAttribute($key)) {
                 $data[$key] = $this->_implodeArrayValues($data[$key]);
             }
         }
@@ -301,22 +301,24 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Combine values of field lines into a single string
      *
-     * @param string[]|string $value
+     * @param array $value
      * @return string
      */
     protected function _implodeArrayValues($value)
     {
-        if (is_array($value) && count($value)) {
-            $isScalar = false;
+        if (is_array($value)) {
+            $isScalar = true;
             foreach ($value as $val) {
-                if (is_scalar($val)) {
-                    $isScalar = true;
+                if (!is_scalar($val)) {
+                    $isScalar = false;
                 }
             }
+
             if ($isScalar) {
                 $value = trim(implode("\n", $value));
             }
         }
+
         return $value;
     }
 

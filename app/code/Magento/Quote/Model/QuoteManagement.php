@@ -354,7 +354,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order = $this->submit($quote);
 
         if (null == $order) {
-            throw new LocalizedException(__('Cannot place order.'));
+            throw new LocalizedException(__('Unable to place order. Please try again later.'));
         }
 
         $this->checkoutSession->setLastQuoteId($quote->getId());

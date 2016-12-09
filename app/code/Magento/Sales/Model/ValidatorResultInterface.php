@@ -7,7 +7,6 @@ namespace Magento\Sales\Model;
 
 /**
  * Interface ValidatorResultInterface
- * @api
  */
 interface ValidatorResultInterface
 {
