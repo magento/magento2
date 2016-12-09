@@ -66,56 +66,148 @@ class SelectVersion extends Form
 
     /**
      * Set maximum compatible sample data for each row
+     * Iterates through each page of the grid and sets the compatible version from fixture
      *
      * @param string $sampleDataVersion
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function chooseVersionUpgradeOtherComponents($sampleDataVersion)
     {
-        $perPageSelect= $this->_rootElement->find(
-            "select#perPage",
-            Locator::SELECTOR_CSS,
+        do {
+            $this->iterateAndSetComponentsRows($this->convertVersionFixtureToRegexp($sampleDataVersion));
+            if ($this->canClickOnNextPage()) {
+                $this->clickOnNextPage();
+            }
+        } while ($this->canClickOnNextPage());
+    }
+
+    /**
+     * Gets components rows as ElementInterface
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    private function getComponentsTableRows()
+    {
+        return $this->_rootElement->getElements("table.data-grid tbody tr");
+    }
+
+    /**
+     * Iterate through components in table and set compatible version for selected magento version
+     *
+     * @param $sampleDataVersion
+     * @return void
+     */
+    private function iterateAndSetComponentsRows($sampleDataVersion)
+    {
+        $rows = $this->getComponentsTableRows();
+        for ($rowIndex = 1; $rowIndex <= count($rows); $rowIndex++) {
+            $textElement = $this->getRowComponentTitle($rowIndex);
+            if ($this->titleContainsSampleData($textElement)) {
+                $this->setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersion);
+            }
+        }
+    }
+
+    /**
+     * Clicks on Next Page of the grid
+     *
+     * @return void
+     */
+    private function clickOnNextPage()
+    {
+        $this->_rootElement->find(".admin__data-grid-pager .action-next", Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Can click on next page
+     *
+     * @return bool
+     */
+    private function canClickOnNextPage()
+    {
+        return !$this->_rootElement->find(
+            ".admin__data-grid-pager .action-next",
+            Locator::SELECTOR_CSS
+        )->isDisabled();
+    }
+
+    /**
+     * Gets rows component title
+     *
+     * @param int $rowIndex
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    private function getRowComponentTitle($rowIndex)
+    {
+        return $this->_rootElement->find(
+            "//table//tbody//tr[" . $rowIndex . "]//td//*[contains(text(),'sample')]",
+            Locator::SELECTOR_XPATH
+        );
+    }
+
+    /**
+     * Gets the select element from row
+     *
+     * @param int $rowIndex
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    private function getSelectFromRow($rowIndex)
+    {
+        return $this->_rootElement->find(
+            '//table//tbody//tr[' . $rowIndex . ']//td//select',
+            Locator::SELECTOR_XPATH,
             'select'
         );
-        $fixtureVersion = $sampleDataVersion;
-        $perPageSelect->setValue(200);
-        sleep(1);
+    }
 
-        $elementsArray= $this->_rootElement->getElements("table.data-grid tbody tr");
+    /**
+     * Convert sample data version fixture to regexp format
+     * Example 100.1.* to 100\.1\.[0-9]+
+     *
+     * @param string $sampleDataVersion
+     * @return string
+     * @throws \Exception
+     */
+    private function convertVersionFixtureToRegexp($sampleDataVersion)
+    {
+        if (!preg_match('/\d+(?:\.*\d*)*/', $sampleDataVersion)) {
+            throw new \Exception('Wrong format for sample data version fixture. Example: 100.1.* needed.');
+        }
+        return str_replace('*', '[0-9]+', $sampleDataVersion);
+    }
 
-        foreach ($elementsArray as $key => $rowElement) {
-            $textElement = $this->_rootElement->find(
-                "//table//tbody//tr[" . ($key + 1) . "]//td//*[contains(text(),'sample')]",
-                Locator::SELECTOR_XPATH
-            );
-            if (preg_match('/magento.+sample.+data/', $textElement->getText())) {
-                $selectElement = $this->_rootElement->find(
-                    '//table//tbody//tr[' . ($key +1) . ']//td//select',
-                    Locator::SELECTOR_XPATH,
-                    'select'
-                );
+    /**
+     * Asserts if element's text contains sample data
+     *
+     * @param \Magento\Mtf\Client\ElementInterface $element
+     * @return bool
+     */
+    private function titleContainsSampleData($element)
+    {
+        return preg_match('/magento.+sample.+data/', $element->getText());
+    }
 
-                $fixtureVersion = str_replace('*', '[0-9]+', $fixtureVersion);
-                $toSelectValue = $selectElement->getValue();
-                $toSelectValueOriginal = $toSelectValue;
-                $toSelectVersion = '0';
-                foreach ($selectElement->getElements('option') as $option) {
-                    $optionText = $option->getText();
-                    if (preg_match('/' . $fixtureVersion .'/', $optionText)) {
-                        if (preg_match('/([0-9\.\-a-zA-Z]+)/', $optionText, $match)) {
-                            if (!empty($match) > 0) {
-                                if (version_compare($match[0], $toSelectVersion, '>')) {
-                                    $toSelectVersion =  $match[0];
-                                    $toSelectValue = $optionText;
-                                }
-                            }
-                        }
-                    }
-                }
 
-                if ($toSelectValue !== $toSelectValueOriginal) {
-                    $selectElement->setValue($toSelectValue);
+    /**
+     * Sets sample data version matching the maximum compatible version from fixture
+     *
+     * @param int $rowIndex
+     * @param string $sampleDataVersionForRegex
+     * @return void
+     */
+    private function setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersionForRegex)
+    {
+        $selectElement = $this->getSelectFromRow($rowIndex);
+        $toSelectVersion = '0';
+        foreach ($selectElement->getElements('option') as $option) {
+            $optionText = $option->getText();
+            if (preg_match('/' . $sampleDataVersionForRegex . '/', $optionText)
+                && preg_match('/([0-9\.\-a-zA-Z]+)/', $optionText, $match)
+            ) {
+                $extractedVersion = reset($match);
+                if (version_compare($extractedVersion, $toSelectVersion, '>')) {
+                    $toSelectVersion = $extractedVersion;
+                    $selectElement->setValue($optionText);
                 }
             }
         }
