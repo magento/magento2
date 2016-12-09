@@ -25,7 +25,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractM
             $item = new DataObject($item);
         }
 
-        if ($item->getData('hideInProduction') === true
+        if ($item->getData('hide_in_production') === true
             && $this->getState()->getMode() === State::MODE_PRODUCTION
         ) {
             return $this;

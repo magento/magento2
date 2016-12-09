@@ -209,7 +209,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
                     'url' => '#http:\/\/localhost\/index\.php\/(?:key\/([\w\d]+)\/)?#',
                     'selected' => false,
                     'blockname' => '',
-                    'hideInProduction' => true
+                    'hide_in_production' => true
                 ]
             ]
         ];

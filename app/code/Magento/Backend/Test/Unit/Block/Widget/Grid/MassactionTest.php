@@ -319,13 +319,13 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'itemId' => 'test1',
-                'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1', 'hideInProduction' => true],
+                'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1', 'hide_in_production' => true],
                 'count' => 0,
                 'mode' => \Magento\Framework\App\State::MODE_PRODUCTION,
             ],
             [
                 'itemId' => 'test2',
-                'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2', 'hideInProduction' => true],
+                'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2', 'hide_in_production' => true],
                 'count' => 1,
                 'mode' => \Magento\Framework\App\State::MODE_DEVELOPER,
             ]

@@ -65,7 +65,7 @@
                     <item name="option_id3" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Option Three</item>
                         <item name="url" xsi:type="string">*/*/option3</item>
-                        <item name="hideInProduction" xsi:type="boolean">true</item>
+                        <item name="hide_in_production" xsi:type="boolean">true</item>
                     </item>
                 </argument>
             </arguments>

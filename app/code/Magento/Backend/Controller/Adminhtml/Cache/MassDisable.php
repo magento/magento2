@@ -31,9 +31,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
             $this->disableCache();
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('adminhtml/*');
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('adminhtml/*');
     }
 
     /**
