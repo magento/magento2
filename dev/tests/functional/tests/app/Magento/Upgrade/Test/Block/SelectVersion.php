@@ -10,6 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Select version block.
@@ -84,7 +85,7 @@ class SelectVersion extends Form
     /**
      * Gets components rows as ElementInterface
      *
-     * @return \Magento\Mtf\Client\ElementInterface[]
+     * @return ElementInterface[]
      */
     private function getComponentsTableRows()
     {
@@ -136,7 +137,7 @@ class SelectVersion extends Form
      * Gets rows component title
      *
      * @param int $rowIndex
-     * @return \Magento\Mtf\Client\ElementInterface
+     * @return ElementInterface
      */
     private function getRowComponentTitle($rowIndex)
     {
@@ -150,7 +151,7 @@ class SelectVersion extends Form
      * Gets the select element from row
      *
      * @param int $rowIndex
-     * @return \Magento\Mtf\Client\ElementInterface
+     * @return ElementInterface
      */
     private function getSelectFromRow($rowIndex)
     {
@@ -180,7 +181,7 @@ class SelectVersion extends Form
     /**
      * Asserts if element's text contains sample data
      *
-     * @param \Magento\Mtf\Client\ElementInterface $element
+     * @param ElementInterface $element
      * @return bool
      */
     private function titleContainsSampleData($element)
