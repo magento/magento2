@@ -33,6 +33,21 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     private $filesystemMock;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlBuilder;
+
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaper;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -44,10 +59,22 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->rootDirectory = $this->getMockBuilder(ReadInterface::class)
             ->getMock();
 
-        $this->filesystemMock->expects($this->once())
+        $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA, DriverPool::FILE)
             ->willReturn($this->rootDirectory);
+
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\UrlBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->coreFileStorageDatabase = $this->getMock(
             \Magento\MediaStorage\Helper\File\Storage\Database::class,
@@ -67,8 +94,38 @@ class FileTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Product\Option\Type\File::class,
             [
                 'filesystem' => $this->filesystemMock,
-                'coreFileStorageDatabase' => $this->coreFileStorageDatabase
+                'coreFileStorageDatabase' => $this->coreFileStorageDatabase,
+                'serializer' => $this->serializer,
+                'urlBuilder' => $this->urlBuilder,
+                'escaper' => $this->escaper
             ]
+        );
+    }
+
+
+    public function testGetCustomizedView()
+    {
+        $fileObject = $this->getFileObject();
+        $optionInfo = ['option_value' => 'some serialized data'];
+
+        $dataAfterSerialize = ['some' => 'array'];
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with('some serialized data')
+            ->willReturn($dataAfterSerialize);
+
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->willReturn('someUrl');
+
+        $this->escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturn('string');
+
+        $this->assertEquals(
+            '<a href="someUrl" target="_blank">string</a> ',
+            $fileObject->getCustomizedView($optionInfo)
         );
     }
 
@@ -82,11 +139,22 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $quotePath = '/quote/path/path/uploaded.file';
         $orderPath = '/order/path/path/uploaded.file';
 
+        $quoteValue = "{\"quote_path\":\"$quotePath\",\"order_path\":\"$orderPath\"}";
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($quoteValue)
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $optionMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(serialize(['quote_path' => $quotePath, 'order_path' => $orderPath])));
+            ->will($this->returnValue($quoteValue));
 
-        $this->rootDirectory->expects($this->once())
+        $this->rootDirectory->expects($this->any())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
@@ -112,4 +180,56 @@ class FileTest extends \PHPUnit_Framework_TestCase
             $fileObject->copyQuoteToOrder()
         );
     }
+
+    public function testGetFormattedOptionValue()
+    {
+        $resultValue = ['result'];
+        $optionValue = json_encode($resultValue);
+        $urlParameter = 'parameter';
+
+        $fileObject = $this->getFileObject();
+        $fileObject->setCustomOptionUrlParams($urlParameter);
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($optionValue)
+            ->willReturn($resultValue);
+
+        $resultValue['url'] = [
+            'route' => 'sales/download/downloadCustomOption',
+            'params' => $fileObject->getCustomOptionUrlParams()
+        ];
+
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($resultValue)
+            ->willReturn(json_encode($resultValue));
+
+        $option = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+            ->setMethods(['setValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $option->expects($this->once())
+            ->method('setValue')
+            ->with(json_encode($resultValue));
+
+        $fileObject->setConfigurationItemOption($option);
+
+        $fileObject->getFormattedOptionValue($optionValue);
+    }
+
+    public function testPrepareOptionValueForRequest()
+    {
+        $optionValue = 'string';
+        $resultValue = ['result'];
+        $fileObject = $this->getFileObject();
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($optionValue)
+            ->willReturn($resultValue);
+
+        $this->assertEquals($resultValue, $fileObject->prepareOptionValueForRequest($optionValue));
+    }
 }
+
