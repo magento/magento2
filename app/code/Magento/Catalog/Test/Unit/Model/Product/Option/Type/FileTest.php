@@ -102,7 +102,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testGetCustomizedView()
     {
         $fileObject = $this->getFileObject();
