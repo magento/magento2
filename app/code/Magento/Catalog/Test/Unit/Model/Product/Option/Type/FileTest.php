@@ -11,6 +11,11 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * Class FileTest.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -231,4 +236,3 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resultValue, $fileObject->prepareOptionValueForRequest($optionValue));
     }
 }
-
