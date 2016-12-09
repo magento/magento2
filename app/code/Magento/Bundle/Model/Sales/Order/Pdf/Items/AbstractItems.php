@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Sales Order Pdf Items renderer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
@@ -44,7 +45,8 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     ) {
         $this->serializer = $serializer;
 
-        parent::__construct($context,
+        parent::__construct(
+            $context,
             $registry,
             $taxData,
             $filesystem,

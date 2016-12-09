@@ -43,7 +43,15 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(SerializerInterface::class);
 
-        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $messageHelper, $checkoutHelper, $data);
+        parent::__construct(
+            $context,
+            $stockRegistry,
+            $stockConfiguration,
+            $registry,
+            $messageHelper,
+            $checkoutHelper,
+            $data
+        );
     }
 
     /**

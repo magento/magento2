@@ -145,7 +145,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function testGetSelectionAttributes()
     {
         $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue([]));
