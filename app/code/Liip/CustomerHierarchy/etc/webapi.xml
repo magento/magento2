@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <!-- Guest place order with payment information saving -->
+    <route url="/V1/cusomer-hierarchy/roles" method="GET">
+        <service class="Liip\CustomerHierarchy\Api\RoleManagerInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/cusomer-hierarchy/roles" method="POST">
+        <service class="Liip\CustomerHierarchy\Api\RoleManagerInterface" method="save"/>
+        <resources>
+            <resource ref="anonymous" />
+            <!--<resource ref="Magento_Catalog::products" />-->
+        </resources>
+    </route>
+
+    <route url="/V1/cusomer-hierarchy/roles/:id" method="GET">
+        <service class="Liip\CustomerHierarchy\Api\RoleManagerInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/cusomer-hierarchy/permissions" method="GET">
+        <service class="Liip\CustomerHierarchy\Api\PermissionManagerInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+</routes>

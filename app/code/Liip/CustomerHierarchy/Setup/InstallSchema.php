@@ -100,6 +100,13 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false],
                 'Role Name'
             )
+            ->addColumn(
+                'created_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Creation Time'
+            )
             ->setComment('Customer Roles Table');
 
         $setup->getConnection()->createTable($table);
@@ -120,7 +127,7 @@ class InstallSchema implements InstallSchemaInterface
                 'Role ID'
             )
             ->addColumn(
-                'permission',
+                'code',
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],

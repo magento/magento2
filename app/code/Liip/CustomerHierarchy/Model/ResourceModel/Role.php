@@ -10,4 +10,18 @@ class Role extends AbstractDb
     {
         $this->_init(\Liip\CustomerHierarchy\Setup\InstallSchema::CUSTOMER_ROLES_TABLE, 'entity_id');
     }
+
+    /**
+     * @param int $roleId
+     * @return array
+     */
+    public function getPermissionsByRoleId($roleId)
+    {
+        $select = $this->getConnection()->select()->from(
+            \Liip\CustomerHierarchy\Setup\InstallSchema::CUSTOMER_PERMISSIONS_TABLE,
+            ['code', 'value']
+        )->where('role_id IN (?)', $roleId);
+
+        return $this->getConnection()->fetchAll($select);
+    }
 }

@@ -7,17 +7,17 @@ use \Liip\CustomerHierarchy\Model\AccountForbiddenException;
 class AccountManagement
 {
     /**
-     * @var \Liip\CustomerHierarchy\Model\Role\Permission\Checker\PoolInterface
+     * @var \Liip\CustomerHierarchy\Model\Role\Permission\PoolInterface
      */
-    private $permissionCheckerPool;
+    private $permissionPool;
 
     /**
-     * @param \Liip\CustomerHierarchy\Model\Role\Permission\Checker\PoolInterface $permissionCheckerPool
+     * @param \Liip\CustomerHierarchy\Model\Role\Permission\PoolInterface $permissionPool
      */
     public function __construct(
-        \Liip\CustomerHierarchy\Model\Role\Permission\Checker\PoolInterface $permissionCheckerPool
+        \Liip\CustomerHierarchy\Model\Role\Permission\PoolInterface $permissionPool
     ) {
-        $this->permissionCheckerPool = $permissionCheckerPool;
+        $this->permissionPool = $permissionPool;
     }
 
     /**
@@ -34,7 +34,7 @@ class AccountManagement
         $username,
         $password
     ) {
-        if (!$this->permissionCheckerPool->get('login')->isAllowed()) {
+        if (!$this->permissionPool->get('login')->isAllowed()) {
             throw new AccountForbiddenException(__('Account has not enough permissions.'));
         }
         return $proceed($username, $password);
