@@ -34,6 +34,7 @@ define([
             configurationsSerialized: ko.observable(''),
             variations: [],
             productAttributes: [],
+            isShowAddProductButton: false,
             fullAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
@@ -73,7 +74,7 @@ define([
                     pageSize: ko.getObservable(this.paging, 'pageSize')
                 };
 
-            this._super().observe('actions opened attributes productMatrix');
+            this._super().observe('actions opened attributes productMatrix isShowAddProductButton');
             this.paging.totalRecords = this.variations.length;
 
             _.each(pagingObservables, function (observable) {
@@ -447,6 +448,7 @@ define([
             }, this);
             this.productMatrix([]);
             this.productMatrix(tempMatrix);
+            this.isShowAddProductButton(this.attributes());
         },
 
         /**
