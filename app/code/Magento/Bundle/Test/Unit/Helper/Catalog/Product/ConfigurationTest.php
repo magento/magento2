@@ -61,7 +61,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(
                 function ($value) {
                     return json_decode($value, true);
-                });
+                }
+            );
 
         $this->helper = (new ObjectManager($this))->getObject(
             \Magento\Bundle\Helper\Catalog\Product\Configuration::class,
