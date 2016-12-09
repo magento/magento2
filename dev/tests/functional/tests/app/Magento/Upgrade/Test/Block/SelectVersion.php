@@ -195,7 +195,8 @@ class SelectVersion extends Form
      * @param string $sampleDataVersionForRegex
      * @return void
      */
-    private function setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersionForRegex) {
+    private function setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersionForRegex)
+    {
         $selectElement = $this->getSelectFromRow($rowIndex);
         $optionTextArray = [];
         foreach ($selectElement->getElements('option') as $option) {
