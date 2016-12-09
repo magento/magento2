@@ -5,15 +5,16 @@
 define(
     [
         'jquery',
-        'Magento_Payment/js/view/payment/iframe'
+        'Magento_Payment/js/view/payment/iframe',
+        'mage/translate'
     ],
-    function ($, Component) {
+    function ($, Component, $t) {
         'use strict';
 
         return Component.extend({
             defaults: {
                 template: 'Magento_Authorizenet/payment/authorizenet-directpost',
-                timeoutMessage: 'Sorry, but something went wrong. Please contact the seller.'
+                timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.')
             },
             placeOrderHandler: null,
             validateHandler: null,

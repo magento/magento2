@@ -71,7 +71,7 @@ class Mime
             throw new \InvalidArgumentException("File '$file' doesn't exist");
         }
 
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         if (isset($this->mimeTypes[$extension])) {
             $result = $this->mimeTypes[$extension];
         }

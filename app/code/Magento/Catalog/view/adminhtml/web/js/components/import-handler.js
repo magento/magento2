@@ -4,148 +4,78 @@
  */
 
 define([
+    'Magento_Ui/js/form/element/abstract',
     'underscore',
-    'Magento_Ui/js/form/element/textarea'
-], function (_, Textarea) {
+    'uiRegistry'
+], function (Abstract, _, registry) {
     'use strict';
 
-    return Textarea.extend({
+    return Abstract.extend({
         defaults: {
             allowImport: true,
             autoImportIfEmpty: false,
-            values: {
-                'name': '',
-                'description': '',
-                'sku': '',
-                'color': '',
-                'country_of_manufacture': '',
-                'gender': '',
-                'material': '',
-                'short_description': '',
-                'size': ''
-            },
-            valueUpdate: 'input',
-            mask: ''
+            values: {},
+            mask: '',
+            queryTemplate: 'ns = ${ $.ns }, index = '
         },
 
-        /**
-         * Handle name value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleNameChanges: function (newValue) {
-            this.values.name = newValue;
-            this.updateValue();
-        },
+        /** @inheritdoc */
+        initialize: function () {
+            this._super();
 
-        /**
-         * Handle description value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleDescriptionChanges: function (newValue) {
-            this.values.description = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Handle sku value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleSkuChanges: function (newValue) {
-            if (this.code !== 'sku') {
-                this.values.sku = newValue;
-                this.updateValue();
+            if (this.allowImport) {
+                this.setHandlers();
             }
         },
 
         /**
-         * Handle color value changes, if it's allowed
-         *
-         * @param {String} newValue
+         * Split mask placeholder and attach events to placeholder fields.
          */
-        handleColorChanges: function (newValue) {
-            this.values.color = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Handle country value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleCountryChanges: function (newValue) {
-            this.values.country = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Handle gender value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleGenderChanges: function (newValue) {
-            this.values.gender = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Handle material value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleMaterialChanges: function (newValue) {
-            this.values.material = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Handle short description value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleShortDescriptionChanges: function (newValue) {
-            this.values['short_description'] = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Handle size value changes, if it's allowed
-         *
-         * @param {String} newValue
-         */
-        handleSizeChanges: function (newValue) {
-            this.values.size = newValue;
-            this.updateValue();
-        },
-
-        /**
-         * Update field value, if it's allowed
-         */
-        updateValue: function () {
+        setHandlers: function () {
             var str = this.mask || '',
-                nonEmptyValueFlag = false,
-                tmpElement;
+                placeholders;
+
+            placeholders = str.match(/{{(.*?)}}/g); // Get placeholders
+
+            _.each(placeholders, function (placeholder) {
+                placeholder = placeholder.replace(/[{{}}]/g, ''); // Remove curly braces
+
+                registry.get(this.queryTemplate + placeholder, function (component) {
+                    this.values[placeholder] = component.getPreview();
+                    component.on('value', this.updateValue.bind(this, placeholder, component));
+                    component.valueUpdate = 'keyup';
+                }.bind(this));
+            }, this);
+        },
+
+        /**
+         * Update field with mask value, if it's allowed.
+         *
+         * @param {Object} placeholder
+         * @param {Object} component
+         */
+        updateValue: function (placeholder, component) {
+            var string = this.mask || '',
+                nonEmptyValueFlag = false;
+
+            if (placeholder) {
+                this.values[placeholder] = component.getPreview() || '';
+            }
 
             if (!this.allowImport) {
                 return;
             }
 
-            if (str) {
-                _.each(this.values, function (propertyValue, propertyName) {
-                    str = str.replace('{{' + propertyName + '}}', propertyValue);
-                    nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
-                });
-            }
-
-            // strip tags
-            tmpElement = document.createElement('div');
-            tmpElement.innerHTML = str;
-            str =  tmpElement.textContent || tmpElement.innerText || '';
+            _.each(this.values, function (propertyValue, propertyName) {
+                string = string.replace('{{' + propertyName + '}}', propertyValue);
+                nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
+            });
 
             if (nonEmptyValueFlag) {
-                this.value(str);
+                string = string.replace(/(<([^>]+)>)/ig, ''); // Remove html tags
+                this.value(string);
+            } else {
+                this.value('');
             }
         },
 
@@ -169,13 +99,20 @@ define([
          *  and disallow/allow import value
          */
         userChanges: function () {
+
+            /**
+             *  As userChanges is called before updateValue,
+             *  we forced to get value from component by reference
+             */
+            var actualValue = arguments[1].currentTarget.value;
+
             this._super();
 
-            if (this.value() === '') {
+            if (actualValue === '') {
                 this.allowImport = true;
 
                 if (this.autoImportIfEmpty) {
-                    this.updateValue();
+                    this.updateValue(null, null);
                 }
             } else {
                 this.allowImport = false;

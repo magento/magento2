@@ -32,6 +32,11 @@ class AssertProductPage extends AbstractAssertForm
     protected $product;
 
     /**
+     * @var CatalogProductView
+     */
+    protected $pageView;
+
+    /**
      * Assert that displayed product data on product page(front-end) equals passed from fixture:
      * 1. Product Name
      * 2. Price
@@ -53,6 +58,7 @@ class AssertProductPage extends AbstractAssertForm
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $this->product = $product;
+        $this->pageView = $catalogProductView;
         $this->productView = $catalogProductView->getViewBlock();
 
         $errors = $this->verify();

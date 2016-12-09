@@ -18,6 +18,7 @@ define([
             value: [],
             maxFileSize: false,
             isMultipleFiles: false,
+            placeholderType: 'document', // 'image', 'video'
             allowedExtensions: false,
             previewTmpl: 'ui/form/element/uploader/preview',
             dropZone: '[data-role=drop-zone]',
@@ -72,6 +73,7 @@ define([
 
             this.value(value);
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -157,6 +159,8 @@ define([
          * @returns {Object} Modified file object.
          */
         processFile: function (file) {
+            file.previewType = this.getFilePreviewType(file);
+
             this.observe.call(file, true, [
                 'previewWidth',
                 'previewHeight'
@@ -232,6 +236,24 @@ define([
          */
         isExtensionAllowed: function (file) {
             return validator('validate-file-type', file.name, this.allowedExtensions);
+        },
+
+        /**
+         * Get simplified file type.
+         *
+         * @param {Object} file - File to be checked.
+         * @returns {String}
+         */
+        getFilePreviewType: function (file) {
+            var type;
+
+            if (!file.type) {
+                return 'document';
+            }
+
+            type = file.type.split('/')[0];
+
+            return type !== 'image' && type !== 'video' ? 'document' : type;
         },
 
         /**

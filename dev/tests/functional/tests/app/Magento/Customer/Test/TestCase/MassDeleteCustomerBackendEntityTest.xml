@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\MassDeleteCustomerBackendEntityTest" summary="Customer Mass Delete" ticketId="MAGETWO-26848">
         <variation name="MassDeleteCustomerBackendEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="customersQty" xsi:type="string">3</data>
             <data name="customersQtyToDelete" xsi:type="string">2</data>

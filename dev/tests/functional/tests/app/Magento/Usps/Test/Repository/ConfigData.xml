@@ -54,13 +54,28 @@
                 <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
-
         <dataset name="usps_rollback">
             <field name="carriers/usps/active" xsi:type="array">
                 <item name="scope" xsi:type="string">carriers</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="usps_container_sm_flat_rate_box">
+            <field name="carriers/usps/container" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Small Flat-Rate Box</item>
+                <item name="value" xsi:type="string">SM FLAT RATE BOX</item>
+            </field>
+        </dataset>
+        <dataset name="usps_container_sm_flat_rate_box_rollback">
+            <field name="carriers/usps/container" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Variable</item>
+                <item name="value" xsi:type="string">VARIABLE</item>
             </field>
         </dataset>
     </repository>

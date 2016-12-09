@@ -8,6 +8,7 @@ namespace Magento\Config\Test\TestStep;
 
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 
 /**
@@ -51,11 +52,19 @@ class SetupConfigurationStep implements TestStepInterface
     protected $flushCache;
 
     /**
+     * Cli command to do operations with cache.
+     *
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param AdminCache $adminCache
+     * @param Cache $cache
      * @param string $configData
      * @param bool $rollback
      * @param bool $flushCache
@@ -63,6 +72,7 @@ class SetupConfigurationStep implements TestStepInterface
     public function __construct(
         FixtureFactory $fixtureFactory,
         AdminCache $adminCache,
+        Cache $cache,
         $configData = null,
         $rollback = false,
         $flushCache = false
@@ -72,6 +82,7 @@ class SetupConfigurationStep implements TestStepInterface
         $this->configData = $configData;
         $this->rollback = $rollback;
         $this->flushCache = $flushCache;
+        $this->cache = $cache;
     }
 
     /**
@@ -95,13 +106,11 @@ class SetupConfigurationStep implements TestStepInterface
                 $config->persist();
                 $result[] = $config;
             }
+            if ($this->flushCache) {
+                $this->cache->flush();
+            }
         }
-        
-        if ($this->flushCache) {
-            $this->adminCache->open();
-            $this->adminCache->getActionsBlock()->flushMagentoCache();
-            $this->adminCache->getMessagesBlock()->waitSuccessMessage();
-        }
+
 
         return ['config' => $result];
     }

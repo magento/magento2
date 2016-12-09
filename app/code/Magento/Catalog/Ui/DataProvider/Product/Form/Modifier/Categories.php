@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
@@ -63,24 +64,32 @@ class Categories extends AbstractModifier
     private $cacheManager;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         LocatorInterface $locator,
         CategoryCollectionFactory $categoryCollectionFactory,
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        SerializerInterface $serializer = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->dbHelper = $dbHelper;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -286,7 +295,7 @@ class Categories extends AbstractModifier
     {
         $categoryTree = $this->getCacheManager()->load(self::CATEGORY_TREE_ID . '_' . $filter);
         if ($categoryTree) {
-            return unserialize($categoryTree);
+            return $this->serializer->unserialize($categoryTree);
         }
 
         $storeId = $this->locator->getStore()->getId();
@@ -340,7 +349,7 @@ class Categories extends AbstractModifier
         }
         
         $this->getCacheManager()->save(
-            serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
+            $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
             self::CATEGORY_TREE_ID . '_' . $filter,
             [
                 \Magento\Catalog\Model\Category::CACHE_TAG,

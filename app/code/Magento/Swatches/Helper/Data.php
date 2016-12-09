@@ -64,6 +64,13 @@ class Data
     protected $imageHelper;
 
     /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -196,7 +203,13 @@ class Data
         }
 
         $productCollection = $this->productCollectionFactory->create();
-        $this->addFilterByParent($productCollection, $parentProduct->getId());
+
+        $productLinkedFiled = $this->getMetadataPool()
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
+        $parentId = $parentProduct->getData($productLinkedFiled);
+
+        $this->addFilterByParent($productCollection, $parentId);
 
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
         $allAttributesArray = [];
@@ -315,12 +328,10 @@ class Data
     private function getAllSizeImages(ModelProduct $product, $imageFile)
     {
         return [
-            'large' => $this->imageHelper->init($product, 'product_page_image_large')
-                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+            'large' => $this->imageHelper->init($product, 'product_page_image_large_no_frame')
                 ->setImageFile($imageFile)
                 ->getUrl(),
-            'medium' => $this->imageHelper->init($product, 'product_page_image_medium')
-                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+            'medium' => $this->imageHelper->init($product, 'product_page_image_medium_no_frame')
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')
@@ -490,5 +501,20 @@ class Data
             $this->populateAdditionalDataEavAttribute($attribute);
         }
         return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_TEXT;
+    }
+
+    /**
+     * Get product metadata pool.
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecared
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Perform all assertions.
  *
  * @group Order_Management
- * @ZephyrId MAGETWO-28696
+ * @ZephyrId MAGETWO-28696, MAGETWO-17063
  */
 class CreateOrderBackendTest extends Scenario
 {
