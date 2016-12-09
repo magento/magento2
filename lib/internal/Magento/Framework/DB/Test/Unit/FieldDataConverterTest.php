@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\FieldDataConverter\QueryModifierInterface;
 
 class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,6 +36,11 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
     private $selectMock;
 
     /**
+     * @var QueryModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $queryModifierMock;
+
+    /**
      * @var FieldDataConverter
      */
     private $fieldDataConverter;
@@ -46,6 +52,7 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
         $this->queryGeneratorMock = $this->getMock(Generator::class, [], [], '', false);
         $this->dataConverterMock = $this->getMock(DataConverterInterface::class);
         $this->selectMock = $this->getMock(Select::class, [], [], '', false);
+        $this->queryModifierMock = $this->getMock(QueryModifierInterface::class);
         $this->fieldDataConverter = $objectManager->getObject(
             FieldDataConverter::class,
             [
@@ -55,7 +62,12 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testConvert()
+    /**
+     * @param boolean $useQueryModifier
+     * @param int $numQueryModifierCalls
+     * @dataProvider convertDataProvider
+     */
+    public function testConvert($useQueryModifier, $numQueryModifierCalls)
     {
         $table = 'table';
         $identifier = 'id';
@@ -83,6 +95,9 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with($where)
             ->willReturnSelf();
+        $this->queryModifierMock->expects($this->exactly($numQueryModifierCalls))
+            ->method('modify')
+            ->with($this->selectMock);
         $this->queryGeneratorMock->expects($this->once())
             ->method('generate')
             ->with($identifier, $this->selectMock)
@@ -102,6 +117,23 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
                 [$field => $convertedValue],
                 [$identifier . ' = ?' => $rows[0][$identifier]]
             );
-        $this->fieldDataConverter->convert($this->connectionMock, $table, $identifier, $field);
+        $this->fieldDataConverter->convert(
+            $this->connectionMock,
+            $table,
+            $identifier,
+            $field,
+            $useQueryModifier ? $this->queryModifierMock : null
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function convertDataProvider()
+    {
+        return [
+            [false, 0],
+            [true, 1]
+        ];
     }
 }
