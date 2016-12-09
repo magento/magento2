@@ -164,7 +164,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     {
         $customOption = $product->getCustomOption('bundle_selection_ids');
         if ($customOption) {
-            $r = json_decode('{"0":1}', true);
             $selectionIds = $this->serializer->unserialize($customOption->getValue());
             if (!empty($selectionIds) && is_array($selectionIds)) {
                 return $selectionIds;
