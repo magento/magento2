@@ -2,64 +2,63 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(
-    [
-        'jquery',
-        'Magento_Payment/js/view/payment/iframe',
-        'mage/translate'
-    ],
-    function ($, Component, $t) {
-        'use strict';
 
-        return Component.extend({
-            defaults: {
-                template: 'Magento_Authorizenet/payment/authorizenet-directpost',
-                timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.')
-            },
-            placeOrderHandler: null,
-            validateHandler: null,
+define([
+    'jquery',
+    'Magento_Payment/js/view/payment/iframe',
+    'mage/translate'
+],
+function ($, Component, $t) {
+    'use strict';
 
-            /**
-             * @param {Object} handler
-             */
-            setPlaceOrderHandler: function (handler) {
-                this.placeOrderHandler = handler;
-            },
+    return Component.extend({
+        defaults: {
+            template: 'Magento_Authorizenet/payment/authorizenet-directpost',
+            timeoutMessage: $t('Sorry, but something went wrong. Please contact the seller.')
+        },
+        placeOrderHandler: null,
+        validateHandler: null,
 
-            /**
-             * @param {Object} handler
-             */
-            setValidateHandler: function (handler) {
-                this.validateHandler = handler;
-            },
+        /**
+         * @param {Object} handler
+         */
+        setPlaceOrderHandler: function (handler) {
+            this.placeOrderHandler = handler;
+        },
 
-            /**
-             * @returns {Object}
-             */
-            context: function () {
-                return this;
-            },
+        /**
+         * @param {Object} handler
+         */
+        setValidateHandler: function (handler) {
+            this.validateHandler = handler;
+        },
 
-            /**
-             * @returns {Boolean}
-             */
-            isShowLegend: function () {
-                return true;
-            },
+        /**
+         * @returns {Object}
+         */
+        context: function () {
+            return this;
+        },
 
-            /**
-             * @returns {String}
-             */
-            getCode: function () {
-                return 'authorizenet_directpost';
-            },
+        /**
+         * @returns {Boolean}
+         */
+        isShowLegend: function () {
+            return true;
+        },
 
-            /**
-             * @returns {Boolean}
-             */
-            isActive: function () {
-                return true;
-            }
-        });
-    }
-);
+        /**
+         * @returns {String}
+         */
+        getCode: function () {
+            return 'authorizenet_directpost';
+        },
+
+        /**
+         * @returns {Boolean}
+         */
+        isActive: function () {
+            return true;
+        }
+    });
+});
