@@ -53,7 +53,8 @@ class CustomOptionProcessor implements CartItemProcessorInterface
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->customOptionFactory = $customOptionFactory;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**

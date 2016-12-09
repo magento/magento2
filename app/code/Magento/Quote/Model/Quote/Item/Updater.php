@@ -54,7 +54,8 @@ class Updater
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;
         $this->objectFactory = $objectFactory;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**

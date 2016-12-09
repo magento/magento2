@@ -100,6 +100,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $catalogConfig;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -175,6 +180,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()
             ->getMock();
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
 
         $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
@@ -194,6 +202,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock(),
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
+                'serializer' => $this->serializer
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
@@ -650,13 +659,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $optionMock->expects($this->any())->method('getValue')->willReturn(json_encode($this->attributeData, true));
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
-            ->setMethods(['unserialize'])
-            ->getMockForAbstractClass();
-        $serializer->expects($this->any())
+        $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturn(json_decode($optionMock->getValue(), true));
-        $this->_objectHelper->setBackwardCompatibleProperty($this->_model, 'serializer', $serializer);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($optionMock);
         $productMock->expects($this->once())->method('hasData')->willReturn(true);
         $productMock->expects($this->at(2))->method('getData')->willReturn(true);

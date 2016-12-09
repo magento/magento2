@@ -38,6 +38,11 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->productMock = $this->getMock(
@@ -94,12 +99,16 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['serialize'])
+            ->getMockForAbstractClass();
 
         $this->object = (new ObjectManager($this))
             ->getObject(
                 \Magento\Quote\Model\Quote\Item\Updater::class,
                 [
-                    'localeFormat' => $this->localeFormat
+                    'localeFormat' => $this->localeFormat,
+                    'serializer' => $this->serializer
                 ]
             );
     }
@@ -252,16 +261,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $buyRequestMock->expects($this->any())
             ->method('getData')
             ->will($this->returnValue(['custom_price' => $customPrice]));
-
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
-            ->setMethods(['serialize'])
-            ->getMockForAbstractClass();
-        $serializer->expects($this->any())
+        $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturn(json_encode($buyRequestMock->getData()));
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->object, 'serializer', $serializer);
-
         $buyRequestMock->expects($this->any())
             ->method('setValue')
             ->with($this->equalTo('{"custom_price":' . $customPrice . '}'));

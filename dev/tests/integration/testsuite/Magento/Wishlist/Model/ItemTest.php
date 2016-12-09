@@ -45,9 +45,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Wishlist\Model\Item\Option $option */
         $option = $this->objectManager->create(
-                \Magento\Wishlist\Model\Item\Option::class,
-                ['data' => ['code' => 'info_buyRequest', 'value' => '{"qty":23}']]
-            );
+            \Magento\Wishlist\Model\Item\Option::class,
+            ['data' => ['code' => 'info_buyRequest', 'value' => '{"qty":23}']]
+        );
         $option->setProduct($product);
         $this->model->addOption($option);
 

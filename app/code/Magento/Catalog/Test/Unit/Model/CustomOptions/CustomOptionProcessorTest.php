@@ -51,6 +51,9 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var CustomOptionProcessor */
     protected $processor;
 
+    /** @var \Magento\Framework\Serialize\SerializerInterface */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
@@ -90,12 +93,16 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
 
         $this->processor = new CustomOptionProcessor(
             $this->objectFactory,
             $this->productOptionFactory,
             $this->extensionFactory,
-            $this->customOptionFactory
+            $this->customOptionFactory,
+            $this->serializer
         );
 
     }
@@ -142,14 +149,9 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $quoteItemOption->expects($this->any())
             ->method('getValue')
             ->willReturn('{"options":{"' . $optionId . '":["5","6"]}}');
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
-            ->setMethods(['unserialize'])
-            ->getMockForAbstractClass();
-        $serializer->expects($this->any())
+        $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturn(json_decode($quoteItemOption->getValue(), true));
-        $objectHelper->setBackwardCompatibleProperty($this->processor, 'serializer', $serializer);
         $this->customOptionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->customOption);

@@ -198,6 +198,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -214,13 +215,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->quoteItemCompare = $quoteItemCompare;
         $this->stockRegistry = $stockRegistry;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -815,29 +819,13 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $data = $option ? $this->getSerializer()->unserialize($option->getValue()) : [];
+        $data = $option ? $this->serializer->unserialize($option->getValue()) : [];
         $buyRequest = new \Magento\Framework\DataObject($data);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
 
         return $buyRequest;
-    }
-
-    /**
-     * Get Serializer interface.
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        }
-
-        return $this->serializer;
     }
 
     /**

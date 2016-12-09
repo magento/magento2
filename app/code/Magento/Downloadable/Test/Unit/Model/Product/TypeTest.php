@@ -31,6 +31,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private $product;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -123,6 +128,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['save'])
             ->getMock();
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->getMockForAbstractClass();
+
         $this->target = $objectHelper->getObject(
             \Magento\Downloadable\Model\Product\Type::class,
             [
@@ -140,7 +148,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'linkFactory' => $linkFactory,
                 'eavConfig' => $eavConfigMock,
                 'typeHandler' => $this->typeHandler,
-
+                'serializer' => $this->serializer
             ]
         );
     }

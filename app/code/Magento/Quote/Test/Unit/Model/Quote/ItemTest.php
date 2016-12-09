@@ -61,6 +61,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockRegistry;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
     const PRODUCT_ID = 1;
     const PRODUCT_TYPE = 'simple';
     const PRODUCT_SKU = '12345';
@@ -134,6 +139,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
+
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Quote\Model\Quote\Item::class,
             [
@@ -142,7 +151,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
                 'quoteItemCompare' => $this->compareHelper,
-                'stockRegistry' => $this->stockRegistry
+                'stockRegistry' => $this->stockRegistry,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -1071,13 +1081,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quantity));
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
-            ->setMethods(['unserialize'])
-            ->getMockForAbstractClass();
-        $serializer->expects($this->any())
+        $this->serializer->expects($this->any())
             ->method('unserialize')
             ->willReturn(json_decode($optionMock->getValue(), true));
-        $this->objectManagerHelper->setBackwardCompatibleProperty($this->model, 'serializer', $serializer);
         $buyRequest = $this->model->getBuyRequest();
         $this->assertEquals($buyRequestQuantity, $buyRequest->getOriginalQty());
         $this->assertEquals($quantity, $buyRequest->getQty());

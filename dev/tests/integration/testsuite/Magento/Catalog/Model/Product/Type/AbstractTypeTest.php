@@ -35,6 +35,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Serialize\SerializerInterface::class
+        );
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
             [
@@ -46,7 +49,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 $filesystem,
                 $registry,
                 $logger,
-                $productRepository
+                $productRepository,
+                $serializer
             ]
         );
     }

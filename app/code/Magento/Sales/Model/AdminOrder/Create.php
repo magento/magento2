@@ -260,6 +260,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -290,7 +291,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -319,6 +321,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
         $this->quoteFactory = $quoteFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($data);
     }
 
@@ -802,7 +806,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         $info = $item->getOptionByCode('info_buyRequest');
                         if ($info) {
                             $info = new \Magento\Framework\DataObject(
-                                $this->getSerializer()->unserialize($info->getValue())
+                                $this->serializer->unserialize($info->getValue())
                             );
                             $info->setQty($qty);
                             $info->setOptions($this->_prepareOptionsForRequest($item));
@@ -879,22 +883,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         return $this;
-    }
-
-    /**
-     * Get Serializer interface.
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        }
-
-        return $this->serializer;
     }
 
     /**

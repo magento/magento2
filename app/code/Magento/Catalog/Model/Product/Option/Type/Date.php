@@ -34,14 +34,18 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_localeDate = $localeDate;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -276,7 +280,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $confItem = $this->getConfigurationItem();
         $infoBuyRequest = $confItem->getOptionByCode('info_buyRequest');
         try {
-            $value = $this->getSerializer()->unserialize($infoBuyRequest->getValue());
+            $value = $this->serializer->unserialize($infoBuyRequest->getValue());
             if (is_array($value) && isset($value['options']) && isset($value['options'][$this->getOption()->getId()])
             ) {
                 return $value['options'][$this->getOption()->getId()];
@@ -286,22 +290,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (\Exception $e) {
             return ['date_internal' => $optionValue];
         }
-    }
-
-    /**
-     * Get Serializer interface.
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        }
-
-        return $this->serializer;
     }
 
     /**

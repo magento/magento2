@@ -9,9 +9,7 @@
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Bundle Type Model
@@ -209,7 +207,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,

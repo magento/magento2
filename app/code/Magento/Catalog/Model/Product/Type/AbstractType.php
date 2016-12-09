@@ -204,7 +204,8 @@ abstract class AbstractType
         $this->_filesystem = $filesystem;
         $this->_logger = $logger;
         $this->productRepository = $productRepository;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**

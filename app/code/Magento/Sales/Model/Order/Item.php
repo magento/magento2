@@ -115,6 +115,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -127,7 +128,8 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -138,6 +140,8 @@ class Item extends AbstractModel implements OrderItemInterface
             $resourceCollection,
             $data
         );
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->_orderFactory = $orderFactory;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;
@@ -473,23 +477,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptions()
     {
         $data = $this->_getData('product_options');
-        return is_string($data) ? $this->getSerializer()->unserialize($data) : $data;
-    }
-
-    /**
-     * Get Serializer interface.
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (!$this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        }
-
-        return $this->serializer;
+        return is_string($data) ? $this->serializer->unserialize($data) : $data;
     }
 
     /**
