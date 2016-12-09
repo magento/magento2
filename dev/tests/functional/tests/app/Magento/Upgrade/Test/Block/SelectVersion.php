@@ -184,9 +184,8 @@ class SelectVersion extends Form
      */
     private function titleContainsSampleData($element)
     {
-        return preg_match('/magento.+sample.+data/', $element->getText());
+        return preg_match('/magento\/*+sample-data/', $element->getText());
     }
-
 
     /**
      * Sets sample data version matching the maximum compatible version from fixture
@@ -198,18 +197,25 @@ class SelectVersion extends Form
     private function setSampleDataVersionToRowSelect($rowIndex, $sampleDataVersionForRegex)
     {
         $selectElement = $this->getSelectFromRow($rowIndex);
-        $toSelectVersion = '0';
+        $optionTextArray = [];
         foreach ($selectElement->getElements('option') as $option) {
             $optionText = $option->getText();
-            if (preg_match('/' . $sampleDataVersionForRegex . '/', $optionText)
-                && preg_match('/([0-9\.\-a-zA-Z]+)/', $optionText, $match)
-            ) {
-                $extractedVersion = reset($match);
-                if (version_compare($extractedVersion, $toSelectVersion, '>')) {
-                    $toSelectVersion = $extractedVersion;
-                    $selectElement->setValue($optionText);
-                }
+            if (preg_match('/' . $sampleDataVersionForRegex . '/', $optionText)) {
+                preg_match('/([0-9\.\-a-zA-Z]+)/', $optionText, $match);
+                $optionTextArray[$optionText] = current($match);
             }
+        }
+
+        uasort(
+            $optionTextArray,
+            function ($versionOne, $versionTwo) {
+                return version_compare($versionOne, $versionTwo) * -1;
+            }
+        );
+
+        $toSelectVersion = key($optionTextArray);
+        if ($toSelectVersion !== $selectElement->getText()) {
+            $selectElement->setValue($optionTextArray[]);
         }
     }
 }
