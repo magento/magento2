@@ -1562,7 +1562,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $sku = 'sku';
         $itemSku = 'item';
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getData', 'hasCustomOptions', 'getCustomOption'])
             ->disableOriginalConstructor()
@@ -1639,7 +1639,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $weight = 5;
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getData', 'hasCustomOptions', 'getCustomOption'])
             ->disableOriginalConstructor()
@@ -1693,7 +1693,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $weight = 5;
         $qtyOption = 5;
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getData', 'hasCustomOptions', 'getCustomOption'])
             ->disableOriginalConstructor()
@@ -1768,7 +1768,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function testIsVirtual()
     {
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
 
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()

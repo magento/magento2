@@ -625,6 +625,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testCheckProductBuyState()
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['getSkipCheckRequiredOption', 'getCustomOption'])
             ->disableOriginalConstructor()
             ->getMock();
         $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
@@ -639,6 +640,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $optionMock->expects($this->once())
             ->method('getValue')
             ->willReturn(json_encode(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']]));
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
 
         $this->assertEquals($this->_model, $this->_model->checkProductBuyState($productMock));
     }
@@ -651,6 +659,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testCheckProductBuyStateException()
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['getSkipCheckRequiredOption', 'getCustomOption'])
             ->disableOriginalConstructor()
             ->getMock();
         $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
@@ -663,6 +672,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with('info_buyRequest')
             ->willReturn($optionMock);
         $optionMock->expects($this->once())->method('getValue')->willReturn(json_encode([]));
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
 
         $this->_model->checkProductBuyState($productMock);
     }

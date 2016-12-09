@@ -170,7 +170,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGetOptions()
     {
         $optionIds = 'a:1:{i:0;i:1;}';
-        $selectionIds = 'a:1:{i:0;s:1:"2";}';
+        $selectionIds =  '{"0":"2"}';
         $selectionId = '2';
         $product = $this->getMock(
             \Magento\Catalog\Model\Product::class,

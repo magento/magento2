@@ -153,7 +153,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
         $this->product->expects($this->any())->method('canAffectOptions')->with($this->equalTo(true));
 
-
         $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityAttributeCodes'], [], '', false);
         $eavConfigMock->expects($this->any())
             ->method('getEntityAttributeCodes')
@@ -182,7 +181,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'linkFactory' => $linkFactory,
                 'eavConfig' => $eavConfigMock,
                 'typeHandler' => $this->typeHandler,
-
+                'serializer' => $this->serializerMock
             ]
         );
     }
