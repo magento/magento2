@@ -91,6 +91,11 @@ class Page extends Layout
     protected $urlBuilder;
 
     /**
+     * @var View\PageSpecificHandlesList
+     */
+    protected $pageSpecificHandlesList;
+
+    /**
      * Constructor
      *
      * @param View\Element\Template\Context $context
@@ -103,6 +108,7 @@ class Page extends Layout
      * @param View\Page\Layout\Reader $pageLayoutReader
      * @param string $template
      * @param bool $isIsolated
+     * @param View\PageSpecificHandlesList $pageSpecificHandlesList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -116,7 +122,8 @@ class Page extends Layout
         View\Page\Config\RendererFactory $pageConfigRendererFactory,
         View\Page\Layout\Reader $pageLayoutReader,
         $template,
-        $isIsolated = false
+        $isIsolated = false,
+        View\PageSpecificHandlesList $pageSpecificHandlesList = null
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();
@@ -127,6 +134,8 @@ class Page extends Layout
         $this->viewFileSystem = $context->getViewFileSystem();
         $this->pageConfigRendererFactory = $pageConfigRendererFactory;
         $this->template = $template;
+        $this->pageSpecificHandlesList = $pageSpecificHandlesList
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(View\PageSpecificHandlesList::class);
         parent::__construct(
             $context,
             $layoutFactory,
@@ -210,12 +219,13 @@ class Page extends Layout
     public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null)
     {
         $handle = $defaultHandle ? $defaultHandle : $this->getDefaultLayoutHandle();
-        $pageHandles = [$handle];
+        // Ensure default layout handle is added first.
+        $this->addHandle($handle);
         foreach ($parameters as $key => $value) {
-            $pageHandles[] = $handle . '_' . $key . '_' . $value;
+            $pageSpecificHandle = $handle . '_' . $key . '_' . $value;
+            $this->pageSpecificHandlesList->addHandle($pageSpecificHandle);
         }
-        // Do not sort array going into add page handles. Ensure default layout handle is added first.
-        return $this->addHandle($pageHandles);
+        return true;
     }
 
     /**
