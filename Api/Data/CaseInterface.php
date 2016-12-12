@@ -40,6 +40,7 @@ interface CaseInterface
     /**#@+
      * Constants for guarantee available statuses
      */
+
     /**
      * Approved status
      */
