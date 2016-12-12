@@ -23,6 +23,7 @@ use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\InvoiceOrder;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class InvoiceOrderTest
@@ -119,6 +120,8 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
+
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,17 +187,20 @@ class InvoiceOrderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
             ->getMock();
 
-        $this->invoiceOrder = new InvoiceOrder(
-            $this->resourceConnectionMock,
-            $this->orderRepositoryMock,
-            $this->invoiceDocumentFactoryMock,
-            $this->paymentAdapterMock,
-            $this->orderStateResolverMock,
-            $this->configMock,
-            $this->invoiceRepositoryMock,
-            $this->invoiceOrderValidatorMock,
-            $this->notifierInterfaceMock,
-            $this->loggerMock
+        $this->invoiceOrder = $objectManager->getObject(
+            InvoiceOrder::class,
+            [
+                'resourceConnection' => $this->resourceConnectionMock,
+                'orderRepository' => $this->orderRepositoryMock,
+                'invoiceDocumentFactory' => $this->invoiceDocumentFactoryMock,
+                'paymentAdapter' => $this->paymentAdapterMock,
+                'orderStateResolver' => $this->orderStateResolverMock,
+                'config' => $this->configMock,
+                'invoiceRepository' => $this->invoiceRepositoryMock,
+                'invoiceOrderValidator' => $this->invoiceOrderValidatorMock,
+                'notifierInterface' => $this->notifierInterfaceMock,
+                'logger' => $this->loggerMock
+            ]
         );
     }
 

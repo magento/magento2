@@ -7,6 +7,7 @@ namespace Magento\Sales\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Validator
@@ -29,14 +30,16 @@ class Validator
      * Validator constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param ValidatorResultInterfaceFactory $validatorResult
+     * @param ValidatorResultInterfaceFactory|null $validatorResult
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ValidatorResultInterfaceFactory $validatorResult
+        ValidatorResultInterfaceFactory $validatorResult = null
     ) {
         $this->objectManager = $objectManager;
-        $this->validatorResultFactory = $validatorResult;
+        $this->validatorResultFactory = $validatorResult ?: ObjectManager::getInstance()->get(
+            ValidatorResultInterfaceFactory::class
+        );
     }
 
     /**

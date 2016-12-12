@@ -50,7 +50,8 @@ class Deployer
      * @param Version\StorageInterface $versionStorage
      * @param JsTranslationConfig $jsTranslationConfig
      * @param AlternativeSourceInterface[] $alternativeSources
-     * @param DeployManagerFactory $deployManagerFactory
+     * @param bool $isDryRun
+     * @param DeployManagerFactory|null $deployManagerFactory
      * @param array $options
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -60,11 +61,14 @@ class Deployer
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
+        $isDryRun = false,
         DeployManagerFactory $deployManagerFactory = null,
         $options = []
     ) {
         $this->output = $output;
-        $this->deployManagerFactory = $deployManagerFactory;
+        $this->deployManagerFactory = $deployManagerFactory ?: ObjectManager::getInstance()->get(
+            DeployManagerFactory::class
+        );
         if (is_array($options)) {
             $this->options = $options;
         } else {
