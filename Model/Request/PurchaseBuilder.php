@@ -5,20 +5,15 @@
  */
 namespace Magento\Signifyd\Model\Request;
 
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Prepare data related to purchase event represented in Case Creation request.
  */
 class PurchaseBuilder
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
     /**
      * @var DateTimeFactory
      */
@@ -30,16 +25,13 @@ class PurchaseBuilder
     private $scope;
 
     /**
-     * @param OrderRepositoryInterface $orderRepository
      * @param DateTimeFactory $dateTimeFactory
      * @param ScopeInterface $scope
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
         DateTimeFactory $dateTimeFactory,
         ScopeInterface $scope
     ) {
-        $this->orderRepository = $orderRepository;
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
     }
@@ -47,27 +39,20 @@ class PurchaseBuilder
     /**
      * Returns purchase data params
      *
-     * @param int $orderId
+     * @param Order $order
      * @return array
      */
-    public function build($orderId)
+    public function build(Order $order)
     {
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->orderRepository->get($orderId);
         $orderPayment = $order->getPayment();
         $createdAt = $this->dateTimeFactory->create(
             $order->getCreatedAt(),
             new \DateTimeZone('UTC')
         );
 
-
-        return [
+        $result = [
             'purchase' => [
                 'browserIpAddress' => $order->getRemoteIp(),
-                'shipments' => [
-                    'shippingPrice' => $order->getShippingAmount()
-
-                ],
                 'orderId' => $order->getEntityId(),
                 'createdAt' => $createdAt->format(\DateTime::ISO8601),
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
@@ -77,21 +62,119 @@ class PurchaseBuilder
                 'totalPrice' => $order->getGrandTotal(),
             ],
         ];
+
+        $shipments = $this->getShipments($order);
+        if (!empty($shipments)) {
+            $result['purchase']['shipments'] = $shipments;
+        }
+
+        $products = $this->getProducts($order);
+        if (!empty($products)) {
+            $result['purchase']['products'] = $products;
+        }
+
+        return $result;
     }
 
     /**
-     * Returns the gateway that processed the transaction. For PayPal orders use paypal_account.
+     * Gets the products purchased in the transaction.
+     *
+     * @param Order $order
+     * @return array
+     */
+    private function getProducts(Order $order)
+    {
+        $result = [];
+        foreach ($order->getAllItems() as $orderItem) {
+            $result[] = [
+                'itemId' => $orderItem->getSku(),
+                'itemName' => $orderItem->getName(),
+                'itemPrice' => $orderItem->getPrice(),
+                'itemQuantity' => $orderItem->getQtyOrdered(),
+                'itemUrl' => $orderItem->getProduct()->getProductUrl(),
+                'itemWeight' => $orderItem->getProduct()->getWeight()
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets the shipments associated with this purchase.
+     *
+     * @param Order $order
+     * @return array
+     */
+    private function getShipments(Order $order)
+    {
+        $result = [];
+        $shipper = $this->getShipper($order->getShippingDescription());
+        $shippingMethod = $this->getShippingMethod($order->getShippingDescription());
+
+        $shipmentList = $order->getShipmentsCollection();
+        /** @var \Magento\Sales\Api\Data\ShipmentInterface $shipment */
+        foreach ($shipmentList as $shipment) {
+            $totalPrice = 0;
+            foreach ($shipment->getItems() as $shipmentItem) {
+                $totalPrice += $shipmentItem->getPrice();
+            }
+
+            $item = [
+                'shipper' => $shipper,
+                'shippingMethod' => $shippingMethod,
+                'shippingPrice' => $totalPrice
+            ];
+
+            $tracks = $shipment->getTracks();
+            if (!empty($tracks)) {
+                $item['trackingNumber'] = end($tracks)->getTrackNumber();
+            }
+
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets the name of the shipper
+     *
+     * @param $shippingDescription
+     * @return string
+     */
+    private function getShipper($shippingDescription)
+    {
+        $result = explode(' - ', $shippingDescription, 2);
+
+        return count($result) == 2 ? $result[0] : '';
+    }
+
+    /**
+     * Gets the type of the shipment method used
+     *
+     * @param $shippingDescription
+     * @return string
+     */
+    private function getShippingMethod($shippingDescription)
+    {
+        $result = explode(' - ', $shippingDescription, 2);
+
+        return count($result) == 2 ? $result[1] : '';
+    }
+
+    /**
+     * Gets the gateway that processed the transaction. For PayPal orders use paypal_account.
      *
      * @param string $gatewayCode
      * @return string
      */
     private function getPaymentGateway($gatewayCode)
     {
-        return (bool)substr_count($gatewayCode, 'paypal') ? 'paypal_account' : $gatewayCode;
+        return strstr($gatewayCode, 'paypal') === false ? $gatewayCode : 'paypal_account';
     }
 
     /**
-     * Returns WEB for web-orders, PHONE for orders created by Admin
+     * Gets WEB for web-orders, PHONE for orders created by Admin
      *
      * @return string
      */
