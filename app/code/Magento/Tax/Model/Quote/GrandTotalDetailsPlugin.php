@@ -54,7 +54,6 @@ class GrandTotalDetailsPlugin
         TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
         SerializerInterface $serializer = null
-
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;

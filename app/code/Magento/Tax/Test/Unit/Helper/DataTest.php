@@ -12,6 +12,8 @@ use Magento\Framework\DataObject as MagentoObject;
 
 /**
  * Class DataTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataTest extends \PHPUnit_Framework_TestCase
 {

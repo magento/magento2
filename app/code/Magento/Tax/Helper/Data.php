@@ -747,7 +747,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $taxableItemType = $itemTaxDetail->getType();
                     $ratio = $itemRatio;
                     if ($item->getTaxRatio()) {
-                        $taxRatio = $fullInfo = $this->serializer->unserialize($item->getTaxRatio());
+                        $taxRatio = $this->serializer->unserialize($item->getTaxRatio());
                         if (isset($taxRatio[$taxableItemType])) {
                             $ratio = $taxRatio[$taxableItemType];
                         }
