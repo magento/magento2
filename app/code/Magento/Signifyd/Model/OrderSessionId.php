@@ -5,7 +5,8 @@
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Checkout\Model\Session;
+use Magento\Framework\DataObject\IdentityGeneratorInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Class OrderSessionId
@@ -13,9 +14,9 @@ use Magento\Checkout\Model\Session;
 class OrderSessionId
 {
     /**
-     * @var Session
+     * @var SessionManagerInterface
      */
-    private $checkoutSession;
+    private $session;
 
     /**
      * @var \Magento\Quote\Model\Quote
@@ -23,11 +24,20 @@ class OrderSessionId
     private $quote;
 
     /**
-     * @param Session $checkoutSession
+     * @var IdentityGeneratorInterface
      */
-    public function __construct(Session $checkoutSession)
-    {
-        $this->checkoutSession = $checkoutSession;
+    private $identityGenerator;
+
+    /**
+     * @param SessionManagerInterface $session
+     * @param IdentityGeneratorInterface $identityGenerator
+     */
+    public function __construct(
+        SessionManagerInterface $session,
+        IdentityGeneratorInterface $identityGenerator
+    ) {
+        $this->session = $session;
+        $this->identityGenerator = $identityGenerator;
     }
 
     /**
@@ -37,7 +47,9 @@ class OrderSessionId
      */
     public function generate()
     {
-        return sha1($this->getQuote()->getId() . $this->getQuote()->getCreatedAt());
+        return $this->identityGenerator->generateIdForData(
+            $this->getQuote()->getId() . $this->getQuote()->getCreatedAt()
+        );
     }
 
     /**
@@ -48,7 +60,7 @@ class OrderSessionId
     private function getQuote()
     {
         if ($this->quote === null) {
-            $this->quote = $this->checkoutSession->getQuote();
+            $this->quote = $this->session->getQuote();
         }
 
         return $this->quote;

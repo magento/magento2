@@ -5,7 +5,8 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model;
 
-use Magento\Checkout\Model\Session;
+use Magento\Framework\DataObject\IdentityGeneratorInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Signifyd\Model\OrderSessionId;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -14,7 +15,7 @@ class OrderSessionIdTest extends \PHPUnit_Framework_TestCase
 {
     const QUOTE_ID = 1;
     const QUOTE_CREATED_AT = '1970-01-01 00:00:00';
-    const HASH = 'ede3c2f59fabe6dee8d1fefb5580200884ff1f16';
+    const HASH = 'hash';
 
     /**
      * @var OrderSessionId
@@ -22,31 +23,39 @@ class OrderSessionIdTest extends \PHPUnit_Framework_TestCase
     private $orderSessionId;
 
     /**
-     * @var Session|MockObject
+     * @var SessionManagerInterface|MockObject
      */
-    private $checkoutSession;
+    private $session;
 
     /**
      * @var Quote|MockObject
      */
     private $quote;
 
-    public function setUp()
+    /**
+     * @var IdentityGeneratorInterface|MockObject
+     */
+    private $identityGenerator;
+
+    protected function setUp()
     {
-        $this->checkoutSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->getMockBuilder(SessionManagerInterface::class)
+            ->setMethods(['getQuote'])
+            ->getMockForAbstractClass();
 
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderSessionId = new OrderSessionId($this->checkoutSession);
+        $this->identityGenerator = $this->getMockBuilder(IdentityGeneratorInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->orderSessionId = new OrderSessionId($this->session, $this->identityGenerator);
     }
 
     public function testGenerate()
     {
-        $this->checkoutSession->expects(static::once())
+        $this->session->expects(static::once())
             ->method('getQuote')
             ->willReturn($this->quote);
 
@@ -56,6 +65,10 @@ class OrderSessionIdTest extends \PHPUnit_Framework_TestCase
         $this->quote->expects(static::once())
             ->method('getCreatedAt')
             ->willReturn(self::QUOTE_CREATED_AT);
+
+        $this->identityGenerator->expects(static::once())
+            ->method('generateIdForData')
+            ->willReturn('hash');
 
         static::assertSame(self::HASH, $this->orderSessionId->generate());
     }

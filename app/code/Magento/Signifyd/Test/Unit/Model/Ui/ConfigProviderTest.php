@@ -11,7 +11,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
-    const HASH = 'ede3c2f59fabe6dee8d1fefb5580200884ff1f16';
+    const HASH = 'hash';
 
     /**
      * @var ConfigProvider
@@ -52,7 +52,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'fraud' => [
+                    'fraud_protection' => [
                         ConfigProvider::SIGNIFYD_CODE => [
                             'orderSessionId' => self::HASH
                         ]
