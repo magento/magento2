@@ -16,6 +16,7 @@ interface CaseInterface
     /**#@+
      * Constants for case available statuses
      */
+
     /**
      * Open status
      */
@@ -67,6 +68,7 @@ interface CaseInterface
     /**#@+
      * Constants for case available review dispositions
      */
+
     /**
      * Review disposition is good
      */
@@ -112,7 +114,7 @@ interface CaseInterface
      * Gets value, which indicates if a guarantee can be requested for a case
      * @return boolean
      */
-    public function getGuaranteeEligible();
+    public function isGuaranteeEligible();
 
     /**
      * Sets value-indicator about guarantee availability for a case

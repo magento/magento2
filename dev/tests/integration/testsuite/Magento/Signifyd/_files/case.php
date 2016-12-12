@@ -28,4 +28,3 @@ $case->setCaseId(123)
 /** @var CaseRepositoryInterface $caseRepository */
 $caseRepository = $objectManager->get(CaseRepositoryInterface::class);
 $caseRepository->save($case);
-

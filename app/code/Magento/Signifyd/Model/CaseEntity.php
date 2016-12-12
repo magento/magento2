@@ -50,7 +50,7 @@ class CaseEntity extends DataObject implements CaseInterface
     /**
      * @inheritdoc
      */
-    public function getGuaranteeEligible()
+    public function isGuaranteeEligible()
     {
         return $this->getData('guarantee_eligible');
     }
