@@ -196,7 +196,7 @@ define([
 
             newFormat = format.replace(/yy|y/gi, 'YYYY'); // replace the year
             newFormat = newFormat.replace(/dd|d/g, 'DD'); // replace the date
-            newFormat = newFormat.replace(/mm|m/g, 'MM'); //replace the month
+            newFormat = newFormat.replace(/mm|m/gi, 'MM'); //replace the month
 
             return newFormat;
         }
