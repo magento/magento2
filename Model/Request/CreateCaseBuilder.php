@@ -8,7 +8,8 @@ namespace Magento\Signifyd\Model\Request;
 use Magento\Sales\Model\OrderFactory;
 
 /**
- * Handles the conversion from Magento Order to Signifyd Case.
+ * Handles the conversion from Magento Order to Signifyd Case
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateCaseBuilder implements CreateCaseBuilderInterface
 {
@@ -33,21 +34,45 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
     private $recipientBuilder;
 
     /**
+     * @var SellerBuilder
+     */
+    private $sellerBuilder;
+
+    /**
+     * @var ClientVersionBuilder
+     */
+    private $clientVersionBuilder;
+
+    /**
+     * @var UserAccountBuilder
+     */
+    private $userAccountBuilder;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param PurchaseBuilder $purchaseBuilder
      * @param CardBuilder $cardBuilder
      * @param RecipientBuilder $recipientBuilder
+     * @param SellerBuilder $sellerBuilder
+     * @param ClientVersionBuilder $clientVersionBuilder
+     * @param UserAccountBuilder $userAccountBuilder
      */
     public function __construct(
         OrderFactory $orderFactory,
         PurchaseBuilder $purchaseBuilder,
         CardBuilder $cardBuilder,
-        RecipientBuilder $recipientBuilder
+        RecipientBuilder $recipientBuilder,
+        SellerBuilder $sellerBuilder,
+        ClientVersionBuilder $clientVersionBuilder,
+        UserAccountBuilder $userAccountBuilder
     ) {
         $this->orderFactory = $orderFactory;
         $this->purchaseBuilder = $purchaseBuilder;
         $this->cardBuilder = $cardBuilder;
         $this->recipientBuilder = $recipientBuilder;
+        $this->sellerBuilder = $sellerBuilder;
+        $this->clientVersionBuilder = $clientVersionBuilder;
+        $this->userAccountBuilder = $userAccountBuilder;
     }
 
     /**
@@ -61,7 +86,10 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
         return array_merge(
             $this->purchaseBuilder->build($order),
             $this->cardBuilder->build($order),
-            $this->recipientBuilder->build($order)
+            $this->recipientBuilder->build($order),
+            $this->userAccountBuilder->build($order),
+            $this->sellerBuilder->build($order),
+            $this->clientVersionBuilder->build()
         );
     }
 }
