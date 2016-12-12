@@ -173,6 +173,7 @@
         "magento/module-security": "100.3.0-dev",
         "magento/module-send-friend": "100.3.0-dev",
         "magento/module-shipping": "100.3.0-dev",
+        "magento/module-signifyd": "100.3.0-dev",
         "magento/module-sitemap": "100.3.0-dev",
         "magento/module-store": "100.3.0-dev",
         "magento/module-swagger": "100.3.0-dev",
