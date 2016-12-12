@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Signifyd\Api\Data\CaseInterface" type="Magento\Signifyd\Model\CaseEntity" />
+    <preference for="Magento\Signifyd\Api\CaseRepositoryInterface" type="Magento\Signifyd\Model\CaseRepository" />
+    <preference for="Magento\Signifyd\Api\CaseManagementInterface" type="Magento\Signifyd\Model\CaseManagement" />
+
+    <!-- Entity Manager operations -->
+    <type name="Magento\Framework\EntityManager\OperationPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="Magento\Signifyd\Api\Data\CaseInterface" xsi:type="array">
+                    <item name="read" xsi:type="string">Magento\Framework\EntityManager\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Update</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- END Entity Manager operations -->
+
+    <!-- Metadata pool entities -->
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Signifyd\Api\Data\CaseInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">signifyd_case</item>
+                    <item name="identifierField" xsi:type="string">order_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- End metadata pool entities -->
+</config>
