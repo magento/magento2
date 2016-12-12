@@ -166,7 +166,9 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
-            this.momentFormat = (this.options.dateFormat) ? this.convertToMomentFormat(this.options.dateFormat) : this.momentFormat;
+            this.momentFormat = this.options.dateFormat ?
+                this.convertToMomentFormat(this.options.dateFormat) : this.momentFormat;
+
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
@@ -184,15 +186,18 @@ define([
         },
 
         /**
-         * @param format PHP Format
-         * @returns {String} Moment compatible format
+         * Converts PHP IntlFormatter format to moment format.
+         *
+         * @param {String} format - PHP format
+         * @returns {String} - moment compatible formatting
          */
-        convertToMomentFormat: function (format){
+        convertToMomentFormat: function (format) {
             var newFormat;
 
             newFormat = format.replace(/yy|y/gi, 'YYYY'); // replace the year
             newFormat = newFormat.replace(/dd|d/g, 'DD'); // replace the date
             newFormat = newFormat.replace(/mm|m/g, 'MM'); //replace the month
+
             return newFormat;
         }
     });
