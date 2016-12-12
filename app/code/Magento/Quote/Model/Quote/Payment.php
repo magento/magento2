@@ -66,6 +66,13 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     private $additionalChecks;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -77,6 +84,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param array $additionalChecks
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -90,10 +98,13 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        array $additionalChecks = []
+        array $additionalChecks = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
         $this->additionalChecks = $additionalChecks;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -326,7 +337,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     {
         $additionalDataValue = $this->getData(self::KEY_ADDITIONAL_DATA);
         if (is_string($additionalDataValue)) {
-            $additionalData = @unserialize($additionalDataValue);
+            $additionalData = $this->serializer->unserialize($additionalDataValue);
             if (is_array($additionalData)) {
                 return $additionalData;
             }
