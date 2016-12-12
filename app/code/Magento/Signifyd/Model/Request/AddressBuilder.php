@@ -35,7 +35,7 @@ class AddressBuilder
      * @param string[]|null $street
      * @return string
      */
-    public function getStreetLine($number, $street)
+    private function getStreetLine($number, $street)
     {
         $lines = is_array($street) ? $street : [];
 

@@ -139,7 +139,7 @@ class PurchaseBuilder
     /**
      * Gets the name of the shipper
      *
-     * @param $shippingDescription
+     * @param string $shippingDescription
      * @return string
      */
     private function getShipper($shippingDescription)
@@ -152,7 +152,7 @@ class PurchaseBuilder
     /**
      * Gets the type of the shipment method used
      *
-     * @param $shippingDescription
+     * @param string $shippingDescription
      * @return string
      */
     private function getShippingMethod($shippingDescription)
