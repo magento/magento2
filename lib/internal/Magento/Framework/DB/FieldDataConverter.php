@@ -8,7 +8,7 @@ namespace Magento\Framework\DB;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
-use Magento\Framework\DB\FieldDataConverter\QueryModifierInterface;
+use Magento\Framework\DB\Select\QueryModifierInterface;
 
 /**
  * Convert field data from one representation to another

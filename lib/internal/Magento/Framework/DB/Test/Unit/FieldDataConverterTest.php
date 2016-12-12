@@ -11,7 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\FieldDataConverter\QueryModifierInterface;
+use Magento\Framework\DB\Select\QueryModifierInterface;
 
 class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
 {
