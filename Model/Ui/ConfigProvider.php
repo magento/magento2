@@ -36,7 +36,7 @@ class ConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'fraud' => [
+            'fraud_protection' => [
                 self::SIGNIFYD_CODE => [
                     'orderSessionId' => $this->orderSessionId->generate()
                 ]
