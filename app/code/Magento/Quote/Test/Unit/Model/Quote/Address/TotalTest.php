@@ -15,7 +15,21 @@ class TotalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = new \Magento\Quote\Model\Quote\Address\Total();
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(function ($value) {
+                return json_decode($value, true);
+            });
+
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManagerHelper->getObject(
+            \Magento\Quote\Model\Quote\Address\Total::class,
+            [
+                'serializer' => $serializer
+            ]);
     }
 
     /**
@@ -171,6 +185,7 @@ class TotalTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify handling of serialized, non-serialized input into and out of getFullInfo()
      *
+     * @covers \Magento\Quote\Model\Quote\Address\Total::getFullInfo()
      * @param $input
      * @param $expected
      * @dataProvider getFullInfoDataProvider
@@ -187,7 +202,7 @@ class TotalTest extends \PHPUnit_Framework_TestCase
     public function getFullInfoDataProvider()
     {
         $myArray = ['team' => 'kiwis'];
-        $serializedInput = serialize($myArray);
+        $serializedInput = json_encode($myArray);
 
         return [
             'simple array' => [
