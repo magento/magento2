@@ -32,16 +32,23 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeConfig;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serializer;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
 
         $this->address = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address::class,
             [
-                'scopeConfig' => $this->scopeConfig
+                'scopeConfig' => $this->scopeConfig,
+                'serializer' => $this->serializer
             ]
         );
         $this->quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
@@ -133,5 +140,27 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($scopeConfigValues);
 
         $this->assertTrue($this->address->validateMinimumAmount());
+    }
+
+    public function testGetAppliedTaxes()
+    {
+        $result = ['result'];
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($result);
+
+        $this->assertEquals($result, $this->address->getAppliedTaxes());
+    }
+
+    public function testSetAppliedTaxes()
+    {
+        $data = ['data'];
+
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($data)
+            ->willReturn('result');
+
+        $this->assertInstanceOf(\Magento\Quote\Model\Quote\Address::class, $this->address->setAppliedTaxes($data));
     }
 }
