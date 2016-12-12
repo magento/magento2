@@ -196,8 +196,9 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testObsoleteClasses($content)
     {
-        /* avoid collision between obsolete class name and valid namespace */
+        /* avoid collision between obsolete class name and valid namespace and package tag */
         $content = preg_replace('/namespace[^;]+;/', '', $content);
+        $content = preg_replace('/\@package\s[a-zA-Z0-9\\\_]+/', '', $content);
         foreach (self::$_classes as $row) {
             list($class, , $replacement) = $row;
             $this->_assertNotRegExp(
