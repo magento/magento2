@@ -1002,35 +1002,36 @@ class EavSetup
             return $this;
         }
         $additionalTableExists = $this->setup->getConnection()->isTableExists($this->setup->getTable($additionalTable));
-        if ($additionalTable && $additionalTableExists) {
-            $attributeFields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
-            if (is_array($field)) {
-                $bind = [];
-                foreach ($field as $k => $v) {
-                    if (isset($attributeFields[$k])) {
-                        $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
-                    }
-                }
-                if (!$bind) {
-                    return $this;
-                }
-                $field = $bind;
-            } else {
-                if (!isset($attributeFields[$field])) {
-                    return $this;
+        if (!$additionalTableExists) {
+            return $this;
+        }
+        $attributeFields = $this->setup->getConnection()->describeTable($this->setup->getTable($additionalTable));
+        if (is_array($field)) {
+            $bind = [];
+            foreach ($field as $k => $v) {
+                if (isset($attributeFields[$k])) {
+                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue($attributeFields[$k], $v);
                 }
             }
-            $this->setup->updateTableRow(
-                $this->setup->getTable($additionalTable),
-                'attribute_id',
-                $this->getAttributeId($entityTypeId, $id),
-                $field,
-                $value
-            );
-
-            $attribute = $this->getAttribute($entityTypeId, $id);
-            $this->updateCachedRow($field, $value, $attribute);
+            if (!$bind) {
+                return $this;
+            }
+            $field = $bind;
+        } else {
+            if (!isset($attributeFields[$field])) {
+                return $this;
+            }
         }
+        $this->setup->updateTableRow(
+            $this->setup->getTable($additionalTable),
+            'attribute_id',
+            $this->getAttributeId($entityTypeId, $id),
+            $field,
+            $value
+        );
+
+        $attribute = $this->getAttribute($entityTypeId, $id);
+        $this->updateCachedRow($field, $value, $attribute);
 
         return $this;
     }
