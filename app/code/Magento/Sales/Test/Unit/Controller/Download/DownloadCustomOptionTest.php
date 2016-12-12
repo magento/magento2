@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Sales\Test\Unit\Controller\Download;
+
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Unserialize\Unserialize;
 
