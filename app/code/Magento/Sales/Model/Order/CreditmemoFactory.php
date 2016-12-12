@@ -23,7 +23,7 @@ class CreditmemoFactory
     protected $taxConfig;
 
     /**
-     * @var \Magento\Framework\Unserialize\Unserialize
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     protected $unserialize;
 
@@ -262,7 +262,7 @@ class CreditmemoFactory
 
     /**
      * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
-     * @param array $qtys
+     * @param int $parentQty
      * @return int
      */
     private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $parentQty)
@@ -270,7 +270,7 @@ class CreditmemoFactory
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
-            $bundleSelectionAttributes = $this->getUnserialize()
+            $bundleSelectionAttributes = $this->getSerializer()
                 ->unserialize($productOptions['bundle_selection_attributes']);
             if ($bundleSelectionAttributes) {
                 $qty = $bundleSelectionAttributes['qty'] * $parentQty;
@@ -280,16 +280,16 @@ class CreditmemoFactory
     }
 
     /**
-     * Get Unserialize
+     * Get instance of Serializer.
      *
-     * @return \Magento\Framework\Unserialize\Unserialize
+     * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated
      */
-    private function getUnserialize()
+    private function getSerializer()
     {
         if (!$this->unserialize) {
             $this->unserialize = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Unserialize\Unserialize::class);
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         }
         return $this->unserialize;
     }

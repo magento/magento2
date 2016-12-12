@@ -80,4 +80,52 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data[$productId]['qty'], $product->getQty());
         $this->assertEquals($data[$productId]['position'], $product->getPosition());
     }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     * @covers \Magento\GroupedProduct\Model\Product\Type\Grouped::_prepareProduct()
+     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
+     */
+    public function testPrepareProduct()
+    {
+        $buyRequest = $this->objectManager->create(
+            \Magento\Framework\DataObject::class,
+            ['data' => ['value' => ['qty' => 2]]]
+        );
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('grouped-product');
+
+        /** @var \Magento\GroupedProduct\Model\Product\Type\Grouped $type */
+        $type = $this->objectManager->get(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
+
+        $processModes = [
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_FULL,
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_LITE
+        ];
+        $expectedData = [
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_FULL => [
+                1  => '{"super_product_config":{"product_type":"grouped","product_id":"'
+                    . $product->getId() . '"}}',
+                21 => '{"super_product_config":{"product_type":"grouped","product_id":"'
+                    . $product->getId() . '"}}',
+            ],
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_LITE => [
+                $product->getId() => '{"value":{"qty":2}}',
+            ]
+        ];
+
+        foreach ($processModes as $processMode) {
+            $products = $type->processConfiguration($buyRequest, $product, $processMode);
+            foreach ($products as $item) {
+                $productId = $item->getId();
+                $this->assertEquals(
+                    $expectedData[$processMode][$productId],
+                    $item->getCustomOptions()['info_buyRequest']->getValue(),
+                    "Wrong info_buyRequest data for product with id: $productId"
+                );
+            }
+        }
+    }
 }

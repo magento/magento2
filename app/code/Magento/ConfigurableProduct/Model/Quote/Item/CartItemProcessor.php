@@ -7,6 +7,8 @@ namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
 class CartItemProcessor implements CartItemProcessorInterface
 {
@@ -31,21 +33,29 @@ class CartItemProcessor implements CartItemProcessorInterface
     protected $itemOptionValueFactory;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\DataObject\Factory $objectFactory
      * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
      * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
      * @param \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
-        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory,
+        SerializerInterface $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->itemOptionValueFactory = $itemOptionValueFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -73,7 +83,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     public function processOptions(CartItemInterface $cartItem)
     {
         $attributesOption = $cartItem->getProduct()->getCustomOption('attributes');
-        $selectedConfigurableOptions = unserialize($attributesOption->getValue());
+        $selectedConfigurableOptions = $this->serializer->unserialize($attributesOption->getValue());
 
         if (is_array($selectedConfigurableOptions)) {
             $configurableOptions = [];

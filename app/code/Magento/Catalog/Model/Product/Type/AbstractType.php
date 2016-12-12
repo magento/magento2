@@ -162,6 +162,13 @@ abstract class AbstractType
     protected $productRepository;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -173,6 +180,7 @@ abstract class AbstractType
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -184,7 +192,8 @@ abstract class AbstractType
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -195,6 +204,8 @@ abstract class AbstractType
         $this->_filesystem = $filesystem;
         $this->_logger = $logger;
         $this->productRepository = $productRepository;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -394,8 +405,7 @@ abstract class AbstractType
         $product->prepareCustomOptions();
         $buyRequest->unsetData('_processing_params');
         // One-time params only
-        $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
-
+        $product->addCustomOption('info_buyRequest', $this->serializer->serialize($buyRequest->getData()));
         if ($options) {
             $optionIds = array_keys($options);
             $product->addCustomOption('option_ids', implode(',', $optionIds));
@@ -645,7 +655,7 @@ abstract class AbstractType
         $optionArr = [];
         $info = $product->getCustomOption('info_buyRequest');
         if ($info) {
-            $optionArr['info_buyRequest'] = unserialize($info->getValue());
+            $optionArr['info_buyRequest'] = $this->serializer->unserialize($info->getValue());
         }
 
         $optionIds = $product->getCustomOption('option_ids');

@@ -62,6 +62,13 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $groupManagement;
 
+    /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
@@ -90,6 +97,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -104,7 +121,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'groupManagement' => $this->groupManagement,
                 'tierPriceFactory' => $tpFactory,
                 'config' => $scopeConfig,
-                'catalogData' => $this->catalogHelperMock
+                'catalogData' => $this->catalogHelperMock,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -201,7 +219,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function dataProviderWithEmptyOptions()
     {
         return [
-            ['a:0:{}'],
+            ['{}'],
             [''],
             [null],
         ];
@@ -244,7 +262,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         $dataObjectMock->expects($this->once())
             ->method('getValue')
-            ->willReturn('a:1:{i:0;s:1:"1";}');
+            ->willReturn('{"0":1}');
 
         $productTypeMock->expects($this->once())
             ->method('getSelectionsByIds')

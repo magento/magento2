@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use \Magento\Sales\Model\Order;
 
@@ -31,14 +32,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderFactory;
 
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
 
+        $this->serializerMock = $this->getMock(SerializerInterface::class, [], ['unserialize'], '', false);
+
         $arguments = [
             'orderFactory' => $this->orderFactory,
+            'serializer' => $this->serializerMock
         ];
         $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, $arguments);
     }
@@ -172,5 +181,56 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $originalPrice = 5.55;
         $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::ORIGINAL_PRICE, $originalPrice);
         $this->assertEquals($originalPrice, $this->model->getOriginalPrice());
+    }
+
+    /**
+     * Test get product options with serialization
+     *
+     * @param array|string $options
+     * @param array $expectedResult
+     *
+     * @dataProvider getProductOptionsDataProvider
+     */
+    public function testGetProductOptions($options, $expectedResult)
+    {
+        if (is_string($options)) {
+            $this->serializerMock->expects($this->once())
+                ->method('unserialize')
+                ->will($this->returnValue($expectedResult));
+        }
+        $this->model->setData('product_options', $options);
+        $result = $this->model->getProductOptions();
+        $this->assertSame($result, $expectedResult);
+    }
+
+    /**
+     * Data provider for testGetProductOptions
+     *
+     * @return array
+     */
+    public function getProductOptionsDataProvider()
+    {
+        return [
+            'array' => [
+                'options' => [
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ],
+                'expectedResult' => [
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ]
+            ],
+            'serialized' => [
+                'options' => json_encode([
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ]),
+                'expectedResult' => [
+                    'option1' => 'option 1 value',
+                    'option2' => 'option 2 value',
+                ]
+            ]
+        ];
     }
 }
