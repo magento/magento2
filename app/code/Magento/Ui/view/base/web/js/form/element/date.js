@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -166,8 +166,7 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
-            this.momentFormat = (this.options.dateFormat)? this.convertToMomentFormat(this.options.dateFormat) :
-                this.momentFormat;
+            this.momentFormat = (this.options.dateFormat) ? this.convertToMomentFormat(this.options.dateFormat) : this.momentFormat;
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
@@ -189,7 +188,9 @@ define([
          * @returns {String} Moment compatible format
          */
         convertToMomentFormat: function (format){
-            var newFormat = format.replace(/yy|y/gi, 'YYYY'); // replace the year
+            var newFormat;
+
+            newFormat = format.replace(/yy|y/gi, 'YYYY'); // replace the year
             newFormat = newFormat.replace(/dd|d/g, 'DD'); // replace the date
             newFormat = newFormat.replace(/mm|m/g, 'MM'); //replace the month
             return newFormat;
