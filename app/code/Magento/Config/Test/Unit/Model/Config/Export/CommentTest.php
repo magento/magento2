@@ -64,7 +64,6 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->method('getExcludedFields')
             ->willReturn([]);
         $this->assertEmpty($this->model->get());
-
     }
 
     public function testGet()
