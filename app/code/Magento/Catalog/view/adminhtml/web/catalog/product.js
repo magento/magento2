@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 require([
     'jquery'
 ], function ($) {
@@ -9,18 +10,29 @@ require([
 
     window.Product = {};
 
+    /**
+     * @param {String} id
+     * @return {*|jQuery|HTMLElement}
+     */
     function byId(id) {
         return $('#' + id);
     }
 
+    /**
+     * @param {String} toogleIdentifier
+     * @param {String} fieldId
+     */
     function toogleFieldEditMode(toogleIdentifier, fieldId) {
         if ($(toogleIdentifier).is(':checked')) {
-            enableFieldEditMode(fieldId);
+            enableFieldEditMode(fieldId);//eslint-disable-line no-use-before-define
         } else {
-            disableFieldEditMode(fieldId);
+            disableFieldEditMode(fieldId);//eslint-disable-line no-use-before-define
         }
     }
 
+    /**
+     * @param {String} fieldId
+     */
     function disableFieldEditMode(fieldId) {
         var field = byId(fieldId);
 
@@ -35,6 +47,9 @@ require([
         }
     }
 
+    /**
+     * @param {String} fieldId
+     */
     function enableFieldEditMode(fieldId) {
         var field = byId(fieldId);
 
@@ -49,31 +64,47 @@ require([
         }
     }
 
+    /**
+     * On complete disable.
+     */
     function onCompleteDisableInited() {
+        var item;
+
         $.each($('[data-disable]'), function () {
-            var item = $(this).data('disable');
+            item = $(this).data('disable');
             disableFieldEditMode(item);
         });
     }
 
+    /**
+     * @param {String} urlKey
+     */
     function onUrlkeyChanged(urlKey) {
+        var hidden, chbx, oldValue;
+
         urlKey = byId(urlKey);
-        var hidden = urlKey.siblings('input[type=hidden]');
-        var chbx = urlKey.siblings('input[type=checkbox]');
-        var oldValue = chbx.val();
+        hidden = urlKey.siblings('input[type=hidden]');
+        chbx = urlKey.siblings('input[type=checkbox]');
+        oldValue = chbx.val();
 
         chbx.prop('disabled', oldValue === urlKey.val());
         hidden.prop('disabled', chbx.prop('disabled'));
     }
 
+    /**
+     * @param {HTMLElement} element
+     */
     function onCustomUseParentChanged(element) {
+        var useParent, parent;
+
         element = $(element);
-        var useParent = element.val() == 1,
-            parent = element.offsetParent().parent();
+        useParent = element.val() == 1; //eslint-disable-line eqeqeq
+        parent = element.offsetParent().parent();
 
         parent.find('input, select, textarea').each(function (i, el) {
             el = $(el);
-            if (element.prop('id') != el.prop('id')) {
+
+            if (element.prop('id') !== el.prop('id')) {
                 el.prop('disabled', useParent);
             }
         });

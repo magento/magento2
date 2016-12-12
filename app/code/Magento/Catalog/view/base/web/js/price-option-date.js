@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'priceUtils',
@@ -18,41 +19,13 @@ define([
 
     optionHandler.optionHandlers = {};
 
-    $.widget('mage.priceOptionDate', {
-        options: globalOptions,
-
-        /**
-         * Function-initializer of priceOptionDate widget
-         * @private
-         */
-        _create: function initOptionDate() {
-            var field = this.element,
-                form = field.closest(this.options.fromSelector),
-                dropdowns = $(this.options.dropdownsSelector, field),
-                dateOptionId;
-
-            if (dropdowns.length) {
-                dateOptionId = this.options.dropdownsSelector + dropdowns.attr('name');
-
-                optionHandler.optionHandlers[dateOptionId] = onCalendarDropdownChange(dropdowns);
-
-                form.priceOptions(optionHandler);
-
-                dropdowns.data('role', dateOptionId);
-                dropdowns.on('change', onDateChange.bind(this, dropdowns));
-            }
-        }
-    });
-
-    return $.mage.priceOptionDate;
-
     /**
      * Custom handler for Date-with-Dropdowns option type.
      * @param  {jQuery} siblings
      * @return {Function} function that return object { optionHash : optionAdditionalPrice }
      */
     function onCalendarDropdownChange(siblings) {
-        return function (element, optionConfig, form) {
+        return function (element, optionConfig) {
             var changes = {},
                 optionId = utils.findOptionId(element),
                 overhead = optionConfig[optionId].prices,
@@ -68,6 +41,16 @@ define([
 
             return changes;
         };
+    }
+
+    /**
+     * Returns number of days for special month and year
+     * @param  {Number} month
+     * @param  {Number} year
+     * @return {Number}
+     */
+    function getDaysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
     }
 
     /**
@@ -99,21 +82,41 @@ define([
                 options = [];
                 needed = expectedDays - daysNodes.length + 1;
 
-                while (needed--) {
-                    options.push('<option value="' + (expectedDays - needed) + '">' + (expectedDays - needed) + '</option>');
+                while (needed--) { //eslint-disable-line max-depth
+                    options.push(
+                        '<option value="' + (expectedDays - needed) + '">' + (expectedDays - needed) + '</option>'
+                    );
                 }
                 $(options.join('')).insertAfter(daysNodes.last());
             }
         }
     }
 
-    /**
-     * Returns number of days for special month and year
-     * @param  {Number} month
-     * @param  {Number} year
-     * @return {Number}
-     */
-    function getDaysInMonth(month, year) {
-        return new Date(year, month, 0).getDate();
-    }
+    $.widget('mage.priceOptionDate', {
+        options: globalOptions,
+
+        /**
+         * Function-initializer of priceOptionDate widget
+         * @private
+         */
+        _create: function initOptionDate() {
+            var field = this.element,
+                form = field.closest(this.options.fromSelector),
+                dropdowns = $(this.options.dropdownsSelector, field),
+                dateOptionId;
+
+            if (dropdowns.length) {
+                dateOptionId = this.options.dropdownsSelector + dropdowns.attr('name');
+
+                optionHandler.optionHandlers[dateOptionId] = onCalendarDropdownChange(dropdowns);
+
+                form.priceOptions(optionHandler);
+
+                dropdowns.data('role', dateOptionId);
+                dropdowns.on('change', onDateChange.bind(this, dropdowns));
+            }
+        }
+    });
+
+    return $.mage.priceOptionDate;
 });

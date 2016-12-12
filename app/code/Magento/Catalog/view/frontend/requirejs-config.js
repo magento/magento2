@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+var config = { //eslint-disable-line no-unused-vars
     map: {
         '*': {
             compareList:            'Magento_Catalog/js/list',

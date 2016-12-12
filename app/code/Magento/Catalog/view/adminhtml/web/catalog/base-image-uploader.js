@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 /*global alert:true*/
 define([
     'jquery',
@@ -20,8 +21,10 @@ define([
          * @protected
          */
         options: {
-            maxImageUploadCount : 10
+            maxImageUploadCount: 10
         },
+
+        /** @inheritdoc */
         _create: function () {
             var $container = this.element,
                 imageTmpl = mageTemplate(this.element.find('[data-template=image]').html()),
@@ -30,22 +33,25 @@ define([
                 mainClass = 'base-image',
                 maximumImageCount = 5,
                 $fieldCheckBox = $container.closest('[data-attribute-code=image]').find(':checkbox'),
-                isDefaultChecked = $fieldCheckBox.is(':checked');
+                isDefaultChecked = $fieldCheckBox.is(':checked'),
+                findElement, updateVisibility;
 
             if (isDefaultChecked) {
                 $fieldCheckBox.trigger('click');
             }
 
-            var findElement = function (data) {
+            findElement = function (data) {//jscs:ignore jsDoc
                 return $container.find('.image:not(.image-placeholder)').filter(function () {
                     if (!$(this).data('image')) {
                         return false;
                     }
+
                     return $(this).data('image').file === data.file;
                 }).first();
             };
-            var updateVisibility = function () {
+            updateVisibility = function () {//jscs:ignore jsDoc
                 var elementsList = $container.find('.image:not(.removed-item)');
+
                 elementsList.each(function (index) {
                     $(this)[index < maximumImageCount ? 'show' : 'hide']();
                 });
@@ -78,12 +84,13 @@ define([
             });
 
             $galleryContainer.on('moveElement', function (event, data) {
-                var $element = findElement(data.imageData);
+                var $element = findElement(data.imageData),
+                    $after;
 
                 if (data.position === 0) {
                     $container.prepend($element);
                 } else {
-                    var $after = $container.find('.image').eq(data.position);
+                    $after = $container.find('.image').eq(data.position);
 
                     if (!$element.is($after)) {
                         $element.insertAfter($after);
@@ -93,8 +100,10 @@ define([
             });
 
             $container.on('click', '[data-role=make-base-button]', function (event) {
+                var data;
+
                 event.preventDefault();
-                var data = $(event.target).closest('.image').data('image');
+                data = $(event.target).closest('.image').data('image');
                 $galleryContainer.productGallery('setBase', data);
             });
 
@@ -108,7 +117,7 @@ define([
                 items: '.image:not(.image-placeholder)',
                 distance: 8,
                 tolerance: 'pointer',
-                stop: function (event, data) {
+                stop: function (event, data) {//jscs:ignore jsDoc
                     $galleryContainer.trigger('setPosition', {
                         imageData: data.item.data('image'),
                         position: $container.find('.image').index(data.item)
@@ -122,7 +131,7 @@ define([
                 dropZone: $dropPlaceholder.closest('[data-attribute-code]'),
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 maxFileSize: this.element.data('maxFileSize'),
-                done: function (event, data) {
+                done: function (event, data) {//jscs:ignore jsDoc
                     $dropPlaceholder.find('.progress-bar').text('').removeClass('in-progress');
 
                     if (!data.result) {
@@ -137,13 +146,13 @@ define([
                         });
                     }
                 },
-                change: function(e, data) {
+                change: function (e, data) {
                     if (data.files.length > this.options.maxImageUploadCount) {
                         $('body').notification('clear').notification('add', {
                             error: true,
-                            message: $.mage.__('You can\'t upload more than ' + this.options.maxImageUploadCount
-                                + ' images in one time'),
-                            insertMethod: function(message) {
+                            message: $.mage.__('You can\'t upload more than ' + this.options.maxImageUploadCount +
+                                ' images in one time'),
+                            insertMethod: function (message) {//jscs:ignore jsDoc
                                 $('.page-main-actions').after(message);
                             }
                         });
@@ -151,21 +160,22 @@ define([
                         return false;
                     }
                 }.bind(this),
-                add: function (event, data) {
+                add: function (event, data) {//jscs:ignore jsDoc
                     $(this).fileupload('process', data).done(function () {
                         data.submit();
                     });
                 },
-                progress: function (e, data) {
+                progress: function (e, data) {//jscs:ignore jsDoc
                     var progress = parseInt(data.loaded / data.total * 100, 10);
+
                     $dropPlaceholder.find('.progress-bar').addClass('in-progress').text(progress + '%');
                 },
-                start: function (event) {
+                start: function (event) {//jscs:ignore jsDoc
                     var uploaderContainer = $(event.target).closest('.image-placeholder');
 
                     uploaderContainer.addClass('loading');
                 },
-                stop: function (event) {
+                stop: function (event) {//jscs:ignore jsDoc
                     var uploaderContainer = $(event.target).closest('.image-placeholder');
 
                     uploaderContainer.removeClass('loading');
