@@ -142,25 +142,22 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testGetAppliedTaxes()
-    {
-        $result = ['result'];
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->willReturn($result);
-
-        $this->assertEquals($result, $this->address->getAppliedTaxes());
-    }
-
-    public function testSetAppliedTaxes()
+    public function testSetAndGetAppliedTaxes()
     {
         $data = ['data'];
+        $result = json_encode($data);
 
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($data)
-            ->willReturn('result');
+            ->willReturn($result);
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($result)
+            ->willReturn($data);
 
         $this->assertInstanceOf(\Magento\Quote\Model\Quote\Address::class, $this->address->setAppliedTaxes($data));
+        $this->assertEquals($data, $this->address->getAppliedTaxes());
     }
 }
