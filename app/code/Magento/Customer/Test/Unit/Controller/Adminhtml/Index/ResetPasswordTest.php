@@ -141,7 +141,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->messageManager = $this->getMockBuilder(
             'Magento\Framework\Message\Manager'
         )->disableOriginalConstructor()->setMethods(
-            ['addSuccess', 'addMessage', 'addException']
+            ['addSuccess', 'addMessage', 'addException', 'addErrorMessage']
         )->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
@@ -328,6 +328,56 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addMessage')
             ->with($error);
+
+        $this->_testedObject->execute();
+    }
+
+    public function testResetPasswordActionSecurityException()
+    {
+        $securityText = 'Security violation.';
+        $exception = new \Magento\Framework\Exception\SecurityViolationException(__($securityText));
+        $customerId = 1;
+        $email = 'some@example.com';
+        $websiteId = 1;
+
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
+        );
+        $customer = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\CustomerInterface::class,
+            ['getId', 'getEmail', 'getWebsiteId']
+        );
+        $customer->expects($this->once())->method('getEmail')->will($this->returnValue($email));
+        $customer->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
+        $this->_customerRepositoryMock->expects(
+            $this->once()
+        )->method(
+            'getById'
+        )->with(
+            $customerId
+        )->will(
+            $this->returnValue($customer)
+        );
+        $this->_customerAccountManagementMock->expects(
+            $this->once()
+        )->method(
+            'initiatePasswordReset'
+        )->willThrowException($exception);
+
+        $this->messageManager->expects(
+            $this->once()
+        )->method(
+            'addErrorMessage'
+        )->with(
+            $this->equalTo($exception->getMessage())
+        );
 
         $this->_testedObject->execute();
     }

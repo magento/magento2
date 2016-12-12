@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Helper;
 
+use Magento\Braintree\Model\Adminhtml\System\Config\Country as CountryConfig;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Braintree\Model\Adminhtml\System\Config\Country as CountryConfig;
 
@@ -51,6 +52,7 @@ class Country
                 ->loadData()
                 ->toOptionArray(false);
         }
+
         return $this->countries;
     }
 }

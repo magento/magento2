@@ -167,6 +167,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token);
         $request->setData('amt', $this->formatPrice($amount));
+        $request->setData('currency', $order->getBaseCurrencyCode());
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);

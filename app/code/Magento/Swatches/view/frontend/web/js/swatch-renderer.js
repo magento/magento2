@@ -169,6 +169,9 @@ define([
             //selector of product images gallery wrapper
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
 
+            // selector of category product tile wrapper
+            selectorProductTile: '.product-item',
+
             // number of controls to show (false or zero = show all)
             numberToShow: false,
 
@@ -190,11 +193,18 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
-            //
-            onlyMainImg: false,
+            // whether swatches are rendered in product list or on product page
+            inProductList: false,
 
-            // sly-old-price block selector
-            slyOldPriceSelector: '.sly-old-price'
+            /**
+             * Defines the mechanism of how images of a gallery should be
+             * updated when user switches between configurations of a product.
+             *
+             * As for now value of this option can be either 'replace' or 'prepend'.
+             *
+             * @type {String}
+             */
+            gallerySwitchStrategy: 'replace'
         },
 
         /**
@@ -239,17 +249,17 @@ define([
                     this.element.parents('.product-item-info');
 
             if (isProductViewExist) {
-                gallery.on('gallery:loaded', function () {
-                    var galleryObject = gallery.data('gallery');
-
-                    options.mediaGalleryInitial = galleryObject.returnCurrentImages();
-                });
+                gallery.data('gallery') ?
+                    this._onGalleryLoaded(gallery) :
+                    gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
             } else {
                 options.mediaGalleryInitial = [{
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
-            this.productForm = this.element.parents(this.options.selectorProduct).find('form:first');
+
+            this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
+            this.inProductList = this.productForm.length > 0;
         },
 
         /**
@@ -283,7 +293,7 @@ define([
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
 
-                if ($widget.productForm) {
+                if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
                 }
@@ -501,13 +511,16 @@ define([
          * @private
          */
         _OnClick: function ($this, $widget) {
-
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
+                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.inProductList) {
                 $input = $widget.productForm.find(
                     '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
                 );
+            }
 
             if ($this.hasClass('disabled')) {
                 return;
@@ -546,9 +559,13 @@ define([
         _OnChange: function ($this, $widget) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 attributeId = $parent.attr('attribute-id'),
+                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+
+            if ($widget.inProductList) {
                 $input = $widget.productForm.find(
                     '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
                 );
+            }
 
             if ($this.val() > 0) {
                 $parent.attr('option-selected', $this.val());
@@ -690,12 +707,6 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
-
-            if (result.oldPrice.amount !== result.finalPrice.amount) {
-                $(this.options.slyOldPriceSelector).show();
-            } else {
-                $(this.options.slyOldPriceSelector).hide();
-            }
         },
 
         /**
@@ -908,26 +919,27 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
-                updateImg,
-                imagesToUpdate,
+                initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
-                item;
+                imagesToUpdate,
+                isInitial;
 
             if (isProductViewExist) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+                isInitial = _.isEqual(imagesToUpdate, initialImages);
 
-                if (this.options.onlyMainImg) {
-                    updateImg = imagesToUpdate.filter(function (img) {
-                        return img.isMain;
-                    });
-                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
-                    gallery.updateDataByIndex(0, item);
+                if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
+                    imagesToUpdate = imagesToUpdate.concat(initialImages);
+                }
 
-                    gallery.seek(1);
-                } else {
-                    gallery.updateData(imagesToUpdate);
+                gallery.updateData(imagesToUpdate);
+
+                if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
                 }
+
+                gallery.first();
+
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -979,6 +991,17 @@ define([
             }
 
             return selectedAttributes;
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         *
+         * @param {HTMLElement} element - DOM element associated with a gallery.
+         */
+        _onGalleryLoaded: function (element) {
+            var galleryObject = element.data('gallery');
+
+            this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
         }
     });
 

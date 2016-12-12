@@ -1332,4 +1332,27 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->setTypeId('typeId');
         $this->model->getTypeInstance();
     }
+
+    public function testGetOptionById()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn($optionId);
+        $this->assertEquals($optionMock, $this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdWithWrongOptionId()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn(200);
+        $this->assertNull($this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdForProductWithoutOptions()
+    {
+        $this->assertNull($this->model->getOptionById(100));
+    }
 }
