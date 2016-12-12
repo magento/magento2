@@ -23,7 +23,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $orderSessionId;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderSessionId = $this->getMockBuilder(OrderSessionId::class)
             ->disableOriginalConstructor()
