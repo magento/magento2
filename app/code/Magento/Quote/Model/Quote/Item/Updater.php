@@ -33,18 +33,29 @@ class Updater
     protected $objectFactory;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param ProductFactory $productFactory
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      */
     public function __construct(
         ProductFactory $productFactory,
         FormatInterface $localeFormat,
-        ObjectFactory $objectFactory
+        ObjectFactory $objectFactory,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;
         $this->objectFactory = $objectFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -104,7 +115,7 @@ class Updater
         if ($infoBuyRequest) {
             $infoBuyRequest->setCustomPrice($itemPrice);
 
-            $infoBuyRequest->setValue(serialize($infoBuyRequest->getData()));
+            $infoBuyRequest->setValue($this->serializer->serialize($infoBuyRequest->getData()));
             $infoBuyRequest->setCode('info_buyRequest');
             $infoBuyRequest->setProduct($item->getProduct());
 
@@ -128,7 +139,7 @@ class Updater
         if ($infoBuyRequest->hasData('custom_price')) {
             $infoBuyRequest->unsetData('custom_price');
 
-            $infoBuyRequest->setValue(serialize($infoBuyRequest->getData()));
+            $infoBuyRequest->setValue($this->serializer->serialize($infoBuyRequest->getData()));
             $infoBuyRequest->setCode('info_buyRequest');
             $infoBuyRequest->setProduct($item->getProduct());
             $item->addOption($infoBuyRequest);

@@ -36,20 +36,31 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     protected $escaper;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
         $this->escaper = $escaper;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($context);
     }
 
@@ -121,7 +132,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
             // get and add bundle selections collection
             $selectionsQuoteItemOption = $item->getOptionByCode('bundle_selection_ids');
 
-            $bundleSelectionIds = unserialize($selectionsQuoteItemOption->getValue());
+            $bundleSelectionIds = $this->serializer->unserialize($selectionsQuoteItemOption->getValue());
 
             if (!empty($bundleSelectionIds)) {
                 $selectionsCollection = $typeInstance->getSelectionsByIds($bundleSelectionIds, $product);
