@@ -8,6 +8,7 @@ namespace Magento\Framework\DB;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\FieldDataConverter\QueryModifierInterface;
 
 /**
  * Convert field data from one representation to another
@@ -45,13 +46,22 @@ class FieldDataConverter
      * @param string $table
      * @param string $identifier
      * @param string $field
+     * @param QueryModifierInterface|null $queryModifier
      * @return void
      */
-    public function convert(AdapterInterface $connection, $table, $identifier, $field)
-    {
+    public function convert(
+        AdapterInterface $connection,
+        $table,
+        $identifier,
+        $field,
+        QueryModifierInterface $queryModifier = null
+    ) {
         $select = $connection->select()
             ->from($table, [$identifier, $field])
             ->where($field . ' IS NOT NULL');
+        if ($queryModifier) {
+            $queryModifier->modify($select);
+        }
         $iterator = $this->queryGenerator->generate($identifier, $select);
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
