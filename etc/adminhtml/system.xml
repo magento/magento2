@@ -16,17 +16,17 @@
                 <field id="enable" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enable this Solution</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <config_path>siginifyd/active</config_path>
+                    <config_path>fraud_protection/siginifyd/active</config_path>
                 </field>
                 <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>API key</label>
+                    <label>API Key</label>
                     <comment><![CDATA[You will find this in <a href="http://signifyd.com/settings/teams" target="_blank">http://signifyd.com/settings/teams</a> after you create a Signifyd account]]></comment>
                     <config_path>signifyd/api_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="api_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>API URL</label>
-                    <config_path>signifyd/api_url</config_path>
+                    <config_path>fraud_protection/signifyd/api_url</config_path>
                     <comment>
                         Don’t change unless asked to do so.
                     </comment>
@@ -34,7 +34,7 @@
                 <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <config_path>signifyd/debug</config_path>
+                    <config_path>fraud_protection/signifyd/debug</config_path>
                 </field>
             </group>
         </section>
