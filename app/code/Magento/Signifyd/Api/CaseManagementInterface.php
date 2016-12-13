@@ -18,7 +18,7 @@ interface CaseManagementInterface
     /**
      * Creates new Case entity
      * @param string $orderId
-     * @return void
+     * @return CaseInterface
      */
     public function create($orderId);
 
