@@ -165,5 +165,14 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryBreadcrumbs" />
         </variation>
+        <variation name="CreateCategoryEntityTestVariation10_InCustomRootCategory" summary="Create category in the custom root category that is used for custom website" ticketId="MAGETWO-12938">
+            <data name="addCategory" xsi:type="string">addSubcategory</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">root_category</data>
+            <data name="category/data/is_active" xsi:type="string">Yes</data>
+            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomWebsite" />
+        </variation>
     </testCase>
 </config>
