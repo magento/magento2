@@ -58,7 +58,7 @@
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::low_stock_product</data>
             <data name="configData" xsi:type="string">decrease_stock_after_order_no</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductsQtyAfterReorder" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductsQtyAfterReorder" />
         </variation>
     </testCase>
 </config>

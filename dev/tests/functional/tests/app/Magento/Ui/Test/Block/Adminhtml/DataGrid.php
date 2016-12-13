@@ -95,16 +95,27 @@ class DataGrid extends Grid
     protected $columnHeader = './/*[@data-role="grid-wrapper"]//th/span[.="%s"]';
 
     /**
+     * Grid row xpath locator.
+     *
      * @var string
      */
-    protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
+    protected $rowById = ".//tr[td//input[@data-action='select-row' and @value='%s']]";
+
+    /**
+     * Column header number.
+     *
+     * @var string
+     */
+    protected $columnNumber = ".//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th";
+
+    /**
+     * Cell number.
+     *
+     * @var string
+     */
+    protected $cellByHeader = "//td[%s+1]";
 
     // @codingStandardsIgnoreStart
-    /**
-     * @var string
-     */
-    private $cellByHeader = "//td[count(//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th)+1]";
-
     /**
      * Admin data grid header selector.
      *
@@ -434,7 +445,12 @@ class DataGrid extends Grid
     {
         $this->waitLoader();
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
-        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
+        $columnNumber = count($this->_rootElement->getElements(
+            sprintf($this->columnNumber, $headerLabel),
+            Locator::SELECTOR_XPATH)
+        );
+        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $columnNumber);
+
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
     }
 

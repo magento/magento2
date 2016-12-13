@@ -61,6 +61,13 @@ class SuggestElement extends SimpleElement
     protected $closeButton = '[data-action="close-advanced-select"]';
 
     /**
+     * Searched count.
+     *
+     * @var string
+     */
+    protected $searchedCount = '[class*=search-count]';
+
+    /**
      * Set value.
      *
      * @param string $value
@@ -77,9 +84,10 @@ class SuggestElement extends SimpleElement
         }
         $this->keys([$value]);
         $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+        $searchedCountElements = $this->find($this->searchedCount);
         $this->waitUntil(
-            function () use ($searchedItem) {
-                return $searchedItem->isVisible();
+            function () use ($searchedCountElements) {
+                return $searchedCountElements->isVisible() ? true : null;
             }
         );
         $searchedItem->click();

@@ -182,24 +182,7 @@
             </field>
         </dataset>
 
-        <dataset name="with_percent_custom_option">
-            <field name="options" xsi:type="array">
-                <item name="custom_options" xsi:type="array">
-                    <item name="0" xsi:type="array">
-                        <item name="title" xsi:type="string">attribute_key_0</item>
-                        <item name="value" xsi:type="string">option_key_1</item>
-                    </item>
-                </item>
-            </field>
-            <field name="qty" xsi:type="string">1</field>
-            <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">560.78</item>
-                <item name="qty" xsi:type="string">1</item>
-                <item name="subtotal" xsi:type="string">560.78</item>
-            </field>
-        </dataset>
-
-        <dataset name="text_and_two_custrom_options">
+        <dataset name="text_and_two_custom_options">
             <field name="options" xsi:type="array">
                 <item name="custom_options" xsi:type="array">
                     <item name="0" xsi:type="array">

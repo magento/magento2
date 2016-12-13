@@ -75,7 +75,6 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation4" summary="Create bundle product with out of stock simple product" ticketId="MAGETWO-12801">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create fixed bundle</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>

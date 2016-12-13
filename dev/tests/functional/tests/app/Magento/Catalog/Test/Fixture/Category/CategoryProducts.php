@@ -50,7 +50,7 @@ class CategoryProducts extends DataSource
         }
     }
 
-    /**
+    /**\
      * Return products.
      *
      * @return array

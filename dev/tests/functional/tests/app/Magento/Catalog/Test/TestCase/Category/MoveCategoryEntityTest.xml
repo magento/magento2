@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Category\MoveCategoryEntityTest" summary="Move category from one to another" ticketId="MAGETWO-27319">
         <variation name="MoveCategoryEntityTestVariation1">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="childCategory/dataset" xsi:type="string">three_nested_categories</data>
             <data name="parentCategory/dataset" xsi:type="string">default</data>
             <data name="nestingLevel" xsi:type="string">3</data>

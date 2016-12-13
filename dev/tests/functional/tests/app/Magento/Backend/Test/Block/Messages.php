@@ -85,6 +85,24 @@ class Messages extends Block
     }
 
     /**
+     * Get all notice messages which are present on the page.
+     *
+     * @return array
+     */
+    public function getNoticeMessages()
+    {
+        $this->waitForElementVisible($this->noticeMessage);
+        $elements = $this->_rootElement->getElements($this->noticeMessage);
+
+        $messages = [];
+        foreach ($elements as $element) {
+            $messages[] = $element->getText();
+        }
+
+        return $messages;
+    }
+
+    /**
      * Get last success message which is present on the page.
      *
      * @return string

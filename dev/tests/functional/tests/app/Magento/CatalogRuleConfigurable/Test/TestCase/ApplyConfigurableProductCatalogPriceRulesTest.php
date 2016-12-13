@@ -16,9 +16,8 @@ use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Preconditions:
- * 1. Execute before each variation:
- *  - Delete all active catalog price rules
- *  - Create catalog price rule from dataset using Curl
+ * 1. Delete all active catalog price rules.
+ * 2. Create catalog price rule from dataset using Curl.
  *
  * Steps:
  * 1. Apply all created rules.
@@ -34,7 +33,7 @@ class ApplyConfigurableProductCatalogPriceRulesTest extends ApplyCatalogPriceRul
      * Add attribute_id to catalog price rule.
      *
      * @param FixtureInterface $product
-     * @return array
+     * @return array|null
      */
     protected function getAttribute(FixtureInterface $product)
     {

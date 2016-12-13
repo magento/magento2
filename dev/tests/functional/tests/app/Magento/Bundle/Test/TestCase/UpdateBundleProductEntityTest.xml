@@ -86,8 +86,6 @@
         <variation name="UpdateBundleProductEntityTestVariation6" summary="Verify data overrirding on Store View level" ticketId="MAGETWO-50642">
             <data name="originalProduct/dataset" xsi:type="string">bundle_fixed_product</data>
             <data name="storeDataset" xsi:type="string">custom</data>
-            <data name="storesCount" xsi:type="number">2</data>
-            <data name="storeIndexToUpdate" xsi:type="number">1</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">fixed_with_custom_title</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleOptionTitleOnStorefront" />

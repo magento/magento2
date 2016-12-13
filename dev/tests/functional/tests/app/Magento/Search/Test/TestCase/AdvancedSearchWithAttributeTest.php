@@ -387,6 +387,8 @@ class AdvancedSearchWithAttributeTest extends Injectable
         $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $this->attributeForSearch]);
         $this->attributeNewPage->getAttributeForm()->fill($this->attributeDisable);
         $this->attributeNewPage->getPageActions()->save();
+        $this->indexManagement->open();
+        $this->indexManagement->getMainBlock()->massaction([], 'Update on Save', false, 'Select All');
         $this->cli->reindex();
     }
 }

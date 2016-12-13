@@ -11,6 +11,7 @@ use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
@@ -23,7 +24,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
  *
  * @ZephyrId MAGETWO-45833
  */
-class InvalidationOnScheduledIndexingTest extends Injectable
+class CacheStatusOnScheduledIndexingTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
@@ -58,57 +59,67 @@ class InvalidationOnScheduledIndexingTest extends Injectable
     private $fixtureFactory;
 
     /**
+     * Cli command to do operations with cache.
+     *
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * Inject pages.
      *
      * @param IndexManagement $indexManagement
      * @param CatalogCategoryEdit $categoryEdit
      * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
+     * @param Cache $cache
      * @return void
      */
     public function __inject(
         IndexManagement $indexManagement,
         CatalogCategoryEdit $categoryEdit,
         BrowserInterface $browser,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        Cache $cache
     ) {
         $this->indexManagement = $indexManagement;
         $this->categoryEdit = $categoryEdit;
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
+        $this->cache = $cache;
     }
 
     /**
      * Create category with products and verify cache invalidation.
      *
+     * @param Category $initialCategory
      * @param Category $category
-     * @param string $productsList
      * @return array
      */
-    public function test(Category $category, $productsList)
+    public function test(Category $initialCategory, Category $category)
     {
-        //Preconditions
         $this->indexManagement->open();
         $this->indexManagement->getMainBlock()->massaction([], 'Update by Schedule', false, 'Select All');
-        $category->persist();
+        $initialCategory->persist();
+        $this->cache->flush();
 
-        //Steps
-        $this->browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
-        $categoryFixture = $this->fixtureFactory->createByCode(
-            'category',
-            [
-                'data' => array_merge(
-                    $category->getData(),
-                    ['category_products' => ['dataset' => $productsList]]
-                )
-            ]
-        );
-        $this->categoryEdit->open(['id' => $category->getId()]);
-        $this->categoryEdit->getEditForm()->fill($categoryFixture);
+        $this->browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
+        $this->categoryEdit->open(['id' => $initialCategory->getId()]);
+        $this->categoryEdit->getEditForm()->fill($category);
         $this->categoryEdit->getFormPageActions()->save();
 
+        $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
         return [
-            'category' => $categoryFixture,
+            'category' => $this->fixtureFactory->createByCode(
+                'category',
+                [
+                    'data' => array_merge(
+                        $initialCategory->getData(),
+                        $category->getData(),
+                        ['category_products' => ['products' => $products]]
+                    )
+                ]
+            ),
         ];
     }
 

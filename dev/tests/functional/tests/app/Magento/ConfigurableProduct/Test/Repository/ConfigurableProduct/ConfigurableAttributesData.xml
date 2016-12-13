@@ -440,42 +440,6 @@
             </field>
         </dataset>
 
-        <dataset name="two_options_with_assigned_product_tier_price">
-            <field name="attributes_data" xsi:type="array">
-                <item name="attribute_key_0" xsi:type="array">
-                    <item name="options" xsi:type="array">
-                        <item name="option_key_0" xsi:type="array">
-                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
-                            <item name="pricing_value" xsi:type="string">560</item>
-                            <item name="include" xsi:type="string">Yes</item>
-                        </item>
-                        <item name="option_key_1" xsi:type="array">
-                            <item name="label" xsi:type="string">option_key_2_%isolation%</item>
-                            <item name="pricing_value" xsi:type="string">10</item>
-                            <item name="include" xsi:type="string">Yes</item>
-                        </item>
-                    </item>
-                </item>
-            </field>
-            <field name="attributes" xsi:type="array">
-                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::attribute_type_dropdown_two_options</item>
-            </field>
-            <field name="products" xsi:type="array">
-                <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::default</item>
-                <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::simple_with_tier_price</item>
-            </field>
-            <field name="matrix" xsi:type="array">
-                <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="qty" xsi:type="string">10</item>
-                    <item name="weight" xsi:type="string">1</item>
-                </item>
-                <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="qty" xsi:type="string">20</item>
-                    <item name="weight" xsi:type="string">1</item>
-                </item>
-            </field>
-        </dataset>
-
         <dataset name="two_options_with_assigned_product_special_price_2">
             <field name="attributes_data" xsi:type="array">
                 <item name="attribute_key_0" xsi:type="array">
@@ -499,6 +463,42 @@
             <field name="products" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::product_with_price_79_99</item>
                 <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::product_with_price_20_01</item>
+            </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">10</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">20</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="two_options_with_assigned_product_tier_price">
+            <field name="attributes_data" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">560</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_2_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">10</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="attributes" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::attribute_type_dropdown_two_options</item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::default</item>
+                <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::simple_with_tier_price</item>
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
@@ -686,6 +686,12 @@
             <field name="attributes" xsi:type="array">
                 <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::attribute_type_dropdown_one_option</item>
             </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">1</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+            </field>
         </dataset>
 
         <dataset name="two_options_with_fixed_price">
@@ -823,42 +829,6 @@
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_2" xsi:type="array">
-                    <item name="qty" xsi:type="string">20</item>
-                    <item name="weight" xsi:type="string">1</item>
-                </item>
-            </field>
-        </dataset>
-
-        <dataset name="temp_dataset_configurable">
-            <field name="attributes_data" xsi:type="array">
-                <item name="attribute_key_0" xsi:type="array">
-                    <item name="options" xsi:type="array">
-                        <item name="option_key_0" xsi:type="array">
-                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
-                            <item name="pricing_value" xsi:type="string">79.99</item>
-                            <item name="include" xsi:type="string">Yes</item>
-                        </item>
-                        <item name="option_key_1" xsi:type="array">
-                            <item name="label" xsi:type="string">option_key_2_%isolation%</item>
-                            <item name="pricing_value" xsi:type="string">20.01</item>
-                            <item name="include" xsi:type="string">Yes</item>
-                        </item>
-                    </item>
-                </item>
-            </field>
-            <field name="attributes" xsi:type="array">
-                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::attrebutes_temp</item>
-            </field>
-            <field name="products" xsi:type="array">
-                <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::product_temp_1</item>
-                <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::product_temp_2</item>
-            </field>
-            <field name="matrix" xsi:type="array">
-                <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="qty" xsi:type="string">10</item>
-                    <item name="weight" xsi:type="string">1</item>
-                </item>
-                <item name="attribute_key_0:option_key_1" xsi:type="array">
                     <item name="qty" xsi:type="string">20</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>

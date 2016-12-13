@@ -3,22 +3,20 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Constraint;
+namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Catalog\Test\Constraint\AssertProductForm;
-use Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm;
+use Magento\Sales\Test\Constraint\AssertProductsQtyAfterOrderCancel;
 
 /**
  * Assert that products quantity is correct after reorder.
  */
-class AssertProductsQtyAfterReorder extends AbstractConstraint
+class AssertConfigurableProductsQtyAfterReorder extends AbstractConstraint
 {
     /**
      * Assert products quantity after placing new order with the same products.

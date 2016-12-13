@@ -284,6 +284,9 @@
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="dob" xsi:type="string">01/01/1990</field>
             <field name="gender" xsi:type="string">Male</field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
     </repository>
 </config>

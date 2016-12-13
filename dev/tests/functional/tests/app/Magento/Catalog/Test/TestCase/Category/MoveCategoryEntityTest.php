@@ -12,10 +12,8 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateCategoryEntity
- *
  * Test Flow:
- * 1. Login as admin
+ * 1. Log in to Backend.
  * 2. Navigate to the Products>Inventory>Categories
  * 3. Click on 'Add Category' button
  * 4. Fill out all data according to data set
@@ -69,7 +67,7 @@ class MoveCategoryEntityTest extends Injectable
      */
     public function test(Category $childCategory, Category $parentCategory)
     {
-        //Preconditions:
+        // Preconditions:
         $parentCategory->persist();
         $childCategory->persist();
 

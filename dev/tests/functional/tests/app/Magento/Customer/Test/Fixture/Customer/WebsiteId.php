@@ -75,7 +75,7 @@ class WebsiteId extends DataSource
 
         if (isset($this->fixtureData['website'])) {
             $this->website = $this->fixtureData['website'];
-            $this->data[] = $this->fixtureData['website']->getName();
+            $this->data = $this->fixtureData['website']->getName();
         } else {
             if (isset($this->fixtureData['dataset'])) {
                 $store = $this->fixtureFactory->createByCode('store', $this->fixtureData);
@@ -87,7 +87,7 @@ class WebsiteId extends DataSource
                 $website = $store->getDataFieldConfig('group_id')['source']
                     ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
 
-                $this->data[] = $website->getName();
+                $this->data = $website->getName();
                 $this->website = $website;
                 $this->store = $store;
             }

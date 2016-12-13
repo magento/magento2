@@ -69,5 +69,6 @@ class ValidateEmailOnCheckoutTest extends Injectable
 
         $checkoutOnepage->open();
         $checkoutOnepage->getShippingBlock()->fill($customer);
+        $checkoutOnepage->getShippingMethodBlock()->clickContinue();
     }
 }

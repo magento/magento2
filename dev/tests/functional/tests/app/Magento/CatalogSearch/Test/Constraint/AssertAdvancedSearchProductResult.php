@@ -63,7 +63,7 @@ class AssertAdvancedSearchProductResult extends AbstractConstraint
     }
 
     /**
-     * Returns array with founded products.
+     * Returns array with found products.
      *
      * @param AdvancedResult $resultPage
      * @param array $allProducts

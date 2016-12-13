@@ -38,10 +38,10 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRuleForConfigurableProductWithAssignedSimpleProducts" summary="Apply Catalog Rule For Configurable Product With Custom Options" ticketId="MAGETWO-23042">
-            <data name="products/0" xsi:type="string">configurableProduct::first_product_with_custom_option_1</data>
-            <data name="products/1" xsi:type="string">configurableProduct::first_product_with_custom_option_2</data>
-            <data name="products/2" xsi:type="string">configurableProduct::second_product_with_custom_option_1</data>
-            <data name="products/3" xsi:type="string">configurableProduct::second_product_with_custom_option_2</data>
+            <data name="products/0" xsi:type="string">configurableProduct::first_product_with_custom_options_and_option_key_1</data>
+            <data name="products/1" xsi:type="string">configurableProduct::first_product_with_custom_options_and_option_key_2</data>
+            <data name="products/2" xsi:type="string">configurableProduct::second_product_with_custom_options_and_option_key_1</data>
+            <data name="products/3" xsi:type="string">configurableProduct::second_product_with_custom_options_and_option_key_2</data>
             <data name="customer/dataset" xsi:type="string">customer_US</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">default</data>
             <data name="catalogRules/0/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>

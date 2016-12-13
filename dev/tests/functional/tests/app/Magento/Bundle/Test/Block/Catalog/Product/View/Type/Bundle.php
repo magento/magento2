@@ -43,13 +43,6 @@ class Bundle extends Block
     protected $optionElement = './div[contains(@class,"option")][%d]';
 
     /**
-     * Option hidden input selector.
-     *
-     * @var string
-     */
-    protected $optionHiddenInput = '.control span.product-name';
-
-    /**
      * Selector for title of option
      *
      * @var string
@@ -99,6 +92,13 @@ class Bundle extends Block
     private $product;
 
     /**
+     * Option index.
+     *
+     * @var null|int
+     */
+    protected $optionIndex;
+
+    /**
      * Fill bundle option on frontend add click "Add to cart" button
      *
      * @param BundleProduct $product
@@ -128,11 +128,12 @@ class Bundle extends Block
         $listFormOptions = $this->getListOptions();
         $formOptions = [];
 
-        foreach ($bundleOptions as $option) {
+        foreach ($bundleOptions as $index => $option) {
             $title = $option['title'];
             if (!isset($listFormOptions[$title])) {
                 throw new \Exception("Can't find option: \"{$title}\"");
             }
+            $this->optionIndex = $index;
 
             /** @var SimpleElement $optionElement */
             $optionElement = $listFormOptions[$title];
@@ -191,7 +192,7 @@ class Bundle extends Block
     protected function getDropdownData(SimpleElement $option)
     {
         if ($this->isOneProductInStock($this->product)) {
-            return ['options' => $this->getPlantTextData()];
+            return ['options' => $this->getFlatTextData()];
         }
         $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
         // Skip "Choose option ..."(option #1)
@@ -305,14 +306,13 @@ class Bundle extends Block
     {
         foreach ($bundleOptions as $option) {
             $selector = sprintf($this->bundleOptionBlock, $option['title']);
-            $optionElement = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
-            //We need to bypass preselected options that can't be changed.
-            if (!$optionElement->find($this->optionHiddenInput)->isVisible()) {
+            $useDefault = isset($option['useDefault']) ? (bool) $option['useDefault'] : false;
+            if (!$useDefault) {
                 /** @var Option $optionBlock */
                 $optionBlock = $this->blockFactory->create(
                     'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\\'
                     . $this->optionNameConvert($option['frontend_type']),
-                    ['element' => $optionElement]
+                    ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
                 );
                 $optionBlock->fillOption($option['value']);
             }
@@ -340,7 +340,7 @@ class Bundle extends Block
     private function isOneProductInStock(BundleProduct $products)
     {
         $result = [];
-        $products = $products->getBundleSelections()['products'][0];
+        $products = $products->getBundleSelections()['products'][$this->optionIndex];
         foreach ($products as $product) {
             $status = $product->getData()['quantity_and_stock_status']['is_in_stock'];
             if ($status == 'In Stock') {
@@ -358,7 +358,7 @@ class Bundle extends Block
      *
      * @return array
      */
-    private function getPlantTextData()
+    private function getFlatTextData()
     {
         $productPrice = $this->_rootElement->find($this->assignedProductPrice)->getText();
         $productPrice = preg_replace("/[^0-9.,]/", '', $productPrice);

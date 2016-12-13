@@ -7,12 +7,13 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos;
 
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Class Grid
  * Credit memos grid on order view page
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends DataGrid
 {
     /**
      * Base part of row locator template for getRow() method.

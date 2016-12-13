@@ -7,12 +7,13 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments;
 
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Class Grid
  * Shipments grid on order view page
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends DataGrid
 {
     /**
      * Locator value for link in action column
@@ -42,7 +43,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="real_shipment_id"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'qty_from' => [
             'selector' => '[name="total_qty[from]"]',

@@ -84,17 +84,12 @@ class UpdateBundleProductEntityTest extends Injectable
      * @param int $storesCount [optional]
      * @param int $storeIndexToUpdate [optional]
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function test(
         BundleProduct $product,
         BundleProduct $originalProduct,
-        $storeDataset = '',
-        $storesCount = 0,
-        $storeIndexToUpdate = null
+        $storeDataset = ''
     ) {
-        $this->markTestIncomplete('MAGETWO-56584: [FT] Custom options are not created for product in test');
         // Preconditions
         $originalProduct->persist();
         $originalCategory = $originalProduct->hasData('category_ids')
@@ -104,19 +99,10 @@ class UpdateBundleProductEntityTest extends Injectable
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
             : $originalCategory;
 
-        $stores = [];
-        $optionTitles = [];
         if ($storeDataset) {
-            for ($i = 0; $i < $storesCount; $i++) {
-                $stores[$i] = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
-                $stores[$i]->persist();
-                $optionTitles[$stores[$i]->getStoreId()] =
-                    $originalProduct->getBundleSelections()['bundle_options'][0]['title'];
-            }
-            if ($storeIndexToUpdate !== null) {
-                $optionTitles[$stores[$storeIndexToUpdate]->getStoreId()] =
-                    $product->getBundleSelections()['bundle_options'][0]['title'];
-            }
+            $store = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
+            $store->persist();
+            $optionTitle = $originalProduct->getBundleSelections()['bundle_options'][0]['title'];
         }
 
         // Steps
@@ -124,16 +110,16 @@ class UpdateBundleProductEntityTest extends Injectable
 
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen($filter);
-        if ($storeDataset && $storeIndexToUpdate !== null) {
-            $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($stores[$storeIndexToUpdate]);
+        if ($storeDataset) {
+            $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($store);
         }
         $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save();
 
         return [
             'category' => $category,
-            'stores' => $stores,
-            'optionTitles' => $optionTitles,
+            'stores' => isset($store) ? $store : [],
+            'optionTitles' => isset($optionTitle) ? $optionTitle : []
         ];
     }
 }

@@ -9,7 +9,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;

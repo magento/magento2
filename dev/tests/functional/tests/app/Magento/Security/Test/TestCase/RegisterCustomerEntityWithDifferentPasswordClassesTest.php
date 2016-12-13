@@ -10,6 +10,7 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Config\Test\Fixture\ConfigData;
 
 /**
@@ -44,18 +45,28 @@ class RegisterCustomerEntityWithDifferentPasswordClassesTest extends Injectable
     protected $cmsIndex;
 
     /**
+     * Test step factory.
+     *
+     * @var TestStepFactory
+     */
+    protected $testStepFactory;
+
+    /**
      * Inject data.
      *
      * @param CustomerAccountCreate $customerAccountCreate
      * @param CmsIndex $cmsIndex
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
-        CmsIndex $cmsIndex
+        CmsIndex $cmsIndex,
+        TestStepFactory $testStepFactory
     ) {
         $this->customerAccountCreate = $customerAccountCreate;
         $this->cmsIndex = $cmsIndex;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -93,7 +104,7 @@ class RegisterCustomerEntityWithDifferentPasswordClassesTest extends Injectable
             ['configData' => 'default_required_character_classes_number']
         )->run();
         // Logout customer
-        $this->objectManager->create(
+        $this->testStepFactory->create(
             \Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class
         )->run();
     }

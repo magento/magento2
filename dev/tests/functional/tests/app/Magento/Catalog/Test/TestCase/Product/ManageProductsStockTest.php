@@ -84,7 +84,6 @@ class ManageProductsStockTest extends Injectable
 
             return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];
         }
-
     }
 
     /**
