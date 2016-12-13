@@ -5,34 +5,17 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\View\LayoutInterface;
-
 /**
- * Layout model which allows access to handles specific to current page only (e.g. containing ID of the rendered entity)
+ * Model which allows access to handles containing ID of the rendered entity
  */
-class PageSpecificHandlesList
+class EntitySpecificHandlesList
 {
-    /**
-     * @var LayoutInterface
-     */
-    private $layout;
-
     /**
      * The list of handles containing entity ID
      *
      * @var string[]
      */
     private $handles = [];
-
-    /**
-     * Initialize dependencies
-     *
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     */
-    public function __construct(LayoutInterface $layout)
-    {
-        $this->layout = $layout;
-    }
 
     /**
      * Add handle to the list of handles containing entity ID
@@ -42,7 +25,6 @@ class PageSpecificHandlesList
      */
     public function addHandle($handle)
     {
-        $this->layout->getUpdate()->addHandle($handle);
         $this->handles[] = $handle;
     }
 

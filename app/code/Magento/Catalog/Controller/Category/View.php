@@ -183,16 +183,17 @@ class View extends \Magento\Framework\App\Action\Action
             if (!$hasChildren) {
                 // Two levels removed from parent.  Need to add default page type.
                 $parentType = strtok($type, '_');
-                $page->addPageLayoutHandles(['type' => $parentType]);
+                $page->addPageLayoutHandles(['type' => $parentType], null, false);
             }
-            $page->addPageLayoutHandles(['type' => $type, 'id' => $category->getId()]);
+            $page->addPageLayoutHandles(['type' => $type], null, false);
+            $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded
             $layoutUpdates = $settings->getLayoutUpdates();
             if ($layoutUpdates && is_array($layoutUpdates)) {
                 foreach ($layoutUpdates as $layoutUpdate) {
                     $page->addUpdate($layoutUpdate);
-                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)]);
+                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)], null, false);
                 }
             }
 

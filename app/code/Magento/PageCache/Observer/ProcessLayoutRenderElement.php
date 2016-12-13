@@ -7,7 +7,7 @@
 namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\View\PageSpecificHandlesList;
+use Magento\Framework\View\EntitySpecificHandlesList;
 
 class ProcessLayoutRenderElement implements ObserverInterface
 {
@@ -33,23 +33,23 @@ class ProcessLayoutRenderElement implements ObserverInterface
     protected $isFullPageCacheEnabled;
 
     /**
-     * @var PageSpecificHandlesList
+     * @var EntitySpecificHandlesList
      */
-    protected $pageSpecificHandlesList;
+    protected $entitySpecificHandlesList;
 
     /**
      * Class constructor
      *
      * @param \Magento\PageCache\Model\Config $config
-     * @param PageSpecificHandlesList $pageSpecificHandlesList
+     * @param EntitySpecificHandlesList $entitySpecificHandlesList
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
-        PageSpecificHandlesList $pageSpecificHandlesList = null
+        EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->_config = $config;
-        $this->pageSpecificHandlesList = $pageSpecificHandlesList
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(PageSpecificHandlesList::class);
+        $this->entitySpecificHandlesList = $entitySpecificHandlesList
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
     }
 
     /**
@@ -64,7 +64,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
         \Magento\Framework\View\Layout $layout
     ) {
         $handles = $layout->getUpdate()->getHandles();
-        $pageSpecificHandles = $this->pageSpecificHandlesList->getHandles();
+        $pageSpecificHandles = $this->entitySpecificHandlesList->getHandles();
         $url = $block->getUrl(
             'page_cache/block/esi',
             [
