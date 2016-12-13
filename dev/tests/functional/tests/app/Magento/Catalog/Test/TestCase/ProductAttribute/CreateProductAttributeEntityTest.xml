@@ -19,8 +19,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation2">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+        <variation name="CreateProductAttributeEntityTestVariation2" ticketId="MAGETWO-17475">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Area</data>
@@ -37,6 +36,7 @@
             <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
@@ -114,8 +114,8 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation6">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
+        <variation name="CreateProductAttributeEntityTestVariation6" ticketId="MAGETWO-17475">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Dropdown</data>
@@ -139,6 +139,7 @@
             <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal" />
@@ -152,8 +153,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation7">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+        <variation name="CreateProductAttributeEntityTestVariation7" ticketId="MAGETWO-17475">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Price_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Price</data>
@@ -169,6 +169,7 @@
             <data name="attributeValue" xsi:type="number">15</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
