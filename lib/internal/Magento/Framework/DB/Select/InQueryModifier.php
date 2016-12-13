@@ -17,8 +17,14 @@ class InQueryModifier implements QueryModifierInterface
      */
     private $values;
 
-    public function __constructor($values)
-    {
+    /**
+     * Constructor
+     *
+     * @param array $values
+     */
+    public function __construct(
+        $values = []
+    ) {
         $this->values = $values;
     }
 

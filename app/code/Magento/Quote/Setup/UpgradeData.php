@@ -77,11 +77,13 @@ class UpgradeData implements UpgradeDataInterface
         $queryModifier = $this->queryModifierFactory->create(
             InQueryModifier::class,
             [
-                'code' => [
-                    'parameters',
-                    'info_buyRequest',
-                    'bundle_option_ids',
-                    'bundle_selection_attributes',
+                'values' => [
+                    'code' => [
+                        'parameters',
+                        'info_buyRequest',
+                        'bundle_option_ids',
+                        'bundle_selection_attributes',
+                    ]
                 ]
             ]
         );
@@ -96,13 +98,26 @@ class UpgradeData implements UpgradeDataInterface
             ->select()
             ->from(
                 $setup->getTable('catalog_product_option'),
-                ['CONCAT("option_", option_id)']
+                ['option_id']
             )
             ->where('type = ?', 'file');
         $iterator = $this->queryGenerator->generate('option_id', $select);
         foreach ($iterator as $selectByRange) {
             $codes = $setup->getConnection()->fetchCol($selectByRange);
-            $queryModifier = $this->queryModifierFactory->create(InQueryModifier::class, ['code' => $codes]);
+            $codes = array_map(
+                function ($id) {
+                    return 'option_' . $id;
+                },
+                $codes
+            );
+            $queryModifier = $this->queryModifierFactory->create(
+                InQueryModifier::class,
+                [
+                    'values' => [
+                        'code' => $codes
+                    ]
+                ]
+            );
             $fieldDataConverter->convert(
                 $setup->getConnection(),
                 $setup->getTable('quote_item_option'),
