@@ -99,6 +99,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * DataProvider Constructor
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -106,9 +108,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param FilterPool $filterPool
-     * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
+     * @param FileProcessorFactory|null $fileProcessorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,9 +121,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         FilterPool $filterPool,
-        FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        FileProcessorFactory $fileProcessorFactory = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
@@ -129,12 +131,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
-        $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
         $this->meta['address']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer_address')
+        );
+        $this->fileProcessorFactory = $fileProcessorFactory ?: ObjectManager::getInstance()->get(
+            FileProcessorFactory::class
         );
     }
 

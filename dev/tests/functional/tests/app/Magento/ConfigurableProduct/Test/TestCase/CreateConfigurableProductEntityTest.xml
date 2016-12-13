@@ -124,7 +124,7 @@
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>

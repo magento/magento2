@@ -108,7 +108,7 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             );
         }
 
-        if (!$websiteModel->getIsDefault() && $websiteModel->getStoresCount()) {
+        if ($this->checkIsSingleAndIsDefaultStore($websiteModel)) {
             $fieldset->addField(
                 'is_default',
                 'checkbox',
@@ -132,5 +132,13 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             'hidden',
             ['name' => 'website[website_id]', 'value' => $websiteModel->getId()]
         );
+    }
+
+    private function checkIsSingleAndIsDefaultStore($websiteModel)
+    {
+        $hasOnlyDefaultStore = $websiteModel->getStoresCount() == 1 &&
+            isset($websiteModel->getStoreIds()[\Magento\Store\Model\Store::DEFAULT_STORE_ID]);
+
+        return !$websiteModel->getIsDefault() && $websiteModel->getStoresCount() && !$hasOnlyDefaultStore;
     }
 }
