@@ -23,6 +23,11 @@ interface CaseInterface
     const STATUS_OPEN = 'OPEN';
 
     /**
+     * Pending status
+     */
+    const STATUS_PENDING = 'PENDING';
+
+    /**
      * Processing status
      */
     const STATUS_PROCESSING = 'PROCESSING';

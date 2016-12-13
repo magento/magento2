@@ -41,7 +41,7 @@ class InstallSchema implements InstallSchemaInterface
         $table->addColumn('case_id', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('guarantee_eligible', Table::TYPE_BOOLEAN, null);
         $table->addColumn('guarantee_disposition', Table::TYPE_TEXT, 32);
-        $table->addColumn('status', Table::TYPE_TEXT, 32, ['default' => CaseInterface::STATUS_PROCESSING]);
+        $table->addColumn('status', Table::TYPE_TEXT, 32, ['default' => CaseInterface::STATUS_PENDING]);
         $table->addColumn('score', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('associated_team', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('review_disposition', Table::TYPE_TEXT, 32);

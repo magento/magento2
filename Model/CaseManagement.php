@@ -5,6 +5,8 @@
  */
 namespace Magento\Signifyd\Model;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
@@ -26,14 +28,32 @@ class CaseManagement implements CaseManagementInterface
     private $caseFactory;
 
     /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * CaseManagement constructor.
      * @param CaseRepositoryInterface $caseRepository
      * @param CaseInterfaceFactory $caseFactory
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
-    public function __construct(CaseRepositoryInterface $caseRepository, CaseInterfaceFactory $caseFactory)
-    {
+    public function __construct(
+        CaseRepositoryInterface $caseRepository,
+        CaseInterfaceFactory $caseFactory,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
         $this->caseRepository = $caseRepository;
         $this->caseFactory = $caseFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -41,9 +61,9 @@ class CaseManagement implements CaseManagementInterface
      */
     public function create($orderId)
     {
-        $case = $this->caseFactory->create(
-            ['data' => ['order_id' => $orderId, 'status' => CaseInterface::STATUS_PROCESSING]]
-        );
+        $case = $this->caseFactory->create();
+        $case->setOrderId($orderId)
+            ->setStatus(CaseInterface::STATUS_PENDING);
         return $this->caseRepository->save($case);
     }
 
@@ -52,6 +72,13 @@ class CaseManagement implements CaseManagementInterface
      */
     public function getByOrderId($orderId)
     {
-        return $this->caseRepository->getById($orderId);
+        $filters = [
+            $this->filterBuilder->setField('order_id')
+                ->setValue($orderId)
+                ->create()
+        ];
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)->create();
+        $items = $this->caseRepository->getList($searchCriteria)->getItems();
+        return !empty($items) ? array_pop($items) : null;
     }
 }
