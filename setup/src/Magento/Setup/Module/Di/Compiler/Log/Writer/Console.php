@@ -70,6 +70,7 @@ class Console
 
         if ($errorsCount) {
             $this->console->writeln('<error>' . 'Total Errors Count: ' . $errorsCount . '</error>');
+            throw new \Magento\Framework\Validator\Exception(__('Error durring compilation'));
         }
     }
 
