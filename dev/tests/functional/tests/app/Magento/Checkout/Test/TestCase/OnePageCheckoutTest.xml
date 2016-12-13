@@ -216,25 +216,25 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types">
-            <data name="tag" xsi:type="string">stable:no</data>
-            <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
-            <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
-            <data name="products/2" xsi:type="string">configurableProduct::with_one_option</data>
-            <data name="products/3" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
-            <data name="products/4" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
-            <data name="products/5" xsi:type="string">groupedProduct::three_simple_products</data>
+            <data name="products/0" xsi:type="string">catalogProductVirtual::buy_all</data>
+            <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links_buy_all</data>
+            <data name="products/2" xsi:type="string">configurableProduct::with_one_option_buy_all</data>
+            <data name="products/3" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product_buy_all</data>
+            <data name="products/4" xsi:type="string">catalogProductSimple::simple_10_dollar_buy_all</data>
+            <data name="products/5" xsi:type="string">groupedProduct::three_simple_products_buy_all</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">2118.43</item>
+                <item name="grandTotal" xsi:type="string">3558.43</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, display_out_of_stock</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
         </variation>
         <variation name="OnePageCheckoutUsingSingInLink" summary="Login during checkout using 'Sign In' link" ticketId="MAGETWO-42547">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>

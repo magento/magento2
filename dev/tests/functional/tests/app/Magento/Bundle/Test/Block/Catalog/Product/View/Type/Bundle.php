@@ -43,6 +43,13 @@ class Bundle extends Block
     protected $optionElement = './div[contains(@class,"option")][%d]';
 
     /**
+     * Option hidden input selector.
+     *
+     * @var string
+     */
+    protected $optionHiddenInput = '.control span.product-name';
+
+    /**
      * Selector for title of option
      *
      * @var string
@@ -298,13 +305,17 @@ class Bundle extends Block
     {
         foreach ($bundleOptions as $option) {
             $selector = sprintf($this->bundleOptionBlock, $option['title']);
-            /** @var Option $optionBlock */
-            $optionBlock = $this->blockFactory->create(
-                'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\\'
-                . $this->optionNameConvert($option['frontend_type']),
-                ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
-            );
-            $optionBlock->fillOption($option['value']);
+            $optionElement = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+            //We need to bypass preselected options that can't be changed.
+            if (!$optionElement->find($this->optionHiddenInput)->isVisible()) {
+                /** @var Option $optionBlock */
+                $optionBlock = $this->blockFactory->create(
+                    'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\\'
+                    . $this->optionNameConvert($option['frontend_type']),
+                    ['element' => $optionElement]
+                );
+                $optionBlock->fillOption($option['value']);
+            }
         }
     }
 
