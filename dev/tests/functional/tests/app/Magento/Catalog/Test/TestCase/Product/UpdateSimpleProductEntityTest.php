@@ -11,6 +11,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Precondition:
@@ -57,18 +58,28 @@ class UpdateSimpleProductEntityTest extends Injectable
     protected $configData;
 
     /**
+     * Fixture Factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
-        CatalogProductEdit $editProductPage
+        CatalogProductEdit $editProductPage,
+        FixtureFactory $fixtureFactory
     ) {
         $this->productGrid = $productGrid;
         $this->editProductPage = $editProductPage;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -76,13 +87,22 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
+     * @param string $storeDataset [optional]
+     * @param int $storesCount [optional]
+     * @param int $storeIndexToUpdate [optional]
      * @param string $configData
      * @return array
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData = '')
-    {
+    public function test(
+        CatalogProductSimple $initialProduct,
+        CatalogProductSimple $product,
+        $storeDataset = '',
+        $storesCount = 0,
+        $storeIndexToUpdate = null,
+        $configData = ''
+    ) {
         $this->configData = $configData;
         // Preconditions
         $initialProduct->persist();
@@ -92,6 +112,19 @@ class UpdateSimpleProductEntityTest extends Injectable
         $category = $product->hasData('category_ids') && $product->getCategoryIds()[0]
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
+
+        $stores = [];
+        $productNames = [];
+        if ($storeDataset) {
+            for ($i = 0; $i < $storesCount; $i++) {
+                $stores[$i] = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
+                $stores[$i]->persist();
+                $productNames[$stores[$i]->getStoreId()] = $initialProduct->getName();
+            }
+            if ($storeIndexToUpdate !== null) {
+                $productNames[$stores[$storeIndexToUpdate]->getStoreId()] = $product->getName();
+            }
+        }
 
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
@@ -103,10 +136,17 @@ class UpdateSimpleProductEntityTest extends Injectable
 
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen($filter);
+        if ($storeDataset && $storeIndexToUpdate !== null) {
+            $this->editProductPage->getFormPageActions()->changeStoreViewScope($stores[$storeIndexToUpdate]);
+        }
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
 
-        return ['category' => $category];
+        return [
+            'category' => $category,
+            'stores' => $stores,
+            'productNames' => $productNames,
+        ];
     }
 
     /**
