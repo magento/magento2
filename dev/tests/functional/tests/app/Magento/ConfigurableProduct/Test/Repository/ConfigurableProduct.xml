@@ -39,6 +39,9 @@
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">configurable_default</item>
             </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
         </dataset>
 
         <dataset name="out_of_stock">
@@ -495,6 +498,302 @@
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">40</item>
                 <item name="dataset" xsi:type="string">price_40</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_price_10">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+            </field>
+            <field name="special_price" xsi:type="string">10</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_options_with_assigned_product_special_price</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_two_new_options_with_special_price</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="first_product_with_custom_option_1">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="special_price" xsi:type="string">49.99</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_options_with_assigned_product_special_price_2</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">product_1_and_option_1</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="first_product_with_custom_option_2">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="special_price" xsi:type="string">10</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_options_with_assigned_product_special_price_2</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">product_1_and_option_2</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="second_product_with_custom_option_1">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="special_price" xsi:type="string">10</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_options_with_assigned_product_special_price_2</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">product_2_and_option_1</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="second_product_with_custom_option_2">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="special_price" xsi:type="string">10</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_options_with_assigned_product_special_price_2</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">product_2_and_option_2</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="Stellar_Solar_Jacket_SIZE_S">
+            <field name="name" xsi:type="string">Stellar Solar Jacket %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">75</item>
+                <item name="dataset" xsi:type="string">price_75</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">three_options_with_sizes_S_M_L</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">promo_attribute_set_with_sizes</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_the_first_option</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="Stellar_Solar_Jacket_SIZE_M">
+            <field name="name" xsi:type="string">Stellar Solar Jacket %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">75</item>
+                <item name="dataset" xsi:type="string">price_75</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">three_options_with_sizes_S_M_L</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">promo_attribute_set_with_sizes</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_the_second_option</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
+        <dataset name="Stellar_Solar_Jacket_SIZE_L">
+            <field name="name" xsi:type="string">Stellar Solar Jacket %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">75</item>
+                <item name="dataset" xsi:type="string">price_75</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">three_options_with_sizes_S_M_L</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">promo_attribute_set_with_sizes</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_the_third_option</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
         </dataset>
     </repository>
