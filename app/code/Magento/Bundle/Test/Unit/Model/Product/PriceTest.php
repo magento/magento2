@@ -209,7 +209,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-
         $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 
@@ -263,7 +262,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock->expects($this->once())
             ->method('getValue')
             ->willReturn('{"0":1}');
-
         $productTypeMock->expects($this->once())
             ->method('getSelectionsByIds')
             ->with([1], $productMock)
