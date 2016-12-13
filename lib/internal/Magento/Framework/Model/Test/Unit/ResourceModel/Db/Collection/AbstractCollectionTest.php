@@ -9,6 +9,7 @@
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -255,6 +256,30 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ['some_field', null, ['some_field']],
             ['some_field', 'alias', ['alias' => 'some_field']]
         ];
+    }
+
+    public function testLoadWithItemFieldsUnserialization()
+    {
+        $itemMock = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->uut->addItem($itemMock);
+
+        $itemMock->expects($this->once())
+            ->method('setOrigData');
+        $this->resourceMock->expects($this->once())
+            ->method('unserializeFields')
+            ->with($itemMock);
+
+        $this->managerMock->expects($this->exactly(2))
+            ->method('dispatch')
+            ->withConsecutive(
+                ['core_collection_abstract_load_before', ['collection' => $this->uut]],
+                ['core_collection_abstract_load_after', ['collection' => $this->uut]]
+
+            );
+
+        $this->uut->load();
     }
 
     /**
