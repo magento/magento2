@@ -18,6 +18,8 @@ use Magento\Signifyd\Model\ResourceModel\CaseEntity\CollectionFactory;
 
 /**
  * Repository for Case interface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CaseRepository implements CaseRepositoryInterface
 {

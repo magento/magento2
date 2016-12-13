@@ -197,8 +197,7 @@ class CaseEntity extends AbstractModel implements CaseInterface
     }
 
     /**
-     * Gets updating datetime for a case
-     * @return string
+     * @inheritdoc
      */
     public function getUpdatedAt()
     {
@@ -206,9 +205,7 @@ class CaseEntity extends AbstractModel implements CaseInterface
     }
 
     /**
-     * Sets updating datetime for a case
-     * @param $datetime
-     * @return $this
+     * @inheritdoc
      */
     public function setUpdatedAt($datetime)
     {
