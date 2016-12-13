@@ -41,11 +41,13 @@ class RecipientBuilder
         }
 
         $result = [
-            'fullName' => $address->getName(),
-            'confirmationEmail' =>  $address->getEmail(),
-            'confirmationPhone' => $address->getTelephone(),
-            'organization' => $address->getCompany(),
-            'deliveryAddress' => $this->addressBuilder->build($address)
+            'recipient' => [
+                'fullName' => $address->getName(),
+                'confirmationEmail' =>  $address->getEmail(),
+                'confirmationPhone' => $address->getTelephone(),
+                'organization' => $address->getCompany(),
+                'deliveryAddress' => $this->addressBuilder->build($address)
+            ]
         ];
 
         return $result;

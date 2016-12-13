@@ -36,6 +36,7 @@ class UserAccountBuilder
      * @var array
      */
     private $currencies = [];
+
     /**
      * @var CustomerOrders
      */
@@ -85,12 +86,14 @@ class UserAccountBuilder
 
         $customer = $this->customerRepository->getById($customerId);
         $result = [
-            'email' => $customer->getEmail(),
-            'username' => $customer->getEmail(),
-            'phone' => $order->getBillingAddress()->getTelephone(),
-            'accountNumber' => $customerId,
-            'createdDate' => $this->formatDate($customer->getCreatedAt()),
-            'lastUpdateDate' => $this->formatDate($customer->getUpdatedAt())
+            'userAccount' => [
+                'email' => $customer->getEmail(),
+                'username' => $customer->getEmail(),
+                'phone' => $order->getBillingAddress()->getTelephone(),
+                'accountNumber' => $customerId,
+                'createdDate' => $this->formatDate($customer->getCreatedAt()),
+                'lastUpdateDate' => $this->formatDate($customer->getUpdatedAt())
+            ]
         ];
 
         $customerOrders = $this->customerOrders->get($customerId);
@@ -103,8 +106,8 @@ class UserAccountBuilder
                         $order->getBaseCurrencyCode()
                     );
                 }
-                $result['aggregateOrderCount'] = count($customerOrders);
-                $result['aggregateOrderDollars'] = $orderTotalDollars;
+                $result['userAccount']['aggregateOrderCount'] = count($customerOrders);
+                $result['userAccount']['aggregateOrderDollars'] = $orderTotalDollars;
             } catch (\Exception $e) {
                 $this->logger->error($e->getMessage());
             }
