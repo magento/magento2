@@ -54,7 +54,7 @@ class PurchaseBuilder
             'purchase' => [
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
-                'createdAt' => $createdAt->format(\DateTime::ISO8601),
+                'createdAt' => $createdAt->format(\DateTime::ATOM),
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
                 'transactionId' => $orderPayment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
