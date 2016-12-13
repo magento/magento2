@@ -6,6 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos;
 
+use Magento\Mtf\Client\Locator;
+
 /**
  * Class Grid
  * Credit memos grid on order view page
@@ -25,6 +27,20 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      * @var string
      */
     protected $editLink = 'tbody td[data-column="increment_id"]';
+
+    /**
+     * Css selector for credit memo ids.
+     *
+     * @var string
+     */
+    protected $creditMemoId = 'tbody td:nth-child(2)';
+
+    /**
+     * CreditMemos data grid loader Xpath locator.
+     *
+     * @var string
+     */
+    protected $loader = '//div[contains(@data-component, "sales_order_view_creditmemo_grid")]';
 
     /**
      * Filters array mapping
@@ -54,7 +70,8 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      */
     public function getCreditMemoId()
     {
-        return $this->_rootElement->find($this->editLink)->getText();
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+        return $this->_rootElement->find($this->creditMemoId)->getText();
     }
 
     /**
@@ -65,7 +82,8 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     public function getIds()
     {
         $result = [];
-        $creditMemoIds = $this->_rootElement->getElements($this->editLink);
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+        $creditMemoIds = $this->_rootElement->getElements($this->creditMemoId);
         foreach ($creditMemoIds as $creditMemoId) {
             $result[] = trim($creditMemoId->getText());
         }
