@@ -175,10 +175,10 @@ require([
                     'downloadable_sample_'+data.id+'_file',
                     <?= /* @noEscape */ $block->getConfigJson() ?>
                 );
-                sampleUrl.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
+                sampleUrl.adviceContainer = 'downloadable_sample_'+data.id+'_container';
                 sampleFile = $('downloadable_sample_'+data.id+'_file_type');
-                sampleFile.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
-                $('downloadable_sample_'+data.id+'_file_save').advaiceContainer = 'downloadable_sample_'+data.id+'_container';
+                sampleFile.adviceContainer = 'downloadable_sample_'+data.id+'_container';
+                $('downloadable_sample_'+data.id+'_file_save').adviceContainer = 'downloadable_sample_'+data.id+'_container';
 
                 this.itemCount++;
                 this.bindRemoveButtons();

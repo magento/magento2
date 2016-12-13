@@ -27,7 +27,7 @@ class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Opti
         return '<script>
             document.getElementById(\'' .
             $elementId .
-            '\').advaiceContainer = \'' .
+            '\').adviceContainer = \'' .
             $containerId .
             '\';
             </script>';

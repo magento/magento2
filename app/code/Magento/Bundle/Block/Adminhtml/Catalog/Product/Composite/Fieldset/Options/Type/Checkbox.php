@@ -27,7 +27,7 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
         return '<script>
             document.getElementById(\'' .
             $elementId .
-            '\').advaiceContainer = \'' .
+            '\').adviceContainer = \'' .
             $containerId .
             '\';
             </script>';
