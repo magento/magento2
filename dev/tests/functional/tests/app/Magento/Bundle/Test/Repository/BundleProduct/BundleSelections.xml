@@ -81,6 +81,44 @@
             </field>
         </dataset>
 
+        <dataset name="fixed_with_custom_title">
+            <field name="bundle_options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="title" xsi:type="string">Custom Option %isolation%</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">Yes</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_price_value" xsi:type="string">5.00</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                                <item name="selection_qty" xsi:type="string">1</item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_price_value" xsi:type="string">6.00</item>
+                                <item name="selection_price_type" xsi:type="string">Fixed</item>
+                                <item name="selection_qty" xsi:type="string">1</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                    <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="fixed_100_dollar">
             <field name="bundle_options" xsi:type="array">
                 <item name="0" xsi:type="array">

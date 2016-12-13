@@ -123,6 +123,17 @@ class Bundle extends Block
     }
 
     /**
+     * Check if bundle option is visible.
+     *
+     * @param string $optionTitle
+     * @return bool
+     */
+    public function isOptionVisible($optionTitle)
+    {
+        return isset($this->getListOptions()[$optionTitle]);
+    }
+
+    /**
      * Get list options
      *
      * @return array

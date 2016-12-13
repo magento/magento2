@@ -78,6 +78,8 @@ class UpdateSimpleProductEntityTest extends Injectable
      * @param CatalogProductSimple $product
      * @param string $configData
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData = '')
     {
