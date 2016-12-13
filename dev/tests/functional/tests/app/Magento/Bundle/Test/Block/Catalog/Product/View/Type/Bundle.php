@@ -22,6 +22,20 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class Bundle extends Block
 {
     /**
+     * Assigned product name.
+     *
+     * @var string
+     */
+    protected $assignedProductName = '.product-name';
+
+    /**
+     * Assigned product price.
+     *
+     * @var string
+     */
+    protected $assignedProductPrice = '.bundle-options-wrapper .price';
+
+    /**
      * Selector for single option block
      *
      * @var string
@@ -71,6 +85,13 @@ class Bundle extends Block
     protected $bundleOptionBlock = './/div[label[span[contains(text(), "%s")]]]';
 
     /**
+     *  Product fixture.
+     *
+     * @var FixtureInterface
+     */
+    private $product;
+
+    /**
      * Fill bundle option on frontend add click "Add to cart" button
      *
      * @param BundleProduct $product
@@ -93,6 +114,7 @@ class Bundle extends Block
     public function getOptions(FixtureInterface $product)
     {
         /** @var BundleProduct  $product */
+        $this->product = $product;
         $bundleSelections = $product->getBundleSelections();
         $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
 
@@ -118,7 +140,6 @@ class Bundle extends Block
 
             $formOptions[] = $optionData;
         }
-
         return $formOptions;
     }
 
@@ -162,6 +183,9 @@ class Bundle extends Block
      */
     protected function getDropdownData(SimpleElement $option)
     {
+        if ($this->isOneProductInStock($this->product)) {
+            return ['options' => $this->getPlantTextData()];
+        }
         $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
         // Skip "Choose option ..."(option #1)
         return $this->getSelectOptionsData($select, 2);
@@ -294,5 +318,44 @@ class Bundle extends Block
     {
         $trimmedOptionType = preg_replace('/[^a-zA-Z]/', '', $optionType);
         return ucfirst(strtolower($trimmedOptionType));
+    }
+
+    /**
+     * Check count products with 'In Stock' status.
+     *
+     * @param BundleProduct $products
+     * @return bool
+     */
+    private function isOneProductInStock(BundleProduct $products)
+    {
+        $result = [];
+        $products = $products->getBundleSelections()['products'][0];
+        foreach ($products as $product) {
+            $status = $product->getData()['quantity_and_stock_status']['is_in_stock'];
+            if ($status == 'In Stock') {
+                $result[] = $product;
+            }
+        }
+        if (count($result) == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return list options.
+     *
+     * @return array
+     */
+    private function getPlantTextData()
+    {
+        $productPrice = $this->_rootElement->find($this->assignedProductPrice)->getText();
+        $productPrice = preg_replace("/[^0-9.,]/", '', $productPrice);
+        $productName = $this->_rootElement->find($this->assignedProductName)->getText();
+        $options[$productName] = [
+            'title' => $productName,
+            'price' => number_format($productPrice, 2)
+        ];
+        return $options;
     }
 }
