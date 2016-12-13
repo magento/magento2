@@ -17,6 +17,5 @@
         <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector" />
         <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper h1.page-title .base" strategy="css selector" />
         <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".column.main .widget" strategy="css selector" />
-        <block name="stockStatusBlock" class="Magento\Catalog\Test\Block\Product\View\Stock" locator=".product-info-stock-sku" strategy="css selector" />
     </page>
 </config>
