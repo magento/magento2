@@ -185,7 +185,7 @@ class Tree extends Block
      *
      * @return void
      */
-    protected function expandAllCategories()
+    public function expandAllCategories()
     {
         $this->_rootElement->find($this->expandAll)->click();
     }

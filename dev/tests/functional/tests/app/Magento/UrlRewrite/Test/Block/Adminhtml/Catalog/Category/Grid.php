@@ -30,5 +30,9 @@ class Grid extends ParentGrid
             'selector' => 'select[name="store_id"]',
             'input' => 'select',
         ],
+        'redirect_type' => [
+            'selector' => 'select[name="redirect_type"]',
+            'input' => 'select',
+        ],
     ];
 }
