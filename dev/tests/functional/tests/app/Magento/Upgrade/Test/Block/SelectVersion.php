@@ -76,9 +76,6 @@ class SelectVersion extends Form
     {
         do {
             $this->iterateAndSetComponentsRows($this->convertVersionFixtureToRegexp($sampleDataVersion));
-            if ($this->canClickOnNextPage()) {
-                $this->clickOnNextPage();
-            }
         } while ($this->canClickOnNextPage());
     }
 
@@ -128,7 +125,9 @@ class SelectVersion extends Form
     {
         $element = $this->_rootElement->find(".admin__data-grid-pager .action-next");
         if ($element->isVisible()) {
-            return !$element->isDisabled();
+            $result = !$element->isDisabled();
+            $this->clickOnNextPage();
+            return $result;
         }
         return false;
     }
