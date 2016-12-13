@@ -12,7 +12,8 @@ interface FormatterInterface
      * Format deployment configuration
      *
      * @param array $data
+     * @param array $comments
      * @return string
      */
-    public function format($data);
+    public function format($data, array $comments = []);
 }

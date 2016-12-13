@@ -12,6 +12,7 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Vault/js/view/payment/vault-enabler',
     'Magento_Checkout/js/action/create-billing-address'
 ], function (
     $,
@@ -21,6 +22,7 @@ define([
     quote,
     fullScreenLoader,
     additionalValidators,
+    VaultEnabler,
     createBillingAddress
 ) {
     'use strict';
@@ -32,12 +34,24 @@ define([
             active: false,
             paymentMethodNonce: null,
             grandTotalAmount: null,
+            isReviewRequired: false,
+            customerEmail: null,
+
+            /**
+             * Additional payment data
+             *
+             * {Object}
+             */
+            additionalData: {},
 
             /**
              * PayPal client configuration
              * {Object}
              */
             clientConfig: {
+                dataCollector: {
+                    paypal: true
+                },
 
                 /**
                  * Triggers when widget is loaded
@@ -45,6 +59,7 @@ define([
                  */
                 onReady: function (checkout) {
                     Braintree.checkout = checkout;
+                    this.additionalData['device_data'] = checkout.deviceData;
                     this.enableButton();
                     Braintree.onReady();
                 },
@@ -70,17 +85,24 @@ define([
             var self = this;
 
             this._super()
-                .observe(['active']);
+                .observe(['active', 'isReviewRequired', 'customerEmail']);
+
+            this.vaultEnabler = new VaultEnabler();
+            this.vaultEnabler.setPaymentCode(this.getVaultCode());
+            this.vaultEnabler.isActivePaymentTokenEnabler.subscribe(function () {
+                self.onVaultPaymentTokenEnablerChange();
+            });
 
             this.grandTotalAmount = quote.totals()['base_grand_total'];
 
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
-                    self.reInitPayPal();
                 }
             });
 
+            // for each component initialization need update property
+            this.isReviewRequired(false);
             this.initClientConfig();
 
             return this;
@@ -141,8 +163,6 @@ define([
                     this.clientConfig[name] = fn.bind(this);
                 }
             }, this);
-
-            Braintree.config = _.extend(Braintree.config, this.clientConfig);
         },
 
         /**
@@ -185,7 +205,13 @@ define([
             if (quote.billingAddress() === null && typeof data.details.billingAddress !== 'undefined') {
                 this.setBillingAddress(data.details, data.details.billingAddress);
             }
-            this.placeOrder();
+
+            if (this.isSkipOrderReview()) {
+                this.placeOrder();
+            } else {
+                this.customerEmail(data.details.email);
+                this.isReviewRequired(true);
+            }
         },
 
         /**
@@ -203,15 +229,6 @@ define([
 
             Braintree.setConfig(this.clientConfig);
             Braintree.setup();
-        },
-
-        /**
-         * Triggers when customer click "Continue to PayPal" button
-         */
-        payWithPayPal: function () {
-            if (additionalValidators.validate()) {
-                Braintree.checkout.paypal.initAuthFlow();
-            }
         },
 
         /**
@@ -236,11 +253,12 @@ define([
          */
         getPayPalConfig: function () {
             var totals = quote.totals(),
-                config = {};
+                config = {},
+                isActiveVaultEnabler = this.isActiveVault();
 
             config.paypal = {
                 container: 'paypal-container',
-                singleUse: true,
+                singleUse: !isActiveVaultEnabler,
                 headless: true,
                 amount: this.grandTotalAmount,
                 currency: totals['base_currency_code'],
@@ -308,12 +326,18 @@ define([
          * @returns {Object}
          */
         getData: function () {
-            return {
+            var data = {
                 'method': this.getCode(),
                 'additional_data': {
                     'payment_method_nonce': this.paymentMethodNonce
                 }
             };
+
+            data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+
+            this.vaultEnabler.visitAdditionalData(data);
+
+            return data;
         },
 
         /**
@@ -326,11 +350,42 @@ define([
         },
 
         /**
+         * @returns {String}
+         */
+        getVaultCode: function () {
+            return window.checkoutConfig.payment[this.getCode()].vaultCode;
+        },
+
+        /**
+         * Check if need to skip order review
+         * @returns {Boolean}
+         */
+        isSkipOrderReview: function () {
+            return window.checkoutConfig.payment[this.getCode()].skipOrderReview;
+        },
+
+        /**
+         * Checks if vault is active
+         * @returns {Boolean}
+         */
+        isActiveVault: function () {
+            return this.vaultEnabler.isVaultEnabled() && this.vaultEnabler.isActivePaymentTokenEnabler();
+        },
+
+        /**
+         * Re-init PayPal Auth flow to use Vault
+         */
+        onVaultPaymentTokenEnablerChange: function () {
+            this.clientConfig.paypal.singleUse = !this.isActiveVault();
+            this.reInitPayPal();
+        },
+
+        /**
          * Disable submit button
          */
         disableButton: function () {
             // stop any previous shown loaders
-            fullScreenLoader.stopLoader();
+            fullScreenLoader.stopLoader(true);
             fullScreenLoader.startLoader();
             $('[data-button="place"]').attr('disabled', 'disabled');
         },
@@ -341,6 +396,31 @@ define([
         enableButton: function () {
             $('[data-button="place"]').removeAttr('disabled');
             fullScreenLoader.stopLoader();
+        },
+
+        /**
+         * Triggers when customer click "Continue to PayPal" button
+         */
+        payWithPayPal: function () {
+            if (additionalValidators.validate()) {
+                Braintree.checkout.paypal.initAuthFlow();
+            }
+        },
+
+        /**
+         * Get button title
+         * @returns {String}
+         */
+        getButtonTitle: function () {
+            return this.isSkipOrderReview() ? 'Pay with PayPal' : 'Continue to PayPal';
+        },
+
+        /**
+         * Get button id
+         * @returns {String}
+         */
+        getButtonId: function () {
+            return this.getCode() + (this.isSkipOrderReview() ? '_pay_with' : '_continue_to');
         }
     });
 });

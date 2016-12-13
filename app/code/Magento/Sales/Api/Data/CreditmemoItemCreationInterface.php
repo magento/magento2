@@ -9,7 +9,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface CreditmemoItemCreationInterface
- * @api
  */
 interface CreditmemoItemCreationInterface extends LineItemInterface, ExtensibleDataInterface
 {

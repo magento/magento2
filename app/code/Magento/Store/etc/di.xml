@@ -399,7 +399,6 @@
     <type name="Magento\Store\App\Config\Type\Scopes">
         <arguments>
             <argument name="source" xsi:type="object">scopesConfigSourceAggregatedProxy</argument>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <virtualType name="scopesConfigSourceAggregatedProxy" type="Magento\Framework\App\Config\ConfigSourceAggregated\Proxy">

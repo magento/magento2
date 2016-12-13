@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+
 /**
  * Class FinalPriceBoxTest
  */
@@ -56,11 +58,16 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     protected $price;
 
+    /**
+     * @var SalableResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $salableResolverMock;
+
     protected function setUp()
     {
         $this->product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['getPriceInfo', '__wakeup', 'getCanShowPrice'],
+            \Magento\Catalog\Model\Product::class,
+            ['getPriceInfo', '__wakeup', 'getCanShowPrice', 'isSalable'],
             [],
             '',
             false
@@ -77,9 +84,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->priceBox = $this->getMock('Magento\Framework\Pricing\Render\PriceBox', [], [], '', false);
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
-        $this->layout->expects($this->any())
-            ->method('getBlock')
-            ->will($this->returnValue($this->priceBox));
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
         $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
             ->getMockForAbstractClass();
@@ -92,13 +97,10 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
 
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->getMockForAbstractClass();
-
-        $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore', 'getCode'])
             ->getMockForAbstractClass();
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
@@ -146,6 +148,10 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->salableResolverMock = $this->getMockBuilder(SalableResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->object = $objectManager->getObject(
             'Magento\Catalog\Pricing\Render\FinalPriceBox',
             [
@@ -153,7 +159,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
                 'saleableItem' => $this->product,
                 'rendererPool' => $this->rendererPool,
                 'price' => $this->price,
-                'data' => ['zone' => 'test_zone', 'list_category_page' => true]
+                'data' => ['zone' => 'test_zone', 'list_category_page' => true],
+                'salableResolver' => $this->salableResolverMock
             ]
         );
     }
@@ -171,12 +178,26 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->product))
             ->will($this->returnValue(false));
 
+        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
         $this->assertStringStartsWith('<div', $result);
         //assert css_selector
         $this->assertRegExp('/[final_price]/', $result);
+    }
+
+    public function testNotSalableItem()
+    {
+        $this->salableResolverMock
+            ->expects($this->once())
+            ->method('isSalable')
+            ->with($this->product)
+            ->willReturn(false);
+        $result = $this->object->toHtml();
+
+        $this->assertEmpty($result);
     }
 
     public function testRenderMsrpEnabled()
@@ -213,6 +234,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with('msrp_price', $this->product, $arguments)
             ->will($this->returnValue($priceBoxRender));
 
+        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
@@ -231,6 +254,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->with($this->equalTo('msrp_price'))
             ->will($this->throwException(new \InvalidArgumentException()));
+
+        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
 
         $result = $this->object->toHtml();
 

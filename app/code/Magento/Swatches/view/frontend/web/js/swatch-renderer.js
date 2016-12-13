@@ -204,7 +204,10 @@ define([
              *
              * @type {String}
              */
-            gallerySwitchStrategy: 'replace'
+            gallerySwitchStrategy: 'replace',
+
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price'
         },
 
         /**
@@ -707,6 +710,12 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
+
+            if (result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
         },
 
         /**

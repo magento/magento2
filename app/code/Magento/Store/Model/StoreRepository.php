@@ -102,14 +102,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
             return $this->entitiesById[$id];
         }
 
-        $storeData = [];
-        $stores = $this->getAppConfig()->get('scopes', "stores", []);
-        foreach ($stores as $data) {
-            if (isset($data['store_id']) && $data['store_id'] == $id) {
-                $storeData = $data;
-                break;
-            }
-        }
+        $storeData = $this->getAppConfig()->get('scopes', "stores/$id", []);
         $store = $this->storeFactory->create([
             'data' => $storeData
         ]);

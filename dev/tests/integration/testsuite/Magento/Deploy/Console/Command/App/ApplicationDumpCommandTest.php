@@ -7,7 +7,6 @@ namespace Magento\Deploy\Console\Command\App;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\ObjectManagerInterface;
@@ -18,37 +17,73 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ApplicationDumpCommand
-     */
-    private $command;
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
+    /**
+     * @var DeploymentConfig\Reader
+     */
+    private $reader;
+
     public function setUp()
     {
-        $this->command = Bootstrap::getObjectManager()->get(ApplicationDumpCommand::class);
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Deploy/_files/config_data.php
+     */
     public function testExecute()
     {
-        $inputMock = $this->getMock(InputInterface::class);
+        $this->objectManager->configure([
+            \Magento\Config\Model\Config\Export\ExcludeList::class => [
+                'arguments' => [
+                    'configs' => [
+                        'web/test/test_value_1' => '',
+                        'web/test/test_value_2' => '',
+                        'web/test/test_sensitive' => '1',
+                    ],
+                ],
+            ],
+        ]);
+
+        $comment = 'The configuration file doesn\'t contain the sensitive data by security reason. '
+            . 'The sensitive data can be stored in the next environment variables:'
+            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive";
         $outputMock = $this->getMock(OutputInterface::class);
-        $outputMock->expects($this->once())
+        $outputMock->expects($this->at(0))
+            ->method('writeln')
+            ->with(['system' => $comment]);
+        $outputMock->expects($this->at(1))
             ->method('writeln')
             ->with('<info>Done.</info>');
-        $this->assertEquals(0, $this->command->run($inputMock, $outputMock));
+
+        /** @var ApplicationDumpCommand command */
+        $command = $this->objectManager->create(ApplicationDumpCommand::class);
+        $command->run($this->getMock(InputInterface::class), $outputMock);
+
+        $config = $this->reader->loadConfigFile(ConfigFilePool::APP_CONFIG, $this->getFileName());
+
+        $this->assertArrayHasKey(
+            'test_value_1',
+            $config['system']['default']['web']['test']
+        );
+        $this->assertArrayHasKey(
+            'test_value_2',
+            $config['system']['default']['web']['test']
+        );
+        $this->assertArrayNotHasKey(
+            'test_sensitive',
+            $config['system']['default']['web']['test']
+        );
     }
 
     public function tearDown()
     {
-        /** @var ConfigFilePool $configFilePool */
-        $configFilePool = $this->objectManager->get(ConfigFilePool::class);
-        $filePool = $configFilePool->getInitialFilePools();
-        $file = $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
+        $file = $this->getFileName();
         /** @var DirectoryList $dirList */
         $dirList = $this->objectManager->get(DirectoryList::class);
         $path = $dirList->getPath(DirectoryList::CONFIG);
@@ -60,5 +95,17 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         /** @var DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         $deploymentConfig->resetData();
+    }
+
+    /**
+     * @return string
+     */
+    private function getFileName()
+    {
+        /** @var ConfigFilePool $configFilePool */
+        $configFilePool = $this->objectManager->get(ConfigFilePool::class);
+        $filePool = $configFilePool->getInitialFilePools();
+
+        return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
     }
 }

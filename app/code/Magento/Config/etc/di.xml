@@ -81,6 +81,7 @@
             <argument name="source" xsi:type="object">systemConfigSourceAggregatedProxy</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorCompositeProxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
         </arguments>
     </type>
     <virtualType name="modulesDataProviderProxy" type="Magento\Framework\App\Config\InitialConfigSource\Proxy">
@@ -113,6 +114,13 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="systemConfigPreProcessorComposite" type="Magento\Framework\App\Config\PreProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="environmentPlaceholder" xsi:type="object">Magento\Config\Model\Config\Processor\EnvironmentPlaceholder</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="systemConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
@@ -138,15 +146,15 @@
             <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
         </arguments>
     </virtualType>
-    <virtualType name="appDumpSystemSource" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+    <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
-                <item name="initial" xsi:type="array">
-                    <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
-                    <item name="sortOrder" xsi:type="string">10</item>
-                </item>
                 <item name="dynamic" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\RuntimeConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
             </argument>
@@ -158,7 +166,20 @@
                 <item name="system" xsi:type="array">
                     <item name="source" xsi:type="object">appDumpSystemSource</item>
                     <item name="namespace" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</item>
+                    <item name="comment" xsi:type="object">Magento\Config\Model\Config\Export\Comment</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\Comment">
+        <arguments>
+            <argument name="source" xsi:type="object">appDumpSystemSource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Placeholder\PlaceholderFactory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="environment" xsi:type="string">Magento\Config\Model\Placeholder\Environment</item>
             </argument>
         </arguments>
     </type>

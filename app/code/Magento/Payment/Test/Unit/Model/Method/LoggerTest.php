@@ -19,7 +19,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loggerMock = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $this->logger = new Logger($this->loggerMock);
     }
 

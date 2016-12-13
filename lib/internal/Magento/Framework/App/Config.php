@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopePool;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Config
@@ -41,16 +42,16 @@ class Config implements ScopeConfigInterface
      * Config constructor.
      *
      * @param ScopePool $scopePool
-     * @param ScopeCodeResolver $scopeCodeResolver
+     * @param ScopeCodeResolver|null $scopeCodeResolver
      * @param array $types
      */
     public function __construct(
         ScopePool $scopePool,
-        ScopeCodeResolver $scopeCodeResolver,
+        ScopeCodeResolver $scopeCodeResolver = null,
         array $types = []
     ) {
         $this->_scopePool = $scopePool;
-        $this->scopeCodeResolver = $scopeCodeResolver;
+        $this->scopeCodeResolver = $scopeCodeResolver ?: ObjectManager::getInstance()->get(ScopeCodeResolver::class);
         $this->types = $types;
     }
 
@@ -137,7 +138,7 @@ class Config implements ScopeConfigInterface
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
         }
-        
+
         return $result !== null ? $result : $default;
     }
 }

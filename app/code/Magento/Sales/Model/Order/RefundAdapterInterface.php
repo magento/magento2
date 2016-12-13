@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\Order;
 
 /**
  * Interface RefundAdapterInterface
- *
- * @api
  */
 interface RefundAdapterInterface
 {

@@ -10,8 +10,6 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 
 /**
  * Interface ShipOrderInterface
- *
- * @api
  */
 interface ShipOrderInterface
 {

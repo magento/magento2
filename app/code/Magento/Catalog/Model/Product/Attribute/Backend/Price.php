@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
-use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
 /**
  * Catalog product price attribute backend model
@@ -102,43 +102,27 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * After Save Attribute manipulation
+     * After Save Price Attribute manipulation
+     * Processes product price attributes if price scoped to website and updates data when:
+     * * Price changed for non-default store view - will update price for all stores assigned to current website.
+     * * Price will be changed according to store currency even if price changed in product with default store id.
+     * * In a case when price was removed for non-default store (use default option checked) the default store price
+     * * will be used instead
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterSave($object)
     {
-        $value = $object->getData($this->getAttribute()->getAttributeCode());
-        /**
-         * Orig value is only for existing objects
-         */
-        $oridData = $object->getOrigData();
-        $origValueExist = $oridData && array_key_exists($this->getAttribute()->getAttributeCode(), $oridData);
-        if ($object->getStoreId() != 0 || !$value || $origValueExist) {
-            return $this;
-        }
-
-        if ($this->getAttribute()->getIsGlobal() == ScopedAttributeInterface::SCOPE_WEBSITE) {
-            $baseCurrency = $this->_config->getValue(
-                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                'default'
-            );
-
-            $storeIds = $object->getStoreIds();
-            if (is_array($storeIds)) {
-                foreach ($storeIds as $storeId) {
-                    $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                    if ($storeCurrency == $baseCurrency) {
-                        continue;
-                    }
-                    $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
-                    if (!$rate) {
-                        $rate = 1;
-                    }
-                    $newValue = $value * $rate;
-                    $object->addAttributeUpdate($this->getAttribute()->getAttributeCode(), $newValue, $storeId);
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->getAttribute();
+        $attributeCode = $attribute->getAttributeCode();
+        $value = $object->getData($attributeCode);
+        if ($value && $value != $object->getOrigData($attributeCode)) {
+            if ($attribute->isScopeWebsite()) {
+                foreach ((array)$object->getWebsiteStoreIds() as $storeId) {
+                    /** @var $object \Magento\Catalog\Model\Product */
+                    $object->addAttributeUpdate($attributeCode, $value, $storeId);
                 }
             }
         }

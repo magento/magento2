@@ -5,6 +5,9 @@
  */
 namespace Magento\Braintree\Gateway\Config\PayPal;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Payment\Model\CcConfig;
+
 /**
  * Class Config
  */
@@ -21,6 +24,26 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_MERCHANT_NAME_OVERRIDE = 'merchant_name_override';
 
     const KEY_REQUIRE_BILLING_ADDRESS = 'require_billing_address';
+
+    /**
+     * @var CcConfig
+     */
+    private $ccConfig;
+
+    /**
+     * @var array
+     */
+    private $icon = [];
+
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        CcConfig $ccConfig,
+        $methodCode = null,
+        $pathPattern = self::DEFAULT_PATH_PATTERN
+    ) {
+        parent::__construct($scopeConfig, $methodCode, $pathPattern);
+        $this->ccConfig = $ccConfig;
+    }
 
     /**
      * Get Payment configuration status
@@ -78,5 +101,33 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getTitle()
     {
         return $this->getValue(self::KEY_TITLE);
+    }
+
+    /**
+     * Is need to skip order review
+     * @return bool
+     */
+    public function isSkipOrderReview()
+    {
+        return (bool) $this->getValue('skip_order_review');
+    }
+
+    /**
+     * Get PayPal icon
+     * @return array
+     */
+    public function getPayPalIcon()
+    {
+        if (empty($this->icon)) {
+            $asset = $this->ccConfig->createAsset('Magento_Braintree::images/paypal.png');
+            list($width, $height) = getimagesize($asset->getSourceFile());
+            $this->icon = [
+                'url' => $asset->getUrl(),
+                'width' => $width,
+                'height' => $height
+            ];
+        }
+
+        return $this->icon;
     }
 }

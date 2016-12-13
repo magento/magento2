@@ -44,12 +44,12 @@ class PaymentType implements OptionSourceInterface
     private function getAvailablePaymentTypes()
     {
         return [
-            PaymentInstrumentType::PAYPAL_ACCOUNT => __('Paypal account'),
-            PaymentInstrumentType::COINBASE_ACCOUNT => __('Coinbase account'),
-            PaymentInstrumentType::EUROPE_BANK_ACCOUNT => __('Europe bank account'),
-            PaymentInstrumentType::CREDIT_CARD => __('Credit card'),
-            PaymentInstrumentType::APPLE_PAY_CARD => __('Apple pay card'),
-            PaymentInstrumentType::ANDROID_PAY_CARD => __('Android pay card')
+            PaymentInstrumentType::PAYPAL_ACCOUNT => __(PaymentInstrumentType::PAYPAL_ACCOUNT),
+            PaymentInstrumentType::COINBASE_ACCOUNT => __(PaymentInstrumentType::COINBASE_ACCOUNT),
+            PaymentInstrumentType::EUROPE_BANK_ACCOUNT => __(PaymentInstrumentType::EUROPE_BANK_ACCOUNT),
+            PaymentInstrumentType::CREDIT_CARD => __(PaymentInstrumentType::CREDIT_CARD),
+            PaymentInstrumentType::APPLE_PAY_CARD => __(PaymentInstrumentType::APPLE_PAY_CARD),
+            PaymentInstrumentType::ANDROID_PAY_CARD => __(PaymentInstrumentType::ANDROID_PAY_CARD)
         ];
     }
 }

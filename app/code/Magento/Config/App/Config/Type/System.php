@@ -8,6 +8,7 @@ namespace Magento\Config\App\Config\Type;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Config\Processor\Fallback;
@@ -39,6 +40,11 @@ class System implements ConfigTypeInterface
     private $postProcessor;
 
     /**
+     * @var PreProcessorInterface
+     */
+    private $preProcessor;
+
+    /**
      * @var FrontendInterface
      */
     private $cache;
@@ -59,6 +65,7 @@ class System implements ConfigTypeInterface
      * @param PostProcessorInterface $postProcessor
      * @param Fallback $fallback
      * @param FrontendInterface $cache
+     * @param PreProcessorInterface $preProcessor
      * @param int $cachingNestedLevel
      */
     public function __construct(
@@ -66,10 +73,12 @@ class System implements ConfigTypeInterface
         PostProcessorInterface $postProcessor,
         Fallback $fallback,
         FrontendInterface $cache,
+        PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1
     ) {
         $this->source = $source;
         $this->postProcessor = $postProcessor;
+        $this->preProcessor = $preProcessor;
         $this->cache = $cache;
         $this->cachingNestedLevel = $cachingNestedLevel;
         $this->fallback = $fallback;
@@ -86,7 +95,9 @@ class System implements ConfigTypeInterface
         if (!$this->data) {
             $data = $this->cache->load(self::CONFIG_TYPE);
             if (!$data) {
-                $data = $this->fallback->process($this->source->get());
+                $data = $this->preProcessor->process($this->source->get());
+                $this->data = new DataObject($data);
+                $data = $this->fallback->process($data);
                 $this->data = new DataObject($data);
                 $data = $this->postProcessor->process($data);
                 $this->data = new DataObject($data);

@@ -9,7 +9,6 @@ use Magento\Framework\DB\Select;
 
 /**
  * Interface BaseSelectProcessorInterface
- * @api
  */
 interface BaseSelectProcessorInterface
 {

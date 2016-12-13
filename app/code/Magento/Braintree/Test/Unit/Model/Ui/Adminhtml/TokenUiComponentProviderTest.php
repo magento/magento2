@@ -7,10 +7,10 @@ namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml;
 
 use Magento\Braintree\Model\Ui\Adminhtml\TokenUiComponentProvider;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class TokenUiComponentProviderTest
@@ -19,12 +19,12 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var TokenUiComponentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TokenUiComponentInterfaceFactory|MockObject
      */
     private $componentFactory;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilder;
 
@@ -59,6 +59,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
         $expirationDate = '12/2015';
 
         $expected = [
+            'code' => 'vault',
             'nonceUrl' => $nonceUrl,
             'details' => [
                 'type' => $type,

@@ -11,19 +11,20 @@
         "magento/module-checkout": "100.1.*",
         "magento/module-sales": "100.1.*",
         "magento/module-backend": "100.1.*",
-        "magento/module-vault": "100.1.*",
+        "magento/module-vault": "100.2.*",
         "magento/module-customer": "100.1.*",
         "magento/module-catalog": "101.0.*",
         "magento/module-quote": "100.1.*",
         "magento/module-paypal": "100.1.*",
         "magento/module-theme": "100.1.*",
+        "magento/module-ui": "100.1.*",
         "braintree/braintree_php": "3.7.0"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.2",
+    "version": "100.1.3",
     "license": [
         "proprietary"
     ],

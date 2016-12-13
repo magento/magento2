@@ -94,14 +94,8 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
         if (isset($this->entitiesById[$id])) {
             return $this->entitiesById[$id];
         }
-        $websiteData = [];
-        $websites = $this->getAppConfig()->get('scopes', 'websites', []);
-        foreach ($websites as $data) {
-            if (isset($data['website_id']) && $data['website_id'] == $id) {
-                $websiteData = $data;
-                break;
-            }
-        }
+
+        $websiteData = $this->getAppConfig()->get('scopes', "websites/$id", []);
         $website = $this->factory->create([
             'data' => $websiteData
         ]);
@@ -187,7 +181,7 @@ class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
      */
     private function initDefaultWebsite()
     {
-        $websites = (array)$this->getAppConfig()->get('scopes', 'websites', []);
+        $websites = (array) $this->getAppConfig()->get('scopes', 'websites', []);
         foreach ($websites as $data) {
             if (isset($data['is_default']) && $data['is_default'] == 1) {
                 if ($this->default) {

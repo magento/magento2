@@ -11,8 +11,6 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface RefundOrderInterface
- *
- * @api
  */
 interface RefundOrderInterface
 {

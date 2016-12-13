@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Model\Payflow;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use Magento\Vault\Model\CreditCardTokenFactory;
 
 /**
  * Class TransparentTest
@@ -49,7 +49,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
     protected $addressShippingMock;
 
     /**
-     * @var PaymentTokenInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditCardTokenFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $paymentTokenFactory;
 
@@ -66,7 +66,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentTokenFactory = $this->getMockBuilder('\Magento\Vault\Api\Data\PaymentTokenInterfaceFactory')
+        $this->paymentTokenFactory = $this->getMockBuilder(CreditCardTokenFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -427,6 +427,13 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $extensionAttributes->expects(static::once())
             ->method('setVaultPaymentToken')
             ->with($paymentTokenMock);
+
+        $this->paymentMock->expects($this->at(8))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::CC_DETAILS);
+        $this->paymentMock->expects($this->at(9))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::PNREF);
 
         $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
     }

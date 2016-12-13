@@ -38,7 +38,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
+        $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
 
         \PHPUnit_Framework_Assert::assertContains(
             self::AUTHORIZED_AMOUNT . $prices['grandTotal'],

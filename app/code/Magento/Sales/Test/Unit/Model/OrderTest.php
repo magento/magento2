@@ -5,8 +5,12 @@
  */
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Item;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -63,6 +67,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $salesOrderCollectionMock;
 
+    /**
+     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productRepository;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -101,6 +110,17 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->item = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'isDeleted',
+                'getQtyToInvoice',
+                'getParentItemId',
+                'getQuoteItemId',
+                'getLockedDoInvoice',
+                'getProductId'
+            ])
+            ->getMock();
         $this->salesOrderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'load', 'getFirstItem'])
@@ -112,6 +132,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->any())
             ->method('getItems')
             ->willReturn([$this->item]);
+        $collection->expects(self::any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->item]));
         $this->orderItemCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($collection);
@@ -125,6 +148,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             true,
             ['round']
         );
+
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
+            ->getMockForAbstractClass();
 
         $this->incrementId = '#00000001';
         $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
@@ -142,7 +168,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 'context' => $context,
                 'historyCollectionFactory' => $this->historyCollectionFactoryMock,
                 'salesOrderCollectionFactory' => $this->salesOrderCollectionFactoryMock,
-                'priceCurrency' => $this->priceCurrency
+                'priceCurrency' => $this->priceCurrency,
+                'productRepository' => $this->productRepository
             ]
         );
     }
@@ -366,6 +393,113 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
 
         $this->assertFalse($this->order->canEdit());
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order::canReorder
+     */
+    public function testCanReorder()
+    {
+        $productId = 1;
+
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, true);
+
+        $this->item->expects(static::once())
+            ->method('getProductId')
+            ->willReturn($productId);
+
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['isSalable'])
+            ->getMockForAbstractClass();
+        $product->expects(static::once())
+            ->method('isSalable')
+            ->willReturn(true);
+
+        $this->productRepository->expects(static::once())
+            ->method('getById')
+            ->with($productId, false)
+            ->willReturn($product);
+
+        $this->assertTrue($this->order->canReorder());
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order::canReorder
+     */
+    public function testCanReorderIsPaymentReview()
+    {
+        $this->order->setState(Order::STATE_PAYMENT_REVIEW);
+
+        $this->assertFalse($this->order->canReorder());
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order::canReorder
+     */
+    public function testCanReorderFlagReorderFalse()
+    {
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, false);
+
+        $this->assertFalse($this->order->canReorder());
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order::canReorder
+     */
+    public function testCanReorderProductNotExists()
+    {
+        $productId = 1;
+
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, true);
+
+        $this->item->expects(static::once())
+            ->method('getProductId')
+            ->willReturn($productId);
+
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['isSalable'])
+            ->getMockForAbstractClass();
+        $product->expects(static::never())
+            ->method('isSalable');
+
+        $this->productRepository->expects(static::once())
+            ->method('getById')
+            ->with($productId, false)
+            ->willThrowException(new NoSuchEntityException(__('Requested product doesn\'t exist')));
+
+        $this->assertFalse($this->order->canReorder());
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order::canReorder
+     */
+    public function testCanReorderProductNotSalable()
+    {
+        $productId = 1;
+
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, true);
+
+        $this->item->expects(static::once())
+            ->method('getProductId')
+            ->willReturn($productId);
+
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['isSalable'])
+            ->getMockForAbstractClass();
+        $product->expects(static::once())
+            ->method('isSalable')
+            ->willReturn(false);
+
+        $this->productRepository->expects(static::once())
+            ->method('getById')
+            ->with($productId, false)
+            ->willReturn($product);
+
+        $this->assertFalse($this->order->canReorder());
     }
 
     public function testCanCancelCanReviewPayment()
