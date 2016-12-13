@@ -11,10 +11,13 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
+use Magento\Sales\Model\Order\Shipment;
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+require __DIR__ . '/customer.php';
 
-$addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
+$addressData = require __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -22,16 +25,22 @@ $billingAddress = $objectManager->create(Address::class, ['data' => $addressData
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
-$shippingAddress->setid(null)
+$shippingAddress->setId(null)
     ->setAddressType('shipping')
     ->setShippingMethod('flatrate_flatrate');
 
 $payment = $objectManager->create(Payment::class);
-$payment->setMethod(PaypalConfig::METHOD_WPP_EXPRESS);
+$payment->setMethod(PaypalConfig::METHOD_WPP_EXPRESS)
+    ->setLastTransId('00001')
+    ->setCcLast4('1234')
+    ->setCcExpMonth('01')
+    ->setCcExpYear('21');
 
 /** @var Item $orderItem */
 $orderItem = $objectManager->create(Item::class);
 $orderItem->setProductId($product->getId())
+    ->setSku($product->getSku())
+    ->setName($product->getName())
     ->setQtyOrdered(1)
     ->setBasePrice($product->getPrice())
     ->setPrice($product->getPrice())
@@ -46,13 +55,13 @@ $order = $objectManager->create(Order::class);
 $order->setIncrementId('100000001')
     ->setState(Order::STATE_PROCESSING)
     ->setStatus(Order::STATE_PROCESSING)
+    ->setRemoteIp('127.0.0.1')
     ->setCreatedAt('2016-12-12T12:00:55+0000')
-    ->setBaseGrandTotal($orderAmount)
+    ->setOrderCurrencyCode('USD')
     ->setSubtotal($orderAmount)
     ->setGrandTotal($orderAmount)
     ->setBaseSubtotal($orderAmount)
     ->setBaseGrandTotal($orderAmount)
-    ->setCustomerIsGuest(true)
     ->setCustomerEmail($customerEmail)
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
@@ -60,18 +69,20 @@ $order->setIncrementId('100000001')
     ->setShippingAmount(10)
     ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())
     ->addItem($orderItem)
-    ->setPayment($payment);
+    ->setPayment($payment)
+    ->setCustomerId(1)
+    ->setCustomerIsGuest(false);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);
 
-$shipmentItem = $objectManager->create(\Magento\Sales\Model\Order\Shipment\Item::class);
+$shipmentItem = $objectManager->create(ShipmentItem::class);
 $shipmentItem->setOrderItem($orderItem);
 
 /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-$shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class);
+$shipment = $objectManager->create(Shipment::class);
 $shipment->setOrder($order)
     ->addItem($shipmentItem)
-    ->setShipmentStatus(\Magento\Sales\Model\Order\Shipment::STATUS_NEW)
+    ->setShipmentStatus(Shipment::STATUS_NEW)
     ->save();
