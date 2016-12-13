@@ -166,6 +166,6 @@ class UserAccountBuilder
             new \DateTimeZone('UTC')
         );
 
-        return $result->format(\DateTime::ISO8601);
+        return $result->format(\DateTime::ATOM);
     }
 }
