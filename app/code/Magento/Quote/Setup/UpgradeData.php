@@ -8,9 +8,11 @@ namespace Magento\Quote\Setup;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Eav\Model\Config;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Framework\DB\Select\InQueryModifier;
+use Magento\Framework\DB\Query\Generator;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -20,14 +22,30 @@ class UpgradeData implements UpgradeDataInterface
     private $fieldDataConverterFactory;
 
     /**
+     * @var QueryModifierFactory
+     */
+    private $queryModifierFactory;
+
+    /**
+     * @var Generator
+     */
+    private $queryGenerator;
+
+    /**
      * Constructor
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param QueryModifierFactory $queryModifierFactory
+     * @param Generator $generator
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory
+        FieldDataConverterFactory $fieldDataConverterFactory,
+        QueryModifierFactory $queryModifierFactory,
+        Generator $queryGenerator
     ) {
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->queryModifierFactory = $queryModifierFactory;
+        $this->queryGenerator = $queryGenerator;
     }
 
     /**
@@ -56,5 +74,57 @@ class UpgradeData implements UpgradeDataInterface
             'payment_id',
             'additional_information'
         );
+        $queryModifier = $this->queryModifierFactory->create(
+            InQueryModifier::class,
+            [
+                'values' => [
+                    'code' => [
+                        'parameters',
+                        'info_buyRequest',
+                        'bundle_option_ids',
+                        'bundle_selection_attributes',
+                    ]
+                ]
+            ]
+        );
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('quote_item_option'),
+            'option_id',
+            'value',
+            $queryModifier
+        );
+        $select = $setup->getConnection()
+            ->select()
+            ->from(
+                $setup->getTable('catalog_product_option'),
+                ['option_id']
+            )
+            ->where('type = ?', 'file');
+        $iterator = $this->queryGenerator->generate('option_id', $select);
+        foreach ($iterator as $selectByRange) {
+            $codes = $setup->getConnection()->fetchCol($selectByRange);
+            $codes = array_map(
+                function ($id) {
+                    return 'option_' . $id;
+                },
+                $codes
+            );
+            $queryModifier = $this->queryModifierFactory->create(
+                InQueryModifier::class,
+                [
+                    'values' => [
+                        'code' => $codes
+                    ]
+                ]
+            );
+            $fieldDataConverter->convert(
+                $setup->getConnection(),
+                $setup->getTable('quote_item_option'),
+                'option_id',
+                'value',
+                $queryModifier
+            );
+        }
     }
 }
