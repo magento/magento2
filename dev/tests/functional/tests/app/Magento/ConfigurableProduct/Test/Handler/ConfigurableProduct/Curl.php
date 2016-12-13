@@ -140,7 +140,7 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
                 $keyIds[] = $attribute['options'][$optionKey]['id'];
                 $configurableAttribute[] = sprintf(
                     '"%s":"%s"',
-                    $attribute['attribute_code'],
+                    isset($attribute['attribute_code']) ? $attribute['attribute_code'] : $attribute['frontend_label'],
                     $attribute['options'][$optionKey]['id']
                 );
             }

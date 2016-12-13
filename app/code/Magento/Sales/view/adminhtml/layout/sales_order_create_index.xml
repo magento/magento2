@@ -16,7 +16,7 @@
 
         <referenceBlock name="page.title">
             <action method="setTitleId">
-                <argument translate="true" name="id" xsi:type="string">order-header</argument>
+                <argument translate="false" name="id" xsi:type="string">order-header</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="after.body.start">
