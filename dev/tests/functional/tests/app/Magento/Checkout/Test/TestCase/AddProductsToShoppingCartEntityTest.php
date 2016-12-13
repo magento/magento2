@@ -15,13 +15,13 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
- * 1. All type products is created
+ * 1. All type products is created.
  *
  * Steps:
- * 1. Navigate to frontend
- * 2. Open test product page
- * 3. Add to cart test product
- * 4. Perform all asserts
+ * 1. Navigate to frontend.
+ * 2. Open test product page.
+ * 3. Add to cart test product.
+ * 4. Perform all asserts.
  *
  * @group Shopping_Cart
  * @ZephyrId MAGETWO-25382
@@ -33,35 +33,42 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Browser interface
+     * Browser interface.
      *
      * @var BrowserInterface
      */
-    protected $browser;
+    private $browser;
 
     /**
-     * Fixture factory
+     * Fixture factory.
      *
      * @var FixtureFactory
      */
-    protected $fixtureFactory;
+    private $fixtureFactory;
 
     /**
-     * Catalog product view page
+     * Catalog product view page.
      *
      * @var CatalogProductView
      */
-    protected $catalogProductView;
+    private $catalogProductView;
 
     /**
-     * Checkout cart page
+     * Checkout cart page.
      *
      * @var CheckoutCart
      */
     protected $cartPage;
 
     /**
-     * Prepare test data
+     * Config settings.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
+     * Prepare test data.
      *
      * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
@@ -82,15 +89,21 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Run test add products to shopping cart
+     * Run test add products to shopping cart.
      *
      * @param array $productsData
      * @param array $cart
+     * @param string|null $configData [optional]
      * @return array
      */
-    public function test(array $productsData, array $cart)
+    public function test(array $productsData, array $cart, $configData = null)
     {
         // Preconditions
+        $this->configData = $configData;
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->run();
         $products = $this->prepareProducts($productsData);
 
         // Steps
@@ -101,7 +114,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Create products
+     * Create products.
      *
      * @param array $productList
      * @return array
@@ -118,7 +131,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Add products to cart
+     * Add products to cart.
      *
      * @param array $products
      * @return void
@@ -130,5 +143,18 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             ['products' => $products]
         );
         $addToCartStep->run();
+    }
+
+    /**
+     * Reset config settings to default.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'rollback' => true]
+        )->run();
     }
 }
