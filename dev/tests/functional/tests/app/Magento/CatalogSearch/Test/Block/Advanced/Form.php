@@ -78,6 +78,10 @@ class Form extends ParentForm
             $data = array_merge($data, $data['price']);
             unset($data['price']);
         }
+        if (isset($data['additional_attributes'])) {
+            $data = array_merge($data, $data['additional_attributes']);
+            unset($data['additional_attributes']);
+        }
 
         // Mapping
         $mapping = $this->dataMapping($data);

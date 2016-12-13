@@ -42,6 +42,31 @@
             </field>
         </dataset>
 
+        <dataset name="one_simple_product">
+            <field name="bundle_options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="title" xsi:type="string">Drop-down Option</item>
+                    <item name="type" xsi:type="string">Drop-down</item>
+                    <item name="required" xsi:type="string">Yes</item>
+                    <item name="assigned_products" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="search_data" xsi:type="array">
+                                <item name="name" xsi:type="string">%product_name%</item>
+                            </item>
+                            <item name="data" xsi:type="array">
+                                <item name="selection_qty" xsi:type="string">1</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="default_fixed">
             <field name="bundle_options" xsi:type="array">
                 <item name="0" xsi:type="array">
