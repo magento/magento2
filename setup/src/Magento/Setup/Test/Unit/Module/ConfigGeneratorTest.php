@@ -66,14 +66,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $returnValue->getData());
     }
 
-    public function testCreateDefinitionsConfig()
-    {
-        $testData = [ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
-        $returnValue = $this->configGeneratorObject->createDefinitionsConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-        $this->assertEquals(['definition' => ['format' => 'test-format']], $returnValue->getData());
-    }
-
     public function testCreateDbConfig()
     {
         $testData = [

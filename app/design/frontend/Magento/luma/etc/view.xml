@@ -77,9 +77,17 @@
                 <height>140</height>
             </image>
             <image id="product_page_image_large" type="image"/>
+            <image id="product_page_image_large_no_frame" type="image">
+                <frame>false</frame>
+            </image>
             <image id="product_page_image_medium" type="image">
                 <width>700</width>
                 <height>560</height>
+            </image>
+            <image id="product_page_image_medium_no_frame" type="image">
+                <width>700</width>
+                <height>700</height>
+                <frame>false</frame>
             </image>
             <image id="product_page_image_small" type="thumbnail">
                 <width>88</width>
@@ -253,10 +261,7 @@
     </vars>
 
     <vars module="Magento_ConfigurableProduct">
-        <var name="change_only_base_image">true</var>
-    </vars>
-    <vars module="Magento_Swatches">
-        <var name="change_only_base_image">true</var>
+        <var name="gallery_switch_strategy">prepend</var>
     </vars>
 
     <vars module="Js_Bundle">

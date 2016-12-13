@@ -46,6 +46,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepoMock;
 
+    /** @var   \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\EntityManager\MetadataPool*/
+    private $metaDataPoolMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -108,7 +111,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->metaDataPoolMock = $this->getMock(
+            \Magento\Framework\EntityManager\MetadataPool::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
             [
@@ -119,6 +128,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'swatchCollectionFactory' => $this->swatchCollectionFactoryMock,
                 'imageHelper' => $this->imageHelperMock,
             ]
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->swatchHelperObject,
+            'metadataPool',
+            $this->metaDataPoolMock
         );
     }
 
@@ -246,12 +260,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadVariationByFallback($product)
     {
+        $metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
+
         $this->getSwatchAttributes($product);
 
         $this->prepareVariationCollection();
 
         $this->productCollectionMock->method('getFirstItem')->willReturn($this->productMock);
-        $this->productMock->method('getId')->willReturn(95);
+        $this->productMock->method('getData')->with('id')->willReturn(95);
         $this->productModelFactoryMock->method('create')->willReturn($this->productMock);
         $this->productMock->method('load')->with(95)->will($this->returnSelf());
 
@@ -322,23 +340,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturnMap([
-                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_large_no_frame', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_medium_no_frame', [], $this->imageHelperMock],
                 [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
             ]);
 
         $this->imageHelperMock->expects($this->any())
             ->method('setImageFile')
             ->with($image)
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('constrainOnly')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('keepAspectRatio')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('keepFrame')
             ->willReturnSelf();
         $this->imageHelperMock->expects($this->any())
             ->method('getUrl')

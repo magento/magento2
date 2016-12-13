@@ -139,6 +139,12 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'data' => ['existing' => ['path' => 1]],
                 'value' => 'valuable data',
                 'result' => ['existing' => ['path' => 1], 'new' => ['path' => [2 => 'valuable data']]]
+            ],
+            3 => [
+                'path' => ['new', 'path/2'],
+                'data' => ['existing' => ['path' => 1]],
+                'value' => 'valuable data',
+                'result' => ['existing' => ['path' => 1], 'new' => ['path' => [2 => 'valuable data']]]
             ]
         ];
     }
@@ -175,6 +181,12 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
             ],
             2 => [
                 'path' => 'new/path/2',
+                'data' => ['existing' => ['path' => 1]],
+                'value' => 'valuable data',
+                'result' => ['existing' => ['path' => 1]]
+            ],
+            3 => [
+                'path' => ['new', 'path', '2'],
                 'data' => ['existing' => ['path' => 1]],
                 'value' => 'valuable data',
                 'result' => ['existing' => ['path' => 1]]
@@ -228,6 +240,13 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'data' => ['valid' => ['path' => 'value'], 'target' => ['path' => 'exists']],
                 'overwrite' => true,
                 'result' => ['valid' => [], 'target' => ['path' => 'value']]
+            ],
+            4 => [
+                'path' => ['valid', 'path'],
+                'targetPath' => 'target/path',
+                'data' => ['valid' => ['path' => 'value'], 'target' => ['path' => 'exists']],
+                'overwrite' => true,
+                'result' => ['valid' => [], 'target' => ['path' => 'value']]
             ]
         ];
     }
@@ -267,7 +286,13 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'data' => [],
                 'value' => [true],
                 'result' => []
-            ]
+            ],
+            3 => [
+                'path' => ['0', 'path/1'],
+                'data' => [['path' => [false, ['value' => false]]]],
+                'value' => ['value' => true, 'new_value' => false],
+                'result' => [['path' => [false, ['value' => true, 'new_value' => false]]]]
+            ],
         ];
     }
 
@@ -337,7 +362,12 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'path' => 'invalid',
                 'data' => [true],
                 'result' => [true]
-            ]
+            ],
+            3 => [
+                'path' => ['simple'],
+                'data' => ['simple' => true, 'complex' => false],
+                'result' => ['complex' => false]
+            ],
         ];
     }
 
@@ -550,7 +580,7 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'offset' => -6,
                 'length' => 3,
                 'result' => 'path/0/goes'
-            ]
+            ],
         ];
     }
 

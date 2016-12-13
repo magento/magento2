@@ -115,6 +115,17 @@ class DeploymentConfig
     }
 
     /**
+     * Check if data from deploy files is avaiable
+     *
+     * @return bool
+     */
+    public function isDbAvailable()
+    {
+        $this->load();
+        return isset($this->data['db']);
+    }
+
+    /**
      * Loads the configuration data
      *
      * @return void

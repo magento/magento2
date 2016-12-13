@@ -14,6 +14,7 @@
     <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />
     <preference for="Magento\Bundle\Api\Data\OptionInterface" type="Magento\Bundle\Model\Option" />
     <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption" />
+    <preference for="Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface" type="Magento\Bundle\Pricing\Adjustment\DefaultSelectionPriceListProvider" />
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -129,4 +130,5 @@
             </argument>
         </arguments>
     </type>
+
 </config>
