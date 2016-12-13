@@ -10,6 +10,7 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Test Creation for Delete CatalogPriceRuleEntity.
@@ -17,6 +18,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Test Flow:
  * Preconditions:
  * 1. Catalog Price Rule is created.
+ * 2. Create customer from dataset using Handler.
  * Steps:
  * 1. Log in as default admin user.
  * 2. Go to Marketing > Catalog Price Rules.
@@ -25,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Perform all assertions.
  *
  * @group Catalog_Price_Rules
- * @ZephyrId MAGETWO-25211
+ * @ZephyrId MAGETWO-25211, MAGETWO-20431
  */
 class DeleteCatalogPriceRuleEntityTest extends Injectable
 {
@@ -46,7 +48,7 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
      * @var CatalogRuleNew
      */
     protected $catalogRuleNew;
-    
+
     /**
      * Injection data.
      *
@@ -67,12 +69,17 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
      *
      * @param CatalogRule $catalogPriceRule
      * @param string $product
+     * @param Customer|null $customer
      * @return array
      */
-    public function test(CatalogRule $catalogPriceRule, $product)
+    public function test(CatalogRule $catalogPriceRule, $product, Customer $customer = null)
     {
         // Precondition
         $catalogPriceRule->persist();
+
+        if ($customer) {
+            $customer->persist();
+        }
 
         $filter = [
             'name' => $catalogPriceRule->getName(),
