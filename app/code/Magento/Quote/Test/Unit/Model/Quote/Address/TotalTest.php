@@ -29,7 +29,8 @@ class TotalTest extends \PHPUnit_Framework_TestCase
             \Magento\Quote\Model\Quote\Address\Total::class,
             [
                 'serializer' => $serializer
-            ]);
+            ]
+        );
     }
 
     /**
