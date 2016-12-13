@@ -45,7 +45,7 @@ class CaseManagementTest extends \PHPUnit_Framework_TestCase
         $case = $this->caseManagement->create($order->getEntityId());
 
         static::assertNotEmpty($case->getEntityId());
-        static::assertEquals(CaseInterface::STATUS_PROCESSING, $case->getStatus());
+        static::assertEquals(CaseInterface::STATUS_PENDING, $case->getStatus());
     }
 
     /**

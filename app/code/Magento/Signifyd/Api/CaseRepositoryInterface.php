@@ -7,7 +7,7 @@ namespace Magento\Signifyd\Api;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Api\Data\CaseSearchResultInterface;
+use Magento\Signifyd\Api\Data\CaseSearchResultsInterface;
 
 /**
  * Signifyd Case repository interface
@@ -25,8 +25,22 @@ interface CaseRepositoryInterface
 
     /**
      * Gets case entity by order id
-     * @param int $orderId
+     * @param int $id
      * @return CaseInterface
      */
-    public function getById($orderId);
+    public function getById($id);
+
+    /**
+     * Deletes case entity
+     * @param CaseInterface $case
+     * @return bool
+     */
+    public function delete(CaseInterface $case);
+
+    /**
+     * Gets list of case entities
+     * @param SearchCriteria $searchCriteria
+     * @return CaseSearchResultsInterface
+     */
+    public function getList(SearchCriteria $searchCriteria);
 }
