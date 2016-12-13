@@ -5,7 +5,7 @@
  */
 namespace Magento\Signifyd\Model\Request;
 
-use Magento\Framework\App\ProductMetadata;
+use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class ClientVersionBuilder
@@ -13,15 +13,15 @@ use Magento\Framework\App\ProductMetadata;
 class ClientVersionBuilder
 {
     /**
-     * @var ProductMetadata
+     * @var ProductMetadataInterface
      */
     private $productMetadata;
 
     /**
-     * @param ProductMetadata $productMetadata
+     * @param ProductMetadataInterface $productMetadata
      */
     public function __construct(
-        ProductMetadata $productMetadata
+        ProductMetadataInterface $productMetadata
     ) {
         $this->productMetadata = $productMetadata;
     }

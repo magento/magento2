@@ -83,13 +83,39 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
         /* @var $order \Magento\Sales\Model\Order */
         $order = $this->orderFactory->create()->load($orderId);
 
-        return array_merge(
-            $this->purchaseBuilder->build($order),
-            $this->cardBuilder->build($order),
-            $this->recipientBuilder->build($order),
-            $this->userAccountBuilder->build($order),
-            $this->sellerBuilder->build($order),
-            $this->clientVersionBuilder->build()
+        return $this->removeEmptyValues(
+            array_merge(
+                $this->purchaseBuilder->build($order),
+                $this->cardBuilder->build($order),
+                $this->recipientBuilder->build($order),
+                $this->userAccountBuilder->build($order),
+                $this->sellerBuilder->build($order),
+                $this->clientVersionBuilder->build()
+            )
         );
+    }
+
+    /**
+     * Remove empty and null values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function removeEmptyValues($data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->removeEmptyValues($data[$key]);
+            }
+
+            if ($data[$key] === null ||
+                $data[$key] === '' ||
+                (is_array($data[$key]) && empty($data[$key]))
+            ) {
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
     }
 }

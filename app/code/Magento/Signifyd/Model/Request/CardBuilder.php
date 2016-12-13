@@ -42,11 +42,13 @@ class CardBuilder
 
         $payment = $order->getPayment();
         $result = [
-            'cardHolderName' => $address->getFirstname() . ' ' . $address->getLastname(),
-            'last4' => $payment->getCcLast4(),
-            'expiryMonth' => $payment->getCcExpMonth(),
-            'expiryYear' =>  $payment->getCcExpYear(),
-            'billingAddress' => $this->addressBuilder->build($address),
+            'card' => [
+                'cardHolderName' => $address->getFirstname() . ' ' . $address->getLastname(),
+                'last4' => $payment->getCcLast4(),
+                'expiryMonth' => $payment->getCcExpMonth(),
+                'expiryYear' =>  $payment->getCcExpYear(),
+                'billingAddress' => $this->addressBuilder->build($address)
+            ]
         ];
 
         return $result;
