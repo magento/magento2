@@ -6,6 +6,9 @@
 
 require 'quote_with_address.php';
 
+/** @var \Magento\Framework\Serialize\SerializerInterface $serializer */
+$serializer = $objectManager->create(\Magento\Framework\Serialize\SerializerInterface::class);
+
 $quote->setReservedOrderId(
     'test_order_1_with_payment'
 );
@@ -22,7 +25,7 @@ $quote->getPayment()
     ->setCcType('visa')
     ->setCcExpYear(2014)
     ->setCcExpMonth(1)
-    ->setAdditionalData(serialize($paymentDetails));
+    ->setAdditionalData($serializer->serialize($paymentDetails));
 
 $quote->collectTotals()->save();
 

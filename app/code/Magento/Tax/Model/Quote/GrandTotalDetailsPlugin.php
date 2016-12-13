@@ -6,6 +6,8 @@
 namespace Magento\Tax\Model\Quote;
 
 use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
 class GrandTotalDetailsPlugin
 {
@@ -35,22 +37,30 @@ class GrandTotalDetailsPlugin
     protected $code;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
         TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Tax\Model\Config $taxConfig,
+        SerializerInterface $serializer = null
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
         $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
         $this->taxConfig = $taxConfig;
         $this->code = 'tax';
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -97,7 +107,7 @@ class GrandTotalDetailsPlugin
         $finalData = [];
         $fullInfo = $taxes['full_info'];
         if (is_string($fullInfo)) {
-            $fullInfo = unserialize($fullInfo);
+            $fullInfo = $this->serializer->unserialize($fullInfo);
         }
         foreach ($fullInfo as $info) {
             if ((array_key_exists('hidden', $info) && $info['hidden'])

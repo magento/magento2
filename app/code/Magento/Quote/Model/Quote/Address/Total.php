@@ -18,6 +18,26 @@ class Total extends \Magento\Framework\DataObject
     protected $baseTotalAmounts;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param array $data [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer [optional]
+     */
+    public function __construct(
+        array $data = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        parent::__construct($data);
+    }
+
+    /**
      * Set total amount value
      *
      * @param string $code
@@ -159,7 +179,7 @@ class Total extends \Magento\Framework\DataObject
     {
         $fullInfo = $this->getData('full_info');
         if (is_string($fullInfo)) {
-            $fullInfo = unserialize($fullInfo);
+            $fullInfo = $this->serializer->unserialize($fullInfo);
         }
         return $fullInfo;
     }
