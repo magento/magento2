@@ -15,7 +15,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 /**
  * Assert product name in different store views on product view page.
  */
-class AssertProductNameOnStorefront extends AbstractConstraint
+class AssertProductNameOnDifferentStoreViews extends AbstractConstraint
 {
     /**
      * Assert that product name is correct on the storefront in different store views.

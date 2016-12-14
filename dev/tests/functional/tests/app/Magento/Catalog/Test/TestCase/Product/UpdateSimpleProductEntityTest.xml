@@ -177,7 +177,7 @@
             <data name="product/data/use_default_name" xsi:type="string">No</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNameOnStorefront" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNameOnDifferentStoreViews" />
         </variation>
     </testCase>
 </config>
