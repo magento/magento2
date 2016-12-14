@@ -16,7 +16,7 @@ use Magento\Framework\Json\DecoderInterface;
  *
  * Encapsulates Signifyd API protocol.
  */
-class SignifydApiClient
+class ApiClient
 {
     /**
      * @var Config
@@ -39,7 +39,7 @@ class SignifydApiClient
     private $dataDecoder;
 
     /**
-     * SignifydApiClient constructor.
+     * ApiClient constructor.
      *
      * Class uses client factory to instantiate new client for interacting with API.
      * All requests and responses are processed by JSON encoder and decoder.
@@ -71,15 +71,15 @@ class SignifydApiClient
      * @param string $method
      * @param array $params
      * @return array
-     * @throws SignifydApiCallException
-     * @throws SignifydApiResponseException
+     * @throws ApiCallException
+     * @throws ApiResponseException
      */
     public function makeApiCall($url, $method, array $params = [])
     {
         try {
             $response = $this->sendRequest($url, $method, $params);
         } catch (\Exception $e) {
-            throw new SignifydApiCallException(
+            throw new ApiCallException(
                 'Unable to call Signifyd API: ' . $e->getMessage(),
                 $e->getCode(),
                 $e
@@ -96,7 +96,6 @@ class SignifydApiClient
      * @param string $method
      * @param array $params
      * @return \Zend_Http_Response
-     * @throws SignifydApiCallException
      */
     private function sendRequest($url, $method, array $params = [])
     {
@@ -125,8 +124,8 @@ class SignifydApiClient
      * @param \Zend_Http_Response $response
      *
      * @return array
-     * @throws SignifydApiCallException
-     * @throws SignifydApiResponseException
+     * @throws ApiCallException
+     * @throws ApiResponseException
      */
     private function handleResponse(\Zend_Http_Response $response)
     {
@@ -135,14 +134,14 @@ class SignifydApiClient
 
         if (!in_array($responseCode, $successResponseCodes)) {
             $errorMessage = $this->buildApiCallFailureMesage($response);
-            throw new SignifydApiResponseException($errorMessage);
+            throw new ApiCallException($errorMessage);
         }
 
         $responseBody = $response->getBody();
         try {
             $decodedResponseBody = $this->dataDecoder->decode($responseBody);
         } catch (\Exception $e) {
-            throw new SignifydApiResponseException(
+            throw new ApiResponseException(
                 'Signifyd API response is not valid JSON: ' . $e->getMessage(),
                 $e->getCode(),
                 $e

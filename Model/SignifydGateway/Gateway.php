@@ -6,14 +6,14 @@
 namespace Magento\Signifyd\Model\SignifydGateway;
 
 use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
-use Magento\Signifyd\Model\SignifydGateway\SignifydApiClient;
+use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 
 /**
  * Signifyd Gateway.
  *
  * Encapsulates interaction with Signifyd API.
  */
-class SignifydGateway
+class Gateway
 {
     /**
      * @var CreateCaseBuilderInterface
@@ -21,19 +21,19 @@ class SignifydGateway
     private $createCaseBuilder;
 
     /**
-     * @var SignifydApiClient
+     * @var ApiClient
      */
     private $apiClient;
 
     /**
-     * SignifydGateway constructor.
+     * Gateway constructor.
      *
      * @param CreateCaseBuilderInterface $createCaseBuilder
-     * @param SignifydApiClient $apiClient
+     * @param ApiClient $apiClient
      */
     public function __construct(
         CreateCaseBuilderInterface $createCaseBuilder,
-        SignifydApiClient $apiClient
+        ApiClient $apiClient
     ) {
         $this->createCaseBuilder = $createCaseBuilder;
         $this->apiClient = $apiClient;
@@ -42,7 +42,7 @@ class SignifydGateway
     /**
      * @param int $orderId
      * @return int Signifyd case (investigation) identifier
-     * @throws SignifydGatewayException
+     * @throws GatewayException
      */
     public function createCase($orderId)
     {
@@ -55,7 +55,7 @@ class SignifydGateway
         );
 
         if (!isset($caseCreationResult['investigationId'])) {
-            throw new SignifydGatewayException('Expected field "investigationId" missed.');
+            throw new GatewayException('Expected field "investigationId" missed.');
         }
 
         return (int)$caseCreationResult['investigationId'];
