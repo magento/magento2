@@ -7,7 +7,7 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Api\Data\CaseInterfaceFactory;
 
-require __DIR__ . '/order.php';
+require __DIR__ . '/order_with_customer_and_two_simple_products.php';
 
 /** @var CaseInterfaceFactory $caseFactory */
 $caseFactory = $objectManager->get(CaseInterfaceFactory::class);

@@ -5,6 +5,7 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
+use Magento\Framework\Config\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Area;
 use Magento\Framework\Intl\DateTimeFactory;
@@ -12,37 +13,23 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+
 /**
- * Class PurchaseBuilderTest
+ * Class CreateCaseBuilderTest
  * @magentoAppIsolation enabled
- * @package Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Order increment ID
-     */
-    const ORDER_INCREMENT_ID = '100000001';
-
     /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var Order
-     */
-    private $order;
-
-    /**
      * @var CreateCaseBuilder
      */
     private $caseBuilder;
-
-    /**
-     * @var array
-     */
-    private $builderData;
 
     /**
      * @var DateTimeFactory
@@ -57,47 +44,51 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         $bootstrap = Bootstrap::getInstance();
         $bootstrap->loadArea(Area::AREA_FRONTEND);
         $this->objectManager = Bootstrap::getObjectManager();
-
         $this->dateTimeFactory = $this->objectManager->create(DateTimeFactory::class);
-
-        $this->order = $this->objectManager->create(Order::class);
-        $this->order->loadByIncrementId(self::ORDER_INCREMENT_ID);
-
         $this->caseBuilder = $this->objectManager->create(CreateCaseBuilder::class);
-        $this->builderData = $this->caseBuilder->build($this->order->getEntityId());
     }
 
     /**
-     * Check the stability purchaseBuilder
+     * Test builder on order with customer, simple product, frontend area,
+     * PayPal gateway, shipping and billing addresses, with two orders
      *
-     * @magentoDataFixture Magento/Signifyd/_files/order.php
+     * @covers \Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder::build()
+     * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testPurchaseBuilder()
+    public function testCreateCaseBuilderWithFullSetOfData()
     {
-        $orderItems = $this->order->getAllItems();
+        /** @var Order $order */
+        $order = $this->objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+        
+        $orderItems = $order->getAllItems();
         $product = $orderItems[0]->getProduct();
-        $payment = $this->order->getPayment();
-        $billingAddress = $this->order->getBillingAddress();
-        $shippingAddress = $this->order->getShippingAddress();
+        $payment = $order->getPayment();
+        $billingAddress = $order->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress();
+
+        /** @var  CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->getById($this->order->getCustomerId());
+        $customer = $customerRepository->getById($order->getCustomerId());
+
         $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
 
         $expected = [
             'purchase' => [
-                'browserIpAddress' => $this->order->getRemoteIp(),
-                'orderId' => $this->order->getEntityId(),
+                'browserIpAddress' => $order->getRemoteIp(),
+                'orderId' => $order->getEntityId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
-                'currency' => $this->order->getOrderCurrencyCode(),
+                'currency' => $order->getOrderCurrencyCode(),
                 'orderChannel' => 'WEB',
-                'totalPrice' => $this->order->getGrandTotal(),
+                'totalPrice' => $order->getGrandTotal(),
                 'shipments' => [
                     0 => [
                         'shipper' => 'Flat Rate',
                         'shippingMethod' => 'Fixed',
-                        'shippingPrice' => $this->order->getShippingAmount()
+                        'shippingPrice' => $order->getShippingAmount()
                     ]
                 ],
                 'products' => [
@@ -138,6 +129,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'confirmationPhone' => $shippingAddress->getTelephone(),
                 'deliveryAddress' => [
                     'streetAddress' => '6161 West Centinela Avenue',
+                    'unit' => 'app. 33',
                     'city' => $shippingAddress->getCity(),
                     'provinceCode' => $shippingAddress->getRegionCode(),
                     'postalCode' => $shippingAddress->getPostcode(),
@@ -147,38 +139,119 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             'userAccount' => [
                 'email' => $customer->getEmail(),
                 'username' => $customer->getEmail(),
-                'phone' => $this->order->getBillingAddress()->getTelephone(),
+                'phone' => $order->getBillingAddress()->getTelephone(),
                 'accountNumber' => $customer->getId(),
                 'createdDate' => $this->formatDate($customer->getCreatedAt()),
-                'lastUpdateDate' => $this->formatDate($customer->getUpdatedAt())
+                'lastUpdateDate' => $this->formatDate($customer->getUpdatedAt()),
+                'aggregateOrderCount' => 2,
+                'aggregateOrderDollars' => 150.0
             ],
-            'seller' => [
-                'name' => 'Sample Store',
-                'domain' => 'm2.com',
-                'shipFromAddress' => [
-                    'streetAddress' => '6161 West Centinela Avenue',
-                    'unit' => 'app. 111',
-                    'city' => 'Culver City',
-                    'provinceCode' => 'AE',
-                    'postalCode' => '90230',
-                    'countryCode' => 1,
-                ],
-                'corporateAddress' => [
-                    'streetAddress' => '5th Avenue',
-                    'unit' => '75',
-                    'city' => 'New York',
-                    'provinceCode' => 'MH',
-                    'postalCode' => '19032',
-                    'countryCode' => 1,
-                ],
-            ],
+            'seller' => $this->getSellerData(),
             'clientVersion' => [
                 'platform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
                 'platformVersion' => $productMetadata->getVersion()
             ]
         ];
 
-        static::assertEquals($expected, $this->builderData);
+
+        static::assertEquals(
+            $expected,
+            $this->caseBuilder->build($order->getEntityId())
+        );
+    }
+
+    /**
+     * Test builder on order with guest, virtual product, admin area,
+     * none PayPal gateway, no shipping address, without credit card data
+     *
+     * @covers \Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder::build()
+     * @magentoDataFixture Magento/Signifyd/_files/order_with_guest_and_virtual_product.php
+     */
+    public function testCreateCaseBuilderWithVirtualProductAndGuest()
+    {
+        /** @var Order $order */
+        $order = $this->objectManager->create(Order::class);
+        $order->loadByIncrementId('100000002');
+
+        $scope = $this->objectManager->get(ScopeInterface::class);
+        $scope->setCurrentScope(Area::AREA_ADMINHTML);
+
+        $orderItems = $order->getAllItems();
+        $product = $orderItems[0]->getProduct();
+        $payment = $order->getPayment();
+        $billingAddress = $order->getBillingAddress();
+        $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
+
+        $expected = [
+            'purchase' => [
+                'browserIpAddress' => $order->getRemoteIp(),
+                'orderId' => $order->getEntityId(),
+                'createdAt' => '2016-12-12T12:00:55+00:00',
+                'paymentGateway' => $payment->getMethod(),
+                'transactionId' => $payment->getLastTransId(),
+                'currency' => $order->getOrderCurrencyCode(),
+                'orderChannel' => 'PHONE',
+                'totalPrice' => $order->getGrandTotal(),
+                'products' => [
+                    0 => [
+                        'itemId' => $orderItems[0]->getSku(),
+                        'itemName' => $orderItems[0]->getName(),
+                        'itemPrice' => $orderItems[0]->getPrice(),
+                        'itemQuantity' => $orderItems[0]->getQtyOrdered(),
+                        'itemUrl' => $product->getProductUrl()
+                    ],
+                ]
+            ],
+            'card' => [
+                'cardHolderName' => 'firstname lastname',
+                'billingAddress' => [
+                    'streetAddress' => 'street',
+                    'city' => $billingAddress->getCity(),
+                    'provinceCode' => $billingAddress->getRegionCode(),
+                    'postalCode' => $billingAddress->getPostcode(),
+                    'countryCode' => $billingAddress->getCountryId()
+                ]
+            ],
+            'seller' => $this->getSellerData(),
+            'clientVersion' => [
+                'platform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
+                'platformVersion' => $productMetadata->getVersion()
+            ]
+        ];
+
+        static::assertEquals(
+            $expected,
+            $this->caseBuilder->build($order->getEntityId())
+        );
+    }
+
+    /**
+     * Return seller data according to fixture
+     *
+     * @return array
+     */
+    private function getSellerData()
+    {
+        return [
+            'name' => 'Sample Store',
+            'domain' => 'm2.com',
+            'shipFromAddress' => [
+                'streetAddress' => '6161 West Centinela Avenue',
+                'unit' => 'app. 111',
+                'city' => 'Culver City',
+                'provinceCode' => 'AE',
+                'postalCode' => '90230',
+                'countryCode' => 'US',
+            ],
+            'corporateAddress' => [
+                'streetAddress' => '5th Avenue',
+                'unit' => '75',
+                'city' => 'New York',
+                'provinceCode' => 'MH',
+                'postalCode' => '19032',
+                'countryCode' => 'US',
+            ],
+        ];
     }
 
     /**
