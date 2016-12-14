@@ -4,6 +4,13 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
+require.config({
+    map: {
+        '*': {
+            'Magento_Checkout/js/view/shipping': 'Magento_Checkout/js/view/shipping'
+        }
+    }
+});
 
 define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
     'use strict';
