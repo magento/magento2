@@ -47,7 +47,7 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $placeOrder = '.action.primary.checkout';
+    protected $placeOrder = '.payment-method._active action.primary.checkout';
     
     /**
      * Wait element.
@@ -75,11 +75,15 @@ class Payment extends Block
      *
      * @param array $payment
      * @param CreditCard|null $creditCard
+     * @param bool $fillCreditCardOn3rdParty
      * @throws \Exception
      * @return void
      */
-    public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
-    {
+    public function selectPaymentMethod(
+        array $payment,
+        CreditCard $creditCard = null,
+        $fillCreditCardOn3rdParty = false
+    ) {
         $paymentMethod = $payment['method'];
         $paymentSelector = sprintf($this->paymentMethodInput, $paymentMethod);
         $paymentLabelSelector = sprintf($this->paymentMethodLabel, $paymentMethod);
@@ -104,7 +108,7 @@ class Payment extends Block
         if ($paymentMethod == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
-        if ($creditCard !== null) {
+        if ($creditCard !== null && $fillCreditCardOn3rdParty === false) {
             $module = $creditCard->hasData('payment_code') ? ucfirst($creditCard->getPaymentCode()) : 'Payment';
             /** @var \Magento\Payment\Test\Block\Form\PaymentCc $formBlock */
             $formBlock = $this->blockFactory->create(

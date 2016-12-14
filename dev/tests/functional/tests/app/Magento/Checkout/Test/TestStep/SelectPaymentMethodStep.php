@@ -11,7 +11,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
- * Selecting payment method.
+ * Select payment method step.
  */
 class SelectPaymentMethodStep implements TestStepInterface
 {
@@ -37,18 +37,28 @@ class SelectPaymentMethodStep implements TestStepInterface
     protected $creditCard;
 
     /**
+     * If fill credit card data should be filled on 3rd party side.
+     *
+     * @var bool
+     */
+    private $fillCreditCardOn3rdParty;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $payment
      * @param CreditCard|null $creditCard
+     * @param bool $fillCreditCardOn3rdParty
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         array $payment,
-        CreditCard $creditCard = null
+        CreditCard $creditCard = null,
+        $fillCreditCardOn3rdParty = false
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->payment = $payment;
         $this->creditCard = $creditCard;
+        $this->fillCreditCardOn3rdParty = $fillCreditCardOn3rdParty;
     }
 
     /**
@@ -59,7 +69,11 @@ class SelectPaymentMethodStep implements TestStepInterface
     public function run()
     {
         if ($this->payment['method'] !== 'free') {
-            $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod($this->payment, $this->creditCard);
+            $this->checkoutOnepage->getPaymentBlock()->selectPaymentMethod(
+                $this->payment,
+                $this->creditCard,
+                $this->fillCreditCardOn3rdParty
+            );
         }
     }
 }
