@@ -34,6 +34,13 @@ class SerializedToJson extends \Magento\Framework\DB\DataConverter\SerializedToJ
                 }
             }
         }
+        if (isset($valueUnserialized['bundle_selection_attributes'])) {
+            $valueUnserialized['bundle_selection_attributes'] = $this->json->serialize(
+                $this->serialize->unserialize(
+                    $valueUnserialized['bundle_selection_attributes']
+                )
+            );
+        }
         return $this->json->serialize($valueUnserialized);
     }
 }
