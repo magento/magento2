@@ -106,7 +106,7 @@ class SignifydApiClient
         $client = $this->createNewClient();
         $client->setHeaders(
             'Authorization',
-            sprintf('Basic %s', $apiKey)
+            sprintf('Basic %s', base64_encode($apiKey))
         );
         if (!empty($params)) {
             $encodedData = $this->dataEncoder->encode($params);
