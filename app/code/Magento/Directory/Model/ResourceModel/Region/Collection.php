@@ -253,7 +253,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (count($options) > 0) {
             array_unshift(
                 $options,
-                ['title' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
+                ['title' => '', 'value' => '', 'label' => __('Please select a region, state or province.')]
             );
         }
         return $options;
