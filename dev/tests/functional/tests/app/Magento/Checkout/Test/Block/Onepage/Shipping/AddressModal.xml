@@ -22,5 +22,8 @@
         </country_id>
         <telephone />
         <postcode />
+        <custom_attribute>
+            <selector>[name="custom_attributes[%attribute_code%]"]</selector>
+        </custom_attribute>
     </fields>
 </mapping>
