@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\Request;
+namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
@@ -96,7 +96,7 @@ class PurchaseBuilder
                 'itemId' => $orderItem->getSku(),
                 'itemName' => $orderItem->getName(),
                 'itemPrice' => $orderItem->getPrice(),
-                'itemQuantity' => $orderItem->getQtyOrdered(),
+                'itemQuantity' => (int)$orderItem->getQtyOrdered(),
                 'itemUrl' => $orderItem->getProduct()->getProductUrl(),
                 'itemWeight' => $orderItem->getProduct()->getWeight()
             ];

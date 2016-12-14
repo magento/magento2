@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Signifyd\Api;
+
+/**
+ * Signifyd case creation interface
+ *
+ * Interface of service for new Signifyd case creation and registering it on Magento side.
+ * Implementation should send request to Signifyd API and create new entity in Magento.
+ *
+ * @api
+ */
+interface CaseCreationServiceInterface
+{
+    /**
+     * Create new case for order with specified id.
+     *
+     * @param $orderId
+     * @return bool
+     */
+    public function createForOrder($orderId);
+
+}
