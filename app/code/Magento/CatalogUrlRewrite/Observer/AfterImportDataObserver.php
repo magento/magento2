@@ -21,7 +21,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\App\ObjectManager;
-use Magento\UrlRewrite\Model\ArrayMerger;
+use Magento\UrlRewrite\Model\UrlRewritesSet;
 
 /**
  * Class AfterImportDataObserver
@@ -99,8 +99,8 @@ class AfterImportDataObserver implements ObserverInterface
         'visibility',
     ];
 
-    /** @var \Magento\UrlRewrite\Model\ArrayMerger */
-    private $arrayMerger;
+    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
+    private $urlRewritesSet;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
@@ -111,7 +111,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
-     * @param \Magento\UrlRewrite\Model\ArrayMerger|null $arrayMerger
+     * @param \Magento\UrlRewrite\Model\UrlRewritesSet|null $urlRewritesSet
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -124,7 +124,7 @@ class AfterImportDataObserver implements ObserverInterface
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
         UrlFinderInterface $urlFinder,
-        ArrayMerger $arrayMerger = null
+        UrlRewritesSet $urlRewritesSet = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -134,7 +134,7 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
-        $this->arrayMerger = $arrayMerger ?: ObjectManager::getInstance()->get(ArrayMerger::class);
+        $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
     }
 
     /**
@@ -267,14 +267,17 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
-        $this->arrayMerger->addData($this->canonicalUrlRewriteGenerate());
-        $this->arrayMerger->addData($this->categoriesUrlRewriteGenerate());
-        $this->arrayMerger->addData($this->currentUrlRewritesRegenerate());
+        $this->urlRewritesSet->merge($this->canonicalUrlRewriteGenerate());
+        $this->urlRewritesSet->merge($this->categoriesUrlRewriteGenerate());
+        $this->urlRewritesSet->merge($this->currentUrlRewritesRegenerate());
         $this->productCategories = null;
 
         unset($this->products);
         $this->products = [];
-        return $this->arrayMerger->getResetData();
+
+        $result = $this->urlRewritesSet->getData();
+        $this->urlRewritesSet->resetData();
+        return $result;
     }
 
     /**

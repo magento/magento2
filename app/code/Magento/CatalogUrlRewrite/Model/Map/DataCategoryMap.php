@@ -45,12 +45,21 @@ class DataCategoryMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($categoryId)
+    public function getAllData($categoryId)
     {
         if (empty($this->data[$categoryId])) {
-            $this->data[$categoryId] = $this->queryData($categoryId);
+            $this->data[$categoryId] = $this->generateData($categoryId);
         }
         return $this->data[$categoryId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($categoryId, $criteria)
+    {
+        $this->getAllData($categoryId);
+        return $this->data[$categoryId][$criteria];
     }
 
     /**
@@ -59,7 +68,7 @@ class DataCategoryMap implements DataMapInterface
      * @param int $categoryId
      * @return array
      */
-    private function queryData($categoryId)
+    private function generateData($categoryId)
     {
         $category = $this->categoryRepository->get($categoryId);
         return $this->collection->addIdFilter($this->getAllCategoryChildrenIds($category))
@@ -87,7 +96,9 @@ class DataCategoryMap implements DataMapInterface
      */
     public function resetData($categoryId)
     {
-        unset($this->data);
-        $this->data = [];
+        unset($this->data[$categoryId]);
+        if (empty($this->data)) {
+            $this->data = [];
+        }
     }
 }

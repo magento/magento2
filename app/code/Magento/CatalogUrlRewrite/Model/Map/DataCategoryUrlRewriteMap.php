@@ -9,6 +9,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
+use \Magento\Framework\DB\Select;
 
 /**
  * Map that holds data for category url rewrites entity
@@ -18,7 +19,7 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
     const ENTITY_TYPE = 'category';
 
     /** @var string[] */
-    private $data = [];
+    private $tableNames = [];
 
     /** @var UrlRewrite */
     private $urlRewritePlaceholder;
@@ -53,12 +54,26 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($categoryId)
+    public function getAllData($categoryId)
     {
-        if (empty($this->data[$categoryId])) {
-            $this->data[$categoryId] = [$this->queryData($categoryId)];
+        if (empty($this->tableNames[$categoryId])) {
+            $this->tableNames[$categoryId] = $this->generateData($categoryId);
         }
-        return $this->data[$categoryId];
+        return $this->tableNames[$categoryId];
+    }
+
+    /**
+     * Gets data by criteria from a map identified by a category Id
+     *
+     * @param int $categoryId
+     * @param Select $criteria
+     * @return array
+     */
+    public function getData($categoryId, $criteria) {
+        $this->getAllData($categoryId);
+        $urlRewritesConnection = $this->connection->getConnection();
+        $criteria->from(['e' => $this->tableNames[$categoryId]]);
+        return $urlRewritesConnection->fetchAll($criteria);
     }
 
     /**
@@ -67,7 +82,7 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
      * @param int $categoryId
      * @return string
      */
-    private function queryData($categoryId)
+    private function generateData($categoryId)
     {
         $urlRewritesConnection = $this->connection->getConnection();
         $select = $urlRewritesConnection->select()
@@ -82,9 +97,9 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
                     [
                         'in' => array_merge(
                             $this->dataMapPool->getDataMap(DataCategoryUsedInProductsMap::class, $categoryId)
-                                ->getData($categoryId),
+                                ->getAllData($categoryId),
                             $this->dataMapPool->getDataMap(DataCategoryMap::class, $categoryId)
-                                ->getData($categoryId)
+                                ->getAllData($categoryId)
                         )
                     ]
                 )
@@ -108,10 +123,10 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
     {
         $this->dataMapPool->resetDataMap(DataCategoryUsedInProductsMap::class, $categoryId);
         $this->dataMapPool->resetDataMap(DataCategoryMap::class, $categoryId);
-        foreach ($this->data as $tableName) {
-            $this->temporaryTableService->dropTable(reset($tableName));
+        $this->temporaryTableService->dropTable($this->tableNames[$categoryId]);
+        unset($this->tableNames[$categoryId]);
+        if (empty($this->tableNames)) {
+            $this->tableNames = [];
         }
-        unset($this->data);
-        $this->data = [];
     }
 }

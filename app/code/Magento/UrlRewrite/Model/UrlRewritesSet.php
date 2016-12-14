@@ -8,9 +8,9 @@ namespace Magento\UrlRewrite\Model;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Merges an array of Url Rewrites
+ * Removes duplicates for a set/array of Url Rewrites
  */
-class ArrayMerger
+class UrlRewritesSet
 {
     /**
      * @var $rewritesArray[]
@@ -18,12 +18,12 @@ class ArrayMerger
     private $data = [];
 
     /**
-     * Adds url rewrites to class data container merging with previous data by keys
+     * Adds url rewrites to class data container by removing duplicates by a unique key
      *
      * @param UrlRewrite[] $urlRewritesArray
      * @return void
      */
-    public function addData($urlRewritesArray)
+    public function merge($urlRewritesArray)
     {
         $separator = '_';
         foreach ($urlRewritesArray as $urlRewrite) {
@@ -37,15 +37,23 @@ class ArrayMerger
     }
 
     /**
-     * Returns the data added and resets the container to an empty array
+     * Returns the data added to container
      *
      * @return UrlRewrite[]
      */
-    public function getResetData()
+    public function getData()
     {
-        $result = $this->data;
+        return $this->data;
+    }
+
+    /**
+     * Resets the container to an empty array
+     *
+     * @return void
+     */
+    public function resetData()
+    {
         unset($this->data);
         $this->data = [];
-        return $result;
     }
 }

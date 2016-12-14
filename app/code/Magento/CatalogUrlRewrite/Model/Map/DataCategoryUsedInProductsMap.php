@@ -36,12 +36,20 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($categoryId)
+    public function getAllData($categoryId)
     {
         if (empty($this->data[$categoryId])) {
-            $this->data[$categoryId] = $this->queryData($categoryId);
+            $this->data[$categoryId] = $this->generateData($categoryId);
         }
         return $this->data[$categoryId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($categoryId, $criteria) {
+        $this->getAllData($categoryId);
+        return $this->data[$categoryId][$criteria];
     }
 
     /**
@@ -50,7 +58,7 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
      * @param int $categoryId
      * @return array
      */
-    private function queryData($categoryId)
+    private function generateData($categoryId)
     {
         $productsLinkConnection = $this->connection->getConnection();
         $select = $productsLinkConnection->select()
@@ -58,13 +66,13 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
             ->where(
                 $productsLinkConnection->prepareSqlCondition(
                     'product_id',
-                    ['in' => $this->dataMapPool->getDataMap(DataProductMap::class, $categoryId)->getData($categoryId)]
+                    ['in' => $this->dataMapPool->getDataMap(DataProductMap::class, $categoryId)->getAllData($categoryId)]
                 )
             )
             ->where(
                 $productsLinkConnection->prepareSqlCondition(
                     'category_id',
-                    ['nin' => $this->dataMapPool->getDataMap(DataCategoryMap::class, $categoryId)->getData($categoryId)]
+                    ['nin' => $this->dataMapPool->getDataMap(DataCategoryMap::class, $categoryId)->getAllData($categoryId)]
                 )
             )
             ->group('category_id');
@@ -79,7 +87,9 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
     {
         $this->dataMapPool->resetDataMap(DataProductMap::class, $categoryId);
         $this->dataMapPool->resetDataMap(DataCategoryMap::class, $categoryId);
-        unset($this->data);
-        $this->data = [];
+        unset($this->data[$categoryId]);
+        if (empty($this->data)) {
+            $this->data = [];
+        }
     }
 }

@@ -75,7 +75,7 @@ class Product extends AbstractDb
      * @param array $filter
      * @return int
      */
-    public function removeMultipleByFiler(array $filter)
+    public function removeMultipleByFilter(array $filter)
     {
         return $this->getConnection()->delete(
             $this->getTable(self::TABLE_NAME),

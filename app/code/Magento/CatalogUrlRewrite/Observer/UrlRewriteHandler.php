@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\UrlRewrite\Model\ArrayMerger;
+use Magento\UrlRewrite\Model\UrlRewritesSet;
 
 class UrlRewriteHandler
 {
@@ -40,8 +40,8 @@ class UrlRewriteHandler
      */
     private $categoryBasedProductRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\ArrayMerger */
-    private $arrayMerger;
+    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
+    private $urlRewritesSet;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
@@ -49,7 +49,7 @@ class UrlRewriteHandler
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\UrlRewrite\Model\ArrayMerger|null $arrayMerger
+     * @param \Magento\UrlRewrite\Model\UrlRewritesSet|null $urlRewritesSet
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -57,14 +57,14 @@ class UrlRewriteHandler
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        ArrayMerger $arrayMerger = null
+        UrlRewritesSet $urlRewritesSet = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->arrayMerger = $arrayMerger ?: ObjectManager::getInstance()->get(ArrayMerger::class);
+        $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
     }
 
     /**
@@ -90,12 +90,12 @@ class UrlRewriteHandler
             foreach ($collection as $product) {
                 $product->setStoreId($storeId);
                 $product->setData('save_rewrites_history', $saveRewriteHistory);
-                $this->arrayMerger->addData(
+                $this->urlRewritesSet->merge(
                     $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
                 );
             }
         } else {
-            $this->arrayMerger->addData(
+            $this->urlRewritesSet->merge(
                 $this->getCategoryProductsUrlRewrites(
                     $category,
                     $storeId,
@@ -105,7 +105,7 @@ class UrlRewriteHandler
             );
         }
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $this->arrayMerger->addData(
+            $this->urlRewritesSet->merge(
                 $this->getCategoryProductsUrlRewrites(
                     $childCategory,
                     $storeId,
@@ -114,7 +114,10 @@ class UrlRewriteHandler
                 )
             );
         }
-        return $this->arrayMerger->getResetData();
+
+        $result = $this->urlRewritesSet->getData();
+        $this->urlRewritesSet->resetData();
+        return $result;
     }
 
     /**
@@ -143,11 +146,14 @@ class UrlRewriteHandler
             $this->isSkippedProduct[] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
-            $this->arrayMerger->addData(
+            $this->urlRewritesSet->merge(
                 $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId)
             );
         }
-        return $this->arrayMerger->getResetData();
+
+        $result = $this->urlRewritesSet->getData();
+        $this->urlRewritesSet->resetData();
+        return $result;
     }
 
     /**

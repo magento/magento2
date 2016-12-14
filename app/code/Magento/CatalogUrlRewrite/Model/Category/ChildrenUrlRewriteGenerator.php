@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\UrlRewrite\Model\ArrayMerger;
+use Magento\UrlRewrite\Model\UrlRewritesSet;
 use Magento\Framework\App\ObjectManager;
 
 class ChildrenUrlRewriteGenerator
@@ -19,22 +19,22 @@ class ChildrenUrlRewriteGenerator
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory */
     protected $categoryUrlRewriteGeneratorFactory;
 
-    /** @var \Magento\UrlRewrite\Model\ArrayMerger */
-    private $arrayMerger;
+    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
+    private $urlRewritesSet;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory
-     * @param ArrayMerger|null $arrayMerger
+     * @param UrlRewritesSet|null $urlRewritesSet
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory,
-        ArrayMerger $arrayMerger = null
+        UrlRewritesSet $urlRewritesSet = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGeneratorFactory = $categoryUrlRewriteGeneratorFactory;
-        $this->arrayMerger = $arrayMerger ?: ObjectManager::getInstance()->get(ArrayMerger::class);
+        $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
     }
 
     /**
@@ -52,8 +52,11 @@ class ChildrenUrlRewriteGenerator
             $childCategory->setData('save_rewrites_history', $category->getData('save_rewrites_history'));
             /** @var CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator */
             $categoryUrlRewriteGenerator = $this->categoryUrlRewriteGeneratorFactory->create();
-            $this->arrayMerger->addData($categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId));
+            $this->urlRewritesSet->merge($categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId));
         }
-        return $this->arrayMerger->getResetData();
+
+        $result = $this->urlRewritesSet->getData();
+        $this->urlRewritesSet->resetData();
+        return $result;
     }
 }

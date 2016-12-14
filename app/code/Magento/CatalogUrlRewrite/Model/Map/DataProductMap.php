@@ -43,12 +43,20 @@ class DataProductMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($categoryId)
+    public function getAllData($categoryId)
     {
         if (empty($this->data[$categoryId])) {
-            $this->data[$categoryId] = $this->queryData($categoryId);
+            $this->data[$categoryId] = $this->generateData($categoryId);
         }
         return $this->data[$categoryId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($categoryId, $criteria) {
+        $this->getAllData($categoryId);
+        return $this->data[$categoryId][$criteria];
     }
 
     /**
@@ -57,7 +65,7 @@ class DataProductMap implements DataMapInterface
      * @param int $categoryId
      * @return array
      */
-    private function queryData($categoryId)
+    private function generateData($categoryId)
     {
         $productsCollection = $this->collectionFactory->create();
         $productsCollection->getSelect()
@@ -69,7 +77,7 @@ class DataProductMap implements DataMapInterface
             ->where(
                 $productsCollection->getConnection()->prepareSqlCondition(
                     'cp.category_id',
-                    ['in' => $this->dataMapPool->getDataMap(DataCategoryMap::class, $categoryId)->getData($categoryId)]
+                    ['in' => $this->dataMapPool->getDataMap(DataCategoryMap::class, $categoryId)->getAllData($categoryId)]
                 )
             )
             ->group('e.entity_id');
@@ -83,8 +91,8 @@ class DataProductMap implements DataMapInterface
     public function resetData($categoryId)
     {
         $this->dataMapPool->resetDataMap(DataCategoryMap::class, $categoryId);
-        unset($this->data);
-        $this->data = [];
-        return $this;
+        if (empty($this->data)) {
+            $this->data = [];
+        }
     }
 }
