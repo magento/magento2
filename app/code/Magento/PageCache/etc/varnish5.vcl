@@ -9,6 +9,13 @@ backend default {
     .host = "/* {{ host }} */";
     .port = "/* {{ port }} */";
     .first_byte_timeout = 600s;
+    .probe = {
+        .url = "/pub/health_check.php";
+        .timeout = 500 ms;
+        .interval = 5s;
+        .window = 10;
+        .threshold = 8;
+   }
 }
 
 acl purge {
@@ -181,12 +188,17 @@ sub vcl_hit {
         # Hit within TTL period
         return (deliver);
     }
-    if (obj.ttl + obj.grace > 0s) {
-        # Hit after TTL expiration, but within grace period
-        set req.http.grace = "full";
-        return (deliver);
+    if (std.healthy(req.backend_hint)) {
+        if (obj.ttl + obj.grace > 0s) {
+            # Hit after TTL expiration, but within grace period
+            set req.http.grace = "full";
+            return (deliver);
+        } else {
+            # Hit after TTL and grace expiration
+            return (miss);
+        }
     } else {
-        # Hit after TTL and grace expiration
-        return(miss);
+        # server is not healthy, retrieve from cache
+        return (deliver);
     }
 }
