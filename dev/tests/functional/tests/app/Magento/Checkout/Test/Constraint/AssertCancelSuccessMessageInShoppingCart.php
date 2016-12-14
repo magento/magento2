@@ -10,22 +10,26 @@ use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that success message is present and has correct text.
+ * Assert that success message about canceled order is present and correct.
  */
-class AssertSuccessMessageInShoppingCart extends AbstractConstraint
+class AssertCancelSuccessMessageInShoppingCart extends AbstractConstraint
 {
     /**
-     * Assert that success message is present and has correct text.
+     * Cancel success message text.
+     */
+    const SUCCESS_MESSAGE = 'Payment was canceled.';
+
+    /**
+     * Assert that success message about canceled order is present and correct.
      *
      * @param CheckoutCart $checkoutCart
-     * @param string $expectedMessage
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, $expectedMessage)
+    public function processAssert(CheckoutCart $checkoutCart)
     {
         $actualMessage = $checkoutCart->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
-            $expectedMessage,
+            self::SUCCESS_MESSAGE,
             $actualMessage,
             'Success message is not present or has wrong text.'
         );
@@ -38,6 +42,6 @@ class AssertSuccessMessageInShoppingCart extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Success message is present or has a correct text.';
+        return 'Cancel success message is present or has a correct text.';
     }
 }
