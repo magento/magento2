@@ -28,6 +28,8 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cronCommand" xsi:type="object">Magento\Cron\Console\Command\CronCommand</item>
+                <item name="cronInstall" xsi:type="object">Magento\Cron\Console\Command\CronInstallCommand</item>
+                <item name="cronRemove" xsi:type="object">Magento\Cron\Console\Command\CronRemoveCommand</item>
             </argument>
         </arguments>
     </type>
@@ -35,6 +37,26 @@
         <arguments>
             <argument name="areas" xsi:type="array">
                 <item name="crontab" xsi:type="null" />
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Crontab\CrontabManager">
+        <arguments>
+            <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Crontab\TasksProvider">
+        <arguments>
+            <argument name="tasks" xsi:type="array">
+                <item name="cronMagento" xsi:type="array">
+                    <item name="command" xsi:type="string">{magentoRoot}bin/magento cron:run | grep -v "Ran jobs by schedule" >> {magentoLog}magento.cron.log</item>
+                </item>
+                <item name="cronUpdate" xsi:type="array">
+                    <item name="command" xsi:type="string">{magentoRoot}update/cron.php >> {magentoLog}update.cron.log</item>
+                </item>
+                <item name="cronSetup" xsi:type="array">
+                    <item name="command" xsi:type="string">{magentoRoot}bin/magento setup:cron:run >> {magentoLog}setup.cron.log</item>
+                </item>
             </argument>
         </arguments>
     </type>
