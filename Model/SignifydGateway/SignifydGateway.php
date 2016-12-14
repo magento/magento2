@@ -40,7 +40,7 @@ class SignifydGateway
     }
 
     /**
-     * @param $orderId
+     * @param int $orderId
      * @return int Signifyd case (investigation) identifier
      * @throws SignifydGatewayException
      */

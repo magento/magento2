@@ -79,5 +79,4 @@ class PlaceOrder implements ObserverInterface
     {
         return $event->getData('order');
     }
-
 }
