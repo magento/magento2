@@ -4,12 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko ifnot: isItemsBlockExpanded() -->
-<div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active'}}">
-<!-- /ko -->
-<!-- ko if: isItemsBlockExpanded() -->
-<div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': true}}">
-<!-- /ko -->
+<div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': isItemsBlockExpanded()}}">
     <div class="title" data-role="title">
         <strong role="heading"><span data-bind="text: getItemsQty()"></span>
             <!-- ko if: getItemsQty() == 1 -->
