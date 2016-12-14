@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Setup;
 
+/**
+ * Class UpgradeData
+ * @package Magento\Sales\Setup
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
     /**
