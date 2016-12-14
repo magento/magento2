@@ -583,6 +583,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function validateUpdate($handle, $updateXml)
     {
