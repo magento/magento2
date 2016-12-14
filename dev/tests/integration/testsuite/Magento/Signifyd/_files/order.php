@@ -8,14 +8,14 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Paypal\Model\Config as PaypalConfig;
 use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
 use Magento\Sales\Model\Order\Shipment;
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-require __DIR__ . '/customer.php';
+require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
+require __DIR__ . '/store.php';
 
 $addressData = require __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 
@@ -27,6 +27,9 @@ $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)
     ->setAddressType('shipping')
+    ->setStreet('6161 West Centinela Avenue')
+    ->setFirstname('John')
+    ->setLastname('Doe')
     ->setShippingMethod('flatrate_flatrate');
 
 $payment = $objectManager->create(Payment::class);
@@ -37,11 +40,23 @@ $payment->setMethod(PaypalConfig::METHOD_WPP_EXPRESS)
     ->setCcExpYear('21');
 
 /** @var Item $orderItem */
-$orderItem = $objectManager->create(Item::class);
-$orderItem->setProductId($product->getId())
+$orderItem1 = $objectManager->create(Item::class);
+$orderItem1->setProductId($product->getId())
     ->setSku($product->getSku())
     ->setName($product->getName())
     ->setQtyOrdered(1)
+    ->setBasePrice($product->getPrice())
+    ->setPrice($product->getPrice())
+    ->setRowTotal($product->getPrice())
+    ->setProductType($product->getTypeId());
+
+/** @var Item $orderItem */
+$orderItem2 = $objectManager->create(Item::class);
+$orderItem2->setProductId($product->getId())
+    ->setSku('simple2')
+    ->setName('Simple product')
+    ->setPrice(100)
+    ->setQtyOrdered(2)
     ->setBasePrice($product->getPrice())
     ->setPrice($product->getPrice())
     ->setRowTotal($product->getPrice())
@@ -55,6 +70,8 @@ $order = $objectManager->create(Order::class);
 $order->setIncrementId('100000001')
     ->setState(Order::STATE_PROCESSING)
     ->setStatus(Order::STATE_PROCESSING)
+    ->setCustomerId($customer->getId())
+    ->setCustomerIsGuest(false)
     ->setRemoteIp('127.0.0.1')
     ->setCreatedAt('2016-12-12T12:00:55+0000')
     ->setOrderCurrencyCode('USD')
@@ -67,20 +84,19 @@ $order->setIncrementId('100000001')
     ->setShippingAddress($shippingAddress)
     ->setShippingDescription('Flat Rate - Fixed')
     ->setShippingAmount(10)
-    ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())
-    ->addItem($orderItem)
-    ->setPayment($payment)
-    ->setCustomerId(1)
-    ->setCustomerIsGuest(false);
+    ->setStoreId($store->getId())
+    ->addItem($orderItem1)
+    ->addItem($orderItem2)
+    ->setPayment($payment);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);
 
 $shipmentItem = $objectManager->create(ShipmentItem::class);
-$shipmentItem->setOrderItem($orderItem);
+$shipmentItem->setOrderItem($orderItem1);
 
-/** @var \Magento\Sales\Model\Order\Shipment $shipment */
+/** @var Shipment $shipment */
 $shipment = $objectManager->create(Shipment::class);
 $shipment->setOrder($order)
     ->addItem($shipmentItem)

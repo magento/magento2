@@ -11,7 +11,7 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-
+use Magento\Framework\App\ProductMetadataInterface;
 /**
  * Class PurchaseBuilderTest
  * @magentoAppIsolation enabled
@@ -45,6 +45,11 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
     private $builderData;
 
     /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * Initial setup
      */
     protected function setUp()
@@ -52,6 +57,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         $bootstrap = Bootstrap::getInstance();
         $bootstrap->loadArea(Area::AREA_FRONTEND);
         $this->objectManager = Bootstrap::getObjectManager();
+
+        $this->dateTimeFactory = $this->objectManager->create(DateTimeFactory::class);
 
         $this->order = $this->objectManager->create(Order::class);
         $this->order->loadByIncrementId(self::ORDER_INCREMENT_ID);
@@ -72,9 +79,9 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         $payment = $this->order->getPayment();
         $billingAddress = $this->order->getBillingAddress();
         $shippingAddress = $this->order->getShippingAddress();
-
         $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
-        $customer = $customerRepository->getById(1);
+        $customer = $customerRepository->getById($this->order->getCustomerId());
+        $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
 
         $expected = [
             'purchase' => [
@@ -101,6 +108,14 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemQuantity' => $orderItems[0]->getQtyOrdered(),
                         'itemUrl' => $product->getProductUrl(),
                         'itemWeight' => $product->getWeight()
+                    ],
+                    1 => [
+                        'itemId' => 'simple2',
+                        'itemName' => 'Simple product',
+                        'itemPrice' => $orderItems[1]->getPrice(),
+                        'itemQuantity' => $orderItems[1]->getQtyOrdered(),
+                        'itemUrl' => $product->getProductUrl(),
+                        'itemWeight' => $product->getWeight()
                     ]
                 ]
             ],
@@ -122,7 +137,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'confirmationEmail' =>  $shippingAddress->getEmail(),
                 'confirmationPhone' => $shippingAddress->getTelephone(),
                 'deliveryAddress' => [
-                    'streetAddress' => 'street',
+                    'streetAddress' => '6161 West Centinela Avenue',
                     'city' => $shippingAddress->getCity(),
                     'provinceCode' => $shippingAddress->getRegionCode(),
                     'postalCode' => $shippingAddress->getPostcode(),
@@ -134,11 +149,51 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'username' => $customer->getEmail(),
                 'phone' => $this->order->getBillingAddress()->getTelephone(),
                 'accountNumber' => $customer->getId(),
-                'createdDate' => '2016-12-12 11:00:00+00:00',
-                'lastUpdateDate' => '2016-12-12 11:05:00+00:00'
+                'createdDate' => $this->formatDate($customer->getCreatedAt()),
+                'lastUpdateDate' => $this->formatDate($customer->getUpdatedAt())
+            ],
+            'seller' => [
+                'name' => 'Sample Store',
+                'domain' => 'm2.com',
+                'shipFromAddress' => [
+                    'streetAddress' => '6161 West Centinela Avenue',
+                    'unit' => 'app. 111',
+                    'city' => 'Culver City',
+                    'provinceCode' => 'AE',
+                    'postalCode' => '90230',
+                    'countryCode' => 1,
+                ],
+                'corporateAddress' => [
+                    'streetAddress' => '5th Avenue',
+                    'unit' => '75',
+                    'city' => 'New York',
+                    'provinceCode' => 'MH',
+                    'postalCode' => '19032',
+                    'countryCode' => 1,
+                ],
+            ],
+            'clientVersion' => [
+                'platform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
+                'platformVersion' => $productMetadata->getVersion()
             ]
         ];
 
-        static::assertEquals($expected['userAccount'], $this->builderData['userAccount']);
+        static::assertEquals($expected, $this->builderData);
+    }
+
+    /**
+     * Format date in ISO8601
+     *
+     * @param string $date
+     * @return string
+     */
+    private function formatDate($date)
+    {
+        $result = $this->dateTimeFactory->create(
+            $date,
+            new \DateTimeZone('UTC')
+        );
+
+        return $result->format(\DateTime::ATOM);
     }
 }
