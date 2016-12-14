@@ -18,7 +18,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 {
     /**
-     * @constructor
      * @param FixtureInterface $product
      */
     public function __construct(FixtureInterface $product)
@@ -32,6 +31,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             ? $checkoutData['options']['bundle_options']
             : [];
 
+        $productSku = [$product->getSku()];
         foreach ($checkoutBundleOptions as $checkoutOptionKey => $checkoutOption) {
             // Find option and value keys
             $attributeKey = null;
@@ -52,6 +52,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             $bundleSelectionAttribute = $bundleSelection['products'][$attributeKey];
             $bundleOptions = $bundleSelection['bundle_options'][$attributeKey];
             $value = $bundleSelectionAttribute[$optionKey]->getName();
+            $product->getSkuType() == 'No' ?: $productSku[] = $bundleSelectionAttribute[$optionKey]->getSku();
             $qty = $bundleOptions['assigned_products'][$optionKey]['data']['selection_qty'];
             $price = $product->getPriceType() == 'Yes'
                 ? number_format($bundleSelectionAttribute[$optionKey]->getPrice(), 2)
@@ -64,6 +65,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             $checkoutBundleOptions[$checkoutOptionKey] = $optionData;
         }
 
+        $this->data['sku'] = implode('-', $productSku);
         $this->data['options'] += $checkoutBundleOptions;
     }
 }

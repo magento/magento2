@@ -13,7 +13,7 @@
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -30,8 +30,8 @@
             <data name="status" xsi:type="string">Complete</data>
             <data name="configData" xsi:type="string">merchant_country_gb, hosted_pro, config_base_currency_gb</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
         </variation>
     </testCase>

@@ -20,7 +20,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 {
     /**
-     * @constructor
      * @param FixtureInterface $product
      */
     public function __construct(FixtureInterface $product)
@@ -28,6 +27,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
         parent::__construct($product);
 
         /** @var ConfigurableProduct $product */
+        $productData = $product->getData();
         $checkoutData = $product->getCheckoutData();
         $cartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
         $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
@@ -35,10 +35,11 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             ? $checkoutData['options']['configurable_options']
             : [];
 
+        $attributeKey = [];
         foreach ($checkoutConfigurableOptions as $key => $checkoutConfigurableOption) {
             $attribute = $checkoutConfigurableOption['title'];
             $option = $checkoutConfigurableOption['value'];
-
+            $attributeKey[] = "$attribute:$option";
             $checkoutConfigurableOptions[$key] = [
                 'title' => isset($attributesData[$attribute]['label'])
                     ? $attributesData[$attribute]['label']
@@ -48,6 +49,9 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
                     : $option,
             ];
         }
+        $attributeKey = implode(' ', $attributeKey);
+        $cartItem['sku'] = $productData['configurable_attributes_data']['matrix'][$attributeKey]['sku'];
+        $cartItem['name'] = $productData['name'];
 
         $cartItem['options'] = isset($cartItem['options'])
             ? $cartItem['options'] + $checkoutConfigurableOptions

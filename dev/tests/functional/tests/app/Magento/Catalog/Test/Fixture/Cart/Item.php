@@ -21,7 +21,6 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 class Item extends DataSource
 {
     /**
-     * @constructor
      * @param FixtureInterface $product
      */
     public function __construct(FixtureInterface $product)
@@ -54,7 +53,8 @@ class Item extends DataSource
         $cartItem['qty'] = isset($checkoutData['qty'])
                 ? $checkoutData['qty']
                 : 1;
-
+        $cartItem['sku'] = $product->getSku();
+        $cartItem['name'] = $product->getName();
         $this->data = $cartItem;
     }
 }

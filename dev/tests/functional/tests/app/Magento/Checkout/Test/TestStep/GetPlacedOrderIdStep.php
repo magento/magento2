@@ -48,19 +48,21 @@ class GetPlacedOrderIdStep implements TestStepInterface
      */
     public function run()
     {
+        $incrementId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         return [
-            'orderId' => $this->getOrderId()
+            'entityId' => $this->getEntityId($incrementId),
+            'orderId' => $incrementId
         ];
     }
 
     /**
-     * Get order id by increment id.
+     * Get order entity id by increment id.
      *
+     * @param string $incrementId
      * @return string
      */
-    private function getOrderId()
+    private function getEntityId($incrementId)
     {
-        $incrementId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $url = $_ENV['app_frontend_url'] . 'rest/V1/orders/';
         $url .= '?searchCriteria[filterGroups][0][filters][0][field]=increment_id';
         $url .= '&searchCriteria[filterGroups][0][filters][0][value]=' . $incrementId;

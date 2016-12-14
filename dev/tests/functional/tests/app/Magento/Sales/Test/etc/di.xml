@@ -101,4 +101,9 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOnlineInvoiceCannotBeCreated">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
 </config>

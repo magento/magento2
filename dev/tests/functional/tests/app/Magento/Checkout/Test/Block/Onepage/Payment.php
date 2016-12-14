@@ -47,7 +47,7 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $placeOrder = '.payment-method._active action.primary.checkout';
+    protected $placeOrder = '.payment-method._active .action.primary.checkout';
     
     /**
      * Wait element.

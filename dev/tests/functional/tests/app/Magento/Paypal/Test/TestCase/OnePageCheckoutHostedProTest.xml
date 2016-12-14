@@ -13,7 +13,7 @@
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>

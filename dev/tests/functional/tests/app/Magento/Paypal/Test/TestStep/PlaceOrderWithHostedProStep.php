@@ -7,12 +7,10 @@
 namespace Magento\Paypal\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
-use Magento\Paypal\Test\Fixture\CreditCardHostedPro;
+use Magento\Payment\Test\Fixture\CreditCard;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
@@ -26,13 +24,6 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
      * @var CheckoutOnepage
      */
     private $checkoutOnepage;
-
-    /**
-     * Onepage checkout success page.
-     *
-     * @var CheckoutOnepageSuccess
-     */
-    private $checkoutOnepageSuccess;
 
     /**
      * Fixture factory.
@@ -63,35 +54,22 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
     private $creditCard;
 
     /**
-     * Curl transport on webapi.
-     *
-     * @var WebapiDecorator
-     */
-    private $decorator;
-
-    /**
      * @param CheckoutOnepage $checkoutOnepage
-     * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
-     * @param CreditCardHostedPro $creditCard
-     * @param WebapiDecorator $decorator
+     * @param CreditCard $creditCard
      * @param array $payment
      * @param array $products
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
-        CreditCardHostedPro $creditCard,
-        WebapiDecorator $decorator,
+        CreditCard $creditCard,
         array $payment,
         array $products
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->creditCard = $creditCard;
-        $this->decorator = $decorator;
         $this->payment = $payment;
         $this->products = $products;
     }

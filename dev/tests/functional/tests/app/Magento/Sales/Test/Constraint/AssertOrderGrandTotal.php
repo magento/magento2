@@ -6,28 +6,32 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that Order Grand Total is correct on order page in backend
+ * Assert that Order Grand Total is correct on order page in Admin.
  */
 class AssertOrderGrandTotal extends AbstractConstraint
 {
     /**
-     * Assert that Order Grand Total is correct on order page in backend
+     * Assert that Order Grand Total is correct on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
-     * @param string $orderId
+     * @param OrderIndex $salesOrder
      * @param array $prices
+     * @param string $orderId
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
-        $orderId,
-        array $prices
+        OrderIndex $salesOrder,
+        array $prices,
+        $orderId
     ) {
-        $salesOrderView->open(['order_id' => $orderId]);
+        $salesOrder->open();
+        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
         \PHPUnit_Framework_Assert::assertEquals(
             number_format($prices['grandTotal'], 2, '.', ','),
@@ -37,7 +41,7 @@ class AssertOrderGrandTotal extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

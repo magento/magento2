@@ -19,7 +19,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about captured amount in order.
      */
-    const CAPTURED_AMOUNT_PATTERN = '/([a-zA-Z\"\s]*)Captured amount of \W+%S.([a-zA-Z0-9\"\s\:]*)/';
+    const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about captured amount exist in Comments History section on order page in Admin.
@@ -42,7 +42,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
         $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCapturedAmount();
         foreach ($capturedPrices as $key => $capturedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
-                sprintf(self::CAPTURED_AMOUNT_PATTERN, $capturedPrices),
+                sprintf(self::CAPTURED_AMOUNT_PATTERN, $capturedPrice),
                 $actualCapturedAmount[$key],
                 'Incorrect captured amount value for the order #' . $orderId
             );

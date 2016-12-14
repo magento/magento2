@@ -330,31 +330,31 @@
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Email Associated with PayPal Merchant Account</item>
-                <item name="value" xsi:type="string">PAYPAL_BUSINESS_ACCOUNT</item>
+                <item name="value" xsi:type="string">%payflow_link_business_account_email%</item>
             </field>
             <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/partner" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Partner</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYMENTSADVANCED_PARTNER</item>
+                <item name="value" xsi:type="string">%payflow_link_partner%</item>
             </field>
             <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/user" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">User</item>
-                <item name="value" xsi:type="string">PAYMENT_PPAYMENTSADVANCED_USER</item>
+                <item name="value" xsi:type="string">%payflow_link_user%</item>
             </field>
             <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/pwd" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Password</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYMENTSADVANCED_PWD</item>
+                <item name="value" xsi:type="string">%payflow_link_password%</item>
             </field>
             <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/vendor" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Vendor</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYMENTSADVANCED_VENDOR</item>
+                <item name="value" xsi:type="string">%payflow_link_vendor%</item>
             </field>
             <field name="payment/paypal_group_all_in_one/payflow_advanced/required_settings/payments_advanced/sandbox_flag" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
@@ -383,31 +383,31 @@
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Email Associated with PayPal Merchant Account</item>
-                <item name="value" xsi:type="string">PAYPAL_BUSINESS_ACCOUNT</item>
+                <item name="value" xsi:type="string">%payflow_link_business_account_email%</item>
             </field>
             <field name="payment/paypal_payment_gateways/payflow_link_us/payflow_link_required/payflow_link_payflow_link/partner" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Partner</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_PARTNER</item>
+                <item name="value" xsi:type="string">%payflow_link_partner%</item>
             </field>
             <field name="payment/paypal_payment_gateways/payflow_link_us/payflow_link_required/payflow_link_payflow_link/user" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">User</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_USER</item>
+                <item name="value" xsi:type="string">%payflow_link_user%</item>
             </field>
             <field name="payment/paypal_payment_gateways/payflow_link_us/payflow_link_required/payflow_link_payflow_link/pwd" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Password</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_PWD</item>
+                <item name="value" xsi:type="string">%payflow_link_password%</item>
             </field>
             <field name="payment/paypal_payment_gateways/payflow_link_us/payflow_link_required/payflow_link_payflow_link/vendor" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Vendor</item>
-                <item name="value" xsi:type="string">PAYMENT_PAYFLOWLINK_VENDOR</item>
+                <item name="value" xsi:type="string">%payflow_link_vendor%</item>
             </field>
             <field name="payment/paypal_payment_gateways/payflow_link_us/payflow_link_required/payflow_link_payflow_link/sandbox_flag" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>

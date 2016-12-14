@@ -6,25 +6,23 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
- * Class AbstractAssertArchiveItems
- * Assert items represented in order's entity view page
+ * Assert items represented in order's entity view page.
  */
 abstract class AbstractAssertItems extends AbstractAssertForm
 {
     /**
-     * Key for sort data
+     * Key for sort data.
      *
      * @var string
      */
     protected $sortKey = "::sku";
 
     /**
-     * List compare fields
+     * List compare fields.
      *
      * @var array
      */
@@ -35,25 +33,23 @@ abstract class AbstractAssertItems extends AbstractAssertForm
     ];
 
     /**
-     * Prepare order products
+     * Prepare order products.
      *
-     * @param OrderInjectable $order
+     * @param Cart $cart
      * @param array|null $data [optional]
      * @return array
      */
-    protected function prepareOrderProducts(OrderInjectable $order, array $data = null)
+    protected function prepareOrderProducts(Cart $cart, array $data = null)
     {
-        $products = $order->getEntityId()['products'];
         $productsData = [];
-
-        /** @var CatalogProductSimple $product */
-        foreach ($products as $key => $product) {
+        /** @var \Magento\Catalog\Test\Fixture\Cart\Item $item */
+        foreach ($cart->getItems() as $key => $item) {
             $productsData[] = [
-                'product' => $product->getName(),
-                'sku' => $product->getSku(),
+                'product' => $item->getData()['name'],
+                'sku' => $item->getData()['sku'],
                 'qty' => (isset($data[$key]['qty']) && $data[$key]['qty'] != '-')
                     ? $data[$key]['qty']
-                    : $product->getCheckoutData()['qty'],
+                    : $item->getData()['qty'],
             ];
         }
 
@@ -61,7 +57,7 @@ abstract class AbstractAssertItems extends AbstractAssertForm
     }
 
     /**
-     * Prepare invoice data
+     * Prepare invoice data.
      *
      * @param array $itemsData
      * @return array
