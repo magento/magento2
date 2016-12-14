@@ -543,6 +543,10 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $prevGroup = $allCustomersGroupId;
 
             foreach ($prices as $price) {
+                if (empty($price['percentage_value'])) {
+                    // can use only percentage tier price
+                    continue;
+                }
                 if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allCustomersGroupId) {
                     // tier not for current customer group nor is for all groups
                     continue;
@@ -563,8 +567,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     continue;
                 }
 
-                if ($price['website_price'] > $prevPrice) {
-                    $prevPrice = $price['website_price'];
+                if ($price['percentage_value'] > $prevPrice) {
+                    $prevPrice = $price['percentage_value'];
                     $prevQty = $price['price_qty'];
                     $prevGroup = $price['cust_group'];
                 }
