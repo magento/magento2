@@ -108,14 +108,22 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
                 $data[$key] = $this->removeEmptyValues($data[$key]);
             }
 
-            if ($data[$key] === null ||
-                $data[$key] === '' ||
-                (is_array($data[$key]) && empty($data[$key]))
-            ) {
+            if ($this->isEmpty($data[$key])) {
                 unset($data[$key]);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Empty values are null, empty string and empty array
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    private function isEmpty($value)
+    {
+        return $value === null || $value === '' || (is_array($value) && empty($value));
     }
 }
