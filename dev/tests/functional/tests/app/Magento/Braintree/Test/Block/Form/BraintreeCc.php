@@ -9,28 +9,36 @@ namespace Magento\Braintree\Test\Block\Form;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Payment\Test\Block\Form\Cc as CreditCard;
+use Magento\Mtf\ObjectManager;
+use Magento\Payment\Test\Block\Form\PaymentCc as CreditCard;
 
 /**
- * Class Cc
- * Form for filling credit card data for Braintree payment method
+ * Form for filling credit card data for Braintree payment method.
  */
-class Cc extends CreditCard
+class BraintreeCc extends CreditCard
 {
     /**
-     * Braintree iFrame locator
+     * Braintree iFrame locator.
      *
      * @var array
      */
     protected $braintreeForm = [
-        "credit_card_number" => "#braintree-hosted-field-number",
-        "credit_card_exp_month" => "#braintree-hosted-field-expirationMonth",
-        "credit_card_exp_year" => "#braintree-hosted-field-expirationYear",
-        "cvv" => "#braintree-hosted-field-cvv",
+        "cc_number" => "#braintree-hosted-field-number",
+        "cc_exp_month" => "#braintree-hosted-field-expirationMonth",
+        "cc_exp_year" => "#braintree-hosted-field-expirationYear",
+        "cc_cid" => "#braintree-hosted-field-cvv",
     ];
 
+    /**
+     * Fill Braintree credit card form.
+     *
+     * @param FixtureInterface $fixture
+     * @param SimpleElement|null $element
+     * @return void
+     */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
+        ObjectManager::getInstance()->create(Locator::class, []);
         $mapping = $this->dataMapping($fixture->getData());
         foreach ($this->braintreeForm as $field => $iframe) {
             $element = $this->browser->find('body');

@@ -7,17 +7,17 @@
 -->
 <mapping strict="0">
     <fields>
-        <credit_card_number>
+        <cc_number>
             <selector>#credit-card-number</selector>
-        </credit_card_number>
-        <credit_card_exp_month>
+        </cc_number>
+        <cc_exp_month>
             <selector>#expiration-month</selector>
-        </credit_card_exp_month>
-        <credit_card_exp_year>
+        </cc_exp_month>
+        <cc_exp_year>
             <selector>#expiration-year</selector>
-        </credit_card_exp_year>
-        <cvv>
+        </cc_exp_year>
+        <cc_cid>
             <selector>#cvv</selector>
-        </cvv>
+        </cc_cid>
     </fields>
 </mapping>
