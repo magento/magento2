@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Signifyd integration configuration.
@@ -21,21 +21,12 @@ class Config
     private $scopeConfig;
 
     /**
-     * @var EncryptorInterface
-     */
-    private $encryptor;
-
-    /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        EncryptorInterface $encryptor
-    ) {
+    public function __construct(ScopeConfigInterface $scopeConfig) {
         $this->scopeConfig = $scopeConfig;
-        $this->encryptor = $encryptor;
     }
 
     /**
@@ -46,7 +37,10 @@ class Config
      */
     public function isEnabled()
     {
-        $enabled = $this->scopeConfig->isSetFlag('fraud_protection/signifyd/active');
+        $enabled = $this->scopeConfig->isSetFlag(
+            'fraud_protection/signifyd/active',
+            ScopeInterface::SCOPE_STORE
+        );
         return $enabled;
     }
 
@@ -60,8 +54,10 @@ class Config
      */
     public function getApiKey()
     {
-        $encryptedApiKey = $this->scopeConfig->getValue('fraud_protection/signifyd/api_key');
-        $apiKey = $this->encryptor->decrypt($encryptedApiKey);
+        $apiKey = $this->scopeConfig->getValue(
+            'fraud_protection/signifyd/api_key',
+            ScopeInterface::SCOPE_STORE
+        );
         return $apiKey;
     }
 
@@ -73,7 +69,10 @@ class Config
      */
     public function getApiUrl()
     {
-        $apiUrl = $this->scopeConfig->getValue('fraud_protection/signifyd/api_url');
+        $apiUrl = $this->scopeConfig->getValue(
+            'fraud_protection/signifyd/api_url',
+            ScopeInterface::SCOPE_STORE
+        );
         return $apiUrl;
     }
 
@@ -84,7 +83,10 @@ class Config
      */
     public function isDebugModeEnabled()
     {
-        $debugModeEnabled = $this->scopeConfig->isSetFlag('fraud_protection/signifyd/debug');
+        $debugModeEnabled = $this->scopeConfig->isSetFlag(
+            'fraud_protection/signifyd/debug',
+            ScopeInterface::SCOPE_STORE
+        );
         return $debugModeEnabled;
     }
 
