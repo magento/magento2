@@ -54,6 +54,16 @@ class Csv implements WriterInterface
      * Close file handler
      *
      * @return void
+     *
+     * @deprecated
+     */
+    public function __destructor()
+    {
+        fclose($this->_fileHandler);
+    }
+
+    /**
+     * Destructor for closing file handler
      */
     public function __destruct()
     {
