@@ -108,10 +108,6 @@ class SignifydApiClient
             'Authorization',
             sprintf('Basic %s', $apiKey)
         );
-//        $client->setHeaders(
-//            'Accept-encoding',
-//            'identity'
-//        );
         if (!empty($params)) {
             $encodedData = $this->dataEncoder->encode($params);
             $client->setRawData($encodedData, 'application/json');
