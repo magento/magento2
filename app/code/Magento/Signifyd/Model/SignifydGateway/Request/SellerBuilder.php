@@ -131,5 +131,4 @@ class SellerBuilder
 
         return $domain;
     }
-
 }

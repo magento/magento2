@@ -64,5 +64,4 @@ class CaseCreationService implements CaseCreationServiceInterface
 
         return true;
     }
-
 }
