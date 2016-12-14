@@ -27,6 +27,7 @@ class AssertShippingPriceWithCustomCurrency extends AbstractConstraint
      * @param CatalogProductSimple $product
      * @param CurrencySymbolEntity $currencySymbol
      * @param string $shippingAmount
+     * @param array $shipping
      * @return void
      */
     public function processAssert(
@@ -35,7 +36,8 @@ class AssertShippingPriceWithCustomCurrency extends AbstractConstraint
         TestStepFactory $testStepFactory,
         CatalogProductSimple $product,
         CurrencySymbolEntity $currencySymbol,
-        $shippingAmount
+        $shippingAmount,
+        array $shipping
     ) {
         $cmsIndex->open();
         $cmsIndex->getLinksBlock()->waitWelcomeMessage();
@@ -45,7 +47,10 @@ class AssertShippingPriceWithCustomCurrency extends AbstractConstraint
             ['products' => [$product]]
         )->run();
         $testStepFactory->create(\Magento\Checkout\Test\TestStep\ProceedToCheckoutStep::class)->run();
-        $shipping = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
+        $shipping = [
+            'shipping_service' => $shipping['shipping_service'],
+            'shipping_method' => $shipping['shipping_method']
+        ];
         \PHPUnit_Framework_Assert::assertEquals(
             $shippingAmount,
             $checkoutOnepage->getShippingMethodBlock()->getShippingMethodAmount($shipping),
