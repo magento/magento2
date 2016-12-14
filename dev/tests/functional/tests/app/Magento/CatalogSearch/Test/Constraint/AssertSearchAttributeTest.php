@@ -18,18 +18,16 @@ class AssertSearchAttributeTest extends AbstractConstraint
      * Assert advanced attribute is present(or absent) in Advanced Search Page.
      *
      * @param AdvancedSearch $advancedSearch
-     * @param string $attributeForSearch
-     * @param bool $isAbsent
+     * @param array $attributeForSearch
      * @return void
      */
     public function processAssert(
         AdvancedSearch $advancedSearch,
-        $attributeForSearch,
-        $isAbsent = true
+        array $attributeForSearch
     ) {
         $advancedSearch->open();
         $availableAttributes = $advancedSearch->getForm()->getFormLabels();
-        if ($isAbsent) {
+        if ($attributeForSearch['isVisible']) {
             \PHPUnit_Framework_Assert::assertTrue(
                 (false !== array_search($attributeForSearch, $availableAttributes)),
                 'Attribute ' . $attributeForSearch . 'was not found in Advanced Search Page.'

@@ -313,7 +313,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
         // Assert indexers status
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers);
         $this->productAttributePage->open();
-        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $attributeForSearch]);
+        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $attributeForSearch['name']]);
         $this->attributeNewPage->getAttributeForm()->fill($attributeEnable);
         $this->attributeNewPage->getPageActions()->save();
         // Assert attribute status
@@ -322,12 +322,12 @@ class AdvancedSearchWithAttributeTest extends Injectable
         // Assert indexers status
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers, false);
 
-        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch);
+        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch['name']);
         $cli->reindex();
 
         // Change attribute 'scope mode'
         $this->productAttributePage->open();
-        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $attributeForSearch]);
+        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $attributeForSearch['name']]);
         $this->attributeNewPage->getAttributeForm()->fill($attributeGlobalStatus);
         $this->attributeNewPage->getPageActions()->save();
         // Assert attribute status
@@ -337,7 +337,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers, false);
 
         // Assert advanced attribute is present(or absent) in Advanced Search Page.
-        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch);
+        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch['name']);
         $cli->reindex();
 
         // Create Products
@@ -361,7 +361,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
         // Assert that Advanced Search result page contains only product(s) according to requested from fixture
         $this->assertAdvancedSearchResult->processAssert($isVisibleInAdvancedSearch, $allProducts, $this->resultPage);
         $this->productAttributePage->open();
-        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $this->attributeForSearch]);
+        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $this->attributeForSearch['name']]);
         $this->attributeNewPage->getAttributeForm()->fill($this->attributeDisable);
         $this->attributeNewPage->getPageActions()->save();
         // Assert attribute status
@@ -371,7 +371,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
         $cli->reindex();
         $this->assertSearchAttributeTest->processAssert(
             $this->advancedSearch,
-            $this->attributeForSearch,
+            $this->attributeForSearch['name'],
             false
         );
     }
@@ -384,7 +384,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
     protected function tearDown()
     {
         $this->productAttributePage->open();
-        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $this->attributeForSearch]);
+        $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $this->attributeForSearch['name']]);
         $this->attributeNewPage->getAttributeForm()->fill($this->attributeDisable);
         $this->attributeNewPage->getPageActions()->save();
         $this->indexManagement->open();

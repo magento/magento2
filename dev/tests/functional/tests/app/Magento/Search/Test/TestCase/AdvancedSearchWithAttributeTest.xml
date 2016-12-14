@@ -28,7 +28,10 @@
             <data name="productSearch/data/additional_attributes/weight_from" xsi:type="string">1</data>
             <data name="productSearch/data/additional_attributes/weight_to" xsi:type="string">1</data>
             <data name="indexers" xsi:type="string">Product EAV</data>
-            <data name="attributeForSearch" xsi:type="string">Weight</data>
+            <data name="attributeForSearch" xsi:type="array">
+                <item name="name" xsi:type="string">Weight</item>
+                <item name="isVisible" xsi:type="boolean">true</item>
+            </data>
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
         </variation>
     </testCase>
