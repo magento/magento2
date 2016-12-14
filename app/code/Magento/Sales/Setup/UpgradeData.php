@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Setup;
 
-use Magento\Sales\Model\Order\Item\Converter\ProductOptions\SerializedToJson;
-
 class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
     /**
@@ -123,7 +121,7 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
     private function upgradeToVersionTwoZeroFive(\Magento\Framework\Setup\ModuleDataSetupInterface $setup)
     {
         $productOptionsDataConverter = $this->fieldDataConverterFactory->create(
-            SerializedToJson::class
+            \Magento\Sales\Model\Order\Item\Converter\ProductOptions\SerializedToJson::class
         );
         $productOptionsDataConverter->convert(
             $setup->getConnection(),
