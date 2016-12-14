@@ -74,6 +74,18 @@ class UpgradeData implements UpgradeDataInterface
             'payment_id',
             'additional_information'
         );
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('quote_address'),
+            'address_id',
+            'applied_taxes'
+        );
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('quote_payment'),
+            'payment_id',
+            'additional_data'
+        );
         $queryModifier = $this->queryModifierFactory->create(
             InQueryModifier::class,
             [
