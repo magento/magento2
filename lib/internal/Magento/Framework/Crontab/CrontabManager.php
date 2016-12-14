@@ -28,6 +28,7 @@ class CrontabManager implements CrontabManagerInterface
 
     /**
      * @param ShellInterface $shell
+     * @param Filesystem $filesystem
      */
     public function __construct(
         ShellInterface $shell,
