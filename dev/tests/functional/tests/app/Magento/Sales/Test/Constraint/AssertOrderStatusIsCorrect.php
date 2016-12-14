@@ -11,13 +11,12 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderStatusIsCorrect
- * Assert that status is correct on order page in backend (same with value of orderStatus variable)
+ * Assert that status is correct on order page in Admin.
  */
 class AssertOrderStatusIsCorrect extends AbstractConstraint
 {
     /**
-     * Assert that status is correct on order page in backend (same with value of orderStatus variable)
+     * Assert that status is correct on order page in Admin.
      *
      * @param string $status
      * @param string $orderId
@@ -44,7 +43,7 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

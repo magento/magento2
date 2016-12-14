@@ -7,6 +7,23 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="merchant_country_gb">
+            <field name="paypal/general/merchant_country" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">United Kingdom</item>
+                <item name="value" xsi:type="string">GB</item>
+            </field>
+        </dataset>
+        <dataset name="merchant_country_gb_rollback">
+            <field name="paypal/general/merchant_country" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">United States</item>
+                <item name="value" xsi:type="string">US</item>
+            </field>
+        </dataset>
+
         <dataset name="paypal_direct">
             <field name="payment/paypal_group_all_in_one/wpp_usuk/wpp_required_settings/wpp_and_express_checkout/business_account" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
@@ -127,6 +144,59 @@
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="hosted_pro">
+            <field name="payment/paypal_group_all_in_one/payments_pro_hosted_solution_with_express_checkout/pphs_required_settings/pphs_required_settings_pphs/business_account" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">HOSTED_PRO_BUSINESS_ACCOUNT</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payments_pro_hosted_solution_with_express_checkout/pphs_required_settings/pphs_required_settings_pphs/api_username" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">HOSTED_PRO_API_USERNAME</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payments_pro_hosted_solution_with_express_checkout/pphs_required_settings/pphs_required_settings_pphs/api_password" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">HOSTED_PRO_API_PASSWORD</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payments_pro_hosted_solution_with_express_checkout/pphs_required_settings/pphs_required_settings_pphs/api_signature" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">HOSTED_PRO_API_SIGNATURE</item>
+            </field>
+            <field name="payment/paypal_group_all_in_one/payments_pro_hosted_solution_with_express_checkout/pphs_required_settings/pphs_required_settings_pphs/sandbox_flag" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/hosted_pro/debug" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/hosted_pro/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="hosted_pro_rollback">
+            <field name="payment/hosted_pro/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
