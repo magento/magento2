@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Setup;
+namespace Magento\Wishlist\Setup;
 
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -36,7 +36,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
-     * @param Generator $generator
+     * @param Generator $queryGenerator
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
@@ -53,39 +53,21 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.4', '<')) {
-            $this->upgradeToVersionTwoZeroFour($setup);
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $this->upgradeToVersionTwoZeroOne($setup);
         }
     }
 
     /**
-     * Upgrade to version 2.0.4, convert data for additional_information field in quote_payment table from serialized
-     * to JSON format
+     * Upgrade to version 2.0.1, convert data for `value` field in `wishlist_item_option table`
+     * from php-serialized to JSON format
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function upgradeToVersionTwoZeroFour(ModuleDataSetupInterface $setup)
+    private function upgradeToVersionTwoZeroOne(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('quote_payment'),
-            'payment_id',
-            'additional_information'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('quote_address'),
-            'address_id',
-            'applied_taxes'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('quote_payment'),
-            'payment_id',
-            'additional_data'
-        );
         $queryModifier = $this->queryModifierFactory->create(
             InQueryModifier::class,
             [
@@ -101,7 +83,7 @@ class UpgradeData implements UpgradeDataInterface
         );
         $fieldDataConverter->convert(
             $setup->getConnection(),
-            $setup->getTable('quote_item_option'),
+            $setup->getTable('wishlist_item_option'),
             'option_id',
             'value',
             $queryModifier
@@ -132,7 +114,7 @@ class UpgradeData implements UpgradeDataInterface
             );
             $fieldDataConverter->convert(
                 $setup->getConnection(),
-                $setup->getTable('quote_item_option'),
+                $setup->getTable('wishlist_item_option'),
                 'option_id',
                 'value',
                 $queryModifier
