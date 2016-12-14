@@ -169,9 +169,9 @@ class ApiClient
                 return 'Conflict - with state of the resource on server. Can occur with (too rapid) PUT requests.' .
                        'Response: ' . $responseBody;
             case 401:
-                'Unauthorized - user is not logged in, could not be authenticated. Response: ' . $responseBody;
+                return 'Unauthorized - user is not logged in, could not be authenticated. Response: ' . $responseBody;
             case 403:
-                'Forbidden - Cannot access resource. Response: ' . $responseBody;
+                return 'Forbidden - Cannot access resource. Response: ' . $responseBody;
             case 500:
                 return 'Server error.';
             default:
