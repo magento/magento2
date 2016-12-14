@@ -16,12 +16,12 @@ class SerializedToJson implements DataConverterInterface
     /**
      * @var Serialize
      */
-    private $serialize;
+    protected $serialize;
 
     /**
      * @var Json
      */
-    private $json;
+    protected $json;
 
     /**
      * Constructor
