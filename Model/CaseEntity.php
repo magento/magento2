@@ -5,14 +5,27 @@
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
  * Implementation of Signifyd Case interface
  */
-class CaseEntity extends DataObject implements CaseInterface
+class CaseEntity extends AbstractModel implements CaseInterface
 {
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'signifyd_case';
+
+    /**
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init(ResourceModel\CaseEntity::class);
+    }
+
     /**
      * @inheritdoc
      */
@@ -184,8 +197,7 @@ class CaseEntity extends DataObject implements CaseInterface
     }
 
     /**
-     * Gets updating datetime for a case
-     * @return string
+     * @inheritdoc
      */
     public function getUpdatedAt()
     {
@@ -193,9 +205,7 @@ class CaseEntity extends DataObject implements CaseInterface
     }
 
     /**
-     * Sets updating datetime for a case
-     * @param $datetime
-     * @return $this
+     * @inheritdoc
      */
     public function setUpdatedAt($datetime)
     {

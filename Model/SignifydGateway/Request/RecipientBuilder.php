@@ -3,14 +3,14 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\Request;
+namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Sales\Model\Order;
 
 /**
- * Prepare data related to the card that was used for the purchase and its cardholder.
+ * Prepare data related to person or organization receiving the items purchased.
  */
-class CardBuilder
+class RecipientBuilder
 {
     /**
      * @var AddressBuilder
@@ -27,7 +27,7 @@ class CardBuilder
     }
 
     /**
-     * Returns card data params
+     * Returns recipient data params
      *
      * @param Order $order
      * @return array
@@ -35,18 +35,19 @@ class CardBuilder
     public function build(Order $order)
     {
         $result = [];
-        $address = $order->getBillingAddress();
+        $address = $order->getShippingAddress();
         if ($address === null) {
             return $result;
         }
 
-        $payment = $order->getPayment();
         $result = [
-            'cardHolderName' => $address->getFirstname() . ' ' . $address->getLastname(),
-            'last4' => $payment->getCcLast4(),
-            'expiryMonth' => $payment->getCcExpMonth(),
-            'expiryYear' =>  $payment->getCcExpYear(),
-            'billingAddress' => $this->addressBuilder->build($address),
+            'recipient' => [
+                'fullName' => $address->getName(),
+                'confirmationEmail' =>  $address->getEmail(),
+                'confirmationPhone' => $address->getTelephone(),
+                'organization' => $address->getCompany(),
+                'deliveryAddress' => $this->addressBuilder->build($address)
+            ]
         ];
 
         return $result;

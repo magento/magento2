@@ -9,6 +9,8 @@
     <module name="Magento_Signifyd" setup_version="2.2.0">
         <sequence>
             <module name="Magento_Sales" />
+            <module name="Magento_Checkout" />
+            <module name="Magento_Store" />
         </sequence>
     </module>
 </config>

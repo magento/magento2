@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\Request;
+namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
@@ -54,7 +54,7 @@ class PurchaseBuilder
             'purchase' => [
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
-                'createdAt' => $createdAt->format(\DateTime::ISO8601),
+                'createdAt' => $createdAt->format(\DateTime::ATOM),
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
                 'transactionId' => $orderPayment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
@@ -63,9 +63,15 @@ class PurchaseBuilder
             ],
         ];
 
-        $shipments = $this->getShipments($order);
-        if (!empty($shipments)) {
-            $result['purchase']['shipments'] = $shipments;
+        $shippingDescription = $order->getShippingDescription();
+        if ($shippingDescription !== null) {
+            $result['purchase']['shipments'] = [
+                [
+                    'shipper' => $this->getShipper($order->getShippingDescription()),
+                    'shippingMethod' => $this->getShippingMethod($order->getShippingDescription()),
+                    'shippingPrice' => $order->getShippingAmount()
+                ]
+            ];
         }
 
         $products = $this->getProducts($order);
@@ -90,47 +96,10 @@ class PurchaseBuilder
                 'itemId' => $orderItem->getSku(),
                 'itemName' => $orderItem->getName(),
                 'itemPrice' => $orderItem->getPrice(),
-                'itemQuantity' => $orderItem->getQtyOrdered(),
+                'itemQuantity' => (int)$orderItem->getQtyOrdered(),
                 'itemUrl' => $orderItem->getProduct()->getProductUrl(),
                 'itemWeight' => $orderItem->getProduct()->getWeight()
             ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Gets the shipments associated with this purchase.
-     *
-     * @param Order $order
-     * @return array
-     */
-    private function getShipments(Order $order)
-    {
-        $result = [];
-        $shipper = $this->getShipper($order->getShippingDescription());
-        $shippingMethod = $this->getShippingMethod($order->getShippingDescription());
-
-        $shipmentList = $order->getShipmentsCollection();
-        /** @var \Magento\Sales\Api\Data\ShipmentInterface $shipment */
-        foreach ($shipmentList as $shipment) {
-            $totalPrice = 0;
-            foreach ($shipment->getItems() as $shipmentItem) {
-                $totalPrice += $shipmentItem->getPrice();
-            }
-
-            $item = [
-                'shipper' => $shipper,
-                'shippingMethod' => $shippingMethod,
-                'shippingPrice' => $totalPrice
-            ];
-
-            $tracks = $shipment->getTracks();
-            if (!empty($tracks)) {
-                $item['trackingNumber'] = end($tracks)->getTrackNumber();
-            }
-
-            $result[] = $item;
         }
 
         return $result;

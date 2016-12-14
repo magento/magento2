@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\Request;
+namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Sales\Model\OrderFactory;
 
@@ -83,13 +83,47 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
         /* @var $order \Magento\Sales\Model\Order */
         $order = $this->orderFactory->create()->load($orderId);
 
-        return array_merge(
-            $this->purchaseBuilder->build($order),
-            $this->cardBuilder->build($order),
-            $this->recipientBuilder->build($order),
-            $this->userAccountBuilder->build($order),
-            $this->sellerBuilder->build($order),
-            $this->clientVersionBuilder->build()
+        return $this->removeEmptyValues(
+            array_merge(
+                $this->purchaseBuilder->build($order),
+                $this->cardBuilder->build($order),
+                $this->recipientBuilder->build($order),
+                $this->userAccountBuilder->build($order),
+                $this->sellerBuilder->build($order),
+                $this->clientVersionBuilder->build()
+            )
         );
+    }
+
+    /**
+     * Remove empty and null values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function removeEmptyValues($data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->removeEmptyValues($data[$key]);
+            }
+
+            if ($this->isEmpty($data[$key])) {
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Empty values are null, empty string and empty array
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    private function isEmpty($value)
+    {
+        return $value === null || $value === '' || (is_array($value) && empty($value));
     }
 }
