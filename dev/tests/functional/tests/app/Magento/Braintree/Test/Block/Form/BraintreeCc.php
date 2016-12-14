@@ -10,12 +10,12 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\ObjectManager;
-use Magento\Payment\Test\Block\Form\PaymentCc as CreditCard;
+use Magento\Payment\Test\Block\Form\PaymentCc;
 
 /**
  * Form for filling credit card data for Braintree payment method.
  */
-class BraintreeCc extends CreditCard
+class BraintreeCc extends PaymentCc
 {
     /**
      * Braintree iFrame locator.
@@ -38,7 +38,6 @@ class BraintreeCc extends CreditCard
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        ObjectManager::getInstance()->create(Locator::class, []);
         $mapping = $this->dataMapping($fixture->getData());
         foreach ($this->braintreeForm as $field => $iframe) {
             $element = $this->browser->find('body');
@@ -48,7 +47,8 @@ class BraintreeCc extends CreditCard
                     return $fieldElement->isVisible() ? true : null;
                 }
             );
-            $this->browser->switchToFrame(new Locator($iframe));
+            $iframeLocator = ObjectManager::getInstance()->create(Locator::class, ['value' => $iframe]);
+            $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
                 function () use ($element) {
