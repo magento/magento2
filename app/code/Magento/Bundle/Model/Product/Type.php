@@ -147,13 +147,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_stockState;
 
     /**
-     * Serializer
-     *
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -215,7 +208,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
 
         parent::__construct(
             $catalogProductOption,
