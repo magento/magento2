@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\Request;
+namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -60,7 +60,7 @@ class SellerBuilder
         return [
             'seller' => [
                 'name' => $this->getConfigValue(Information::XML_PATH_STORE_INFO_NAME, $store),
-                'domain' => parse_url($store->getBaseUrl(), PHP_URL_HOST),
+                'domain' => $this->getPublicDomain($store),
                 'shipFromAddress' => [
                     'streetAddress' => $this->getConfigValue(Shipment::XML_PATH_STORE_ADDRESS1, $store),
                     'unit' => $this->getConfigValue(Shipment::XML_PATH_STORE_ADDRESS2, $store),
@@ -115,4 +115,21 @@ class SellerBuilder
             $store
         );
     }
+
+    /**
+     * @param StoreInterface $store
+     *
+     * @return string|null
+     */
+    private function getPublicDomain(StoreInterface $store)
+    {
+        $baseUrl = $store->getBaseUrl();
+        $domain = parse_url($baseUrl, PHP_URL_HOST);
+        if (\function_exists('checkdnsrr') && false === \checkdnsrr($domain)) {
+            return null;
+        }
+
+        return $domain;
+    }
+
 }

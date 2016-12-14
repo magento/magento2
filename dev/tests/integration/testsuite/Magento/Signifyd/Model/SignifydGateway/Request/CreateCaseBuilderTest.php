@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\Request;
+namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Area;
@@ -15,7 +15,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 /**
  * Class PurchaseBuilderTest
  * @magentoAppIsolation enabled
- * @package Magento\Signifyd\Model\Request\CreateCaseBuilder
+ * @package Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder
  */
 class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
 {
