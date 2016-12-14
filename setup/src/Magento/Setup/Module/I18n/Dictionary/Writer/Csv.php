@@ -55,7 +55,7 @@ class Csv implements WriterInterface
      *
      * @return void
      */
-    public function __destructor()
+    public function __destruct()
     {
         fclose($this->_fileHandler);
     }
