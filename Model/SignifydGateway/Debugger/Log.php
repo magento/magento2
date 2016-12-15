@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Exception;
 
 /**
- * Debugger writes infromation about request, response and possible exception to standard system log.
+ * Debugger writes information about request, response and possible exception to standard system log.
  */
 class Log implements DebuggerInterface
 {
@@ -109,7 +109,7 @@ class Log implements DebuggerInterface
      */
     private function writeToLog($info)
     {
-        $logMessage = $this->buildInfoSection('Signifyd API integartion debug info', $info);
+        $logMessage = $this->buildInfoSection('Signifyd API integration debug info', $info);
         $this->logger->debug($logMessage);
     }
 

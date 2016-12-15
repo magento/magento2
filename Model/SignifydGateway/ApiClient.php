@@ -88,12 +88,14 @@ class ApiClient
         try {
             $client = $this->getRequestClient($url, $method, $params);
             $response = $client->request();
+
             $this->debuggerFactory->create()->success(
                 $url,
                 $client->getLastRequest(),
                 $response->getStatus() . ' ' . $response->getMessage(),
                 $response->getBody()
             );
+
             $result = $this->handleResponse($response);
         } catch (\Exception $e) {
             $this->debuggerFactory->create()->failure(
