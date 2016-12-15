@@ -48,8 +48,7 @@ class CrontabManager implements CrontabManagerInterface
 
         if (preg_match($pattern, $content, $matches)) {
             $tasks = trim($matches[2], PHP_EOL);
-            $tasks = explode($tasks, PHP_EOL);
-
+            $tasks = explode(PHP_EOL, $tasks);
             return $tasks;
         }
 
