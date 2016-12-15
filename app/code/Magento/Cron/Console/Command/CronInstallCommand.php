@@ -49,7 +49,7 @@ class CronInstallCommand extends Command
     {
         $this->setName('cron:install')
             ->setDescription('Generates and installs crontab for current user')
-            ->addOption('reinstall', 'r', InputOption::VALUE_NONE, 'Reinstall tasks');
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force install tasks');
 
         parent::configure();
     }
