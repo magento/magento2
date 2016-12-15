@@ -76,8 +76,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'sales_shipment_grid',
             ];
             foreach ($tables as $table) {
-                $setup->getConnection()->modifyColumn(
-                    $setup->getTable($table),
+                $salesConnection = $setup->getConnection(self::$connectionName);
+                $salesConnection->modifyColumn(
+                    $installer->getTable($table, self::$connectionName),
                     'customer_group_id',
                     ['type' => 'integer']
                 );

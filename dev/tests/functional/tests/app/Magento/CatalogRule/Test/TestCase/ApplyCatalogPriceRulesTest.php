@@ -11,6 +11,8 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Command\Cli\Cron;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleEdit;
+use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Preconditions:
@@ -37,57 +39,66 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
      * Apply catalog price rules.
      *
      * @param array $catalogRules
-     * @param CatalogProductSimple $product
      * @param CatalogRuleEdit $catalogRuleEdit
+     * @param TestStepFactory $stepFactory
      * @param Cron $cron
      * @param bool $isCronEnabled
      * @param Customer $customer
-     * @return array
+     * @param array $products
+     * @return FixtureInterface[]
      */
     public function test(
         array $catalogRules,
-        CatalogProductSimple $product,
         CatalogRuleEdit $catalogRuleEdit,
+        TestStepFactory $stepFactory,
         Cron $cron,
         $isCronEnabled = false,
-        Customer $customer = null
+        Customer $customer = null,
+        array $products = null
     ) {
-        $product->persist();
-
-        foreach ($catalogRules as $catalogPriceRule) {
-            $catalogPriceRule = $this->createCatalogPriceRule($catalogPriceRule, $product, $customer);
-
-            if ($isCronEnabled) {
-                $cron->run();
-                $cron->run();
-            } else {
-                $catalogRuleEdit->open(['id' => $catalogPriceRule->getId()]);
-                $this->catalogRuleNew->getFormPageActions()->saveAndApply();
-            }
+        if ($customer !== null) {
+            $customer->persist();
         }
 
-        return ['products' => [$product]];
+        $products = $stepFactory->create(
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            ['products' => $products]
+        )->run()['products'];
+
+        foreach ($catalogRules as $catalogRule) {
+            foreach ($products as $product) {
+                $catalogPriceRule = $this->createCatalogPriceRule($catalogRule, $product, $customer);
+                if ($isCronEnabled) {
+                    $cron->run();
+                    $cron->run();
+                } else {
+                    $catalogRuleEdit->open(['id' => $catalogPriceRule->getId()]);
+                    $this->catalogRuleNew->getFormPageActions()->saveAndApply();
+                }
+            }
+        }
+        return ['products' => $products];
     }
 
     /**
      * Prepare condition for catalog price rule.
      *
-     * @param CatalogProductSimple $productSimple
+     * @param FixtureInterface $product
      * @param array $catalogPriceRule
      * @return array
      */
-    private function prepareCondition(CatalogProductSimple $productSimple, array $catalogPriceRule)
+    private function prepareCondition(FixtureInterface $product, array $catalogPriceRule)
     {
         $result = [];
         $conditionEntity = explode('|', trim($catalogPriceRule['data']['rule'], '[]'))[0];
 
         switch ($conditionEntity) {
             case 'Category':
-                $result['%category_id%'] = $productSimple->getDataFieldConfig('category_ids')['source']->getIds()[0];
+                $result['%category_id%'] = $product->getDataFieldConfig('category_ids')['source']->getIds()[0];
                 break;
             case 'Attribute':
                 /** @var \Magento\Catalog\Test\Fixture\CatalogProductAttribute[] $attrs */
-                $attributes = $productSimple->getDataFieldConfig('attribute_set_id')['source']
+                $attributes = $product->getDataFieldConfig('attribute_set_id')['source']
                     ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']->getAttributes();
 
                 $result['%attribute_id%'] = $attributes[0]->getAttributeCode();
@@ -110,7 +121,6 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
      */
     private function applyCustomerGroup(array $catalogPriceRule, Customer $customer)
     {
-        $customer->persist();
         /** @var \Magento\Customer\Test\Fixture\CustomerGroup $customerGroup */
         $customerGroup = $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup();
         $catalogPriceRule['data']['customer_group_ids']['option_0'] = $customerGroup->getCustomerGroupId();
@@ -121,20 +131,19 @@ class ApplyCatalogPriceRulesTest extends AbstractCatalogRuleEntityTest
     /**
      * Create catalog price rule.
      *
-     * @param CatalogProductSimple $product
      * @param array $catalogPriceRule
+     * @param FixtureInterface $product
      * @param Customer $customer
      * @return CatalogRule
      */
     private function createCatalogPriceRule(
         array $catalogPriceRule,
-        CatalogProductSimple $product,
+        FixtureInterface $product,
         Customer $customer = null
     ) {
         if (isset($catalogPriceRule['data']['rule'])) {
             $catalogPriceRule = $this->prepareCondition($product, $catalogPriceRule);
         }
-
         if ($customer !== null) {
             $catalogPriceRule = $this->applyCustomerGroup($catalogPriceRule, $customer);
         }

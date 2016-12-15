@@ -17,6 +17,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * LayoutProcessorTest covers a list of variations for
  * checkout layout processor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +46,11 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
      * @var LayoutProcessor
      */
     private $layoutProcessor;
+
+    /**
+     * @var MockObject
+     */
+    private $storeResolver;
 
     protected function setUp()
     {
@@ -79,8 +86,11 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
             $this->attributeMerger
         );
 
+        $this->storeResolver = $this->getMock(\Magento\Store\Api\StoreResolverInterface::class);
+
         $objectManager->setBackwardCompatibleProperty($this->layoutProcessor, 'checkoutDataHelper', $this->dataHelper);
         $objectManager->setBackwardCompatibleProperty($this->layoutProcessor, 'options', $options);
+        $objectManager->setBackwardCompatibleProperty($this->layoutProcessor, 'storeResolver', $this->storeResolver);
     }
 
     /**
