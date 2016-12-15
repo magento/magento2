@@ -18,43 +18,33 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 {
     /**
-     * @param FixtureInterface $product
+     * Return prepared dataset.
+     *
+     * @param null $key
+     * @return mixed
      */
-    public function __construct(FixtureInterface $product)
+    public function getData($key = null)
     {
-        parent::__construct($product);
-
+        $this->data = parent::getData($key);
         /** @var BundleProduct $product */
-        $bundleSelection = $product->getBundleSelections();
-        $checkoutData = $product->getCheckoutData();
+        $bundleSelection = $this->product->getBundleSelections();
+        $checkoutData = $this->product->getCheckoutData();
         $checkoutBundleOptions = isset($checkoutData['options']['bundle_options'])
             ? $checkoutData['options']['bundle_options']
             : [];
 
-        $productSku = [$product->getSku()];
+        $productSku = [$this->product->getSku()];
         foreach ($checkoutBundleOptions as $checkoutOptionKey => $checkoutOption) {
-            // Find option and value keys
-            $attributeKey = null;
-            $optionKey = null;
-            foreach ($bundleSelection['bundle_options'] as $key => $option) {
-                if ($option['title'] == $checkoutOption['title']) {
-                    $attributeKey = $key;
-
-                    foreach ($option['assigned_products'] as $valueKey => $value) {
-                        if (false !== strpos($value['search_data']['name'], $checkoutOption['value']['name'])) {
-                            $optionKey = $valueKey;
-                        }
-                    }
-                }
-            }
-
+            $keys = $this->getKeys($bundleSelection['bundle_options'], $checkoutOption);
+            $attributeKey = $keys['attribute'];
+            $optionKey = $keys['attribute'];
             // Prepare option data
             $bundleSelectionAttribute = $bundleSelection['products'][$attributeKey];
             $bundleOptions = $bundleSelection['bundle_options'][$attributeKey];
             $value = $bundleSelectionAttribute[$optionKey]->getName();
-            $product->getSkuType() == 'No' ?: $productSku[] = $bundleSelectionAttribute[$optionKey]->getSku();
+            $this->product->getSkuType() == 'No' ?: $productSku[] = $bundleSelectionAttribute[$optionKey]->getSku();
             $qty = $bundleOptions['assigned_products'][$optionKey]['data']['selection_qty'];
-            $price = $product->getPriceType() == 'Yes'
+            $price = $this->product->getPriceType() == 'Yes'
                 ? number_format($bundleSelectionAttribute[$optionKey]->getPrice(), 2)
                 : number_format($bundleOptions['assigned_products'][$optionKey]['data']['selection_price_value'], 2);
             $optionData = [
@@ -67,5 +57,42 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 
         $this->data['sku'] = implode('-', $productSku);
         $this->data['options'] += $checkoutBundleOptions;
+
+        return $this->data;
+    }
+
+    /**
+     * Get option key.
+     *
+     * @param array $assignedProducts
+     * @param $checkoutOption
+     * @return null|string
+     */
+    private function getOptionKey(array $assignedProducts, $checkoutOption)
+    {
+        foreach ($assignedProducts as $key => $value) {
+            if (false !== strpos($value['search_data']['name'], $checkoutOption)) {
+                return $key;
+            }
+        }
+    }
+
+    /**
+     * Find option and attribute keys.
+     *
+     * @param array $bundleOptions
+     * @param $checkoutOption
+     * @return array
+     */
+    private function getKeys(array $bundleOptions, $checkoutOption)
+    {
+        $keys = [];
+        foreach ($bundleOptions as $key => $option) {
+            if ($option['title'] == $checkoutOption['title']) {
+                $keys['attribute'] = $key;
+                $keys['option'] = $this->getOptionKey($option['assigned_products'], $checkoutOption['value']['name']);
+            }
+        }
+        return $keys;
     }
 }

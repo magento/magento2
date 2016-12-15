@@ -31,12 +31,12 @@ class AssertInvoiceItems extends AbstractAssertItems
         InvoiceIndex $invoiceIndex,
         SalesInvoiceView $salesInvoiceView,
         OrderInjectable $order,
-        Cart $cart,
         array $ids,
-        array $data = null
+        array $data = null,
+        Cart $cart = null
     ) {
         $orderId = $order->getId();
-        $productsData = $this->prepareOrderProducts($cart, $data['items_data']);
+        $productsData = $this->prepareOrderProducts($order, $data['items_data'], $cart);
         foreach ($ids['invoiceIds'] as $invoiceId) {
             $filter = [
                 'order_id' => $orderId,

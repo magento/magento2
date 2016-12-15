@@ -8,6 +8,8 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Assert items represented in order's entity view page.
@@ -35,13 +37,19 @@ abstract class AbstractAssertItems extends AbstractAssertForm
     /**
      * Prepare order products.
      *
-     * @param Cart $cart
+     * @param OrderInjectable $order
+     * @param Cart|null $cart
      * @param array|null $data [optional]
      * @return array
      */
-    protected function prepareOrderProducts(Cart $cart, array $data = null)
+    protected function prepareOrderProducts(OrderInjectable $order, array $data = null, Cart $cart = null)
     {
         $productsData = [];
+        if ($cart === null) {
+            $cart['data']['items'] = ['products' => $order->getEntityId()['products']];
+            $fixtureFactory = $this->objectManager->create(FixtureFactory::class);
+            $cart = $fixtureFactory->createByCode('cart', $cart);
+        }
         /** @var \Magento\Catalog\Test\Fixture\Cart\Item $item */
         foreach ($cart->getItems() as $key => $item) {
             $productsData[] = [
