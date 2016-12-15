@@ -88,19 +88,13 @@ class UpdateSimpleProductEntityTest extends Injectable
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
      * @param string $storeDataset [optional]
-     * @param int $storesCount [optional]
-     * @param int $storeIndexToUpdate [optional]
      * @param string $configData
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function test(
         CatalogProductSimple $initialProduct,
         CatalogProductSimple $product,
         $storeDataset = '',
-        $storesCount = 0,
-        $storeIndexToUpdate = null,
         $configData = ''
     ) {
         $this->configData = $configData;
@@ -113,17 +107,10 @@ class UpdateSimpleProductEntityTest extends Injectable
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
 
-        $stores = [];
-        $productNames = [];
         if ($storeDataset) {
-            for ($i = 0; $i < $storesCount; $i++) {
-                $stores[$i] = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
-                $stores[$i]->persist();
-                $productNames[$stores[$i]->getStoreId()] = $initialProduct->getName();
-            }
-            if ($storeIndexToUpdate !== null) {
-                $productNames[$stores[$storeIndexToUpdate]->getStoreId()] = $product->getName();
-            }
+            $store = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
+            $store->persist();
+            $productName[$store->getStoreId()] = $product->getName();
         }
 
         $this->objectManager->create(
@@ -136,16 +123,16 @@ class UpdateSimpleProductEntityTest extends Injectable
 
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen($filter);
-        if ($storeDataset && $storeIndexToUpdate !== null) {
-            $this->editProductPage->getFormPageActions()->changeStoreViewScope($stores[$storeIndexToUpdate]);
+        if ($storeDataset) {
+            $this->editProductPage->getFormPageActions()->changeStoreViewScope($store);
         }
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
 
         return [
             'category' => $category,
-            'stores' => $stores,
-            'productNames' => $productNames,
+            'stores' => isset($store) ? [$store] : [],
+            'productNames' => isset($productName) ? $productName : [],
         ];
     }
 
