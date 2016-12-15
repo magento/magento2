@@ -50,6 +50,10 @@ class PlaceOrder implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        if (!$this->signifydIntegrationConfig->isEnabled()) {
+            return;
+        }
+
         $event = $observer->getEvent();
         $order = $this->extractOrder($event);
 
@@ -59,10 +63,6 @@ class PlaceOrder implements ObserverInterface
 
         $orderId = $order->getEntityId();
         if (null === $order) {
-            return;
-        }
-
-        if (!$this->signifydIntegrationConfig->isEnabled()) {
             return;
         }
 
