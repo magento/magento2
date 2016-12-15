@@ -37,7 +37,7 @@ class CaseManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Signifyd\Model\CaseManagement::create
-     * @magentoDataFixture Magento/Signifyd/_files/order.php
+     * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
      */
     public function testCreate()
     {
