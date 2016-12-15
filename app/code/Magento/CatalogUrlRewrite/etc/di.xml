@@ -6,9 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\CatalogUrlRewrite\Model\Map\MapPoolInterface" type="Magento\CatalogUrlRewrite\Model\Map\MapPool" />
     <preference for="Magento\CatalogUrlRewrite\Model\Map\DataMapPoolInterface" type="Magento\CatalogUrlRewrite\Model\Map\DataMapPool" />
-    <preference for="Magento\CatalogUrlRewrite\Model\Map\MapFactoryInterface" type="Magento\CatalogUrlRewrite\Model\Map\MapFactory" />
     <type name="Magento\Catalog\Block\Widget\Link">
         <arguments>
             <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
