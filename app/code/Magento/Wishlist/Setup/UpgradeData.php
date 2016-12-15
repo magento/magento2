@@ -76,6 +76,7 @@ class UpgradeData implements UpgradeDataInterface
                         'parameters',
                         'info_buyRequest',
                         'bundle_option_ids',
+                        'bundle_selection_ids',
                         'attributes',
                         'bundle_selection_attributes',
                     ]
