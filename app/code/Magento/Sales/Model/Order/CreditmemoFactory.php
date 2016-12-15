@@ -24,6 +24,7 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
+     * @deprecated
      */
     protected $unserialize;
 
@@ -287,20 +288,5 @@ class CreditmemoFactory
             }
         }
         return $qty;
-    }
-
-    /**
-     * Get Unserialize
-     *
-     * @return \Magento\Framework\Unserialize\Unserialize
-     * @deprecated
-     */
-    private function getUnserialize()
-    {
-        if (!$this->unserialize) {
-            $this->unserialize = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Unserialize\Unserialize::class);
-        }
-        return $this->unserialize;
     }
 }
