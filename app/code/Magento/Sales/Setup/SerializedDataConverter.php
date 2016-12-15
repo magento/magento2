@@ -37,8 +37,7 @@ class SerializedDataConverter implements \Magento\Framework\DB\DataConverter\Dat
     public function __construct(
         Serialize $serialize,
         Json $json
-    )
-    {
+    ) {
         $this->serialize = $serialize;
         $this->json = $json;
     }
