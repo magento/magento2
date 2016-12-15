@@ -37,11 +37,9 @@ class AssertProductNameOnDifferentStoreViews extends AbstractConstraint
         array $productNames
     ) {
         $browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
-        $cmsIndex->getLinksBlock()->waitWelcomeMessage();
         foreach ($stores as $store) {
             $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
             $cmsIndex->getLinksBlock()->waitWelcomeMessage();
-            $browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
             \PHPUnit_Framework_Assert::assertEquals(
                 $productNames[$store->getStoreId()],
                 $catalogProductView->getViewBlock()->getProductName(),
