@@ -61,6 +61,6 @@ class Cli
     private function prepareUrl($command, array $options)
     {
         $command .= ' ' . implode(' ', $options);
-        return $_ENV['app_frontend_url'] . Cli::URL . '?command=' . urlencode($command);
+        return $_ENV['app_frontend_url'] . self::URL . '?command=' . urlencode($command);
     }
 }
