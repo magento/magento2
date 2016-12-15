@@ -13,7 +13,6 @@ use \Magento\Framework\DB\Select;
 
 /**
  * Map that holds data for category url rewrites entity
- * @SuppressWarnings(PHPCPD)
  */
 class DataCategoryUrlRewriteMap implements DataMapInterface
 {
@@ -61,24 +60,6 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
             $this->tableNames[$categoryId] = $this->generateData($categoryId);
         }
         return $this->tableNames[$categoryId];
-    }
-
-    /**
-     * Gets data by criteria from a map identified by a category Id
-     *
-     * @param int $categoryId
-     * @param string $key
-     * @return array
-     */
-    public function getData($categoryId, $key)
-    {
-        $this->getAllData($categoryId);
-        $urlRewritesConnection = $this->connection->getConnection();
-        $select = $urlRewritesConnection->select()
-            ->from(['e' => $this->tableNames[$categoryId]])
-            ->where('hash_key = ?', $key);
-
-        return $urlRewritesConnection->fetchAll($select);
     }
 
     /**
@@ -133,5 +114,23 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
         if (empty($this->tableNames)) {
             $this->tableNames = [];
         }
+    }
+
+    /**
+     * Gets data by criteria from a map identified by a category Id
+     *
+     * @param int $categoryId
+     * @param string $key
+     * @return array
+     */
+    public function getData($categoryId, $key)
+    {
+        $this->getAllData($categoryId);
+        $urlRewritesConnection = $this->connection->getConnection();
+        $select = $urlRewritesConnection->select()
+            ->from(['e' => $this->tableNames[$categoryId]])
+            ->where('hash_key = ?', $key);
+
+        return $urlRewritesConnection->fetchAll($select);
     }
 }
