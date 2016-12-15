@@ -190,7 +190,7 @@ sub vcl_hit {
     if (std.healthy(req.backend_hint)) {
         if (obj.ttl + obj.grace > 0s) {
             # Hit after TTL expiration, but within grace period
-            set req.http.grace = "full";
+            set req.http.grace = "normal (healthy server)";
             return (deliver);
         } else {
             # Hit after TTL and grace expiration
@@ -198,6 +198,7 @@ sub vcl_hit {
         }
     } else {
         # server is not healthy, retrieve from cache
+        set req.http.grace = "unlimited (unhealthy server)";
         return (deliver);
     }
 }
