@@ -11,7 +11,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Sales\Model\Order;
 
 /**
- * Prepare data related to purchase event represented in Case Creation request.
+ * Prepare data related to purchase event represented in case creation request.
  */
 class PurchaseBuilder
 {
@@ -84,7 +84,7 @@ class PurchaseBuilder
     }
 
     /**
-     * Gets the products purchased in the transaction.
+     * Returns the products purchased in the transaction.
      *
      * @param Order $order
      * @return array
@@ -107,7 +107,7 @@ class PurchaseBuilder
     }
 
     /**
-     * Gets the name of the shipper
+     * Returns the name of the shipper
      *
      * @param string $shippingDescription
      * @return string
@@ -120,7 +120,7 @@ class PurchaseBuilder
     }
 
     /**
-     * Gets the type of the shipment method used
+     * Returns the type of the shipment method used
      *
      * @param string $shippingDescription
      * @return string
@@ -133,7 +133,7 @@ class PurchaseBuilder
     }
 
     /**
-     * Gets the gateway that processed the transaction. For PayPal orders use paypal_account.
+     * Returns the gateway that processed the transaction. For PayPal orders should be paypal_account.
      *
      * @param string $gatewayCode
      * @return string
@@ -144,7 +144,7 @@ class PurchaseBuilder
     }
 
     /**
-     * Gets WEB for web-orders, PHONE for orders created by Admin
+     * Returns WEB for web-orders, PHONE for orders created by Admin
      *
      * @return string
      */

@@ -6,7 +6,9 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 /**
- * Interface CreateCaseBuilderInterface
+ * Signifyd case creation request builder interface
+ *
+ * Retrieves params for case creation request API call based on order ID
  */
 interface CreateCaseBuilderInterface
 {

@@ -13,6 +13,8 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
 class AddressBuilder
 {
     /**
+     * Returns address data params based on OrderAddressInterface
+     *
      * @param OrderAddressInterface $address
      * @return array
      */
