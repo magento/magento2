@@ -8,7 +8,6 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
 use Magento\Catalog\Model\Product;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\App\ResourceConnection;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 /**
@@ -25,27 +24,21 @@ class UrlRewriteMap
     /** @var UrlFinderInterface */
     private $urlFinder;
 
-    /** @var ResourceConnection */
-    private $connection;
-
     /** @var UrlRewrite */
     private $urlRewritePlaceholder;
 
     /**
      * @param DataMapPoolInterface $dataMapPool
      * @param UrlFinderInterface $urlFinder
-     * @param ResourceConnection $connection
      * @param UrlRewriteFactory $urlRewriteFactory
      */
     public function __construct(
         DataMapPoolInterface $dataMapPool,
         UrlFinderInterface $urlFinder,
-        ResourceConnection $connection,
         UrlRewriteFactory $urlRewriteFactory
     ) {
         $this->dataMapPool = $dataMapPool;
         $this->urlFinder = $urlFinder;
-        $this->connection = $connection;
         $this->urlRewritePlaceholder = $urlRewriteFactory->create();
     }
 

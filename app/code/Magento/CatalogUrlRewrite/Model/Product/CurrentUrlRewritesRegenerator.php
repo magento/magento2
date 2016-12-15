@@ -32,8 +32,14 @@ class CurrentUrlRewritesRegenerator
     /** @var ProductUrlPathGenerator */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var UrlRewriteFactory
+     * @deprecated
+     */
     protected $urlRewriteFactory;
+
+    /** @var UrlRewrite */
+    private $urlRewritePlaceholder;
 
     /** @var UrlRewriteMap */
     private $urlRewriteMap;
@@ -58,6 +64,7 @@ class CurrentUrlRewritesRegenerator
         $this->urlFinder = $urlFinder;
         $this->productUrlPathGenerator = $productUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
+        $this->urlRewritePlaceholder = $urlRewriteFactory->create();
         $this->urlRewriteMap = $urlRewriteMap ?: ObjectManager::getInstance()->get(UrlRewriteMap::class);
         $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
     }
@@ -76,7 +83,7 @@ class CurrentUrlRewritesRegenerator
         $currentUrlRewrites = $this->urlRewriteMap->getByIdentifiers(
             $product->getEntityId(),
             $storeId,
-            UrlRewriteMap::ENTITY_TYPE_PRODUCT,
+            ProductUrlRewriteGenerator::ENTITY_TYPE,
             $rootCategoryId
         );
 
@@ -109,8 +116,8 @@ class CurrentUrlRewritesRegenerator
         if ($product->getData('save_rewrites_history')) {
             $targetPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
             if ($url->getRequestPath() !== $targetPath) {
-                $generatedUrl = $this->urlRewriteFactory->create()
-                    ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
+                $generatedUrl = clone $this->urlRewritePlaceholder;
+                $generatedUrl->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($product->getEntityId())
                     ->setRequestPath($url->getRequestPath())
                     ->setTargetPath($targetPath)
@@ -138,8 +145,8 @@ class CurrentUrlRewritesRegenerator
             ? $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
             : $url->getTargetPath();
         if ($url->getRequestPath() !== $targetPath) {
-            $generatedUrl = $this->urlRewriteFactory->create()
-                ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
+            $generatedUrl = clone $this->urlRewritePlaceholder;
+            $generatedUrl->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($product->getEntityId())
                 ->setRequestPath($url->getRequestPath())
                 ->setTargetPath($targetPath)

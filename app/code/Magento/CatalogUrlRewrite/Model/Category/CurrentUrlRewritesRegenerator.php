@@ -10,8 +10,8 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\UrlRewritesSet;
@@ -21,8 +21,14 @@ class CurrentUrlRewritesRegenerator
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory */
+    /**
+     * @var UrlRewriteFactory
+     * @deprecated
+     */
     protected $urlRewriteFactory;
+
+    /** @var UrlRewrite */
+    private $urlRewritePlaceholder;
 
     /**
      * @var UrlFinderInterface
@@ -52,6 +58,7 @@ class CurrentUrlRewritesRegenerator
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
+        $this->urlRewritePlaceholder = $urlRewriteFactory->create();
         $this->urlFinder = $urlFinder;
         $this->urlRewriteMap = $urlRewriteMap ?: ObjectManager::getInstance()->get(UrlRewriteMap::class);
         $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
@@ -70,7 +77,7 @@ class CurrentUrlRewritesRegenerator
         $currentUrlRewrites = $this->urlRewriteMap->getByIdentifiers(
             $category->getEntityId(),
             $storeId,
-            UrlRewriteMap::ENTITY_TYPE_CATEGORY,
+            CategoryUrlRewriteGenerator::ENTITY_TYPE,
             $rootCategoryId
         );
 
@@ -98,8 +105,8 @@ class CurrentUrlRewritesRegenerator
         if ($category->getData('save_rewrites_history')) {
             $targetPath = $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
             if ($url->getRequestPath() !== $targetPath) {
-                $generatedUrl = $this->urlRewriteFactory->create()
-                    ->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
+                $generatedUrl = clone $this->urlRewritePlaceholder;
+                $generatedUrl->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($category->getEntityId())
                     ->setRequestPath($url->getRequestPath())
                     ->setTargetPath($targetPath)
@@ -124,8 +131,8 @@ class CurrentUrlRewritesRegenerator
             ? $url->getTargetPath()
             : $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
         if ($url->getRequestPath() !== $targetPath) {
-            $generatedUrl = $this->urlRewriteFactory->create()
-                ->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
+            $generatedUrl = clone $this->urlRewritePlaceholder;
+            $generatedUrl->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($category->getEntityId())
                 ->setRequestPath($url->getRequestPath())
                 ->setTargetPath($targetPath)
