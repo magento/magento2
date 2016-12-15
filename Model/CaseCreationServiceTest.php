@@ -109,7 +109,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->client->expects(static::once())
             ->method('request')
             ->willReturn($response);
-        $this->client->expects(static::once())
+        $this->client->expects(static::atLeastOnce())
             ->method('getLastRequest')
             ->willReturn(json_encode($requestData));
 
@@ -143,7 +143,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->client->expects(static::once())
             ->method('request')
             ->willReturn($response);
-        $this->client->expects(static::once())
+        $this->client->expects(static::atLeastOnce())
             ->method('getLastRequest')
             ->willReturn(json_encode($requestData));
 
@@ -191,8 +191,6 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->client->expects(static::once())
             ->method('request')
             ->willReturn($response);
-        $this->client->expects(static::never())
-            ->method('getLastRequest');
 
         $this->logger->expects(static::never())
             ->method('error');
