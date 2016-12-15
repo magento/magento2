@@ -36,7 +36,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
-     * @param Generator $generator
+     * @param Generator $queryGenerator
      */
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory,
