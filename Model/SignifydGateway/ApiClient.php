@@ -10,6 +10,8 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Json\DecoderInterface;
+use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
+use Exception;
 
 /**
  * Signifyd API Client.
@@ -39,6 +41,11 @@ class ApiClient
     private $dataDecoder;
 
     /**
+     * @var DebuggerFactory
+     */
+    private $debuggerFactory;
+
+    /**
      * ApiClient constructor.
      *
      * Class uses client factory to instantiate new client for interacting with API.
@@ -48,17 +55,20 @@ class ApiClient
      * @param ZendClientFactory $clientFactory
      * @param EncoderInterface $dataEncoder
      * @param DecoderInterface $dataDecoder
+     * @param DebuggerFactory $debuggerFactory
      */
     public function __construct(
         Config $config,
         ZendClientFactory $clientFactory,
         EncoderInterface $dataEncoder,
-        DecoderInterface $dataDecoder
+        DecoderInterface $dataDecoder,
+        DebuggerFactory $debuggerFactory
     ) {
         $this->config = $config;
         $this->clientFactory = $clientFactory;
         $this->dataEncoder = $dataEncoder;
         $this->dataDecoder = $dataDecoder;
+        $this->debuggerFactory = $debuggerFactory;
     }
 
     /**
@@ -114,7 +124,24 @@ class ApiClient
         $client->setMethod($method);
         $client->setUri($apiUrl);
 
-        $response = $client->request();
+        try {
+            $response = $client->request();
+
+            $this->debuggerFactory->create()->success(
+                $apiUrl,
+                $encodedData,
+                $response->getStatus() . ' ' . $response->getMessage(),
+                $response->getBody()
+            );
+        } catch (Exception $e) {
+            $this->debuggerFactory->create()->failure(
+                $apiUrl,
+                $encodedData,
+                $e
+            );
+            throw $e;
+        }
+
         return $response;
     }
 
