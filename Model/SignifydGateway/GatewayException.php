@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\SignifydGateway;
 /**
  * Exception of interacation with Signifyd API
  */
-class SignifydApiResponseException extends SignifydGatewayException
+class GatewayException extends \Exception
 {
 
 }

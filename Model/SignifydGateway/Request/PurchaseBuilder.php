@@ -5,6 +5,7 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Sales\Model\Order;
@@ -149,6 +150,6 @@ class PurchaseBuilder
      */
     private function getOrderChannel()
     {
-        return $this->scope->getCurrentScope() === 'adminhtml' ? 'PHONE' : 'WEB';
+        return $this->scope->getCurrentScope() === Area::AREA_ADMINHTML ? 'PHONE' : 'WEB';
     }
 }

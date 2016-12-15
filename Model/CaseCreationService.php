@@ -7,8 +7,8 @@ namespace Magento\Signifyd\Model;
 
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
-use Magento\Signifyd\Model\SignifydGateway\SignifydGateway;
-use Magento\Signifyd\Model\SignifydGateway\SignifydGatewayException;
+use Magento\Signifyd\Model\SignifydGateway\Gateway;
+use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -24,7 +24,7 @@ class CaseCreationService implements CaseCreationServiceInterface
     private $caseManagement;
 
     /**
-     * @var SignifydGateway;
+     * @var Gateway;
      */
     private $signifydGateway;
 
@@ -37,12 +37,12 @@ class CaseCreationService implements CaseCreationServiceInterface
      * CaseCreationService constructor.
      *
      * @param CaseManagementInterface $caseManagement
-     * @param SignifydGateway $signifydGateway
+     * @param Gateway $signifydGateway
      * @param LoggerInterface $logger
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
-        SignifydGateway $signifydGateway,
+        Gateway $signifydGateway,
         LoggerInterface $logger
     ) {
         $this->caseManagement = $caseManagement;
@@ -58,11 +58,10 @@ class CaseCreationService implements CaseCreationServiceInterface
         $this->caseManagement->create($orderId);
         try {
             $this->signifydGateway->createCase($orderId);
-        } catch (SignifydGatewayException $e) {
+        } catch (GatewayException $e) {
             $this->logger->error($e->getMessage());
         }
 
         return true;
     }
-
 }

@@ -18,9 +18,8 @@ interface CaseCreationServiceInterface
     /**
      * Create new case for order with specified id.
      *
-     * @param $orderId
+     * @param int $orderId
      * @return bool
      */
     public function createForOrder($orderId);
-
 }
