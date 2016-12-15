@@ -6,9 +6,6 @@
 
 namespace Magento\Bundle\Test\Fixture\Cart;
 
-use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\Mtf\Fixture\FixtureInterface;
-
 /**
  * Data for verify cart item block on checkout page.
  *
@@ -20,13 +17,12 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
     /**
      * Return prepared dataset.
      *
-     * @param null $key
-     * @return mixed
+     * @param null|string $key
+     * @return array
      */
     public function getData($key = null)
     {
         $this->data = parent::getData($key);
-        /** @var BundleProduct $product */
         $bundleSelection = $this->product->getBundleSelections();
         $checkoutData = $this->product->getCheckoutData();
         $checkoutBundleOptions = isset($checkoutData['options']['bundle_options'])
@@ -37,7 +33,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
         foreach ($checkoutBundleOptions as $checkoutOptionKey => $checkoutOption) {
             $keys = $this->getKeys($bundleSelection['bundle_options'], $checkoutOption);
             $attributeKey = $keys['attribute'];
-            $optionKey = $keys['attribute'];
+            $optionKey = $keys['option'];
             // Prepare option data
             $bundleSelectionAttribute = $bundleSelection['products'][$attributeKey];
             $bundleOptions = $bundleSelection['bundle_options'][$attributeKey];
@@ -65,7 +61,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
      * Get option key.
      *
      * @param array $assignedProducts
-     * @param $checkoutOption
+     * @param string $checkoutOption
      * @return null|string
      */
     private function getOptionKey(array $assignedProducts, $checkoutOption)
@@ -74,6 +70,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             if (false !== strpos($value['search_data']['name'], $checkoutOption)) {
                 return $key;
             }
+            return null;
         }
     }
 
@@ -81,7 +78,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
      * Find option and attribute keys.
      *
      * @param array $bundleOptions
-     * @param $checkoutOption
+     * @param string $checkoutOption
      * @return array
      */
     private function getKeys(array $bundleOptions, $checkoutOption)

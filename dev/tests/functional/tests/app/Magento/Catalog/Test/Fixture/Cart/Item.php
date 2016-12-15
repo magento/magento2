@@ -37,7 +37,7 @@ class Item extends DataSource
     /**
      * Return prepared dataset.
      *
-     * @param null $key
+     * @param null|string $key
      * @return array
      */
     public function getData($key = null)

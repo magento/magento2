@@ -22,9 +22,9 @@ class AssertInvoiceItems extends AbstractAssertItems
      * @param InvoiceIndex $invoiceIndex
      * @param SalesInvoiceView $salesInvoiceView
      * @param OrderInjectable $order
-     * @param Cart $cart
      * @param array $ids
      * @param array|null $data [optional]
+     * @param Cart|null $cart [optional]
      * @return void
      */
     public function processAssert(

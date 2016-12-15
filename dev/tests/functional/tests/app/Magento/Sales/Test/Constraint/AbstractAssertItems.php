@@ -38,8 +38,8 @@ abstract class AbstractAssertItems extends AbstractAssertForm
      * Prepare order products.
      *
      * @param OrderInjectable $order
-     * @param Cart|null $cart
      * @param array|null $data [optional]
+     * @param Cart|null $cart [optional]
      * @return array
      */
     protected function prepareOrderProducts(OrderInjectable $order, array $data = null, Cart $cart = null)
