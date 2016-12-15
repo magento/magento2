@@ -66,14 +66,18 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
      * Gets data by criteria from a map identified by a category Id
      *
      * @param int $categoryId
-     * @param Select $criteria
+     * @param string $key
      * @return array
      */
-    public function getData($categoryId, $criteria) {
+    public function getData($categoryId, $key)
+    {
         $this->getAllData($categoryId);
         $urlRewritesConnection = $this->connection->getConnection();
-        $criteria->from(['e' => $this->tableNames[$categoryId]]);
-        return $urlRewritesConnection->fetchAll($criteria);
+        $select = $urlRewritesConnection->select()
+            ->from(['e' => $this->tableNames[$categoryId]])
+            ->where('hash_key = ?', $key);
+
+        return $urlRewritesConnection->fetchAll($select);
     }
 
     /**

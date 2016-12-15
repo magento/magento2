@@ -162,8 +162,12 @@ class CategoryUrlRewriteGenerator
      */
     protected function generateForSpecificStoreView(Category $category, $storeId, $rootCategoryId = null)
     {
-        $this->urlRewritesSet->merge($this->canonicalUrlRewriteGenerator->generate($storeId, $category));
-        $this->urlRewritesSet->merge($this->childrenUrlRewriteGenerator->generate($storeId, $category, $rootCategoryId));
+        $this->urlRewritesSet->merge(
+            $this->canonicalUrlRewriteGenerator->generate($storeId, $category)
+        );
+        $this->urlRewritesSet->merge(
+            $this->childrenUrlRewriteGenerator->generate($storeId, $category, $rootCategoryId)
+        );
         $this->urlRewritesSet->merge(
             $this->currentUrlRewritesRegenerator->generate($storeId, $category, $rootCategoryId)
         );

@@ -52,57 +52,33 @@ class UrlRewriteMap
     /**
      * Queries by identifiers from maps or falls-back to UrlFinderInterface
      *
-     * @param int|int[] $entity_id
-     * @param int|int[] $store_id
-     * @param string $entity_type
+     * @param int $entityId
+     * @param int $storeId
+     * @param string $entityType
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function getByIdentifiers($entity_id, $store_id, $entity_type, $rootCategoryId = null)
+    public function getByIdentifiers($entityId, $storeId, $entityType, $rootCategoryId = null)
     {
-        if ($rootCategoryId) {
+        if ($rootCategoryId && is_numeric($entityId) && is_numeric($storeId) && is_string($entityType)) {
             $map = null;
-            if ($entity_type === self::ENTITY_TYPE_PRODUCT) {
+            if ($entityType === self::ENTITY_TYPE_PRODUCT) {
                 $map = $this->dataMapPool->getDataMap(DataProductUrlRewriteMap::class, $rootCategoryId);
-            } elseif ($entity_type === self::ENTITY_TYPE_CATEGORY) {
+            } elseif ($entityType === self::ENTITY_TYPE_CATEGORY) {
                 $map = $this->dataMapPool->getDataMap(DataCategoryUrlRewriteMap::class, $rootCategoryId);
             }
 
             if ($map) {
-                $select = null;
-                if (!is_array($entity_id) && !is_array($store_id)) {
-                    $key = $store_id . '_' . $entity_id;
-                    $urlRewritesConnection = $this->connection->getConnection();
-                    $select = $urlRewritesConnection->select()
-                        ->where('hash_key = ?', $key);
-                } else if (is_array($entity_id) && is_array($store_id)) {
-                    $urlRewritesConnection = $this->connection->getConnection();
-                    $select = $urlRewritesConnection->select()
-                        ->where(
-                            $urlRewritesConnection->prepareSqlCondition(
-                                'store_id',
-                                ['in' => $store_id]
-                            )
-                        )
-                        ->where(
-                            $urlRewritesConnection->prepareSqlCondition(
-                                'entity_id',
-                                ['in' => $entity_id]
-                            )
-                        );
-                }
-                if ($select) {
-                    return $this->arrayToUrlRewriteObject($map->getData($rootCategoryId, $select));
-                }
+                $key = $storeId . '_' . $entityId;
+                return $this->arrayToUrlRewriteObject($map->getData($rootCategoryId, $key));
             }
-
         }
 
         return $this->urlFinder->findAllByData(
             [
-                UrlRewrite::STORE_ID => $store_id,
-                UrlRewrite::ENTITY_ID => $entity_id,
-                UrlRewrite::ENTITY_TYPE => $entity_type
+                UrlRewrite::STORE_ID => $storeId,
+                UrlRewrite::ENTITY_ID => $entityId,
+                UrlRewrite::ENTITY_TYPE => $entityType
             ]
         );
     }

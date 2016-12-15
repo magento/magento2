@@ -52,7 +52,9 @@ class ChildrenUrlRewriteGenerator
             $childCategory->setData('save_rewrites_history', $category->getData('save_rewrites_history'));
             /** @var CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator */
             $categoryUrlRewriteGenerator = $this->categoryUrlRewriteGeneratorFactory->create();
-            $this->urlRewritesSet->merge($categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId));
+            $this->urlRewritesSet->merge(
+                $categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId)
+            );
         }
 
         $result = $this->urlRewritesSet->getData();

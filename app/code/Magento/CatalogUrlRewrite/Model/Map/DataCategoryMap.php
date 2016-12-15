@@ -56,10 +56,10 @@ class DataCategoryMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($categoryId, $criteria)
+    public function getData($categoryId, $key)
     {
         $this->getAllData($categoryId);
-        return $this->data[$categoryId][$criteria];
+        return $this->data[$categoryId][$key];
     }
 
     /**

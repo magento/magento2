@@ -24,10 +24,10 @@ interface DataMapInterface
      * Gets data by criteria from a map identified by a category Id
      *
      * @param int $categoryId
-     * @param string|Select $criteria
+     * @param string $key
      * @return array
      */
-    public function getData($categoryId, $criteria);
+    public function getData($categoryId, $key);
 
     /**
      * Resets current map and it's dependencies

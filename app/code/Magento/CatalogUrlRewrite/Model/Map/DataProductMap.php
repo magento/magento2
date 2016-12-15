@@ -54,9 +54,10 @@ class DataProductMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($categoryId, $criteria) {
+    public function getData($categoryId, $key)
+    {
         $this->getAllData($categoryId);
-        return $this->data[$categoryId][$criteria];
+        return $this->data[$categoryId][$key];
     }
 
     /**
@@ -77,10 +78,14 @@ class DataProductMap implements DataMapInterface
             ->where(
                 $productsCollection->getConnection()->prepareSqlCondition(
                     'cp.category_id',
-                    ['in' => $this->dataMapPool->getDataMap(DataCategoryMap::class, $categoryId)->getAllData($categoryId)]
+                    [
+                        'in' => $this->dataMapPool->getDataMap(
+                            DataCategoryMap::class,
+                            $categoryId
+                        )->getAllData($categoryId)
+                    ]
                 )
-            )
-            ->group('e.entity_id');
+            )->group('e.entity_id');
 
         return $productsCollection->getAllIds();
     }
