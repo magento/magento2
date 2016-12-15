@@ -20,9 +20,41 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializeMock;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
     public function setUp()
     {
-        $this->model = new \Magento\Sales\Setup\SerializedDataConverter(new Serialize(), new Json());
+        $this->serializeMock = $this->getMock(Serialize::class, ['unserialize'], [], '', false);
+        $this->serializeMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return unserialize($value);
+                    }
+                )
+            );
+        $this->jsonMock = $this->getMock(Json::class, ['serialize'], [], '', false);
+        $this->jsonMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+
+        $this->model = new \Magento\Sales\Setup\SerializedDataConverter($this->serializeMock, $this->jsonMock);
+
     }
 
     /**
