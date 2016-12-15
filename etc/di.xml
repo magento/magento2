@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Signifyd\Api\Data\CaseInterface" type="Magento\Signifyd\Model\CaseEntity" />
+    <preference for="Magento\Signifyd\Api\CaseRepositoryInterface" type="Magento\Signifyd\Model\CaseRepository" />
+    <preference for="Magento\Signifyd\Api\CaseManagementInterface" type="Magento\Signifyd\Model\CaseManagement" />
+    <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Signifyd\Api\CaseCreationServiceInterface" type="Magento\Signifyd\Model\CaseCreationService" />
+    <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
+</config>
