@@ -44,14 +44,15 @@ class CreateProductWithSeveralWebsitesUrlRewriteTest extends Injectable
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage,
         FixtureFactory $fixtureFactory,
-        array $websiteCategory
+        array $websiteCategories
     ) {
         $categoryParent = [];
         $categoryList = [];
         $storeList = [];
 
         // Preconditions
-        foreach ($websiteCategory as $website => $category) {
+        foreach ($websiteCategories as $websiteCategory) {
+            list($storeGroup, $store, $category) = explode('::', $websiteCategory);
             if (!isset($categoryParent[$category])) {
                 $categoryListItem = $fixtureFactory->createByCode('category', ['dataset' => $category]);
                 $categoryListItem->persist();
@@ -60,7 +61,7 @@ class CreateProductWithSeveralWebsitesUrlRewriteTest extends Injectable
                 $categoryList[] = $categoryListItem;
             }
             $storeGroup = $fixtureFactory->createByCode('storeGroup', [
-                'dataset' => $website,
+                'dataset' => $storeGroup,
                 'data' => [
                     'root_category_id' => [
                         'category' => $categoryParent[$category]
@@ -69,7 +70,7 @@ class CreateProductWithSeveralWebsitesUrlRewriteTest extends Injectable
             ]);
             $storeGroup->persist();
             $store = $fixtureFactory->createByCode('store', [
-                'dataset' => $website,
+                'dataset' => $store,
                 'data' => [
                     'group_id' => [
                         'storeGroup' => $storeGroup

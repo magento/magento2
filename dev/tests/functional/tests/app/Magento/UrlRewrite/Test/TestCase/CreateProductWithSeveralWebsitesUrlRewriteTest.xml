@@ -14,10 +14,10 @@
             <data name="product/data/price/value" xsi:type="string">42</data>
             <data name="product/data/weight" xsi:type="string">50</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">345</data>
-            <data name="websiteCategory" xsi:type="array">
-                <item name="default" xsi:type="string">default</item>
-                <item name="new" xsi:type="string">default</item>
-                <item name="new2" xsi:type="string">root_subcategory</item>
+            <data name="websiteCategories" xsi:type="array">
+                <item name="0" xsi:type="string">default::default::default</item>
+                <item name="1" xsi:type="string">store_group_new_1::store_new_1::default</item>
+                <item name="2" xsi:type="string">store_group_new_2::store_new_2::root_subcategory</item>
             </data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductInGrid" />
