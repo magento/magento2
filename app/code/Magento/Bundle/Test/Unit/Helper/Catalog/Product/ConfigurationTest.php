@@ -143,8 +143,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBundleOptionsEmptyBundleSelectionIds()
     {
-        $optionIds = 'a:1:{i:0;i:1;}';
-
+        $optionIds = '{"0":"1"}';
         $collection = $this->getMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class, [], [], '', false);
         $product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
@@ -168,7 +167,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $selectionOption->expects($this->once())->method('getValue')->will($this->returnValue(''));
         $itemOption->expects($this->once())->method('getValue')->will($this->returnValue($optionIds));
-        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(unserialize($optionIds), $product)
+        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(json_decode($optionIds, true), $product)
             ->will($this->returnValue($collection));
         $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
         $this->item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
@@ -185,7 +184,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions()
     {
-        $optionIds = 'a:1:{i:0;i:1;}';
+        $optionIds = '{"0":"1"}';
         $selectionIds =  '{"0":"2"}';
         $selectionId = '2';
         $product = $this->getMock(
@@ -253,7 +252,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('appendSelections')->with($collection2, true)
             ->will($this->returnValue([$bundleOption]));
         $itemOption->expects($this->once())->method('getValue')->will($this->returnValue($optionIds));
-        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(unserialize($optionIds), $product)
+        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(json_decode($optionIds, true), $product)
             ->will($this->returnValue($collection));
         $typeInstance->expects($this->once())
             ->method('getSelectionsByIds')

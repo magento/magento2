@@ -700,8 +700,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $this->checkIsResult($_result);
 
                     $result[] = $_result[0]->setParentProductId($product->getId())
-                        ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
-                        ->addCustomOption('bundle_selection_attributes', $this->serializer->serialize($attributes));
+                        ->addCustomOption(
+                            'bundle_option_ids',
+                            $this->serializer->serialize(array_map('intval', $optionIds))
+                        )
+                        ->addCustomOption(
+                            'bundle_selection_attributes',
+                            $this->serializer->serialize($attributes)
+                        );
 
                     if ($isStrictProcessMode) {
                         $_result[0]->setCartQty($qty);
@@ -718,7 +724,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($result as $item) {
                     $item->addCustomOption('bundle_identity', $uniqueKey);
                 }
-                $product->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)));
+                $product->addCustomOption(
+                    'bundle_option_ids',
+                    $this->serializer->serialize(
+                        array_map('intval', $optionIds)
+                    )
+                );
                 $product->addCustomOption('bundle_selection_ids', $this->serializer->serialize($selectionIds));
 
                 return $result;
@@ -829,7 +840,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $usedOptions = $product->getData($this->_keyUsedOptions);
         $usedOptionsIds = $product->getData($this->_keyUsedOptionsIds);
 
-        if (!$usedOptions || serialize($usedOptionsIds) != serialize($optionIds)) {
+        if (
+            !$usedOptions
+            || $this->serializer->serialize($usedOptionsIds) != $this->serializer->serialize($optionIds)
+        ) {
             $usedOptions = $this->_bundleOption
                 ->create()
                 ->getResourceCollection()
@@ -861,7 +875,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if ($product->hasCustomOptions()) {
             $customOption = $product->getCustomOption('bundle_option_ids');
-            $optionIds = unserialize($customOption->getValue());
+            $optionIds = $this->serializer->unserialize($customOption->getValue());
             $options = $this->getOptionsByIds($optionIds, $product);
             $customOption = $product->getCustomOption('bundle_selection_ids');
             $selectionIds = $this->serializer->unserialize($customOption->getValue());
