@@ -104,7 +104,7 @@ class Log implements DebuggerInterface
     /**
      * Write debug information to log file (var/log/debug.log by default)
      *
-     * @param $info
+     * @param string $info
      * @return void
      */
     private function writeToLog($info)
@@ -143,5 +143,4 @@ class Log implements DebuggerInterface
         $content = implode("\n", $contentLinesWithIndent);
         return $content;
     }
-
 }

@@ -15,6 +15,7 @@ class BlackHole implements DebuggerInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function success($requestUrl, $requestData, $responseStatus, $responseBody)
     {
@@ -23,6 +24,7 @@ class BlackHole implements DebuggerInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function failure($requestUrl, $requestData, Exception $exception)
     {

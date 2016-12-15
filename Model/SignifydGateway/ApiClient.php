@@ -82,7 +82,6 @@ class ApiClient
      * @param array $params
      * @return array
      * @throws ApiCallException
-     * @throws ApiResponseException
      */
     public function makeApiCall($url, $method, array $params = [])
     {
@@ -152,7 +151,6 @@ class ApiClient
      *
      * @return array
      * @throws ApiCallException
-     * @throws ApiResponseException
      */
     private function handleResponse(\Zend_Http_Response $response)
     {
@@ -167,8 +165,8 @@ class ApiClient
         $responseBody = $response->getBody();
         try {
             $decodedResponseBody = $this->dataDecoder->decode($responseBody);
-        } catch (\Exception $e) {
-            throw new ApiResponseException(
+        } catch (Exception $e) {
+            throw new ApiCallException(
                 'Signifyd API response is not valid JSON: ' . $e->getMessage(),
                 $e->getCode(),
                 $e

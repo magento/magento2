@@ -54,5 +54,4 @@ class DebuggerFactory
 
         return $this->objectManager->get(Log::class);
     }
-
 }
