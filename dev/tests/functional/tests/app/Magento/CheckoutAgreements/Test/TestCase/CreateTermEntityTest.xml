@@ -8,8 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CheckoutAgreements\Test\TestCase\CreateTermEntityTest" summary="Create Terms And Conditions" ticketId="MAGETWO-29586">
         <variation name="CreateTermEntityTestVariation1" summary="Create enabled term entity with text value">
-            <data name="tag" xsi:type="string">severity:S3</data>
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S3</data>
             <data name="configData" xsi:type="string">checkout_term_condition</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
@@ -63,8 +62,7 @@
             <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
         </variation>
         <variation name="CreateTermEntityTestVariation4" summary="Terms and conditions on multishipping" ticketId="MAGETWO-32499">
-            <data name="tag" xsi:type="string">severity:S3</data>
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S3</data>
             <data name="configData" xsi:type="string">checkout_term_condition</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
