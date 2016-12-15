@@ -3,27 +3,26 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Order\Item\Converter\ProductOptions;
+namespace Magento\Sales\Test\Unit\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Sales\Model\Order\Item\Converter\ProductOptions\SerializedToJson;
 
 /**
  * Unit test for order address repository class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SerializedToJsonTest extends \PHPUnit_Framework_TestCase
+class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SerializedToJson
+     * @var \Magento\Sales\Setup\SerializedDataConverter
      */
     protected $model;
 
     public function setUp()
     {
-        $this->model = new SerializedToJson(new Serialize(), new Json());
+        $this->model = new \Magento\Sales\Setup\SerializedDataConverter(new Serialize(), new Json());
     }
 
     /**
