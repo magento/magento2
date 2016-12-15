@@ -95,7 +95,7 @@ class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->crontabManagerMock->expects($this->once())
             ->method('getTasks')
-            ->willReturn([]);
+            ->willReturn($existingTasks);
         $this->tasksProviderMock->expects($this->once())
             ->method('getTasks')
             ->willReturn([]);
@@ -103,7 +103,7 @@ class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('saveTasks')
             ->with([]);
 
-        $this->commandTester->execute([]);
+        $this->commandTester->execute($options);
         $this->assertEquals(
             'Crontab has been generated and saved' . PHP_EOL,
             $this->commandTester->getDisplay()

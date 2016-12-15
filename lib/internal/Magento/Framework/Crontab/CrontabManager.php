@@ -57,6 +57,7 @@ class CrontabManager implements CrontabManagerInterface
 
     /**
      * {@inheritdoc}
+     * @throws LocalizedException
      */
     public function saveTasks(array $tasks)
     {
@@ -92,6 +93,7 @@ class CrontabManager implements CrontabManagerInterface
 
     /**
      * {@inheritdoc}
+     * @throws LocalizedException
      */
     public function removeTasks()
     {
