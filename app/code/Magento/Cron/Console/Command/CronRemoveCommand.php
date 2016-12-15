@@ -5,7 +5,7 @@
  */
 namespace Magento\Cron\Console\Command;
 
-use Magento\Framework\Crontab\CrontabManager;
+use Magento\Framework\Crontab\CrontabManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,14 +17,14 @@ use Magento\Framework\Console\Cli;
 class CronRemoveCommand extends Command
 {
     /**
-     * @var CrontabManager
+     * @var CrontabManagerInterface
      */
     private $crontabManager;
 
     /**
-     * @param CrontabManager $crontabManager
+     * @param CrontabManagerInterface $crontabManager
      */
-    public function __construct(CrontabManager $crontabManager)
+    public function __construct(CrontabManagerInterface $crontabManager)
     {
         $this->crontabManager = $crontabManager;
 

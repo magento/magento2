@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
     <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
+    <preference for="Magento\Framework\Crontab\CrontabManagerInterface" type="Magento\Framework\Crontab\CrontabManager" />
+    <preference for="Magento\Framework\Crontab\TasksProviderInterface" type="Magento\Framework\Crontab\TasksProvider" />
     <type name="Magento\Config\Model\Config\Structure\Converter">
         <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
     </type>
@@ -45,7 +47,7 @@
             <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Crontab\TasksProvider">
+    <type name="Magento\Framework\Crontab\TasksProviderInterface">
         <arguments>
             <argument name="tasks" xsi:type="array">
                 <item name="cronMagento" xsi:type="array">

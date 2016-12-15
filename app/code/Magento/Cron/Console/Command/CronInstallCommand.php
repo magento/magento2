@@ -5,8 +5,8 @@
  */
 namespace Magento\Cron\Console\Command;
 
-use Magento\Framework\Crontab\CrontabManager;
-use Magento\Framework\Crontab\TasksProvider;
+use Magento\Framework\Crontab\CrontabManagerInterface;
+use Magento\Framework\Crontab\TasksProviderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,22 +19,22 @@ use Symfony\Component\Console\Input\InputOption;
 class CronInstallCommand extends Command
 {
     /**
-     * @var CrontabManager
+     * @var CrontabManagerInterface
      */
     private $crontabManager;
 
     /**
-     * @var TasksProvider
+     * @var TasksProviderInterface
      */
     private $tasksProvider;
 
     /**
-     * @param CrontabManager $crontabManager
-     * @param TasksProvider $tasksProvider
+     * @param CrontabManagerInterface $crontabManager
+     * @param TasksProviderInterface $tasksProvider
      */
     public function __construct(
-        CrontabManager $crontabManager,
-        TasksProvider $tasksProvider
+        CrontabManagerInterface $crontabManager,
+        TasksProviderInterface $tasksProvider
     ) {
         $this->crontabManager = $crontabManager;
         $this->tasksProvider = $tasksProvider;
