@@ -59,7 +59,7 @@ class CronInstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->crontabManager->getTasks() && !$input->getOption('reinstall')) {
+        if ($this->crontabManager->getTasks() && !$input->getOption('force')) {
             $output->writeln('<error>Crontab has already been generated and saved</error>');
             return Cli::RETURN_FAILURE;
         }
