@@ -62,7 +62,7 @@ class PlaceOrder implements ObserverInterface
         }
 
         $orderId = $order->getEntityId();
-        if (null === $order) {
+        if (null === $orderId) {
             return;
         }
 
