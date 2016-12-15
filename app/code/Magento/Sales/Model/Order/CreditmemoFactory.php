@@ -23,9 +23,14 @@ class CreditmemoFactory
     protected $taxConfig;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Unserialize\Unserialize
      */
     protected $unserialize;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Factory constructor
@@ -35,10 +40,14 @@ class CreditmemoFactory
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Tax\Model\Config $taxConfig,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManage::getInstance()->get(
+            \Magento\Framework\Serialize\SerializerInterface::class
+        );
     }
 
     /**
@@ -270,7 +279,7 @@ class CreditmemoFactory
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
-            $bundleSelectionAttributes = $this->getSerializer()
+            $bundleSelectionAttributes = $this->serializer
                 ->unserialize($productOptions['bundle_selection_attributes']);
             if ($bundleSelectionAttributes) {
                 $qty = $bundleSelectionAttributes['qty'] * $parentQty;
@@ -280,16 +289,16 @@ class CreditmemoFactory
     }
 
     /**
-     * Get instance of Serializer.
+     * Get Unserialize
      *
-     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @return \Magento\Framework\Unserialize\Unserialize
      * @deprecated
      */
-    private function getSerializer()
+    private function getUnserialize()
     {
         if (!$this->unserialize) {
             $this->unserialize = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+                ->get(\Magento\Framework\Unserialize\Unserialize::class);
         }
         return $this->unserialize;
     }

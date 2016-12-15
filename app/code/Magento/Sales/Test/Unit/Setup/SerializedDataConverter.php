@@ -3,27 +3,58 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Order\Item\Converter\ProductOptions;
+namespace Magento\Sales\Test\Unit\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Sales\Model\Order\Item\Converter\ProductOptions\SerializedToJson;
 
 /**
  * Unit test for order address repository class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SerializedToJsonTest extends \PHPUnit_Framework_TestCase
+class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SerializedToJson
+     * @var \Magento\Sales\Setup\SerializedDataConverter
      */
     protected $model;
 
+    /**
+     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializeMock;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonMock;
+
     public function setUp()
     {
-        $this->model = new SerializedToJson(new Serialize(), new Json());
+        $this->serializeMock = $this->getMock(Serialize::class, ['unserialize'], [], '', false);
+        $this->serializeMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return unserialize($value);
+                    }
+                )
+            );
+        $this->jsonMock = $this->getMock(Json::class, ['serialize'], [], '', false);
+        $this->jsonMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+
+        $this->model = new \Magento\Sales\Setup\SerializedDataConverter($this->serializeMock, $this->jsonMock);
+
     }
 
     /**
