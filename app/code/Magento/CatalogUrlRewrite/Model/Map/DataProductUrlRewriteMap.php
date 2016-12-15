@@ -5,14 +5,13 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
 use \Magento\Framework\DB\Select;
 
 /**
  * Map that holds data for category url rewrites entity
+ * @SuppressWarnings(PHPCPD)
  */
 class DataProductUrlRewriteMap implements DataMapInterface
 {
@@ -33,13 +32,11 @@ class DataProductUrlRewriteMap implements DataMapInterface
     /**
      * @param ResourceConnection $connection
      * @param DataMapPoolInterface $dataMapPool,
-     * @param UrlRewriteFactory $urlRewriteFactory
      * @param TemporaryTableService $temporaryTableService,
      */
     public function __construct(
         ResourceConnection $connection,
         DataMapPoolInterface $dataMapPool,
-        UrlRewriteFactory $urlRewriteFactory,
         TemporaryTableService $temporaryTableService
     ) {
         $this->connection = $connection;

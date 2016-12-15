@@ -13,6 +13,7 @@ use \Magento\Framework\DB\Select;
 
 /**
  * Map that holds data for category url rewrites entity
+ * @SuppressWarnings(PHPCPD)
  */
 class DataCategoryUrlRewriteMap implements DataMapInterface
 {

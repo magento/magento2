@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 /**
- * Allows query to DataCategoryUrlRewriteMap and DataProductUrlRewriteMapclass or UrlFinderInterface by identifiers
+ * Allows query to DataCategoryUrlRewriteMap and DataProductUrlRewriteMap class or UrlFinderInterface by identifiers
  */
 class UrlRewriteMap
 {
