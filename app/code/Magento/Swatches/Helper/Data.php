@@ -24,7 +24,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * When we init media gallery empty image types contain this value.
