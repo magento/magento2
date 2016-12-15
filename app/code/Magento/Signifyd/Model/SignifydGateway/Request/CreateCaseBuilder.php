@@ -8,6 +8,8 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Sales\Model\OrderFactory;
 
 /**
+ * Signifyd case creation request builder
+ *
  * Handles the conversion from Magento Order to Signifyd Case
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -27,7 +27,7 @@ class CardBuilder
     }
 
     /**
-     * Returns card data params
+     * Returns card data params based on payment and billing address info
      *
      * @param Order $order
      * @return array

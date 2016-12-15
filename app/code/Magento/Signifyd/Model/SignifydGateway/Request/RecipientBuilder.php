@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Sales\Model\Order;
 
 /**
- * Prepare data related to person or organization receiving the items purchased.
+ * Prepare data related to person or organization receiving the items purchased
  */
 class RecipientBuilder
 {
@@ -27,7 +27,7 @@ class RecipientBuilder
     }
 
     /**
-     * Returns recipient data params
+     * Returns recipient data params based on shipping address
      *
      * @param Order $order
      * @return array
