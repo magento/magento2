@@ -9,11 +9,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Cron\Console\Command\CronInstallCommand;
 use Magento\Framework\Crontab\CrontabManagerInterface;
 use Magento\Framework\Crontab\TasksProviderInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
-use Symfony\Component\Console\Input\InputOption;
 
 class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
 {
