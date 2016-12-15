@@ -4,7 +4,6 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
-
 define(['squire'], function (Squire) {
     'use strict';
 
@@ -12,7 +11,9 @@ define(['squire'], function (Squire) {
         loginAction = jasmine.createSpy(),
         mocks = {
             'Magento_Customer/js/action/login': loginAction,
-            'Magento_Customer/js/customer-data': {get: function () {}},
+            'Magento_Customer/js/customer-data': {
+                get: jasmine.createSpy()
+            },
             'Magento_Customer/js/model/authentication-popup': {
                 createPopUp: jasmine.createSpy(),
                 modalWindow: null
@@ -22,13 +23,13 @@ define(['squire'], function (Squire) {
         },
         obj;
 
-        loginAction.registerLoginCallback = function () {};
-        window.authenticationPopup = {
-            customerRegisterUrl: 'register_url',
-            customerForgotPasswordUrl: 'forgot_password_url',
-            autocomplete: 'autocomplete_flag',
-            baseUrl: 'base_url'
-        };
+    loginAction.registerLoginCallback = jasmine.createSpy();
+    window.authenticationPopup = {
+        customerRegisterUrl: 'register_url',
+        customerForgotPasswordUrl: 'forgot_password_url',
+        autocomplete: 'autocomplete_flag',
+        baseUrl: 'base_url'
+    };
 
     beforeEach(function (done) {
         injector.mock(mocks);
@@ -45,7 +46,9 @@ define(['squire'], function (Squire) {
     describe('Magento_Customer/js/view/authentication-popup', function () {
         describe('"isActive" method', function () {
             it('Check for return value.', function () {
-                spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(function() {return true;});
+                mocks['Magento_Customer/js/customer-data'].get.and.returnValue(function () {
+                    return true;
+                });
                 expect(obj.isActive()).toBeFalsy();
             });
         });
@@ -67,8 +70,11 @@ define(['squire'], function (Squire) {
                     currentTarget: '<form><input type="text" name="username" value="customer"/></form>',
                     stopPropagation: jasmine.createSpy()
                 };
+
                 expect(obj.login(null, event)).toBeFalsy();
-                expect(mocks['Magento_Customer/js/action/login']).toHaveBeenCalledWith({username: 'customer'});
+                expect(mocks['Magento_Customer/js/action/login']).toHaveBeenCalledWith({
+                    username: 'customer'
+                });
             });
         });
     });
