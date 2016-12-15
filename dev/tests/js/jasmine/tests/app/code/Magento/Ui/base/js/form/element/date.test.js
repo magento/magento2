@@ -23,7 +23,6 @@ define([
 
         it('Check prepareDateTimeFormats function', function () {
             spyOn(utils, 'convertToMomentFormat');
-            spyOn(utils, 'normalizeDate');
             model.prepareDateTimeFormats();
             expect(utils.convertToMomentFormat).toHaveBeenCalled();
         });
