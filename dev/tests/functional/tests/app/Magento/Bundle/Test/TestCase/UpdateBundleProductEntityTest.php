@@ -102,7 +102,7 @@ class UpdateBundleProductEntityTest extends Injectable
         if ($storeDataset) {
             $store = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
             $store->persist();
-            $optionTitle = $originalProduct->getBundleSelections()['bundle_options'][0]['title'];
+            $optionTitle[$store->getStoreId()] = $product->getBundleSelections()['bundle_options'][0]['title'];
         }
 
         // Steps
@@ -118,7 +118,7 @@ class UpdateBundleProductEntityTest extends Injectable
 
         return [
             'category' => $category,
-            'stores' => isset($store) ? $store : [],
+            'stores' => isset($store) ? [$store] : [],
             'optionTitles' => isset($optionTitle) ? $optionTitle : []
         ];
     }
