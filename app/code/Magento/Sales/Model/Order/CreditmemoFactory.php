@@ -45,7 +45,7 @@ class CreditmemoFactory
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManage::getInstance()->get(
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Serialize\SerializerInterface::class
         );
     }
