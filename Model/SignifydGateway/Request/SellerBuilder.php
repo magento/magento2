@@ -15,6 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Prepare data related to the seller of the product.
+ *
  * This information is optional unless you are operating a marketplace,
  * listing goods on behalf of multiple sellers who each hold a seller account registered with your site.
  */
@@ -86,7 +87,7 @@ class SellerBuilder
     }
 
     /**
-     * Get region code by id
+     * Returns region code by id
      *
      * @param int $regionId
      * @return string
@@ -101,7 +102,7 @@ class SellerBuilder
     }
 
     /**
-     * Gets value from config
+     * Returns value from config
      *
      * @param string $value
      * @param StoreInterface $store
@@ -117,9 +118,10 @@ class SellerBuilder
     }
 
     /**
-     * @param StoreInterface $store
+     * Returns public domain name
      *
-     * @return string|null
+     * @param StoreInterface $store
+     * @return string|null null if no DNS records corresponding to a current host found
      */
     private function getPublicDomain(StoreInterface $store)
     {

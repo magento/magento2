@@ -10,6 +10,8 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Json\DecoderInterface;
+use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
+use Exception;
 
 /**
  * Signifyd API Client.
@@ -39,6 +41,11 @@ class ApiClient
     private $dataDecoder;
 
     /**
+     * @var DebuggerFactory
+     */
+    private $debuggerFactory;
+
+    /**
      * ApiClient constructor.
      *
      * Class uses client factory to instantiate new client for interacting with API.
@@ -48,17 +55,20 @@ class ApiClient
      * @param ZendClientFactory $clientFactory
      * @param EncoderInterface $dataEncoder
      * @param DecoderInterface $dataDecoder
+     * @param DebuggerFactory $debuggerFactory
      */
     public function __construct(
         Config $config,
         ZendClientFactory $clientFactory,
         EncoderInterface $dataEncoder,
-        DecoderInterface $dataDecoder
+        DecoderInterface $dataDecoder,
+        DebuggerFactory $debuggerFactory
     ) {
         $this->config = $config;
         $this->clientFactory = $clientFactory;
         $this->dataEncoder = $dataEncoder;
         $this->dataDecoder = $dataDecoder;
+        $this->debuggerFactory = $debuggerFactory;
     }
 
     /**
@@ -72,32 +82,46 @@ class ApiClient
      * @param array $params
      * @return array
      * @throws ApiCallException
-     * @throws ApiResponseException
      */
     public function makeApiCall($url, $method, array $params = [])
     {
         try {
-            $response = $this->sendRequest($url, $method, $params);
+            $client = $this->getRequestClient($url, $method, $params);
+            $response = $client->request();
+            $result = $this->handleResponse($response);
+
+            $this->debuggerFactory->create()->success(
+                $client->getUri(true),
+                $client->getLastRequest(),
+                $response->getStatus() . ' ' . $response->getMessage(),
+                $response->getBody()
+            );
         } catch (\Exception $e) {
-            throw new ApiCallException(
-                'Unable to call Signifyd API: ' . $e->getMessage(),
-                $e->getCode(),
+            $this->debuggerFactory->create()->failure(
+                $client->getUri(true),
+                $client->getLastRequest(),
                 $e
             );
+
+            throw new ApiCallException(
+                'Unable to process Signifyd API: ' . $e->getMessage(),
+                $e->getCode(),
+                $e,
+                $client->getLastRequest()
+            );
         }
-        $result = $this->handleResponse($response);
         return $result;
     }
 
     /**
-     * Send HTTP request to Signifyd API.
+     * Init HTTP client for processing requests to Signifyd API.
      *
      * @param string $url
      * @param string $method
      * @param array $params
-     * @return \Zend_Http_Response
+     * @return \Zend_Http_Client
      */
-    private function sendRequest($url, $method, array $params = [])
+    private function getRequestClient($url, $method, array $params = [])
     {
         $apiKey = $this->getApiKey();
         $apiUrl = $this->buildFullApiUrl($url);
@@ -114,8 +138,7 @@ class ApiClient
         $client->setMethod($method);
         $client->setUri($apiUrl);
 
-        $response = $client->request();
-        return $response;
+        return $client;
     }
 
     /**
@@ -125,7 +148,6 @@ class ApiClient
      *
      * @return array
      * @throws ApiCallException
-     * @throws ApiResponseException
      */
     private function handleResponse(\Zend_Http_Response $response)
     {
@@ -133,7 +155,7 @@ class ApiClient
         $successResponseCodes = [200, 201, 204];
 
         if (!in_array($responseCode, $successResponseCodes)) {
-            $errorMessage = $this->buildApiCallFailureMesage($response);
+            $errorMessage = $this->buildApiCallFailureMessage($response);
             throw new ApiCallException($errorMessage);
         }
 
@@ -141,8 +163,8 @@ class ApiClient
         try {
             $decodedResponseBody = $this->dataDecoder->decode($responseBody);
         } catch (\Exception $e) {
-            throw new ApiResponseException(
-                'Signifyd API response is not valid JSON: ' . $e->getMessage(),
+            throw new ApiCallException(
+                'Response is not valid JSON: ' . $e->getMessage(),
                 $e->getCode(),
                 $e
             );
@@ -157,7 +179,7 @@ class ApiClient
      * @param \Zend_Http_Response $response
      * @return string
      */
-    private function buildApiCallFailureMesage(\Zend_Http_Response $response)
+    private function buildApiCallFailureMessage(\Zend_Http_Response $response)
     {
         $responseBody = $response->getBody();
         switch ($response->getStatus()) {

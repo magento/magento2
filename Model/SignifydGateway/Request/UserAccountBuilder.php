@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Sales\Model\Order;
 
 /**
- * Prepare details from registered user account.
+ * Prepare details based on registered user account info
  */
 class UserAccountBuilder
 {
@@ -135,7 +135,7 @@ class UserAccountBuilder
     }
 
     /**
-     * Get currency by currency code
+     * Returns currency by currency code
      *
      * @param string|null $currencyCode
      * @return \Magento\Directory\Model\Currency
@@ -154,7 +154,7 @@ class UserAccountBuilder
     }
 
     /**
-     * Format date in ISO8601
+     * Returns date formatted according to ISO8601
      *
      * @param string $date
      * @return string

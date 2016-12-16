@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Framework\App\ProductMetadataInterface;
 
 /**
- * Class ClientVersionBuilder
+ * Provides platform name, edition and version info
  */
 class ClientVersionBuilder
 {

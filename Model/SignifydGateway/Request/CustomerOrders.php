@@ -47,7 +47,7 @@ class CustomerOrders
     }
 
     /**
-     * Gets customer orders
+     * Returns customer orders
      *
      * @param int $customerId
      * @return \Magento\Sales\Api\Data\OrderInterface[]
