@@ -12,8 +12,11 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
+ * Precondition:
+ * 1. Categories are created
+ *
  * Test Flow:
- * 1. Log in to Backend.
+ * 1. Log in to Backend
  * 2. Navigate to the Products>Inventory>Categories
  * 3. Click on 'Add Category' button
  * 4. Fill out all data according to data set

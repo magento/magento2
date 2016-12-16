@@ -28,7 +28,7 @@
             </field>
         </dataset>
 
-        <dataset name="oneSimpleProduct">
+        <dataset name="one_simple_product">
             <field name="assigned_products" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="id" xsi:type="string">%id%</item>

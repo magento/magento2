@@ -36,7 +36,7 @@ class CreateProductWithSeveralWebsitesUrlRewriteTest extends Injectable
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
      * @param FixtureFactory $fixtureFactory
-     * @param array $websiteCategory
+     * @param array $websiteCategories
      * @return array
      */
     public function testCreate(

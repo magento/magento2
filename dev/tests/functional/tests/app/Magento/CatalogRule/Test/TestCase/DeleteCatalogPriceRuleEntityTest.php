@@ -18,6 +18,7 @@ use Magento\Customer\Test\Fixture\Customer;
  * Test Flow:
  * Preconditions:
  * 1. Catalog Price Rule is created.
+ * 2. Customer is created if needed.
  * Steps:
  * 1. Log in as default admin user.
  * 2. Go to Marketing > Catalog Price Rules.

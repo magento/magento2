@@ -36,7 +36,8 @@ class AssertBundleOptionTitleOnStorefront extends AbstractConstraint
         array $stores,
         array $optionTitles
     ) {
-        $cmsIndex->open()->getLinksBlock()->waitWelcomeMessage();
+        $cmsIndex->open();
+        $cmsIndex->getLinksBlock()->waitWelcomeMessage();
         foreach ($stores as $store) {
             $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
             $cmsIndex->getLinksBlock()->waitWelcomeMessage();

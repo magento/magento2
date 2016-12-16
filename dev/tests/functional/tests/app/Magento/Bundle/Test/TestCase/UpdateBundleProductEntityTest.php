@@ -81,8 +81,6 @@ class UpdateBundleProductEntityTest extends Injectable
      * @param BundleProduct $product
      * @param BundleProduct $originalProduct
      * @param string $storeDataset [optional]
-     * @param int $storesCount [optional]
-     * @param int $storeIndexToUpdate [optional]
      * @return array
      */
     public function test(

@@ -33,7 +33,7 @@ class ApplyConfigurableProductCatalogPriceRulesTest extends ApplyCatalogPriceRul
      * Add attribute_id to catalog price rule.
      *
      * @param FixtureInterface $product
-     * @return array|null
+     * @return array
      */
     protected function getAttribute(FixtureInterface $product)
     {

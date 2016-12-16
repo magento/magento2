@@ -19,8 +19,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation2" ticketId="MAGETWO-17475">
-            <data name="description" xsi:type="string">Create custom text attribute product field</data>
+        <variation name="CreateProductAttributeEntityTestVariation2"  summary="Create custom text attribute product field" ticketId="MAGETWO-17475">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Area</data>
@@ -115,8 +114,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation6">
-            <data name="description" xsi:type="string">Create custom dropdown attribute product field</data>
+        <variation name="CreateProductAttributeEntityTestVariation6" summary="Create custom dropdown attribute product field" ticketId="MAGETWO-17475">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
@@ -155,8 +153,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation7" ticketId="MAGETWO-17475">
-            <data name="description" xsi:type="string">Create custom price attribute product field</data>
+        <variation name="CreateProductAttributeEntityTestVariation7" summary="Create custom price attribute product field" ticketId="MAGETWO-17475">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Price_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Price</data>
