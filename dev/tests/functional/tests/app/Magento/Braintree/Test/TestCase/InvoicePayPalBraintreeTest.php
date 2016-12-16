@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 7. Perform assertions.
  *
  * @group Braintree
- * @ZephyrId MAGETWO-48614, MAGETWO-48615
+ * @ZephyrId MAGETWO-48614, MAGETWO-48615, MAGETWO-48684
  */
 class InvoicePayPalBraintreeTest extends Scenario
 {

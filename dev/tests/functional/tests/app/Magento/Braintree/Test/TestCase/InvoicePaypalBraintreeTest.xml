@@ -31,7 +31,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
         </variation>
-        <variation name="InvoicePayPalBraintreeTestVariation2" summary="Partial capture for order placed within Braintree PayPal" ticketId="MAGETWO-48615">
+        <variation name="InvoicePayPalBraintreeTestVariation2" summary="Partial capture for order placed within Braintree PayPal" ticketId="MAGETWO-48615, MAGETWO-48684">
             <data name="description" xsi:type="string">Partial capture for order placed within Braintree PayPal</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="taxRule" xsi:type="string">us_illinois_tax_rule</data>
