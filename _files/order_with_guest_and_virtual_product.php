@@ -55,7 +55,8 @@ $order->setIncrementId('100000002')
     ->setBillingAddress($billingAddress)
     ->setStoreId($store->getId())
     ->addItem($orderItem1)
-    ->setPayment($payment);
+    ->setPayment($payment)
+    ->setQuoteId(1);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
