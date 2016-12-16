@@ -167,7 +167,8 @@ class CrontabManager implements CrontabManagerInterface
             $this->shell->execute('echo "' . $content . '" | crontab -');
         } catch (LocalizedException $e) {
             throw new LocalizedException(
-                new Phrase('Error during saving of crontab: %1', [$e->getPrevious()->getMessage()]), $e
+                new Phrase('Error during saving of crontab: %1', [$e->getPrevious()->getMessage()]),
+                $e
             );
         }
     }
