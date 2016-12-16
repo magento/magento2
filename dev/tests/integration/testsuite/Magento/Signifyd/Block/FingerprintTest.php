@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Block\Fingerprint;
+namespace Magento\Signifyd\Block;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
@@ -34,7 +34,8 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      */
-    public function testSessionIdPresent() {
+    public function testSessionIdPresent()
+    {
         static::assertRegExp('/data-order-session-id=\"[^\"]+\"/', $this->getBlockContents());
     }
 
@@ -43,7 +44,8 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 0
      */
-    public function testBlockEmpty() {
+    public function testBlockEmpty()
+    {
         static::assertEmpty($this->getBlockContents());
     }
 
@@ -52,7 +54,8 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private function getBlockContents() {
+    private function getBlockContents()
+    {
         $block = $this->objectManager->get(LayoutInterface::class)
             ->createBlock(Fingerprint::class);
 
