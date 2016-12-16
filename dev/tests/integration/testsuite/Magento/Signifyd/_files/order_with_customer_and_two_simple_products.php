@@ -86,7 +86,8 @@ $order->setIncrementId('100000001')
     ->setStoreId($store->getId())
     ->addItem($orderItem1)
     ->addItem($orderItem2)
-    ->setPayment($payment);
+    ->setPayment($payment)
+    ->setQuoteId(1);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
@@ -113,6 +114,7 @@ $order2->setIncrementId('100000005')
     ->setShippingAmount(10)
     ->setStoreId($store->getId())
     ->addItem($orderItem1)
-    ->setPayment($payment2);
+    ->setPayment($payment2)
+    ->setQuoteId(2);
 
 $orderRepository->save($order2);

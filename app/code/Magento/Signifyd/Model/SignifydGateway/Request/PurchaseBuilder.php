@@ -6,6 +6,7 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Sales\Model\Order;
@@ -26,15 +27,23 @@ class PurchaseBuilder
     private $scope;
 
     /**
+     * @var IdentityGeneratorInterface
+     */
+    private $identityGenerator;
+
+    /**
      * @param DateTimeFactory $dateTimeFactory
      * @param ScopeInterface $scope
+     * @param IdentityGeneratorInterface $identityGenerator
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
-        ScopeInterface $scope
+        ScopeInterface $scope,
+        IdentityGeneratorInterface $identityGenerator
     ) {
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
+        $this->identityGenerator = $identityGenerator;
     }
 
     /**
@@ -53,6 +62,7 @@ class PurchaseBuilder
 
         $result = [
             'purchase' => [
+                'orderSessionId' => $this->identityGenerator->generateIdForData($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => $createdAt->format(\DateTime::ATOM),
