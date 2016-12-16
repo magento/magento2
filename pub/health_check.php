@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+register_shutdown_function("fatalErrorHandler");
+
 try {
     require __DIR__ . '/../app/bootstrap.php';
     /** @var \Magento\Framework\App\ObjectManagerFactory $objectManagerFactory */
@@ -31,6 +33,7 @@ foreach ($envConfig['db']['connection'] as $connectionData) {
     } catch (\Exception $e) {
         $logger->error("MySQL connection failed: " . $e->getMessage());
         http_response_code(500);
+        exit(1);
     }
 }
 
@@ -40,6 +43,7 @@ if (isset($envConfig['cache']['frontend']) && is_array($envConfig['cache']['fron
         if (!isset($cacheConfig['backend']) || !isset($cacheConfig['backend_options'])) {
             $logger->error("Cache configuration is invalid");
             http_response_code(500);
+            exit(1);
         }
         $cacheBackendClass = $cacheConfig['backend'];
         try {
@@ -49,6 +53,21 @@ if (isset($envConfig['cache']['frontend']) && is_array($envConfig['cache']['fron
         } catch (\Exception $e) {
             $logger->error("Cache storage is not accessible");
             http_response_code(500);
+            exit(1);
         }
+    }
+}
+
+/**
+ * Handle any fatal errors
+ *
+ * @return void
+ */
+function fatalErrorHandler()
+{
+    $error = error_get_last();
+    if ($error !== NULL) {
+        http_response_code(500);
+        exit(1);
     }
 }

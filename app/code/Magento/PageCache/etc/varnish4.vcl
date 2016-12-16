@@ -54,6 +54,11 @@ sub vcl_recv {
         return (pass);
     }
 
+    # Bypass health check requests
+    if (req.url ~ "/pub/health_check.php") {
+        return (pass);
+    }
+
     # Set initial grace period usage status
     set req.http.grace = "none";
 
