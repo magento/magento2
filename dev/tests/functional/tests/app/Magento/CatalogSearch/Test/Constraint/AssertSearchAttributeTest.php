@@ -29,13 +29,13 @@ class AssertSearchAttributeTest extends AbstractConstraint
         $availableAttributes = $advancedSearch->getForm()->getFormLabels();
         if ($attributeForSearch['isVisible']) {
             \PHPUnit_Framework_Assert::assertTrue(
-                (false !== array_search($attributeForSearch, $availableAttributes)),
-                'Attribute ' . $attributeForSearch . 'was not found in Advanced Search Page.'
+                (false !== array_search($attributeForSearch['name'], $availableAttributes)),
+                'Attribute ' . $attributeForSearch['name'] . 'was not found in Advanced Search Page.'
             );
         } else {
             \PHPUnit_Framework_Assert::assertTrue(
-                (false == array_search($attributeForSearch, $availableAttributes)),
-                'Attribute ' . $attributeForSearch . ' was found in Advanced Search Page.'
+                (false == array_search($attributeForSearch['name'], $availableAttributes)),
+                'Attribute ' . $attributeForSearch['name'] . ' was found in Advanced Search Page.'
             );
         }
     }

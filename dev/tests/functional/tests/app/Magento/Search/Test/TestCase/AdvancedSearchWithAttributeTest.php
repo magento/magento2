@@ -322,7 +322,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
         // Assert indexers status
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers, false);
 
-        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch['name']);
+        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch);
         $cli->reindex();
 
         // Change attribute 'scope mode'
@@ -337,7 +337,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers, false);
 
         // Assert advanced attribute is present(or absent) in Advanced Search Page.
-        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch['name']);
+        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $attributeForSearch);
         $cli->reindex();
 
         // Create Products
@@ -369,11 +369,8 @@ class AdvancedSearchWithAttributeTest extends Injectable
 
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers, false);
         $cli->reindex();
-        $this->assertSearchAttributeTest->processAssert(
-            $this->advancedSearch,
-            $this->attributeForSearch['name'],
-            false
-        );
+        $this->attributeForSearch['isVisible'] = false;
+        $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $this->attributeForSearch);
     }
 
     /**
