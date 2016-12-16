@@ -18,6 +18,7 @@ interface BulkSummaryInterface
     const DESCRIPTION = 'description';
     const START_TIME = 'start_time';
     const USER_ID = 'user_id';
+    const OPERATION_COUNT = 'operation_count';
     /**#@-*/
 
     /**#@+
@@ -88,4 +89,19 @@ interface BulkSummaryInterface
      * @return $this
      */
     public function setUserId($userId);
+
+    /**
+     * Get total number of operations scheduled in scope of this bulk
+     *
+     * @return int
+     */
+    public function getOperationCount();
+
+    /**
+     * Set total number of operations scheduled in scope of this bulk
+     *
+     * @param int $operationCount
+     * @return $this
+     */
+    public function setOperationCount($operationCount);
 }
