@@ -7,8 +7,9 @@ define([
     'ko',
     'jquery',
     'moment',
+    'mageUtils',
     'Magento_Ui/js/lib/knockout/bindings/datepicker'
-], function (ko, $, moment) {
+], function (ko, $, moment, utils) {
     'use strict';
 
     describe('Datepicker binding', function () {
@@ -21,7 +22,9 @@ define([
 
             $(document.body).append(element);
 
-            ko.applyBindingsToNode(element[0], { datepicker: observable });
+            ko.applyBindingsToNode(element[0], {
+                datepicker: observable
+            });
         });
 
         afterEach(function () {
@@ -32,11 +35,13 @@ define([
             var openBtn,
                 todayBtn,
                 todayDate,
-                dateFormat,
-                result;
+                result,
+                inputFormat,
+                momentFormat;
 
-            dateFormat  = element.datepicker('option', 'dateFormat');
-            todayDate   = moment().format(dateFormat);
+            inputFormat = 'M/d/yy';
+            momentFormat = utils.convertToMomentFormat(inputFormat);
+            todayDate   = moment().format(momentFormat);
 
             openBtn  = $('img.ui-datepicker-trigger');
             todayBtn = $('[data-handler="today"]');
@@ -44,7 +49,7 @@ define([
             openBtn.click();
             todayBtn.click();
 
-            result = moment(observable()).format(dateFormat);
+            result = moment(observable()).format(momentFormat);
 
             expect(todayDate).toEqual(result);
         });
