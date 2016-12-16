@@ -96,15 +96,13 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         try {
             /** @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface $bulkSummary */
             $bulkSummary = $this->bulkSummaryFactory->create();
+            $this->entityManager->load($bulkSummary, $bulkUuid);
             $bulkSummary->setBulkId($bulkUuid);
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
+            $bulkSummary->setOperationCount($bulkSummary->getOperationCount() + count($operations));
 
             $this->entityManager->save($bulkSummary);
-            /** @var OperationInterface $operation */
-            foreach ($operations as $operation) {
-                $this->entityManager->save($operation);
-            }
 
             $connection->commit();
         } catch (\Exception $exception) {
@@ -138,15 +136,32 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
             ->getItems();
 
-        // save related operations
+        // remove corresponding operations from database (i.e. move them to 'open' status)
         $connection->beginTransaction();
         try {
+            $operationIds = [];
+            $currentBatchSize = 0;
+            $maxBatchSize = 10000;
             /** @var OperationInterface $operation */
             foreach ($operations as $operation) {
-                $operation->setStatus(Operation::STATUS_TYPE_OPEN);
-                $operation->setErrorCode(null);
-                $operation->setResultMessage(null);
-                $this->entityManager->save($operation);
+                if ($currentBatchSize === $maxBatchSize) {
+                    $connection->delete(
+                        $this->resourceConnection->getTableName('magento_operation'),
+                        $connection->quoteInto('id IN (?)', $operationIds)
+                    );
+                    $operationIds = [];
+                    $currentBatchSize = 0;
+                }
+                $currentBatchSize++;
+                $operationIds[] = $operation->getId();
+                $operation->setId(null);
+            }
+            // remove operations from the last batch
+            if (!empty($operationIds)) {
+                $connection->delete(
+                    $this->resourceConnection->getTableName('magento_operation'),
+                    $connection->quoteInto('id IN (?)', $operationIds)
+                );
             }
 
             $connection->commit();

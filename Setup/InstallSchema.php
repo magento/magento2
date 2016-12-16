@@ -55,6 +55,12 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Bulk Description'
         )->addColumn(
+            'operation_count',
+            Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false],
+            'Total number of operations scheduled within this bulk'
+        )->addColumn(
             'start_time',
             Table::TYPE_TIMESTAMP,
             null,
