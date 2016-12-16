@@ -2,36 +2,36 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global define*/
-define(
-    [
-        'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/shipping-rate-processor/new-address',
-        'Magento_Checkout/js/model/shipping-rate-processor/customer-address'
-    ],
-    function (quote, defaultProcessor, customerAddressProcessor) {
-        'use strict';
 
-        var processors = [];
+define([
+    'Magento_Checkout/js/model/quote',
+    'Magento_Checkout/js/model/shipping-rate-processor/new-address',
+    'Magento_Checkout/js/model/shipping-rate-processor/customer-address'
+], function (quote, defaultProcessor, customerAddressProcessor) {
+    'use strict';
 
-        processors.default =  defaultProcessor;
-        processors['customer-address'] = customerAddressProcessor;
+    var processors = [];
 
-        quote.shippingAddress.subscribe(function () {
-            var type = quote.shippingAddress().getType();
+    processors.default =  defaultProcessor;
+    processors['customer-address'] = customerAddressProcessor;
 
-            if (processors[type]) {
-                processors[type].getRates(quote.shippingAddress());
-            } else {
-                processors.default.getRates(quote.shippingAddress());
-            }
-        });
+    quote.shippingAddress.subscribe(function () {
+        var type = quote.shippingAddress().getType();
 
-        return {
-            registerProcessor: function (type, processor) {
-                processors[type] = processor;
-            }
+        if (processors[type]) {
+            processors[type].getRates(quote.shippingAddress());
+        } else {
+            processors.default.getRates(quote.shippingAddress());
         }
-    }
-);
+    });
+
+    return {
+        /**
+         * @param {String} type
+         * @param {*} processor
+         */
+        registerProcessor: function (type, processor) {
+            processors[type] = processor;
+        }
+    };
+});

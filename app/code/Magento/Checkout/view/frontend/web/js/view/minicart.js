@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'uiComponent',
     'Magento_Customer/js/customer-data',
@@ -16,11 +17,6 @@ define([
     var sidebarInitialized = false,
         addToCartCalls = 0,
         miniCart;
-
-    miniCart = $('[data-block=\'minicart\']');
-    miniCart.on('dropdowndialogopen', function () {
-        initSidebar();
-    });
 
     /**
      * @return {Boolean}
@@ -73,6 +69,11 @@ define([
         });
     }
 
+    miniCart = $('[data-block=\'minicart\']');
+    miniCart.on('dropdowndialogopen', function () {
+        initSidebar();
+    });
+
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         cart: {},
@@ -92,11 +93,12 @@ define([
                 this.update(updatedCart);
                 initSidebar();
             }, this);
-            $('[data-block="minicart"]').on('contentLoading', function (event) {
+            $('[data-block="minicart"]').on('contentLoading', function () {
                 addToCartCalls++;
                 self.isLoading(true);
             });
-            if (cartData().website_id !== window.checkout.websiteId) {
+
+            if (cartData()['website_id'] !== window.checkout.websiteId) {
                 customerData.reload(['cart'], false);
             }
 
@@ -117,6 +119,7 @@ define([
          */
         closeSidebar: function () {
             var minicart = $('[data-block="minicart"]');
+
             minicart.on('click', '[data-action="close"]', function (event) {
                 event.stopPropagation();
                 minicart.find('[data-role="dropdownDialog"]').dropdownDialog('close');

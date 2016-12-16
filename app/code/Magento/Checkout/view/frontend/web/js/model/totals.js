@@ -2,52 +2,50 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
-define(
-    [
-        'ko',
-        'Magento_Checkout/js/model/quote'
-    ],
-    function (ko, quote) {
-        'use strict';
 
-        var quoteItems = ko.observable(quote.totals().items);
+define([
+    'ko',
+    'Magento_Checkout/js/model/quote'
+], function (ko, quote) {
+    'use strict';
 
-        quote.totals.subscribe(function (newValue) {
-            quoteItems(newValue.items);
-        });
+    var quoteItems = ko.observable(quote.totals().items);
 
-        return {
-            totals: quote.totals,
-            isLoading: ko.observable(false),
+    quote.totals.subscribe(function (newValue) {
+        quoteItems(newValue.items);
+    });
 
-            /**
-             * @return {Function}
-             */
-            getItems: function () {
-                return quoteItems;
-            },
+    return {
+        totals: quote.totals,
+        isLoading: ko.observable(false),
 
-            /**
-             * @param code
-             * @return {*}
-             */
-            getSegment: function (code) {
-                if (!this.totals()) {
-                    return null;
-                }
+        /**
+         * @return {Function}
+         */
+        getItems: function () {
+            return quoteItems;
+        },
 
-                for (var i in this.totals().total_segments) {
-                    var total = this.totals().total_segments[i];
+        /**
+         * @param {*} code
+         * @return {*}
+         */
+        getSegment: function (code) {
+            var i, total;
 
-                    if (total.code == code) {
-                        return total;
-                    }
-                }
-
+            if (!this.totals()) {
                 return null;
             }
-        };
-    }
-);
+
+            for (i in this.totals()['total_segments']) { //eslint-disable-line guard-for-in
+                total = this.totals()['total_segments'][i];
+
+                if (total.code == code) { //eslint-disable-line eqeqeq
+                    return total;
+                }
+            }
+
+            return null;
+        }
+    };
+});

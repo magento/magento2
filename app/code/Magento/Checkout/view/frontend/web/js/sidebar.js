@@ -2,8 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global confirm:true*/
+
 define([
     'jquery',
     'Magento_Customer/js/model/authentication-popup',
@@ -15,6 +14,7 @@ define([
     'mage/collapsible',
     'mage/cookies'
 ], function ($, authenticationPopup, customerData, alert, confirm) {
+    'use strict';
 
     $.widget('mage.sidebar', {
         options: {
@@ -42,13 +42,16 @@ define([
             this._isOverflowed();
         },
 
+        /**
+         * @private
+         */
         _initContent: function () {
             var self = this,
                 events = {};
 
             this.element.decorate('list', this.options.isRecursive);
 
-            events['click ' + this.options.button.close] = function (event) {
+            events['click ' + this.options.button.close] = function (event) { //jscs:ignore jsDoc
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog('close');
             };
@@ -59,6 +62,7 @@ define([
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
+
                     if (this.options.url.isRedirectRequired) {
                         location.href = this.options.url.loginUrl;
                     } else {
@@ -69,28 +73,31 @@ define([
                 }
                 location.href = this.options.url.checkout;
             }, this);
-            events['click ' + this.options.button.remove] =  function (event) {
+            events['click ' + this.options.button.remove] =  function (event) { //jscs:ignore jsDoc
                 event.stopPropagation();
                 confirm({
                     content: self.options.confirmMessage,
                     actions: {
+                        /** @inheritdoc */
                         confirm: function () {
                             self._removeItem($(event.currentTarget));
                         },
-                        always: function (event) {
-                            event.stopImmediatePropagation();
+
+                        /** @inheritdoc */
+                        always: function (e) {
+                            e.stopImmediatePropagation();
                         }
                     }
                 });
             };
-            events['keyup ' + this.options.item.qty] = function (event) {
+            events['keyup ' + this.options.item.qty] = function (event) { //jscs:ignore jsDoc
                 self._showItemButton($(event.target));
             };
-            events['click ' + this.options.item.button] = function (event) {
+            events['click ' + this.options.item.button] = function (event) { //jscs:ignore jsDoc
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
             };
-            events['focusout ' + this.options.item.qty] = function (event) {
+            events['focusout ' + this.options.item.qty] = function (event) { //jscs:ignore jsDoc
                 self._validateQty($(event.currentTarget));
             };
 
@@ -115,13 +122,17 @@ define([
             }
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _showItemButton: function (elem) {
             var itemId = elem.data('cart-item'),
                 itemQty = elem.data('item-qty');
 
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
-            } else if (elem.val() == 0) {
+            } else if (elem.val() == 0) { //eslint-disable-line eqeqeq
                 this._hideItemButton(elem);
             } else {
                 this._hideItemButton(elem);
@@ -129,16 +140,16 @@ define([
         },
 
         /**
-         * @param origin - origin qty. 'data-item-qty' attribute.
-         * @param changed - new qty.
-         * @returns {boolean}
+         * @param {*} origin - origin qty. 'data-item-qty' attribute.
+         * @param {*} changed - new qty.
+         * @returns {Boolean}
          * @private
          */
         _isValidQty: function (origin, changed) {
-            return (origin != changed) &&
-                (changed.length > 0) &&
-                (changed - 0 == changed) &&
-                (changed - 0 > 0);
+            return origin != changed && //eslint-disable-line eqeqeq
+                changed.length > 0 &&
+                changed - 0 == changed && //eslint-disable-line eqeqeq
+                changed - 0 > 0;
         },
 
         /**
@@ -153,43 +164,55 @@ define([
             }
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _hideItemButton: function (elem) {
             var itemId = elem.data('cart-item');
+
             $('#update-cart-item-' + itemId).hide('fade', 300);
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _updateItemQty: function (elem) {
             var itemId = elem.data('cart-item');
+
             this._ajax(this.options.url.update, {
-                item_id: itemId,
-                item_qty: $('#cart-item-' + itemId + '-qty').val()
+                'item_id': itemId,
+                'item_qty': $('#cart-item-' + itemId + '-qty').val()
             }, elem, this._updateItemQtyAfter);
         },
 
         /**
          * Update content after update qty
          *
-         * @param elem
+         * @param {HTMLElement} elem
          */
         _updateItemQtyAfter: function (elem) {
             this._hideItemButton(elem);
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _removeItem: function (elem) {
             var itemId = elem.data('cart-item');
+
             this._ajax(this.options.url.remove, {
-                item_id: itemId
+                'item_id': itemId
             }, elem, this._removeItemAfter);
         },
 
         /**
-         * Update content after item remove
-         *
-         * @param elem
-         * @param response
+         * Update content after item remove.
          * @private
          */
-        _removeItemAfter: function (elem, response) {
+        _removeItemAfter: function () {
         },
 
         /**
@@ -209,18 +232,24 @@ define([
                 type: 'post',
                 dataType: 'json',
                 context: this,
+
+                /** @inheritdoc */
                 beforeSend: function () {
                     elem.attr('disabled', 'disabled');
                 },
+
+                /** @inheritdoc */
                 complete: function () {
                     elem.attr('disabled', null);
                 }
             })
                 .done(function (response) {
+                    var msg;
+
                     if (response.success) {
                         callback.call(this, elem, response);
                     } else {
-                        var msg = response.error_message;
+                        msg = response['error_message'];
 
                         if (msg) {
                             alert({

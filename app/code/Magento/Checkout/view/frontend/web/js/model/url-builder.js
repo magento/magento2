@@ -2,37 +2,51 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
-define(
-    ['jquery'],
-    function($) {
-        return {
-            method: "rest",
-            storeCode: window.checkoutConfig.storeCode,
-            version: 'V1',
-            serviceUrl: ':method/:storeCode/:version',
 
-            createUrl: function(url, params) {
-                var completeUrl = this.serviceUrl + url;
-                return this.bindParams(completeUrl, params);
-            },
-            bindParams: function(url, params) {
-                params.method = this.method;
-                params.storeCode = this.storeCode;
-                params.version = this.version;
+define(['jquery'], function ($) {
+    'use strict';
 
-                var urlParts = url.split("/");
-                urlParts = urlParts.filter(Boolean);
+    return {
+        method: 'rest',
+        storeCode: window.checkoutConfig.storeCode,
+        version: 'V1',
+        serviceUrl: ':method/:storeCode/:version',
 
-                $.each(urlParts, function(key, part) {
-                    part = part.replace(':', '');
-                    if (params[part] != undefined) {
-                        urlParts[key] = params[part];
-                    }
-                });
-                return urlParts.join('/');
-            }
-        };
-    }
-);
+        /**
+         * @param {String} url
+         * @param {Object} params
+         * @return {*}
+         */
+        createUrl: function (url, params) {
+            var completeUrl = this.serviceUrl + url;
+
+            return this.bindParams(completeUrl, params);
+        },
+
+        /**
+         * @param {String} url
+         * @param {Object} params
+         * @return {*}
+         */
+        bindParams: function (url, params) {
+            var urlParts;
+
+            params.method = this.method;
+            params.storeCode = this.storeCode;
+            params.version = this.version;
+
+            urlParts = url.split('/');
+            urlParts = urlParts.filter(Boolean);
+
+            $.each(urlParts, function (key, part) {
+                part = part.replace(':', '');
+
+                if (params[part] != undefined) { //eslint-disable-line eqeqeq
+                    urlParts[key] = params[part];
+                }
+            });
+
+            return urlParts.join('/');
+        }
+    };
+});
