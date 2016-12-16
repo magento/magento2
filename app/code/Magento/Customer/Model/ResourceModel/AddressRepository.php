@@ -8,6 +8,7 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Model\Address as CustomerAddressModel;
+use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -107,6 +108,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         }
 
         if ($addressModel === null) {
+            /** @var \Magento\Customer\Model\Address $addressModel */
             $addressModel = $this->addressFactory->create();
             $addressModel->updateData($address);
             $addressModel->setCustomer($customerModel);
@@ -119,13 +121,25 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             throw $inputException;
         }
         $addressModel->save();
+        $address->setId($addressModel->getId());
         // Clean up the customer registry since the Address save has a
         // side effect on customer : \Magento\Customer\Model\ResourceModel\Address::_afterSave
-        $this->customerRegistry->remove($address->getCustomerId());
         $this->addressRegistry->push($addressModel);
-        $customerModel->getAddressesCollection()->clear();
+        $this->updateAddressCollection($customerModel, $addressModel);
 
         return $addressModel->getDataModel();
+    }
+
+    /**
+     * @param Customer $customer
+     * @param Address $address
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    private function updateAddressCollection(CustomerModel $customer, CustomerAddressModel $address)
+    {
+        $customer->getAddressesCollection()->removeItemByKey($address->getId());
+        $customer->getAddressesCollection()->addItem($address);
     }
 
     /**
@@ -234,7 +248,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     {
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
-        $customerModel->getAddressesCollection()->clear();
+        $customerModel->getAddressesCollection()->removeItemByKey($addressId);
         $this->addressResource->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;

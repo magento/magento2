@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Customer\Model\CustomerRegistry;
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
-$repository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-$customer = $objectManager->create('Magento\Customer\Model\Customer');
-
+$repository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+$customer = $objectManager->create(\Magento\Customer\Model\Customer::class);
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = $objectManager->get(CustomerRegistry::class);
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(1)
     ->setId(1)
@@ -29,3 +32,4 @@ $customer->setWebsiteId(1)
 
 $customer->isObjectNew(true);
 $customer->save();
+$customerRegistry->remove($customer->getId());

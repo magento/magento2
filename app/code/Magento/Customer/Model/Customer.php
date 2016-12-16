@@ -17,6 +17,7 @@ use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer model
@@ -320,7 +321,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $customerDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
             $customer,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         foreach ($customerDataAttributes as $attributeCode => $attributeData) {
@@ -823,7 +824,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId)
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
@@ -831,7 +832,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         )->setScopeId(
             $storeId
         )->setFrom(
-            $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId)
         )->addTo(
             $this->getEmail(),
             $this->getName()
@@ -874,7 +875,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $storeId = $this->getStoreId() ? $this->getStoreId() : $this->_storeManager->getStore()->getId();
             $groupId = $this->_scopeConfig->getValue(
                 GroupManagement::XML_PATH_DEFAULT_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $this->setData('group_id', $groupId);

@@ -222,7 +222,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $this->addressRepository->deleteById($addressId);
             }
         }
-
+        $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
             'customer_save_after_data_object',

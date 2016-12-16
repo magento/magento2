@@ -7,6 +7,15 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Class Address
+ * @package Magento\Customer\Model\ResourceModel
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
@@ -18,6 +27,16 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
     protected $customerRepository;
+
+    /**
+     * @var DeleteRelation
+     */
+    protected $deleteRelation;
+
+    /**
+     * @var CustomerRegistry
+     */
+    protected $customerRegistry;
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -110,20 +129,38 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated
+     * @return DeleteRelation
+     */
+    private function getDeleteRelation()
+    {
+        if ($this->deleteRelation === null) {
+            $this->deleteRelation = ObjectManager::getInstance()->get(DeleteRelation::class);
+        }
+        return $this->deleteRelation;
+    }
+
+    /**
+     * @deprecated
+     * @return CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        if ($this->customerRegistry === null) {
+            $this->customerRegistry = ObjectManager::getInstance()->get(CustomerRegistry::class);
+        }
+        return $this->customerRegistry;
+    }
+
+    /**
+     * @param \Magento\Customer\Model\Address $address
+     * @return $this
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {
-        if ($address->getId()) {
-            $customer = $this->customerRepository->getById($address->getCustomerId());
-            if ($customer->getDefaultBilling() == $address->getId()) {
-                $customer->setDefaultBilling(null);
-            }
-            if ($customer->getDefaultShipping() == $address->getId()) {
-                $customer->setDefaultShipping(null);
-            }
-            $this->customerRepository->save($customer);
-        }
+        $customer = $this->getCustomerRegistry()->retrieve($address->getCustomerId());
+
+        $this->getDeleteRelation()->deleteRelation($address, $customer);
         return parent::_afterDelete($address);
     }
 }
