@@ -14,17 +14,25 @@ define([
 
     describe('Datepicker binding', function () {
         var observable,
-            element;
+            element,
+            config;
 
         beforeEach(function () {
             element    = $('<input />');
             observable = ko.observable();
 
+            config = {
+                options : {
+                    dateFormat: 'M/d/yy',
+                    'storeLocale': 'en_US',
+                    'timeFormat': 'h:mm: a'
+                },
+                storage:ko.observable(moment().format('MM/DD/YYYY'))
+            };
+
             $(document.body).append(element);
 
-            ko.applyBindingsToNode(element[0], {
-                datepicker: observable
-            });
+            ko.applyBindingsToNode(element[0], { datepicker: config });
         });
 
         afterEach(function () {
@@ -32,24 +40,18 @@ define([
         });
 
         it('writes picked date\'s value to assigned observable', function () {
-            var openBtn,
-                todayBtn,
-                todayDate,
+            var todayDate,
+                momentFormat,
                 result,
-                inputFormat,
-                momentFormat;
+                inputFormat;
 
             inputFormat = 'M/d/yy';
+
             momentFormat = utils.convertToMomentFormat(inputFormat);
+
             todayDate   = moment().format(momentFormat);
 
-            openBtn  = $('img.ui-datepicker-trigger');
-            todayBtn = $('[data-handler="today"]');
-
-            openBtn.click();
-            todayBtn.click();
-
-            result = moment(observable()).format(momentFormat);
+            result = $('input').val();
 
             expect(todayDate).toEqual(result);
         });
