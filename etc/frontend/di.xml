@@ -13,9 +13,9 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Signifyd\Model\OrderSessionId">
+    <type name="Magento\Signifyd\Model\QuoteSessionId">
         <arguments>
-            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
+            <argument name="quoteSession" xsi:type="object">Magento\Signifyd\Model\QuoteSession\FrontendSession</argument>
         </arguments>
     </type>
 </config>
