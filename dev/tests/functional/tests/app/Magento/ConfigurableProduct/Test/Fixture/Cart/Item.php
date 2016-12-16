@@ -6,9 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Fixture\Cart;
 
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Mtf\Fixture\FixtureInterface;
-
 /**
  * Data for verify cart item block on checkout page.
  *
@@ -20,17 +17,18 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 {
     /**
-     * @param FixtureInterface $product
+     * Return prepared dataset.
+     *
+     * @param null|string $key
+     * @return array
      */
-    public function __construct(FixtureInterface $product)
+    public function getData($key = null)
     {
-        parent::__construct($product);
-
-        /** @var ConfigurableProduct $product */
-        $productData = $product->getData();
-        $checkoutData = $product->getCheckoutData();
+        parent::getData($key);
+        $productData = $this->product->getData();
+        $checkoutData = $this->product->getCheckoutData();
         $cartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
-        $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
+        $attributesData = $this->product->getConfigurableAttributesData()['attributes_data'];
         $checkoutConfigurableOptions = isset($checkoutData['options']['configurable_options'])
             ? $checkoutData['options']['configurable_options']
             : [];
@@ -57,5 +55,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             ? $cartItem['options'] + $checkoutConfigurableOptions
             : $checkoutConfigurableOptions;
         $this->data = $cartItem;
+
+        return $this->data;
     }
 }

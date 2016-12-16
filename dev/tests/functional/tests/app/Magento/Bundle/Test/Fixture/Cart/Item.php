@@ -22,7 +22,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
      */
     public function getData($key = null)
     {
-        $this->data = parent::getData($key);
+        parent::getData($key);
         $bundleSelection = $this->product->getBundleSelections();
         $checkoutData = $this->product->getCheckoutData();
         $checkoutBundleOptions = isset($checkoutData['options']['bundle_options'])
@@ -70,8 +70,9 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             if (false !== strpos($value['search_data']['name'], $checkoutOption)) {
                 return $key;
             }
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -90,6 +91,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
                 $keys['option'] = $this->getOptionKey($option['assigned_products'], $checkoutOption['value']['name']);
             }
         }
+
         return $keys;
     }
 }
