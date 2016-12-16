@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class tests interaction with Signifyd Case creation service
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
 {
