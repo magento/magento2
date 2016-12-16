@@ -25,14 +25,15 @@ try {
 // check mysql connectivity
 foreach ($envConfig['db']['connection'] as $connectionData) {
     try {
-        new \PDO(
-            "mysql:dbname={$connectionData['dbname']};host={$connectionData['host']}",
-            $connectionData['username'],
-            $connectionData['password']
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $dbAdapter */
+        $dbAdapter = $objectManager->create(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['config' => $connectionData]
         );
+        $dbAdapter->getConnection();
     } catch (\Exception $e) {
-        $logger->error("MySQL connection failed: " . $e->getMessage());
         http_response_code(500);
+        $logger->error("MySQL connection failed: " . $e->getMessage());
         exit(1);
     }
 }
@@ -41,8 +42,8 @@ foreach ($envConfig['db']['connection'] as $connectionData) {
 if (isset($envConfig['cache']['frontend']) && is_array($envConfig['cache']['frontend'])) {
     foreach ($envConfig['cache']['frontend'] as $cacheConfig) {
         if (!isset($cacheConfig['backend']) || !isset($cacheConfig['backend_options'])) {
-            $logger->error("Cache configuration is invalid");
             http_response_code(500);
+            $logger->error("Cache configuration is invalid");
             exit(1);
         }
         $cacheBackendClass = $cacheConfig['backend'];
@@ -51,8 +52,8 @@ if (isset($envConfig['cache']['frontend']) && is_array($envConfig['cache']['fron
             $backend = new $cacheBackendClass($cacheConfig['backend_options']);
             $backend->test('test_cache_id');
         } catch (\Exception $e) {
-            $logger->error("Cache storage is not accessible");
             http_response_code(500);
+            $logger->error("Cache storage is not accessible");
             exit(1);
         }
     }
@@ -68,6 +69,5 @@ function fatalErrorHandler()
     $error = error_get_last();
     if ($error !== NULL) {
         http_response_code(500);
-        exit(1);
     }
 }
