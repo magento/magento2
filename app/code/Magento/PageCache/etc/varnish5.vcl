@@ -115,7 +115,7 @@ sub vcl_hash {
 
 sub vcl_backend_response {
 
-    set beresp.grace = /* {{ grace_period }} */s;
+    set beresp.grace = 3d;
 
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
@@ -189,7 +189,7 @@ sub vcl_hit {
         return (deliver);
     }
     if (std.healthy(req.backend_hint)) {
-        if (obj.ttl + obj.grace > 0s) {
+        if (obj.ttl + /* {{ grace_period }} */s > 0s) {
             # Hit after TTL expiration, but within grace period
             set req.http.grace = "normal (healthy server)";
             return (deliver);
