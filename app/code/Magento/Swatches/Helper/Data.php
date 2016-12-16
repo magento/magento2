@@ -328,12 +328,10 @@ class Data
     private function getAllSizeImages(ModelProduct $product, $imageFile)
     {
         return [
-            'large' => $this->imageHelper->init($product, 'product_page_image_large')
-                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+            'large' => $this->imageHelper->init($product, 'product_page_image_large_no_frame')
                 ->setImageFile($imageFile)
                 ->getUrl(),
-            'medium' => $this->imageHelper->init($product, 'product_page_image_medium')
-                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+            'medium' => $this->imageHelper->init($product, 'product_page_image_medium_no_frame')
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')

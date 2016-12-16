@@ -94,4 +94,19 @@ class View extends ParentView
     {
         $this->getGroupedProductBlock()->fill($product);
     }
+
+    /**
+     * Set quantity and click add to cart.
+     * @param FixtureInterface $product
+     * @param string|int $qty
+     */
+    public function setQtyAndClickAddToCartGrouped(FixtureInterface $product, $qty)
+    {
+        $associatedProducts = $product->getAssociated()['products'];
+        $groupedProductBlock = $this->getGroupedProductBlock();
+        foreach ($associatedProducts as $product) {
+            $groupedProductBlock->setQty($product->getId(), $qty);
+        }
+        $this->clickAddToCart();
+    }
 }
