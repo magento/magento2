@@ -61,7 +61,7 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
         foreach ($bundleOptions as $optionKey => $bundleOption) {
             $optionData = [
                 'title' => $bundleOption['title'],
-                'type' => $bundleOption['type'],
+                'type' => $bundleOption['frontend_type'],
                 'is_require' => $bundleOption['required'],
             ];
 
