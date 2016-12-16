@@ -66,6 +66,18 @@ class Grouped extends Block
     }
 
     /**
+     * Set qty to subproduct block
+     *
+     * @param int $subProductId
+     * @param string|int $qty
+     * @return void
+     */
+    public function setQty($subProductId, $qty)
+    {
+        $this->_rootElement->find(sprintf($this->qtySubProductById, $subProductId))->setValue($qty);
+    }
+
+    /**
      * Fill product options on view page.
      *
      * @param FixtureInterface $product
