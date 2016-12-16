@@ -107,6 +107,8 @@ class ProductForm extends FormSections
                         $this->getNewCategoryModalForm()->addNewCategory($category);
                     }
                 }
+                $sections['product-details']['category_ids']['value'] =
+                    array_unique($sections['product-details']['category_ids']['value']);
             }
             $this->fillContainers($sections, $element);
         }
