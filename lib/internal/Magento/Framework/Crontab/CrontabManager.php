@@ -147,6 +147,10 @@ class CrontabManager implements CrontabManagerInterface
         try {
             $content = (string)$this->shell->execute('crontab -l');
         } catch (LocalizedException $e) {
+            if (strpos($e->getPrevious()->getMessage(), 'no crontab') !== false) {
+                return '';
+            }
+
             throw $e->getPrevious();
         }
 

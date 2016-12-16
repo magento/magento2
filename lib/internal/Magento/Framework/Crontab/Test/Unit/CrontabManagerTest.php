@@ -66,6 +66,22 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetTasksNoCrontab()
+    {
+        $exception = new \Exception('crontab: no crontab for user');
+        $localizedException = new LocalizedException(new Phrase('Some error'), $exception);
+
+        $this->shellMock->expects($this->once())
+            ->method('execute')
+            ->with('crontab -l', [])
+            ->willThrowException($localizedException);
+
+        $this->assertEquals([], $this->crontabManager->getTasks());
+    }
+
+    /**
      * @param string $content
      * @param array $tasks
      * @return void
