@@ -9,6 +9,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Cron\Console\Command\CronRemoveCommand;
 use Magento\Framework\Crontab\CrontabManagerInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 class CronRemoveCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,7 +60,7 @@ class CronRemoveCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->crontabManagerMock->expects($this->once())
             ->method('RemoveTasks')
-            ->willThrowException(new \Exception('Some error'));
+            ->willThrowException(new LocalizedException(new Phrase('Some error')));
 
         $this->commandTester->execute([]);
         $this->assertEquals(

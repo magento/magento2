@@ -10,6 +10,8 @@ use Magento\Cron\Console\Command\CronInstallCommand;
 use Magento\Framework\Crontab\CrontabManagerInterface;
 use Magento\Framework\Crontab\TasksProviderInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,7 +77,7 @@ class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
         $this->crontabManagerMock->expects($this->once())
             ->method('saveTasks')
-            ->willThrowException(new \Exception('Some error'));
+            ->willThrowException(new LocalizedException(new Phrase('Some error')));
 
         $this->commandTester->execute([]);
         $this->assertEquals(

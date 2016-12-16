@@ -49,24 +49,6 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Exception
-     * @expectedExceptionMessage Shell error
-     */
-    public function testGetTasksWithException()
-    {
-        $exception = new \Exception('Shell error');
-        $localizedException = new LocalizedException(new Phrase('Some error'), $exception);
-
-        $this->shellMock->expects($this->once())
-            ->method('execute')
-            ->with('crontab -l', [])
-            ->willThrowException($localizedException);
-
-        $this->crontabManager->getTasks();
-    }
-
-    /**
-     * @return void
      */
     public function testGetTasksNoCrontab()
     {
@@ -134,7 +116,7 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Shell error
      */
     public function testRemoveTasksWithException()

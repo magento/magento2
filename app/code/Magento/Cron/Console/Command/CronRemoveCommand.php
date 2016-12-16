@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * CronRemoveCommand removes Magento cron tasks
@@ -49,7 +50,7 @@ class CronRemoveCommand extends Command
     {
         try {
             $this->crontabManager->removeTasks();
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
         }

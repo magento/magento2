@@ -7,6 +7,7 @@ namespace Magento\Cron\Console\Command;
 
 use Magento\Framework\Crontab\CrontabManagerInterface;
 use Magento\Framework\Crontab\TasksProviderInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -66,7 +67,7 @@ class CronInstallCommand extends Command
 
         try {
             $this->crontabManager->saveTasks($this->tasksProvider->getTasks());
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
         }

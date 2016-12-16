@@ -140,18 +140,13 @@ class CrontabManager implements CrontabManagerInterface
      * Get crontab content without Magento Tasks Section
      *
      * @return string
-     * @throws \Exception
      */
     private function getCrontabContent()
     {
         try {
             $content = (string)$this->shell->execute('crontab -l');
         } catch (LocalizedException $e) {
-            if (strpos($e->getPrevious()->getMessage(), 'no crontab') !== false) {
                 return '';
-            }
-
-            throw $e->getPrevious();
         }
 
         return $content;
@@ -162,7 +157,7 @@ class CrontabManager implements CrontabManagerInterface
      *
      * @param string $content
      * @return void
-     * @throws \Exception
+     * @throws LocalizedException
      */
     private function save($content)
     {
@@ -171,7 +166,9 @@ class CrontabManager implements CrontabManagerInterface
         try {
             $this->shell->execute('echo "' . $content . '" | crontab -');
         } catch (LocalizedException $e) {
-            throw $e->getPrevious();
+            throw new LocalizedException(
+                new Phrase('Error during saving of crontab: %1', [$e->getPrevious()->getMessage()]), $e
+            );
         }
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Crontab;
 
+use Magento\Framework\Exception\LocalizedException;
+
 interface CrontabManagerInterface
 {
     const TASKS_BLOCK_START = '#~ MAGENTO START';
@@ -14,7 +16,7 @@ interface CrontabManagerInterface
      * Get list of Magento Tasks
      *
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function getTasks();
 
@@ -23,7 +25,7 @@ interface CrontabManagerInterface
      *
      * @param array $tasks
      * @return void
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function saveTasks(array $tasks);
 
@@ -31,7 +33,7 @@ interface CrontabManagerInterface
      * Remove Magento Tasks form crontab
      *
      * @return void
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function removeTasks();
 }
