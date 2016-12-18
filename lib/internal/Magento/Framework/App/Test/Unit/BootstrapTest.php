@@ -8,11 +8,10 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\Bootstrap;
-use \Magento\Framework\App\State;
-use \Magento\Framework\App\MaintenanceMode;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use \Magento\Framework\App\Bootstrap;
+use \Magento\Framework\App\MaintenanceMode;
+use \Magento\Framework\App\State;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,6 +63,11 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      */
     protected $bootstrapMock;
 
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $remoteAddress;
+
     protected function setUp()
     {
         $this->objectManagerFactory = $this->getMock(
@@ -82,6 +86,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, ['isOn'], [], '', false);
+        $this->remoteAddress = $this->getMock('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress', [], [], '', false);
         $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
@@ -91,6 +96,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $mapObjectManager = [
             [\Magento\Framework\App\Filesystem\DirectoryList::class, $this->dirs],
             [\Magento\Framework\App\MaintenanceMode::class, $this->maintenanceMode],
+            [\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class, $this->remoteAddress],
             [\Magento\Framework\Filesystem::class, $filesystem],
             [\Magento\Framework\App\DeploymentConfig::class, $this->deploymentConfig],
             ['Psr\Log\LoggerInterface', $this->logger],
@@ -205,7 +211,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             [State::MODE_DEVELOPER, State::MODE_PRODUCTION, true],
             [State::MODE_PRODUCTION, State::MODE_DEVELOPER, false],
             [null, State::MODE_DEVELOPER, true],
-            [null, State::MODE_PRODUCTION, false]
+            [null, State::MODE_PRODUCTION, false],
         ];
     }
 
@@ -260,6 +266,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $bootstrap = self::createBootstrap([Bootstrap::PARAM_REQUIRE_MAINTENANCE => $isExpected]);
         $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn($isOn);
+        $this->remoteAddress->expects($this->once())->method('getRemoteAddress')->willReturn(false);
         $this->application->expects($this->never())->method('launch');
         $this->application->expects($this->once())->method('catchException')->willReturn(true);
         $bootstrap->run($this->application);
@@ -273,7 +280,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, false],
-            [false, true]
+            [false, true],
         ];
     }
 
