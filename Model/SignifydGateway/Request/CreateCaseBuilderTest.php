@@ -80,7 +80,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $expected = [
             'purchase' => [
-                'orderSessionId' => $quoteSessionId->generate($order->getQuoteId()),
+                'orderSessionId' => $quoteSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
@@ -191,7 +191,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $expected = [
             'purchase' => [
-                'orderSessionId' => $quoteSessionId->generate($order->getQuoteId()),
+                'orderSessionId' => $quoteSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
