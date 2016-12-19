@@ -69,7 +69,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
             'no class' => [[], '\InvalidArgumentException', 'Object class name is missing'],
             'no agrument name' => [
                 ['value' => \Magento\Framework\ObjectManagerInterface::class],
-                '\InvalidArgumentException', 'Argument name is missing'],
+                '\InvalidArgumentException', 'Argument "name" is missing'],
             'unexpected class' => [
                 ['name' => 'dataSource', 'value' => \Magento\Framework\ObjectManagerInterface::class],
                 '\UnexpectedValueException',
