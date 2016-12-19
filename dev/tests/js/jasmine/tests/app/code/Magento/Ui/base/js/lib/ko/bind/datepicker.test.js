@@ -51,7 +51,7 @@ define([
 
             todayDate   = moment().format(momentFormat);
 
-            result = $('input').val();
+            result = $('input:last').val();
 
             expect(todayDate).toEqual(result);
         });
