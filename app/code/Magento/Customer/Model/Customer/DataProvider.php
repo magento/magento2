@@ -189,6 +189,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
+            $customer->afterLoad();
             $result['customer'] = $customer->getData();
 
             $this->overrideFileUploaderData($customer, $result['customer']);
