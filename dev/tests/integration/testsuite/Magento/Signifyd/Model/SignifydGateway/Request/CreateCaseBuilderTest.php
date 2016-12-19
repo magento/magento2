@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\Config\ScopeInterface;
-use Magento\Framework\DataObject\IdentityGeneratorInterface;
+use Magento\Signifyd\Model\QuoteSessionId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Area;
 use Magento\Framework\Intl\DateTimeFactory;
@@ -75,12 +75,12 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
 
-        /** @var IdentityGeneratorInterface $identityGenerator */
-        $identityGenerator = $this->objectManager->create(IdentityGeneratorInterface::class);
+        /** @var QuoteSessionId $quoteSessionId */
+        $quoteSessionId = $this->objectManager->create(QuoteSessionId::class);
 
         $expected = [
             'purchase' => [
-                'orderSessionId' => $identityGenerator->generateIdForData($order->getQuoteId()),
+                'orderSessionId' => $quoteSessionId->generate($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
@@ -186,12 +186,12 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         $billingAddress = $order->getBillingAddress();
         $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
 
-        /** @var IdentityGeneratorInterface $identityGenerator */
-        $identityGenerator = $this->objectManager->create(IdentityGeneratorInterface::class);
+        /** @var QuoteSessionId $quoteSessionId */
+        $quoteSessionId = $this->objectManager->create(QuoteSessionId::class);
 
         $expected = [
             'purchase' => [
-                'orderSessionId' => $identityGenerator->generateIdForData($order->getQuoteId()),
+                'orderSessionId' => $quoteSessionId->generate($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
