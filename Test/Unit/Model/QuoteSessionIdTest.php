@@ -18,6 +18,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class QuoteSessionIdTest extends \PHPUnit_Framework_TestCase
 {
+    const QUOTE_ID = 1;
+
     /**
      * @var QuoteSessionId
      */
@@ -48,11 +50,24 @@ class QuoteSessionIdTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Sets up general expectations for method.
+     * Tests method by passing quoteId parameter
      *
      * @covers \Magento\Signifyd\Model\QuoteSessionId::generate
      */
-    public function testGenerateQuoteSessionId()
+    public function testGenerateByQuoteId()
+    {
+        $this->identityGenerator->expects(static::once())
+            ->method('generateIdForData');
+
+        $this->quoteSessionId->generate(self::QUOTE_ID);
+    }
+
+    /**
+     * Tests method by getting quoteId from session
+     *
+     * @covers \Magento\Signifyd\Model\QuoteSessionId::generate
+     */
+    public function testGenerateByQuoteSession()
     {
         $quote = $this->getMockBuilder(CartInterface::class)
             ->getMockForAbstractClass();

@@ -42,12 +42,13 @@ class QuoteSessionId
     /**
      * Generates unique identifier by quote id.
      *
+     * @param int|null $quoteId
      * @return string
      */
-    public function generate()
+    public function generate($quoteId = null)
     {
         return $this->identityGenerator->generateIdForData(
-            $this->quoteSession->getQuote()->getId()
+            $quoteId ? : $this->quoteSession->getQuote()->getId()
         );
     }
 }
