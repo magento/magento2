@@ -91,7 +91,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
-                        <item name="useDefault" xsi:type="string">1</item>
+                        <item name="use_default" xsi:type="string">true</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">default_qty_1</item>
                         </item>
