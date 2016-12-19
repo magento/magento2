@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\MassAssignCustomerGroupTest" summary="Mass Assign Customer's Group to Customers" ticketId="MAGETWO-27892">
-        <variation name="MassAssignCustomerGroupTestVariation1">
+        <variation name="MassAssignCustomerGroupTestVariation1" summary="Customer is created and mass action for changing customer group to created group is applied">
             <data name="customers" xsi:type="array">
                 <item name="0" xsi:type="string">default</item>
             </data>
