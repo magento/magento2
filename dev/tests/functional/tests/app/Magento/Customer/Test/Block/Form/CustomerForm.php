@@ -39,7 +39,7 @@ class CustomerForm extends Form
     protected $validationText = '.mage-error[for="%s"]';
 
     /**
-     * Fixture mapping.
+     * Fixture mapping and fields revision.
      *
      * @param array|null $fields
      * @param string|null $parent

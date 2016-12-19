@@ -369,7 +369,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
 
         $this->assertIndexerStatus->processAssert($this->indexManagement, $this->indexers, false);
         $cli->reindex();
-        $this->attributeForSearch['isVisible'] = false;
+        unset($this->attributeForSearch['isVisible']);
         $this->assertSearchAttributeTest->processAssert($this->advancedSearch, $this->attributeForSearch);
     }
 
