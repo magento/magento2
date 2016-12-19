@@ -76,12 +76,12 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ['new-url.html', 'catalog/category/view/id/3', 1, 0],
             ['new-url/category-1-1.html', 'catalog/category/view/id/4', 1, 0],
             ['new-url/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1, 0],
-            ['category-1.html', 'new-url.html', 0, OptionProvider::PERMANENT],
-            ['category-1/category-1-1.html', 'new-url/category-1-1.html', 0, OptionProvider::PERMANENT],
+            ['category-1.html', 'new-url.html', 1, OptionProvider::PERMANENT],
+            ['category-1/category-1-1.html', 'new-url/category-1-1.html', 1, OptionProvider::PERMANENT],
             [
                 'category-1/category-1-1/category-1-1-1.html',
                 'new-url/category-1-1/category-1-1-1.html',
-                0,
+                1,
                 OptionProvider::PERMANENT
             ],
         ];
