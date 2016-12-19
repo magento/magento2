@@ -51,8 +51,8 @@ class Comment implements CommentInterface
             $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path ;
         }
         if ($comment) {
-            $comment = 'The configuration file doesn\'t contain the sensitive data by security reason. '
-                . 'The sensitive data can be stored in the next environment variables:'
+            $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
+                . 'Sensitive data can be stored in the following environment variables:'
                 . $comment;
         }
         return $comment;
