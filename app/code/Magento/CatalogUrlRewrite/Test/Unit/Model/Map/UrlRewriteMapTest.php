@@ -41,7 +41,6 @@ class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
         $this->urlRewriteFactoryMock = $this->getMock(UrlRewriteFactory::class, ['create'], [], '', false);
         $this->urlRewritePlaceholderMock = new UrlRewrite();
 
-
         $this->urlRewriteFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->urlRewritePlaceholderMock);
@@ -59,7 +58,7 @@ class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     /**
      * test getByIdentifiers using findAllByData
      */
-    function testGetByIdentifiersFallback()
+    public function testGetByIdentifiersFallback()
     {
         $expected = [1, 2, 3];
         $this->dataMapPoolMock->expects($this->never())
@@ -81,7 +80,7 @@ class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     /**
      * test getByIdentifiers Product URL rewrites
      */
-    function testGetByIdentifiersProduct()
+    public function testGetByIdentifiersProduct()
     {
         $data =[
             [
@@ -119,7 +118,7 @@ class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     /**
      * test getByIdentifiers Category URL rewrites
      */
-    function testGetByIdentifiersCategory()
+    public function testGetByIdentifiersCategory()
     {
         $data =[
             [
