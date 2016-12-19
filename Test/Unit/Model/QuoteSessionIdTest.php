@@ -52,22 +52,22 @@ class QuoteSessionIdTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests method by passing quoteId parameter
      *
-     * @covers \Magento\Signifyd\Model\QuoteSessionId::generate
+     * @covers \Magento\Signifyd\Model\QuoteSessionId::get
      */
-    public function testGenerateByQuoteId()
+    public function testGetByQuoteId()
     {
         $this->identityGenerator->expects(static::once())
             ->method('generateIdForData');
 
-        $this->quoteSessionId->generate(self::QUOTE_ID);
+        $this->quoteSessionId->get(self::QUOTE_ID);
     }
 
     /**
      * Tests method by getting quoteId from session
      *
-     * @covers \Magento\Signifyd\Model\QuoteSessionId::generate
+     * @covers \Magento\Signifyd\Model\QuoteSessionId::get
      */
-    public function testGenerateByQuoteSession()
+    public function testGetByQuoteSession()
     {
         $quote = $this->getMockBuilder(CartInterface::class)
             ->getMockForAbstractClass();
@@ -81,6 +81,6 @@ class QuoteSessionIdTest extends \PHPUnit_Framework_TestCase
         $quote->expects(static::once())
             ->method('getId');
 
-        $this->quoteSessionId->generate();
+        $this->quoteSessionId->get();
     }
 }
