@@ -14,7 +14,6 @@ use Magento\CatalogUrlRewrite\Model\Map\DataCategoryMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
-
 /**
  * Class DataCategoryMapTest
  */

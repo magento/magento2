@@ -101,7 +101,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function testBeforeDeleteByData()
     {
         $data = [1, 2, 3];
-        $this->productResourceModel->expects(static::once())->method('removeMultipleByFilter')->with($data)->willReturnSelf();
+        $this->productResourceModel->expects(static::once())
+            ->method('removeMultipleByFilter')
+            ->with($data)->willReturnSelf();
         $this->plugin->beforeDeleteByData($this->storage, $data);
     }
 }

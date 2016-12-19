@@ -17,7 +17,7 @@ use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteMap;
 /**
  * Class DataProductUrlRewriteMapTest
  */
-class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var DataMapPoolInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $dataMapPoolMock;
