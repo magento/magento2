@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\User\Model;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -28,6 +29,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_newRole;
 
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -35,6 +41,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
         $this->_dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Stdlib\DateTime::class
+        );
+        $this->serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            SerializerInterface::class
         );
     }
 
@@ -113,7 +122,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_model->saveExtra(['test' => 'val']);
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $extra = unserialize($this->_model->getExtra());
+        $extra = $this->serializer->unserialize($this->_model->getExtra());
         $this->assertEquals($extra['test'], 'val');
     }
 
