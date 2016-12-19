@@ -34,9 +34,16 @@ class QueryModifierFactory
      * @param string $queryModifierClassName
      * @param array $data
      * @return QueryModifierInterface
+     * @throws \InvalidArgumentException
      */
-    public function create($queryModifierClassName, $data)
+    public function create($queryModifierClassName, array $data = [])
     {
-        return $this->objectManager->create($queryModifierClassName, $data);
+        $queryModifier = $this->objectManager->create($queryModifierClassName, $data);
+        if (!($queryModifier instanceof QueryModifierInterface)) {
+            throw new \InvalidArgumentException(
+                $queryModifierClassName . ' must implement ' . QueryModifierInterface::class
+            );
+        }
+        return $queryModifier;
     }
 }
