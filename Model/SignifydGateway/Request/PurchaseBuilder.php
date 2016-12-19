@@ -9,6 +9,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Sales\Model\Order;
+use Magento\Signifyd\Model\QuoteSessionId;
 
 /**
  * Prepare data related to purchase event represented in case creation request.
@@ -26,15 +27,23 @@ class PurchaseBuilder
     private $scope;
 
     /**
+     * @var QuoteSessionId
+     */
+    private $quoteSessionId;
+
+    /**
      * @param DateTimeFactory $dateTimeFactory
      * @param ScopeInterface $scope
+     * @param QuoteSessionId $quoteSessionId
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
-        ScopeInterface $scope
+        ScopeInterface $scope,
+        QuoteSessionId $quoteSessionId
     ) {
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
+        $this->quoteSessionId = $quoteSessionId;
     }
 
     /**
@@ -53,6 +62,7 @@ class PurchaseBuilder
 
         $result = [
             'purchase' => [
+                'orderSessionId' => $this->quoteSessionId->generate($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => $createdAt->format(\DateTime::ATOM),

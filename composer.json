@@ -7,7 +7,8 @@
         "magento/module-sales": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/module-customer": "100.2.*",
-        "magento/module-directory": "100.2.*"
+        "magento/module-directory": "100.2.*",
+        "magento/module-checkout": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
