@@ -5,12 +5,12 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-interface DisplayCheckerInterface
+interface VisibilityCheckerInterface
 {
     /**
      * Check that action can be displayed on massaction list
      *
      * @return bool
      */
-    public function isDisplayed();
+    public function isVisible();
 }

@@ -5,11 +5,14 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-use Magento\Backend\Block\Widget\Grid\Massaction\DisplayCheckerInterface as DisplayChecker;
+use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 use Magento\Framework\DataObject;
 
 /**
  * Grid widget massaction block
+ *
+ * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
+ * @method boolean getHideFormElement()
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
@@ -71,7 +74,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *      'url'      => string,
      *      'confirm'  => string, // text of confirmation of this action (optional)
      *      'additional' => string, // (optional)
-     *      'displayChecker' => object // instance of DisplayCheckerInterface
+     *      'visible' => object // instance of VisibilityCheckerInterface (optional)
      * );
      *
      * @param string $itemId
@@ -84,7 +87,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             $item = new DataObject($item);
         }
 
-        if ($item instanceof DataObject && $this->isPossibleToAdd($item)) {
+        if ($item instanceof DataObject && $this->isVisible($item)) {
             $item->setId($itemId);
             $item->setUrl($this->getUrl($item->getUrl()));
             $this->_items[$itemId] = $item;
@@ -99,11 +102,11 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * @param DataObject $item
      * @return bool
      */
-    private function isPossibleToAdd(DataObject $item)
+    private function isVisible(DataObject $item)
     {
-        /** @var DisplayChecker $checker */
-        $checker = $item->getData('displayChecker');
-        return ($checker instanceof DisplayChecker && $checker->isDisplayed()) || !$checker instanceof DisplayChecker;
+        /** @var VisibilityChecker $checker */
+        $checker = $item->getData('visible');
+        return (!$checker instanceof VisibilityChecker) || $checker->isVisible();
     }
 
     /**

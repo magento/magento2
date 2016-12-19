@@ -5,13 +5,13 @@
  */
 namespace Magento\Backend\Block\Cache\Grid\Massaction;
 
-use Magento\Backend\Block\Widget\Grid\Massaction\DisplayCheckerInterface;
+use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface;
 use Magento\Framework\App\State;
 
 /**
  * Class checks that action can be displayed on massaction list
  */
-class ProductionDisplayChecker implements DisplayCheckerInterface
+class ProductionModeVisibilityChecker implements VisibilityCheckerInterface
 {
     /**
      * @var State
@@ -29,7 +29,7 @@ class ProductionDisplayChecker implements DisplayCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function isDisplayed()
+    public function isVisible()
     {
         return $this->state->getMode() !== State::MODE_PRODUCTION;
     }

@@ -9,7 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-use Magento\Backend\Block\Widget\Grid\Massaction\DisplayCheckerInterface as DisplayChecker;
+use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 
 class MassactionTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,9 +39,9 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected $_requestMock;
 
     /**
-     * @var DisplayChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisibilityChecker|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $displayCheckerMock;
+    private $visibilityCheckerMock;
 
     protected function setUp()
     {
@@ -78,7 +78,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalClone()
             ->getMock();
 
-        $this->displayCheckerMock = $this->getMockBuilder(DisplayChecker::class)
+        $this->visibilityCheckerMock = $this->getMockBuilder(VisibilityChecker::class)
             ->getMockForAbstractClass();
 
         $arguments = [
@@ -285,12 +285,12 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddItem($itemId, $item, $count, $withDisplayChecker, $isDisplay)
     {
-        $this->displayCheckerMock->expects($this->any())
-            ->method('isDisplayed')
+        $this->visibilityCheckerMock->expects($this->any())
+            ->method('isVisible')
             ->willReturn($isDisplay);
 
         if ($withDisplayChecker) {
-            $item['displayChecker'] = $this->displayCheckerMock;
+            $item['visible'] = $this->visibilityCheckerMock;
         }
 
         $urlReturnValueMap = [

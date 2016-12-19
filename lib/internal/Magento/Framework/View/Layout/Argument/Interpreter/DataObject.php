@@ -45,11 +45,11 @@ class DataObject implements InterpreterInterface
             throw new \InvalidArgumentException('Object class name is missing.');
         }
         if (!isset($data['name'])) {
-            throw new \InvalidArgumentException('Argument name is missing.');
+            throw new \InvalidArgumentException('Argument "name" is missing.');
         }
         $className = $data['value'];
         $result = $this->objectManager->create($className);
-        if ($data['name'] == 'dataSource' && $this->expectedClass && !$result instanceof $this->expectedClass) {
+        if ($data['name'] === 'dataSource' && $this->expectedClass && !$result instanceof $this->expectedClass) {
             throw new \UnexpectedValueException(
                 sprintf("Instance of %s is expected, got %s instead.", $this->expectedClass, get_class($result))
             );

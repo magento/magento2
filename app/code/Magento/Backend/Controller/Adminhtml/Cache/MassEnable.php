@@ -11,6 +11,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Controller enables some types of cache
+ */
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
