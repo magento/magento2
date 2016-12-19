@@ -43,6 +43,7 @@ class CrontabManager implements CrontabManagerInterface
      */
     public function getTasks()
     {
+        $this->checkSupportedOs();
         $content = $this->getCrontabContent();
         $pattern = '!(' . self::TASKS_BLOCK_START . ')(.*?)(' . self::TASKS_BLOCK_END . ')!s';
 
@@ -57,10 +58,10 @@ class CrontabManager implements CrontabManagerInterface
 
     /**
      * {@inheritdoc}
-     * @throws LocalizedException
      */
     public function saveTasks(array $tasks)
     {
+        $this->checkSupportedOs();
         $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
         $logDir = $this->filesystem->getDirectoryRead(DirectoryList::LOG)->getAbsolutePath();
 
@@ -97,6 +98,7 @@ class CrontabManager implements CrontabManagerInterface
      */
     public function removeTasks()
     {
+        $this->checkSupportedOs();
         $content = $this->getCrontabContent();
         $content = $this->cleanMagentoSection($content);
         $this->save($content);
@@ -130,14 +132,19 @@ class CrontabManager implements CrontabManagerInterface
      */
     private function cleanMagentoSection($content)
     {
-        $content = preg_replace('!' . self::TASKS_BLOCK_START . '.*?' . self::TASKS_BLOCK_END . '!s', '', $content);
-        $content = preg_replace('/\n\s*\n/', "\n", $content);
+        $content = preg_replace(
+            '!' . self::TASKS_BLOCK_START . '.*?' . self::TASKS_BLOCK_END . PHP_EOL . '!s',
+            '',
+            $content
+        );
 
         return $content;
     }
 
     /**
      * Get crontab content without Magento Tasks Section
+     *
+     * In case of some exceptions the empty content is returned
      *
      * @return string
      */
@@ -146,7 +153,7 @@ class CrontabManager implements CrontabManagerInterface
         try {
             $content = (string)$this->shell->execute('crontab -l');
         } catch (LocalizedException $e) {
-                return '';
+            return '';
         }
 
         return $content;
@@ -169,6 +176,23 @@ class CrontabManager implements CrontabManagerInterface
             throw new LocalizedException(
                 new Phrase('Error during saving of crontab: %1', [$e->getPrevious()->getMessage()]),
                 $e
+            );
+        }
+    }
+
+    /**
+     * Check that OS is supported
+     *
+     * If OS is not supported then no possibility to work with crontab
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function checkSupportedOs()
+    {
+        if (stripos(PHP_OS, 'WIN') !== false) {
+            throw new LocalizedException(
+                new Phrase('Your operation system is not supported, you cannot work with crontab')
             );
         }
     }

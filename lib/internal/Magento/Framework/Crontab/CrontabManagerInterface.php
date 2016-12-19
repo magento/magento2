@@ -9,8 +9,12 @@ use Magento\Framework\Exception\LocalizedException;
 
 interface CrontabManagerInterface
 {
+    /**#@+
+     * Constants for wrapping Magento section in crontab
+     */
     const TASKS_BLOCK_START = '#~ MAGENTO START';
     const TASKS_BLOCK_END = '#~ MAGENTO END';
+    /**#@-*/
 
     /**
      * Get list of Magento Tasks
