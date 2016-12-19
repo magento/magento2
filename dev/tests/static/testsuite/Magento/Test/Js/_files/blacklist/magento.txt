@@ -923,7 +923,6 @@ vendor/magento/module-ui/view/base/web/js/form/components/html.js
 vendor/magento/module-ui/view/base/web/js/form/components/tab_group.js
 vendor/magento/module-ui/view/base/web/js/form/components/tab.js
 vendor/magento/module-ui/view/base/web/js/form/element/abstract.js
-vendor/magento/module-ui/view/base/web/js/form/element/date.js
 vendor/magento/module-ui/view/base/web/js/form/element/helpers/options.js
 vendor/magento/module-ui/view/base/web/js/form/element/multiselect.js
 vendor/magento/module-ui/view/base/web/js/form/element/post-code.js

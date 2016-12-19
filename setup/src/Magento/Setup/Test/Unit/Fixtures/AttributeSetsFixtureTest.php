@@ -202,7 +202,7 @@ class AttributeSetsFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturn($optionFactoryMock);
 
         $this->fixtureModelMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
             ->willReturn($attributeSets);
 
@@ -267,7 +267,7 @@ class AttributeSetsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
         $this->fixtureModelMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
             ->willReturn(null);
 
