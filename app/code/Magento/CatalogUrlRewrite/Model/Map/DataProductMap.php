@@ -96,6 +96,7 @@ class DataProductMap implements DataMapInterface
     public function resetData($categoryId)
     {
         $this->dataMapPool->resetDataMap(DataCategoryMap::class, $categoryId);
+        unset($this->data[$categoryId]);
         if (empty($this->data)) {
             $this->data = [];
         }

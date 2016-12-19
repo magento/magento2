@@ -59,7 +59,7 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
         if (empty($this->tableNames[$categoryId])) {
             $this->tableNames[$categoryId] = $this->generateData($categoryId);
         }
-        return $this->tableNames[$categoryId];
+        return $this->getData($categoryId, '');
     }
 
     /**
@@ -125,11 +125,14 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
      */
     public function getData($categoryId, $key)
     {
-        $this->getAllData($categoryId);
+        if (!isset($this->tableNames[$categoryId])) {
+            $this->getAllData($categoryId);
+        }
         $urlRewritesConnection = $this->connection->getConnection();
-        $select = $urlRewritesConnection->select()
-            ->from(['e' => $this->tableNames[$categoryId]])
-            ->where('hash_key = ?', $key);
+        $select = $urlRewritesConnection->select()->from(['e' => $this->tableNames[$categoryId]]);
+        if (strlen($key) > 0) {
+            $select->where('hash_key = ?', $key);
+        }
 
         return $urlRewritesConnection->fetchAll($select);
     }

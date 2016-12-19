@@ -14,10 +14,10 @@ use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 class Storage
 {
     /** @var UrlFinderInterface */
-    protected $urlFinder;
+    private $urlFinder;
 
     /** @var Product */
-    protected $productResource;
+    private $productResource;
 
     /**
      * @param UrlFinderInterface $urlFinder

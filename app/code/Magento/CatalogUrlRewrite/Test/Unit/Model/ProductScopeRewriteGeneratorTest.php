@@ -41,6 +41,9 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var  ProductScopeRewriteGenerator */
     private $productScopeGenerator;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $urlRewritesSet;
+
     public function setUp()
     {
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
@@ -61,6 +64,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
+        $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator::class,
@@ -72,6 +76,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'objectRegistryFactory' => $this->objectRegistryFactory,
                 'storeViewService' => $this->storeViewService,
                 'storeManager' => $this->storeManager,
+                'urlRewritesSet' => $this->urlRewritesSet
             ]
         );
     }
@@ -91,34 +96,34 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
         $this->initObjectRegistryFactory([]);
         $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
-        $canonical->setTargetPath('category-1')
+        $canonical->setRequestPath('category-1')
             ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$canonical]));
         $categories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
-        $categories->setTargetPath('category-2')
+        $categories->setRequestPath('category-2')
             ->setStoreId(2);
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$categories]));
         $current = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
-        $current->setTargetPath('category-3')
+        $current->setRequestPath('category-3')
             ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$current]));
         $anchorCategories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
-        $anchorCategories->setTargetPath('category-4')
+        $anchorCategories->setRequestPath('category-4')
             ->setStoreId(4);
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$anchorCategories]));
 
         $this->assertEquals(
             [
-                'category-1-1' => $canonical,
-                'category-2-2' => $categories,
-                'category-3-3' => $current,
-                'category-4-4' => $anchorCategories
+                'category-1_1' => $canonical,
+                'category-2_2' => $categories,
+                'category-3_3' => $current,
+                'category-4_4' => $anchorCategories
             ],
-            $this->productScopeGenerator->generateForGlobalScope([$categoryMock], $product)
+            $this->productScopeGenerator->generateForGlobalScope([$categoryMock], $product, 1)
         );
     }
 
@@ -138,7 +143,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->initObjectRegistryFactory([$category]);
         $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
-        $canonical->setTargetPath('category-1')
+        $canonical->setRequestPath('category-1')
             ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$canonical]));
@@ -150,8 +155,8 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
 
         $this->assertEquals(
-            ['category-1-1' => $canonical],
-            $this->productScopeGenerator->generateForSpecificStoreView(1, [$category], $product)
+            ['category-1_1' => $canonical],
+            $this->productScopeGenerator->generateForSpecificStoreView(1, [$category], $product, 1)
         );
     }
 
@@ -165,7 +170,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(true));
 
-        $this->assertEquals([], $this->productScopeGenerator->generateForGlobalScope([], $product));
+        $this->assertEquals([], $this->productScopeGenerator->generateForGlobalScope([], $product, 1));
     }
 
     /**
