@@ -186,7 +186,8 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      * @param string $bulkUuid
      * @return int
      */
-    private function getOperationCount($bulkUuid) {
+    private function getOperationCount($bulkUuid)
+    {
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
 

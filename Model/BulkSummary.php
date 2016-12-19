@@ -94,7 +94,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
         return $this->setData(self::OPERATION_COUNT, $operationCount);
     }
 
-
     /**
      * Retrieve existing extension attributes object.
      *

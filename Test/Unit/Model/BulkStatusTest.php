@@ -9,6 +9,9 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BulkStatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
