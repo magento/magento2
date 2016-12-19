@@ -96,6 +96,7 @@ class ProductForm extends FormSections
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
             $sections = $this->getFixtureFieldsByContainers($product);
+            $sections['product-details']['category_ids']['value'] = [];
             if ($product->hasData('category_ids') || $category) {
                 $categories = $product->hasData('category_ids')
                     ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
@@ -107,8 +108,6 @@ class ProductForm extends FormSections
                         $this->getNewCategoryModalForm()->addNewCategory($category);
                     }
                 }
-                $sections['product-details']['category_ids']['value'] =
-                    array_unique($sections['product-details']['category_ids']['value']);
             }
             $this->fillContainers($sections, $element);
         }
