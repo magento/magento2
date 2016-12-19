@@ -10,7 +10,7 @@ backend default {
     .first_byte_timeout = 600s;
     .probe = {
         .url = "/pub/health_check.php";
-        .timeout = 500 ms;
+        .timeout = 2s;
         .interval = 5s;
         .window = 10;
         .threshold = 8;
