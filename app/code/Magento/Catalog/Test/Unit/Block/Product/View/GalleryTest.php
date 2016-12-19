@@ -111,8 +111,8 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->method('init')
             ->willReturnMap([
                 [$productMock, 'product_page_image_small', [], $this->imageHelper],
-                [$productMock, 'product_page_image_medium', [], $this->imageHelper],
-                [$productMock, 'product_page_image_large', [], $this->imageHelper],
+                [$productMock, 'product_page_image_medium_no_frame', [], $this->imageHelper],
+                [$productMock, 'product_page_image_large_no_frame', [], $this->imageHelper],
             ])
             ->willReturnSelf();
         $this->imageHelper->expects($this->exactly(3))
@@ -128,19 +128,6 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->imageHelper->expects($this->at(2))
             ->method('getUrl')
             ->willReturn('product_page_image_large_url');
-
-        $this->imageHelper->expects($this->exactly(2))
-            ->method('constrainOnly')
-            ->with(true)
-            ->willReturnSelf();
-        $this->imageHelper->expects($this->exactly(2))
-            ->method('keepAspectRatio')
-            ->with(true)
-            ->willReturnSelf();
-         $this->imageHelper->expects($this->exactly(2))
-            ->method('keepFrame')
-            ->with(false)
-            ->willReturnSelf();
 
         $images = $this->model->getGalleryImages();
         $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $images);

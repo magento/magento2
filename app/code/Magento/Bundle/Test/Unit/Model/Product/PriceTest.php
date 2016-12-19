@@ -90,7 +90,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\Bundle\Model\Product\Price::class,
@@ -191,7 +190,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-
         $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 
@@ -245,7 +243,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock->expects($this->once())
             ->method('getValue')
             ->willReturn('a:1:{i:0;s:1:"1";}');
-
         $productTypeMock->expects($this->once())
             ->method('getSelectionsByIds')
             ->with([1], $productMock)
