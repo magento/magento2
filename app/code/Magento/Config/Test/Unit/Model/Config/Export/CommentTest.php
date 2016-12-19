@@ -70,8 +70,8 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'one/two';
         $placeholder = 'one__two';
-        $expectedResult = 'The configuration file doesn\'t contain the sensitive data by security reason. '
-            . 'The sensitive data can be stored in the next environment variables:'
+        $expectedResult = 'The configuration file doesn\'t contain sensitive data for security reasons. '
+            . 'Sensitive data can be stored in the following environment variables:'
             . "\n$placeholder for $path";
 
         $this->configSourceMock->expects($this->once())

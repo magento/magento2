@@ -50,8 +50,8 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $comment = 'The configuration file doesn\'t contain the sensitive data by security reason. '
-            . 'The sensitive data can be stored in the next environment variables:'
+        $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
+            . 'Sensitive data can be stored in the following environment variables:'
             . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive";
         $outputMock = $this->getMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
