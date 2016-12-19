@@ -18,30 +18,41 @@ class QueryModifierFactory
     private $objectManager;
 
     /**
+     * @var array
+     */
+    private $queryModifiers;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
+     * @param array $queryModifiers
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        array $queryModifiers = []
     ) {
         $this->objectManager = $objectManager;
+        $this->queryModifiers = $queryModifiers;
     }
 
     /**
      * Create instance of QueryModifierInterface
      *
-     * @param string $queryModifierClassName
+     * @param string $type
      * @param array $data
      * @return QueryModifierInterface
      * @throws \InvalidArgumentException
      */
-    public function create($queryModifierClassName, array $data = [])
+    public function create($type, array $data = [])
     {
-        $queryModifier = $this->objectManager->create($queryModifierClassName, $data);
+        if (!isset($this->queryModifiers[$type])) {
+            throw new \InvalidArgumentException('Unknown query modifier type ' . $type);
+        }
+        $queryModifier = $this->objectManager->create($this->queryModifiers[$type], $data);
         if (!($queryModifier instanceof QueryModifierInterface)) {
             throw new \InvalidArgumentException(
-                $queryModifierClassName . ' must implement ' . QueryModifierInterface::class
+                $this->queryModifiers[$type] . ' must implement ' . QueryModifierInterface::class
             );
         }
         return $queryModifier;

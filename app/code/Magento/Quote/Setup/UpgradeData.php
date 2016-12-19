@@ -64,6 +64,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
+     * @throws \InvalidArgumentException
      */
     private function upgradeToVersionTwoZeroFour(ModuleDataSetupInterface $setup)
     {
@@ -75,7 +76,7 @@ class UpgradeData implements UpgradeDataInterface
             'additional_information'
         );
         $queryModifier = $this->queryModifierFactory->create(
-            InQueryModifier::class,
+            'in',
             [
                 'values' => [
                     'code' => [
@@ -111,7 +112,7 @@ class UpgradeData implements UpgradeDataInterface
                 $codes
             );
             $queryModifier = $this->queryModifierFactory->create(
-                InQueryModifier::class,
+                'in',
                 [
                     'values' => [
                         'code' => $codes
