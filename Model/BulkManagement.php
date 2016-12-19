@@ -100,7 +100,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $bulkSummary->setBulkId($bulkUuid);
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
-            $bulkSummary->setOperationCount($bulkSummary->getOperationCount() + count($operations));
+            $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
 
             $this->entityManager->save($bulkSummary);
 
@@ -130,8 +130,8 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
 
-        /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation[] $operations */
-        $operations = $this->operationCollectionFactory->create()
+        /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation[] $retriablyFailedOperations */
+        $retriablyFailedOperations = $this->operationCollectionFactory->create()
             ->addFieldToFilter('error_code', ['in' => $errorCodes])
             ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
             ->getItems();
@@ -143,7 +143,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $currentBatchSize = 0;
             $maxBatchSize = 10000;
             /** @var OperationInterface $operation */
-            foreach ($operations as $operation) {
+            foreach ($retriablyFailedOperations as $operation) {
                 if ($currentBatchSize === $maxBatchSize) {
                     $connection->delete(
                         $this->resourceConnection->getTableName('magento_operation'),
@@ -154,6 +154,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
                 }
                 $currentBatchSize++;
                 $operationIds[] = $operation->getId();
+                // Rescheduled operations must be put in queue in 'open' state (i.e. without ID)
                 $operation->setId(null);
             }
             // remove operations from the last batch
@@ -172,10 +173,10 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         }
 
         // publish operation to message queue
-        foreach ($operations as $operation) {
+        foreach ($retriablyFailedOperations as $operation) {
             $this->publisher->publish($operation->getTopicName(), $operation);
         }
-        return count($operations);
+        return count($retriablyFailedOperations);
     }
 
     /**
