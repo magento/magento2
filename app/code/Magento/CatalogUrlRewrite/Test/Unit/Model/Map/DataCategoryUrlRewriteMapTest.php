@@ -16,7 +16,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
 
-
 /**
  * Class DataCategoryUrlRewriteMapTest
  */
@@ -44,7 +43,13 @@ class DataCategoryUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     {
         $this->dataMapPoolMock = $this->getMock(DataMapPoolInterface::class);
         $this->dataCategoryMapMock = $this->getMock(DataProductMap::class, [], [], '', false);
-        $this->dataCategoryUsedInProductsMapMock = $this->getMock(DataCategoryUsedInProductsMap::class, [], [], '', false);
+        $this->dataCategoryUsedInProductsMapMock = $this->getMock(
+            DataCategoryUsedInProductsMap::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->temporaryTableServiceMock = $this->getMock(TemporaryTableService::class, [], [], '', false);
         $this->connectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
 

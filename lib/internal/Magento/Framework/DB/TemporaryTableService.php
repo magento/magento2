@@ -17,9 +17,22 @@ use Magento\Framework\DB\Select;
 class TemporaryTableService
 {
     /**
+     * @var $random
+     */
+    private $random;
+
+    /**
      * @var AdapterInterface[]
      */
     private $createdTables = [];
+
+    /**
+     * @param \Magento\Framework\Math\Random $random
+     */
+    public function __construct(\Magento\Framework\Math\Random $random)
+    {
+        $this->random = $random;
+    }
 
     /**
      * Creates a temporary table from select removing duplicate rows if you have a union in your select
@@ -51,7 +64,7 @@ class TemporaryTableService
         $indexMethod = 'HASH',
         $engine = 'INNODB'
     ) {
-        $name = uniqid('tmp_select_' . crc32((string)$select));
+        $name = $this->random->getUniqueHash('tmp_select_');
 
         $indexStatements = [];
         foreach ($indexes as $indexName => $columns) {

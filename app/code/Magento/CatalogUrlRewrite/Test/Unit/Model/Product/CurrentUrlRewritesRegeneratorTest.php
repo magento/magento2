@@ -18,9 +18,6 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator */
     private $currentUrlRewritesRegenerator;
 
-    /** @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $urlFinder;
-
     /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
     private $productUrlPathGenerator;
 
