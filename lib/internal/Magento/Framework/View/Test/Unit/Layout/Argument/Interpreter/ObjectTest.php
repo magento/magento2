@@ -34,16 +34,11 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testEvaluate()
     {
-        $input = ['value' => self::EXPECTED_CLASS];
-        $this->_objectManager->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            self::EXPECTED_CLASS
-        )->will(
-            $this->returnValue($this)
-        );
+        $input = ['name' => 'dataSource', 'value' => self::EXPECTED_CLASS];
+        $this->_objectManager->expects($this->once())
+            ->method('create')
+            ->with(self::EXPECTED_CLASS)
+            ->willReturn($this);
 
         $actual = $this->_model->evaluate($input);
         $this->assertSame($this, $actual);
@@ -56,23 +51,27 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException($expectedException, $expectedExceptionMessage);
         $self = $this;
-        $this->_objectManager->expects($this->any())->method('create')->will(
-            $this->returnCallback(
-                function ($className) use ($self) {
-                    return $self->getMock($className);
-                }
-            )
+        $this->_objectManager->expects($this->any())->method('create')->willReturnCallback(
+            function ($className) use ($self) {
+                return $self->getMock($className);
+            }
         );
 
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateWrongClassDataProvider()
     {
         return [
             'no class' => [[], '\InvalidArgumentException', 'Object class name is missing'],
-            'unexpected class' => [
+            'no agrument name' => [
                 ['value' => \Magento\Framework\ObjectManagerInterface::class],
+                '\InvalidArgumentException', 'Argument name is missing'],
+            'unexpected class' => [
+                ['name' => 'dataSource', 'value' => \Magento\Framework\ObjectManagerInterface::class],
                 '\UnexpectedValueException',
                 'Instance of ' . self::EXPECTED_CLASS . ' is expected',
             ]

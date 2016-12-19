@@ -5,14 +5,11 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-use Magento\Framework\View\Element\Template;
+use Magento\Backend\Block\Widget\Grid\Massaction\DisplayCheckerInterface as DisplayChecker;
+use Magento\Framework\DataObject;
 
 /**
  * Grid widget massaction block
- *
- * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
- * @method boolean getHideFormElement()
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
@@ -73,26 +70,40 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *      'complete' => string, // Only for ajax enabled grid (optional)
      *      'url'      => string,
      *      'confirm'  => string, // text of confirmation of this action (optional)
-     *      'additional' => string // (optional)
+     *      'additional' => string, // (optional)
+     *      'displayChecker' => object // instance of DisplayCheckerInterface
      * );
      *
      * @param string $itemId
-     * @param array|\Magento\Framework\DataObject $item
+     * @param array|DataObject $item
      * @return $this
      */
     public function addItem($itemId, $item)
     {
         if (is_array($item)) {
-            $item = new \Magento\Framework\DataObject($item);
+            $item = new DataObject($item);
         }
 
-        if ($item instanceof \Magento\Framework\DataObject) {
+        if ($item instanceof DataObject && $this->isPossibleToAdd($item)) {
             $item->setId($itemId);
             $item->setUrl($this->getUrl($item->getUrl()));
             $this->_items[$itemId] = $item;
         }
 
         return $this;
+    }
+
+    /**
+     * Check that item can be added to list
+     *
+     * @param DataObject $item
+     * @return bool
+     */
+    private function isPossibleToAdd(DataObject $item)
+    {
+        /** @var DisplayChecker $checker */
+        $checker = $item->getData('displayChecker');
+        return ($checker instanceof DisplayChecker && $checker->isDisplayed()) || !$checker instanceof DisplayChecker;
     }
 
     /**

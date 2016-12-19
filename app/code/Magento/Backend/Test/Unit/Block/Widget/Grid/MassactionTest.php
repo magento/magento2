@@ -9,6 +9,8 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
+use Magento\Backend\Block\Widget\Grid\Massaction\DisplayCheckerInterface as DisplayChecker;
+
 class MassactionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,9 +39,9 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var DisplayChecker|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stateMock;
+    private $displayCheckerMock;
 
     protected function setUp()
     {
@@ -76,16 +78,14 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalClone()
             ->getMock();
 
-        $this->stateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->getMock();
+        $this->displayCheckerMock = $this->getMockBuilder(DisplayChecker::class)
+            ->getMockForAbstractClass();
 
         $arguments = [
             'layout' => $this->_layoutMock,
             'request' => $this->_requestMock,
             'urlBuilder' => $this->_urlModelMock,
-            'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id'],
+            'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id']
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -93,7 +93,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\Block\Widget\Grid\Massaction::class,
             $arguments
         );
-        $objectManagerHelper->setBackwardCompatibleProperty($this->_block, 'state', $this->stateMock);
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
@@ -279,13 +278,20 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $itemId
      * @param array|\Magento\Framework\DataObject $item
+     * @param int $count
+     * @param bool $withDisplayChecker
+     * @param bool $isDisplay
      * @dataProvider addItemDataProvider
      */
-    public function testAddItem($itemId, $item, $count, $mode)
+    public function testAddItem($itemId, $item, $count, $withDisplayChecker, $isDisplay)
     {
-        $this->stateMock->expects($this->any())
-            ->method('getMode')
-            ->willReturn($mode);
+        $this->displayCheckerMock->expects($this->any())
+            ->method('isDisplayed')
+            ->willReturn($isDisplay);
+
+        if ($withDisplayChecker) {
+            $item['displayChecker'] = $this->displayCheckerMock;
+        }
 
         $urlReturnValueMap = [
             ['*/*/test1', [], 'http://localhost/index.php/backend/admin/test/test1'],
@@ -309,25 +315,29 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
                 'itemId' => 'test1',
                 'item' => ['label' => 'Test 1', 'url' => '*/*/test1'],
                 'count' => 1,
-                'mode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+                'withDisplayChecker' => false,
+                'isDisplay' => false,
             ],
             [
                 'itemId' => 'test2',
                 'item' => ['label' => 'Test 2', 'url' => '*/*/test2'],
                 'count' => 1,
-                'mode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+                'withDisplayChecker' => false,
+                'isDisplay' => true,
             ],
             [
                 'itemId' => 'test1',
-                'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1', 'hide_in_production' => true],
+                'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1'],
                 'count' => 0,
-                'mode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+                'withDisplayChecker' => true,
+                'isDisplay' => false,
             ],
             [
                 'itemId' => 'test2',
-                'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2', 'hide_in_production' => true],
+                'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2'],
                 'count' => 1,
-                'mode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+                'withDisplayChecker' => true,
+                'isDisplay' => true,
             ]
         ];
     }
