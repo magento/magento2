@@ -78,7 +78,8 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
         // schedule bulk
         $this->assertTrue($this->model->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId));
         $storedData = $this->getStoredOperationData();
-        $this->assertCount($operationCount, $storedData);
+        // No operations should be saved to database during bulk creation
+        $this->assertCount(0, $storedData);
     }
 
     /**
@@ -87,21 +88,21 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
     public function testRetryBulk()
     {
         $bulkUuid = 'bulk-uuid-5';
+        $topicName = 'topic-4';
         $errorCodes = [1111, 2222];
 
+        $this->publisherMock->expects($this->exactly(2))
+            ->method('publish')
+            ->with($topicName, $this->isInstanceOf(OperationInterface::class));
         $this->assertEquals(2, $this->model->retryBulk($bulkUuid, $errorCodes));
 
         $operations = $this->objectManager->get(CollectionFactory::class)
             ->create()
             ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
             ->getItems();
-        $this->assertCount(2, $operations);
-        /** @var OperationInterface $operation */
-        foreach ($operations as $operation) {
-            $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $operation->getStatus());
-            $this->assertNull($operation->getErrorCode());
-            $this->assertNull($operation->getResultMessage());
-        }
+
+        // Failed operations should be removed from database during bulk retry
+        $this->assertCount(0, $operations);
     }
 
     /**
