@@ -7,21 +7,32 @@ define([
     'ko',
     'jquery',
     'moment',
+    'mageUtils',
     'Magento_Ui/js/lib/knockout/bindings/datepicker'
-], function (ko, $, moment) {
+], function (ko, $, moment, utils) {
     'use strict';
 
     describe('Datepicker binding', function () {
         var observable,
-            element;
+            element,
+            config;
 
         beforeEach(function () {
             element    = $('<input />');
             observable = ko.observable();
 
+            config = {
+                options : {
+                    dateFormat: 'M/d/yy',
+                    'storeLocale': 'en_US',
+                    'timeFormat': 'h:mm: a'
+                },
+                storage:ko.observable(moment().format('MM/DD/YYYY'))
+            };
+
             $(document.body).append(element);
 
-            ko.applyBindingsToNode(element[0], { datepicker: observable });
+            ko.applyBindingsToNode(element[0], { datepicker: config });
         });
 
         afterEach(function () {
@@ -29,22 +40,18 @@ define([
         });
 
         it('writes picked date\'s value to assigned observable', function () {
-            var openBtn,
-                todayBtn,
-                todayDate,
-                dateFormat,
-                result;
+            var todayDate,
+                momentFormat,
+                result,
+                inputFormat;
 
-            dateFormat  = element.datepicker('option', 'dateFormat');
-            todayDate   = moment().format(dateFormat);
+            inputFormat = 'M/d/yy';
 
-            openBtn  = $('img.ui-datepicker-trigger');
-            todayBtn = $('[data-handler="today"]');
+            momentFormat = utils.convertToMomentFormat(inputFormat);
 
-            openBtn.click();
-            todayBtn.click();
+            todayDate   = moment().format(momentFormat);
 
-            result = moment(observable()).format(dateFormat);
+            result = $('input:last').val();
 
             expect(todayDate).toEqual(result);
         });
