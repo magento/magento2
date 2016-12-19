@@ -249,10 +249,7 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->never())->method('rollBack');
 
         $this->operationMock->expects($this->any())->method('getTopicName')->willReturn($topicName);
-        $this->operationMock->expects($this->once())->method('setStatus')->with(OperationInterface::STATUS_TYPE_OPEN);
-        $this->operationMock->expects($this->once())->method('setErrorCode')->with(null);
-        $this->operationMock->expects($this->once())->method('setResultMessage')->with(null);
-        $this->entityManagerMock->expects($this->once())->method('save')->with($this->operationMock);
+        $this->connectionMock->expects($this->once())->method('delete');
 
         $this->publisherMock->expects($this->once())->method('publish')->with($topicName, $this->operationMock);
 

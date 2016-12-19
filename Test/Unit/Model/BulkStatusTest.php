@@ -46,6 +46,21 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
      */
     private $calculatedStatusSqlMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataPoolMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityMetadataMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectionMock;
+
     protected function setUp()
     {
         $this->bulkCollectionFactory = $this->getMock(
@@ -78,11 +93,23 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->metadataPoolMock = $this->getMock(
+            \Magento\Framework\EntityManager\MetadataPool::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->entityMetadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+
         $this->model = new \Magento\AsynchronousOperations\Model\BulkStatus(
             $this->bulkCollectionFactory,
             $this->operationCollectionFactory,
             $this->resourceConnectionMock,
-            $this->calculatedStatusSqlMock
+            $this->calculatedStatusSqlMock,
+            $this->metadataPoolMock
         );
     }
 
@@ -183,7 +210,7 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetBulksStatus()
     {
         $bulkUuid = 'bulk-1';
-        $allOperationCollection = $this->getMock(
+        $allProcessedOperationCollection = $this->getMock(
             \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class,
             [],
             [],
@@ -198,44 +225,44 @@ class BulkStatusTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $notStartedOperationCollection = $this->getMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+
+        $connectionName = 'connection_name';
+        $entityType = \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class;
+        $this->metadataPoolMock
+            ->expects($this->once())
+            ->method('getMetadata')
+            ->with($entityType)
+            ->willReturn($this->entityMetadataMock);
+        $this->entityMetadataMock
+            ->expects($this->once())
+            ->method('getEntityConnectionName')
+            ->willReturn($connectionName);
+        $this->resourceConnectionMock
+            ->expects($this->once())
+            ->method('getConnectionByName')
+            ->with($connectionName)
+            ->willReturn($this->connectionMock);
+
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $selectMock->expects($this->once())->method('where')->with('uuid = ?', $bulkUuid)->willReturnSelf();
+        $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
+        $this->connectionMock->expects($this->once())->method('fetchOne')->with($selectMock)->willReturn(10);
 
         $this->operationCollectionFactory
             ->expects($this->at(0))
             ->method('create')
-            ->willReturn($allOperationCollection);
+            ->willReturn($allProcessedOperationCollection);
         $this->operationCollectionFactory
             ->expects($this->at(1))
             ->method('create')
-            ->willReturn($notStartedOperationCollection);
-        $this->operationCollectionFactory
-            ->expects($this->at(2))
-            ->method('create')
             ->willReturn($completeOperationCollection);
-        $allOperationCollection
+        $allProcessedOperationCollection
             ->expects($this->once())
             ->method('addFieldToFilter')
             ->with('bulk_uuid', $bulkUuid)
             ->willReturnSelf();
-        $allOperationCollection->expects($this->once())->method('getSize')->willReturn(10);
-
-        $notStartedOperationCollection
-            ->expects($this->at(0))
-            ->method('addFieldToFilter')
-            ->with('bulk_uuid', $bulkUuid)
-            ->willReturnSelf();
-        $notStartedOperationCollection
-            ->expects($this->at(1))
-            ->method('addFieldToFilter')
-            ->with('status', OperationInterface::STATUS_TYPE_OPEN)
-            ->willReturnSelf();
-        $notStartedOperationCollection->expects($this->any())->method('getSize')->willReturn(5);
+        $allProcessedOperationCollection->expects($this->once())->method('getSize')->willReturn(5);
 
         $completeOperationCollection
             ->expects($this->at(0))

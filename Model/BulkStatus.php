@@ -193,7 +193,7 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
         return (int)$connection->fetchOne(
             $connection->select()
                 ->from($metadata->getEntityTable(), 'operation_count')
-                ->where("uuid = ?", $bulkUuid)
+                ->where('uuid = ?', $bulkUuid)
         );
     }
 }
