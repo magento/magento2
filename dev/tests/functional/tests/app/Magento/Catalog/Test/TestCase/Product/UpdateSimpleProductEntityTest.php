@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Test\TestCase\Product;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\ObjectManager;
@@ -87,14 +88,14 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
-     * @param string $storeDataset [optional]
+     * @param Store|null $store
      * @param string $configData
      * @return array
      */
     public function test(
         CatalogProductSimple $initialProduct,
         CatalogProductSimple $product,
-        $storeDataset = '',
+        Store $store = null,
         $configData = ''
     ) {
         $this->configData = $configData;
@@ -107,8 +108,7 @@ class UpdateSimpleProductEntityTest extends Injectable
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
 
-        if ($storeDataset) {
-            $store = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
+        if ($store) {
             $store->persist();
             $productName[$store->getStoreId()] = $product->getName();
         }
@@ -123,7 +123,7 @@ class UpdateSimpleProductEntityTest extends Injectable
 
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen($filter);
-        if ($storeDataset) {
+        if ($store) {
             $this->editProductPage->getFormPageActions()->changeStoreViewScope($store);
         }
         $this->editProductPage->getProductForm()->fill($product);
