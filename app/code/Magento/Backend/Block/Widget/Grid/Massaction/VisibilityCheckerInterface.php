@@ -5,7 +5,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
-interface VisibilityCheckerInterface
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+
+interface VisibilityCheckerInterface extends ArgumentInterface
 {
     /**
      * Check that action can be displayed on massaction list

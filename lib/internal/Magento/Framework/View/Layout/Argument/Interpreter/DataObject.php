@@ -44,12 +44,9 @@ class DataObject implements InterpreterInterface
         if (!isset($data['value'])) {
             throw new \InvalidArgumentException('Object class name is missing.');
         }
-        if (!isset($data['name'])) {
-            throw new \InvalidArgumentException('Argument "name" is missing.');
-        }
         $className = $data['value'];
         $result = $this->objectManager->create($className);
-        if ($data['name'] === 'dataSource' && $this->expectedClass && !$result instanceof $this->expectedClass) {
+        if ($this->expectedClass && !$result instanceof $this->expectedClass) {
             throw new \UnexpectedValueException(
                 sprintf("Instance of %s is expected, got %s instead.", $this->expectedClass, get_class($result))
             );
