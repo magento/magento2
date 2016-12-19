@@ -24,7 +24,7 @@ use Magento\Framework\Reflection\MethodsMap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessor implements ServicePayloadConverterInterface
+class ServiceInputProcessor
 {
     const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
