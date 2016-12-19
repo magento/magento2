@@ -133,7 +133,7 @@ class CrontabManager implements CrontabManagerInterface
     private function cleanMagentoSection($content)
     {
         $content = preg_replace(
-            '!' . self::TASKS_BLOCK_START . '.*?' . self::TASKS_BLOCK_END . PHP_EOL . '!s',
+            '!' . preg_quote(self::TASKS_BLOCK_START) . '.*?' . preg_quote(self::TASKS_BLOCK_END . PHP_EOL) . '!s',
             '',
             $content
         );
@@ -190,7 +190,7 @@ class CrontabManager implements CrontabManagerInterface
      */
     private function checkSupportedOs()
     {
-        if (stripos(PHP_OS, 'WIN') !== false) {
+        if (stripos(PHP_OS, 'WIN') === 0) {
             throw new LocalizedException(
                 new Phrase('Your operation system is not supported, you cannot work with crontab')
             );
