@@ -176,7 +176,6 @@ class Tree extends Block
             sprintf($this->categoryInTree, $parentCategoryName),
             Locator::SELECTOR_XPATH
         );
-        $this->browser->find($this->header)->hover();
         $targetElement->hover();
         $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)
             ->dragAndDrop($targetElement);
