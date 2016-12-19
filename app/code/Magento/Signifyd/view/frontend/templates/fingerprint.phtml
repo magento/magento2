@@ -4,13 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block Magento\Signifyd\Block\Fingerprint */
 ?>
 <?php if ($block->isModuleEnabled()): ?>
-<script
-    async
-    id="sig-api"
-    data-order-session-id="<?php echo $block->escapeHtml($block->getQuoteSessionId()); ?>"
-    src="https://cdn-scripts.signifyd.com/api/script-tag.js">
-</script>
-<?php endif ?>
+    <script
+        async
+        id="sig-api"
+        data-order-session-id="<?php echo $block->escapeHtml($block->getQuoteSessionId()); ?>"
+        src="https://cdn-scripts.signifyd.com/api/script-tag.js">
+    </script>
+<?php endif; ?>
