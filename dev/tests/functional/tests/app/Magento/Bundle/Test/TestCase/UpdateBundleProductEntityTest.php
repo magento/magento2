@@ -7,6 +7,7 @@
 namespace Magento\Bundle\Test\TestCase;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\TestCase\Injectable;
@@ -80,13 +81,13 @@ class UpdateBundleProductEntityTest extends Injectable
      *
      * @param BundleProduct $product
      * @param BundleProduct $originalProduct
-     * @param string $storeDataset [optional]
+     * @param Store|null $store
      * @return array
      */
     public function test(
         BundleProduct $product,
         BundleProduct $originalProduct,
-        $storeDataset = ''
+        Store $store = null
     ) {
         // Preconditions
         $originalProduct->persist();
@@ -97,8 +98,7 @@ class UpdateBundleProductEntityTest extends Injectable
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
             : $originalCategory;
 
-        if ($storeDataset) {
-            $store = $this->fixtureFactory->createByCode('store', ['dataset' => $storeDataset]);
+        if ($store) {
             $store->persist();
             $optionTitle[$store->getStoreId()] = $product->getBundleSelections()['bundle_options'][0]['title'];
         }
@@ -108,7 +108,7 @@ class UpdateBundleProductEntityTest extends Injectable
 
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen($filter);
-        if ($storeDataset) {
+        if ($store) {
             $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($store);
         }
         $this->catalogProductEdit->getProductForm()->fill($product);
