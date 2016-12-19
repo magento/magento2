@@ -85,31 +85,9 @@ class ApiClient
      */
     public function makeApiCall($url, $method, array $params = [])
     {
-        try {
-            $client = $this->getRequestClient($url, $method, $params);
-            $response = $client->request();
-            $result = $this->handleResponse($response);
-
-            $this->debuggerFactory->create()->success(
-                $client->getUri(true),
-                $client->getLastRequest(),
-                $response->getStatus() . ' ' . $response->getMessage(),
-                $response->getBody()
-            );
-        } catch (\Exception $e) {
-            $this->debuggerFactory->create()->failure(
-                $client->getUri(true),
-                $client->getLastRequest(),
-                $e
-            );
-
-            throw new ApiCallException(
-                'Unable to process Signifyd API: ' . $e->getMessage(),
-                $e->getCode(),
-                $e,
-                $client->getLastRequest()
-            );
-        }
+        $client = $this->buildRequestClient($url, $method, $params);
+        $response = $this->sendRequest($client);
+        $result = $this->handleResponse($response);
         return $result;
     }
 
@@ -119,9 +97,9 @@ class ApiClient
      * @param string $url
      * @param string $method
      * @param array $params
-     * @return \Zend_Http_Client
+     * @return ZendClient
      */
-    private function getRequestClient($url, $method, array $params = [])
+    private function buildRequestClient($url, $method, array $params = [])
     {
         $apiKey = $this->getApiKey();
         $apiUrl = $this->buildFullApiUrl($url);
@@ -139,6 +117,48 @@ class ApiClient
         $client->setUri($apiUrl);
 
         return $client;
+    }
+
+    /**
+     * Send HTTP request to Signifyd API with configured client
+     *
+     * Each request/response pair is handled by debugger.
+     * If debug mode for Signifyd integration enabled in configuration
+     * debug information is recorded to debug.log.
+     *
+     * @param ZendClient $client
+     *
+     * @return \Zend_Http_Response
+     * @throws ApiCallException
+     */
+    private function sendRequest(ZendClient $client)
+    {
+
+        try {
+            $response = $client->request();
+
+            $this->debuggerFactory->create()->success(
+                $client->getUri(true),
+                $client->getLastRequest(),
+                $response->getStatus() . ' ' . $response->getMessage(),
+                $response->getBody()
+            );
+
+            return $response;
+        } catch (\Exception $e) {
+            $this->debuggerFactory->create()->failure(
+                $client->getUri(true),
+                $client->getLastRequest(),
+                $e
+            );
+
+            throw new ApiCallException(
+                'Unable to process Signifyd API: ' . $e->getMessage(),
+                $e->getCode(),
+                $e,
+                $client->getLastRequest()
+            );
+        }
     }
 
     /**
