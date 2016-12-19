@@ -13,8 +13,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Class DataProductUrlRewriteMapTest
@@ -30,12 +28,6 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
     private $temporaryTableServiceMock;
 
-    /** @var UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
-    private $urlRewriteFactoryMock;
-
-    /** @var UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
-    private $urlRewritePlaceholderMock;
-
     /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     private $connectionMock;
 
@@ -47,17 +39,11 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
         $this->dataMapPoolMock = $this->getMock(DataMapPoolInterface::class);
         $this->dataProductMapMock = $this->getMock(DataProductMap::class, [], [], '', false);
         $this->temporaryTableServiceMock = $this->getMock(TemporaryTableService::class, [], [], '', false);
-        $this->urlRewriteFactoryMock = $this->getMock(UrlRewriteFactory::class, ['create'], [], '', false);
-        $this->urlRewritePlaceholderMock = $this->getMock(UrlRewrite::class, [], [], '', false);
         $this->connectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
 
         $this->dataMapPoolMock->expects($this->any())
             ->method('getDataMap')
             ->willReturn($this->dataProductMapMock);
-
-        $this->urlRewriteFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->urlRewritePlaceholderMock);
 
         $this->model = (new ObjectManager($this))->getObject(
             DataCategoryUrlRewriteMap::class,
@@ -65,7 +51,6 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
                 'connection' => $this->connectionMock,
                 'dataMapPool' => $this->dataMapPoolMock,
                 'temporaryTableService' => $this->temporaryTableServiceMock,
-                'urlRewriteFactory' => $this->urlRewriteFactoryMock,
                 'mapData' => [],
             ]
         );

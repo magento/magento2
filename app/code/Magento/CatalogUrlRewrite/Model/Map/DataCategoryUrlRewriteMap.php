@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
 use \Magento\Framework\DB\Select;
@@ -21,9 +19,6 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
     /** @var string[] */
     private $tableNames = [];
 
-    /** @var UrlRewrite */
-    private $urlRewritePlaceholder;
-
     /** @var DataMapPoolInterface */
     private $dataMapPool;
 
@@ -36,19 +31,16 @@ class DataCategoryUrlRewriteMap implements DataMapInterface
     /**
      * @param ResourceConnection $connection
      * @param DataMapPoolInterface $dataMapPool,
-     * @param UrlRewriteFactory $urlRewriteFactory
      * @param TemporaryTableService $temporaryTableService,
      */
     public function __construct(
         ResourceConnection $connection,
         DataMapPoolInterface $dataMapPool,
-        UrlRewriteFactory $urlRewriteFactory,
         TemporaryTableService $temporaryTableService
     ) {
         $this->connection = $connection;
         $this->dataMapPool = $dataMapPool;
         $this->temporaryTableService = $temporaryTableService;
-        $this->urlRewritePlaceholder = $urlRewriteFactory->create();
     }
 
     /**
