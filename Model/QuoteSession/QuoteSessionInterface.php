@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Model\QuoteSession;
 
-use Magento\Quote\Api\Data\CartInterface;
-
 /**
  * Interface QuoteSessionInterface
  */
@@ -15,7 +13,7 @@ interface QuoteSessionInterface
     /**
      * Returns quote from session.
      *
-     * @return CartInterface
+     * @return \Magento\Quote\Api\Data\CartInterface
      */
     public function getQuote();
 }

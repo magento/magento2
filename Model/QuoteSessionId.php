@@ -9,7 +9,7 @@ use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface;
 
 /**
- * Class SessionId generate uuid by quote id.
+ * Class SessionId encapsulate generation of uuid by quote id.
  */
 class QuoteSessionId
 {
@@ -40,12 +40,12 @@ class QuoteSessionId
     }
 
     /**
-     * Generates unique identifier by quote id.
+     * Gets unique identifier through generation uuid by quote id.
      *
      * @param int|null $quoteId
      * @return string
      */
-    public function generate($quoteId = null)
+    public function get($quoteId = null)
     {
         return $this->identityGenerator->generateIdForData(
             $quoteId ? : $this->quoteSession->getQuote()->getId()

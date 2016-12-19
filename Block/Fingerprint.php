@@ -56,7 +56,7 @@ class Fingerprint extends Template
      */
     public function getQuoteSessionId()
     {
-        return $this->quoteSessionId->generate();
+        return $this->quoteSessionId->get();
     }
 
     /**

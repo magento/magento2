@@ -62,7 +62,7 @@ class PurchaseBuilder
 
         $result = [
             'purchase' => [
-                'orderSessionId' => $this->quoteSessionId->generate($order->getQuoteId()),
+                'orderSessionId' => $this->quoteSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => $createdAt->format(\DateTime::ATOM),
