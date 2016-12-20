@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'mage/template',
@@ -37,10 +38,10 @@ define([
         },
 
         /**
-         *Render js files list
+         * Render js files list
          *
-         * @param event
-         * @param data
+         * @param {jQuery.Event} event
+         * @param {Object} data
          * @protected
          */
         _onRefreshList: function (event, data) {
@@ -54,10 +55,10 @@ define([
         },
 
         /**
-         *Get item js list id
+         * Get item js list id
          *
-         * @param fileId
-         * @return string
+         * @param {*} fileId
+         * @return {String}
          * @protected
          */
         _getItemId: function (fileId) {
@@ -67,7 +68,7 @@ define([
         /**
          * Render js list
          *
-         * @param jsList
+         * @param {Array} jsList
          * @protected
          */
         _renderList: function (jsList) {
@@ -78,7 +79,7 @@ define([
             for (index = 0; index < jsList.length; index++) {
                 itemTmpl = $('<li></li>').html($(this.options.templateId).html());
 
-                $(itemTmpl).attr('class', ($(this.options.templateId).attr('class')));
+                $(itemTmpl).attr('class', $(this.options.templateId).attr('class'));
 
                 itemTmpl.attr('id', this._getItemId(jsList[index].id));
 
@@ -99,9 +100,9 @@ define([
          * @protected
          */
         _renderEmptyList: function () {
-            var itemTmpl = $("<li></li>").html($(this.options.emptyTemplateId).html());
+            var itemTmpl = $('<li></li>').html($(this.options.emptyTemplateId).html());
 
-            $(itemTmpl).attr('class', ($(this.options.emptyTemplateId).attr('class')));
+            $(itemTmpl).attr('class', $(this.options.emptyTemplateId).attr('class'));
 
             itemTmpl.attr('id', 'empty-js-list');
             itemTmpl.removeClass('no-display');

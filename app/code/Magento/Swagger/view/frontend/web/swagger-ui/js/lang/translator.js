@@ -1,3 +1,5 @@
+/* eslint-disable */
+/* jscs:disable */
 'use strict';
 
 /**

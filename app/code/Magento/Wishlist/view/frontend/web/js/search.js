@@ -2,19 +2,19 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
 
     $.widget('mage.wishlistSearch', {
 
         /**
          * Bind handlers to events
          */
-        _create: function() {
+        _create: function () {
             this.element.on('change', $.proxy(this._toggleForm, this));
         },
 
@@ -22,12 +22,13 @@ define([
          * Toggle Form
          * @private
          */
-        _toggleForm: function() {
+        _toggleForm: function () {
             switch (this.element.val()) {
                 case 'name':
                     $(this.options.emailFormSelector).hide();
                     $(this.options.nameFormSelector).show();
                     break;
+
                 case 'email':
                     $(this.options.nameFormSelector).hide();
                     $(this.options.emailFormSelector).show();

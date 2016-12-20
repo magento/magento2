@@ -1,3 +1,5 @@
+/* eslint-disable */
+/* jscs:disable */
 var appName;
 var popupMask;
 var popupDialog;

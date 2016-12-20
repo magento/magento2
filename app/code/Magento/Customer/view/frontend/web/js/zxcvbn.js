@@ -1,3 +1,6 @@
+/* eslint-disable */
+/* jscs:disable */
+/**/
 /*
  * Realistic Password Strength Estimator v4.2.0
  *

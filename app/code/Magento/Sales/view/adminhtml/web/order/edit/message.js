@@ -1,16 +1,16 @@
 /**
- * @category    Mage
- * @package     Magento_Sales
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
-    "jquery",
-    "jquery/ui",
+    'jquery',
+    'jquery/ui',
     'Magento_Ui/js/modal/modal',
-    "mage/translate"
-], function($){
-    "use strict";
+    'mage/translate'
+], function ($) {
+    'use strict';
+
     $.widget('mage.orderEditDialog', {
         options: {
             url:     null,
@@ -28,14 +28,14 @@ define([
         /**
          * Show modal
          */
-        showDialog: function() {
+        showDialog: function () {
             this.options.dialog.html(this.options.message).modal('openModal');
         },
 
         /**
          * Redirect to edit page
          */
-        redirect: function() {
+        redirect: function () {
             window.location = this.options.url;
         },
 
@@ -43,7 +43,7 @@ define([
          * Prepare modal
          * @protected
          */
-        _prepareDialog: function() {
+        _prepareDialog: function () {
             var self = this;
 
             this.options.dialog = $('<div class="ui-dialog-content ui-widget-content"></div>').modal({
@@ -53,7 +53,9 @@ define([
                 buttons: [{
                     text: $.mage.__('Ok'),
                     'class': 'action-primary',
-                    click: function(){
+
+                    /** @inheritdoc */
+                    click: function () {
                         self.redirect();
                     }
                 }]

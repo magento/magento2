@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+var config = { //eslint-disable-line no-unused-vars
     map: {
         '*': {
-            editTrigger:   'mage/edit-trigger',
-            addClass:      'Magento_Translation/add-class'
+            editTrigger: 'mage/edit-trigger',
+            addClass: 'Magento_Translation/add-class'
         }
     },
     deps: [

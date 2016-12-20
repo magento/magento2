@@ -2,12 +2,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 define([
     'jquery',
     'underscore',
     'mage/template',
-    "matchMedia",
+    'matchMedia',
     'jquery/ui',
     'mage/translate'
 ], function ($, _, mageTemplate, mediaCheck) {
@@ -20,7 +20,7 @@ define([
      * @returns {Boolean}
      */
     function isEmpty(value) {
-        return (value.length === 0) || (value == null) || /^\s+$/.test(value);
+        return value.length === 0 || value == null || /^\s+$/.test(value);
     }
 
     $.widget('mage.quickSearch', {
@@ -43,6 +43,7 @@ define([
             isExpandable: null
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.responseList = {
                 indexList: null,
@@ -98,7 +99,7 @@ define([
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
-            this.searchForm.on('submit', $.proxy(function() {
+            this.searchForm.on('submit', $.proxy(function () {
                 this._onSubmit();
                 this._updateAriaHasPopup(false);
             }, this));
@@ -144,9 +145,9 @@ define([
 
         /**
          * @private
-         * @param {Boolean} show Set attribute aria-haspopup to "true/false" for element.
+         * @param {Boolean} show - Set attribute aria-haspopup to "true/false" for element.
          */
-        _updateAriaHasPopup: function(show) {
+        _updateAriaHasPopup: function (show) {
             if (show) {
                 this.element.attr('aria-haspopup', 'true');
             } else {
@@ -200,25 +201,29 @@ define([
                     this._getFirstVisibleElement().addClass(this.options.selectClass);
                     this.responseList.selected = this._getFirstVisibleElement();
                     break;
+
                 case $.ui.keyCode.END:
                     this._getLastElement().addClass(this.options.selectClass);
                     this.responseList.selected = this._getLastElement();
                     break;
+
                 case $.ui.keyCode.ESCAPE:
                     this._resetResponseList(true);
                     this.autoComplete.hide();
                     break;
+
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
                     break;
+
                 case $.ui.keyCode.DOWN:
                     if (this.responseList.indexList) {
-                        if (!this.responseList.selected) {
+                        if (!this.responseList.selected) {  //eslint-disable-line max-depth
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
                             this.responseList.selected = this._getFirstVisibleElement();
-                        }
-                        else if (!this._getLastElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
+                        } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
+                            this.responseList.selected = this.responseList.selected
+                                .removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
                         } else {
                             this.responseList.selected.removeClass(this.options.selectClass);
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
@@ -228,10 +233,12 @@ define([
                         this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
                     break;
+
                 case $.ui.keyCode.UP:
                     if (this.responseList.indexList !== null) {
                         if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
+                            this.responseList.selected = this.responseList.selected
+                                .removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
 
                         } else {
                             this.responseList.selected.removeClass(this.options.selectClass);
@@ -270,10 +277,14 @@ define([
             this.submitBtn.disabled = isEmpty(value);
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
-                $.get(this.options.url, {q: value}, $.proxy(function (data) {
-                    $.each(data, function(index, element) {
+                $.get(this.options.url, {
+                    q: value
+                }, $.proxy(function (data) {
+                    $.each(data, function (index, element) {
+                        var html;
+
                         element.index = index;
-                        var html = template({
+                        html = template({
                             data: element
                         });
                         dropdown.append(html);

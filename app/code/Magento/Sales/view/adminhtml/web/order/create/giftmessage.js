@@ -4,6 +4,9 @@
  */
 /********************* GIFT OPTIONS POPUP ***********************/
 /********************* GIFT OPTIONS SET ***********************/
+
+/* eslint-disable */
+/* jscs:disable */
 define([
     "jquery",
     "jquery/ui",
