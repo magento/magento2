@@ -547,9 +547,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
-        if (!function_exists('imagecolorat')) {
-            $this->markTestSkipped('Workaround of problem with imagecolorat function on Travis');
-        }
+        $this->markTestSkipped('Invalid imagettfbbox function behaviour on PHP 5.6.29 Travis CI. MAGETWO-62464');
 
         $adapter = $this->_getAdapter($adapterType);
 
