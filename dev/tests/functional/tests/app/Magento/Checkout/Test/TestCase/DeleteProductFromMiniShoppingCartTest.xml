@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\DeleteProductFromMiniShoppingCartTest" summary="Delete Product from Mini Shopping Cart" ticketId="MAGETWO-29104">
         <variation name="DeleteProductFromMiniShoppingCartTestVariation1">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="description" xsi:type="string">delete Simple</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/1" xsi:type="string">catalogProductVirtual::default</data>
@@ -16,6 +17,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductPresentInMiniShoppingCart" />
         </variation>
         <variation name="DeleteProductFromMiniShoppingCartTestVariation2">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="description" xsi:type="string">delete Simple</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="deletedProductIndex" xsi:type="string">0</data>
