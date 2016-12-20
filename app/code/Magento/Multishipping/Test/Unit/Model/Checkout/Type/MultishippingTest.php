@@ -5,6 +5,8 @@
  */
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type;
 
+use Magento\Quote\Model\ShippingAssignment;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -106,13 +108,10 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->addressRepositoryMock = $this->getMock(
-            \Magento\Customer\Api\AddressRepositoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->addressRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
+            ->setMethods([])
+            ->disableOriginalConstructor()
+            ->getMock();
         /** This is used to get past _init() which is called in construct. */
         $data['checkout_session'] = $this->checkoutSessionMock;
         $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
@@ -121,13 +120,10 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($this->quoteMock);
         $this->customerSessionMock->expects($this->atLeastOnce())->method('getCustomerDataObject')
             ->willReturn($this->customerMock);
-        $this->totalsCollectorMock = $this->getMock(
-            \Magento\Quote\Model\Quote\TotalsCollector::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->totalsCollectorMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\TotalsCollector::class)
+            ->setMethods([])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new \Magento\Multishipping\Model\Checkout\Type\Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -220,6 +216,8 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $addressItemMock = $this->getMock(\Magento\Customer\Api\Data\AddressInterface::class, [], [], '', false);
         $resultMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$addressItemMock]);
         $addressItemMock->expects($this->atLeastOnce())->method('getId')->willReturn(null);
+
+        $this->mockShippingAssignment();
 
         $this->assertEquals($this->model, $this->model->setShippingItemsInformation($info));
     }
@@ -330,54 +328,80 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
 
         $methodsArray = [1 => 'flatrate_flatrate', 2 => 'tablerate_bestway'];
         $addressId = 1;
-        $addressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getId', 'setShippingMethod'],
-            [],
-            '',
-            false
-        );
-        $extensionAttributesMock = $this->getMock(
-            \Magento\Quote\Api\Data\CartExtension::class,
-            ['setShippingAssignments'],
-            [],
-            '',
-            false
-        );
-        $shippingAssignmentMock = $this->getMock(
-            \Magento\Quote\Model\ShippingAssignment::class,
-            ['getShipping', 'setShipping'],
-            [],
-            '',
-            false
-        );
-        $shippingMock = $this->getMock(\Magento\Quote\Model\Shipping::class, ['setMethod'], [], '', false);
+        $addressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+            ->setMethods(['getId', 'setShippingMethod'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([$addressMock]);
         $addressMock->expects($this->once())->method('setShippingMethod')->with($methodsArray[$addressId]);
-        //mock for prepareShippingAssignment
-        $this->quoteMock
-            ->expects($this->once())
-            ->method('getExtensionAttributes')
-            ->willReturn($extensionAttributesMock);
-        $this->shippingAssignmentProcessorMock
-            ->expects($this->once())
-            ->method('create')
-            ->with($this->quoteMock)
-            ->willReturn($shippingAssignmentMock);
-        $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
-        $shippingMock->expects($this->once())->method('setMethod')->with(null)->willReturnSelf();
-        $shippingAssignmentMock->expects($this->once())->method('setShipping')->with($shippingMock);
+
+        $this->mockShippingAssignment();
+
+        //save mock
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
+        $this->model->setShippingMethods($methodsArray);
+    }
+
+    /**
+     * @param ShippingAssignment $shippingAssignmentMock
+     * @return \Magento\Quote\Api\Data\CartExtension|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getExtensionAttributesMock(ShippingAssignment $shippingAssignmentMock)
+    {
+        $extensionAttributesMock = $this->getMockBuilder(\Magento\Quote\Api\Data\CartExtension::class)
+            ->setMethods(['setShippingAssignments'])
+            ->getMock();
+
         $extensionAttributesMock
             ->expects($this->once())
             ->method('setShippingAssignments')
             ->with([$shippingAssignmentMock])
             ->willReturnSelf();
+
+        return $extensionAttributesMock;
+    }
+
+    /**
+     * @return ShippingAssignment | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getShippingAssignmentMock()
+    {
+        $shippingAssignmentMock = $this->getMockBuilder(ShippingAssignment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getShipping', 'setShipping'])
+            ->getMock();
+        $shippingMock = $this->getMockBuilder(\Magento\Quote\Model\Shipping::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setMethod'])
+            ->getMock();
+
+        $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
+        $shippingMock->expects($this->once())->method('setMethod')->with(null)->willReturnSelf();
+        $shippingAssignmentMock->expects($this->once())->method('setShipping')->with($shippingMock);
+
+        return $shippingAssignmentMock;
+    }
+
+    private function mockShippingAssignment()
+    {
+        $shippingAssignmentMock = $this->getShippingAssignmentMock();
+
+        $extensionAttributesMock = $this->getExtensionAttributesMock($shippingAssignmentMock);
+
+        $this->shippingAssignmentProcessorMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->quoteMock)
+            ->willReturn($shippingAssignmentMock);
+
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesMock);
+
         $this->quoteMock->expects($this->once())->method('setExtensionAttributes')->with($extensionAttributesMock);
-        //save mock
-        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-        $this->model->setShippingMethods($methodsArray);
     }
 }
