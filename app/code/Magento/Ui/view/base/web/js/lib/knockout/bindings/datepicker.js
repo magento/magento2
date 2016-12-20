@@ -53,7 +53,7 @@ define([
                 'setDate',
                 moment(
                     observable(),
-                    utils.normalizeDate(
+                    utils.convertToMomentFormat(
                         options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
                     )
                 ).toDate()
