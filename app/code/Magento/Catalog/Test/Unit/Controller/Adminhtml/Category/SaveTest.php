@@ -365,8 +365,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
 
         /**
-         * @var \Magento\Store\Model\Store
-         * |\PHPUnit_Framework_MockObject_MockObject $storeMock
+         * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject $storeMock
          */
         $storeMock = $this->getMock(
             \Magento\Store\Model\Store::class,
