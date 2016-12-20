@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
+
 register_shutdown_function("fatalErrorHandler");
 
 try {
@@ -14,7 +16,6 @@ try {
     $objectManager = $objectManagerFactory->create([]);
     /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
     $deploymentConfig = $objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
-    $envConfig = $deploymentConfig->getConfigData();
     /** @var \Psr\Log\LoggerInterface $logger */
     $logger = $objectManager->get(\Psr\Log\LoggerInterface::class);
 } catch (\Exception $e) {
@@ -23,7 +24,7 @@ try {
 }
 
 // check mysql connectivity
-foreach ($envConfig['db']['connection'] as $connectionData) {
+foreach ($deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS) as $connectionData) {
     try {
         /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $dbAdapter */
         $dbAdapter = $objectManager->create(
@@ -39,17 +40,19 @@ foreach ($envConfig['db']['connection'] as $connectionData) {
 }
 
 // check cache storage availability
-if (isset($envConfig['cache']['frontend']) && is_array($envConfig['cache']['frontend'])) {
-    foreach ($envConfig['cache']['frontend'] as $cacheConfig) {
-        if (!isset($cacheConfig['backend']) || !isset($cacheConfig['backend_options'])) {
+$cacheConfigs = $deploymentConfig->get(ConfigOptionsListConstants::KEY_CACHE_FRONTEND);
+if ($cacheConfigs) {
+    foreach ($cacheConfigs as $cacheConfig) {
+        if (!isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND]) ||
+            !isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND_OPTIONS])) {
             http_response_code(500);
             $logger->error("Cache configuration is invalid");
             exit(1);
         }
-        $cacheBackendClass = $cacheConfig['backend'];
+        $cacheBackendClass = $cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND];
         try {
             /** @var \Zend_Cache_Backend_Interface $backend */
-            $backend = new $cacheBackendClass($cacheConfig['backend_options']);
+            $backend = new $cacheBackendClass($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND_OPTIONS]);
             $backend->test('test_cache_id');
         } catch (\Exception $e) {
             http_response_code(500);

@@ -50,6 +50,12 @@ class ConfigOptionsListConstants
     const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
     /**#@-*/
 
+    /**#@+
+     * Input keys for cache configuration
+     */
+    const KEY_CACHE_FRONTEND = 'cache/frontend';
+    const CONFIG_PATH_BACKEND_OPTIONS = 'backend_options';
+
     /** @deprecated */
     const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
 
