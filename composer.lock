@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2c2cf51ac52a97f1112ea2a5980cdde",
-    "content-hash": "84ff2404db05e77879752c79669f4b67",
+    "hash": "4bf0cffe1095754999e58fc708acd3b8",
+    "content-hash": "7dd6510eb25f6756a761c7785dd1c0a6",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -131,32 +131,39 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.0.0-alpha10",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "775f6cd5c633facf2e7b99611fdcaa900b58ddb7"
+                "reference": "5cb2b522637a941d608c58bd522f3b2a7bda4a1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/775f6cd5c633facf2e7b99611fdcaa900b58ddb7",
-                "reference": "775f6cd5c633facf2e7b99611fdcaa900b58ddb7",
+                "url": "https://api.github.com/repos/composer/composer/zipball/5cb2b522637a941d608c58bd522f3b2a7bda4a1c",
+                "reference": "5cb2b522637a941d608c58bd522f3b2a7bda4a1c",
                 "shasum": ""
             },
             "require": {
-                "justinrainbow/json-schema": "~1.4",
-                "php": ">=5.3.2",
-                "seld/jsonlint": "~1.0",
-                "symfony/console": "~2.5",
-                "symfony/finder": "~2.2",
-                "symfony/process": "~2.1"
+                "composer/semver": "^1.0",
+                "composer/spdx-licenses": "^1.0",
+                "justinrainbow/json-schema": "^1.6",
+                "php": "^5.3.2 || ^7.0",
+                "seld/cli-prompt": "^1.0",
+                "seld/jsonlint": "^1.4",
+                "seld/phar-utils": "^1.0",
+                "symfony/console": "^2.5 || ^3.0",
+                "symfony/filesystem": "^2.5 || ^3.0",
+                "symfony/finder": "^2.2 || ^3.0",
+                "symfony/process": "^2.1 || ^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.5"
+                "phpunit/phpunit": "^4.5 || ^5.0.5",
+                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
-                "ext-zip": "Enabling the zip extension allows you to unzip archives, and allows gzip compression of all internet traffic"
+                "ext-zip": "Enabling the zip extension allows you to unzip archives",
+                "ext-zlib": "Allow gzip compression of HTTP requests"
             },
             "bin": [
                 "bin/composer"
@@ -168,8 +175,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Composer": "src/"
+                "psr-4": {
+                    "Composer\\": "src/Composer"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -189,13 +196,136 @@
                 }
             ],
             "description": "Composer helps you declare, manage and install dependencies of PHP projects, ensuring you have the right stack everywhere.",
-            "homepage": "http://getcomposer.org/",
+            "homepage": "https://getcomposer.org/",
             "keywords": [
                 "autoload",
                 "dependency",
                 "package"
             ],
-            "time": "2015-04-14 21:18:51"
+            "time": "2016-03-03 15:15:10"
+        },
+        {
+            "name": "composer/semver",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/semver.git",
+                "reference": "c7cb9a2095a074d131b65a8a0cd294479d785573"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/semver/zipball/c7cb9a2095a074d131b65a8a0cd294479d785573",
+                "reference": "c7cb9a2095a074d131b65a8a0cd294479d785573",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5 || ^5.0.5",
+                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Semver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "Semver library that offers utilities, version constraint parsing and validation.",
+            "keywords": [
+                "semantic",
+                "semver",
+                "validation",
+                "versioning"
+            ],
+            "time": "2016-08-30 16:08:34"
+        },
+        {
+            "name": "composer/spdx-licenses",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/spdx-licenses.git",
+                "reference": "96c6a07b05b716e89a44529d060bc7f5c263cb13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/96c6a07b05b716e89a44529d060bc7f5c263cb13",
+                "reference": "96c6a07b05b716e89a44529d060bc7f5c263cb13",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5 || ^5.0.5",
+                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Spdx\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "SPDX licenses list and validation library.",
+            "keywords": [
+                "license",
+                "spdx",
+                "validator"
+            ],
+            "time": "2016-09-28 07:17:45"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -265,15 +395,20 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.0.2",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/composer.git",
+                "reference": "b53f7c8a037860b467083e94de7c17cfd323e365"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/composer/magento-composer-1.0.2.0.zip",
-                "reference": null,
-                "shasum": "6bfdbff4c23aace1e6d14ab598c81c790375aba0"
+                "url": "https://api.github.com/repos/magento/composer/zipball/b53f7c8a037860b467083e94de7c17cfd323e365",
+                "reference": "b53f7c8a037860b467083e94de7c17cfd323e365",
+                "shasum": ""
             },
             "require": {
-                "composer/composer": "1.0.0-alpha10",
+                "composer/composer": "1.0.0-beta1",
                 "php": "~5.5.0|~5.6.0|~7.0.0",
                 "symfony/console": "~2.3 <2.7"
             },
@@ -286,24 +421,26 @@
                     "Magento\\Composer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "time": "2016-03-08 20:50:51"
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.1.11",
+            "version": "0.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "a12b9577cd9859af67d2365ae38d23ddfc57cf4d"
+                "reference": "10c600e88ad34fec71bb6b435ea8415ce92d51de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/a12b9577cd9859af67d2365ae38d23ddfc57cf4d",
-                "reference": "a12b9577cd9859af67d2365ae38d23ddfc57cf4d",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/10c600e88ad34fec71bb6b435ea8415ce92d51de",
+                "reference": "10c600e88ad34fec71bb6b435ea8415ce92d51de",
                 "shasum": ""
             },
             "require": {
@@ -369,7 +506,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2016-06-15 04:02:25"
+            "time": "2016-10-06 16:05:07"
         },
         {
             "name": "magento/zendframework1",
@@ -755,6 +892,54 @@
             "time": "2016-10-10 12:19:37"
         },
         {
+            "name": "seld/cli-prompt",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/cli-prompt.git",
+                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
+                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seld\\CliPrompt\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "Allows you to prompt for user input on the command line, and optionally hide the characters they type",
+            "keywords": [
+                "cli",
+                "console",
+                "hidden",
+                "input",
+                "prompt"
+            ],
+            "time": "2016-04-18 09:31:41"
+        },
+        {
             "name": "seld/jsonlint",
             "version": "1.5.0",
             "source": {
@@ -799,6 +984,50 @@
                 "validator"
             ],
             "time": "2016-11-14 17:59:58"
+        },
+        {
+            "name": "seld/phar-utils",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/phar-utils.git",
+                "reference": "7009b5139491975ef6486545a39f3e6dad5ac30a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/7009b5139491975ef6486545a39f3e6dad5ac30a",
+                "reference": "7009b5139491975ef6486545a39f3e6dad5ac30a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seld\\PharUtils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "PHAR file format utilities, for when PHP phars you up",
+            "keywords": [
+                "phra"
+            ],
+            "time": "2015-10-13 18:44:15"
         },
         {
             "name": "symfony/console",
@@ -919,17 +1148,17 @@
             "time": "2016-10-13 01:43:15"
         },
         {
-            "name": "symfony/finder",
+            "name": "symfony/filesystem",
             "version": "v2.8.15",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/finder.git",
-                "reference": "c0f10576335743b881ac1ed39d18c0fa66048775"
+                "url": "https://github.com/symfony/filesystem.git",
+                "reference": "a3784111af9f95f102b6411548376e1ae7c93898"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/c0f10576335743b881ac1ed39d18c0fa66048775",
-                "reference": "c0f10576335743b881ac1ed39d18c0fa66048775",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a3784111af9f95f102b6411548376e1ae7c93898",
+                "reference": "a3784111af9f95f102b6411548376e1ae7c93898",
                 "shasum": ""
             },
             "require": {
@@ -939,6 +1168,55 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Filesystem Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-10-18 04:28:30"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "v3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/finder.git",
+                "reference": "a69cb5d455b4885ca376dc5bb3e1155cc8c08c4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/a69cb5d455b4885ca376dc5bb3e1155cc8c08c4b",
+                "reference": "a69cb5d455b4885ca376dc5bb3e1155cc8c08c4b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -965,7 +1243,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-13 09:38:12"
+            "time": "2016-12-13 09:39:43"
         },
         {
             "name": "symfony/process",
@@ -3881,55 +4159,6 @@
             "time": "2016-12-08 14:41:31"
         },
         {
-            "name": "symfony/filesystem",
-            "version": "v2.8.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/filesystem.git",
-                "reference": "a3784111af9f95f102b6411548376e1ae7c93898"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a3784111af9f95f102b6411548376e1ae7c93898",
-                "reference": "a3784111af9f95f102b6411548376e1ae7c93898",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Filesystem\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Filesystem Component",
-            "homepage": "https://symfony.com",
-            "time": "2016-10-18 04:28:30"
-        },
-        {
             "name": "symfony/stopwatch",
             "version": "v3.2.1",
             "source": {
@@ -4030,9 +4259,7 @@
     ],
     "aliases": [],
     "minimum-stability": "alpha",
-    "stability-flags": {
-        "composer/composer": 15
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

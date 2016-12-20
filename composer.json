@@ -7,12 +7,6 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://repo.magento.com/"
-        }
-    ],
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0",
         "zendframework/zend-stdlib": "~2.4.6",
@@ -40,7 +34,7 @@
         "magento/zendframework1": "1.12.16",
         "colinmollenhour/credis": "1.6",
         "colinmollenhour/php-redis-session-abstract": "1.1",
-        "composer/composer": "<=1.0.0-alpha10",
+        "composer/composer": "<=1.0.0-beta1",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
         "pelago/emogrifier": "0.1.1",

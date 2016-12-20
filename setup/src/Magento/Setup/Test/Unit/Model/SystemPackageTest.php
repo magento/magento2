@@ -267,7 +267,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             ->with('magento/product-enterprise-edition')
             ->willReturn(['available_versions' => ['1.0.0', '1.0.1', '1.0.2']]);
         $require = $this->getMock('\Composer\Package\Link', [], [], '', false);
-        $constraintMock = $this->getMock('\Composer\Package\LinkConstraint\VersionConstraint', [], [], '', false);
+        $constraintMock = $this->getMock('\Composer\Semver\Constraint\Constraint', [], [], '', false);
         $constraintMock->expects($this->any())->method('getPrettyString')
             ->willReturn('1.0.1');
         $require->expects($this->any())
