@@ -10,6 +10,8 @@ use Magento\Framework\View\EntitySpecificHandlesList;
 
 /**
  * Result Page Test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {

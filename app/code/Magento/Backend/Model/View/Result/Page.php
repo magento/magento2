@@ -22,6 +22,10 @@ class Page extends View\Result\Page
      * @param View\Page\Config\RendererFactory $pageConfigRendererFactory
      * @param View\Page\Layout\Reader $pageLayoutReader
      * @param string $template
+     * @param bool $isIsolated
+     * @param View\EntitySpecificHandlesList $entitySpecificHandlesList
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         View\Element\Template\Context $context,
@@ -32,7 +36,9 @@ class Page extends View\Result\Page
         View\Layout\GeneratorPool $generatorPool,
         View\Page\Config\RendererFactory $pageConfigRendererFactory,
         View\Page\Layout\Reader $pageLayoutReader,
-        $template
+        $template,
+        $isIsolated = false,
+        View\EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         parent::__construct(
             $context,
@@ -43,7 +49,9 @@ class Page extends View\Result\Page
             $generatorPool,
             $pageConfigRendererFactory,
             $pageLayoutReader,
-            $template
+            $template,
+            $isIsolated,
+            $entitySpecificHandlesList
         );
     }
 

@@ -44,9 +44,11 @@ class MergePlugin
         if (in_array($handle, $this->entitySpecificHandlesList->getHandles())
             && (strpos($updateXml, 'ttl=') !== false)
         ) {
-            throw new \LogicException("Handle '{$handle}' must not contain blocks with 'ttl' attribute specified. "
+            throw new \LogicException(
+                "Handle '{$handle}' must not contain blocks with 'ttl' attribute specified. "
                 . "Otherwise, these blocks will be treated as ESI by Varnish, however will not be shared between pages "
-                . "because handle '{$handle}' is not generic. Such blocks will not be rendered on the page");
+                . "because handle '{$handle}' is not generic. Such blocks will not be rendered on the page"
+            );
         }
         return null;
     }
