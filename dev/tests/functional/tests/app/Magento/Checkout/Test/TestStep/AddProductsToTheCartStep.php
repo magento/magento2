@@ -47,7 +47,7 @@ class AddProductsToTheCartStep implements TestStepInterface
     private $cmsIndex;
 
     /**
-     * Client Browser instance..
+     * Client Browser instance.
      *
      * @var BrowserInterface
      */
