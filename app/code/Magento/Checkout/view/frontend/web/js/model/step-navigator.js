@@ -27,7 +27,7 @@ define([
                 return false;
             }
 
-            if ($.inArray(hashString, this.validCodes === -1)) {
+            if ($.inArray(hashString, this.validCodes) === -1) {
                 window.location.href = window.checkoutConfig.pageNotFoundUrl;
 
                 return false;

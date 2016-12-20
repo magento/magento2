@@ -5,8 +5,7 @@
 
 define([
     'Magento_Checkout/js/model/address-converter'
-],
-function (addressConverter) {
+], function (addressConverter) {
     'use strict';
 
     return function (addressData) {
