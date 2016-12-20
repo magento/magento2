@@ -13,7 +13,7 @@
             <resource>Magento_Sales::fraud_protection</resource>
             <group id="signifyd" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Signifyd</label>
-                <field id="enable" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="active" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enable this Solution</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <config_path>fraud_protection/signifyd/active</config_path>
@@ -27,9 +27,7 @@
                 <field id="api_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>API URL</label>
                     <config_path>fraud_protection/signifyd/api_url</config_path>
-                    <comment>
-                        Don’t change unless asked to do so.
-                    </comment>
+                    <comment>Don’t change unless asked to do so.</comment>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>

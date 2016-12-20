@@ -36,7 +36,7 @@ class Config
      *
      * @return bool
      */
-    public function isEnabled()
+    public function isActive()
     {
         $enabled = $this->scopeConfig->isSetFlag(
             'fraud_protection/signifyd/active',

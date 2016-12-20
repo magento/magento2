@@ -14,8 +14,6 @@ use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
 use Exception;
 
 /**
- * Signifyd API Client.
- *
  * Encapsulates Signifyd API protocol.
  */
 class ApiClient
@@ -46,8 +44,6 @@ class ApiClient
     private $debuggerFactory;
 
     /**
-     * ApiClient constructor.
-     *
      * Class uses client factory to instantiate new client for interacting with API.
      * All requests and responses are processed by JSON encoder and decoder.
      *
@@ -92,7 +88,7 @@ class ApiClient
     }
 
     /**
-     * Init HTTP client for processing requests to Signifyd API.
+     * Returns HTTP client configured with request for API call.
      *
      * @param string $url
      * @param string $method
@@ -120,14 +116,13 @@ class ApiClient
     }
 
     /**
-     * Send HTTP request to Signifyd API with configured client
+     * Send HTTP request to Signifyd API with configured client.
      *
      * Each request/response pair is handled by debugger.
      * If debug mode for Signifyd integration enabled in configuration
      * debug information is recorded to debug.log.
      *
      * @param ZendClient $client
-     *
      * @return \Zend_Http_Response
      * @throws ApiCallException
      */
@@ -165,7 +160,6 @@ class ApiClient
      * Read result of successful operation and throw exception in case of any failure.
      *
      * @param \Zend_Http_Response $response
-     *
      * @return array
      * @throws ApiCallException
      */
@@ -194,7 +188,7 @@ class ApiClient
     }
 
     /**
-     * Make error message for request rejected by Signify
+     * Make error message for request rejected by Signify.
      *
      * @param \Zend_Http_Response $response
      * @return string
@@ -205,15 +199,15 @@ class ApiClient
         switch ($response->getStatus()) {
             case 400:
                 return 'Bad Request - The request could not be parsed. Response: ' . $responseBody;
+            case 401:
+                return 'Unauthorized - user is not logged in, could not be authenticated. Response: ' . $responseBody;
+            case 403:
+                return 'Forbidden - Cannot access resource. Response: ' . $responseBody;
             case 404:
                 return 'Not Found - resource does not exist. Response: ' . $responseBody;
             case 409:
                 return 'Conflict - with state of the resource on server. Can occur with (too rapid) PUT requests.' .
                        'Response: ' . $responseBody;
-            case 401:
-                return 'Unauthorized - user is not logged in, could not be authenticated. Response: ' . $responseBody;
-            case 403:
-                return 'Forbidden - Cannot access resource. Response: ' . $responseBody;
             case 500:
                 return 'Server error.';
             default:
@@ -234,9 +228,9 @@ class ApiClient
     }
 
     /**
-     * Returns Signifyd API key for merchant account
-     * @see https://www.signifyd.com/docs/api/#/introduction/authentication
+     * Returns Signifyd API key for merchant account.
      *
+     * @see https://www.signifyd.com/docs/api/#/introduction/authentication
      * @return string
      */
     private function getApiKey()
@@ -245,7 +239,7 @@ class ApiClient
     }
 
     /**
-     * Builds full URL for Singifyd API based on relative URL
+     * Builds full URL for Singifyd API based on relative URL.
      *
      * @param string $url
      * @return string
@@ -258,7 +252,7 @@ class ApiClient
     }
 
     /**
-     * Returns Base Sigifyd API URL without trailing slash
+     * Returns Base Sigifyd API URL without trailing slash.
      *
      * @return string
      */
