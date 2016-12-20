@@ -77,6 +77,7 @@ class CaseRepository implements CaseRepositoryInterface
     {
         /** @var CaseEntity $case */
         $this->resourceModel->save($case);
+
         return $case;
     }
 
@@ -88,6 +89,7 @@ class CaseRepository implements CaseRepositoryInterface
         /** @var CaseEntity $case */
         $case = $this->caseFactory->create();
         $this->resourceModel->load($case, $id);
+
         return $case;
     }
 
@@ -97,13 +99,12 @@ class CaseRepository implements CaseRepositoryInterface
     public function delete(CaseInterface $case)
     {
         $this->resourceModel->delete($case);
+
         return true;
     }
 
     /**
-     * Gets list of case entities
-     * @param SearchCriteria $searchCriteria
-     * @return CaseSearchResultsInterface
+     * @inheritdoc
      */
     public function getList(SearchCriteria $searchCriteria)
     {

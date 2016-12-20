@@ -13,7 +13,8 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Api\Data\CaseInterfaceFactory;
 
 /**
- * Implementation of case management interface
+ *
+ * Default case management implementation
  */
 class CaseManagement implements CaseManagementInterface
 {

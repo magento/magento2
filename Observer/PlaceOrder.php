@@ -14,7 +14,7 @@ use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 
 /**
- * Place Order
+ * Place Order observer.
  *
  * Observer should be triggered when new order is created and placed.
  * If Signifyd integration enabled in configuration then new case will be created.
@@ -50,33 +50,39 @@ class PlaceOrder implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->signifydIntegrationConfig->isEnabled()) {
+        if (!$this->signifydIntegrationConfig->isActive()) {
             return;
         }
 
-        $event = $observer->getEvent();
-        $order = $this->extractOrder($event);
+        $orders = $this->extractOrders(
+            $observer->getEvent()
+        );
 
-        if (null === $order) {
+        if (null === $orders) {
             return;
         }
 
-        $orderId = $order->getEntityId();
-        if (null === $orderId) {
-            return;
+        foreach ($orders as $order) {
+            $orderId = $order->getEntityId();
+            if (null !== $orderId) {
+                $this->caseCreationService->createForOrder($orderId);
+            }
         }
-
-        $this->caseCreationService->createForOrder($orderId);
     }
 
     /**
-     * Fetch Order entity from Event data container
+     * Returns Orders entity list from Event data container
      *
      * @param Event $event
-     * @return OrderInterface|null
+     * @return OrderInterface[]|null
      */
-    private function extractOrder(Event $event)
+    private function extractOrders(Event $event)
     {
-        return $event->getData('order');
+        $order = $event->getData('order');
+        if (null !== $order) {
+            return [$order];
+        }
+
+        return $event->getData('orders');
     }
 }

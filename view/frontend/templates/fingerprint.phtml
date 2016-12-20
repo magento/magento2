@@ -8,11 +8,11 @@
 
 /** @var $block Magento\Signifyd\Block\Fingerprint */
 ?>
-<?php if ($block->isModuleEnabled()): ?>
+<?php if ($block->isModuleActive()): ?>
     <script
         async
         id="sig-api"
-        data-order-session-id="<?php echo $block->escapeHtml($block->getQuoteSessionId()); ?>"
+        data-order-session-id="<?php echo $block->escapeHtml($block->getSignifydOrderSessionId()); ?>"
         src="https://cdn-scripts.signifyd.com/api/script-tag.js">
     </script>
 <?php endif; ?>
