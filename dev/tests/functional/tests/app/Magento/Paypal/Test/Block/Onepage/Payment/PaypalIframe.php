@@ -8,9 +8,7 @@ namespace Magento\Paypal\Test\Block\Onepage\Payment;
 
 use Magento\Checkout\Test\Block\Onepage\Payment\Method;
 use Magento\Mtf\Client\ElementInterface;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\ObjectManagerFactory;
 use Magento\Paypal\Test\Block\Form\HostedPro\Cc;
 
 /**
