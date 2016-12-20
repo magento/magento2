@@ -11,6 +11,7 @@
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="address/dataset" xsi:type="string">US_address_1</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">United States Postal Service</data>
             <data name="shipping/shipping_method" xsi:type="string">Priority Mail 1-Day Small Flat Rate Box</data>
