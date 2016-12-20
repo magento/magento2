@@ -11,7 +11,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var UrlRewritesSet|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -33,9 +32,9 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
     /**
      * Run test merge method
      *
-     * @param array urlRewriteMockArray
-     * @param String expectedData
-     * @param int arrayCount
+     * @param array $urlRewriteMockArray
+     * @param String $expectedData
+     * @param int $arrayCount
      * @dataProvider getMergeTestParameters
      * @return void
      */
@@ -72,6 +71,8 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Run test resetData method
+     *
+     * @return void
      */
     public function testResetData()
     {
@@ -84,6 +85,7 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider  for testMerge
      *
      * @return array
      */
@@ -153,5 +155,4 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-
 }
