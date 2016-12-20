@@ -117,7 +117,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->logger->expects(static::once())
             ->method('error')
-            ->with('Unable to process Signifyd API: Response is not valid JSON: Decoding failed: Syntax error');
+            ->with('Response is not valid JSON: Decoding failed: Syntax error');
 
         $result = $this->service->createForOrder($order->getEntityId());
         static::assertTrue($result);
@@ -152,7 +152,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects(static::once())
             ->method('error')
             ->with(
-                'Unable to process Signifyd API: Bad Request - The request could not be parsed. Response: ' .
+                'Bad Request - The request could not be parsed. Response: ' .
                 json_encode($responseData)
             );
 
