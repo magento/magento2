@@ -44,7 +44,7 @@ class ApplyConfigurableProductCatalogPriceRulesTest extends ApplyCatalogPriceRul
             $result['%attribute_value%'] = $attributes['options']['option_key_' . $this->promo]['id'];
             return $result;
         } else {
-            parent::getAttribute($product);
+            return parent::getAttribute($product);
         }
     }
 }

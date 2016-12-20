@@ -156,6 +156,7 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
                 return $retrieveCategory;
             }
         }
+        return ['id' => null];
     }
 
     /**
