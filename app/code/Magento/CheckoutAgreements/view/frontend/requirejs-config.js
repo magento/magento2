@@ -2,9 +2,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
-var config = {
+
+var config = { //eslint-disable-line no-unused-vars
     config: {
         mixins: {
             'Magento_Checkout/js/action/place-order': {

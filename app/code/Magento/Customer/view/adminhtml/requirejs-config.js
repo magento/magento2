@@ -3,9 +3,9 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+var config = { //eslint-disable-line no-unused-vars
     paths: {
-        'customer/template': "Magento_Customer/templates"
+        'customer/template': 'Magento_Customer/templates'
     },
     map: {
         '*': {
@@ -13,5 +13,5 @@ var config = {
             dataItemDeleteButton:   'Magento_Customer/edit/tab/js/addresses',
             observableInputs:       'Magento_Customer/edit/tab/js/addresses'
         }
-    } 
+    }
 };

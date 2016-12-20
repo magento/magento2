@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+var config = { //eslint-disable-line no-unused-vars
     map: {
         '*': {
             giftOptions:    'Magento_GiftMessage/gift-options',

@@ -2,13 +2,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint jquery:true*/
+
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
+
     $.widget('mage.giftOptions', {
         options: {
             mageError: 'mage-error',
@@ -20,7 +20,7 @@ define([
          * Initial toggle of the various gift options after widget instantiation.
          * @private
          */
-        _init: function() {
+        _init: function () {
             this._toggleVisibility();
         },
 
@@ -28,7 +28,7 @@ define([
          * Bind a click handler to the widget's context element.
          * @private
          */
-        _create: function() {
+        _create: function () {
             this.element.on('click', $.proxy(this._toggleVisibility, this));
             $(this.element.data('selector').id).find('.giftmessage-area')
                 .on('change', $.proxy(this._toggleRequired, this));
@@ -37,23 +37,25 @@ define([
         /**
          * Toggle the visibility of the widget's context element's selector(s).
          * @private
-         * @param event {Object} - Click event. Target is a checkbox.
+         * @param {Object} event - Click event. Target is a checkbox.
          */
-        _toggleVisibility: function(event) {
+        _toggleVisibility: function (event) {
             var checkbox = event ? $(event.target) : this.element,
-                container = $(checkbox.data('selector').id);
+                container = $(checkbox.data('selector').id),
+                _this;
+
             if (checkbox.is(':checked')) {
                 container.show()
-                    .find('.giftmessage-area:not(:visible)').each(function(x, element) {
+                    .find('.giftmessage-area:not(:visible)').each(function (x, element) {
                         if ($(element).val().length > 0) {
                             $(element).change();
                             container.find('a').click();
                         }
                     });
             } else {
-                var _this = this;
+                _this = this;
                 container.hide()
-                    .find('.input-text:not(.giftmessage-area)').each(function(x, element) {
+                    .find('.input-text:not(.giftmessage-area)').each(function (x, element) {
                         $(element).val(element.defaultValue).removeClass(_this.options.mageError)
                             .next('div.' + _this.options.mageError).remove();
                     }).end()
@@ -67,15 +69,16 @@ define([
         /**
          * Make the From and To input fields required if a gift message has been written.
          * @private
-         * @param event {Object} - Change event. Target is a textarea.
+         * @param {Object} event - Change event. Target is a textarea.
          */
-        _toggleRequired: function(event) {
+        _toggleRequired: function (event) {
             var textArea = $(event.target),
                 length = textArea.val().length;
+
             textArea.closest('li').prev('.fields')
                 .find('.input-text').toggleClass(this.options.requiredEntry, length > 0);
         }
     });
-    
+
     return $.mage.giftOptions;
 });

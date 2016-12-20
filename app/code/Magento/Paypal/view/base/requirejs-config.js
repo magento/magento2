@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 
-var config = {
+var config = {  //eslint-disable-line no-unused-vars
     map: {
         '*': {
-            transparent:            'Magento_Payment/transparent'
+            transparent: 'Magento_Payment/transparent'
         }
     }
 };
