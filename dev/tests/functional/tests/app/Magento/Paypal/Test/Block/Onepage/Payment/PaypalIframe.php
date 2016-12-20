@@ -88,11 +88,7 @@ class PaypalIframe extends Method
      */
     private function switchToPaypalFrame()
     {
-
-        $iframeLocator = ObjectManagerFactory::getObjectManager()->create(
-            Locator::class,
-            ['value' => $this->paypalIframe]
-        );
+        $iframeLocator = $this->browser->find($this->paypalIframe)->getLocator();
         $this->browser->switchToFrame($iframeLocator);
         return $this->browser->find('body');
     }
