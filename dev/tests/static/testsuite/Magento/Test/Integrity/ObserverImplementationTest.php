@@ -22,29 +22,6 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
      */
     protected static $observerClasses = [];
 
-    /**
-     * @var array
-     */
-    protected static $blackList = [
-        // not support of virtual types
-        'SalesOrderIndexGridAsyncInsertObserver',
-        'SalesInvoiceIndexGridAsyncInsertObserver',
-        'SalesShipmentIndexGridAsyncInsertObserver',
-        'SalesCreditmemoIndexGridAsyncInsertObserver',
-        'SalesOrderIndexGridSyncInsert',
-        'SalesInvoiceIndexGridSyncInsert',
-        'SalesShipmentIndexGridSyncInsert',
-        'SalesCreditmemoIndexGridSyncInsert',
-        'SalesOrderIndexGridSyncRemove',
-        'SalesInvoiceIndexGridSyncRemove',
-        'SalesShipmentIndexGridSyncRemove',
-        'SalesCreditmemoIndexGridSyncRemove',
-        'SalesOrderSendEmailsObserver',
-        'SalesOrderInvoiceSendEmailsObserver',
-        'SalesOrderShipmentSendEmailsObserver',
-        'SalesOrderCreditmemoSendEmailsObserver',
-    ];
-
     public static function setUpBeforeClass()
     {
         self::$observerClasses = array_merge(
@@ -116,9 +93,15 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+
+        $blacklistFiles = str_replace('\\', '/', realpath(__DIR__)) . '/_files/blacklist/observers*.txt';
+        $blacklistExceptions = [];
+        foreach (glob($blacklistFiles) as $fileName) {
+            $blacklistExceptions = array_merge($blacklistExceptions, file($fileName, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES));
+        }
         return array_diff(
             array_unique($observerClasses),
-            self::$blackList
+            $blacklistExceptions
         );
     }
 }
