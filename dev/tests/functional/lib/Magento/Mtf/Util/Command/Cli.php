@@ -7,7 +7,6 @@
 namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
@@ -28,7 +27,6 @@ class Cli
     private $transport;
 
     /**
-     * @constructor
      * @param CurlTransport $transport
      */
     public function __construct(CurlTransport $transport)

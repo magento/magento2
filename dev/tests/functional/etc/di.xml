@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Mtf\Util\Command\File\ExportInterface" type="\Magento\Mtf\Util\Command\File\Export" />
-    <preference for="Magento\Mtf\Util\Command\File\Resource\ReaderInterface" type="\Magento\Mtf\Util\Command\File\Resource\Reader" />
+    <preference for="Magento\Mtf\Util\Command\File\Export\ReaderInterface" type="\Magento\Mtf\Util\Command\File\Export\Reader" />
 
     <type name="\Magento\Mtf\Util\Command\File\Export" shared="false" />
 
@@ -19,19 +19,19 @@
 
     <type name="Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator" shared="true" />
 
-    <type name="Magento\Mtf\Util\Command\File\Resource\Reader">
+    <type name="Magento\Mtf\Util\Command\File\Export\Reader">
         <arguments>
             <argument name="template" xsi:type="string">\w*?\.csv</argument>
         </arguments>
     </type>
 
-    <virtualType name="Magento\Mtf\Util\Command\File\Resource\ProductReader" type="Magento\Mtf\Util\Command\File\Resource\Reader">
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\ProductReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
         <arguments>
             <argument name="template" xsi:type="string">catalog_product.*?\.csv</argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="Magento\Mtf\Util\Command\File\Resource\CustomerReader" type="Magento\Mtf\Util\Command\File\Resource\Reader">
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\CustomerReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
         <arguments>
             <argument name="template" xsi:type="string">customer.*?\.csv</argument>
         </arguments>

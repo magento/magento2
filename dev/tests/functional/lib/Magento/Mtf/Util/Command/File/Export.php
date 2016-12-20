@@ -7,8 +7,8 @@
 namespace Magento\Mtf\Util\Command\File;
 
 use Magento\Mtf\ObjectManagerInterface;
-use Magento\Mtf\Util\Command\File\Resource\Data;
-use Magento\Mtf\Util\Command\File\Resource\ReaderInterface;
+use Magento\Mtf\Util\Command\File\Export\Data;
+use Magento\Mtf\Util\Command\File\Export\ReaderInterface;
 
 /**
  * Get Exporting file from the Magento.
@@ -20,12 +20,12 @@ class Export implements ExportInterface
      *
      * @var string
      */
-    private $readerPath = 'Magento\Mtf\Util\Command\File\Resource\%sReader';
+    private $readerPath = 'Magento\Mtf\Util\Command\File\Export\%sReader';
 
     /**
      * Object manager instance.
      *
-     * @var ObjectManagerInterface $objectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -55,8 +55,8 @@ class Export implements ExportInterface
      */
     private function getReader($type)
     {
+        $readerPath = sprintf($this->readerPath, ucfirst($type));
         try {
-            $readerPath = sprintf($this->readerPath, ucfirst($type));
             return $this->objectManager->create($readerPath);
         } catch (\ReflectionException $e) {
             throw new \ReflectionException("Virtual type '$readerPath' does not exist. Please, check it in di.xml.");

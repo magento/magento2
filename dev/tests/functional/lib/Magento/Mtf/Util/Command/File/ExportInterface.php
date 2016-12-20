@@ -6,8 +6,7 @@
 
 namespace Magento\Mtf\Util\Command\File;
 
-use Magento\Mtf\Util\Command\File\Resource\Data;
-use Magento\Mtf\Util\Command\File\Resource\Reader;
+use Magento\Mtf\Util\Command\File\Export\Data;
 
 /**
  * Interface for getting Exporting file from the Magento.
