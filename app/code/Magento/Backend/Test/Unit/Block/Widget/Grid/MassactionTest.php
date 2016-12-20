@@ -29,6 +29,11 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected $_gridMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_eventManagerMock;
+
+    /**
      * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_urlModelMock;
@@ -99,6 +104,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_layoutMock);
+        unset($this->_eventManagerMock);
         unset($this->_gridMock);
         unset($this->_urlModelMock);
         unset($this->_block);
