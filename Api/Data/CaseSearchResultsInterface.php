@@ -8,21 +8,21 @@ namespace Magento\Signifyd\Api\Data;
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
- * Interface for case search results
+ * Retrieve and set list of case entities.
  *
  * @api
  */
 interface CaseSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * Gets collection items.
+     * Gets collection of case entities.
      *
      * @return \Magento\Signifyd\Api\Data\CaseInterface[]
      */
     public function getItems();
 
     /**
-     * Sets collection items.
+     * Sets collection of case entities.
      *
      * @param \Magento\Signifyd\Api\Data\CaseInterface[] $items
      * @return $this
