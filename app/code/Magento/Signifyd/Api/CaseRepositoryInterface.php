@@ -17,28 +17,32 @@ use Magento\Signifyd\Api\Data\CaseSearchResultsInterface;
 interface CaseRepositoryInterface
 {
     /**
-     * Saves case entity
+     * Saves case entity.
+     *
      * @param CaseInterface $case
      * @return CaseInterface
      */
     public function save(CaseInterface $case);
 
     /**
-     * Gets case entity by order id
+     * Gets case entity by order id.
+     *
      * @param int $id
      * @return CaseInterface
      */
     public function getById($id);
 
     /**
-     * Deletes case entity
+     * Deletes case entity.
+     *
      * @param CaseInterface $case
      * @return bool
      */
     public function delete(CaseInterface $case);
 
     /**
-     * Gets list of case entities
+     * Gets list of case entities.
+     *
      * @param SearchCriteria $searchCriteria
      * @return CaseSearchResultsInterface
      */

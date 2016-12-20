@@ -47,6 +47,17 @@ class InstallSchema implements InstallSchemaInterface
         $table->addColumn('review_disposition', Table::TYPE_TEXT, 32);
         $table->addColumn('created_at', Table::TYPE_TIMESTAMP);
         $table->addColumn('updated_at', Table::TYPE_TIMESTAMP);
+
+        $table->addIndex(
+            $setup->getIdxName(
+                $setup->getTable(static::$table),
+                'order_id',
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            'order_id',
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+        );
+
         $table->addForeignKey(
             $setup->getFkName(
                 $setup->getTable(static::$table),

@@ -9,23 +9,25 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
  * Signifyd management interface
- * Allows to performs operations with Signifyd cases
+ * Allows to performs operations with Signifyd cases.
  *
  * @api
  */
 interface CaseManagementInterface
 {
     /**
-     * Creates new Case entity
+     * Creates new Case entity linked to order id.
+     *
      * @param string $orderId
      * @return CaseInterface
      */
     public function create($orderId);
 
     /**
-     * Gets Case entity
+     * Gets Case entity associated with order id.
+     *
      * @param string $orderId
-     * @return CaseInterface
+     * @return CaseInterface|null
      */
     public function getByOrderId($orderId);
 }

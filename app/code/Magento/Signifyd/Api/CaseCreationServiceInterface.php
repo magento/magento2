@@ -20,6 +20,7 @@ interface CaseCreationServiceInterface
      *
      * @param int $orderId
      * @return bool
+     * @throws \Magento\Framework\Exception\AlreadyExistsException If case for $orderId already exists
      */
     public function createForOrder($orderId);
 }
