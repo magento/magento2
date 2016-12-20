@@ -13,6 +13,7 @@ Cancel,Cancel
 "Something went wrong canceling the transactions.","Something went wrong canceling the transactions."
 "There was an error canceling transactions. Please contact us or try again later.","There was an error canceling transactions. Please contact us or try again later."
 "We couldn't process your order right now. Please try again later.","We couldn't process your order right now. Please try again later."
+"Unable to place order. Please try again later.","Unable to place order. Please try again later."
 "amount %1","amount %1"
 failed,failed
 successful,successful

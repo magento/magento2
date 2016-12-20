@@ -176,12 +176,12 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Customer\Model\ResourceModel\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Customer</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

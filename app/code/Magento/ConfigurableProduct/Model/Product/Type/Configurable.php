@@ -1185,4 +1185,23 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         return parent::setImageFromChildProduct($product);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        $isAllCustomOptionsDisplayed = true;
+
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            $eavAttribute = $attribute->getProductAttribute();
+
+            $isAllCustomOptionsDisplayed = (
+                $isAllCustomOptionsDisplayed
+                && $eavAttribute->getData('used_in_product_listing')
+            );
+        }
+
+        return $isAllCustomOptionsDisplayed;
+    }
 }

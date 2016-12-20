@@ -72,6 +72,7 @@ class UpgradeSystemTest extends Injectable
             ['data' => $createBackupConfig]
         );
         $version = $upgrade['upgradeVersion'];
+        $sampleDataVersion = $upgrade['sampledataVersion'];
 
         $suffix = "( (CE|EE))$";
         $normalVersion = '(0|[1-9]\d*)';
@@ -109,6 +110,7 @@ class UpgradeSystemTest extends Injectable
         $this->setupWizard->getSelectVersion()->fill($upgradeFixture);
         if ($upgrade['otherComponents'] === 'Yes') {
             $this->setupWizard->getSelectVersion()->chooseUpgradeOtherComponents();
+            $this->setupWizard->getSelectVersion()->chooseVersionUpgradeOtherComponents($sampleDataVersion);
         }
         $this->setupWizard->getSelectVersion()->clickNext();
 
