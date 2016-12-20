@@ -97,7 +97,10 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         $blacklistFiles = str_replace('\\', '/', realpath(__DIR__)) . '/_files/blacklist/observers*.txt';
         $blacklistExceptions = [];
         foreach (glob($blacklistFiles) as $fileName) {
-            $blacklistExceptions = array_merge($blacklistExceptions, file($fileName, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES));
+            $blacklistExceptions = array_merge(
+                $blacklistExceptions, file($fileName,
+                FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+            ));
         }
         return array_diff(
             array_unique($observerClasses),
