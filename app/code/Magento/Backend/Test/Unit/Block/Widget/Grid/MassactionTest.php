@@ -285,17 +285,17 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
      * @param string $itemId
      * @param array|\Magento\Framework\DataObject $item
      * @param int $count
-     * @param bool $withDisplayChecker
-     * @param bool $isDisplay
+     * @param bool $withVisibilityChecker
+     * @param bool $isVisible
      * @dataProvider addItemDataProvider
      */
-    public function testAddItem($itemId, $item, $count, $withDisplayChecker, $isDisplay)
+    public function testAddItem($itemId, $item, $count, $withVisibilityChecker, $isVisible)
     {
         $this->visibilityCheckerMock->expects($this->any())
             ->method('isVisible')
-            ->willReturn($isDisplay);
+            ->willReturn($isVisible);
 
-        if ($withDisplayChecker) {
+        if ($withVisibilityChecker) {
             $item['visible'] = $this->visibilityCheckerMock;
         }
 
@@ -321,29 +321,29 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
                 'itemId' => 'test1',
                 'item' => ['label' => 'Test 1', 'url' => '*/*/test1'],
                 'count' => 1,
-                'withDisplayChecker' => false,
-                'isDisplay' => false,
+                'withVisibilityChecker' => false,
+                '$isVisible' => false,
             ],
             [
                 'itemId' => 'test2',
                 'item' => ['label' => 'Test 2', 'url' => '*/*/test2'],
                 'count' => 1,
-                'withDisplayChecker' => false,
-                'isDisplay' => true,
+                'withVisibilityChecker' => false,
+                'isVisible' => true,
             ],
             [
                 'itemId' => 'test1',
                 'item' => ['label' => 'Test 1. Hide', 'url' => '*/*/test1'],
                 'count' => 0,
-                'withDisplayChecker' => true,
-                'isDisplay' => false,
+                'withVisibilityChecker' => true,
+                'isVisible' => false,
             ],
             [
                 'itemId' => 'test2',
                 'item' => ['label' => 'Test 2. Does not hide', 'url' => '*/*/test2'],
                 'count' => 1,
-                'withDisplayChecker' => true,
-                'isDisplay' => true,
+                'withVisibilityChecker' => true,
+                'isVisible' => true,
             ]
         ];
     }
