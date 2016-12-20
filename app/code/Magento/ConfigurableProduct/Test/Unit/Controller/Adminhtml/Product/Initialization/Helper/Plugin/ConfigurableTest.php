@@ -44,20 +44,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productTypeMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             [],
             [],
             '',
             false
         );
         $this->variationHandler = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\VariationHandler',
+            \Magento\ConfigurableProduct\Model\Product\VariationHandler::class,
             [],
             [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $methods = [
             'setNewVariationsAttributeSetId',
             'setAssociatedProductIds',
@@ -66,9 +66,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'getResource',
             '__wakeup',
         ];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
         $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class,
             [],
             [],
             '',
@@ -190,6 +190,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subjectMock, $this->productMock);
     }
 
+    /**
+     * generate product resource model mock
+     * @param $postValue
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getProductResource($postValue)
     {
         $productResourceMock = $this->getMockBuilder(Product::class)
