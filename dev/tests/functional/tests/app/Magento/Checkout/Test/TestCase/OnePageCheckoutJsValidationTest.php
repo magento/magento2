@@ -21,6 +21,10 @@ use Magento\Mtf\TestCase\Scenario;
  */
 class OnePageCheckoutJsValidationTest extends Scenario
 {
+    /* tags */
+    const SEVERITY = 'S2';
+    /* end tags */
+
     /**
      * Runs one page checkout js validation test.
      *
