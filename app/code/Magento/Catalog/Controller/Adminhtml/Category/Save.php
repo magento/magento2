@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class Save
  */
@@ -24,6 +26,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Constructor
@@ -82,6 +89,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $storeId = $this->getRequest()->getParam('store');
+        $store = $this->getStoreManager()->getStore($storeId);
+        $this->getStoreManager()->setCurrentStore($store->getCode());
+
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
         if ($data) {
@@ -90,9 +100,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $parentId = $this->getRequest()->getParam('parent');
                 if (!$parentId) {
                     if ($storeId) {
-                        $parentId = $this->_objectManager->get(
-                            'Magento\Store\Model\StoreManagerInterface'
-                        )->getStore(
+                        $parentId = $this->getStoreManager()->getStore(
                             $storeId
                         )->getRootCategoryId();
                     } else {
@@ -210,5 +218,19 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'catalog/*/edit',
             $redirectParams
         );
+    }
+
+    /**
+     * Get StoreManager object
+     *
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager == null) {
+            $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
+        }
+
+        return $this->storeManager;
     }
 }

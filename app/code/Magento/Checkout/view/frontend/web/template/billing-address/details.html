@@ -13,7 +13,13 @@
 
     <!-- ko foreach: { data: currentBillingAddress().customAttributes, as: 'element' } -->
         <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
-            <!-- ko text: element[attribute].value --><!-- /ko -->
+            <!-- ko if: (typeof element[attribute] === "object") -->
+                <!-- ko text: element[attribute].value --><!-- /ko -->
+            <!-- /ko -->
+
+            <!-- ko if: (typeof element[attribute] === "string") -->
+                <!-- ko text: element[attribute] --><!-- /ko -->
+            <!-- /ko --><br/>
         <!-- /ko -->
     <!-- /ko -->
 
