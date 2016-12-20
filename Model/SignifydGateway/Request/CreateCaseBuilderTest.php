@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\Config\ScopeInterface;
-use Magento\Signifyd\Model\QuoteSessionId;
+use Magento\Signifyd\Model\SignifydOrderSessionId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Area;
 use Magento\Framework\Intl\DateTimeFactory;
@@ -75,12 +75,12 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
 
-        /** @var QuoteSessionId $quoteSessionId */
-        $quoteSessionId = $this->objectManager->create(QuoteSessionId::class);
+        /** @var SignifydOrderSessionId $signifydOrderSessionId */
+        $signifydOrderSessionId = $this->objectManager->create(SignifydOrderSessionId::class);
 
         $expected = [
             'purchase' => [
-                'orderSessionId' => $quoteSessionId->get($order->getQuoteId()),
+                'orderSessionId' => $signifydOrderSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getEntityId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
@@ -186,8 +186,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         $billingAddress = $order->getBillingAddress();
         $productMetadata = $this->objectManager->create(ProductMetadataInterface::class);
 
-        /** @var QuoteSessionId $quoteSessionId */
-        $quoteSessionId = $this->objectManager->create(QuoteSessionId::class);
+        /** @var SignifydOrderSessionId $quoteSessionId */
+        $quoteSessionId = $this->objectManager->create(SignifydOrderSessionId::class);
 
         $expected = [
             'purchase' => [
