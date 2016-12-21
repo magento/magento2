@@ -12,12 +12,12 @@ require __DIR__ . '/order_with_customer_and_two_simple_products.php';
 /** @var CaseInterfaceFactory $caseFactory */
 $caseFactory = $objectManager->get(CaseInterfaceFactory::class);
 
-$associatedTeam = array(
+$associatedTeam = [
     'teamName' => 'Some Team',
     'teamId' => 123,
     'getAutoDismiss' => true,
     'getTeamDismissalDays' => 3
-);
+];
 
 /** @var CaseInterface $case */
 $case = $caseFactory->create();
