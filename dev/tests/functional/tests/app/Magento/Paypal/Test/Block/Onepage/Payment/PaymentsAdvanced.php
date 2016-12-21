@@ -16,5 +16,5 @@ class PaymentsAdvanced extends PaypalIframe
      *
      * @var string
      */
-    protected $formBlockCc = '\Magento\Paypal\Test\Block\Form\PaymentsAdvanced\Cc';
+    protected $formBlockCc = \Magento\Paypal\Test\Block\Form\PaymentsAdvanced\Cc::class;
 }

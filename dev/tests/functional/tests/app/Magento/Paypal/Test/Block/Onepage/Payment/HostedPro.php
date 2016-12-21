@@ -16,5 +16,5 @@ class HostedPro extends PaypalIframe
      *
      * @var string
      */
-    protected $formBlockCc = '\Magento\Paypal\Test\Block\Form\HostedPro\Cc';
+    protected $formBlockCc = \Magento\Paypal\Test\Block\Form\HostedPro\Cc::class;
 }

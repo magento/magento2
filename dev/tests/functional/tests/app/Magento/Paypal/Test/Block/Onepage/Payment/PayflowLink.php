@@ -16,5 +16,5 @@ class PayflowLink extends PaypalIframe
      *
      * @var string
      */
-    protected $formBlockCc = '\Magento\Paypal\Test\Block\Form\PayflowLink\Cc';
+    protected $formBlockCc = \Magento\Paypal\Test\Block\Form\PayflowLink\Cc::class;
 }
