@@ -11,7 +11,7 @@ interface ReviewInterface
      * Return Added review item.
      *
      * @param int $productId
-     * @return array
+     * @return []
      *
      */
     public function getReviewsList($productId);

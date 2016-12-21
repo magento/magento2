@@ -118,7 +118,7 @@ class ReviewManagement implements \Magento\Review\Api\ReviewInterface
     /**
      * Get reviews of the product
      * @param int $productId
-     * @return array|bool
+     * @return []|bool
      */
 
     public function getReviewsList($productId)
