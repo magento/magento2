@@ -2,8 +2,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*eslint max-nested-callbacks: 0*/
 
+/*eslint max-nested-callbacks: 0*/
 define([
     'Magento_Ui/js/grid/columns/column'
 ], function (Column) {
@@ -18,6 +18,8 @@ define([
                 sorting: false,
                 headerTmpl: 'header',
                 bodyTmpl: 'body',
+
+                /** Stub */
                 source: function () {}
             });
         });

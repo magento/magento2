@@ -3,10 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'underscore',
     'uiRegistry',
@@ -24,12 +20,14 @@ define([
             originalClient = obj.client;
 
         registry.set('provName', {
-            on: function () {
-            },
-            get: function () {
-            },
-            set: function () {
-            }
+            /** Stub */
+            on: function () {},
+
+            /** Stub */
+            get: function () {},
+
+            /** Stub */
+            set: function () {}
         });
 
         describe('"initialize" method', function () {

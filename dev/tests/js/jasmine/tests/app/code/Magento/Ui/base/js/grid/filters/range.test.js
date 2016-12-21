@@ -25,13 +25,19 @@ define([
 
         it('Default state - Select no fields.', function () {
             expect(group.elems()).toEqual([]);
-            group.elems.push({id:1}, {id:1});
+            group.elems.push({
+                id: 1
+            }, {
+                id: 1
+            });
             expect(group.elems()).not.toEqual([]);
         });
         it('Check for clear elements.', function () {
             var elem = {
                 value: 'text',
-                clear: function() {
+
+                /** Stub */
+                clear: function () {
                     this.value = '';
                 }
             };
@@ -42,7 +48,8 @@ define([
         });
         it('Check if some elements has data.', function () {
             var elem = {
-                hasData: function() {
+                /** Stub */
+                hasData: function () {
                     return true;
                 }
             };
@@ -53,7 +60,8 @@ define([
         });
         it('Get preview from child elements.', function () {
             var elem = {
-                getPreview: function() {
+                /** Stub */
+                getPreview: function () {
                     return true;
                 }
             };

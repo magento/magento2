@@ -2,6 +2,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* eslint-disable max-nested-callbacks */
 define([
     'jquery',
     'Magento_Msrp/js/msrp'
@@ -32,6 +34,7 @@ define([
 
         it('widget tries to submit Cart Form on click', function (done) {
             var link = $('<a />');
+
             wdContainer.addToCart({
                 'cartButtonId': link
             }).on('addToCart', function (event, result) {

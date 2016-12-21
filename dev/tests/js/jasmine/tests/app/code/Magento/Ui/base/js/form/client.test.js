@@ -3,10 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'underscore',
     'uiRegistry',
@@ -23,10 +19,15 @@ define([
         });
 
         registry.set('provName', {
+            /** Stub */
             on: function () {
             },
+
+            /** Stub */
             get: function () {
             },
+
+            /** Stub */
             set: function () {
             }
         });

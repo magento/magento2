@@ -5,14 +5,14 @@
 
 define([
     'Magento_Ui/js/grid/controls/bookmarks/storage'
-], function (storage) {
+], function (Storage) {
     'use strict';
 
     describe('ui/js/grid/controls/bookmarks/storage', function () {
         var storageObj;
 
-        beforeEach(function(){
-            storageObj = new storage();
+        beforeEach(function () {
+            storageObj = new Storage();
         });
         it('has setter method', function () {
             spyOn(storageObj, 'set');

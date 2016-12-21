@@ -4,7 +4,6 @@
  */
 
 /*eslint max-nested-callbacks: 0*/
-
 define([
     'uiRegistry'
 ], function (registry) {

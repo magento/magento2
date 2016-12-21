@@ -13,26 +13,26 @@ define([
     'use strict';
 
     describe('Datepicker binding', function () {
-        var observable,
-            element,
+        var element,
             config;
 
         beforeEach(function () {
             element    = $('<input />');
-            observable = ko.observable();
 
             config = {
-                options : {
+                options: {
                     dateFormat: 'M/d/yy',
                     'storeLocale': 'en_US',
                     'timeFormat': 'h:mm: a'
                 },
-                storage:ko.observable(moment().format('MM/DD/YYYY'))
+                storage: ko.observable(moment().format('MM/DD/YYYY'))
             };
 
             $(document.body).append(element);
 
-            ko.applyBindingsToNode(element[0], { datepicker: config });
+            ko.applyBindingsToNode(element[0], {
+                datepicker: config
+            });
         });
 
         afterEach(function () {

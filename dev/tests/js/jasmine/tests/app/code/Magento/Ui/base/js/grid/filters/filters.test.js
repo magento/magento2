@@ -43,6 +43,7 @@ define([
         });
         it('has isFilterVisible method', function () {
             temp = {
+                /** Stub */
                 visible: function () {
                     return false;
                 }

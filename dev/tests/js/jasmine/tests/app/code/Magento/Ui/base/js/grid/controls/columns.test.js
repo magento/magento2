@@ -22,22 +22,32 @@ define([
                 dataScope: 'scope',
                 provider: 'provider'
             });
-            FakeElement = function(){
+
+            /** Stub */
+            FakeElement = function () {
                 return this;
             };
-            FakeElement.prototype.visible = function(){
+
+            /** Stub */
+            FakeElement.prototype.visible = function () {
                 return true;
             };
         });
 
         it('hasOverflow method', function () {
             columnsInstance.viewportSize = 2;
-            columnsInstance.elems.push({id:1});
-            columnsInstance.elems.push({id:2});
+            columnsInstance.elems.push({
+                id: 1
+            });
+            columnsInstance.elems.push({
+                id: 2
+            });
 
             expect(columnsInstance.hasOverflow()).toBeFalsy();
 
-            columnsInstance.elems.push({id:3});
+            columnsInstance.elems.push({
+                id: 3
+            });
             expect(columnsInstance.hasOverflow()).toBeTruthy();
         });
 
