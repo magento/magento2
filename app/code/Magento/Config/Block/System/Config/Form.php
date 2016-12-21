@@ -325,7 +325,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $fieldPrefix
      * @param string $labelPrefix
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _initElement(
         \Magento\Config\Model\Config\Structure\Element\Field $field,
@@ -334,39 +333,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldPrefix = '',
         $labelPrefix = ''
     ) {
-        $inherit = true;
-        $data = $this->getAppConfigDataValue($path);
+        $inherit = !array_key_exists($path, $this->_configData);
+        $data = $this->getFieldData($field, $path);
 
-        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
-            $path,
-            $this->getScope(),
-            $this->getStringScopeCode()
-        );
-
-        if ($placeholderValue) {
-            $data = $placeholderValue;
-        }
-        if ($data === null) {
-            if (array_key_exists($path, $this->_configData)) {
-                $data = $this->_configData[$path];
-                $inherit = false;
-
-                if ($field->hasBackendModel()) {
-                    $backendModel = $field->getBackendModel();
-                    $backendModel->setPath($path)
-                        ->setValue($data)
-                        ->setWebsite($this->getWebsiteCode())
-                        ->setStore($this->getStoreCode())
-                        ->afterLoad();
-                    $data = $backendModel->getValue();
-                }
-
-            } elseif ($field->getConfigPath() !== null) {
-                $data = $this->getConfigValue($field->getConfigPath());
-            } else {
-                $data = $this->getConfigValue($path);
-            }
-        }
         $fieldRendererClass = $field->getFrontendModel();
         if ($fieldRendererClass) {
             $fieldRenderer = $this->_layout->getBlockSingleton($fieldRendererClass);
@@ -422,6 +391,50 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $formField->setValues($field->getOptions());
         }
         $formField->setRenderer($fieldRenderer);
+    }
+
+    /**
+     * Get data of field by path
+     *
+     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param string $path
+     * @return mixed|null|string
+     */
+    private function getFieldData(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    {
+        $data = $this->getAppConfigDataValue($path);
+
+        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
+            $path,
+            $this->getScope(),
+            $this->getStringScopeCode()
+        );
+
+        if ($placeholderValue) {
+            $data = $placeholderValue;
+        }
+        if ($data === null) {
+            if (array_key_exists($path, $this->_configData)) {
+                $data = $this->_configData[$path];
+
+                if ($field->hasBackendModel()) {
+                    $backendModel = $field->getBackendModel();
+                    $backendModel->setPath($path)
+                        ->setValue($data)
+                        ->setWebsite($this->getWebsiteCode())
+                        ->setStore($this->getStoreCode())
+                        ->afterLoad();
+                    $data = $backendModel->getValue();
+                }
+
+            } elseif ($field->getConfigPath() !== null) {
+                $data = $this->getConfigValue($field->getConfigPath());
+            } else {
+                $data = $this->getConfigValue($path);
+            }
+        }
+
+        return $data;
     }
 
     /**
