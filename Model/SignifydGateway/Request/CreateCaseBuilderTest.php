@@ -82,7 +82,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             'purchase' => [
                 'orderSessionId' => $signifydOrderSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
-                'orderId' => $order->getEntityId(),
+                'orderId' => $order->getIncrementId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
@@ -193,7 +193,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             'purchase' => [
                 'orderSessionId' => $quoteSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
-                'orderId' => $order->getEntityId(),
+                'orderId' => $order->getIncrementId(),
                 'createdAt' => '2016-12-12T12:00:55+00:00',
                 'paymentGateway' => $payment->getMethod(),
                 'transactionId' => $payment->getLastTransId(),
