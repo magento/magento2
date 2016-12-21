@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\EntityManager\Operation;
 
-use Magento\Framework\EntityManager\Operation\CreateInterface;
+use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\EntityManager\Operation\Create\CreateMain;
 use Magento\Framework\EntityManager\Operation\Create\CreateAttributes;
 use Magento\Framework\EntityManager\Operation\Create\CreateExtensions;
@@ -13,6 +13,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Phrase;
 
 /**
  * Class Create
@@ -86,6 +88,7 @@ class Create implements CreateInterface
      * @param array $arguments
      * @return object
      * @throws \Exception
+     * @throws AlreadyExistsException
      */
     public function execute($entity, $arguments = [])
     {
@@ -114,6 +117,9 @@ class Create implements CreateInterface
                 ]
             );
             $connection->commit();
+        } catch (DuplicateException $e) {
+            $connection->rollBack();
+            throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $connection->rollBack();
             throw $e;

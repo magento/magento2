@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Deploy\Console\Command;
 
 use Magento\Framework\App\Utility\Files;
@@ -19,6 +18,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\State;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\DeployManager;
+use Magento\Framework\App\Cache;
+use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
 
 /**
  * Deploy static content command
@@ -29,7 +30,7 @@ class DeployStaticContentCommand extends Command
     /**
      * Key for dry-run option
      * @deprecated
-     * @see Magento\Deploy\Console\Command\DeployStaticOptionsInterface::DRY_RUN
+     * @see \Magento\Deploy\Console\Command\DeployStaticOptionsInterface::DRY_RUN
      */
     const DRY_RUN_OPTION = 'dry-run';
 
@@ -87,6 +88,7 @@ class DeployStaticContentCommand extends Command
      * @param ObjectManagerFactory $objectManagerFactory
      * @param Locale $validator
      * @param ObjectManagerInterface $objectManager
+     * @throws \LogicException When the command name is empty
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -96,6 +98,7 @@ class DeployStaticContentCommand extends Command
         $this->objectManagerFactory = $objectManagerFactory;
         $this->validator = $validator;
         $this->objectManager = $objectManager;
+
         parent::__construct();
     }
 
@@ -373,6 +376,7 @@ class DeployStaticContentCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
+     * @throws LocalizedException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -394,9 +398,9 @@ class DeployStaticContentCommand extends Command
         list ($deployableLanguages, $deployableAreaThemeMap, $requestedThemes)
             = $this->prepareDeployableEntities($filesUtil);
 
-        $output->writeln("Requested languages: " . implode(', ', $deployableLanguages));
-        $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
-        $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
+        $output->writeln('Requested languages: ' . implode(', ', $deployableLanguages));
+        $output->writeln('Requested areas: ' . implode(', ', array_keys($deployableAreaThemeMap)));
+        $output->writeln('Requested themes: ' . implode(', ', $requestedThemes));
 
         /** @var $deployManager DeployManager */
         $deployManager = $this->objectManager->create(
@@ -415,11 +419,13 @@ class DeployStaticContentCommand extends Command
             }
         }
 
+        $this->mockCache();
         return $deployManager->deploy();
     }
 
     /**
      * @param Files $filesUtil
+     * @throws \InvalidArgumentException
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -475,5 +481,19 @@ class DeployStaticContentCommand extends Command
         }
 
         return [$deployableLanguages, $deployableAreaThemeMap, $requestedThemes];
+    }
+
+    /**
+     * Mock Cache class with dummy implementation
+     *
+     * @return void
+     */
+    private function mockCache()
+    {
+        $this->objectManager->configure([
+            'preferences' => [
+                Cache::class => DummyCache::class
+            ]
+        ]);
     }
 }

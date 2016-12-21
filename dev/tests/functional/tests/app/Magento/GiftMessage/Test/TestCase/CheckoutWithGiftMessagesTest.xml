@@ -27,6 +27,7 @@
             <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" />
         </variation>
         <variation name="CheckoutWithGiftMessagesTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/1" xsi:type="string">catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>

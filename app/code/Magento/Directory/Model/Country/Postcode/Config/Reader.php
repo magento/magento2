@@ -12,7 +12,10 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = ['/config/zip' => 'countryCode'];
+    protected $_idAttributes = [
+        '/config/zip' => 'countryCode',
+        '/config/zip/codes/code' => 'id',
+    ];
 
     /**
      * Construct the FileSystem Reader Class

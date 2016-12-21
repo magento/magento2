@@ -179,7 +179,7 @@ define(
                     newShippingAddress;
 
                 this.source.set('params.invalid', false);
-                this.source.trigger('shippingAddress.data.validate');
+                this.triggerShippingDataValidateEvent();
 
                 if (!this.source.get('params.invalid')) {
                     addressData = this.source.get('shippingAddress');
@@ -254,12 +254,7 @@ define(
 
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
-                    this.source.trigger('shippingAddress.data.validate');
-
-                    if (this.source.get('shippingAddress.custom_attributes')) {
-                        this.source.trigger('shippingAddress.custom_attributes.data.validate');
-                    }
-
+                    this.triggerShippingDataValidateEvent();
                     if (emailValidationResult &&
                         this.source.get('params.invalid') ||
                         !quote.shippingMethod().method_code ||
@@ -304,6 +299,18 @@ define(
                 }
 
                 return true;
+            },
+
+            /**
+             * Trigger Shipping data Validate Event.
+             *
+             * @return {void}
+             */
+            triggerShippingDataValidateEvent: function () {
+                this.source.trigger('shippingAddress.data.validate');
+                if (this.source.get('shippingAddress.custom_attributes')) {
+                    this.source.trigger('shippingAddress.custom_attributes.data.validate');
+                }
             }
         });
     }

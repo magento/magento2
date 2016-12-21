@@ -20,7 +20,7 @@
         <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
         <fieldset class="field required review-field-ratings">
-            <legend class="label"><span><?php echo $block->escapeHtml(__('Your Rating')) ?><span></legend><br/>
+            <legend class="label"><span><?php echo $block->escapeHtml(__('Your Rating')) ?></span></legend><br/>
             <div class="control">
                 <div class="nested" id="product-review-table">
                     <?php foreach ($block->getRatings() as $_rating): ?>

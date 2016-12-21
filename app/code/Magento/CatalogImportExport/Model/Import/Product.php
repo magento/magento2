@@ -645,6 +645,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productEntityIdentifierField;
 
     /**
+     * Escaped separator value for regular expression.
+     * The value is based on PSEUDO_MULTI_LINE_SEPARATOR constant.
+     * @var string
+     */
+    private $multiLineSeparatorForRegexp;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -2297,7 +2304,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $sku = $rowData[self::COL_SKU];
 
-        if (isset($this->_oldSku[$sku])) {
+        if (isset($this->_oldSku[$sku]) && Import::BEHAVIOR_REPLACE !== $this->getBehavior()) {
             // can we get all necessary data from existent DB product?
             // check for supported type of existing product
             if (isset($this->_productTypeModels[$this->_oldSku[$sku]['type_id']])) {
@@ -2349,7 +2356,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowAttributesValid = $productTypeValidator->isRowValid(
                 $rowData,
                 $rowNum,
-                !isset($this->_oldSku[$sku])
+                !(isset($this->_oldSku[$sku]) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
             );
             if (!$rowAttributesValid && self::SCOPE_DEFAULT == $rowScope) {
                 // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
@@ -2438,14 +2445,40 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieves additional attributes as array code=>value.
+     * Retrieves additional attributes in format:
+     * [
+     *      code1 => value1,
+     *      code2 => value2,
+     *      ...
+     *      codeN => valueN
+     * ]
      *
-     * @param string $additionalAttributes
+     * @param string $additionalAttributes Attributes data that will be parsed
      * @return array
      */
     private function parseAdditionalAttributes($additionalAttributes)
     {
-        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $additionalAttributes);
+        return empty($this->_parameters[Import::FIELDS_ENCLOSURE])
+            ? $this->parseAttributesWithoutWrappedValues($additionalAttributes)
+            : $this->parseAttributesWithWrappedValues($additionalAttributes);
+    }
+
+    /**
+     * Parses data and returns attributes in format:
+     * [
+     *      code1 => value1,
+     *      code2 => value2,
+     *      ...
+     *      codeN => valueN
+     * ]
+     *
+     * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
+     *      code=value,code2=value2...,codeN=valueN
+     * @return array
+     */
+    private function parseAttributesWithoutWrappedValues($attributesData)
+    {
+        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $attributesData);
         $preparedAttributes = [];
         $code = '';
         foreach ($attributeNameValuePairs as $attributeData) {
@@ -2461,6 +2494,75 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
+    }
+
+    /**
+     * Parses data and returns attributes in format:
+     * [
+     *      code1 => value1,
+     *      code2 => value2,
+     *      ...
+     *      codeN => valueN
+     * ]
+     * All values have unescaped data except mupliselect attributes,
+     * they should be parsed in additional method - parseMultiselectValues()
+     *
+     * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
+     *      code="value",code2="value2"...,codeN="valueN"
+     *  where every value is wrapped in double quotes. Double quotes as part of value should be duplicated.
+     *  E.g. attribute with code 'attr_code' has value 'my"value'. This data should be stored as attr_code="my""value"
+     *
+     * @return array
+     */
+    private function parseAttributesWithWrappedValues($attributesData)
+    {
+        $attributes = [];
+        preg_match_all('~((?:[a-z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
+            $attributesData,
+            $matches
+        );
+        foreach ($matches[1] as $i => $attributeCode) {
+            $attribute = $this->retrieveAttributeByCode($attributeCode);
+            $value = 'multiselect' != $attribute->getFrontendInput()
+                ? str_replace('""', '"', $matches[2][$i])
+                : '"' . $matches[2][$i] . '"';
+            $attributes[$attributeCode] = $value;
+        }
+        return $attributes;
+    }
+
+    /**
+     * Parse values of multiselect attributes depends on "Fields Enclosure" parameter
+     *
+     * @param string $values
+     * @return array
+     */
+    public function parseMultiselectValues($values)
+    {
+        if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
+            return explode(self::PSEUDO_MULTI_LINE_SEPARATOR, $values);
+        }
+        if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
+            return $values = array_map(function ($value) {
+                return str_replace('""', '"', $value);
+            }, $matches[1]);
+        }
+        return [$values];
+    }
+
+    /**
+     * Retrieves escaped PSEUDO_MULTI_LINE_SEPARATOR if it is metacharacter for regular expression
+     *
+     * @return string
+     */
+    private function getMultiLineSeparatorForRegexp()
+    {
+        if (!$this->multiLineSeparatorForRegexp) {
+            $this->multiLineSeparatorForRegexp = in_array(self::PSEUDO_MULTI_LINE_SEPARATOR, str_split('[\^$.|?*+(){}'))
+                ? '\\' . self::PSEUDO_MULTI_LINE_SEPARATOR
+                : self::PSEUDO_MULTI_LINE_SEPARATOR;
+        }
+        return $this->multiLineSeparatorForRegexp;
     }
 
     /**
