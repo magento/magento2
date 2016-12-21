@@ -30,9 +30,9 @@ define([
             expect(utils.convertToMomentFormat).toHaveBeenCalled();
         });
 
-        it('Check onValueChange function', function () {
+        it('Check onShiftedValueChange function', function () {
             spyOn(moment, 'tz').and.callThrough();
-            model.onValueChange('2016-11-16 11:30 AM');
+            model.onShiftedValueChange('2016-12-23 9:11 PM');
             expect(moment.tz).toHaveBeenCalled();
         });
 
