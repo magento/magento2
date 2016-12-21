@@ -8,9 +8,9 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Sales\Model\OrderFactory;
 
 /**
- * Signifyd case creation request builder
+ * Signifyd case creation request builder.
  *
- * Handles the conversion from Magento Order to Signifyd Case
+ * Handles the conversion from Magento Order to Signifyd Case.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateCaseBuilder implements CreateCaseBuilderInterface
@@ -98,7 +98,7 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
     }
 
     /**
-     * Remove empty and null values
+     * Remove empty and null values.
      *
      * @param array $data
      * @return array
@@ -119,7 +119,7 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
     }
 
     /**
-     * Empty values are null, empty string and empty array
+     * Empty values are null, empty string and empty array.
      *
      * @param mixed $value
      * @return bool
