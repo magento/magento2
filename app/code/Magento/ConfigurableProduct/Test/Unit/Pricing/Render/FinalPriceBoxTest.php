@@ -178,7 +178,10 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->product))
             ->will($this->returnValue(false));
 
-        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+        $this->salableResolverMock->expects($this->any())
+            ->method('isSalable')
+            ->with($this->product)
+            ->willReturn(true);
 
         $result = $this->object->toHtml();
 
@@ -191,13 +194,14 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     public function testNotSalableItem()
     {
         $this->salableResolverMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('isSalable')
             ->with($this->product)
             ->willReturn(false);
+
         $result = $this->object->toHtml();
 
-        $this->assertEmpty($result);
+        $this->assertNotEmpty($result);
     }
 
     public function testRenderMsrpEnabled()
@@ -234,7 +238,10 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with('msrp_price', $this->product, $arguments)
             ->will($this->returnValue($priceBoxRender));
 
-        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+        $this->salableResolverMock->expects($this->any())
+            ->method('isSalable')
+            ->with($this->product)
+            ->willReturn(true);
 
         $result = $this->object->toHtml();
 
@@ -255,7 +262,10 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('msrp_price'))
             ->will($this->throwException(new \InvalidArgumentException()));
 
-        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+        $this->salableResolverMock->expects($this->any())
+            ->method('isSalable')
+            ->with($this->product)
+            ->willReturn(true);
 
         $result = $this->object->toHtml();
 
