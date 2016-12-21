@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Sales\Model\Order;
 
 /**
- * Prepare details based on registered user account info
+ * Prepares details based on registered user account info
  */
 class UserAccountBuilder
 {
@@ -23,48 +23,22 @@ class UserAccountBuilder
     private $dateTimeFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var \Magento\Directory\Model\CurrencyFactory
-     */
-    private $currencyFactory;
-
-    /**
-     * @var array
-     */
-    private $currencies = [];
-
-    /**
      * @var CustomerOrders
      */
     private $customerOrders;
 
     /**
-     * @var string
-     */
-    private static $usdCurrencyCode = 'USD';
-
-    /**
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param CustomerOrders $customerOrders
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Intl\DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         CustomerOrders $customerOrders,
-        \Magento\Framework\Intl\DateTimeFactory $dateTimeFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory
+        \Magento\Framework\Intl\DateTimeFactory $dateTimeFactory
     ) {
         $this->customerRepository = $customerRepository;
         $this->dateTimeFactory = $dateTimeFactory;
-        $this->logger = $logger;
-        $this->currencyFactory = $currencyFactory;
         $this->customerOrders = $customerOrders;
     }
 
@@ -96,65 +70,28 @@ class UserAccountBuilder
             ]
         ];
 
-        $customerOrders = $this->customerOrders->get($customerId);
-        if (!empty($customerOrders)) {
-            try {
-                $orderTotalDollars = 0.0;
-                foreach ($customerOrders as $order) {
-                    $orderTotalDollars += $this->getUsdOrderTotal(
-                        $order->getBaseGrandTotal(),
-                        $order->getBaseCurrencyCode()
-                    );
-                }
-                $result['userAccount']['aggregateOrderCount'] = count($customerOrders);
-                $result['userAccount']['aggregateOrderDollars'] = $orderTotalDollars;
-            } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
-            }
+        $ordersInfo = $this->customerOrders->getCountAndTotalAmount($customerId);
+        if ($this->isNotEmptyCustomerOrdersInfo($ordersInfo)) {
+            $result['userAccount']['aggregateOrderCount'] = $ordersInfo['aggregateOrderCount'];
+            $result['userAccount']['aggregateOrderDollars'] = $ordersInfo['aggregateOrderDollars'];
         }
 
         return $result;
     }
 
     /**
-     * Returns amount in USD
+     * Checks if customer aggregated orders count and total amount are available.
      *
-     * @param float $amount
-     * @param string $currency
-     * @return float
+     * @param array $ordersInfo
+     * @return bool
      */
-    private function getUsdOrderTotal($amount, $currency)
+    private function isNotEmptyCustomerOrdersInfo(array $ordersInfo)
     {
-        if ($currency === self::$usdCurrencyCode) {
-            return $amount;
-        }
-
-        $operationCurrency = $this->getCurrencyByCode($currency);
-
-        return $operationCurrency->convert($amount, self::$usdCurrencyCode);
+        return null !== $ordersInfo['aggregateOrderCount'] && null !== $ordersInfo['aggregateOrderDollars'];
     }
 
     /**
-     * Returns currency by currency code
-     *
-     * @param string|null $currencyCode
-     * @return \Magento\Directory\Model\Currency
-     */
-    private function getCurrencyByCode($currencyCode)
-    {
-        if (isset($this->currencies[$currencyCode])) {
-            return $this->currencies[$currencyCode];
-        }
-
-        /** @var \Magento\Directory\Model\Currency $currency */
-        $currency = $this->currencyFactory->create();
-        $this->currencies[$currencyCode] = $currency->load($currencyCode);
-
-        return $this->currencies[$currencyCode];
-    }
-
-    /**
-     * Returns date formatted according to ISO8601
+     * Returns date formatted according to ISO8601.
      *
      * @param string $date
      * @return string
