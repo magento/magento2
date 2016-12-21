@@ -13,7 +13,9 @@
             "Magento_Swatches/js/SwatchRenderer": {
                 "jsonConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig(); ?>,
                 "jsonSwatchConfig": <?php /* @escapeNotVerified */ echo $block->getJsonSwatchConfig(); ?>,
-                "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>"
+                "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>",
+                "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
+                    'Magento_ConfigurableProduct') ?: 'replace'; ?>"
             }
         }
     }

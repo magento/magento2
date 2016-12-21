@@ -254,6 +254,11 @@
     <vars module="Magento_Bundle">
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
     </vars>
+
+    <vars module="Magento_ConfigurableProduct">
+        <var name="gallery_switch_strategy">prepend</var>
+    </vars>
+
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
     </vars>
