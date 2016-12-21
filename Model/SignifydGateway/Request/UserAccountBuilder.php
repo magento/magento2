@@ -72,23 +72,14 @@ class UserAccountBuilder
         ];
 
         $ordersInfo = $this->customerOrders->getAggregatedOrdersInfo($customerId);
-        if ($this->isNotEmptyCustomerOrdersInfo($ordersInfo)) {
+        if (isset($ordersInfo['aggregateOrderCount'])) {
             $result['userAccount']['aggregateOrderCount'] = $ordersInfo['aggregateOrderCount'];
+        }
+        if (isset($ordersInfo['aggregateOrderDollars'])) {
             $result['userAccount']['aggregateOrderDollars'] = $ordersInfo['aggregateOrderDollars'];
         }
 
         return $result;
-    }
-
-    /**
-     * Checks if customer aggregated orders count and total amount are available.
-     *
-     * @param array $ordersInfo
-     * @return bool
-     */
-    private function isNotEmptyCustomerOrdersInfo(array $ordersInfo)
-    {
-        return null !== $ordersInfo['aggregateOrderCount'] && null !== $ordersInfo['aggregateOrderDollars'];
     }
 
     /**
