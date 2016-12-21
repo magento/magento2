@@ -9,6 +9,9 @@ use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Class DumpConfigSourceAggregated aggregates configurations from all available sources
+ */
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
     /**
