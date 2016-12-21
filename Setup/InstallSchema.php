@@ -38,6 +38,7 @@ class InstallSchema implements InstallSchemaInterface
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true]
         );
         $table->addColumn('order_id', Table::TYPE_INTEGER, null, ['unsigned' => true]);
+        $table->addColumn('order_increment_id', Table::TYPE_TEXT, 32);
         $table->addColumn('case_id', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('guarantee_eligible', Table::TYPE_BOOLEAN, null);
         $table->addColumn('guarantee_disposition', Table::TYPE_TEXT, 32);

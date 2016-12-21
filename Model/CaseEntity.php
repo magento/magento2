@@ -156,10 +156,27 @@ class CaseEntity extends AbstractModel implements CaseInterface
     /**
      * @inheritdoc
      */
+    public function getOrderIncrementId()
+    {
+        return (string) $this->getData('order_increment_id');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOrderIncrementId($orderIncrementId)
+    {
+        $this->setData('order_increment_id', (string) $orderIncrementId);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getAssociatedTeam()
     {
         $teamData = $this->getData('associated_team');
-        return empty($teamData) ? array() : $this->serializer->unserialize($teamData);
+        return empty($teamData) ? [] : $this->serializer->unserialize($teamData);
     }
 
     /**

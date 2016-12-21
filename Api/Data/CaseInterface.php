@@ -147,6 +147,21 @@ interface CaseInterface
     public function setOrderId($orderId);
 
     /**
+     * Returns order increment id for a case.
+     *
+     * @return string
+     */
+    public function getOrderIncrementId();
+
+    /**
+     * Sets order increment id for a case.
+     *
+     * @param string $orderIncrementId
+     * @return $this
+     */
+    public function setOrderIncrementId($orderIncrementId);
+
+    /**
      * Returns data about a team associated with a case.
      *
      * @return array
