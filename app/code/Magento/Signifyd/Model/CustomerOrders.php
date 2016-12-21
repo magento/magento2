@@ -5,6 +5,8 @@
  */
 namespace Magento\Signifyd\Model;
 
+use Exception;
+use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -106,7 +108,7 @@ class CustomerOrders
                     'aggregateOrderCount' => count($customerOrders),
                     'aggregateOrderDollars' => $orderTotalDollars
                 ];
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
             }
         }
@@ -118,7 +120,7 @@ class CustomerOrders
      * Returns customer orders.
      *
      * @param $customerId
-     * @return \Magento\Sales\Api\Data\OrderInterface[]
+     * @return OrderInterface[]
      */
     private function getCustomerOrders($customerId)
     {
@@ -154,7 +156,7 @@ class CustomerOrders
      * Returns currency by currency code.
      *
      * @param string|null $currencyCode
-     * @return \Magento\Directory\Model\Currency
+     * @return Currency
      */
     private function getCurrencyByCode($currencyCode)
     {
@@ -162,7 +164,7 @@ class CustomerOrders
             return $this->currencies[$currencyCode];
         }
 
-        /** @var \Magento\Directory\Model\Currency $currency */
+        /** @var Currency $currency */
         $currency = $this->currencyFactory->create();
         $this->currencies[$currencyCode] = $currency->load($currencyCode);
 
