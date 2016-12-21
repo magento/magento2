@@ -14,6 +14,7 @@ define([
 
     describe('Magento_Ui/js/form/element/date', function () {
         var params, model;
+
         beforeEach(function () {
             params = {
                 dataScope: 'abstract',

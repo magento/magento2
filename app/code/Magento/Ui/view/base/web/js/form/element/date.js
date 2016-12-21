@@ -112,6 +112,7 @@ define([
         onValueChange: function (value) {
             var dateFormat,
                 shiftedValue;
+
             if (value) {
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
@@ -166,6 +167,7 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
+
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
