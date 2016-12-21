@@ -123,7 +123,7 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Signifyd\Model\CustomerOrders::getCountAndTotalAmount()
+     * @covers \Magento\Signifyd\Model\CustomerOrders::getAggregatedOrdersInfo()
      */
     public function testGetCountAndTotalAmount()
     {
@@ -145,7 +145,7 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test case when required currency rate is absent and exception is thrown
-     * @covers \Magento\Signifyd\Model\CustomerOrders::getCountAndTotalAmount()
+     * @covers \Magento\Signifyd\Model\CustomerOrders::getAggregatedOrdersInfo()
      */
     public function testGetCountAndTotalAmountNegative()
     {
