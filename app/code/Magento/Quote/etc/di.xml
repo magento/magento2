@@ -89,4 +89,7 @@
     <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\Quote\Model\Quote\Address\FreeShipping" />
     <preference for="Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Model\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
 </config>
