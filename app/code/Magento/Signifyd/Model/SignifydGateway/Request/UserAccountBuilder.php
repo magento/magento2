@@ -6,6 +6,7 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Sales\Model\Order;
+use Magento\Signifyd\Model\CustomerOrders;
 
 /**
  * Prepares details based on registered user account info
@@ -70,7 +71,7 @@ class UserAccountBuilder
             ]
         ];
 
-        $ordersInfo = $this->customerOrders->getCountAndTotalAmount($customerId);
+        $ordersInfo = $this->customerOrders->getAggregatedOrdersInfo($customerId);
         if ($this->isNotEmptyCustomerOrdersInfo($ordersInfo)) {
             $result['userAccount']['aggregateOrderCount'] = $ordersInfo['aggregateOrderCount'];
             $result['userAccount']['aggregateOrderDollars'] = $ordersInfo['aggregateOrderDollars'];
