@@ -12,6 +12,13 @@ require __DIR__ . '/order_with_customer_and_two_simple_products.php';
 /** @var CaseInterfaceFactory $caseFactory */
 $caseFactory = $objectManager->get(CaseInterfaceFactory::class);
 
+$associatedTeam = array(
+    'teamName' => 'Some Team',
+    'teamId' => 123,
+    'getAutoDismiss' => true,
+    'getTeamDismissalDays' => 3
+);
+
 /** @var CaseInterface $case */
 $case = $caseFactory->create();
 $case->setCaseId(123)
@@ -20,7 +27,7 @@ $case->setCaseId(123)
     ->setStatus(CaseInterface::STATUS_PROCESSING)
     ->setScore(553)
     ->setOrderId($order->getEntityId())
-    ->setAssociatedTeam(124)
+    ->setAssociatedTeam($associatedTeam)
     ->setReviewDisposition(CaseInterface::DISPOSITION_GOOD)
     ->setCreatedAt('2016-12-12T15:17:17+0000')
     ->setUpdatedAt('2016-12-12T19:23:16+0000');

@@ -64,7 +64,7 @@ class PurchaseBuilder
             'purchase' => [
                 'orderSessionId' => $this->signifydOrderSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
-                'orderId' => $order->getEntityId(),
+                'orderId' => $order->getIncrementId(),
                 'createdAt' => $createdAt->format(\DateTime::ATOM),
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
                 'transactionId' => $orderPayment->getLastTransId(),
