@@ -106,8 +106,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemWeight' => $product->getWeight()
                     ],
                     1 => [
-                        'itemId' => 'simple2',
-                        'itemName' => 'Simple product',
+                        'itemId' => $orderItems[1]->getSku(),
+                        'itemName' => $orderItems[1]->getName(),
                         'itemPrice' => $orderItems[1]->getPrice(),
                         'itemQuantity' => $orderItems[1]->getQtyOrdered(),
                         'itemUrl' => $product->getProductUrl(),
