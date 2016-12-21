@@ -11,5 +11,10 @@ namespace Magento\Paypal\Test\Block\Onepage\Payment;
  */
 class HostedPro extends PaypalIframe
 {
-    //
+    /**
+     * Block for filling credit card data for Hosted Pro payment method.
+     *
+     * @var string
+     */
+    protected $formBlockCc = '\Magento\Paypal\Test\Block\Form\HostedPro\Cc';
 }

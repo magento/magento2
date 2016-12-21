@@ -9,7 +9,6 @@ namespace Magento\Paypal\Test\Block\Onepage\Payment;
 use Magento\Checkout\Test\Block\Onepage\Payment\Method;
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Paypal\Test\Block\Form\HostedPro\Cc;
 
 /**
  * Paypal Iframe block.
@@ -45,6 +44,13 @@ class PaypalIframe extends Method
     private $errorMessage = '#messageBox';
 
     /**
+     * Block for filling credit card data for payment method.
+     *
+     * @var string
+     */
+    protected $formBlockCc;
+
+    /**
      * Fill credit card data in PayPal iframe form.
      *
      * @param FixtureInterface $creditCard
@@ -53,9 +59,8 @@ class PaypalIframe extends Method
     public function fillPaymentData(FixtureInterface $creditCard)
     {
         $iframeRootElement = $this->switchToPaypalFrame();
-        /** @var Cc $formBlock */
         $formBlock = $this->blockFactory->create(
-            Cc::class,
+            $this->formBlockCc,
             ['element' => $this->_rootElement->find($this->creditCardForm)]
         );
         $formBlock->fill($creditCard, $iframeRootElement);

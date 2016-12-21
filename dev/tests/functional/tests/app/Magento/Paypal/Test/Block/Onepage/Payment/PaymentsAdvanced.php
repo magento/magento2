@@ -11,5 +11,10 @@ namespace Magento\Paypal\Test\Block\Onepage\Payment;
  */
 class PaymentsAdvanced extends PaypalIframe
 {
-    //
+    /**
+     * Block for filling credit card data for Payments Advanced payment method.
+     *
+     * @var string
+     */
+    protected $formBlockCc = '\Magento\Paypal\Test\Block\Form\PaymentsAdvanced\Cc';
 }
