@@ -5,13 +5,14 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
+use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
- * Collects customer orders
+ * Provides information about customer orders.
  */
 class CustomerOrders
 {
@@ -31,6 +32,26 @@ class CustomerOrders
     private $orderRepository;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var CurrencyFactory
+     */
+    private $currencyFactory;
+
+    /**
+     * @var array
+     */
+    private $currencies = [];
+
+    /**
+     * @var string
+     */
+    private static $usdCurrencyCode = 'USD';
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param OrderRepositoryInterface $orderRepository
@@ -38,21 +59,64 @@ class CustomerOrders
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        CurrencyFactory $currencyFactory,
+        \Psr\Log\LoggerInterface $logger
     ) {
 
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->orderRepository = $orderRepository;
+        $this->logger = $logger;
+        $this->currencyFactory = $currencyFactory;
     }
 
     /**
-     * Returns customer orders
+     * Returns aggregated customer orders count and total amount in USD.
+     *
+     * Returned array contains next keys:
+     ** aggregateOrderCount - total count of orders placed by this account since it was created, including the current
+     ** aggregateOrderDollars - total amount spent by this account since it was created, including the current order
      *
      * @param int $customerId
+     * @return array
+     */
+    public function getCountAndTotalAmount($customerId)
+    {
+        $result = [
+            'aggregateOrderCount' => null,
+            'aggregateOrderDollars' => null
+        ];
+
+        $customerOrders = $this->getCustomerOrders($customerId);
+        if (!empty($customerOrders)) {
+            try {
+                $orderTotalDollars = 0.0;
+                foreach ($customerOrders as $order) {
+                    $orderTotalDollars += $this->getUsdOrderTotal(
+                        $order->getBaseGrandTotal(),
+                        $order->getBaseCurrencyCode()
+                    );
+                }
+                $result = [
+                    'aggregateOrderCount' => count($customerOrders),
+                    'aggregateOrderDollars' => $orderTotalDollars
+                ];
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns customer orders.
+     *
+     * @param $customerId
      * @return \Magento\Sales\Api\Data\OrderInterface[]
      */
-    public function get($customerId)
+    private function getCustomerOrders($customerId)
     {
         $filters = [
             $this->filterBuilder->setField(OrderInterface::CUSTOMER_ID)->setValue($customerId)->create()
@@ -62,5 +126,42 @@ class CustomerOrders
         $searchResults = $this->orderRepository->getList($searchCriteria);
 
         return $searchResults->getItems();
+    }
+
+    /**
+     * Returns amount in USD.
+     *
+     * @param float $amount
+     * @param string $currency
+     * @return float
+     */
+    private function getUsdOrderTotal($amount, $currency)
+    {
+        if ($currency === self::$usdCurrencyCode) {
+            return $amount;
+        }
+
+        $operationCurrency = $this->getCurrencyByCode($currency);
+
+        return $operationCurrency->convert($amount, self::$usdCurrencyCode);
+    }
+
+    /**
+     * Returns currency by currency code.
+     *
+     * @param string|null $currencyCode
+     * @return \Magento\Directory\Model\Currency
+     */
+    private function getCurrencyByCode($currencyCode)
+    {
+        if (isset($this->currencies[$currencyCode])) {
+            return $this->currencies[$currencyCode];
+        }
+
+        /** @var \Magento\Directory\Model\Currency $currency */
+        $currency = $this->currencyFactory->create();
+        $this->currencies[$currencyCode] = $currency->load($currencyCode);
+
+        return $this->currencies[$currencyCode];
     }
 }
