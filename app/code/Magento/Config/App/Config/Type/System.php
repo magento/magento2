@@ -6,18 +6,10 @@
 namespace Magento\Config\App\Config\Type;
 
 use Magento\Framework\App\Config\ConfigTypeInterface;
-use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\App\Config\Spi\PostProcessorInterface;
-use Magento\Framework\App\Config\Spi\PreProcessorInterface;
-use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
  * Class process source, cache them and retrieve value by path
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class System implements ConfigTypeInterface
 {
@@ -26,7 +18,7 @@ class System implements ConfigTypeInterface
     const CONFIG_TYPE = 'system';
 
     /**
-     * @var ConfigSourceInterface
+     * @var \Magento\Framework\App\Config\ConfigSourceInterface
      */
     private $source;
 
@@ -36,17 +28,17 @@ class System implements ConfigTypeInterface
     private $data;
 
     /**
-     * @var PostProcessorInterface
+     * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface
      */
     private $postProcessor;
 
     /**
-     * @var PreProcessorInterface
+     * @var \Magento\Framework\App\Config\Spi\PreProcessorInterface
      */
     private $preProcessor;
 
     /**
-     * @var FrontendInterface
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     private $cache;
 
@@ -56,32 +48,31 @@ class System implements ConfigTypeInterface
     private $cachingNestedLevel;
 
     /**
-     * @var Fallback
+     * @var \Magento\Store\Model\Config\Processor\Fallback
      */
     private $fallback;
 
     /**
-     * @var SerializerInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
 
     /**
-     * System constructor.
-     * @param ConfigSourceInterface $source
-     * @param PostProcessorInterface $postProcessor
-     * @param Fallback $fallback
-     * @param FrontendInterface $cache
-     * @param PreProcessorInterface $preProcessor
+     * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
+     * @param \Magento\Framework\App\Config\Spi\PostProcessorInterface $postProcessor
+     * @param \Magento\Store\Model\Config\Processor\Fallback $fallback
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor
      * @param int $cachingNestedLevel
-     * @param SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
-        ConfigSourceInterface $source,
-        PostProcessorInterface $postProcessor,
-        Fallback $fallback,
-        FrontendInterface $cache,
-        SerializerInterface $serializer,
-        PreProcessorInterface $preProcessor,
+        \Magento\Framework\App\Config\ConfigSourceInterface $source,
+        \Magento\Framework\App\Config\Spi\PostProcessorInterface $postProcessor,
+        \Magento\Store\Model\Config\Processor\Fallback $fallback,
+        \Magento\Framework\Cache\FrontendInterface $cache,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1
     ) {
         $this->source = $source;
@@ -105,9 +96,7 @@ class System implements ConfigTypeInterface
             $data = $this->cache->load(self::CONFIG_TYPE);
             if (!$data) {
                 $data = $this->preProcessor->process($this->source->get());
-                $this->data = new DataObject($data);
                 $data = $this->fallback->process($data);
-                $this->data = new DataObject($data);
                 //Placeholder processing need system config - so we need to save intermediate result
                 $data = $this->postProcessor->process($data);
                 $this->data = new DataObject($data);
