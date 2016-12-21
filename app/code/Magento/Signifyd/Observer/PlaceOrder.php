@@ -12,6 +12,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * Place Order observer.
@@ -32,17 +34,25 @@ class PlaceOrder implements ObserverInterface
     private $caseCreationService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * PlaceOrder constructor.
      *
      * @param Config $signifydIntegrationConfig
      * @param CaseCreationServiceInterface $caseCreationService
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $signifydIntegrationConfig,
-        CaseCreationServiceInterface $caseCreationService
+        CaseCreationServiceInterface $caseCreationService,
+        LoggerInterface $logger
     ) {
         $this->signifydIntegrationConfig = $signifydIntegrationConfig;
         $this->caseCreationService = $caseCreationService;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,10 +73,25 @@ class PlaceOrder implements ObserverInterface
         }
 
         foreach ($orders as $order) {
-            $orderId = $order->getEntityId();
-            if (null !== $orderId) {
-                $this->caseCreationService->createForOrder($orderId);
-            }
+            $this->createCaseForOrder($order);
+        }
+    }
+
+    /**
+     * Creates signifyd case for single order
+     *
+     * @param OrderInterface $order
+     */
+    private function createCaseForOrder($order) {
+        $orderId = $order->getEntityId();
+        if (null !== $orderId) {
+            return;
+        }
+
+        try {
+            $this->caseCreationService->createForOrder($orderId);
+        } catch (AlreadyExistsException $e) {
+            $this->logger->error($e->getMessage());
         }
     }
 

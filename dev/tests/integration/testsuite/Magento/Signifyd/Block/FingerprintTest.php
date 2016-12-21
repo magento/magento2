@@ -36,7 +36,7 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      */
     public function testSessionIdPresent()
     {
-        static::assertRegExp('/data-order-session-id=\"[^\"]+\"/', $this->getBlockContents());
+        static::assertContains('data-order-session-id', $this->getBlockContents());
     }
 
     /**

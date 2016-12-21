@@ -11,6 +11,8 @@ use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Api\Data\CaseInterfaceFactory;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\DB\Adapter\DuplicateException;
 
 /**
  *
@@ -65,7 +67,11 @@ class CaseManagement implements CaseManagementInterface
         $case = $this->caseFactory->create();
         $case->setOrderId($orderId)
             ->setStatus(CaseInterface::STATUS_PENDING);
-        return $this->caseRepository->save($case);
+        try {
+            return $this->caseRepository->save($case);
+        } catch (DuplicateException $e) {
+            throw new AlreadyExistsException(__('This order already has associated case entity'), $e);
+        }
     }
 
     /**
