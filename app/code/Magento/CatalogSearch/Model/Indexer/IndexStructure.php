@@ -12,6 +12,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 class IndexStructure implements IndexStructureInterface
 {
@@ -26,11 +27,11 @@ class IndexStructure implements IndexStructureInterface
 
     /**
      * @param ResourceConnection $resource
-     * @param IndexScopeResolver $indexScopeResolver
+     * @param IndexScopeResolverInterface $indexScopeResolver
      */
     public function __construct(
         ResourceConnection $resource,
-        IndexScopeResolver $indexScopeResolver
+        IndexScopeResolverInterface $indexScopeResolver
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;

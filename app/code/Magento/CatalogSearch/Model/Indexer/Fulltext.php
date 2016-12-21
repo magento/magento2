@@ -6,11 +6,17 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
+use Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher;
+use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use \Magento\Framework\Search\Request\Config as SearchRequestConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Provide functionality for Fulltext Search indexing
+ */
 class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -25,26 +31,41 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @var IndexerHandlerFactory
      */
     private $indexerHandlerFactory;
+
     /**
      * @var StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var DimensionFactory
      */
     private $dimensionFactory;
+
     /**
-     * @var Full
+     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
      */
     private $fullAction;
+
     /**
      * @var FulltextResource
      */
     private $fulltextResource;
+
     /**
      * @var SearchRequestConfig
      */
     private $searchRequestConfig;
+
+    /**
+     * @var \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher
+     */
+    private $indexSwitcher;
+
+    /**
+     * @var State
+     */
+    private $indexScopeState;
 
     /**
      * @param FullFactory $fullActionFactory
@@ -54,6 +75,8 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param FulltextResource $fulltextResource
      * @param SearchRequestConfig $searchRequestConfig
      * @param array $data
+     * @param IndexSwitcher $indexSwitcher
+     * @param Scope\State $indexScopeState
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -62,7 +85,9 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         DimensionFactory $dimensionFactory,
         FulltextResource $fulltextResource,
         SearchRequestConfig $searchRequestConfig,
-        array $data
+        array $data,
+        IndexSwitcher $indexSwitcher = null,
+        State $indexScopeState = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -71,6 +96,14 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         $this->fulltextResource = $fulltextResource;
         $this->searchRequestConfig = $searchRequestConfig;
         $this->data = $data;
+        if (null === $indexSwitcher) {
+            $indexSwitcher = ObjectManager::getInstance()->get(IndexSwitcher::class);
+        }
+        if (null === $indexScopeState) {
+            $indexScopeState = ObjectManager::getInstance()->get(State::class);
+        }
+        $this->indexSwitcher = $indexSwitcher;
+        $this->indexScopeState = $indexScopeState;
     }
 
     /**
@@ -106,10 +139,14 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
             'data' => $this->data
         ]);
         foreach ($storeIds as $storeId) {
-            $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
-            $saveHandler->cleanIndex([$dimension]);
-            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId));
+            $dimensions = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
+            $this->indexScopeState->useTemporaryIndex();
 
+            $saveHandler->cleanIndex($dimensions);
+            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
+
+            $this->indexSwitcher->switchIndex($dimensions);
+            $this->indexScopeState->useRegularIndex();
         }
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();

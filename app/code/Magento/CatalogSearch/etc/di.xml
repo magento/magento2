@@ -246,4 +246,27 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\CatalogSearch\Model\Indexer\IndexerHandler">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\CatalogSearch\Model\Indexer\IndexStructure">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy">
+        <arguments>
+            <argument name="states" xsi:type="array">
+                <item name="use_temporary_table" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\TemporaryResolver</item>
+                <item name="use_main_table" xsi:type="string">\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
