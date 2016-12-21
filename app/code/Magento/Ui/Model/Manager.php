@@ -120,7 +120,6 @@ class Manager implements ManagerInterface
         CacheInterface $cache,
         InterpreterInterface $argumentInterpreter,
         SerializerInterface $serializer = null
-
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;
