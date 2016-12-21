@@ -96,8 +96,8 @@ class ProductForm extends FormSections
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
             $sections = $this->getFixtureFieldsByContainers($product);
-            $sections['product-details']['category_ids']['value'] = [];
             if ($product->hasData('category_ids') || $category) {
+                $sections['product-details']['category_ids']['value'] = [];
                 $categories = $product->hasData('category_ids')
                     ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
                     : [$category];
