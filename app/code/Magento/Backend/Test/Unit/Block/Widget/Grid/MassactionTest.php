@@ -126,7 +126,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string$itemId
+     * @param string $itemId
      * @param \Magento\Framework\DataObject $item
      * @param $expectedItem \Magento\Framework\DataObject
      * @dataProvider itemsProcessingDataProvider
