@@ -112,8 +112,6 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
             'logger' => $this->logger
         ]);
 
-
-
         $this->initCurrencies();
         $this->initOrderRepository();
 
