@@ -86,7 +86,7 @@ class PlaceOrder implements ObserverInterface
     private function createCaseForOrder($order)
     {
         $orderId = $order->getEntityId();
-        if (null !== $orderId) {
+        if (null === $orderId) {
             return;
         }
 
