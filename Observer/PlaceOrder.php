@@ -81,8 +81,10 @@ class PlaceOrder implements ObserverInterface
      * Creates signifyd case for single order
      *
      * @param OrderInterface $order
+     * @return void
      */
-    private function createCaseForOrder($order) {
+    private function createCaseForOrder($order)
+    {
         $orderId = $order->getEntityId();
         if (null !== $orderId) {
             return;
