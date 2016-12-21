@@ -5,9 +5,6 @@
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\DB\Adapter\DuplicateException;
-use Magento\Framework\Phrase;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
@@ -59,11 +56,7 @@ class CaseCreationService implements CaseCreationServiceInterface
      */
     public function createForOrder($orderId)
     {
-        try {
-            $this->caseManagement->create($orderId);
-        } catch (DuplicateException $e) {
-            throw new AlreadyExistsException(new Phrase('This order already has associated case entity'), $e);
-        }
+        $this->caseManagement->create($orderId);
 
         try {
             $this->signifydGateway->createCase($orderId);
