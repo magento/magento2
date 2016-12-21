@@ -105,7 +105,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)
             ->order('t.rule_price ' . Select::SQL_ASC)
-            ->limit($limit)];
+            ->limit($limit);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
         return [$priceSelect];
