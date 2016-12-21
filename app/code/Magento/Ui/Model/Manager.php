@@ -18,6 +18,7 @@ use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definit
 use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
 use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager
@@ -108,7 +109,7 @@ class Manager implements ManagerInterface
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      * @param CacheInterface $cache
      * @param InterpreterInterface $argumentInterpreter
-     * @param SerializerInterface $serializer
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -118,7 +119,7 @@ class Manager implements ManagerInterface
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
         CacheInterface $cache,
         InterpreterInterface $argumentInterpreter,
-        SerializerInterface $serializer
+        SerializerInterface $serializer = null
 
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
@@ -129,7 +130,7 @@ class Manager implements ManagerInterface
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
         $this->cache = $cache;
         $this->argumentInterpreter = $argumentInterpreter;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
