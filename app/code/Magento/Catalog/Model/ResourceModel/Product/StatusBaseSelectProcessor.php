@@ -61,16 +61,16 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
         $select->joinLeft(
             ['status_global_attr' => $statusAttribute->getBackendTable()],
             "status_global_attr.{$linkField} = " . self::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                . ' AND status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-                . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
+            . ' AND status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
             []
         );
 
         $select->joinLeft(
             ['status_attr' => $statusAttribute->getBackendTable()],
             "status_attr.{$linkField} = " . self::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-                . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
+            . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
+            . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
             []
         );
 

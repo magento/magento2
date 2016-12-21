@@ -19,6 +19,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -100,9 +103,9 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ['status_global_attr' => $backendTable],
                 "status_global_attr.{$linkField} = "
-                    . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                    . " AND status_global_attr.attribute_id = {$attributeId}"
-                    . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
+                . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
+                . " AND status_global_attr.attribute_id = {$attributeId}"
+                . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
                 []
             )
             ->willReturnSelf();
@@ -111,8 +114,8 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ['status_attr' => $backendTable],
                 "status_attr.{$linkField} = " . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                    . " AND status_attr.attribute_id = {$attributeId}"
-                    . " AND status_attr.store_id = {$currentStoreId}",
+                . " AND status_attr.attribute_id = {$attributeId}"
+                . " AND status_attr.store_id = {$currentStoreId}",
                 []
             )
             ->willReturnSelf();
