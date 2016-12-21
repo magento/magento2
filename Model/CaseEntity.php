@@ -5,8 +5,10 @@
  */
 namespace Magento\Signifyd\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Signifyd\Api\Data\CaseInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Implementation of Signifyd Case interface
@@ -19,10 +21,16 @@ class CaseEntity extends AbstractModel implements CaseInterface
     protected $_eventPrefix = 'signifyd_case';
 
     /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * @inheritdoc
      */
     protected function _construct()
     {
+        $this->serializer = ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->_init(ResourceModel\CaseEntity::class);
     }
 
@@ -150,15 +158,16 @@ class CaseEntity extends AbstractModel implements CaseInterface
      */
     public function getAssociatedTeam()
     {
-        return (int) $this->getData('associated_team');
+        $teamData = $this->getData('associated_team');
+        return empty($teamData) ? array() : $this->serializer->unserialize($teamData);
     }
 
     /**
      * @inheritdoc
      */
-    public function setAssociatedTeam($teamId)
+    public function setAssociatedTeam(array $team)
     {
-        $this->setData('associated_team', (int) $teamId);
+        $this->setData('associated_team', $this->serializer->serialize($team));
         return $this;
     }
 
