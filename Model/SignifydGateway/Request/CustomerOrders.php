@@ -55,6 +55,8 @@ class CustomerOrders
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param OrderRepositoryInterface $orderRepository
+     * @param CurrencyFactory $currencyFactory
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
