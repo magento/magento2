@@ -16,6 +16,11 @@ use Magento\Framework\DB\Query\Generator;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
+     * Name of the database connection
+     */
+    const CONNECTION_NAME = 'checkout';
+
+    /**
      * @var FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
@@ -69,7 +74,7 @@ class UpgradeData implements UpgradeDataInterface
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
-            $setup->getConnection(),
+            $setup->getConnection(self::CONNECTION_NAME),
             $setup->getTable('quote_payment'),
             'payment_id',
             'additional_information'
@@ -88,7 +93,7 @@ class UpgradeData implements UpgradeDataInterface
             ]
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
+            $setup->getConnection(self::CONNECTION_NAME),
             $setup->getTable('quote_item_option'),
             'option_id',
             'value',
@@ -119,7 +124,7 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
             $fieldDataConverter->convert(
-                $setup->getConnection(),
+                $setup->getConnection(self::CONNECTION_NAME),
                 $setup->getTable('quote_item_option'),
                 'option_id',
                 'value',

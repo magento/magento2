@@ -8,6 +8,11 @@ namespace Magento\Sales\Setup;
 class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
     /**
+     * Name of the database connection
+     */
+    const CONNECTION_NAME = 'sales';
+
+    /**
      * Sales setup factory
      *
      * @var \Magento\Sales\Setup\SalesSetupFactory
@@ -124,25 +129,25 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             \Magento\Framework\DB\DataConverter\SerializedToJson::class
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
+            $setup->getConnection(self::CONNECTION_NAME),
             $setup->getTable('sales_order_item'),
             'item_id',
             'product_options'
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
+            $setup->getConnection(self::CONNECTION_NAME),
             $setup->getTable('sales_shipment'),
             'entity_id',
             'packages'
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
+            $setup->getConnection(self::CONNECTION_NAME),
             $setup->getTable('sales_order_payment'),
             'entity_id',
             'additional_information'
         );
         $fieldDataConverter->convert(
-            $setup->getConnection(),
+            $setup->getConnection(self::CONNECTION_NAME),
             $setup->getTable('sales_payment_transaction'),
             'transaction_id',
             'additional_information'
