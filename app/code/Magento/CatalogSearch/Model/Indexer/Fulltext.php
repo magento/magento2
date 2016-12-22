@@ -24,7 +24,9 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      */
     const INDEXER_ID = 'catalogsearch_fulltext';
 
-    /** @var array index structure */
+    /**
+     * @var array index structure
+     */
     protected $data;
 
     /**
@@ -53,7 +55,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $fulltextResource;
 
     /**
-     * @var SearchRequestConfig
+     * @var \Magento\Framework\Search\Request\Config
      */
     private $searchRequestConfig;
 
@@ -63,7 +65,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $indexSwitcher;
 
     /**
-     * @var State
+     * @var \Magento\CatalogSearch\Model\Indexer\Scope\State
      */
     private $indexScopeState;
 

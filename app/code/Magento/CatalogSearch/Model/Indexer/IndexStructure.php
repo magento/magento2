@@ -20,6 +20,7 @@ class IndexStructure implements IndexStructureInterface
      * @var Resource
      */
     private $resource;
+
     /**
      * @var IndexScopeResolver
      */

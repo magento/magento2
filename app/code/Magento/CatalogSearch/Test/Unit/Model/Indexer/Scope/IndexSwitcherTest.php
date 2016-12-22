@@ -110,7 +110,6 @@ class IndexSwitcherTest extends \PHPUnit_Framework_TestCase
             ->method('getState')
             ->willReturn(State::USE_TEMPORARY_INDEX);
 
-
         $this->scopeState->expects($this->at(1))->method('useRegularIndex');
         $this->scopeState->expects($this->at(2))->method('useTemporaryIndex');
 
@@ -149,7 +148,6 @@ class IndexSwitcherTest extends \PHPUnit_Framework_TestCase
         $this->scopeState->expects($this->once())
             ->method('getState')
             ->willReturn(State::USE_TEMPORARY_INDEX);
-
 
         $this->scopeState->expects($this->at(1))->method('useRegularIndex');
         $this->scopeState->expects($this->at(2))->method('useTemporaryIndex');
@@ -193,7 +191,6 @@ class IndexSwitcherTest extends \PHPUnit_Framework_TestCase
         $this->scopeState->expects($this->once())
             ->method('getState')
             ->willReturn(State::USE_TEMPORARY_INDEX);
-
 
         $this->scopeState->expects($this->never())->method('useRegularIndex');
         $this->scopeState->expects($this->never())->method('useTemporaryIndex');
