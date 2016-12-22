@@ -28,11 +28,6 @@ class SettingChecker
     private $placeholder;
 
     /**
-     * @var array|null
-     */
-    private $environmentVariables;
-
-    /**
      * @var ScopeCodeResolver
      */
     private $scopeCodeResolver;
@@ -97,12 +92,8 @@ class SettingChecker
      */
     public function getEnvValue($placeholder)
     {
-        if (null === $this->environmentVariables) {
-            $this->environmentVariables = $_ENV;
-        }
-
-        if ($this->placeholder->isApplicable($placeholder) && isset($this->environmentVariables[$placeholder])) {
-            return $this->environmentVariables[$placeholder];
+        if ($this->placeholder->isApplicable($placeholder) && isset($_ENV[$placeholder])) {
+            return $_ENV[$placeholder];
         }
 
         return null;
