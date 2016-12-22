@@ -5,7 +5,9 @@
  */
 namespace Magento\Quote\Model\Product\Plugin;
 
-/** AroundSave plugin for product resource model to update quote items prices if product price is changed */
+/**
+ * AroundSave plugin for product resource model to update quote items prices if product price is changed
+ */
 class UpdateQuoteItems
 {
     /**
