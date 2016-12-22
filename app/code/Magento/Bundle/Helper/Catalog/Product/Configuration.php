@@ -47,7 +47,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

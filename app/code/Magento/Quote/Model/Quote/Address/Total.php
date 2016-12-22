@@ -26,7 +26,7 @@ class Total extends \Magento\Framework\DataObject
 
     /**
      * @param array $data [optional]
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         array $data = [],
