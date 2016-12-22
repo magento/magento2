@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\PageCache;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Builtin cache processor
@@ -35,18 +36,31 @@ class Kernel
     private $fullPageCache;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @param Cache $cache
      * @param Identifier $identifier
      * @param \Magento\Framework\App\Request\Http $request
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
         \Magento\Framework\App\PageCache\Identifier $identifier,
-        \Magento\Framework\App\Request\Http $request
+        \Magento\Framework\App\Request\Http $request,
+        SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
         $this->request = $request;
+        $this->serializer = $serializer ?: $this->getObjectManager()->get(SerializerInterface::class);
     }
 
     /**
@@ -57,7 +71,31 @@ class Kernel
     public function load()
     {
         if ($this->request->isGet() || $this->request->isHead()) {
-            return unserialize($this->getCache()->load($this->identifier->getValue()));
+            $responseData = $this->serializer->unserialize($this->getCache()->load($this->identifier->getValue()));
+            if (!$responseData) {
+                return false;
+            }
+
+            $context = $this->getObjectManager()->create(
+                \Magento\Framework\App\Http\Context::class,
+                [
+                    'data' => $responseData['context']['data'],
+                    'default' => $responseData['context']['default']
+                ]
+            );
+
+            $response = $this->getObjectManager()->create(
+                \Magento\Framework\App\Response\Http::class,
+                [
+                    'context' => $context
+                ]
+            );
+            $response->setStatusCode($responseData['status_code']);
+            $response->setContent($responseData['content']);
+            foreach ($responseData['headers'] as $headerKey => $headerValue) {
+                $response->setHeader($headerKey, $headerValue, true);
+            }
+            return $response;
         }
         return false;
     }
@@ -84,9 +122,47 @@ class Kernel
                 if (!headers_sent()) {
                     header_remove('Set-Cookie');
                 }
-                $this->getCache()->save(serialize($response), $this->identifier->getValue(), $tags, $maxAge);
+
+                $this->getCache()->save(
+                    $this->serializer->serialize($this->cacheDataPreparation($response)),
+                    $this->identifier->getValue(),
+                    $tags,
+                    $maxAge
+                );
             }
         }
+    }
+
+    /*
+     * Preparation data for storage in the cache.
+     *
+     * @param \Magento\Framework\App\Response\Http $response
+     * @return array
+     */
+    private function cacheDataPreparation(\Magento\Framework\App\Response\Http $response)
+    {
+        $context = $this->getObjectManager()->get(\Magento\Framework\App\Http\Context::class);
+
+        return [
+            'content' => $response->getContent(),
+            'status_code' => $response->getStatusCode(),
+            'headers' => $response->getHeaders()->toArray(),
+            'context' => $context->toArray()
+        ];
+
+    }
+
+    /**
+     * Get ObjectManager Instance
+     *
+     * @return ObjectManager
+     */
+    private function getObjectManager()
+    {
+        if ($this->objectManager === null) {
+            $this->objectManager = ObjectManager::getInstance();
+        }
+        return $this->objectManager;
     }
 
     /**
@@ -97,7 +173,7 @@ class Kernel
     private function getCache()
     {
         if (!$this->fullPageCache) {
-            $this->fullPageCache = ObjectManager::getInstance()->get(\Magento\PageCache\Model\Cache\Type::class);
+            $this->fullPageCache = $this->getObjectManager()->get(\Magento\PageCache\Model\Cache\Type::class);
         }
         return $this->fullPageCache;
     }
