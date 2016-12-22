@@ -119,7 +119,7 @@ class CustomerOrders
     /**
      * Returns customer orders.
      *
-     * @param $customerId
+     * @param int $customerId
      * @return OrderInterface[]
      */
     private function getCustomerOrders($customerId)
