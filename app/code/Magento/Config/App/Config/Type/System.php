@@ -62,9 +62,9 @@ class System implements ConfigTypeInterface
      * @param \Magento\Framework\App\Config\Spi\PostProcessorInterface $postProcessor
      * @param \Magento\Store\Model\Config\Processor\Fallback $fallback
      * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor
      * @param int $cachingNestedLevel
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
