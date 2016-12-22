@@ -194,4 +194,43 @@ class Structure
     {
         return $this->assets;
     }
+
+    /**
+     * Reformat page config structure to array.
+     * It can be possible for serialization and save to cache storage for example.
+     *
+     * @return array
+     */
+    public function __toArray()
+    {
+        return [
+            'assets'                  => $this->assets,
+            'removeAssets'            => $this->removeAssets,
+            'title'                   => $this->title,
+            'metadata'                => $this->metadata,
+            'elementAttributes'       => $this->elementAttributes,
+            'removeElementAttributes' => $this->removeElementAttributes,
+            'bodyClasses'             => $this->bodyClasses,
+            'isBodyClassesDeleted'    => $this->isBodyClassesDeleted,
+        ];
+    }
+
+    /**
+     * Update page config structure data.
+     * It can be used for case of set data from cache storage after initialization this class.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function populateWithArray(array $data)
+    {
+        $this->assets = isset($data['assets']) ? $data['assets'] : [];
+        $this->removeAssets = isset($data['removeAssets']) ? $data['removeAssets'] : [];
+        $this->title = isset($data['title']) ? $data['title'] : '';
+        $this->metadata = isset($data['metadata']) ? $data['metadata'] : [];
+        $this->elementAttributes = isset($data['elementAttributes']) ? $data['elementAttributes'] : [];
+        $this->removeElementAttributes = isset($data['removeElementAttributes']) ? $data['removeElementAttributes'] : [];
+        $this->bodyClasses = isset($data['bodyClasses']) ? $data['bodyClasses'] : [];
+        $this->isBodyClassesDeleted = isset($data['isBodyClassesDeleted']) ? $data['isBodyClassesDeleted'] : false;
+    }
 }

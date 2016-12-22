@@ -531,4 +531,45 @@ class ScheduledStructure
         $this->scheduledElements = [];
         $this->scheduledStructure = [];
     }
+
+    /**
+     * Reformat layout scheduled structure to array.
+     * It can be possible for serialization and save to cache storage for example.
+     *
+     * @return array
+     */
+    public function __toArray()
+    {
+        return [
+            'scheduledStructure' => $this->scheduledStructure,
+            'scheduledData'      => $this->scheduledData,
+            'scheduledElements'  => $this->scheduledElements,
+            'scheduledMoves'     => $this->scheduledMoves,
+            'scheduledRemoves'   => $this->scheduledRemoves,
+            'scheduledIfconfig'  => $this->scheduledIfconfig,
+            'scheduledPaths'     => $this->scheduledPaths,
+            'elementsToSort'     => $this->elementsToSort,
+            'brokenParent'       => $this->brokenParent,
+        ];
+    }
+
+    /**
+     * Update layout scheduled structure data.
+     * It can be used for case of set data from cache storage after initialization this class.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function populateWithArray(array $data)
+    {
+        $this->scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
+        $this->scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
+        $this->scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
+        $this->scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
+        $this->scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
+        $this->scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
+        $this->scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
+        $this->elementsToSort = isset($data['elementsToSort']) ? $data['elementsToSort'] : [];
+        $this->brokenParent = isset($data['brokenParent']) ? $data['brokenParent'] : [];
+    }
 }
