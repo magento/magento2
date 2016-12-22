@@ -133,7 +133,7 @@ class Kernel
         }
     }
 
-    /*
+    /**
      * Preparation data for storage in the cache.
      *
      * @param \Magento\Framework\App\Response\Http $response

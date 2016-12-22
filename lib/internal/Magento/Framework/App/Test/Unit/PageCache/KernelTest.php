@@ -7,6 +7,9 @@ namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use \Magento\Framework\App\PageCache\Kernel;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class KernelTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Kernel */
