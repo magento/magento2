@@ -43,12 +43,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_validatorMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_moduleListMock;
+
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /**
      * @var array
@@ -58,8 +56,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         'title' => 'Item Title',
         'action' => '/system/config',
         'resource' => 'Magento_Config::config',
-        'dependsOnModule' => 'Magento_Backend',
-        'dependsOnConfig' => 'system/config/isEnabled',
+        'depends_on_module' => 'Magento_Backend',
+        'depends_on_config' => 'system/config/isEnabled',
         'tooltip' => 'Item tooltip',
     ];
 
@@ -76,15 +74,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
         $this->_urlModelMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
         $this->_moduleManager = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
-        $this->_validatorMock = $this->getMock(\Magento\Backend\Model\Menu\Item\Validator::class);
-        $this->_validatorMock->expects($this->any())->method('validate');
+        $validatorMock = $this->getMock(\Magento\Backend\Model\Menu\Item\Validator::class);
+        $validatorMock->expects($this->any())->method('validate');
         $this->_moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleListInterface::class);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $helper->getObject(
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_model = $this->objectManager->getObject(
             \Magento\Backend\Model\Menu\Item::class,
             [
-                'validator' => $this->_validatorMock,
+                'validator' => $validatorMock,
                 'authorization' => $this->_aclMock,
                 'scopeConfig' => $this->_scopeConfigMock,
                 'menuFactory' => $this->_menuFactoryMock,
@@ -99,8 +97,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlWithEmptyActionReturnsHashSign()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $item = $helper->getObject(
+        $item = $this->objectManager->getObject(
             \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
@@ -129,8 +126,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testHasClickCallbackReturnsTrueIfItemHasNoAction()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $item = $helper->getObject(
+        $item = $this->objectManager->getObject(
             \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
@@ -140,8 +136,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetClickCallbackReturnsStoppingJsIfItemDoesntHaveAction()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $item = $helper->getObject(
+        $item = $this->objectManager->getObject(
             \Magento\Backend\Model\Menu\Item::class,
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
         );
@@ -218,15 +213,232 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChildrenCreatesSubmenuOnFirstCall()
     {
-        $menuMock = $this->getMock(
-            \Magento\Backend\Model\Menu::class,
-            [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
-        );
+        $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
 
         $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));
 
         $this->_model->getChildren();
         $this->_model->getChildren();
+    }
+
+    /**
+     * @param array $data
+     * @param array $expected
+     * @dataProvider toArrayDataProvider
+     */
+    public function testToArray($data, $expected)
+    {
+        $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
+        $menuMock->method('toArray')
+            ->willReturn(isset($data['sub_menu']) ? $data['sub_menu'] : null);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
+            [
+                'authorization' => $this->_aclMock,
+                'scopeConfig' => $this->_scopeConfigMock,
+                'menuFactory' => $this->_menuFactoryMock,
+                'urlModel' => $this->_urlModelMock,
+                'moduleList' => $this->_moduleListMock,
+                'moduleManager' => $this->_moduleManager,
+                'data' => $data
+            ]
+        );
+        $this->assertEquals($expected, $model->toArray());
+    }
+
+    public function toArrayDataProvider()
+    {
+        return [
+            [
+                $this->_params,
+                [
+                    'parent_id' => null,
+                    'module_name' => 'Magento_Backend',
+                    'sort_index' => null,
+                    'depends_on_config' => 'system/config/isEnabled',
+                    'id' => 'item',
+                    'resource' => 'Magento_Config::config',
+                    'path' => '',
+                    'action' => '/system/config',
+                    'depends_on_module' => 'Magento_Backend',
+                    'tooltip' => 'Item tooltip',
+                    'title' => 'Item Title',
+                    'sub_menu' => null
+                ]
+            ],
+            [
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => '5',
+                    'resource' => null,
+                    'path' => null,
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => null,
+                    'title' => null,
+                    'sub_menu' => $this->_params,
+                ],
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => '5',
+                    'resource' => null,
+                    'path' => null,
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => '',
+                    'title' => null,
+                    'sub_menu' => $this->_params
+                ]
+            ],
+            [
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'sub_menu' => $this->_params,
+                ],
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => null,
+                    'resource' => null,
+                    'path' => '',
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => '',
+                    'title' => null,
+                    'sub_menu' => $this->_params
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param array $constructorData
+     * @param array $populateFromData
+     * @dataProvider populateFromArrayDataProvider
+     */
+    public function testPopulateFromArray($constructorData, $populateFromData, $expected)
+    {
+        $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
+        $menuMock->method('toArray')
+            ->willReturn(isset($constructorData['sub_menu']) ? $constructorData['sub_menu'] : null);
+
+        $model = $this->objectManager->getObject(
+            \Magento\Backend\Model\Menu\Item::class,
+            [
+                'authorization' => $this->_aclMock,
+                'scopeConfig' => $this->_scopeConfigMock,
+                'menuFactory' => $this->_menuFactoryMock,
+                'urlModel' => $this->_urlModelMock,
+                'moduleList' => $this->_moduleListMock,
+                'moduleManager' => $this->_moduleManager,
+                'data' => $constructorData
+            ]
+        );
+        $model->populateFromArray($populateFromData);
+        $this->assertEquals($expected, $model->toArray());
+    }
+
+    public function populateFromArrayDataProvider()
+    {
+        return [
+            [
+                [],
+                $this->_params,
+                [
+                    'parent_id' => null,
+                    'module_name' => 'Magento_Backend',
+                    'sort_index' => null,
+                    'depends_on_config' => 'system/config/isEnabled',
+                    'id' => 'item',
+                    'resource' => 'Magento_Config::config',
+                    'path' => '',
+                    'action' => '/system/config',
+                    'depends_on_module' => 'Magento_Backend',
+                    'tooltip' => 'Item tooltip',
+                    'title' => 'Item Title',
+                    'sub_menu' => null
+                ],
+            ],
+            [
+                $this->_params,
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => '5',
+                    'resource' => null,
+                    'path' => null,
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => null,
+                    'title' => null,
+                    'sub_menu' => $this->_params,
+                ],
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => '5',
+                    'resource' => null,
+                    'path' => '',
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => '',
+                    'title' => null,
+                    'sub_menu' => null
+                ],
+            ],
+            [
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => '5',
+                    'resource' => null,
+                    'path' => null,
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => null,
+                    'title' => null,
+                    'sub_menu' => $this->_params,
+                ],
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'sub_menu' => $this->_params,
+                ],
+                [
+                    'parent_id' => '1',
+                    'module_name' => 'Magento_Module1',
+                    'sort_index' => '50',
+                    'depends_on_config' => null,
+                    'id' => null,
+                    'resource' => null,
+                    'path' => '',
+                    'action' => null,
+                    'depends_on_module' => null,
+                    'tooltip' => '',
+                    'title' => null,
+                    'sub_menu' => $this->_params
+                ],
+            ]
+        ];
     }
 }

@@ -131,6 +131,7 @@ class Item
      * Serialized submenu string
      *
      * @var string
+     * @deprecated
      */
     protected $_serializedSubmenu;
 
@@ -169,7 +170,6 @@ class Item
         $this->_validator = $validator;
         if (!empty($data)) {
             $this->_validator->validate($data);
-            $this->populateFromArray($data);
         }
         $this->_moduleManager = $moduleManager;
         $this->_acl = $authorization;
@@ -177,6 +177,7 @@ class Item
         $this->_menuFactory = $menuFactory;
         $this->_urlModel = $urlModel;
         $this->_moduleList = $moduleList;
+        $this->populateFromArray($data);
     }
 
     /**
@@ -447,7 +448,7 @@ class Item
     {
         return [
             'parent_id' => $this->_parentId,
-            'module' => $this->_moduleName,
+            'module_name' => $this->_moduleName,
             'sort_index' => $this->_sortIndex,
             'depends_on_config' => $this->_dependsOnConfig,
             'id' => $this->_id,
@@ -469,20 +470,17 @@ class Item
      */
     public function populateFromArray(array $data)
     {
-        $this->_moduleName = isset($data['module']) ? $data['module'] : 'Magento_Backend';
-
-        $this->_id = $data['id'];
-        $this->_title = $data['title'];
-        $this->_action = $this->_getArgument($data, 'action');
-        $this->_resource = $this->_getArgument($data, 'resource');
-        $this->_dependsOnModule = $this->_getArgument($data, 'dependsOnModule');
-        $this->_dependsOnConfig = $this->_getArgument($data, 'dependsOnConfig');
-        $this->_tooltip = $this->_getArgument($data, 'toolTip', '');
         $this->_parentId = $this->_getArgument($data, 'parent_id');
+        $this->_moduleName = $this->_getArgument($data, 'module_name', 'Magento_Backend');
         $this->_sortIndex = $this->_getArgument($data, 'sort_index');
         $this->_dependsOnConfig = $this->_getArgument($data, 'depends_on_config');
-        $this->_path = $this->_getArgument($data, 'path');
+        $this->_id = $this->_getArgument($data, 'id');
+        $this->_resource = $this->_getArgument($data, 'resource');
+        $this->_path = $this->_getArgument($data, 'path', '');
+        $this->_action = $this->_getArgument($data, 'action');
         $this->_dependsOnModule = $this->_getArgument($data, 'depends_on_module');
+        $this->_tooltip = $this->_getArgument($data, 'tooltip', '');
+        $this->_title = $this->_getArgument($data, 'title');
         if (isset($data['sub_menu'])) {
             $menu = $this->_menuFactory->create();
             $menu->populateFromArray($data['sub_menu']);

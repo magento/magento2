@@ -71,7 +71,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->menuBuilderMock = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
 
-        $menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->menuMock));;
+        $menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->menuMock));
 
         $this->configReaderMock->expects($this->any())->method('read')->will($this->returnValue([]));
 
