@@ -1028,7 +1028,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $productSelections = $this->getSelectionsCollection($productOptionIds, $product);
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
         $selectionIds = $this->serializer->unserialize($selectionIds->getValue());
-        $bundleOption = $this->getBundleOption($product);
+        $buyRequest = $product->getCustomOption('info_buyRequest');
+ 	 	$buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
+ 	 	$bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
@@ -1055,23 +1057,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $this;
-    }
-
-    /**
-     * Get Bundle option as array from 'info_buyRequest' data.
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return array
-     */
-    private function getBundleOption(\Magento\Catalog\Model\Product $product)
-    {
-        $buyRequest = $product->getCustomOption('info_buyRequest');
-        $data = $this->serializer->unserialize($buyRequest->getValue());
-        $data = is_array($data) ? $data : [];
-        $buyRequest = \Magento\Framework\App\ObjectManager::getInstance()
-            ->create(\Magento\Framework\DataObject::class, ['data' => $data]);
-
-        return $buyRequest->getBundleOption();
     }
 
     /**
