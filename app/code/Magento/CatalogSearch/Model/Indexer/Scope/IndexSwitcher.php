@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Scope;
 
+use Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
- * Provides a functionality to replace main index table with its temporary state
+ * Provides a functionality to replace main index with its temporary representation
  */
-class IndexSwitcher
+class IndexSwitcher implements IndexSwitcherInterface
 {
     /**
      * @var Resource
@@ -45,12 +45,7 @@ class IndexSwitcher
     }
 
     /**
-     * Switch current index with temporary index
-     *
-     * It will drop current index table and rename temporary index table to the current index table.
-     *
-     * @param array $dimensions
-     * @return void
+     * {@inheritdoc}
      * @throws IndexTableNotExistException
      */
     public function switchIndex(array $dimensions)

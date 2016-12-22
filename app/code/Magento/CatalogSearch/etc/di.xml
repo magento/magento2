@@ -12,11 +12,20 @@
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
     <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
+    <preference for="\Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="\Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexerHandler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy">
+        <arguments>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="mysql" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher</item>
             </argument>
         </arguments>
     </type>

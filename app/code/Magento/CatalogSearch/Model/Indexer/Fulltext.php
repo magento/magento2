@@ -40,7 +40,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $storeManager;
 
     /**
-     * @var DimensionFactory
+     * @var \Magento\Framework\Search\Request\DimensionFactory
      */
     private $dimensionFactory;
 
@@ -77,7 +77,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param FulltextResource $fulltextResource
      * @param SearchRequestConfig $searchRequestConfig
      * @param array $data
-     * @param IndexSwitcher $indexSwitcher
+     * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
      */
     public function __construct(
@@ -88,7 +88,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         FulltextResource $fulltextResource,
         SearchRequestConfig $searchRequestConfig,
         array $data,
-        IndexSwitcher $indexSwitcher = null,
+        IndexSwitcherInterface $indexSwitcher = null,
         State $indexScopeState = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
@@ -99,7 +99,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         $this->searchRequestConfig = $searchRequestConfig;
         $this->data = $data;
         if (null === $indexSwitcher) {
-            $indexSwitcher = ObjectManager::getInstance()->get(IndexSwitcher::class);
+            $indexSwitcher = ObjectManager::getInstance()->get(IndexSwitcherInterface::class);
         }
         if (null === $indexScopeState) {
             $indexScopeState = ObjectManager::getInstance()->get(State::class);
