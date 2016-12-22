@@ -130,25 +130,25 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
         );
         $fieldDataConverter->convert(
             $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_order_item'),
+            $setup->getTable('sales_order_item', self::CONNECTION_NAME),
             'item_id',
             'product_options'
         );
         $fieldDataConverter->convert(
             $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_shipment'),
+            $setup->getTable('sales_shipment', self::CONNECTION_NAME),
             'entity_id',
             'packages'
         );
         $fieldDataConverter->convert(
             $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_order_payment'),
+            $setup->getTable('sales_order_payment', self::CONNECTION_NAME),
             'entity_id',
             'additional_information'
         );
         $fieldDataConverter->convert(
             $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_payment_transaction'),
+            $setup->getTable('sales_payment_transaction', self::CONNECTION_NAME),
             'transaction_id',
             'additional_information'
         );

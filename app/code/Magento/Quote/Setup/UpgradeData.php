@@ -75,7 +75,7 @@ class UpgradeData implements UpgradeDataInterface
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $fieldDataConverter->convert(
             $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('quote_payment'),
+            $setup->getTable('quote_payment', self::CONNECTION_NAME),
             'payment_id',
             'additional_information'
         );
@@ -94,7 +94,7 @@ class UpgradeData implements UpgradeDataInterface
         );
         $fieldDataConverter->convert(
             $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('quote_item_option'),
+            $setup->getTable('quote_item_option', self::CONNECTION_NAME),
             'option_id',
             'value',
             $queryModifier
@@ -125,7 +125,7 @@ class UpgradeData implements UpgradeDataInterface
             );
             $fieldDataConverter->convert(
                 $setup->getConnection(self::CONNECTION_NAME),
-                $setup->getTable('quote_item_option'),
+                $setup->getTable('quote_item_option', self::CONNECTION_NAME),
                 'option_id',
                 'value',
                 $queryModifier
