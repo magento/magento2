@@ -71,6 +71,6 @@ class Environment implements PlaceholderInterface
      */
     public function isApplicable($placeholder)
     {
-        return 1 === preg_match('/(' . static::PREFIX . '.*[a-zA-Z_]).*/', $placeholder);
+        return 1 === preg_match('/^' . static::PREFIX . '([a-zA-Z]+)([a-zA-Z0-9_])*$/', $placeholder);
     }
 }

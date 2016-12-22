@@ -84,8 +84,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicable($placeholder, $expected)
     {
         $this->assertSame(
-            $this->model->isApplicable($placeholder),
-            $expected
+            $expected,
+            $this->model->isApplicable($placeholder)
         );
     }
 
@@ -98,6 +98,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             [Environment::PREFIX . 'TEST', true],
             ['TEST', false],
             [Environment::PREFIX . 'TEST_test', true],
+            [Environment::PREFIX . '-:A', false],
+            [Environment::PREFIX . '_A', false],
+            [Environment::PREFIX . 'A@#$', false]
         ];
     }
 }

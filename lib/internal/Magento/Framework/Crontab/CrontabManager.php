@@ -192,7 +192,7 @@ class CrontabManager implements CrontabManagerInterface
     {
         if (stripos(PHP_OS, 'WIN') === 0) {
             throw new LocalizedException(
-                new Phrase('Your operation system is not supported, you cannot work with crontab')
+                new Phrase('Your operation system is not supported to work with this command')
             );
         }
     }
