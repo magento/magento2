@@ -167,7 +167,7 @@
                     <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
                     <item name="type" xsi:type="string">null</item>
                 </item>
-                <item name="hasDatepicker" xsi:type="array">
+                <item name="admin__control-text _has-datepicker" xsi:type="array">
                     <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
                     <item name="type" xsi:type="string">datepicker</item>
                 </item>
