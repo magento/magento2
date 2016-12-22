@@ -40,7 +40,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,

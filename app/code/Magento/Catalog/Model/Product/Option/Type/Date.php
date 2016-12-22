@@ -34,7 +34,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,

@@ -9,9 +9,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
- * Unit test for order address repository class.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Unit test for serialized data converter test.
  */
 class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
 {

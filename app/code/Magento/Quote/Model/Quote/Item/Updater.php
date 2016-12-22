@@ -43,7 +43,7 @@ class Updater
      * @param ProductFactory $productFactory
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         ProductFactory $productFactory,

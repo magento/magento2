@@ -84,7 +84,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param array $additionalChecks
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

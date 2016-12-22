@@ -85,7 +85,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param TypeHandler\TypeHandlerInterface $typeHandler
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

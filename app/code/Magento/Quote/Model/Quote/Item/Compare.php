@@ -20,7 +20,7 @@ class Compare
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer [optional]
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(\Magento\Framework\Serialize\SerializerInterface $serializer = null)
     {
