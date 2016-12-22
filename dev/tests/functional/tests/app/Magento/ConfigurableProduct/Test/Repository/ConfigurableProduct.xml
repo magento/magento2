@@ -572,7 +572,7 @@
             </field>
         </dataset>
 
-        <dataset name="product_product_with_custom_options_and_option_key_1">
+        <dataset name="first_product_with_custom_options_and_option_key_1">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="special_price" xsi:type="string">49.99</field>
