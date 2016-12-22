@@ -149,7 +149,7 @@ define([
                     formattedValue = moment(momentDateTime).format(this.timezoneFormat);
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.momentFormat);
+                    value = moment(shiftedValue, this.pickerDateTimeFormat);
                     value = value.format(this.outputDateFormat);
                 }
             } else {
