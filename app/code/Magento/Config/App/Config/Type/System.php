@@ -96,7 +96,9 @@ class System implements ConfigTypeInterface
             $data = $this->cache->load(self::CONFIG_TYPE);
             if (!$data) {
                 $data = $this->preProcessor->process($this->source->get());
+                $this->data = new DataObject($data);
                 $data = $this->fallback->process($data);
+                $this->data = new DataObject($data);
                 //Placeholder processing need system config - so we need to save intermediate result
                 $data = $this->postProcessor->process($data);
                 $this->data = new DataObject($data);

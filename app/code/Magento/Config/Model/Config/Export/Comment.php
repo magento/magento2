@@ -26,7 +26,6 @@ class Comment implements CommentInterface
     private $source;
 
     /**
-     * Comment constructor.
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
      */
