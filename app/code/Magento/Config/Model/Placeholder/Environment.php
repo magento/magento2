@@ -59,7 +59,7 @@ class Environment implements PlaceholderInterface
      */
     public function restore($template)
     {
-        $template = str_replace(static::PREFIX, '', $template);
+        $template = preg_replace('/^' . static::PREFIX . '/', '', $template);
         $template = str_replace('__', '/', $template);
         $template = strtolower($template);
 

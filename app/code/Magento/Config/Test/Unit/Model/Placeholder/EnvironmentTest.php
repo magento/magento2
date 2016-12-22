@@ -47,8 +47,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function testGenerate($path, $scope, $scopeId, $expected)
     {
         $this->assertSame(
-            $this->model->generate($path, $scope, $scopeId),
-            $expected
+            $expected,
+            $this->model->generate($path, $scope, $scopeId)
         );
     }
 
@@ -101,6 +101,31 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             [Environment::PREFIX . '-:A', false],
             [Environment::PREFIX . '_A', false],
             [Environment::PREFIX . 'A@#$', false]
+        ];
+    }
+
+    /**
+     * @param string $template
+     * @param string $expected
+     * @dataProvider restoreDataProvider
+     */
+    public function testRestore($template, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            $this->model->restore($template)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function restoreDataProvider()
+    {
+        return [
+            [Environment::PREFIX . 'TEST__CONFIG', 'test/config'],
+            [Environment::PREFIX . 'TEST__CONFIG__VALUE', 'test/config/value'],
+            [Environment::PREFIX . 'TEST__CONFIG_VALUE', 'test/config_value'],
         ];
     }
 }
