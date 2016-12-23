@@ -13,9 +13,5 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Signifyd\Model\QuoteSessionId">
-        <arguments>
-            <argument name="quoteSession" xsi:type="object">Magento\Signifyd\Model\QuoteSession\FrontendSession</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface" type="Magento\Signifyd\Model\QuoteSession\FrontendSession" />
 </config>
