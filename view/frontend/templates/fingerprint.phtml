@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block Magento\Signifyd\Block\Fingerprint */
+?>
+<?php if ($block->isModuleEnabled()): ?>
+<script
+    async
+    id="sig-api"
+    data-order-session-id="<?php echo $block->escapeHtml($block->getOrderSessionId()); ?>"
+    src="https://cdn-scripts.signifyd.com/api/script-tag.js">
+</script>
+<?php endif ?>
