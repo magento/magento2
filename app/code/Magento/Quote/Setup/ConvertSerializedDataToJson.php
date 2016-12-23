@@ -5,44 +5,48 @@
  */
 namespace Magento\Quote\Setup;
 
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\Select\QueryModifierFactory;
+use Magento\Framework\DB\Query\Generator;
+
 /**
  * Convert serialized data in quote tables to JSON
  */
 class ConvertSerializedDataToJson
 {
     /**
-     * @var \Magento\Quote\Setup\QuoteSetup
+     * @var QuoteSetup
      */
     private $quoteSetup;
 
     /**
-     * @var \Magento\Framework\DB\FieldDataConverterFactory
+     * @var FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
 
     /**
-     * @var \Magento\Framework\DB\Select\QueryModifierFactory
+     * @var QueryModifierFactory
      */
     private $queryModifierFactory;
 
     /**
-     * @var \Magento\Framework\DB\Query\Generator
+     * @var Generator
      */
     private $queryGenerator;
 
     /**
      * Constructor
      *
-     * @param \Magento\Quote\Setup\QuoteSetup $quoteSetup
-     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
-     * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
-     * @param \Magento\Framework\DB\Query\Generator $queryGenerator
+     * @param QuoteSetup $quoteSetup
+     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param QueryModifierFactory $queryModifierFactory
+     * @param Generator $queryGenerator
      */
     public function __construct(
-        \Magento\Quote\Setup\QuoteSetup $quoteSetup,
-        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
-        \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory,
-        \Magento\Framework\DB\Query\Generator $queryGenerator
+        QuoteSetup $quoteSetup,
+        FieldDataConverterFactory $fieldDataConverterFactory,
+        QueryModifierFactory $queryModifierFactory,
+        Generator $queryGenerator
     ) {
         $this->quoteSetup = $quoteSetup;
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
