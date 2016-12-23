@@ -12,5 +12,4 @@
     <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Signifyd\Api\CaseCreationServiceInterface" type="Magento\Signifyd\Model\CaseCreationService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
-    <preference for="Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface" type="Magento\Signifyd\Model\QuoteSession\FrontendSession" />
 </config>
