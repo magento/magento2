@@ -8,11 +8,6 @@ namespace Magento\Sales\Setup;
 class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
     /**
-     * Name of the database connection
-     */
-    const CONNECTION_NAME = 'sales';
-
-    /**
      * Sales setup factory
      *
      * @var \Magento\Sales\Setup\SalesSetupFactory
@@ -25,25 +20,25 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\DB\FieldDataConverterFactory
+     * @var \Magento\Sales\Setup\ConvertSerializedDataToJsonFactory
      */
-    private $fieldDataConverterFactory;
+    private $convertSerializedDataToJsonFactory;
 
     /**
      * Constructor
      *
      * @param \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory
+     * @param \Magento\Sales\Setup\ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
         \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+        \Magento\Sales\Setup\ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
+        $this->convertSerializedDataToJsonFactory = $convertSerializedDataToJsonFactory;
         $this->eavConfig = $eavConfig;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
     /**
@@ -58,7 +53,8 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             $this->upgradeToTwoZeroOne($salesSetup);
         }
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
-            $this->upgradeToVersionTwoZeroFive($setup);
+            $this->convertSerializedDataToJsonFactory->create(['salesSetup' => $salesSetup])
+                ->convert();
         }
         $this->eavConfig->clear();
     }
@@ -110,47 +106,6 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             'shipment',
             'increment_model',
             \Magento\Eav\Model\Entity\Increment\NumericValue::class
-        );
-    }
-
-    /**
-     * Upgrade to version 2.0.5, convert data for the following fields from serialized to JSON format:
-     * sales_order_item.product_options
-     * sales_shipment.packages
-     * sales_order_payment.additional_information
-     * sales_payment_transaction.additional_information
-     *
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $setup
-     * @return void
-     */
-    private function upgradeToVersionTwoZeroFive(\Magento\Framework\Setup\ModuleDataSetupInterface $setup)
-    {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Framework\DB\DataConverter\SerializedToJson::class
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_order_item', self::CONNECTION_NAME),
-            'item_id',
-            'product_options'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_shipment', self::CONNECTION_NAME),
-            'entity_id',
-            'packages'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_order_payment', self::CONNECTION_NAME),
-            'entity_id',
-            'additional_information'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('sales_payment_transaction', self::CONNECTION_NAME),
-            'transaction_id',
-            'additional_information'
         );
     }
 }

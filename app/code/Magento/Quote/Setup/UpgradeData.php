@@ -8,48 +8,31 @@ namespace Magento\Quote\Setup;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\FieldDataConverterFactory;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Framework\DB\Query\Generator;
 
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * Name of the database connection
+     * @var QuoteSetupFactory
      */
-    const CONNECTION_NAME = 'checkout';
+    private $quoteSetupFactory;
 
     /**
-     * @var FieldDataConverterFactory
+     * @var ConvertSerializedDataToJsonFactory
      */
-    private $fieldDataConverterFactory;
-
-    /**
-     * @var QueryModifierFactory
-     */
-    private $queryModifierFactory;
-
-    /**
-     * @var Generator
-     */
-    private $queryGenerator;
+    private $convertSerializedDataToJsonFactory;
 
     /**
      * Constructor
      *
-     * @param FieldDataConverterFactory $fieldDataConverterFactory
-     * @param QueryModifierFactory $queryModifierFactory
-     * @param Generator $generator
+     * @param QuoteSetupFactory $quoteSetupFactory
+     * @param ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory,
-        QueryModifierFactory $queryModifierFactory,
-        Generator $queryGenerator
+        QuoteSetupFactory $quoteSetupFactory,
+        ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory
     ) {
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
-        $this->queryModifierFactory = $queryModifierFactory;
-        $this->queryGenerator = $queryGenerator;
+        $this->quoteSetupFactory = $quoteSetupFactory;
+        $this->convertSerializedDataToJsonFactory = $convertSerializedDataToJsonFactory;
     }
 
     /**
@@ -58,78 +41,9 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.4', '<')) {
-            $this->upgradeToVersionTwoZeroFour($setup);
-        }
-    }
-
-    /**
-     * Upgrade to version 2.0.4, convert data for additional_information field in quote_payment table from serialized
-     * to JSON format
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    private function upgradeToVersionTwoZeroFour(ModuleDataSetupInterface $setup)
-    {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
-        $fieldDataConverter->convert(
-            $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('quote_payment', self::CONNECTION_NAME),
-            'payment_id',
-            'additional_information'
-        );
-        $queryModifier = $this->queryModifierFactory->create(
-            'in',
-            [
-                'values' => [
-                    'code' => [
-                        'parameters',
-                        'info_buyRequest',
-                        'bundle_option_ids',
-                        'bundle_selection_attributes',
-                    ]
-                ]
-            ]
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(self::CONNECTION_NAME),
-            $setup->getTable('quote_item_option', self::CONNECTION_NAME),
-            'option_id',
-            'value',
-            $queryModifier
-        );
-        $select = $setup->getConnection()
-            ->select()
-            ->from(
-                $setup->getTable('catalog_product_option'),
-                ['option_id']
-            )
-            ->where('type = ?', 'file');
-        $iterator = $this->queryGenerator->generate('option_id', $select);
-        foreach ($iterator as $selectByRange) {
-            $codes = $setup->getConnection()->fetchCol($selectByRange);
-            $codes = array_map(
-                function ($id) {
-                    return 'option_' . $id;
-                },
-                $codes
-            );
-            $queryModifier = $this->queryModifierFactory->create(
-                'in',
-                [
-                    'values' => [
-                        'code' => $codes
-                    ]
-                ]
-            );
-            $fieldDataConverter->convert(
-                $setup->getConnection(self::CONNECTION_NAME),
-                $setup->getTable('quote_item_option', self::CONNECTION_NAME),
-                'option_id',
-                'value',
-                $queryModifier
-            );
+            $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
+            $this->convertSerializedDataToJsonFactory->create(['quoteSetup' => $quoteSetup])
+                ->convert();
         }
     }
 }
