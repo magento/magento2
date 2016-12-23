@@ -16,6 +16,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var IndexSwitcherInterface
+     */
+    private $indexSwitcher;
+
+    /**
      * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
@@ -72,28 +77,45 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = Bootstrap::getObjectManager();
+
+        $objectManager->configure(
+            [
+                'Magento\CatalogSearch\Model\Indexer\Fulltext' => [
+                    'arguments' => [
+                        'indexSwitcher' => [
+                            'instance' => 'Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
-        $this->indexer = Bootstrap::getObjectManager()->create(
+        $this->indexer = $objectManager->create(
             \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalogsearch_fulltext');
 
-        $objectManager = Bootstrap::getObjectManager();
         $this->engine = $objectManager->get(
             \Magento\CatalogSearch\Model\ResourceModel\Engine::class
         );
 
-        $this->resourceFulltext = Bootstrap::getObjectManager()->get(
+        $this->resourceFulltext = $objectManager->get(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class
         );
 
-        $this->queryFactory = Bootstrap::getObjectManager()->get(
+        $this->queryFactory = $objectManager->get(
             \Magento\Search\Model\QueryFactory::class
         );
 
-        $this->dimension = Bootstrap::getObjectManager()->create(
+        $this->dimension = $objectManager->create(
             \Magento\Framework\Search\Request\Dimension::class,
             ['name' => 'scope', 'value' => '1']
+        );
+
+        $this->indexSwitcher = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
         );
 
         $this->productApple = $this->getProductBySku('fulltext-1');
@@ -103,21 +125,46 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
         $this->productCherry = $this->getProductBySku('fulltext-5');
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testReindexAll()
     {
         $this->indexer->reindexAll();
 
-        $products = $this->search('Apple');
-        $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]->getId());
-
-        $products = $this->search('Simple Product');
-        $this->assertCount(5, $products);
         /** @var \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock $indexSwitcher */
         $indexSwitcher = Bootstrap::getObjectManager()->get(
             \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
         );
         $this->assertTrue($indexSwitcher->isSwitched());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testReindexList()
+    {
+        $this->indexer->reindexList([$this->productApple->getId(), $this->productBanana->getId()]);
+
+        /** @var \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock $indexSwitcher */
+        $indexSwitcher = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
+        );
+        $this->assertFalse($indexSwitcher->isSwitched());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testReindexRow()
+    {
+        $this->indexer->reindexRow($this->productPapaya->getId());
+
+        /** @var \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock $indexSwitcher */
+        $indexSwitcher = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
+        );
+        $this->assertFalse($indexSwitcher->isSwitched());
     }
 
     /**

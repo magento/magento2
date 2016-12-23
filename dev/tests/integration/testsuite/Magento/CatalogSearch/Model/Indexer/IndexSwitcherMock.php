@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface;
 
+/**
+ * The proxy class around index switcher which allows to ensure that the IndexSwitcher was actually used
+ */
 class IndexSwitcherMock extends \PHPUnit_Framework_Assert implements IndexSwitcherInterface
 {
     private $isSwitched = false;
@@ -27,7 +30,6 @@ class IndexSwitcherMock extends \PHPUnit_Framework_Assert implements IndexSwitch
         $this->indexSwitcher = $indexSwitcher;
     }
 
-
     /**
      * Switch current index with temporary index
      *
@@ -38,7 +40,7 @@ class IndexSwitcherMock extends \PHPUnit_Framework_Assert implements IndexSwitch
      */
     public function switchIndex(array $dimensions)
     {
-        $this->isSwitched = true;
+        $this->isSwitched |= true;
         $this->indexSwitcher->switchIndex($dimensions);
     }
 
@@ -47,6 +49,6 @@ class IndexSwitcherMock extends \PHPUnit_Framework_Assert implements IndexSwitch
      */
     public function isSwitched()
     {
-        return $this->isSwitched;
+        return (bool) $this->isSwitched;
     }
 }
