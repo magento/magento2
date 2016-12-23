@@ -33,11 +33,14 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     private $httpResponseMock;
 
+    /** @var \Magento\Framework\App\Http\ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $contextFactoryMock;
+
+    /** @var \Magento\Framework\App\Response\HttpFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $httpFactoryMock;
+
     /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $serializer;
-
-    /** @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
-    private $objectManager;
 
     /** @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject */
     private $contextMock;
@@ -52,22 +55,28 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, [], [], '', false);
         $this->contextMock = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
         $this->httpResponseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
-        $this->objectManager = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
         $this->identifierMock = $this->getMock(\Magento\Framework\App\PageCache\Identifier::class, [], [], '', false);
         $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
         $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->contextFactoryMock = $this->getMock(\Magento\Framework\App\Http\ContextFactory::class, [], [], '', false);
+        $this->httpFactoryMock = $this->getMock(\Magento\Framework\App\Response\HttpFactory::class, [], [], '', false);
         $this->responseMock->expects($this->any())->method('getHeaders')->willReturn($headersMock);
 
-        $this->kernel = new Kernel($this->cacheMock, $this->identifierMock, $this->requestMock, $this->serializer);
+        $this->kernel = new Kernel(
+            $this->cacheMock,
+            $this->identifierMock,
+            $this->requestMock,
+            $this->contextMock,
+            $this->contextFactoryMock,
+            $this->httpFactoryMock,
+            $this->serializer
+        );
 
         $reflection = new \ReflectionClass(\Magento\Framework\App\PageCache\Kernel::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
-        $reflectionProperty = $reflection->getProperty('objectManager');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->kernel, $this->objectManager);
     }
 
     /**
@@ -87,21 +96,23 @@ class KernelTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $this->objectManager->method('create')
-            ->will($this->returnValueMap([
+        $this->contextFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
                 [
-                    \Magento\Framework\App\Http\Context::class,
-                    [
-                        'data' => ['context_data'],
-                        'default' => ['context_default_data']
-                    ],
-                    $this->contextMock
-                ],
-                [
-                    \Magento\Framework\App\Response\Http::class,
-                    ['context' => $this->contextMock],
-                    $this->httpResponseMock]
-            ]));
+                    'data' => ['context_data'],
+                    'default' => ['context_default_data']
+                ]
+            )
+            ->willReturn($this->contextMock);
+
+        $this->httpFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(['context' => $this->contextMock])
+            ->willReturn($this->httpResponseMock);
+
         $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue($isGet));
         $this->requestMock->expects($this->any())->method('isHead')->will($this->returnValue($isHead));
         $this->fullPageCacheMock->expects(
@@ -190,12 +201,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
                     return json_encode($value);
                 }
             );
-        $cacheTypeMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, [], [], '', false);
-        $this->objectManager->method('get')
-            ->will($this->returnValueMap([
-                [\Magento\Framework\App\Http\Context::class, $this->contextMock],
-                [\Magento\PageCache\Model\Cache\Type::class, $cacheTypeMock],
-            ]));
+
         $cacheControlHeader = \Zend\Http\Header\CacheControl::fromString(
             'Cache-Control: public, max-age=100, s-maxage=100'
         );
