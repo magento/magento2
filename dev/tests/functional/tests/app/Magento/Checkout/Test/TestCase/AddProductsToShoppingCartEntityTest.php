@@ -125,6 +125,10 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
+        // Change http://app_backend_url to https://app_backend_url
+        if ($this->configData == 'enable_https_frontend_admin') {
+            $this->changeBackendUrl(true);
+        }
         $products = $this->prepareProducts($productsData);
 
         // Steps
@@ -167,6 +171,21 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
+     * Change app_backend_url.
+     *
+     * @param bool $useHttps
+     * @return void
+     */
+    private function changeBackendUrl($useHttps = false)
+    {
+        if ($useHttps) {
+            $_ENV['app_backend_url'] = preg_replace('/(http[s]?)/', 'https', $_ENV['app_backend_url']);
+        } else {
+            $_ENV['app_backend_url'] = preg_replace('/(http[s]?)/', 'http', $_ENV['app_backend_url']);
+        }
+    }
+
+    /**
      * Clean data after running test.
      *
      * @return void
@@ -177,5 +196,9 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
+        // Change https://app_backend_url to http://app_backend_url
+        if ($this->configData == 'enable_https_frontend_admin') {
+            $this->changeBackendUrl();
+        }
     }
 }

@@ -22,6 +22,13 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     const REDIRECT_TYPE_NO = 'No';
 
     /**
+     * Curl transport on webapi.
+     *
+     * @var WebapiDecorator
+     */
+    private $webApi;
+
+    /**
      * Url rewrite index page.
      *
      * @var UrlRewriteIndex
@@ -52,34 +59,50 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
         $redirectType = 'Permanent (301)'
     ) {
         $this->urlRewriteIndex = $urlRewriteIndex;
+        $this->webApi = $webApi;
+
         $urlRewriteIndex->open();
-        $categoryId = ($childCategory ? $childCategory->getId() : $category->getId())
-            ? $category->getId()
-            : $this->getCategoryId($webApi, $category->getData('parent_id'));
+        $categoryId = $this->getCategoryId($category, $childCategory);
+        $nestingPath = $this->getNestingPath($category, $nestingLevel);
 
         $filter = [
-            'request_path' => $this->getNestingPath($category, $nestingLevel),
+            'request_path' => $nestingPath,
             'target_path' => 'catalog/category/view/id/' . $categoryId,
             'redirect_type' => self::REDIRECT_TYPE_NO
         ];
-        $this->rowVisibleAssertion($filter);
-
-        if ($redirectType == 'No') {
-            return;
-        }
-
         if ($parentCategory && $childCategory) {
-            $urlPath = strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
-
-            $filter = [
-                'request_path' => $this->getNestingPath($category, $nestingLevel),
-                'target_path' => $urlPath,
-                'redirect_type' => $redirectType
-            ];
-        } else {
-            $filter = [$filterByPath => strtolower($category->getUrlKey())];
+            $filter['request_path'] =
+                strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
         }
         $this->rowVisibleAssertion($filter);
+
+        if ($redirectType != self::REDIRECT_TYPE_NO) {
+            if ($parentCategory && $childCategory) {
+                $urlPath = strtolower($parentCategory->getUrlKey() . '/' . $childCategory->getUrlKey() . '.html');
+                $filter = [
+                    'request_path' => $nestingPath,
+                    'target_path' => $urlPath,
+                    'redirect_type' => $redirectType
+                ];
+            } else {
+                $filter = [$filterByPath => strtolower($category->getUrlKey())];
+            }
+            $this->rowVisibleAssertion($filter);
+        }
+    }
+
+    /**
+     * Get category id.
+     *
+     * @param Category $category
+     * @param Category|null $childCategory
+     * @return int
+     */
+    private function getCategoryId(Category $category, Category $childCategory = null)
+    {
+        return ($childCategory ? $childCategory->getId() : $category->getId())
+            ? $category->getId()
+            : $this->retrieveCategory($category)['id'];
     }
 
     /**
@@ -119,21 +142,36 @@ class AssertUrlRewriteCategoryInGrid extends AbstractConstraint
     }
 
     /**
-     * Return category id by parent id.
+     * Retrieve category.
      *
-     * @param WebapiDecorator $webApi
-     * @param int $id
-     * @return integer|string
+     * @param Category $category
+     * @return array
      */
-    public function getCategoryId(WebapiDecorator $webApi, $id)
+    private function retrieveCategory(Category $category)
     {
-        $url = $_ENV['app_frontend_url'] . 'rest/all/V1/categories/' . $id;
-        $webApi->write($url, [], WebapiDecorator::GET);
-        $response = json_decode($webApi->read(), true);
-        $webApi->close();
-        preg_match('/(\d+)$/', $response['children'], $ids);
+        $childrenIds = explode(',', $this->getResponse($category->getData('parent_id'))['children']);
+        while ($id = array_pop($childrenIds)) {
+            $retrieveCategory = $this->getResponse($id);
+            if ($retrieveCategory['name'] == $category->getData('name')) {
+                return $retrieveCategory;
+            }
+        }
+        return ['id' => null];
+    }
 
-        return isset($ids[0]) ? $ids[0] : '';
+    /**
+     * Return category data by category id.
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    private function getResponse($categoryId)
+    {
+        $url = $_ENV['app_frontend_url'] . 'rest/all/V1/categories/' . $categoryId;
+        $this->webApi->write($url, [], WebapiDecorator::GET);
+        $response = json_decode($this->webApi->read(), true);
+        $this->webApi->close();
+        return $response;
     }
 
     /**
