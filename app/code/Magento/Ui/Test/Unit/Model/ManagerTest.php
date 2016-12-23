@@ -75,6 +75,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $aggregatedFileCollectorFactory;
 
+    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializer;
+
     protected function setUp()
     {
         $this->componentConfigProvider = $this->getMockBuilder(
@@ -105,6 +108,24 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->argumentInterpreter = $this->getMockBuilder(\Magento\Framework\Data\Argument\InterpreterInterface::class)
             ->getMockForAbstractClass();
+        $this->serializer = $this->getMockBuilder(
+            \Magento\Framework\Serialize\SerializerInterface::class
+        )->getMockForAbstractClass();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $this->manager = new Manager(
             $this->componentConfigProvider,
             $this->domMerger,
@@ -112,7 +133,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->arrayObjectFactory,
             $this->aggregatedFileCollectorFactory,
             $this->cacheConfig,
-            $this->argumentInterpreter
+            $this->argumentInterpreter,
+            $this->serializer
         );
     }
 
@@ -192,7 +214,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             [
                 'test_component1',
                 new \ArrayObject(),
-                $cachedData->serialize(),
+                json_encode($cachedData->getArrayCopy()),
                 [],
                 [
                     'test_component1' => [
