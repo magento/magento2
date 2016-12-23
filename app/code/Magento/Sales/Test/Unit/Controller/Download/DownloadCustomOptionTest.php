@@ -92,7 +92,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['downloadFile'])
             ->getMock();
 
-        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
+        $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['serialize', 'unserialize'])
             ->getMock();
