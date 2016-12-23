@@ -123,7 +123,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -140,7 +140,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -156,7 +156,7 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
@@ -165,7 +165,7 @@ class Item extends AbstractModel implements ItemInterface
         $this->_wishlistOptFactory = $wishlistOptFactory;
         $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
     }

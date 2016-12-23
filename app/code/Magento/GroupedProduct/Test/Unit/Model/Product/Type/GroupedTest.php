@@ -38,7 +38,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     protected $objectHelper;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -72,7 +72,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['serialize'])
             ->getMockForAbstractClass();
 

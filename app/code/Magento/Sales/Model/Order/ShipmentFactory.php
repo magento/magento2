@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
@@ -39,7 +39,7 @@ class ShipmentFactory
     /**
      * Serializer
      *
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -48,12 +48,12 @@ class ShipmentFactory
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;

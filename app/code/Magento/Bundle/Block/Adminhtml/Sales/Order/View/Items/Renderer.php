@@ -6,7 +6,7 @@
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Adminhtml sales order item renderer
@@ -16,7 +16,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
     /**
      * Serializer
      *
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -28,7 +28,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -38,7 +38,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         \Magento\GiftMessage\Helper\Message $messageHelper,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(SerializerInterface::class);

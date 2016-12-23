@@ -75,7 +75,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -39,7 +39,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -99,7 +99,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['serialize'])
             ->getMockForAbstractClass();
 
@@ -330,7 +330,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         );
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->will($this->returnValue([]));
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['serialize'])
             ->getMockForAbstractClass();
         $serializer->expects($this->any())

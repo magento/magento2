@@ -31,7 +31,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -40,21 +40,21 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
         \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->customOptionFactory = $customOptionFactory;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**

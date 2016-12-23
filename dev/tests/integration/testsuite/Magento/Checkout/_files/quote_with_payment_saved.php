@@ -6,8 +6,8 @@
 
 require 'quote_with_address.php';
 
-/** @var \Magento\Framework\Serialize\SerializerInterface $serializer */
-$serializer = $objectManager->create(\Magento\Framework\Serialize\SerializerInterface::class);
+/** @var \Magento\Framework\Serialize\Serializer\Json $serializer */
+$serializer = $objectManager->create(\Magento\Framework\Serialize\Serializer\Json::class);
 
 $quote->setReservedOrderId(
     'test_order_1_with_payment'

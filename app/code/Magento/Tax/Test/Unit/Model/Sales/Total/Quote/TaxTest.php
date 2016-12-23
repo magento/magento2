@@ -614,7 +614,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
 
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 

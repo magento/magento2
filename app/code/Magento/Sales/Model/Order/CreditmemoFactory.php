@@ -29,7 +29,7 @@ class CreditmemoFactory
     protected $unserialize;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -38,17 +38,17 @@ class CreditmemoFactory
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Serialize\SerializerInterface::class
+            \Magento\Framework\Serialize\Serializer\Json::class
         );
     }
 

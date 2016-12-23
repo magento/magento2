@@ -6,7 +6,7 @@
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Sales Order Pdf Items renderer
@@ -17,7 +17,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Serializer
      *
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -30,7 +30,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -41,7 +41,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->serializer = $serializer;
 
@@ -291,7 +291,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * The getter function to get serializer
      *
-     * @return SerializerInterface
+     * @return Json
      *
      * @deprecated
      */
