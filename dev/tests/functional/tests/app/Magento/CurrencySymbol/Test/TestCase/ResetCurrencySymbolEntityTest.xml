@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CurrencySymbol\Test\TestCase\ResetCurrencySymbolEntityTest" summary="Reset Currency Symbol" ticketId="MAGETWO-26638">
         <variation name="ResetCurrencySymbolEntityTestVariation1" firstConstraint="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="configData" xsi:type="string">config_currency_symbols_usd_and_uah</data>
             <data name="currencySymbolOriginal/dataset" xsi:type="string">currency_symbols_uah</data>
             <data name="currencySymbol/data/code" xsi:type="string">UAH</data>

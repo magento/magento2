@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
 

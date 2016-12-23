@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\CreateConfigurableProductEntityTest" summary="Create Configurable Product" ticketId="MAGETWO-26041">
         <variation name="CreateConfigurableProductEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with category and two new options</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_new_options</data>
@@ -33,6 +34,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with two options</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options</data>
@@ -55,6 +57,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with special price</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_new_options</data>
@@ -78,6 +81,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with assigned products to options</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_assigned_product</data>
@@ -99,6 +103,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation5" summary="Create Configurable Product and Assign it to Category" ticketId="MAGETWO-12620">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_fixed_price</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>

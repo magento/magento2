@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest">
         <variation name="DownloadableTaxCalculationTestVariation1" summary="Downloadable product with sales rule, customer tax equals store tax and catalog price excluding tax" ticketId="MAGETWO-32076">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="configData" xsi:type="string">total_cat_excl_ship_incl_after_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links_special_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
@@ -34,6 +35,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="DownloadableTaxCalculationTestVariation2" summary="Downloadable product with catalog rule, customer tax greater than store tax and catalog price excluding tax" ticketId="MAGETWO-32076">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="configData" xsi:type="string">total_cat_excl_ship_incl_after_disc_on_incl, display_including_tax</data>
             <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links_special_price_and_category</data>
             <data name="catalogRule" xsi:type="string">catalog_price_rule_all_groups</data>
@@ -53,6 +55,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendIncludingTax" />
         </variation>
         <variation name="DownloadableTaxCalculationTestVariation4" summary="Downloadable product with catalog rule, customer tax greater than store tax and catalog price including tax" ticketId="MAGETWO-32076">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="configData" xsi:type="string">total_cat_incl_ship_excl_before_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links_custom_options_and_category</data>
             <data name="catalogRule" xsi:type="string">catalog_price_rule_all_groups</data>
@@ -77,6 +80,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertOrderTaxOnBackendExcludingIncludingTax" />
         </variation>
         <variation name="DownloadableTaxCalculationTestVariation6" summary="Downloadable product with catalog rule, customer tax equals store tax and catalog price including tax" ticketId="MAGETWO-32076">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="configData" xsi:type="string">total_cat_incl_ship_excl_before_disc_on_excl</data>
             <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links_custom_options_and_category</data>
             <data name="catalogRule" xsi:type="string">catalog_price_rule_all_groups</data>

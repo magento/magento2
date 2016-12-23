@@ -164,6 +164,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation9">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule9 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
             <data name="salesRule/data/is_active" xsi:type="string">Active</data>
@@ -200,6 +201,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation11">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule11 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
             <data name="salesRule/data/is_active" xsi:type="string">Active</data>

@@ -46,6 +46,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with special price and custom options(fixed price)</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -66,6 +67,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with special price and custom options(percent price)</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -86,6 +88,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with group price and custom options(percent price)</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -207,6 +210,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation12">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product that visible only in search</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -238,6 +242,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation14">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create simple product and check visibility in category</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -255,6 +260,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation15">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with tax class and group price</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -292,6 +298,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation17">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product without tax class and tier price</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -394,6 +401,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation23" summary="Create Simple Product with Creating New Category (Required Fields Only)" ticketId="MAGETWO-13345">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/url_key" xsi:type="string">simple%isolation%</data>
@@ -405,6 +413,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation24" summary="Create Simple Product and Assigning It to Category" ticketId="MAGETWO-12514">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>

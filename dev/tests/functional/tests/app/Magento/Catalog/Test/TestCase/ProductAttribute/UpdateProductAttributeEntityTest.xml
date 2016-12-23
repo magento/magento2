@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateProductAttributeEntityTest" summary="Update Product Attribute" ticketId="MAGETWO-23459">
         <variation name="UpdateProductAttributeEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_text_field</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_%isolation%</data>
@@ -28,6 +29,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>

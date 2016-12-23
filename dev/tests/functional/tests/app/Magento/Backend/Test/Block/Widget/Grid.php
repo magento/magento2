@@ -466,6 +466,7 @@ abstract class Grid extends Block
      */
     public function openFirstRow()
     {
+        $this->waitLoader();
         $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
     }
 

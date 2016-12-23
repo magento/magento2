@@ -16,6 +16,7 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
         <variation name="UpdateAdminUserRoleEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="role/data/resource_access" xsi:type="string">Custom</data>
             <data name="role/data/roles_resources" xsi:type="string">Sales</data>
