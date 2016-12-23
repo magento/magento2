@@ -445,9 +445,8 @@ class DataGrid extends Grid
     {
         $this->waitLoader();
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
-        $columnNumber = count($this->_rootElement->getElements(
-            sprintf($this->columnNumber, $headerLabel),
-            Locator::SELECTOR_XPATH)
+        $columnNumber = count(
+            $this->_rootElement->getElements(sprintf($this->columnNumber, $headerLabel), Locator::SELECTOR_XPATH)
         );
         $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $columnNumber);
 
