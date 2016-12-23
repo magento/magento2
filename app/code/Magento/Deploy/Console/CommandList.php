@@ -8,7 +8,7 @@ namespace Magento\Deploy\Console;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class CommandList
+ * This class groups and instantiates a list of deploy commands in order to be used separately before install
  */
 class CommandList implements \Magento\Framework\Console\CommandListInterface
 {
@@ -35,7 +35,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
     protected function getCommandsClasses()
     {
         return [
-            'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+            \Magento\Deploy\Console\Command\DeployStaticContentCommand::class
         ];
     }
 

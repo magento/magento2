@@ -126,15 +126,19 @@ class Cli extends SymfonyApplication
             $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
             $bootstrap = Bootstrap::create(BP, $params);
             $objectManager = $bootstrap->getObjectManager();
-            /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
-            $omProvider = $this->serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
-            $omProvider->setObjectManager($objectManager);
 
-            if (class_exists('Magento\Setup\Console\CommandList')) {
+            // Specialized setup command list available before and after M2 install
+            if (class_exists('Magento\Setup\Console\CommandList')
+                && class_exists('Magento\Setup\Model\ObjectManagerProvide')
+            ) {
+                /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
+                $omProvider = $this->serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
+                $omProvider->setObjectManager($objectManager);
                 $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
                 $commands = array_merge($commands, $setupCommandList->getCommands());
             }
 
+            // Allowing instances of all modular commands only after M2 install
             if ($objectManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
                 /** @var \Magento\Framework\Console\CommandListInterface $commandList */
                 $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
