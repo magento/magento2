@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit;
+
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -192,7 +193,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function ($value) {
                 return json_decode($value, true);
             });
-
 
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,

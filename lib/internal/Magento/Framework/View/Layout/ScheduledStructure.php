@@ -20,6 +20,23 @@ class ScheduledStructure
     /**#@-*/
 
     /**
+     * Map of class properties.
+     *
+     * @var array
+     */
+    private $propertyMap = [
+        'scheduledStructure',
+        'scheduledData',
+        'scheduledElements',
+        'scheduledMoves',
+        'scheduledRemoves',
+        'scheduledIfconfig',
+        'scheduledPaths',
+        'elementsToSort',
+        'brokenParent',
+    ];
+
+    /**
      * Information about structural elements, scheduled for creation
      *
      * @var array
@@ -84,18 +101,10 @@ class ScheduledStructure
 
     /**
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(array $data = [])
     {
-        $this->scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
-        $this->scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
-        $this->scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
-        $this->scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
-        $this->scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
-        $this->scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
-        $this->scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
+        $this->populateWithArray($data);
     }
 
     /**
@@ -540,17 +549,12 @@ class ScheduledStructure
      */
     public function __toArray()
     {
-        return [
-            'scheduledStructure' => $this->scheduledStructure,
-            'scheduledData'      => $this->scheduledData,
-            'scheduledElements'  => $this->scheduledElements,
-            'scheduledMoves'     => $this->scheduledMoves,
-            'scheduledRemoves'   => $this->scheduledRemoves,
-            'scheduledIfconfig'  => $this->scheduledIfconfig,
-            'scheduledPaths'     => $this->scheduledPaths,
-            'elementsToSort'     => $this->elementsToSort,
-            'brokenParent'       => $this->brokenParent,
-        ];
+        $result = [];
+        foreach ($this->propertyMap as $property) {
+            $result[$property] = $this->{$property};
+        }
+
+        return $result;
     }
 
     /**
@@ -559,19 +563,22 @@ class ScheduledStructure
      *
      * @param array $data
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function populateWithArray(array $data)
     {
-        $this->scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
-        $this->scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
-        $this->scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
-        $this->scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
-        $this->scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
-        $this->scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
-        $this->scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
-        $this->elementsToSort = isset($data['elementsToSort']) ? $data['elementsToSort'] : [];
-        $this->brokenParent = isset($data['brokenParent']) ? $data['brokenParent'] : [];
+        foreach ($this->propertyMap as $property) {
+            $this->{$property} = $this->getDataValue($property, $data);
+        }
+    }
+
+    /**
+     * Get value from array by key.
+     *
+     * @param string $name
+     * @param array $data
+     * @return array
+     */
+    private function getDataValue($name, array $data) {
+        return isset($data[$name]) ? $data[$name] : [];
     }
 }

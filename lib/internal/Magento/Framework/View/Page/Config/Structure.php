@@ -13,6 +13,22 @@ namespace Magento\Framework\View\Page\Config;
 class Structure
 {
     /**
+     * Map of class properties.
+     *
+     * @var array
+     */
+    private $propertyMap = [
+        'assets',
+        'removeAssets',
+        'title',
+        'metadata',
+        'elementAttributes',
+        'removeElementAttributes',
+        'bodyClasses',
+        'isBodyClassesDeleted',
+    ];
+
+    /**
      * Information assets elements on page
      *
      * @var array
@@ -203,16 +219,12 @@ class Structure
      */
     public function __toArray()
     {
-        return [
-            'assets'                  => $this->assets,
-            'removeAssets'            => $this->removeAssets,
-            'title'                   => $this->title,
-            'metadata'                => $this->metadata,
-            'elementAttributes'       => $this->elementAttributes,
-            'removeElementAttributes' => $this->removeElementAttributes,
-            'bodyClasses'             => $this->bodyClasses,
-            'isBodyClassesDeleted'    => $this->isBodyClassesDeleted,
-        ];
+        $result = [];
+        foreach ($this->propertyMap as $property) {
+            $result[$property] = $this->{$property};
+        }
+
+        return $result;
     }
 
     /**
@@ -221,19 +233,22 @@ class Structure
      *
      * @param array $data
      * @return void
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function populateWithArray(array $data)
     {
-        $this->assets = isset($data['assets']) ? $data['assets'] : [];
-        $this->removeAssets = isset($data['removeAssets']) ? $data['removeAssets'] : [];
-        $this->title = isset($data['title']) ? $data['title'] : '';
-        $this->metadata = isset($data['metadata']) ? $data['metadata'] : [];
-        $this->elementAttributes = isset($data['elementAttributes']) ? $data['elementAttributes'] : [];
-        $this->removeElementAttributes = isset($data['removeElementAttributes'])
-            ? $data['removeElementAttributes']
-            : [];
-        $this->bodyClasses = isset($data['bodyClasses']) ? $data['bodyClasses'] : [];
-        $this->isBodyClassesDeleted = isset($data['isBodyClassesDeleted']) ? $data['isBodyClassesDeleted'] : false;
+        foreach ($this->propertyMap as $property) {
+            $this->{$property} = $this->getDataValue($property, $data);
+        }
+    }
+
+    /**
+     * Get value from array by key.
+     *
+     * @param string $name
+     * @param array $data
+     * @return array
+     */
+    private function getDataValue($name, array $data) {
+        return isset($data[$name]) ? $data[$name] : [];
     }
 }
