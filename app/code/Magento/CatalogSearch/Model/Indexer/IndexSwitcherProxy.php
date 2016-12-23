@@ -10,6 +10,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Proxy for adapter-specific index switcher
+ */
 class IndexSwitcherProxy implements IndexSwitcherInterface
 {
     /**
@@ -59,7 +62,7 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * As index switcher is an optional part of the search SPI, it may be not defined by a search engine.
      * It is especially reasonable for search engines with pre-defined indexes declaration (like old SOLR and Sphinx)

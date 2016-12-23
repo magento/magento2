@@ -20,7 +20,7 @@ class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolver
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager = null;
+    private $objectManager;
 
     /**
      * @var array
