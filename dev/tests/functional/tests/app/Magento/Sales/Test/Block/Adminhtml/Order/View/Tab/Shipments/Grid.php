@@ -10,13 +10,12 @@ use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Class Grid
- * Shipments grid on order view page
+ * Shipments grid on order view page.
  */
 class Grid extends DataGrid
 {
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
@@ -37,7 +36,7 @@ class Grid extends DataGrid
     protected $loader = '//div[contains(@data-component, "sales_order_view_shipment_grid")]';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -54,7 +53,7 @@ class Grid extends DataGrid
     ];
 
     /**
-     * Get shipment ids
+     * Get shipment ids.
      *
      * @return array
      */

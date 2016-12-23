@@ -10,8 +10,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Class Grid
- * Credit memos grid on order view page
+ * Credit memos grid on order view page.
  */
 class Grid extends DataGrid
 {
@@ -23,7 +22,7 @@ class Grid extends DataGrid
     protected $rowPattern = './/tr[%s]';
 
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
@@ -44,7 +43,7 @@ class Grid extends DataGrid
     protected $loader = '//div[contains(@data-component, "sales_order_view_creditmemo_grid")]';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -65,7 +64,7 @@ class Grid extends DataGrid
     ];
 
     /**
-     * Get credit memo id from grid
+     * Get credit memo id from grid.
      *
      * @return array|string
      */
@@ -76,7 +75,7 @@ class Grid extends DataGrid
     }
 
     /**
-     * Get credit memo ids
+     * Get credit memo ids.
      *
      * @return array
      */
