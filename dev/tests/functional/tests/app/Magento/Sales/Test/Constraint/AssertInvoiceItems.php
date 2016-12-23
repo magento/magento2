@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\InvoiceIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesInvoiceView;
@@ -23,6 +24,7 @@ class AssertInvoiceItems extends AbstractAssertItems
      * @param OrderInjectable $order
      * @param array $ids
      * @param array|null $data [optional]
+     * @param Cart|null $cart [optional]
      * @return void
      */
     public function processAssert(
@@ -30,10 +32,11 @@ class AssertInvoiceItems extends AbstractAssertItems
         SalesInvoiceView $salesInvoiceView,
         OrderInjectable $order,
         array $ids,
-        array $data = null
+        array $data = null,
+        Cart $cart = null
     ) {
         $orderId = $order->getId();
-        $productsData = $this->prepareOrderProducts($order, $data['items_data']);
+        $productsData = $this->prepareOrderProducts($order, $data['items_data'], $cart);
         foreach ($ids['invoiceIds'] as $invoiceId) {
             $filter = [
                 'order_id' => $orderId,

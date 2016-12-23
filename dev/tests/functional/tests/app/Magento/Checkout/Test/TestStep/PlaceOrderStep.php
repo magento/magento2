@@ -22,41 +22,44 @@ class PlaceOrderStep implements TestStepInterface
      *
      * @var CheckoutOnepage
      */
-    protected $checkoutOnepage;
+    private $checkoutOnepage;
 
     /**
      * Assert that Order Grand Total is correct on checkout page review block.
      *
      * @var AssertGrandTotalOrderReview
      */
-    protected $assertGrandTotalOrderReview;
+    private $assertGrandTotalOrderReview;
 
     /**
      * One page checkout success page.
      *
      * @var CheckoutOnepageSuccess
      */
-    protected $checkoutOnepageSuccess;
+    private $checkoutOnepageSuccess;
 
     /**
      * Price array.
      *
      * @var array
      */
-    protected $prices;
+    private $prices;
 
     /**
+     * Factory for fixtures.
+     *
      * @var FixtureFactory
      */
     private $fixtureFactory;
 
     /**
+     * Array of product entities.
+     *
      * @var array
      */
     private $products;
 
     /**
-     * @construct
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
@@ -74,10 +77,10 @@ class PlaceOrderStep implements TestStepInterface
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
-        $this->prices = $prices;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
+        $this->prices = $prices;
     }
 
     /**
@@ -91,18 +94,20 @@ class PlaceOrderStep implements TestStepInterface
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
+        $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
             [
                 'data' => [
-                    'entity_id' => ['products' => $this->products]
+                    'id' => $orderId,
+                    'entity_id' => ['products' => $this->products],
                 ]
             ]
         );
 
         return [
-            'orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId(),
-            'order' => $order
+            'orderId' => $orderId,
+            'order' => $order,
         ];
     }
 }
