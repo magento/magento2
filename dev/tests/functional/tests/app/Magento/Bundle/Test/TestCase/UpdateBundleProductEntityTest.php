@@ -59,7 +59,7 @@ class UpdateBundleProductEntityTest extends Injectable
     private $fixtureFactory;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductEdit $catalogProductEditPage
@@ -77,7 +77,7 @@ class UpdateBundleProductEntityTest extends Injectable
     }
 
     /**
-     * Test update bundle product
+     * Test update bundle product.
      *
      * @param BundleProduct $product
      * @param BundleProduct $originalProduct
@@ -117,7 +117,7 @@ class UpdateBundleProductEntityTest extends Injectable
     }
 
     /**
-     * Get Category instances
+     * Get Category instances.
      *
      * @param BundleProduct $originalProduct
      * @param BundleProduct $product

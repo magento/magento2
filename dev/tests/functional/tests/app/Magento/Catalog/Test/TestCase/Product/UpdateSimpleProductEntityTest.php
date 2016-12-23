@@ -10,9 +10,9 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Precondition:
@@ -101,7 +101,7 @@ class UpdateSimpleProductEntityTest extends Injectable
         $this->configData = $configData;
         // Preconditions
         $initialProduct->persist();
-        $category = $this->getCategories($initialProduct, $product);
+        $category = $this->getCategory($initialProduct, $product);
 
         if ($store) {
             $store->persist();
@@ -132,13 +132,13 @@ class UpdateSimpleProductEntityTest extends Injectable
     }
 
     /**
-     * Get Category instances
+     * Get Category instance.
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
-     * @return array
+     * @return Category
      */
-    protected function getCategories(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
+    protected function getCategory(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
     {
         $initialCategory = $initialProduct->hasData('category_ids')
             ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
