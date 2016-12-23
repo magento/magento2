@@ -25,7 +25,6 @@ class AssertAddToCartButtonAbsentOnCategoryPage extends AbstractConstraint
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
      * @param Category|null $category [optional]
-     *
      * @return void
      */
     public function processAssert(

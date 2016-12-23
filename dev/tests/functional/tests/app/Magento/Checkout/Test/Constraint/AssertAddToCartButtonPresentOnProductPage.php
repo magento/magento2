@@ -22,7 +22,6 @@ class AssertAddToCartButtonPresentOnProductPage extends AbstractConstraint
      * @param BrowserInterface $browser
      * @param InjectableFixture $product
      * @param CatalogProductView $catalogProductView
-     *
      * @return void
      */
     public function processAssert(
