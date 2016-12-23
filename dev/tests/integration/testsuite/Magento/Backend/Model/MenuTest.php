@@ -9,37 +9,34 @@ namespace Magento\Backend\Model;
  * Test class for \Magento\Backend\Model\Auth.
  *
  * @magentoAppArea adminhtml
- * @magentoCache all disabled
  */
 class MenuTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu
      */
-    protected $_model;
+    private $model;
+
+    /** @var \Magento\Framework\ObjectManagerInterface */
+    private $objectManager;
 
     protected function setUp()
     {
         parent::setUp();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Backend\Model\Auth::class);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Config\ScopeInterface::class
-        )->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
     }
 
     public function testMenuItemManipulation()
     {
         /* @var $menu \Magento\Backend\Model\Menu */
-        $menu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Backend\Model\Menu\Config::class
-        )->getMenu();
+        $menu = $this->objectManager->create(\Magento\Backend\Model\Menu\Config::class)->getMenu();
         /* @var $itemFactory \Magento\Backend\Model\Menu\Item\Factory */
-        $itemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Backend\Model\Menu\Item\Factory::class
-        );
+        $itemFactory = $this->objectManager->create(\Magento\Backend\Model\Menu\Item\Factory::class);
 
         // Add new item in top level
         $menu->add(
@@ -84,13 +81,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     public function testSerializeUnserialize()
     {
         /** @var Menu $menu */
-        $menu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\MenuFactory::class
-        )->create();
+        $menu = $this->objectManager->get(\Magento\Backend\Model\MenuFactory::class)->create();
         /* @var \Magento\Backend\Model\Menu\Item\Factory $itemFactory */
-        $itemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Backend\Model\Menu\Item\Factory::class
-        );
+        $itemFactory = $this->objectManager->create(\Magento\Backend\Model\Menu\Item\Factory::class);
 
         // Add new item in top level
         $menu->add(
@@ -104,7 +97,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        //Add submenu
+        // Add submenu
         $menu->add(
             $itemFactory->create(
                 [
@@ -118,11 +111,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             'Magento_Backend::system3'
         );
         $serializedString = $menu->serialize();
-        /** @var Menu $menu2 */
-        $menu2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\MenuFactory::class
-        )->create();
-        $menu2->unserialize($serializedString);
-        $this->assertEquals($menu, $menu2);
+        /** @var Menu $unserializedMenu */
+        $unserializedMenu = $this->objectManager->get(\Magento\Backend\Model\MenuFactory::class)->create();
+        $unserializedMenu->unserialize($serializedString);
+        $this->assertEquals($menu, $unserializedMenu);
     }
 }

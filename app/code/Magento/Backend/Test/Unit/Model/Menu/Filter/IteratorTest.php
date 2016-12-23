@@ -12,12 +12,12 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Backend\Model\Menu
      */
-    protected $menuModel;
+    private $menuModel;
 
     /**
      * @var \Magento\Backend\Model\Menu\Item[]
      */
-    protected $items = [];
+    private $items = [];
 
     protected function setUp()
     {

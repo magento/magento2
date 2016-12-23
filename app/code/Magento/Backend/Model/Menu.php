@@ -39,10 +39,12 @@ class Menu extends \ArrayObject
     private $serializer;
 
     /**
+     * Menu constructor
+     *
      * @param LoggerInterface $logger
      * @param string $pathInMenuStructure
-     * @param Factory $menuItemFactory
-     * @param SerializerInterface $serializer
+     * @param Factory|null $menuItemFactory
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         LoggerInterface $logger,
@@ -258,17 +260,13 @@ class Menu extends \ArrayObject
     }
 
     /**
-     * Hack to unset logger instance which cannot be serialized
+     * Serialize menu
      *
      * @return string
      */
     public function serialize()
     {
-        $logger = $this->_logger;
-        unset($this->_logger);
-        $result = $this->serializer->serialize($this->toArray());
-        $this->_logger = $logger;
-        return $result;
+        return $this->serializer->serialize($this->toArray());
     }
 
     /**

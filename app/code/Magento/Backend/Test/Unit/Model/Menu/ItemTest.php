@@ -226,7 +226,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      * @param array $expected
      * @dataProvider toArrayDataProvider
      */
-    public function testToArray($data, $expected)
+    public function testToArray(array $data, array $expected)
     {
         $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
         $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
@@ -251,8 +251,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function toArrayDataProvider()
     {
         return [
-            [
-                $this->_params,
+            'No submenu' => [
+                [
+                    'id' => 'item',
+                    'title' => 'Item Title',
+                    'action' => '/system/config',
+                    'resource' => 'Magento_Config::config',
+                    'depends_on_module' => 'Magento_Backend',
+                    'depends_on_config' => 'system/config/isEnabled',
+                    'tooltip' => 'Item tooltip',
+                ],
                 [
                     'parent_id' => null,
                     'module_name' => 'Magento_Backend',
@@ -268,7 +276,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'sub_menu' => null
                 ]
             ],
-            [
+            'with submenu' => [
                 [
                     'parent_id' => '1',
                     'module_name' => 'Magento_Module1',
@@ -281,7 +289,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => null,
                     'title' => null,
-                    'sub_menu' => $this->_params,
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ],
                 ],
                 [
                     'parent_id' => '1',
@@ -295,15 +311,31 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => '',
                     'title' => null,
-                    'sub_menu' => $this->_params
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ]
                 ]
             ],
-            [
+            'small set of data' => [
                 [
                     'parent_id' => '1',
                     'module_name' => 'Magento_Module1',
                     'sort_index' => '50',
-                    'sub_menu' => $this->_params,
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ],
                 ],
                 [
                     'parent_id' => '1',
@@ -317,7 +349,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => '',
                     'title' => null,
-                    'sub_menu' => $this->_params
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ]
                 ]
             ]
         ];
@@ -326,10 +366,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $constructorData
      * @param array $populateFromData
+     * @param array $expected
      * @dataProvider populateFromArrayDataProvider
      */
-    public function testPopulateFromArray($constructorData, $populateFromData, $expected)
-    {
+    public function testPopulateFromArray(
+        array $constructorData,
+        array $populateFromData,
+        array $expected
+    ) {
         $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
         $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
         $menuMock->method('toArray')
@@ -354,9 +398,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function populateFromArrayDataProvider()
     {
         return [
-            [
+            'default data to constructor' => [
                 [],
-                $this->_params,
+                [
+                    'id' => 'item',
+                    'title' => 'Item Title',
+                    'action' => '/system/config',
+                    'resource' => 'Magento_Config::config',
+                    'depends_on_module' => 'Magento_Backend',
+                    'depends_on_config' => 'system/config/isEnabled',
+                    'tooltip' => 'Item tooltip',
+                ],
                 [
                     'parent_id' => null,
                     'module_name' => 'Magento_Backend',
@@ -372,8 +424,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'sub_menu' => null
                 ],
             ],
-            [
-                $this->_params,
+            'data without submenu to constructor' => [
+                [
+                    'id' => 'item',
+                    'title' => 'Item Title',
+                    'action' => '/system/config',
+                    'resource' => 'Magento_Config::config',
+                    'depends_on_module' => 'Magento_Backend',
+                    'depends_on_config' => 'system/config/isEnabled',
+                    'tooltip' => 'Item tooltip',
+                ],
                 [
                     'parent_id' => '1',
                     'module_name' => 'Magento_Module1',
@@ -386,7 +446,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => null,
                     'title' => null,
-                    'sub_menu' => $this->_params,
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ],
                 ],
                 [
                     'parent_id' => '1',
@@ -403,7 +471,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'sub_menu' => null
                 ],
             ],
-            [
+            'data with submenu to constructor' => [
                 [
                     'parent_id' => '1',
                     'module_name' => 'Magento_Module1',
@@ -416,13 +484,29 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => null,
                     'title' => null,
-                    'sub_menu' => $this->_params,
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ],
                 ],
                 [
                     'parent_id' => '1',
                     'module_name' => 'Magento_Module1',
                     'sort_index' => '50',
-                    'sub_menu' => $this->_params,
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ],
                 ],
                 [
                     'parent_id' => '1',
@@ -436,7 +520,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => '',
                     'title' => null,
-                    'sub_menu' => $this->_params
+                    'sub_menu' => [
+                        'id' => 'item',
+                        'title' => 'Item Title',
+                        'action' => '/system/config',
+                        'resource' => 'Magento_Config::config',
+                        'depends_on_module' => 'Magento_Backend',
+                        'depends_on_config' => 'system/config/isEnabled',
+                        'tooltip' => 'Item tooltip',
+                    ]
                 ],
             ]
         ];

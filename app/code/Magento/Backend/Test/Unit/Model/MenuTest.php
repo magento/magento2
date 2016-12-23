@@ -338,10 +338,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @covers \Magento\Backend\Model\Menu::toArray
-     * @covers \Magento\Backend\Model\Menu::serialize
-     */
     public function testSerialize()
     {
         $serializerMock = $this->getMock(SerializerInterface::class);
@@ -365,10 +361,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('serializedString', $menu->serialize());
     }
 
-    /**
-     * @covers \Magento\Backend\Model\Menu::populateFromArray
-     * @covers \Magento\Backend\Model\Menu::unserialize
-     */
     public function testUnserialize()
     {
         $serializerMock = $this->getMock(SerializerInterface::class);
