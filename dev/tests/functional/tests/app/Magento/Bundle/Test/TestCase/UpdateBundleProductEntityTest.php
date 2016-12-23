@@ -91,12 +91,7 @@ class UpdateBundleProductEntityTest extends Injectable
     ) {
         // Preconditions
         $originalProduct->persist();
-        $originalCategory = $originalProduct->hasData('category_ids')
-            ? $originalProduct->getDataFieldConfig('category_ids')['source']->getCategories()
-            : null;
-        $category = $product->hasData('category_ids')
-            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
-            : $originalCategory;
+        $category = $this->getCategories($originalProduct, $product);
 
         if ($store) {
             $store->persist();
@@ -119,5 +114,22 @@ class UpdateBundleProductEntityTest extends Injectable
             'stores' => isset($store) ? [$store] : [],
             'optionTitles' => isset($optionTitle) ? $optionTitle : []
         ];
+    }
+
+    /**
+     * Get Category instances
+     *
+     * @param BundleProduct $originalProduct
+     * @param BundleProduct $product
+     * @return array
+     */
+    protected function getCategories(BundleProduct $originalProduct, BundleProduct $product)
+    {
+        $originalCategory = $originalProduct->hasData('category_ids')
+            ? $originalProduct->getDataFieldConfig('category_ids')['source']->getCategories()
+            : null;
+        return $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
+            : $originalCategory;
     }
 }
