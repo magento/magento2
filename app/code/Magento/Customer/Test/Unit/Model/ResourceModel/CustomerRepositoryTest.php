@@ -172,8 +172,14 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
-            false
+            true,
+            true,
+            true,
+            [
+                '__toArray'
+            ]
         );
+
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
@@ -254,6 +260,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn(['default_billing', 'default_shipping']);
+
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [],
@@ -495,6 +506,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getId'
             ]
         );
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn(['default_billing', 'default_shipping']);
+
         $customerModel = $this->getMock(
             \Magento\Customer\Model\Customer::class,
             [
