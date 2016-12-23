@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
 {
