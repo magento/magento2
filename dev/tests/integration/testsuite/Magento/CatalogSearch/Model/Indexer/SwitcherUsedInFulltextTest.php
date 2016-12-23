@@ -6,6 +6,8 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -46,27 +48,27 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
     protected $queryFactory;
 
     /**
-     * @var Product
+     * @var \Magento\Catalog\Model\Product
      */
     protected $productApple;
 
     /**
-     * @var Product
+     * @var \Magento\Catalog\Model\Product
      */
     protected $productBanana;
 
     /**
-     * @var Product
+     * @var \Magento\Catalog\Model\Product
      */
     protected $productOrange;
 
     /**
-     * @var Product
+     * @var \Magento\Catalog\Model\Product
      */
     protected $productPapaya;
 
     /**
-     * @var Product
+     * @var \Magento\Catalog\Model\Product
      */
     protected $productCherry;
 
@@ -81,10 +83,10 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->configure(
             [
-                ltrim(\Magento\CatalogSearch\Model\Indexer\Fulltext::class, '\\') => [
+                ltrim(Fulltext::class, '\\') => [
                     'arguments' => [
                         'indexSwitcher' => [
-                            'instance' => ltrim(\Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class, '\\'),
+                            'instance' => ltrim(IndexSwitcherMock::class, '\\'),
                         ],
                     ],
                 ],
@@ -115,7 +117,7 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->indexSwitcher = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
+            IndexSwitcherMock::class
         );
 
         $this->productApple = $this->getProductBySku('fulltext-1');
@@ -132,9 +134,9 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexAll();
 
-        /** @var \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock $indexSwitcher */
+        /** @var IndexSwitcherMock $indexSwitcher */
         $indexSwitcher = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
+            IndexSwitcherMock::class
         );
         $this->assertTrue($indexSwitcher->isSwitched());
     }
@@ -146,9 +148,9 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexList([$this->productApple->getId(), $this->productBanana->getId()]);
 
-        /** @var \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock $indexSwitcher */
+        /** @var IndexSwitcherMock $indexSwitcher */
         $indexSwitcher = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
+            IndexSwitcherMock::class
         );
         $this->assertFalse($indexSwitcher->isSwitched());
     }
@@ -160,9 +162,9 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexRow($this->productPapaya->getId());
 
-        /** @var \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock $indexSwitcher */
+        /** @var IndexSwitcherMock $indexSwitcher */
         $indexSwitcher = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class
+            IndexSwitcherMock::class
         );
         $this->assertFalse($indexSwitcher->isSwitched());
     }
