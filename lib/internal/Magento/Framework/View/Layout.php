@@ -318,18 +318,17 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $cacheId = 'structure_' . $this->getUpdate()->getCacheId();
         $result = $this->cache->load($cacheId);
         if ($result) {
-            $this->readerContext = $this->getReaderContext();
             $data = $this->serializer->unserialize($result);
-            $this->readerContext->getPageConfigStructure()->populateWithArray($data['pageConfigStructure']);
-            $this->readerContext->getScheduledStructure()->populateWithArray($data['scheduledStructure']);
+            $this->getReaderContext()->getPageConfigStructure()->populateWithArray($data['pageConfigStructure']);
+            $this->getReaderContext()->getScheduledStructure()->populateWithArray($data['scheduledStructure']);
         } else {
             \Magento\Framework\Profiler::start('build_structure');
             $this->readerPool->interpret($this->getReaderContext(), $this->getNode());
             \Magento\Framework\Profiler::stop('build_structure');
 
             $data = [
-                'pageConfigStructure' => $this->readerContext->getPageConfigStructure()->__toArray(),
-                'scheduledStructure'  => $this->readerContext->getScheduledStructure()->__toArray(),
+                'pageConfigStructure' => $this->getReaderContext()->getPageConfigStructure()->__toArray(),
+                'scheduledStructure'  => $this->getReaderContext()->getScheduledStructure()->__toArray(),
             ];
             $this->cache->save($this->serializer->serialize($data), $cacheId, $this->getUpdate()->getHandles());
         }

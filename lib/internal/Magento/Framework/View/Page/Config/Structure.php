@@ -221,6 +221,7 @@ class Structure
      *
      * @param array $data
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function populateWithArray(array $data)
     {
@@ -229,7 +230,9 @@ class Structure
         $this->title = isset($data['title']) ? $data['title'] : '';
         $this->metadata = isset($data['metadata']) ? $data['metadata'] : [];
         $this->elementAttributes = isset($data['elementAttributes']) ? $data['elementAttributes'] : [];
-        $this->removeElementAttributes = isset($data['removeElementAttributes']) ? $data['removeElementAttributes'] : [];
+        $this->removeElementAttributes = isset($data['removeElementAttributes'])
+            ? $data['removeElementAttributes']
+            : [];
         $this->bodyClasses = isset($data['bodyClasses']) ? $data['bodyClasses'] : [];
         $this->isBodyClassesDeleted = isset($data['isBodyClassesDeleted']) ? $data['isBodyClassesDeleted'] : false;
     }

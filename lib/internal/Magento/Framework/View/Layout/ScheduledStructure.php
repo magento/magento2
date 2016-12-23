@@ -559,6 +559,8 @@ class ScheduledStructure
      *
      * @param array $data
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function populateWithArray(array $data)
     {
